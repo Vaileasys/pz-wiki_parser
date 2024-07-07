@@ -26,6 +26,7 @@ Example: DisplayCategory for Base.Axe
 * module: Base
 * type: Axe
 * property: DisplayCategory
+
 _After running the script parser, the parsed data can be visualised as indentations in `parsed_data.txt`._
 1. Import `script_parser`
 2. Call a value using the `get()` method. E.g. `display_category = script_parser.main().get('DisplayCategory')`.
