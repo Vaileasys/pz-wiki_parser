@@ -7,7 +7,7 @@ def sort_by_property(parsed_data, property):
     for module, module_data in parsed_data.items():
         for item_type, type_data in module_data.items():
             if property in type_data:
-                property_value = ''.join(type_data[property])
+                property_value = type_data.get(property)
                 key = f'{property_value}_{module}_{item_type}'
                 if property_value not in sorted_data:
                     sorted_data[property_value] = []

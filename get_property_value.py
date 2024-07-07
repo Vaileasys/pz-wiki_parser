@@ -6,7 +6,7 @@ def get_property_value(data, item_type, property_name=None):
         if item_type in module_data:
             block = module_data[item_type]
             if property_name and property_name in block:
-                property_value = ''.join(block[property_name])
+                property_value = block.get(property_name)
                 print(f"'{property_name}' value found for '{module}.{item_type}':", property_value)
                 return property_value
             else:
