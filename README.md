@@ -15,6 +15,7 @@ This programme is bundled with a range of modules that can be run independently 
 2. Select a module/script you want to run.
 3. Follow the prompts for that module.
 4. The script will run, parsing the data, and then output. Some modules will output to a file such as `output.txt` while others will just output to the terminal.
+
 _Some scripts will prompt the user for a language code (default 'en') which is used to translate to the desired language. The translations must have been added to the "Translate" folder._
 
 ## Creating a module
