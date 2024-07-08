@@ -32,7 +32,7 @@ Example: DisplayCategory for Base.Axe
 
 _After running the script parser, the parsed data can be visualised as indentations in `parsed_data.txt`._
 1. Import `script_parser`
-2. Call a value using the `get()` method. E.g. `display_category = script_parser.main().get('DisplayCategory')`.
+2. Call a value using the `get()` method. E.g. `data[module_name][item_type].get(property_name)`
 
 ### Adding module to available commands
 Modules can be run via `main.py` using `importlib`. 
