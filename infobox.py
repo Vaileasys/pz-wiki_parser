@@ -15,6 +15,8 @@ def get_item(parsed_data):
 
 def write_to_output(item_data, item_id, translate_names, language_code, output_dir='output/infoboxes'):
     #TODO: Translation
+    # check output directory exists before writing
+    os.makedirs(output_dir, exist_ok=True)
     output_file = os.path.join(output_dir, f'{item_id}.txt')
     with open(output_file, 'w', encoding='utf-8') as file:
         file.write("{{Infobox item")
@@ -22,7 +24,7 @@ def write_to_output(item_data, item_id, translate_names, language_code, output_d
         #All used infobox parameters and their matching keys
         parameters = {
             "name": item_data.get('DisplayName', ''),
-            "model": f"{item_data.get('WeaponSprite', item_data.get('WorldStaticModel', ''))}_Model.png",
+            "model": f"{item_data.get('WeaponSprite', item_data.get('WorldStaticModel', item_data.get('StaticModel', '')))}_Model.png",
             "icon": f"{item_data.get('Icon', 'Question')}.png",
             "icon_name": item_data.get('DisplayName', ''),
             "category": item_data.get('DisplayCategory', ''),
