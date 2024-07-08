@@ -1,8 +1,11 @@
 # PZ Script Parser
 Parses Project Zomboid 'scripts' files and outputs in the desired format for PZwiki.
 
+# Requires:
+* Python 3
+* Chardet
+
 # Instructions
-_Requires Python 3_
 ## Setting up the resources folder
 1. Create a folder called "resources" in the same folder as `main.py`. 
 2. Add the game's scripts files to a folder called "scripts".
