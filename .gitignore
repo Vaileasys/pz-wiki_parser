@@ -1,3 +1,5 @@
 output.txt
 parsed_data.txt
 resources/
+output/
+__pycache__/
