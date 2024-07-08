@@ -15,12 +15,12 @@ while True:
     # print a list of available commands
     for command, description in help_info.items():
         print(f"'{command}' - {description}")
-    
+
     user_input = input("> ")
 
     if user_input == "exit":
         break
-        
+
     scripts = {
         '1': 'item_list',
         '2': 'weapon_list',
@@ -35,8 +35,8 @@ while True:
         try:
             module = importlib.import_module(module_name)
             module.main()
-        except ImportError:
-            print(f"Error importing module {module_name}")
+        except ImportError as e:
+            print(f"Error importing module {module_name}: {e}")
         break
     else:
         print("Invalid input. Please type a valid command.")
