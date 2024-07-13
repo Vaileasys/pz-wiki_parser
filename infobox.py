@@ -14,12 +14,22 @@ def get_item(parsed_data):
 
 
 def write_to_output(item_data, item_id, translate_names, language_code, output_dir='output/infoboxes'):
-    #TODO: Translation
     # check output directory exists before writing
     os.makedirs(output_dir, exist_ok=True)
     output_file = os.path.join(output_dir, f'{item_id}.txt')
     with open(output_file, 'w', encoding='utf-8') as file:
         file.write("{{Infobox item")
+
+        # Skill type mapping to wiki links
+        skill_type_mapping = {
+            "LongBlade": "[[Long Blade]]",
+            "SmallBlade": "[[Short Blade]]",
+            "Improvised;Spear": "[[Spear]]",
+            "SmallBlunt": "[[Short Blunt]]",
+            "Blunt": "[[Long Blunt]]",
+            "Firearm": "[[Aiming|Firearm]]",
+            "Axe": "[[Axe (skill)|Axe]]"
+        }
 
         #All used infobox parameters and their matching keys
         parameters = {
@@ -36,7 +46,7 @@ def write_to_output(item_data, item_id, translate_names, language_code, output_d
             "function": '',
             "weapon": item_data.get('MountOn', ''),
             "part_type": item_data.get('PartType', ''),
-            "skill_type": item_data.get('Categories', item_data.get('SubCategory', '')),
+            "skill_type": skill_type_mapping.get(item_data.get('Categories', item_data.get('SubCategory', '')), item_data.get('Categories', item_data.get('SubCategory', ''))),
             "ammo_type": item_data.get('AmmoType', ''),
             "clip_size": item_data.get('MaxAmmo', ''),
             "material": item_data.get('FabricType', ''),
