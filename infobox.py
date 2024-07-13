@@ -131,7 +131,7 @@ def write_to_output(item_data, item_id, translate_names, language_code, output_d
 
         for key, value in parameters.items():
             if value:
-                file.write(f"\n|{key} = {value}")
+                file.write(f"\n|{key}={value}")
 
         file.write("\n}}")
 
