@@ -189,16 +189,17 @@ def parse_file(file_path, data, item_names):
     return data, type_counter
 
 
-# defins the files to be parsed - will parse every txt file in the "folder_path"
+# defines the files to be parsed - will parse every txt file in the "folder_path" and subdirectories
 def parse_files_in_folder(folder_path, item_names):
     parsed_data = {}
     total_type_counter = 0
-    for filename in os.listdir(folder_path):
-        if filename.endswith('.txt'):
-#            print("Processing", filename)
-            file_path = os.path.join(folder_path, filename)
-            parsed_data, type_counter = parse_file(file_path, parsed_data, item_names)
-            total_type_counter += type_counter
+    for root, _, files in os.walk(folder_path):
+        for filename in files:
+            if filename.endswith('.txt'):
+#                print("Processing", filename)
+                file_path = os.path.join(root, filename)
+                parsed_data, type_counter = parse_file(file_path, parsed_data, item_names)
+                total_type_counter += type_counter
 #    print("Script files parsed successfully")
     return parsed_data, total_type_counter
 
