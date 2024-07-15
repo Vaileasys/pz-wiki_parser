@@ -189,7 +189,7 @@ def parse_file(file_path, data, item_names):
     return data, type_counter
 
 
-# defins the files to be parsed - will parse every txt file in the "folder_path"
+# defines the files to be parsed - will parse every txt file in the "folder_path"
 def parse_files_in_folder(folder_path, item_names):
     parsed_data = {}
     total_type_counter = 0
