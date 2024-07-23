@@ -38,6 +38,7 @@ def write_to_output(item_data, item_id, translate_names, language_code, output_d
             material_value = item_data.get('MetalValue', '')
             if not material and material_value:
                 material = 'metal'
+            material = material.capitalize()  # Capitalize the first letter of the material value
 
             parameters = {
                 "name": item_data.get('DisplayName', ''),
@@ -51,16 +52,16 @@ def write_to_output(item_data, item_id, translate_names, language_code, output_d
                 "equipped": item_data.get('CanBeEquipped', ''),
                 "attachment_type": item_data.get('AttachmentType', ''),
                 "function": '',
-                "weapon": item_data.get('MountOn', ''), # TODO: don't overwrite
+                "weapon": item_data.get('MountOn', ''),  # TODO: don't overwrite
                 "part_type": item_data.get('PartType', ''),
                 "skill_type": skill_type_mapping.get(item_data.get('Categories', item_data.get('SubCategory', '')), item_data.get('Categories', item_data.get('SubCategory', ''))),  # TODO: don't overwrite
-                "ammo_type": item_data.get('AmmoType', ''), # TODO: don't overwrite
+                "ammo_type": item_data.get('AmmoType', ''),  # TODO: don't overwrite
                 "clip_size": item_data.get('MaxAmmo', ''),
                 "material": material,
                 "material_value": material_value,
                 "can_boil_water": item_data.get('IsCookable', '').capitalize(),
                 "writable": item_data.get('CanBeWrite', '').capitalize(),
-                "recipes": item_data.get('TeachedRecipes', ''), # TODO: don't overwrite
+                "recipes": item_data.get('TeachedRecipes', ''),  # TODO: don't overwrite
                 "skill_trained": item_data.get('SkillTrained', ''),
                 "page_number": item_data.get('NumberOfPages') or item_data.get('PageToWrite', ''),
                 "packaged": item_data.get('Packaged', '').capitalize(),
@@ -141,8 +142,8 @@ def write_to_output(item_data, item_id, translate_names, language_code, output_d
                 "good_hot": item_data.get('GoodHot', '').capitalize(),
                 "bad_cold": item_data.get('BadCold', '').capitalize(),
                 "spice": item_data.get('Spice', '').capitalize(),
-                "evolved_recipe": item_data.get('EvolvedRecipeName', ''), # TODO: don't overwrite
-                "tag": '', # TODO: don't overwrite
+                "evolved_recipe": item_data.get('EvolvedRecipeName', ''),  # TODO: don't overwrite
+                "tag": '',  # TODO: don't overwrite
                 "item_id": item_id,
                 "infobox_version": "41.78.16"
             }
