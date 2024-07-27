@@ -1,8 +1,6 @@
 import os
-import sys
-import chardet
+from core import translate
 
-language_code = ""
 language_codes = {
     'ar': "Cp1252", 
     'ca': "ISO-8859-15", 
@@ -33,72 +31,22 @@ language_codes = {
     'ua': "Cp1251"
 }
 
-def get_language():
-    global language_code
-    language_code = input("Enter language code (default 'en')\n> ").strip().lower()
-    if language_code in language_codes:
-        print(f"Language code '{language_code}' selected.")
-    else:
-        language_code = "en"
-        print("Unrecognised language code, setting to 'en'")
-
-    translate_names = {}
-    if language_code != "en":
-        translate_names = parse_item_names(f'resources/Translate/ItemName/ItemName_{language_code.upper()}.txt', language_code)
+# find a module for an item and return item_id (used for property values that don't define the module)
+def get_module_from_item(parsed_data, item_data, property_name):
+    item_types = item_data.get(property_name, [])
+    modules = {}
     
-    return translate_names, language_code
+    for item_type in item_types:
+        item_type = item_type.strip()
+        for module, items in parsed_data.items():
+            if item_type in items:
+                modules[item_type] = f"{module}.{item_type}"
+                break
 
-# detect encoding and return best-fit
-def detect_file_encoding(file_path):
-    print(f"Detecting encoding for '{file_path}'")
-    with open(file_path, 'rb') as file:
-        raw_data = file.read()
-        result = chardet.detect(raw_data)
-        encoding = result['encoding']
-        print(f"File encoded with '{encoding}'")
-    return encoding
-
-def read_file_with_encoding(file_path, encoding):
-    item_names = {}
-    try:
-        with open(file_path, 'r', encoding=encoding) as file:
-            for line in file:
-                line = line.strip()
-                if line.startswith("ItemName_"):
-                    item_id, item_name = line.split(" = ")
-                    item_id = item_id[len("ItemName_"):].strip()
-                    item_name = item_name.strip('"').rstrip('",')
-                    item_names[item_id] = item_name
-    except UnicodeDecodeError:
-        print(f"Warning: There was an issue decoding the file '{file_path}' with encoding '{encoding}'.")
-    return item_names
-
-
-# parse the item names from translate file
-def parse_item_names(file_path, lang_code):
-    if not os.path.exists(file_path):
-        print(f"No file found for '{file_path}'. Ensure the file is in the correct path, or try a different language code.")
-        sys.exit()
-    language_code = lang_code
-    encoding = language_codes.get(language_code, "")
-    if not encoding:
-        encoding = "UTF-8"
-        print(f"No encoding found for language code '{language_code}', defaulting to UTF-8")
-    else:
-        print(f"Encoding for language code '{language_code}' set to {encoding}")
-    item_names = read_file_with_encoding(file_path, encoding)
-    if item_names is None:
-        print(f"Warning: There was an issue decoding the file '{file_path}' with encoding '{encoding}'. Trying to detect encoding.")
-        encoding = detect_file_encoding(file_path)
-        item_names = read_file_with_encoding(file_path, encoding)
-        if item_names is None:
-            print(f"Error: There was an issue decoding the file '{file_path}' with detected encoding '{encoding}'.")
-            exit(1)
-    return item_names
+    return modules
 
 # parse each line and add to a "data" dictionary
-# 'item_names' retrieved from the parse_item_names function
-def parse_file(file_path, data, item_names):
+def parse_file(file_path, data):
     current_module = None
     current_type = None
     block = None
@@ -177,29 +125,33 @@ def parse_file(file_path, data, item_names):
 
                 if prop == 'DisplayName':
                     item_id = f"{current_module}.{current_type}"
-                    item_name = item_names.get(item_id, None)
+                    item_name = translate.get_translation(item_id, 'DisplayName', 'en')
                     if item_name is not None:
                         data[current_module][current_type][prop] = item_name
                     else:
                         data[current_module][current_type][prop] = value
                 else:
-                    data[current_module][current_type][prop] = value
+                    # check for ';' for fourth level
+                    if ';' in value:
+                        data[current_module][current_type][prop] = value.split(';')
+                    else:
+                        data[current_module][current_type][prop] = value
                 
 #    print("Parsed Data:\n", data)
     return data, type_counter
 
 
 # defines the files to be parsed - will parse every txt file in the "folder_path"
-def parse_files_in_folder(folder_path, item_names):
+def parse_files_in_folder(folder_path):
     parsed_data = {}
     total_type_counter = 0
     for filename in os.listdir(folder_path):
         if filename.endswith('.txt'):
 #            print("Processing", filename)
             file_path = os.path.join(folder_path, filename)
-            parsed_data, type_counter = parse_file(file_path, parsed_data, item_names)
+            parsed_data, type_counter = parse_file(file_path, parsed_data)
             total_type_counter += type_counter
-#    print("Script files parsed successfully")
+            
     return parsed_data, total_type_counter
 
 
@@ -211,7 +163,7 @@ def output_parsed_data_to_txt(data, output_file):
                 block_value = module_data.pop('block')
                 file.write(f"{block_value} {module}\n")
             for item_type, type_data in module_data.items():
-                if 'block' in type_data: 
+                if 'block' in type_data:
                     block_value = type_data.pop('block')
                     file.write(f"    {block_value} {item_type}\n")
                 else:
@@ -221,12 +173,9 @@ def output_parsed_data_to_txt(data, output_file):
                 file.write('\n')
 
 
-
 def main():
-    language_code = "en"
-    item_names = parse_item_names('resources/Translate/ItemName/ItemName_EN.txt', language_code)
-    parsed_data, total_type_counter = parse_files_in_folder('resources/scripts', item_names)
-    output_parsed_data_to_txt(parsed_data, 'parsed_data.txt')
+    parsed_data, total_type_counter = parse_files_in_folder('resources/scripts')
+    output_parsed_data_to_txt(parsed_data, 'logging/parsed_data.txt')
     print("Total items parsed:", total_type_counter)
     return parsed_data
     

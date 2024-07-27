@@ -1,5 +1,6 @@
 import os
 import script_parser
+from core import translate
 
 filters = {
     'MakeUp_': (True,),
@@ -8,12 +9,10 @@ filters = {
 }
 
 
-def replace_icons():
-    print()
-
-def write_to_output(language_code, sorted_items):
+def write_to_output(sorted_items):
+    language_code = translate.language_code
     # write to output.txt
-    output_file = 'output.txt'
+    output_file = 'output/output.txt'
     with open(output_file, 'w', encoding='utf-8') as file:
 
         lc_subpage = ""
@@ -35,11 +34,10 @@ def write_to_output(language_code, sorted_items):
         file.write(f"==See also==\n*[[PZwiki:Tile list{lc_subpage}]]")
     print(f"Output saved to {output_file}")
 
+
 def item_list(parsed_data):
     sorted_items = {}
     icon_dir = 'resources/icons/'
-
-    translate_names, language_code = script_parser.get_language()
 
     for module, module_data in parsed_data.items():
         for item_type, item_data in module_data.items():
@@ -52,7 +50,7 @@ def item_list(parsed_data):
                 # check if 'IconsForTexture' property exists and use it for icon
                 if 'IconsForTexture' in item_data:
                     icons_for_texture = item_data.get('IconsForTexture', [''])
-                    icons = [icon.strip() for icon in icons_for_texture.split(';')]
+                    icons = [icon.strip() for icon in icons_for_texture]
                 else:
                     # get 'Icon' property
                     icon = item_data.get('Icon', ['Question'])
@@ -62,7 +60,7 @@ def item_list(parsed_data):
                 if icon == "Question":
                     icons_for_texture = item_data.get('IconsForTexture', [''])
                     if icons_for_texture:
-                        icons = [icon.strip() for icon in icons_for_texture.split(';')]
+                        icons = [icon.strip() for icon in icons_for_texture]
                 
                 # check if icon has variants
                 icon_variants = ['Rotten', 'Cooked', '_Cooked', 'Burnt', 'Overdone']
@@ -79,7 +77,7 @@ def item_list(parsed_data):
                 item_name = item_data.get('DisplayName', [''])
                 item_id = f"{module}.{item_type}"
 
-                translated_item_name = translate_names.get(item_id, item_name)
+                translated_item_name = translate.get_translation(item_id, "DisplayName")
                 
                 skip_item = False
 
@@ -106,7 +104,7 @@ def item_list(parsed_data):
                 if display_category not in sorted_items:
                     sorted_items[display_category] = []
                 sorted_items[display_category].append((item_name, translated_item_name, icons, item_id))
-    write_to_output(language_code, sorted_items)
+    write_to_output(sorted_items)
     
 def filters_tree():
     while True:
@@ -133,7 +131,7 @@ def filters_tree():
             print("Invalid filter name. Please try again.")
 
 
-def main():
+def init():
     while True:
         user_input = input("Run script ('y') or set up a filter ('filter')?\n> ")
         if user_input == "y":
@@ -156,4 +154,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    init()

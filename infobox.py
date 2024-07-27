@@ -1,11 +1,21 @@
 import os
 import shutil
+from core import logging
 import script_parser
+from core import translate
 
+skill_id = {
+    "Firearm": "Aiming",
+}
+
+
+page_mapping = {
+    "Axe": "Axe (skill)",
+}
 
 def get_item(parsed_data):
     while True:
-        item_id = input("Enter an item id\n>")
+        item_id = input("Enter an item id\n> ")
         for module, module_data in parsed_data.items():
             for item_type, item_data in module_data.items():
                 if f"{module}.{item_type}" == item_id:
@@ -13,54 +23,127 @@ def get_item(parsed_data):
         print(f"No item found for '{item_id}', please try again.")
 
 
-def get_skill_type_mapping():
-    return {
-        "LongBlade": "[[Long Blade]]",
-        "SmallBlade": "[[Short Blade]]",
-        "Improvised;Spear": "[[Spear]]",
-        "SmallBlunt": "[[Short Blunt]]",
-        "Blunt": "[[Long Blunt]]",
-        "Firearm": "[[Aiming|Firearm]]",
-        "Axe": "[[Axe (skill)|Axe]]"
-    }
+def get_skill_type_mapping(item_data, item_id):
+
+    skill = item_data.get('Categories', item_data.get('SubCategory'))
+    
+    if skill is not None:
+        if isinstance(skill, str):
+            skill = [skill]
+        
+        if "Improvised" in skill:
+            skill = [cat for cat in skill if cat != "Improvised"]
+        
+        if skill:
+            if len(skill) > 1:
+                skill = "<br>".join(skill)
+                print(f"More than one skill value found for {item_id} with a value of: {skill}")
+                return skill
+            skill = skill[0]
+            skill = skill_id.get(skill, skill)
+
+            skill_translation = translate.get_translation(skill, "Categories")
+            if translate.language_code == "en":
+                skill_page = page_mapping.get(skill, skill_translation)
+                link = f"[[{skill_page}]]"
+            else:
+                skill_page = page_mapping.get(skill, skill)
+
+            if translate.language_code != "en":
+                lang = f"/{translate.language_code}"
+            else:
+                lang = ""
+            if skill_page != skill_translation:
+                link = f"[[{skill_page}{lang}|{skill_translation}]]"
+            return link
+        else:
+            return "N/A"
+        
+    return
 
 
-def write_to_output(item_data, item_id, translate_names, language_code, output_dir='output/infoboxes'):
+# gets icon from a property that is an item_id.
+def get_icons_for_item_ids(parsed_data, item_ids):
+    if not item_ids:
+        return ""
+    
+    if isinstance(item_ids, str):
+        item_ids = [item_ids]
+
+    icons = []
+
+    for item_id in item_ids:
+        try:
+            module, item_type = item_id.split('.')
+        except ValueError:
+            continue
+        icon = parsed_data.get(module, {}).get(item_type, {}).get('Icon', 'Unknown')
+        display_name = parsed_data.get(module, {}).get(item_type, {}).get('DisplayName', 'Unknown')
+        if icon != 'Unknown' and display_name != 'Unknown':
+            icons.append(f"[[File:{icon}.png|link={display_name}]]")
+    return "".join(icons)
+
+
+# formats sub-properties (i.e. property values separated by ';')
+def format_sub_prop(values, format=None):
+    if not values:
+        return ''
+    if not isinstance(values, list):
+        values = [values]
+    # link
+    if format == "link":
+        values = [f"[[{v.strip()}]]" for v in values]
+    if len(values) > 1:
+        return "<br>".join(values)
+    else:
+        return values[0]
+
+
+def write_to_output(parsed_data, item_data, item_id, output_dir='output/infoboxes'):
     try:
         os.makedirs(output_dir, exist_ok=True)
         output_file = os.path.join(output_dir, f'{item_id}.txt')
         with open(output_file, 'w', encoding='utf-8') as file:
             file.write("{{Infobox item")
 
-            skill_type_mapping = get_skill_type_mapping()
+            category = 'DisplayCategory'
+            category = translate.get_translation(item_data.get(category, 'Item'), category)
+            
+            skill_type = get_skill_type_mapping(item_data, item_id)
 
             material = item_data.get('FabricType', '')
             material_value = item_data.get('MetalValue', '')
             if not material and material_value:
                 material = 'metal'
+            material = material.capitalize()
+
+            weapon = script_parser.get_module_from_item(parsed_data, item_data, 'MountOn')
+            weapon = get_icons_for_item_ids(parsed_data, weapon.values())
+
+            ammo_type = get_icons_for_item_ids(parsed_data, item_data.get('AmmoType', ''))
 
             parameters = {
-                "name": item_data.get('DisplayName', ''),
+                "name": translate.get_translation(item_id, "DisplayName"),
                 "model": f"{item_data.get('WeaponSprite', item_data.get('WorldStaticModel', item_data.get('StaticModel', '')))}_Model.png",
                 "icon": f"{item_data.get('Icon', 'Question')}.png",
                 "icon_name": item_data.get('DisplayName', ''),
-                "category": item_data.get('DisplayCategory', ''),
+                "category": category,
                 "weight": item_data.get('Weight', 1),
                 "weight_reduction": item_data.get('WeightReduction', ''),
                 "max_units": item_data.get('UseDelta', ''),
                 "equipped": item_data.get('CanBeEquipped', ''),
                 "attachment_type": item_data.get('AttachmentType', ''),
                 "function": '',
-                "weapon": item_data.get('MountOn', ''), # TODO: don't overwrite
+                "weapon": weapon,
                 "part_type": item_data.get('PartType', ''),
-                "skill_type": skill_type_mapping.get(item_data.get('Categories', item_data.get('SubCategory', '')), item_data.get('Categories', item_data.get('SubCategory', ''))),  # TODO: don't overwrite
-                "ammo_type": item_data.get('AmmoType', ''), # TODO: don't overwrite
+                "skill_type": skill_type,
+                "ammo_type": ammo_type,
                 "clip_size": item_data.get('MaxAmmo', ''),
                 "material": material,
                 "material_value": material_value,
                 "can_boil_water": item_data.get('IsCookable', '').capitalize(),
                 "writable": item_data.get('CanBeWrite', '').capitalize(),
-                "recipes": item_data.get('TeachedRecipes', ''), # TODO: don't overwrite
+                "recipes": format_sub_prop(item_data.get('TeachedRecipes', '')),
                 "skill_trained": item_data.get('SkillTrained', ''),
                 "page_number": item_data.get('NumberOfPages') or item_data.get('PageToWrite', ''),
                 "packaged": item_data.get('Packaged', '').capitalize(),
@@ -107,7 +190,7 @@ def write_to_output(item_data, item_id, translate_names, language_code, output_d
                 "crit_chance": item_data.get('CriticalChance', ''),
                 "crit_multiplier": item_data.get('CritDmgMultiplier', ''),
                 "angle_mod": item_data.get('AngleModifier', ''),
-                "kill_move": item_data.get('CloseKillMove', '').replace('_', ' ').lower().capitalize() if item_data.get(
+                "kill_move": item_data.get('CloseKillMove', '').replace('_', ' ').capitalize() if item_data.get(
                     'CloseKillMove') else '',
                 "weight_mod": item_data.get('WeightModifier', ''),
                 "effect_power": item_data.get('ExplosionPower') or item_data.get('FirePower', ''),
@@ -141,8 +224,8 @@ def write_to_output(item_data, item_id, translate_names, language_code, output_d
                 "good_hot": item_data.get('GoodHot', '').capitalize(),
                 "bad_cold": item_data.get('BadCold', '').capitalize(),
                 "spice": item_data.get('Spice', '').capitalize(),
-                "evolved_recipe": item_data.get('EvolvedRecipeName', ''), # TODO: don't overwrite
-                "tag": '', # TODO: don't overwrite
+                "evolved_recipe": item_data.get('EvolvedRecipeName', ''),
+                "tags": format_sub_prop(item_data.get('Tags', '')),  # TODO: use param tag1, tag2, etc.
                 "item_id": item_id,
                 "infobox_version": "41.78.16"
             }
@@ -154,13 +237,15 @@ def write_to_output(item_data, item_id, translate_names, language_code, output_d
             file.write("\n}}")
     except Exception as e:
         print(f"Error writing file {item_id}.txt: {e}")
+        logging.log_to_file(f"Error writing file {item_id}.txt: {e}")
+        
 
 
-def process_item(item_id, item_data, translate_names, language_code, output_dir):
-    write_to_output(item_data, item_id, translate_names, language_code, output_dir)
+def process_item(parsed_data, item_data, item_id, output_dir):
+    write_to_output(parsed_data, item_data, item_id, output_dir)
 
 
-def automatic_extraction(parsed_data, translate_names, language_code):
+def automatic_extraction(parsed_data):
     output_dir = 'output/infoboxes'
     if os.path.exists(output_dir):
         shutil.rmtree(output_dir)
@@ -169,20 +254,19 @@ def automatic_extraction(parsed_data, translate_names, language_code):
     for module, module_data in parsed_data.items():
         for item_type, item_data in module_data.items():
             item_id = f"{module}.{item_type}"
-            process_item(item_id, item_data, translate_names, language_code, output_dir)
+            process_item(parsed_data, item_data, item_id, output_dir)
 
 
 def main():
     parsed_data = script_parser.main()
-    translate_names, language_code = script_parser.get_language()
 
     choice = input("Select extraction mode (1: automatic, 2: manual):\n> ")
     if choice == '1':
-        automatic_extraction(parsed_data, translate_names, language_code)
+        automatic_extraction(parsed_data)
         print("Extraction complete, the files can be found in output/infoboxes.")
     elif choice == '2':
         item_data, item_id = get_item(parsed_data)
-        write_to_output(item_data, item_id, translate_names, language_code)
+        write_to_output(parsed_data, item_data, item_id)
         print("Extraction complete, the file can be found in output/infoboxes.")
     else:
         print("Invalid choice. Please restart the script and choose 1 or 2.")

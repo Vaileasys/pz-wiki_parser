@@ -3,3 +3,4 @@ parsed_data.txt
 resources/
 output/
 __pycache__/
+logging/

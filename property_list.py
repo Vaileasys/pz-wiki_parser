@@ -23,7 +23,7 @@ def save_property_list_to_file(sorted_properties, output_file):
             file.write("\n")
 
 def main():
-    parsed_data = script_parser.main()
+    parsed_data = script_parser.init()
     
     while True:
         property_name = input("Enter the property: \n> ")
@@ -32,7 +32,7 @@ def main():
             break
         print(f"No property found for {property_name}")
     
-    output_file = 'output.txt'
+    output_file = 'output/output.txt'
     save_property_list_to_file(sorted_properties, output_file)
     print(f"Property values for '{property_name}' organized by 'DisplayCategory' saved to {output_file}")
 

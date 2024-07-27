@@ -1,8 +1,10 @@
 import script_parser
+import core.translate as translate
 
-def write_to_output(language_code, items):
+def write_to_output(items):
     # write to output.txt
-    output_file = 'output.txt'
+    output_file = 'output/output.txt'
+    language_code = translate.language_code
     with open(output_file, 'w', encoding='utf-8') as file:
 
         lc_subpage = ""
@@ -35,7 +37,7 @@ def write_to_output(language_code, items):
 
     print(f"Output saved to {output_file}")
 
-def get_items(parsed_data, translate_names):
+def get_items(parsed_data):
     items = []
     
     for module, module_data in parsed_data.items():
@@ -43,7 +45,7 @@ def get_items(parsed_data, translate_names):
             if "Calories" in item_value:
                 item_id = f"{module}.{item_key}"
                 item_name = item_value.get('DisplayName')
-                translated_item_name = translate_names.get(item_id, item_name)
+                translated_item_name = translate.get_translation(item_id, "DisplayName")
 
                 items.append({
                     'item_id': item_id,
@@ -62,9 +64,8 @@ def get_items(parsed_data, translate_names):
 
 def main():
     parsed_data = script_parser.main()
-    translate_names, language_code = script_parser.get_language()
-    items = get_items(parsed_data, translate_names)
-    write_to_output(language_code, items)
+    items = get_items(parsed_data)
+    write_to_output(items)
                 
 
 

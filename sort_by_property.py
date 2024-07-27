@@ -14,7 +14,7 @@ def sort_by_property(parsed_data, property):
                 sorted_data[property_value].append((module, item_type))
 
     # write to output.txt
-    output_file = 'output.txt'
+    output_file = 'output/output.txt'
     with open(output_file, 'w') as file:
         for property_value in sorted(sorted_data.keys()):
             file.write(f"<!-- ## {property_value} ## -->\n")
@@ -26,7 +26,7 @@ def sort_by_property(parsed_data, property):
 
 def main():
     # sorts by a user-defined property
-    sort_by_property(script_parser.main(), input("Enter a property:\n> "))
+    sort_by_property(script_parser.init(), input("Enter a property:\n> "))
 
 if __name__ == "__main__":
     main()
