@@ -3,11 +3,8 @@ import shutil
 from core import logging
 import script_parser
 from core import translate
+from core import utility
 
-
-page_mapping = {
-    "Axe": "Axe (skill)",
-}
 
 def get_item(parsed_data):
     while True:
@@ -19,81 +16,44 @@ def get_item(parsed_data):
         print(f"No item found for '{item_id}', please try again.")
 
 
-def get_skill_type_mapping(item_data, item_id):
-
-    skill = item_data.get('Categories', item_data.get('SubCategory'))
-    
-    if skill is not None:
-        if isinstance(skill, str):
-            skill = [skill]
-        
-        if "Improvised" in skill:
-            skill = [cat for cat in skill if cat != "Improvised"]
-        
-        if skill:
-            if len(skill) > 1:
-                skill = "<br>".join(skill)
-                print(f"More than one skill value found for {item_id} with a value of: {skill}")
-                return skill
-            skill = skill[0]
-            if skill == "Firearm":
-                skill = "Aiming"
-
-            skill_translation = translate.get_translation(skill, "Categories")
-            if translate.language_code == "en":
-                skill_page = page_mapping.get(skill, skill_translation)
-                link = f"[[{skill_page}]]"
-            else:
-                skill_page = page_mapping.get(skill, skill)
-
-            if translate.language_code != "en":
-                lang = f"/{translate.language_code}"
-            else:
-                lang = ""
-            if skill_page != skill_translation:
-                link = f"[[{skill_page}{lang}|{skill_translation}]]"
-            return link
-        else:
-            return "N/A"
-        
-    return
-
-
-# gets icon from a property that is an item_id.
-def get_icons_for_item_ids(parsed_data, item_ids):
-    if not item_ids:
-        return ""
-    
-    if isinstance(item_ids, str):
-        item_ids = [item_ids]
-
-    icons = []
-
-    for item_id in item_ids:
-        try:
-            module, item_type = item_id.split('.')
-        except ValueError:
-            continue
-        icon = parsed_data.get(module, {}).get(item_type, {}).get('Icon', 'Unknown')
-        display_name = parsed_data.get(module, {}).get(item_type, {}).get('DisplayName', 'Unknown')
-        if icon != 'Unknown' and display_name != 'Unknown':
-            icons.append(f"[[File:{icon}.png|link={display_name}]]")
-    return "".join(icons)
-
-
-# formats sub-properties (i.e. property values separated by ';')
-def format_sub_prop(values, format=None):
-    if not values:
-        return ''
-    if not isinstance(values, list):
-        values = [values]
-    # link
-    if format == "link":
-        values = [f"[[{v.strip()}]]" for v in values]
-    if len(values) > 1:
-        return "<br>".join(values)
+def add_parameters_with_key(base_dict, key, items):
+    if len(items) == 1:
+        base_dict[key] = items[0]
     else:
-        return values[0]
+        base_dict[key] = items[0]
+        for index, item in enumerate(items[1:], start=2):
+            base_dict[f'{key}{index}'] = item
+
+
+# inserts new parameters into the parameters dictionary, after a defined parameter
+def insert_parameters_after(parameters, new_parameters_dict):
+    combined_parameters = {}
+    insertion_points = {key: False for key in new_parameters_dict.keys()}
+
+    # insert new parameters after the specified keys
+    for key, value in parameters.items():
+        combined_parameters[key] = value
+        
+        if key in new_parameters_dict:
+            insertion_points[key] = True
+            new_params = new_parameters_dict[key]
+            for new_key, new_value in new_params.items():
+                if isinstance(new_value, list):
+                    add_parameters_with_key(combined_parameters, new_key, new_value)
+                else:
+                    combined_parameters[new_key] = new_value
+    
+    # add new parameters at the end if insertion point wasn't found
+    for insert_after_key, was_inserted in insertion_points.items():
+        if not was_inserted:
+            new_params = new_parameters_dict[insert_after_key]
+            for new_key, new_value in new_params.items():
+                if isinstance(new_value, list):
+                    add_parameters_with_key(combined_parameters, new_key, new_value)
+                else:
+                    combined_parameters[new_key] = new_value
+
+    return combined_parameters
 
 
 def write_to_output(parsed_data, item_data, item_id, output_dir='output/infoboxes'):
@@ -103,10 +63,10 @@ def write_to_output(parsed_data, item_data, item_id, output_dir='output/infoboxe
         with open(output_file, 'w', encoding='utf-8') as file:
             file.write("{{Infobox item")
 
+            icons = utility.get_icons(item_data)
+
             category = 'DisplayCategory'
             category = translate.get_translation(item_data.get(category, 'Item'), category)
-            
-            skill_type = get_skill_type_mapping(item_data, item_id)
 
             material = item_data.get('FabricType', '')
             material_value = item_data.get('MetalValue', '')
@@ -115,14 +75,12 @@ def write_to_output(parsed_data, item_data, item_id, output_dir='output/infoboxe
             material = material.capitalize()
 
             weapon = script_parser.get_module_from_item(parsed_data, item_data, 'MountOn')
-            weapon = get_icons_for_item_ids(parsed_data, weapon.values())
-
-            ammo_type = get_icons_for_item_ids(parsed_data, item_data.get('AmmoType', ''))
+            weapon = utility.get_icons_for_item_ids(parsed_data, weapon.values())
 
             parameters = {
                 "name": translate.get_translation(item_id, "DisplayName"),
-                "model": f"{item_data.get('WeaponSprite', item_data.get('WorldStaticModel', item_data.get('StaticModel', '')))}_Model.png",
-                "icon": f"{item_data.get('Icon', 'Question')}.png",
+                "model": utility.get_model(item_data),
+#                "icon": utility.get_icons(item_data),  # added with 'insert_parameters_after' 
                 "icon_name": item_data.get('DisplayName', ''),
                 "category": category,
                 "weight": item_data.get('Weight', 1),
@@ -133,14 +91,14 @@ def write_to_output(parsed_data, item_data, item_id, output_dir='output/infoboxe
                 "function": '',
                 "weapon": weapon,
                 "part_type": item_data.get('PartType', ''),
-                "skill_type": skill_type,
-                "ammo_type": ammo_type,
+                "skill_type": utility.get_skill_type_mapping(item_data, item_id),
+                "ammo_type": utility.get_icons_for_item_ids(parsed_data, item_data.get('AmmoType', '')),
                 "clip_size": item_data.get('MaxAmmo', ''),
                 "material": material,
                 "material_value": material_value,
                 "can_boil_water": item_data.get('IsCookable', '').capitalize(),
                 "writable": item_data.get('CanBeWrite', '').capitalize(),
-                "recipes": format_sub_prop(item_data.get('TeachedRecipes', '')),
+                "recipes": utility.format_line_break(item_data.get('TeachedRecipes', '')),
                 "skill_trained": item_data.get('SkillTrained', ''),
                 "page_number": item_data.get('NumberOfPages') or item_data.get('PageToWrite', ''),
                 "packaged": item_data.get('Packaged', '').capitalize(),
@@ -222,10 +180,21 @@ def write_to_output(parsed_data, item_data, item_id, output_dir='output/infoboxe
                 "bad_cold": item_data.get('BadCold', '').capitalize(),
                 "spice": item_data.get('Spice', '').capitalize(),
                 "evolved_recipe": item_data.get('EvolvedRecipeName', ''),
-                "tags": format_sub_prop(item_data.get('Tags', '')),  # TODO: use param tag1, tag2, etc.
+                "tags": utility.format_line_break(item_data.get('Tags', '')),  # TODO: use param tag1, tag2, etc.
                 "item_id": item_id,
                 "infobox_version": "41.78.16"
             }
+
+            # new parameters to be added and parameter keys go here
+            icon_parameters = {'icon': icons}
+
+            # These parameters will be added afterwards. For parameters that need to be defined, e.g. icon2, icon3, etc.
+            # 'after_param': param_key,
+            new_parameters_dict = {
+                'model': icon_parameters
+            }
+
+            parameters = insert_parameters_after(parameters, new_parameters_dict)
 
             for key, value in parameters.items():
                 if value:
