@@ -4,10 +4,6 @@ from core import logging
 import script_parser
 from core import translate
 
-skill_id = {
-    "Firearm": "Aiming",
-}
-
 
 page_mapping = {
     "Axe": "Axe (skill)",
@@ -40,7 +36,8 @@ def get_skill_type_mapping(item_data, item_id):
                 print(f"More than one skill value found for {item_id} with a value of: {skill}")
                 return skill
             skill = skill[0]
-            skill = skill_id.get(skill, skill)
+            if skill == "Firearm":
+                skill = "Aiming"
 
             skill_translation = translate.get_translation(skill, "Categories")
             if translate.language_code == "en":
