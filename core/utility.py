@@ -5,6 +5,11 @@ page_mapping = {
     "Axe": "Axe (skill)",
 }
 
+def get_tags(item_data):
+    tags = []
+    tags = item_data.get('Tags', '')
+    return tags
+
 def get_icons(item_data):
     icon_dir = 'resources/icons/'
     icons = []

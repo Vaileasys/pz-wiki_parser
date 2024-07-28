@@ -76,6 +76,8 @@ def write_to_output(parsed_data, item_data, item_id, output_dir='output/infoboxe
 
             weapon = script_parser.get_module_from_item(parsed_data, item_data, 'MountOn')
             weapon = utility.get_icons_for_item_ids(parsed_data, weapon.values())
+            
+            tags = utility.get_tags(item_data)
 
             parameters = {
                 "name": translate.get_translation(item_id, "DisplayName"),
@@ -180,18 +182,20 @@ def write_to_output(parsed_data, item_data, item_id, output_dir='output/infoboxe
                 "bad_cold": item_data.get('BadCold', '').capitalize(),
                 "spice": item_data.get('Spice', '').capitalize(),
                 "evolved_recipe": item_data.get('EvolvedRecipeName', ''),
-                "tags": utility.format_line_break(item_data.get('Tags', '')),  # TODO: use param tag1, tag2, etc.
+#                "tag": utility.get_tags(item_data),  # added with 'insert_parameters_after' 
                 "item_id": item_id,
                 "infobox_version": "41.78.16"
             }
 
             # new parameters to be added and parameter keys go here
             icon_parameters = {'icon': icons}
+            tag_parameters = {'tag': tags}
 
             # These parameters will be added afterwards. For parameters that need to be defined, e.g. icon2, icon3, etc.
             # 'after_param': param_key,
             new_parameters_dict = {
-                'model': icon_parameters
+                'model': icon_parameters,
+                'evolved_recipe': tag_parameters
             }
 
             parameters = insert_parameters_after(parameters, new_parameters_dict)
