@@ -48,13 +48,22 @@ def get_icon(item_data, variant=""):
     return icon
 
 
+def is_egg(tags):
+    if isinstance(tags, str):
+        tags = [tags]
+    if "Egg" in tags:
+        value = 'true'
+    else: value = ''
+    return value
+
+
 def write_to_output(parsed_data, item_data, item_id, output_dir='output/consumables'):
     if item_data.get('Type') == "Food" and ('IsCookable' in item_data or 'DaysTotallyRotten' in item_data):
         try:
             os.makedirs(output_dir, exist_ok=True)
             output_file = os.path.join(output_dir, f'{item_id}.txt')
             with open(output_file, 'w', encoding='utf-8') as file:
-                file.write("{{Consumables/sandbox")
+                file.write("{{Consumables")
 
                 perishable = item_data.get("DaysTotallyRotten", '')
                 if perishable:
@@ -70,6 +79,7 @@ def write_to_output(parsed_data, item_data, item_id, output_dir='output/consumab
                     "boredom": item_data.get("BoredomChange", ''),
                     "unhappiness": item_data.get("UnhappyChange", ''),
                     "dangerous_uncooked": item_data.get("DangerousUncooked", '').lower(),
+                    "egg": is_egg(item_data.get("Tags", '')),
                     "cookable": item_data.get("IsCookable", '').lower(),
                     "perishable": perishable,
                     "RemoveNegativeEffectOnCooked": item_data.get("RemoveNegativeEffectOnCooked", '').lower()
