@@ -98,7 +98,7 @@ def write_to_output(parsed_data, item_data, item_id, output_dir='output/infoboxe
                 "clip_size": item_data.get('MaxAmmo', ''),
                 "material": material,
                 "material_value": material_value,
-                "can_boil_water": item_data.get('IsCookable', '').capitalize(),
+                "can_boil_water": item_data.get('CanBoilWater', '').capitalize(),
                 "writable": item_data.get('CanBeWrite', '').capitalize(),
                 "recipes": utility.format_line_break(item_data.get('TeachedRecipes', '')),
                 "skill_trained": item_data.get('SkillTrained', ''),
