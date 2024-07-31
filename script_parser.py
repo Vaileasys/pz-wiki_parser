@@ -1,52 +1,68 @@
 import os
 from core import translate
 
-language_codes = {
-    'ar': "Cp1252", 
-    'ca': "ISO-8859-15", 
-    'ch': "UTF-8", 
-    'cn': "UTF-8", 
-    'cs': "Cp1250", 
-    'da': "Cp1252", 
-    'de': "Cp1252", 
-    'en': "UTF-8", 
-    'es': "Cp1252", 
-    'fi': "Cp1252", 
-    'fr': "Cp1252", 
-    'hu': "Cp1250", 
-    'id': "UTF-8", 
-    'it': "Cp1252", 
-    'jp': "UTF-8", 
-    'ko': "UTF-16", 
-    'nl': "Cp1252", 
-    'no': "Cp1252", 
-    'ph': "UTF-8", 
-    'pl': "Cp1250", 
-    'pt': "Cp1252", 
-    'ptbr': "Cp1252", 
-    'ro': "UTF-8", 
-    'ru': "Cp1251", 
-    'th': "UTF-8", 
-    'tr': "Cp1254", 
-    'ua': "Cp1251"
-}
+parsed_item_data = ""
+parsed_fixing_data = ""
 
-# find a module for an item and return item_id (used for property values that don't define the module)
-def get_module_from_item(parsed_data, item_data, property_name):
-    item_types = item_data.get(property_name, [])
-    modules = {}
-    
-    for item_type in item_types:
-        item_type = item_type.strip()
-        for module, items in parsed_data.items():
-            if item_type in items:
-                modules[item_type] = f"{module}.{item_type}"
-                break
 
-    return modules
+# parse fixing data
+def get_fixing_properties(line, data, current_module, current_fixing):   
+    if ':' in line and current_module and current_fixing:
+        role, value = line.split(':', 1)
+        role = role.strip()
+        value = value.rstrip(',').strip()
+
+        if role == 'Fixer':
+            fixer_entries = value.split(';')
+            if 'Fixer' not in data[current_module][current_fixing]:
+                data[current_module][current_fixing]['Fixer'] = []
+            
+            fixer_item = {}
+            for entry in fixer_entries:
+                entry = entry.strip()
+                if '=' in entry:
+                    key, val = entry.split('=')
+                    key = key.strip()
+                    val = int(val.strip())
+                else:
+                    key = entry.strip()
+                    val = 1
+                
+                fixer_item[key] = {'amount': val}
+
+            data[current_module][current_fixing]['Fixer'].append(fixer_item)
+        elif role == 'Require':
+            data[current_module][current_fixing]['Require'] = value
+
+    return
+
+
+# parse item data
+def get_item_properties(line, data, current_module, current_item):
+    # get properties
+    if '=' in line and current_module and current_item:
+        prop, value = line.split('=', 1)
+        prop = prop.strip()
+        value = value.rstrip(',').strip()
+
+        if prop == 'DisplayName':
+            item_id = f"{current_module}.{current_item}"
+            item_name = translate.get_translation(item_id, 'DisplayName', 'en')
+            if item_name is not None:
+                data[current_module][current_item][prop] = item_name
+            else:
+                data[current_module][current_item][prop] = value
+        else:
+            # check for ';' for fourth level
+            if ';' in value:
+                data[current_module][current_item][prop] = value.split(';')
+            else:
+                data[current_module][current_item][prop] = value
+    return
+
 
 # parse each line and add to a "data" dictionary
-def parse_file(file_path, data):
+def parse_file(file_path, data, block_type="item"):
     current_module = None
     current_type = None
     block = None
@@ -54,7 +70,7 @@ def parse_file(file_path, data):
     is_comment = False
     is_imports_block = False
     type_counter = 0
-    block_type = None # TODO: give user option to define the block type (e.g. item, recipe, fixing, etc.)
+#    block_type = "fixing" # TODO: give user option to define the block type (e.g. item, recipe, fixing, etc.)
 
     with open(file_path, 'r') as file:
         for line in file:
@@ -98,61 +114,51 @@ def parse_file(file_path, data):
                 block = None
 
             # open item block
-            if block_type == None:
-                block_type = 'item'
-            elif line.startswith(block_type) and indent_level == 1:
+            if line.startswith(block_type) and indent_level == 1:
                 indent_level += 1
                 block = block_type
-                current_type = line.split()[1]
+                current_type = line[len(block_type):].strip()
                 if current_module not in data:
                     data[current_module] = {}
                 if current_type not in data[current_module]:
                     data[current_module][current_type] = {'block': block}
                     type_counter += 1
                 else:
-                    # type already exists, update block value
-                    block = data[current_module][current_type]['block']
+                    # type already exists, skip it
+                    print(f"Type '{current_type}' already exists when parsing '{block_type}'")
+                    current_type = None
+                    continue
             # close item block
             elif line.startswith('}') and indent_level == 2:
                 indent_level -= 1
                 block = None
-            
-            # get properties
-            elif '=' in line and current_module and current_type:
-                prop, value = line.split('=', 1)
-                prop = prop.strip()
-                value = value.rstrip(',').strip()
-
-                if prop == 'DisplayName':
-                    item_id = f"{current_module}.{current_type}"
-                    item_name = translate.get_translation(item_id, 'DisplayName', 'en')
-                    if item_name is not None:
-                        data[current_module][current_type][prop] = item_name
-                    else:
-                        data[current_module][current_type][prop] = value
-                else:
-                    # check for ';' for fourth level
-                    if ';' in value:
-                        data[current_module][current_type][prop] = value.split(';')
-                    else:
-                        data[current_module][current_type][prop] = value
                 
-#    print("Parsed Data:\n", data)
+            
+            # get item properties
+            elif block == "item" and indent_level == 2:
+                get_item_properties(line, data, current_module, current_type)
+            elif block == "fixing" and indent_level == 2:
+                get_fixing_properties(line, data, current_module, current_type)
+                
     return data, type_counter
 
 
 # defines the files to be parsed - will parse every txt file in the "folder_path"
 def parse_files_in_folder(folder_path):
-    parsed_data = {}
-    total_type_counter = 0
+    parsed_item_data = {}
+    parsed_fixing_data = {}
+    total_item_counter = 0
+    total_fixing_counter = 0
     for filename in os.listdir(folder_path):
         if filename.endswith('.txt'):
 #            print("Processing", filename)
             file_path = os.path.join(folder_path, filename)
-            parsed_data, type_counter = parse_file(file_path, parsed_data)
-            total_type_counter += type_counter
+            parsed_item_data, item_counter = parse_file(file_path, parsed_item_data)
+            parsed_fixing_data, fixing_counter = parse_file(file_path, parsed_fixing_data, "fixing")
+            total_item_counter += item_counter
+            total_fixing_counter += fixing_counter
             
-    return parsed_data, total_type_counter
+    return parsed_item_data, parsed_fixing_data, total_item_counter, total_fixing_counter
 
 
 # for debugging - outputs all the parsed data into a txt file called "parsed_data.txt"
@@ -168,16 +174,30 @@ def output_parsed_data_to_txt(data, output_file):
                     file.write(f"    {block_value} {item_type}\n")
                 else:
                     file.write(f"    {item_type}\n")
+                
                 for prop, values in type_data.items():
-                    file.write(f"        {prop} = {values}\n")
+                    # fixing
+                    if prop == 'Fixer':
+                        file.write(f"        {prop}:\n")
+                        for fixer_dict in values:
+                            fixer_line = '; '.join(f"{key} = {val['amount']}" for key, val in fixer_dict.items())
+                            file.write(f"            {fixer_line}\n")
+                    # item
+                    else:
+                        file.write(f"        {prop} = {values}\n")
                 file.write('\n')
 
 
-def main():
-    parsed_data, total_type_counter = parse_files_in_folder('resources/scripts')
-    output_parsed_data_to_txt(parsed_data, 'logging/parsed_data.txt')
-    print("Total items parsed:", total_type_counter)
-    return parsed_data
+# initialise parser
+def init():
+    global parsed_item_data
+    global parsed_fixing_data
+    parsed_item_data, parsed_fixing_data, total_item_counter, total_fixing_counter = parse_files_in_folder('resources/scripts')
+    output_parsed_data_to_txt(parsed_item_data, 'logging/parsed_data.txt')
+    output_parsed_data_to_txt(parsed_fixing_data, 'logging/parsed_fixing_data.txt')
+    print("Total items parsed:", total_item_counter)
+    print("Total fixings parsed:", total_fixing_counter)
+
     
 if __name__ == "__main__":
-    main()
+    init()

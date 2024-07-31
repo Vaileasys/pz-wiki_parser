@@ -6,10 +6,10 @@ from core import translate
 from core import utility
 
 
-def get_item(parsed_data):
+def get_item():
     while True:
         item_id = input("Enter an item id\n> ")
-        for module, module_data in parsed_data.items():
+        for module, module_data in script_parser.parsed_item_data.items():
             for item_type, item_data in module_data.items():
                 if f"{module}.{item_type}" == item_id:
                     return item_data, item_id
@@ -56,7 +56,7 @@ def insert_parameters_after(parameters, new_parameters_dict):
     return combined_parameters
 
 
-def write_to_output(parsed_data, item_data, item_id, output_dir='output/infoboxes'):
+def write_to_output(item_data, item_id, output_dir='output/infoboxes'):
     try:
         os.makedirs(output_dir, exist_ok=True)
         output_file = os.path.join(output_dir, f'{item_id}.txt')
@@ -74,8 +74,8 @@ def write_to_output(parsed_data, item_data, item_id, output_dir='output/infoboxe
                 material = 'metal'
             material = material.capitalize()
 
-            weapon = script_parser.get_module_from_item(parsed_data, item_data, 'MountOn')
-            weapon = utility.get_icons_for_item_ids(parsed_data, weapon.values())
+            weapon = utility.get_module_from_item(item_data, 'MountOn')
+            weapon = utility.get_icons_for_item_ids(weapon.values())
             
             tags = utility.get_tags(item_data)
 
@@ -94,13 +94,13 @@ def write_to_output(parsed_data, item_data, item_id, output_dir='output/infoboxe
                 "weapon": weapon,
                 "part_type": item_data.get('PartType', ''),
                 "skill_type": utility.get_skill_type_mapping(item_data, item_id),
-                "ammo_type": utility.get_icons_for_item_ids(parsed_data, item_data.get('AmmoType', '')),
+                "ammo_type": utility.get_icons_for_item_ids(item_data.get('AmmoType', '')),
                 "clip_size": item_data.get('MaxAmmo', ''),
                 "material": material,
                 "material_value": material_value,
                 "can_boil_water": item_data.get('CanBoilWater', '').capitalize(),
                 "writable": item_data.get('CanBeWrite', '').capitalize(),
-                "recipes": utility.format_line_break(item_data.get('TeachedRecipes', '')),
+                "recipes": utility.format_br(item_data.get('TeachedRecipes', '')),
                 "skill_trained": item_data.get('SkillTrained', ''),
                 "page_number": item_data.get('NumberOfPages') or item_data.get('PageToWrite', ''),
                 "packaged": item_data.get('Packaged', '').capitalize(),
@@ -211,32 +211,32 @@ def write_to_output(parsed_data, item_data, item_id, output_dir='output/infoboxe
         
 
 
-def process_item(parsed_data, item_data, item_id, output_dir):
-    write_to_output(parsed_data, item_data, item_id, output_dir)
+def process_item(item_data, item_id, output_dir):
+    write_to_output(item_data, item_id, output_dir)
 
 
-def automatic_extraction(parsed_data):
+def automatic_extraction():
     output_dir = 'output/infoboxes'
     if os.path.exists(output_dir):
         shutil.rmtree(output_dir)
     os.makedirs(output_dir)
 
-    for module, module_data in parsed_data.items():
+    for module, module_data in script_parser.parsed_item_data.items():
         for item_type, item_data in module_data.items():
             item_id = f"{module}.{item_type}"
-            process_item(parsed_data, item_data, item_id, output_dir)
+            process_item(item_data, item_id, output_dir)
 
 
 def main():
-    parsed_data = script_parser.main()
+    script_parser.init()
 
     choice = input("Select extraction mode (1: automatic, 2: manual):\n> ")
     if choice == '1':
-        automatic_extraction(parsed_data)
+        automatic_extraction()
         print("Extraction complete, the files can be found in output/infoboxes.")
     elif choice == '2':
-        item_data, item_id = get_item(parsed_data)
-        write_to_output(parsed_data, item_data, item_id)
+        item_data, item_id = get_item()
+        write_to_output(item_data, item_id)
         print("Extraction complete, the file can be found in output/infoboxes.")
     else:
         print("Invalid choice. Please restart the script and choose 1 or 2.")

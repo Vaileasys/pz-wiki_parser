@@ -2,10 +2,10 @@ import script_parser
 import core.translate as translate
 
 
-def weapon_list(parsed_data):
+def weapon_list():
     sorted_items = {}
 
-    for module, module_data in parsed_data.items():
+    for module, module_data in script_parser.parsed_item_data.items():
         for item_type, item_data in module_data.items():
             if item_data.get("Type") == "Weapon":
                 skill = item_data.get("Categories")
@@ -101,7 +101,8 @@ def write_to_output(sorted_items):
 
 
 def main():
-    weapon_list(script_parser.main())
+    script_parser.init()
+    weapon_list()
 
 
 if __name__ == "__main__":

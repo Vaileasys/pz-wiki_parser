@@ -1,12 +1,13 @@
 import script_parser
 
-def property_list(parsed_data, property_name):
+def property_list(property_name):
     sorted_properties = {}
 
-    for module, module_data in parsed_data.items():
+    for module, module_data in script_parser.parsed_item_data.items():
         for item_type, type_data in module_data.items():
             if property_name in type_data:
                 value = type_data[property_name]
+#                item_id = f"{module}.{item_type}"
                 display_category = type_data.get('DisplayCategory', 'Other')
                 if display_category not in sorted_properties:
                     sorted_properties[display_category] = []
@@ -23,11 +24,11 @@ def save_property_list_to_file(sorted_properties, output_file):
             file.write("\n")
 
 def main():
-    parsed_data = script_parser.init()
+    script_parser.init()
     
     while True:
         property_name = input("Enter the property: \n> ")
-        sorted_properties = property_list(parsed_data, property_name)
+        sorted_properties = property_list(property_name)
         if sorted_properties:
             break
         print(f"No property found for {property_name}")

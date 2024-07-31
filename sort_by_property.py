@@ -1,10 +1,11 @@
 import script_parser
 
-def sort_by_property(parsed_data, property):
+
+def sort_by_property(property):
     sorted_data = {}
 
     # iterate through the parsed data and sort it based on the specified property
-    for module, module_data in parsed_data.items():
+    for module, module_data in script_parser.parsed_item_data.items():
         for item_type, type_data in module_data.items():
             if property in type_data:
                 property_value = type_data.get(property)
@@ -24,9 +25,12 @@ def sort_by_property(parsed_data, property):
     
     print(f"Output saved to {output_file}")
 
+
 def main():
+    script_parser.init()
     # sorts by a user-defined property
-    sort_by_property(script_parser.init(), input("Enter a property:\n> "))
+    sort_by_property(input("Enter a property:\n> "))
+
 
 if __name__ == "__main__":
     main()

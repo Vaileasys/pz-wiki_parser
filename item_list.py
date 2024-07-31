@@ -35,11 +35,11 @@ def write_to_output(sorted_items):
     print(f"Output saved to {output_file}")
 
 
-def item_list(parsed_data):
+def item_list():
     sorted_items = {}
     icon_dir = 'resources/icons/'
 
-    for module, module_data in parsed_data.items():
+    for module, module_data in script_parser.parsed_item_data.items():
         for item_type, item_data in module_data.items():
             # Check if 'DisplayCategory' property exists for the item
             if 'DisplayCategory' in item_data:
@@ -131,11 +131,12 @@ def filters_tree():
             print("Invalid filter name. Please try again.")
 
 
-def init():
+def main():
+    script_parser.init()
     while True:
         user_input = input("Run script ('y') or set up a filter ('filter')?\n> ")
         if user_input == "y":
-            item_list(script_parser.main())
+            item_list()
             return
         
         # filters
@@ -154,4 +155,4 @@ def init():
 
 
 if __name__ == "__main__":
-    init()
+    main()

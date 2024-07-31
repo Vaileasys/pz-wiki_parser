@@ -1,5 +1,6 @@
 import script_parser
-import core.translate as translate
+from core import translate
+
 
 def write_to_output(items):
     # write to output.txt
@@ -37,10 +38,11 @@ def write_to_output(items):
 
     print(f"Output saved to {output_file}")
 
-def get_items(parsed_data):
+
+def get_items():
     items = []
     
-    for module, module_data in parsed_data.items():
+    for module, module_data in script_parser.parsed_item_data.items():
         for item_key, item_value in module_data.items():
             if "Calories" in item_value:
                 item_id = f"{module}.{item_key}"
@@ -62,12 +64,12 @@ def get_items(parsed_data):
     
     return items
 
+
 def main():
-    parsed_data = script_parser.main()
-    items = get_items(parsed_data)
+    script_parser.init()
+    items = get_items()
     write_to_output(items)
                 
-
 
 if __name__ == "__main__":
     main()
