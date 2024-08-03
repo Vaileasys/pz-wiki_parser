@@ -7,7 +7,9 @@ def main(user_input):
         for item_type, item_data in module_data.items():
             if 'Tags' in item_data:
                 name = item_data.get('DisplayName')
-                icon = item_data.get('Icon', 'Question')
+                icon = item_data.get('Icon', '')
+                if icon in ('', 'default'):
+                    icon = item_data.get('WorldObjectSprite', 'Question')
                 tags = item_data.get('Tags', [])
                 if isinstance(tags, str):
                     tags = [tags]
@@ -29,7 +31,7 @@ def main(user_input):
 
 
 def write_tag_image(tags_dict):
-    output_dir = "output/tags"
+    output_dir = "output/tags/"
     os.makedirs(output_dir, exist_ok=True)
     for tag, tag_data in tags_dict.items():
         output_file = os.path.join(output_dir, f'{tag}.txt')
@@ -40,12 +42,11 @@ def write_tag_image(tags_dict):
                 name = item['name']
                 file.write(f"[[File:{icon}.png|32x32px|link=Item tags#tag-{tag}|{name}]]")
             file.write("</span>")
-    output_file = os.path.normpath(output_file).replace(os.sep, '/')
-    print(f"Completed Tag images script. Files can be found in '{output_file}'")
+    print(f"Completed Tag images script. Files can be found in '{output_dir}'")
 
 
 def write_tag_table(tags_dict):
-    output_dir = "output"
+    output_dir = "output/"
     os.makedirs(output_dir, exist_ok=True)
     output_file = os.path.join(output_dir, 'tags_table.txt')
     with open(output_file, 'w', encoding='utf-8') as file:
@@ -56,7 +57,6 @@ def write_tag_table(tags_dict):
             tags = ', '.join(f'[[{name}]]' for name in names)
             file.write(f'|-\n| <span id="tag-{tag}">[[#{tag}|{tag}]]</span> || {tags}\n')
         file.write('|}')
-    output_file = os.path.normpath(output_file).replace(os.sep, '/')
     print(f"Completed Tag table script. File can be found in '{output_file}'")
         
 
