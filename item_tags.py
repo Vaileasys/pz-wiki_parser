@@ -1,5 +1,6 @@
 import os
 import script_parser
+from core import utility
 
 def main(user_input):
     tags_dict = {}
@@ -7,9 +8,7 @@ def main(user_input):
         for item_type, item_data in module_data.items():
             if 'Tags' in item_data:
                 name = item_data.get('DisplayName')
-                icon = item_data.get('Icon', '')
-                if icon in ('', 'default'):
-                    icon = item_data.get('WorldObjectSprite', 'Question')
+                icon = utility.get_icon(item_data)
                 tags = item_data.get('Tags', [])
                 if isinstance(tags, str):
                     tags = [tags]

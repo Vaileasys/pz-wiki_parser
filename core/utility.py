@@ -14,7 +14,19 @@ def get_tags(item_data):
     return tags
 
 
-# gets all icons for item_data
+#get an icon for item_data
+def get_icon(item_data):
+    icon = item_data.get('Icon', '')
+    if icon in ('', 'default'):
+        if 'IconsForTexture' in item_data:
+            icon = item_data.get('IconsForTexture')
+            icon = icon[0]
+        else:
+            icon = item_data.get('WorldObjectSprite', 'Question')
+
+    return icon
+
+# gets all icons for item_data and return as a list
 def get_icons(item_data):
     icon_dir = 'resources/icons/'
     icons = []
