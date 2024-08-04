@@ -9,7 +9,7 @@ def main(user_input):
             if 'Tags' in item_data:
                 item_id = f"{module}.{item_type}"
                 name = item_data.get('DisplayName')
-                icon = utility.get_icon(item_data)
+                icon = utility.get_icon(item_data, item_id)
                 tags = item_data.get('Tags', [])
                 if isinstance(tags, str):
                     tags = [tags]

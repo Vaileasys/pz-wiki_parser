@@ -1,4 +1,5 @@
 import os
+import csv
 from core import translate
 import script_parser
 
@@ -15,7 +16,18 @@ def get_tags(item_data):
 
 
 #get an icon for item_data
-def get_icon(item_data):
+def get_icon(item_data, item_id=""):
+    icons_csv = 'resources/icons.csv'
+    # get icon from icons.csv instead if it exists
+    if os.path.exists(icons_csv) and item_id != "":
+        with open(icons_csv, newline='', encoding='UTF-8') as csv_file:
+            csv_file = csv.reader(csv_file)
+            for row in csv_file:
+                if row[0] == item_id:
+                    return row[1]
+    else:
+        print(f"File {icons_csv} does not exist. Getting icon from item properties.")
+
     icon = item_data.get('Icon', '')
     if icon in ('', 'default'):
         if 'IconsForTexture' in item_data:
@@ -25,6 +37,7 @@ def get_icon(item_data):
             icon = item_data.get('WorldObjectSprite', 'Question')
 
     return icon
+
 
 # gets all icons for item_data and return as a list
 def get_icons(item_data):
