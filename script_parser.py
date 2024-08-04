@@ -1,43 +1,67 @@
 import os
 from core import translate
+from core import logging
 
 parsed_item_data = ""
 parsed_fixing_data = ""
 
 
-# parse fixing data
-def get_fixing_properties(line, data, current_module, current_fixing):   
-    if ':' in line and current_module and current_fixing:
-        role, value = line.split(':', 1)
-        role = role.strip()
+# parse fixing properties
+def get_fixing_properties(line, data, current_module, current_fixing):
+    if current_module is None or current_fixing is None:
+        logging.log_to_file(f"Skipping line due to unset module or type: {line}")
+        return
+
+    if current_module not in data:
+        data[current_module] = {}
+    if current_fixing not in data[current_module]:
+        data[current_module][current_fixing] = {}
+
+    if ':' in line:
+        property, value = line.split(':', 1)
+        property = property.strip()
         value = value.rstrip(',').strip()
 
-        if role == 'Fixer':
-            fixer_entries = value.split(';')
-            if 'Fixer' not in data[current_module][current_fixing]:
-                data[current_module][current_fixing]['Fixer'] = []
-            
-            fixer_item = {}
-            for entry in fixer_entries:
-                entry = entry.strip()
-                if '=' in entry:
-                    key, val = entry.split('=')
-                    key = key.strip()
-                    val = int(val.strip())
-                else:
-                    key = entry.strip()
-                    val = 1
-                
-                fixer_item[key] = {'amount': val}
+        # 'Fixer' and 'GlobalItem' should be treated differently (GlobalItem included for future-proofing)
+        if property == "Fixer" or property == "GlobalItem":
+            base_property = property
+            count = 1
 
-            data[current_module][current_fixing]['Fixer'].append(fixer_item)
-        elif role == 'Require':
-            data[current_module][current_fixing]['Require'] = value
+            while f"{base_property}{count}" in data[current_module][current_fixing]:
+                count += 1
+            property = f"{base_property}{count}"
+            data[current_module][current_fixing][property] = {'items': {}, 'skills': {}}
+            value_parts = value.split(';')
+
+            for i, fixer_data in enumerate(value_parts):
+                fixer_data = fixer_data.strip()
+                if '=' in fixer_data:
+                    k, v = fixer_data.split('=')
+                    k = k.strip()
+                    v = v.strip()
+                else:
+                    k = fixer_data
+                    v = '1'
+
+                if i == 0:
+                    data[current_module][current_fixing][property]['items'][k] = v
+                else:
+                    data[current_module][current_fixing][property]['skills'][k] = v
+
+        else:
+            if property not in data[current_module][current_fixing]:
+                data[current_module][current_fixing][property] = []
+
+            value_parts = value.split(';')
+            for item in value_parts:
+                item = item.strip()
+                if item:
+                    data[current_module][current_fixing][property].append(item)
 
     return
 
 
-# parse item data
+# parse item properties
 def get_item_properties(line, data, current_module, current_item):
     # get properties
     if '=' in line and current_module and current_item:
@@ -70,7 +94,6 @@ def parse_file(file_path, data, block_type="item"):
     is_comment = False
     is_imports_block = False
     type_counter = 0
-#    block_type = "fixing" # TODO: give user option to define the block type (e.g. item, recipe, fixing, etc.)
 
     with open(file_path, 'r') as file:
         for line in file:
@@ -125,7 +148,7 @@ def parse_file(file_path, data, block_type="item"):
                     type_counter += 1
                 else:
                     # type already exists, skip it
-                    print(f"Type '{current_type}' already exists when parsing '{block_type}'")
+                    logging.log_to_file(f"Type '{current_type}' already exists when parsing '{block_type}'")
                     current_type = None
                     continue
             # close item block
@@ -133,7 +156,6 @@ def parse_file(file_path, data, block_type="item"):
                 indent_level -= 1
                 block = None
                 
-            
             # get item properties
             elif block == "item" and indent_level == 2:
                 get_item_properties(line, data, current_module, current_type)
@@ -151,7 +173,6 @@ def parse_files_in_folder(folder_path):
     total_fixing_counter = 0
     for filename in os.listdir(folder_path):
         if filename.endswith('.txt'):
-#            print("Processing", filename)
             file_path = os.path.join(folder_path, filename)
             parsed_item_data, item_counter = parse_file(file_path, parsed_item_data)
             parsed_fixing_data, fixing_counter = parse_file(file_path, parsed_fixing_data, "fixing")
@@ -161,7 +182,7 @@ def parse_files_in_folder(folder_path):
     return parsed_item_data, parsed_fixing_data, total_item_counter, total_fixing_counter
 
 
-# for debugging - outputs all the parsed data into a txt file called "parsed_data.txt"
+# for debugging - outputs all the parsed data into a txt file
 def output_parsed_data_to_txt(data, output_file):
     with open(output_file, 'w') as file:
         for module, module_data in data.items():
@@ -175,16 +196,28 @@ def output_parsed_data_to_txt(data, output_file):
                 else:
                     file.write(f"    {item_type}\n")
                 
-                for prop, values in type_data.items():
+                for property, property_data in type_data.items():
                     # fixing
-                    if prop == 'Fixer':
-                        file.write(f"        {prop}:\n")
-                        for fixer_dict in values:
-                            fixer_line = '; '.join(f"{key} = {val['amount']}" for key, val in fixer_dict.items())
-                            file.write(f"            {fixer_line}\n")
+                    if 'fixing' in block_value:
+                        if len(property_data) == 1:
+                            property_data = str(property_data[0])
+                            file.write(f"        {property}: {property_data}\n")
+
+                        else:
+                            if isinstance(property_data, list):
+                                items = ', '.join(property_data)
+                                file.write(f"        {property}: {items}\n")
+                            else:
+                                file.write(f"        {property}:\n")
+                                for fixer, fixer_data in property_data.items():
+                                    if fixer_data:
+                                        file.write(f"            {fixer}:\n")
+
+                                        for pair, pair_data in fixer_data.items():
+                                            file.write(f"                {pair} = {pair_data}\n")
                     # item
                     else:
-                        file.write(f"        {prop} = {values}\n")
+                        file.write(f"        {property} = {property_data}\n")
                 file.write('\n')
 
 

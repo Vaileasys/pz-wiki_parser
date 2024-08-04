@@ -6,67 +6,158 @@ from core import translate
 from core import utility
 
 
-def get_item():
+def get_fixing():
     while True:
-        item_id = input("Enter an item id\n> ")
+        fixing_id = input("Enter an item id\n> ")
         for module, module_data in script_parser.parsed_fixing_data.items():
             for fixing, fixing_data in module_data.items():
-                if 'Require' in fixing_data:
-                    item_fixed = fixing_data['Require']
-                    item_data = item_data = fixing_data['Fixer']
-                    if f"{module}.{item_fixed}" == item_id:
-                        return module, item_data, item_id
-        print(f"No item found for '{item_id}', please try again.")
+                fixing_id = f"{module}.{fixing}"
+                fixing_id = fixing_id.replace(" ", "_")
+                return module, fixing_id, fixing_data
+        print(f"No item found for '{fixing_id}', please try again.")
 
 
-def write_to_output(module, item_data, item_id, output_dir='output/fixing'):
+# get fixer(s)
+def get_fixer(fixing_id, index=""):
+    items = []
+    item_values = []
+    skills = []
+    skill_values = []
+    module, fixing = fixing_id.split(".")
+    fixing = fixing.replace("_", " ")
+    
+    for parsed_module, module_data in script_parser.parsed_fixing_data.items():
+        if parsed_module == module:
+            for parsed_fixing, fixing_data in module_data.items():
+                if parsed_fixing == fixing:
+                    for property, property_data in fixing_data.items():
+                        if "Fixer" in property:
+                            skill_data = property_data.get("skills", {})
+
+                            for subprop, subprop_data in property_data.items():
+                                if "items" in subprop:
+                                    items.extend(subprop_data.keys())
+                                    item_values.extend(subprop_data.values())
+
+                                    for item_key in subprop_data.keys():
+                                        item_skills = []
+                                        item_skill_values = []
+
+                                        for skill, level in skill_data.items():
+                                            item_skills.append(skill)
+                                            item_skill_values.append(level)
+
+                                        skills.append(item_skills)
+                                        skill_values.append(item_skill_values)
+                    
+    # handle indexing
+    if index != "":
+        if index < len(items):
+            items = items[index]
+            item_values = item_values[index]
+            skills = skills[index]
+            skill_values = skill_values[index]
+        else:
+            print(f"Index {index} is out of range.")
+            return None, None, None, None
+                 
+    return items, item_values, skills, skill_values
+
+
+def get_require(module, fixing_data):
+    name = ""
+    item_id = ""
+    if 'Require' in fixing_data:
+        item_fixed = fixing_data['Require']
+        if isinstance(item_fixed, list):
+            for item in item_fixed:
+                item_id_new = f"{module}.{item}"
+                translated_name = translate.get_translation(item_id_new, "DisplayName")
+
+                if translated_name not in name:
+                    if name:
+                        name += "; "
+                    name += translated_name
+                if item_id:
+                    item_id += "; "
+                item_id += item_id_new
+        else:
+            item_id = f"{module}.{item_fixed}"
+            name = translate.get_translation(item_id, "DisplayName")
+    return item_id, name
+
+
+# format fixers
+def format_fixers(module, fixers):
+    formatted_fixers = []
+    for fixer in fixers:
+        fixer = f"{module}.{fixer}"
+        fixer = translate.get_translation(fixer, "DisplayName")
+        formatted_fixer = f"{{{{ll|{fixer}}}}}"
+        formatted_fixers.append(formatted_fixer)
+    return formatted_fixers
+
+
+# format skills
+def format_skills(skills, skill_values):
+    """Format skills and skill values into a string with <br> for line breaks."""
+    if not skills or not skill_values:
+        return ""
+    if len(skills) != len(skill_values):
+        return ""
+    
+    formatted_skills = []
+    for skill, value in zip(skills, skill_values):
+        translated_skill = translate.get_translation(skill, "Categories")
+        if not translated_skill:
+            translated_skill = skill
+        if not value:
+            value = "0"
+        formatted_skills.append(f"{value} {{{{ll|{translated_skill}}}}}")
+    
+    return "<br>".join(formatted_skills)
+
+
+def write_to_output(module, fixing_id, fixing_data, output_dir='output/fixing'):
     try:
         os.makedirs(output_dir, exist_ok=True)
-        output_file = os.path.join(output_dir, f'{item_id}.txt')
+        output_file = os.path.join(output_dir, f'{fixing_id}.txt')
         with open(output_file, 'w', encoding='utf-8') as file:
             file.write("{{Fixing")
 
-            # Up to 10 fixers
-            fixers = list(item_data)[:10]
+            item_id, name = get_require(module, fixing_data)
+            condition_modifier = fixing_data.get('ConditionModifier', '')
+            if condition_modifier != '':
+                condition_modifier = condition_modifier[0]
+            
+            global_item_value = ''
+            global_item = ''
+            global_item_dict = fixing_data.get('GlobalItem1', {}).get('items', {})
+            if global_item_dict:
+                # expect single entry
+                global_item, global_item_value = next(iter(global_item_dict.items()))
+
+            fixers, fixer_values, skills, skill_values = utility.get_fixer(fixing_id)
+            fixers = format_fixers(module, fixers)
+            
             parameters = {
-                "name": translate.get_translation(item_id, "DisplayName")
+                "name": name,
+                "item_id": item_id,
+                "global_item": global_item,
+                "global_item_value": global_item_value,
+                "condition_modifier": condition_modifier,
             }
 
-            for i, fixer_dict in enumerate(fixers):
-                fixer_key = f"fixer{i+1}"
-                fixer_value_key = f"{fixer_key}_value"
-                fixer_skill_key = f"{fixer_key}_skill"
-                fixer_skill_value_key = f"{fixer_skill_key}_value"
+            # Add fixers, fixer_values, skills, and skill_values dynamically
+            for i in range(max(len(fixers), len(fixer_values), len(skills), len(skill_values))):
+                if i < len(fixers):
+                    parameters[f"fixer{i+1}"] = fixers[i]
+                if i < len(fixer_values):
+                    parameters[f"fixer{i+1}_value"] = fixer_values[i]
+                if i < len(skills):
+                    skill_str = format_skills(skills[i], skill_values[i])
+                    parameters[f"fixer{i+1}_skill"] = skill_str
 
-                fixer_items = list(fixer_dict.items())
-                lc = ""
-                if translate.language_code != "en":
-                    lc = f"/{translate.language_code}"
-                if len(fixer_items) > 0:
-                    fixer_item_key, fixer_item_value = fixer_items[0]
-                    fixer_id = f"{module}.{fixer_item_key}"
-                    fixer_name = translate.get_translation(fixer_id, "DisplayName", "en")
-                    
-                    fixer_name_translated = fixer_name
-                    if translate.language_code != "en":
-                        fixer_name_translated = translate.get_translation(fixer_id)
-                    fixer_icon = f"[[File:{utility.get_icon_from_id(fixer_id)}.png|link={fixer_name}{lc}|{fixer_name_translated}]]"
-                    parameters[fixer_key] = f"{fixer_icon} [[{fixer_name}{lc}]]"
-                    parameters[fixer_value_key] = fixer_item_value['amount']
-                else:
-                    parameters[fixer_key] = ''
-                    parameters[fixer_value_key] = ''
-                
-                if len(fixer_items) > 1:
-                    skill_name, skill_value = fixer_items[1]
-                    if skill_name:
-                        skill_name = translate.get_translation(skill_name, "Categories", "en")
-                    
-                    parameters[fixer_skill_key] = f"[[{skill_name}{lc}]]"
-                    parameters[fixer_skill_value_key] = skill_value['amount']
-                else:
-                    parameters[fixer_skill_key] = ''
-                    parameters[fixer_skill_value_key] = ''
 
             for key, value in parameters.items():
                 if value:
@@ -74,13 +165,13 @@ def write_to_output(module, item_data, item_id, output_dir='output/fixing'):
 
             file.write("\n}}")
     except Exception as e:
-        print(f"Error writing file {item_id}.txt: {e}")
-        logging.log_to_file(f"Error writing file {item_id}.txt: {e}")
+        print(f"Error writing file {fixing_id}.txt: {e}")
+        logging.log_to_file(f"Error writing file {fixing_id}.txt: {e}")
     return
 
 
-def process_item(module, item_data, item_id, output_dir):
-    write_to_output(module, item_data, item_id, output_dir)
+def process_item(module, fixing_id, fixing_data, output_dir):
+    write_to_output(module, fixing_id, fixing_data, output_dir)
 
 
 def automatic_extraction():
@@ -91,10 +182,9 @@ def automatic_extraction():
 
     for module, module_data in script_parser.parsed_fixing_data.items():
         for fixing, fixing_data in module_data.items():
-            if 'Require' in fixing_data:
-                item_id = f"{module}.{fixing_data['Require']}"
-                item_data = item_data = fixing_data['Fixer']
-                process_item(module, item_data, item_id, output_dir)
+            fixing_id = f"{module}.{fixing}"
+            fixing_id = fixing_id.replace(" ", "_")
+            process_item(module, fixing_id, fixing_data, output_dir)
 
 
 def main():
@@ -105,8 +195,8 @@ def main():
         automatic_extraction()
         print("Extraction complete, the files can be found in output/fixing.")
     elif choice == '2':
-        module, item_data, item_id = get_item()
-        write_to_output(module, item_data, item_id)
+        module, fixing_id, fixing_data = get_fixing()
+        write_to_output(module, fixing_id, fixing_data)
         print("Extraction complete, the file can be found in output/fixing.")
     else:
         print("Invalid choice. Please restart the script and choose 1 or 2.")

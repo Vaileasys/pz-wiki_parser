@@ -1,5 +1,6 @@
 import os
 import chardet
+import script_parser
 from core import logging
 
 language_code = None
@@ -76,13 +77,14 @@ def parse_translation_file(file_path, language_code, property_prefix):
         try:
             with open(file_path, 'r', encoding=encoding) as file:
                 for line in file:
+                    # check if the key exists, then get its value
                     if property_prefix in line:
-                        # Split the line at the first '='
                         parts = line.split('=', 1)
+
                         if len(parts) == 2:
-                            # Extract the value within the quotes
                             translation = parts[1].split('"')[1]
                             return translation
+                        
         except UnicodeDecodeError:
             if encoding_detected:
                 print(f"Unable to decode the file '{file_path}' even after trying to detect encoding.")
@@ -120,7 +122,22 @@ def get_translation(property_value, property_name="DisplayName", lang_code=None)
     
     translation = parse_translation_file(file_path, lang_code, property_prefix)
     
+
     if translation is None:
         logging.log_to_file(f"No translation found for item with prefix '{property_prefix}' in '{file_path}'")
+        # try get the item's name from DisplayName instead
+        if property_name == "DisplayName":
+            module_check, item_check = property_value.split(".")
+
+            #check if script_parser has been run yet
+            if script_parser.parsed_item_data != "":
+                for module, module_data in script_parser.parsed_item_data.items():
+                    if module == module_check:
+                        for item, item_data in module_data.items():
+                            if item == item_check:
+                                translation = item_data.get("DisplayName", item)
+                            # special case for 'SaucePan' in fixing (should be 'Saucepan')
+                            elif item == item_check.capitalize():
+                                translation = item_data.get("DisplayName", item)
 
     return translation
