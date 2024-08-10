@@ -137,7 +137,7 @@ def write_to_output(module, fixing_id, fixing_data, output_dir='output/fixing'):
                 # expect single entry
                 global_item, global_item_value = next(iter(global_item_dict.items()))
 
-            fixers, fixer_values, skills, skill_values = utility.get_fixer(fixing_id)
+            fixers, fixer_values, skills, skill_values = get_fixer(fixing_id)
             fixers = format_fixers(module, fixers)
             
             parameters = {
