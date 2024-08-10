@@ -77,7 +77,7 @@ def build_header(category, skill_type):
         return "{{Header|Project Zomboid|Items}}"  # Default header
 
 
-def process_file(file_path, output_dir):
+def process_file(file_path, output_dir, consumables_dir):
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             content = file.read()
@@ -133,7 +133,7 @@ def process_file(file_path, output_dir):
     header = build_header(category, skill_type)
 
     # Create the output content
-    body_content = assemble_body(lowercase_name, os.path.basename(file_path), name, item_id, category, skill_type, infobox)
+    body_content = assemble_body(lowercase_name, os.path.basename(file_path), name, item_id, category, skill_type, infobox, consumables_dir)
 
     new_content = f"""
 {header}
@@ -155,12 +155,11 @@ def process_file(file_path, output_dir):
     try:
         with open(new_file_path, 'w', encoding='utf-8') as new_file:
             new_file.write(new_content.strip())
-        print(f"Processed and created {new_file_path}")
     except Exception as e:
         print(f"Error writing to {new_file_path}: {e}")
 
 
-def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox):
+def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox, consumables_dir):
     sections = {
         'Condition': generate_condition(name, category, skill_type, infobox),
         'Location': generate_location(original_filename, infobox_name, item_id),
@@ -168,7 +167,11 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
         'See also': generate_see_also(name, category)
     }
 
-    body_content = "\n==Usage==\n"  # Start with an empty Usage section
+    body_content = "\n==Usage==\nHelp PZwiki by adding information to this section.\n"
+
+    consumable_properties = generate_consumable_properties(item_id, consumables_dir)
+    if consumable_properties:
+        body_content += f"\n===Consumable properties===\n{consumable_properties}\n"
 
     for section, content in sections.items():
         if content.strip():
@@ -215,7 +218,6 @@ def generate_location(original_filename, infobox_name, item_id):
                 with open(file_path, 'r', encoding='utf-8') as file:
                     return file.read().strip()
             except Exception as e:
-
                 print(f"Error reading {file_path}: {e}")
     return ""
 
@@ -256,9 +258,28 @@ def generate_see_also(name, category):
     return f"{see_also_list}\n\n{navbox}"
 
 
+def generate_consumable_properties(item_id, consumables_dir):
+    if not os.path.exists(consumables_dir):
+        return ""
+
+    # Generate the filename to check
+    filename = re.sub(r'[^\w\-_\. ]', '_', item_id) + '.txt'
+    file_path = os.path.join(consumables_dir, filename)
+
+    if os.path.isfile(file_path):
+        try:
+            with open(file_path, 'r', encoding='utf-8') as file:
+                return file.read().strip()
+        except Exception as e:
+            print(f"Error reading {file_path}: {e}")
+
+    return ""
+
+
 def main():
     input_dir = 'output/infoboxes'
     output_dir = 'output/articles'
+    consumables_dir = 'output/consumables'
 
     if not os.path.exists(input_dir):
         print("Infoboxes directory not found")
@@ -277,7 +298,11 @@ def main():
 
     for text_file in text_files:
         file_path = os.path.join(input_dir, text_file)
-        process_file(file_path, output_dir)
+        process_file(file_path, output_dir, consumables_dir)
+
+    # Check for consumables directory and its contents
+    if not os.path.exists(consumables_dir) or not os.listdir(consumables_dir):
+        print("WARNING: Consumables not found, please run consumables.py first")
 
 
 if __name__ == "__main__":
