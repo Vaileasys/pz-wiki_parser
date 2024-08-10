@@ -1,12 +1,30 @@
 import os
 import script_parser
 from core import translate
+from core import utility
 
 filters = {
     'MakeUp_': (True,),
     'obsolete': (True, 'OBSOLETE', 'true')
 #    'ExampleFilter': (False, 'PropertyName', 'PropertyValue')
 }
+
+# store category translations in a dict to improve efficiency
+categories = {}
+
+
+# checks if a category exists in the dict before trying to translate
+def translate_category(category, property="DisplayCategory"):
+    if category not in categories:
+        try:
+            cat_translated = translate.get_translation(category, property)
+            categories[category] = cat_translated
+        except Exception as e:
+            print(f"Error translating category '{category}': {e}")
+            cat_translated = category
+    else:
+        cat_translated = categories[category]
+    return cat_translated
 
 
 def write_to_output(sorted_items):
@@ -22,16 +40,16 @@ def write_to_output(sorted_items):
         for display_category in sorted(sorted_items.keys()):
             file.write(f"=={display_category}==\n")
             file.write("{| class=\"wikitable theme-blue\"\n! Icon !! Name !! Item ID\n")
-            for item_name, translated_item_name, icons, item_id in sorted_items[display_category]:
+            for page_name, translated_item_name, icons, item_id in sorted_items[display_category]:
                 icons_image = ' '.join([f"[[File:{icon}.png|32x32px]]" for icon in icons])
-                item_link = f"[[{item_name}]]"
+                item_link = f"[[{page_name}]]"
 
-                if language_code != "en":
-                    item_link = f"[[{item_name}{lc_subpage}|{translated_item_name}]]"
+                if language_code != "en" or page_name != translated_item_name:
+                    item_link = f"[[{page_name}{lc_subpage}|{translated_item_name}]]"
                 file.write(f"|-\n| {icons_image} || {item_link} || {item_id}\n")
             file.write("|}\n\n")
 
-        file.write(f"==See also==\n*[[PZwiki:Tile list{lc_subpage}]]")
+        file.write(f"==See also==\n*{{{{ll|PZwiki:Tile list{lc_subpage}}}}}")
     print(f"Output saved to {output_file}")
 
 
@@ -44,16 +62,22 @@ def item_list():
             # Check if 'DisplayCategory' property exists for the item
             if 'DisplayCategory' in item_data:
                 display_category = item_data.get('DisplayCategory', 'Other')
+                display_category = translate_category(display_category)
+                
+                item_id = f"{module}.{item_type}"
                 
                 icons = []
                 
                 # check if 'IconsForTexture' property exists and use it for icon
+                icons_for_texture = []
                 if 'IconsForTexture' in item_data:
                     icons_for_texture = item_data.get('IconsForTexture', [''])
+                    if isinstance(icons_for_texture, str):
+                        icons_for_texture = [icons_for_texture]
                     icons = [icon.strip() for icon in icons_for_texture]
                 else:
                     # get 'Icon' property
-                    icon = item_data.get('Icon', ['Question'])
+                    icon = utility.get_icon(item_data, item_id)
                     if icon != "default":
                         icons.append(icon)
 
@@ -74,10 +98,13 @@ def item_list():
                     icon = item_data.get('WorldObjectSprite', ['Flatpack'])
                     icons.append(icon)
                 
-                item_name = item_data.get('DisplayName', [''])
-                item_id = f"{module}.{item_type}"
-
-                translated_item_name = translate.get_translation(item_id, "DisplayName")
+                # we don't need to translate again if language code is 'en'
+                translated_item_name = item_data.get('DisplayName', [''])
+                page_name = utility.get_page(item_id)
+                if page_name == 'Unknown':
+                    page_name = translated_item_name
+                if translate.language_code != 'en':
+                    translated_item_name = translate.get_translation(item_id, "DisplayName")
                 
                 skip_item = False
 
@@ -103,9 +130,10 @@ def item_list():
                 # add item to the sorted dictionary
                 if display_category not in sorted_items:
                     sorted_items[display_category] = []
-                sorted_items[display_category].append((item_name, translated_item_name, icons, item_id))
+                sorted_items[display_category].append((page_name, translated_item_name, icons, item_id))
     write_to_output(sorted_items)
-    
+
+
 def filters_tree():
     while True:
         print("Current filters:")
