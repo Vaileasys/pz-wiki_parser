@@ -1,7 +1,8 @@
 import os
 import csv
-from core import translate
 import script_parser
+from core import translate
+from core import logging
 
 page_mapping = {
     "Axe": "Axe (skill)",
@@ -116,7 +117,6 @@ def get_model(item_data):
 
 # returns a formatted skill
 def get_skill_type_mapping(item_data, item_id):
-
     skill = item_data.get('Categories', item_data.get('SubCategory'))
     
     if skill is not None:
@@ -166,7 +166,7 @@ def format_link(values):
     return values
 
 
-# formats values separated by <br>
+# formats values separated by <br> (list)
 def format_br(values):
     if not values:
         return ''
@@ -185,9 +185,25 @@ def get_module_from_item(item_data, property_name):
     
     for item_type in item_types:
         item_type = item_type.strip()
-        for module, items in script_parser.parsed_item_data.items():
-            if item_type in items:
+        for module, module_data in script_parser.parsed_item_data.items():
+            if item_type in module_data:
                 modules[item_type] = f"{module}.{item_type}"
                 break
 
     return modules
+
+
+
+# get page name based on item_id uses 'item_id_dictionary.csv'
+def get_page(item_id):
+    dict_csv = 'resources/item_id_dictionary.csv'
+    
+    with open(dict_csv, mode='r', newline='') as csv_file:
+        reader = csv.reader(csv_file)
+        for row in reader:
+            if item_id in row[1:]:
+                return row[0]
+
+#    print(f"Couldn't find a page for '{item_id}'")
+    logging.log_to_file(f"Couldn't find a page for '{item_id}'")
+    return "Unknown"
