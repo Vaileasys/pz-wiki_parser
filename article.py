@@ -3,8 +3,7 @@ import re
 import sys
 
 
-def build_header(category, skill_type):
-    # Define the category dictionary
+def generate_header(category, skill_type):
     category_dict = {
         "Weapon": "use_skill_type",
         "Tool/Weapon": "use_skill_type",
@@ -48,7 +47,6 @@ def build_header(category, skill_type):
         "Appearance": "{{Header|Project Zomboid|Items|Miscellaneous items|Appearance}}"
     }
 
-    # Define the skill type dictionary
     skill_type_dict = {
         "Long Blade": "{{Header|Project Zomboid|Items|Weapons|Melee weapons|Long blade weapons}}",
         "Short Blade": "{{Header|Project Zomboid|Items|Weapons|Melee weapons|Short blade weapons}}",
@@ -77,7 +75,7 @@ def build_header(category, skill_type):
         return "{{Header|Project Zomboid|Items}}"  # Default header
 
 
-def process_file(file_path, output_dir):
+def process_file(file_path, output_dir, consumables_dir):
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             content = file.read()
@@ -130,10 +128,10 @@ def process_file(file_path, output_dir):
     article = 'An' if lowercase_name[0] in 'aeiou' else 'A'
 
     # Build the header
-    header = build_header(category, skill_type)
+    header = generate_header(category, skill_type)
 
     # Create the output content
-    body_content = assemble_body(lowercase_name, os.path.basename(file_path), name, item_id, category, skill_type, infobox)
+    body_content = assemble_body(lowercase_name, os.path.basename(file_path), name, item_id, category, skill_type, infobox, consumables_dir)
 
     new_content = f"""
 {header}
@@ -155,12 +153,11 @@ def process_file(file_path, output_dir):
     try:
         with open(new_file_path, 'w', encoding='utf-8') as new_file:
             new_file.write(new_content.strip())
-        print(f"Processed and created {new_file_path}")
     except Exception as e:
         print(f"Error writing to {new_file_path}: {e}")
 
 
-def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox):
+def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox, consumables_dir):
     sections = {
         'Condition': generate_condition(name, category, skill_type, infobox),
         'Location': generate_location(original_filename, infobox_name, item_id),
@@ -168,7 +165,11 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
         'See also': generate_see_also(name, category)
     }
 
-    body_content = "\n==Usage==\n"  # Start with an empty Usage section
+    body_content = "\n==Usage==\nHelp PZwiki by adding information to this section.\n"
+
+    consumable_properties = generate_consumable_properties(item_id, consumables_dir)
+    if consumable_properties:
+        body_content += f"\n===Consumable properties===\n{consumable_properties}\n"
 
     for section, content in sections.items():
         if content.strip():
@@ -178,7 +179,7 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
 
 
 def generate_condition(name, category, skill_type, infobox):
-    if category not in ['Weapon', 'ToolWeapon']:
+    if category not in ['Weapon', 'Tool / Weapon']:
         return ""
 
     condition_max_match = re.search(r'\|condition_max\s*=\s*(\d+)', infobox)
@@ -190,9 +191,31 @@ def generate_condition(name, category, skill_type, infobox):
     condition_max = condition_max_match.group(1)
     condition_lower_chance = condition_lower_chance_match.group(1)
 
-    return f"""The {name} has a maximum condition of {condition_max}. Its rate of degradation is influenced by the {skill_type} and [[maintenance]] [[skill]]s. The chance of losing [[durability]] can be simplified to the following formula: <code>1 in (35 + maintenanceMod &times; 2)</code>. Where "maintenanceMod" is calculated using the {skill_type} and maintenance skills.<br>
+    condition_text = f"""The {name} has a maximum condition of {condition_max}. Its rate of degradation is influenced by the {skill_type} and [[maintenance]] [[skill]]s. The chance of losing [[durability]] can be simplified to the following formula: <code>1 in (35 + maintenanceMod &times; 2)</code>. Where "maintenanceMod" is calculated using the {skill_type} and maintenance skills.<br>
 
 {{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"""
+
+    fixing_dir = 'output/fixing'
+    if os.path.exists(fixing_dir):
+        fixing_files = os.listdir(fixing_dir)
+
+        item_id = re.search(r'\|item_id\s*=\s*(.+)', infobox).group(1).strip()
+        item_id_search = f"|item_id={item_id}"
+
+        if fixing_files:
+            for file_name in fixing_files:
+                file_path = os.path.join(fixing_dir, file_name)
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as file:
+                        file_content = file.read()
+                        if item_id_search in file_content:
+                            fixing_content = file_content.strip()
+                            condition_text += f"\n\n===Repairing===\n{fixing_content}"
+                            break
+                except Exception as e:
+                    print(f"Error reading {file_path}: {e}")
+
+    return condition_text
 
 
 def generate_location(original_filename, infobox_name, item_id):
@@ -215,7 +238,6 @@ def generate_location(original_filename, infobox_name, item_id):
                 with open(file_path, 'r', encoding='utf-8') as file:
                     return file.read().strip()
             except Exception as e:
-
                 print(f"Error reading {file_path}: {e}")
     return ""
 
@@ -256,9 +278,31 @@ def generate_see_also(name, category):
     return f"{see_also_list}\n\n{navbox}"
 
 
+def generate_consumable_properties(item_id, consumables_dir):
+    if not os.path.exists(consumables_dir):
+        return ""
+
+    # Generate the filename to check
+    filename = re.sub(r'[^\w\-_\. ]', '_', item_id) + '.txt'
+    file_path = os.path.join(consumables_dir, filename)
+
+    if os.path.isfile(file_path):
+        try:
+            with open(file_path, 'r', encoding='utf-8') as file:
+                return file.read().strip()
+        except Exception as e:
+            print(f"Error reading {file_path}: {e}")
+
+    return ""
+
+
 def main():
     input_dir = 'output/infoboxes'
     output_dir = 'output/articles'
+    consumables_dir = 'output/consumables'
+    fixing_dir = 'output/fixing'
+
+    warnings = []
 
     if not os.path.exists(input_dir):
         print("Infoboxes directory not found")
@@ -275,9 +319,18 @@ def main():
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
+    if not os.path.exists(consumables_dir) or not os.listdir(consumables_dir):
+        warnings.append("WARNING: Consumables not found, please run consumables.py first")
+
+    if not os.path.exists(fixing_dir) or not os.listdir(fixing_dir):
+        warnings.append("WARNING: Fixing not found, please run fixing.py first")
+
     for text_file in text_files:
         file_path = os.path.join(input_dir, text_file)
-        process_file(file_path, output_dir)
+        process_file(file_path, output_dir, consumables_dir)
+
+    if warnings:
+        print("\n".join(warnings))
 
 
 if __name__ == "__main__":
