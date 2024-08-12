@@ -35,7 +35,7 @@ def get_icon(item_data, item_id=""):
             icon = item_data.get('IconsForTexture')
             icon = icon[0]
         else:
-            icon = item_data.get('WorldObjectSprite', 'Question')
+            icon = item_data.get('WorldObjectSprite', 'Question_On')
 
     return icon
 
@@ -51,7 +51,7 @@ def get_icons(item_data):
         icons = [f"{icon}.png" for icon in icons]
     else:
         # get 'Icon' property
-        icon = item_data.get('Icon', 'Question')
+        icon = item_data.get('Icon', 'Question_On')
 
         # check if 'WorldObjectSprite' property exists and use it for icon
         if icon == "default":

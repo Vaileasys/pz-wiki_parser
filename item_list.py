@@ -81,7 +81,7 @@ def item_list():
                     if icon != "default":
                         icons.append(icon)
 
-                if icon == "Question":
+                if icon == "Question_On":
                     icons_for_texture = item_data.get('IconsForTexture', [''])
                     if icons_for_texture:
                         icons = [icon.strip() for icon in icons_for_texture]
