@@ -59,7 +59,7 @@ def get_icons(item_data):
         icons.append(f"{icon}.png")
 
         # check if icon has variants
-        icon_variants = ['Rotten', 'Cooked', '_Cooked', 'Burnt', 'Overdone']
+        icon_variants = ['Rotten', 'Spoiled', 'Cooked', '_Cooked', 'Burnt', 'Overdone']
         for variant in icon_variants:
             variant_icon = f"{icon}{variant}.png"
             if os.path.exists(os.path.join(icon_dir, variant_icon)):

@@ -90,7 +90,7 @@ def item_list():
                         icons = [icon.strip() for icon in icons_for_texture]
                 
                 # check if icon has variants
-                icon_variants = ['Rotten', 'Cooked', '_Cooked', 'Burnt', 'Overdone']
+                icon_variants = ['Rotten', 'Spoiled', 'Cooked', '_Cooked', 'Burnt', 'Overdone']
                 for variant in icon_variants:
                     variant_icon = f"{icon}{variant}.png"
                     if os.path.exists(os.path.join(icon_dir, variant_icon)):
