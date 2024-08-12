@@ -68,17 +68,14 @@ def get_icons(item_data):
     return icons
 
 
-# gets 'Icon' for an item_id
-def get_icon_from_id(item_id):
+# gets parsed item data for an item id
+def get_item_data_from_id(item_id):
     current_module, current_item_type = item_id.split('.')
-    icon = "Question"
     for module, module_data in script_parser.parsed_item_data.items():
         if module == current_module:
             for item_type, item_data in module_data.items():
                 if item_type == current_item_type:
-                    icon = item_data.get('Icon')
-
-    return icon
+                    return item_data
 
 
 # gets 'Icon' for list of item_id and formats as wiki image.
@@ -155,8 +152,20 @@ def get_skill_type_mapping(item_data, item_id):
     return
 
 
-# formats values to be a link
-def format_link(values):
+# format a link
+def format_link(name, page=""):
+    if page == "" or name == page:
+        return f"[[{name}]]"
+    
+    lc = ""
+    if translate.language_code != "en":
+        lc = "/" + translate.language_code
+    
+    return f"[[{page}{lc}|{name}]]"
+
+
+# formats values to be links (list)
+def format_links(values):
     if not values:
         return ''
     if not isinstance(values, list):

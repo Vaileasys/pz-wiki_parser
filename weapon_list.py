@@ -1,109 +1,244 @@
+import os
+import shutil
 import script_parser
-import core.translate as translate
+from core import translate
+from core import utility
+
+# table header for melee weapons
+melee_header = """{| class="wikitable theme-red sortable" style="text-align: center;"
+! rowspan=2 | Icon
+! rowspan=2 | Name
+! rowspan=2 | [[File:Moodle_Icon_HeavyLoad.png|link=|Encumbrance]]
+! rowspan=2 | [[File:UI_Hand.png|32px|link=|Equipped]]
+! rowspan=2 | [[File:UI_Damage_Min-test.png|32px|link=|Minimum]]
+! rowspan=2 | [[File:UI_Damage_Max-test.png|32px|link=|Maximum]]
+! rowspan=2 | [[File:UI_Door.png|32px|link=|Door damage]]
+! rowspan=2 | [[File:Container_Plant.png|32px|link=|Tree damage]]
+! colspan=2 | Damage
+! colspan=2 | Range
+! rowspan=2 | [[File:UI_SwingTime.png|32px|link=|Attack speed]]
+! rowspan=2 | [[File:Dice.png|32px|32px|link=|Crit chance]]
+! rowspan=2 | [[File:Dice.png|32px|link=|Crit multiplier]]x
+! rowspan=2 | [[File:UI_Knockback.png|32px|link=|Knockback]]
+! rowspan=2 | [[File:UI_Durability.png|32px|link=|Max condition]]
+! rowspan=2 | {{Tooltip|[[File:UI_DurabilityPercent.png]]|Condition lower chance, 1 in (x + (maintenance × 2 + weapon level))}}
+! rowspan=2 | Av. [[File:UI_Durability.png|32px|link=|Average condition at level 0]]
+! rowspan=2 | Item ID
+|-
+! [[File:UI_Min.png|28px|link=|Minimum]]
+! [[File:UI_Max.png|28px|link=|Maximum]]
+! [[File:UI_Min.png|32px|link=|Minimum]]
+! style="border-right: var(--border-mw);" | [[File:UI_Max.png|32px|link=|Maximum]]\n"""
+
+# table header for firearms
+firearm_header = """{| class="wikitable theme-red sortable" style="text-align: center;"
+! rowspan=2 | Icon
+! rowspan=2 | Name
+! rowspan=2 | [[File:Moodle_Icon_HeavyLoad.png|link=|Encumbrance]]
+! rowspan=2 | [[File:UI_Hand.png|32px|link=|Equipped]]
+! rowspan=2 | [[File:UI_Ammo.png|link=|Ammunition]]
+! rowspan=2 | [[File:BerettaClip.png|link=|Magazine size]]
+! rowspan=2 | [[File:UI_Damage_Min-test.png|32px|link=|Minimum]]
+! rowspan=2 | [[File:UI_Damage_Max-test.png|32px|link=|Maximum]]
+! colspan=2 | Damage
+! colspan=2 | Range
+! rowspan=2 | [[File:UI_Accuracy-test.png|32px|link=|Accuracy]]
+! rowspan=2 | +[[File:UI_Accuracy-test.png|32px|link=|Accuracy]] × Aiming level
+! rowspan=2 | [[File:Dice.png|32px|link=|Crit chance]]
+! rowspan=2 | +[[File:Dice.png|32px|link=|Additional crit chance]] × Aiming level
+! rowspan=2 | [[File:trait_keenhearing.png|36px|link=|Noise radius]]
+! rowspan=2 | [[File:UI_Knockback.png|28px|link=|Knockback]]
+! rowspan=2 | Item ID
+|-
+! [[File:UI_Min.png|28px|link=|Minimum]]
+! [[File:UI_Max.png|28px|link=|Maximum]]
+! [[File:UI_Min.png|28px|link=|Minimum]]
+! style="border-right: var(--border-mw);" | [[File:UI_Max.png|28px|link=|Maximum]]\n"""
+
+# store translated skills
+skills = {}
 
 
-def weapon_list():
-    sorted_items = {}
+# function to be efficient with translating skills
+def translate_skill(skill, property="Categories"):
+    if skill not in skills:
+        try:
+            skill_translated = translate.get_translation(skill, property)
+            skills[skill] = skill_translated
+        except Exception as e:
+            print(f"Error translating skill '{skill}': {e}")
+            skill_translated = skill
+    else:
+        skill_translated = skills[skill]
+    return skill_translated
+
+
+# get values for each firearm
+def process_item_firearm(item_data, item_id):
+    skill = "Handgun"
+    equipped = "1H"
+    if item_data.get("RequiresEquippedBothHands", '').lower() == "true":
+        skill = "Rifle"
+        equipped = "2H"
+        if int(item_data.get("ProjectileCount")) > 1:
+            skill = "Shotgun"
+    
+    name = item_data.get('DisplayName', 'Unknown')
+    page_name = utility.get_page(item_id)
+    link = utility.format_link(name, page_name)
+    icon = utility.get_icon(item_data, item_id)
+    
+    ammo = "-"
+    ammo_id = item_data.get('AmmoType', '')
+    if ammo_id:
+        ammo_data = utility.get_item_data_from_id(ammo_id)
+        ammo_name = ammo_data.get('DisplayName', 'Unknown')
+        ammo_page = utility.get_page(ammo_id)
+        ammo_icon = utility.get_icon(ammo_data, ammo_id)
+        ammo = f"[[File:{ammo_icon}.png|link={ammo_page}|{ammo_name}]]"
+
+
+    crit_chance = item_data.get('CriticalChance', '-')
+    #IsoPlayer.class > calculateCritChance()
+    crit_chance_mod = str((int(item_data.get('AimingPerkCritModifier', 0)) / 2) + 3)
+
+    condition_max = item_data.get("ConditionMax", '0')
+    condition_chance = item_data.get("ConditionLowerChanceOneIn", '0')
+    condition_average = str(int(condition_max) * int(condition_chance))
+
+    item = {
+        "name": name,
+        "icon": f"[[File:{icon}.png|link={page_name}|{name}]]",
+        "name_link": link,
+        "weight": item_data.get('Weight', '1'),
+        "equipped": equipped,
+        "ammo": ammo,
+        "clip_size": item_data.get('ClipSize', item_data.get('MaxAmmo', '')),
+        "damage_min": item_data.get('MinDamage', '-'),
+        "damage_max": item_data.get('MaxDamage', '-'),
+        "min_range": item_data.get('MinRange', '-'),
+        "max_range": item_data.get('MaxRange', '-'),
+        "hit_chance": item_data.get('HitChance', '-') + '%',
+        #SwipeStatePlayer.class > CalcHitChance()
+        "hit_chance_mod": '+' + item_data.get('AimingPerkHitChanceModifier', '-') + '%',
+        "crit_chance": crit_chance + '%',
+        "crit_chance_mod": '+' + crit_chance_mod + '%',
+        "sound_radius": item_data.get('SoundRadius', '-'),
+        "knockback": item_data.get('PushBackMod', '-'),
+#        "condition_max": condition_max,
+#        "condition_chance": condition_chance,
+#        "condition_average": condition_average,
+        "item_id": f'{{{{ID|{item_id}}}}}',
+    }
+
+    return skill, item
+
+
+# get values for each melee waepon
+def process_item_melee(item_data, item_id):
+
+    skill = item_data.get("Categories", '')
+    if isinstance(skill, str):
+        skill = [skill]
+    # remove "Improvised" from list
+    if "Improvised" in skill and len(skill) > 1:
+        skill = [cat for cat in skill if cat != "Improvised"]
+
+    skill = " and ".join(skill)
+    skill_translated = translate_skill(skill, "Categories")
+    if skill_translated is not None:
+        skill = skill_translated
+    
+    name = item_data.get('DisplayName', 'Unknown')
+    page_name = utility.get_page(item_id)
+    link = utility.format_link(name, page_name)
+    icon = utility.get_icon(item_data, item_id)
+
+    equipped = "1H"
+    if item_data.get("RequiresEquippedBothHands") == "TRUE":
+        equipped = "{{Tooltip|2H*|Limited impact when used one-handed.}}"
+    elif item_data.get("TwoHandWeapon", "FALSE") == "TRUE":
+        equipped = "2H"
+
+    condition_max = item_data.get("ConditionMax", '0')
+    condition_chance = item_data.get("ConditionLowerChanceOneIn", '0')
+    condition_average = str(int(condition_max) * int(condition_chance))
+
+    item = {
+        "name": name,
+        "icon": f"[[File:{icon}.png|link={page_name}|{name}]]",
+        "name_link": link,
+        "weight": item_data.get('Weight', '1'),
+        "equipped": equipped,
+        "damage_min": item_data.get('MinDamage', '-'),
+        "damage_max": item_data.get('MaxDamage', '-'),
+        "damage_door": item_data.get('DoorDamage', '-'),
+        "damage_tree": item_data.get('TreeDamage', '-'),
+        "min_range": item_data.get('MinRange', '-'),
+        "max_range": item_data.get('MaxRange', '-'),
+        "base_speed": item_data.get('BaseSpeed', '1'),
+        "crit_chance": item_data.get('CriticalChance', '-'),
+        "crit_multiplier": item_data.get('CritDmgMultiplier', '-'),
+        "knockback": item_data.get('PushBackMod', '-'),
+        "condition_max": condition_max,
+        "condition_chance": condition_chance,
+        "condition_average": condition_average,
+        "item_id": f"{{{{ID|{item_id}}}}}",
+    }
+
+    return skill, item
+
+
+# write to file
+def write_items_to_file(skills, header, category):
+    output_dir = f'output/item_list/weapons/{category}/'
+    os.makedirs(output_dir, exist_ok=True)
+    
+    for skill, items in skills.items():
+        output_path = f"{output_dir}{skill}.txt"
+        with open(output_path, 'w', encoding='utf-8') as file:
+            file.write(f"==={skill}===\n{header}")
+
+            sorted_items = sorted(items, key=lambda x: x['name'])
+
+            for item in sorted_items:
+                # remove 'name' before writing
+                item = [value for key, value in item.items() if key != 'name']
+                item = '\n| '.join(item)
+                file.write(f"|-\n| {item}\n")
+            file.write("|}")
+
+
+def get_items():
+    melee_skills = {}
+    firearm_skills = {}
 
     for module, module_data in script_parser.parsed_item_data.items():
         for item_type, item_data in module_data.items():
             if item_data.get("Type") == "Weapon":
-                skill = item_data.get("Categories")
-                if skill is not None:
-                    if isinstance(skill, str):
-                        skill = [skill]
-                    # remove "Improvised" from list
-                    if "Improvised" in skill and len(skill) > 1:
-                        skill = [cat for cat in skill if cat != "Improvised"]
+                item_id = f"{module}.{item_type}"
 
-                    skill = ";".join(skill)
-                    skill_translated = translate.get_translation(skill, "Categories")
-                    if skill_translated is None:
-                        skill_translated = skill
+                if item_data.get("Categories"):
+                    skill, item = process_item_melee(item_data, item_id)
 
-                    item_id = f"{module}.{item_type}"
-                    item_name = item_data.get("DisplayName")
-                    translated_item_name = translate.get_translation(item_id, "DisplayName")
-                    icon = item_data.get("Icon", "Question")
-                    weight = item_data.get("Weight", 1)
+                    if skill not in melee_skills:
+                        melee_skills[skill] = []
+                    melee_skills[skill].append(item)
 
-                    equipped = "1H"
-                    if item_data.get("RequiresEquippedBothHands") == "TRUE":
-                        equipped = "{{Tooltip|2H*|Limited impact when used one-handed.}}"
-                    elif item_data.get("TwoHandWeapon", "FALSE") == "TRUE":
-                        equipped = "2H"
+                elif item_data.get("SubCategory") == "Firearm":
+                    skill, item = process_item_firearm(item_data, item_id)
 
-                    damage_min = item_data.get("MinDamage", 0)
-                    damage_max = item_data.get("MaxDamage", 0)
-                    damage_door = item_data.get("DoorDamage", 0)
-                    damage_tree = item_data.get("TreeDamage", 0)
-                    min_range = item_data.get("MinRange", 0)
-                    max_range = item_data.get("MaxRange", 0)
-                    base_speed = item_data.get("BaseSpeed", 0)
-                    crit_chance = item_data.get("CriticalChance", 0)
-                    crit_multiplier = item_data.get("CritDmgMultiplier", 0)
-                    knockback = item_data.get("PushBackMod", 0)
-                    condition_max = item_data.get("ConditionMax", 0)
-                    condition_chance = item_data.get("ConditionLowerChanceOneIn", 0)
-                    condition_average = int(condition_max) * int(condition_chance)
+                    if skill not in firearm_skills:
+                        firearm_skills[skill] = []
+                    firearm_skills[skill].append(item)
 
-                    # add item to the sorted dictionary
-                    if skill_translated not in sorted_items:
-                        sorted_items[skill_translated] = []
-                    sorted_items[skill_translated].append((item_id, item_name, translated_item_name, icon, weight, equipped, damage_min, damage_max, damage_door, damage_tree, min_range, max_range, base_speed, crit_chance, crit_multiplier, knockback, condition_max, condition_chance, condition_average))
-    write_to_output(sorted_items)                    
-                    
+                # TODO: add explosives
 
-def write_to_output(sorted_items):
-    output_file = 'output/output.txt'
-    with open(output_file, 'w', encoding='utf-8') as file:
-
-        lc_subpage = ""
-        if translate.language_code != "en":
-            lc_subpage = f"/{translate.language_code}"
-
-        file.write("{{Note|content=The contents of this page are <b>auto-generated</b> using the <code>weapon_list</code> module from <code>pz-script_parser</code>. Any edits made to this page will be overridden automatically.}}\n\n")
-
-        for skill in sorted(sorted_items.keys()):
-            file.write(f"=={skill}==\n")
-            file.write("{| class=\"wikitable theme-red sortable\" style=\"text-align: center;\"\n")
-            file.write("! rowspan=2 | Icon\n")
-            file.write("! rowspan=2 | Name\n")
-            file.write("! rowspan=2 | [[File:Moodle_Icon_HeavyLoad.png|link=|Encumbrance]]\n")
-            file.write("! rowspan=2 | [[File:UI_Hands.png|32px|link=|Equipped]]\n")
-            file.write("! colspan=4 | Damage\n")
-            file.write("! colspan=2 | Range\n")
-            file.write("! rowspan=2 | [[File:UI_SwingTime.png|32px|link=|Attack speed]]\n")
-            file.write("! rowspan=2 | [[File:UI_Percentage.png|32px|link=|Crit chance]]\n")
-            file.write("! rowspan=2 | [[File:UI_PercentageX.png|32px|link=|Crit multiplier]]\n")
-            file.write("! rowspan=2 | [[File:UI_Knockback.png|32px|link=|Knockback]]\n")
-            file.write("! rowspan=2 | [[File:UI_Durability.png|32px|link=|Max condition]]\n")
-            file.write("! rowspan=2 | {{Tooltip|[[File:UI_DurabilityPercent.png]]|Condition lower chance, 1 in (x + (maintenance × 2 + weapon level))}}\n")
-            file.write("! rowspan=2 | Av. [[File:UI_Durability.png|32px|link=|Average condition at level 0]]\n")
-            file.write("! rowspan=2 | Item ID\n")
-            file.write("|-\n")
-            file.write("! [[File:UI_Min.png|32px|link=|Minimum]]\n")
-            file.write("! [[File:UI_Max.png|32px|link=|Maximum]]\n")
-            file.write("! [[File:UI_Door.png|32px|link=|Door damage]]\n")
-            file.write("! [[File:Container_Plant.png|32px|link=|Tree damage]]\n")
-            file.write("! [[File:UI_Min.png|32px|link=|Minimum]]\n")
-            file.write("! style=\"border-right: var(--border-mw);\" | [[File:UI_Max.png|32px|link=|Maximum]]\n")
-            for item_id, item_name, translated_item_name, icon, weight, equipped, damage_min, damage_max, damage_door, damage_tree, min_range, max_range, base_speed, crit_chance, crit_multiplier, knockback, condition_max, condition_chance, condition_average in sorted_items[skill]:
-                icons_image = f"[[File:{icon}.png]]"
-                item_link = f"[[{item_name}]]"
-
-                if translate.language_code != "en":
-                    item_link = f"[[{item_name}{lc_subpage}|{translated_item_name}]]"
-                file.write(f"|-\n|{icons_image}\n|{item_link}\n|{weight}\n|{equipped}\n|{damage_min}\n|{damage_max}\n|{damage_door}\n|{damage_tree}\n|{min_range}\n|{max_range}\n|{base_speed}\n|{crit_chance}\n|{crit_multiplier}\n|{knockback}\n|{condition_max}\n|{condition_chance}\n|{condition_average}\n|{item_id}\n")
-            file.write("|}\n\n")
-
-    print(f"Output saved to {output_file}")
-
-
-def main():
-    script_parser.init()
-    weapon_list()
+    write_items_to_file(melee_skills, melee_header, 'melee')
+    write_items_to_file(firearm_skills, firearm_header, 'firearm')
 
 
 if __name__ == "__main__":
-    main()
+    script_parser.init()
+    get_items()
+#    test()
