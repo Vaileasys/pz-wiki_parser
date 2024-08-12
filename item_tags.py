@@ -1,3 +1,11 @@
+"""
+Gets all tags and the items with those tags.
+Can be output in 3 formats:
+    1: Tag images: Outputs all items as a cycling image.
+    2: Tag item list: Outputs a separate table for each tag with a list of items that have it.
+    3: Tag table: Outputs all tags in a single table with a list of items that have it.
+"""
+
 import os
 import script_parser
 from core import utility
@@ -22,14 +30,15 @@ def main(user_input):
         print("Running Tag images script...")
         write_tag_image(tags_dict)
     elif user_input == "2":
-        print("Running Tag table script...")
-        write_tag_table(tags_dict)
-    elif user_input == "3":
         print("Running Tag item list script...")
         write_tag_list(tags_dict)
+    elif user_input == "3":
+        print("Running Tag table script...")
+        write_tag_table(tags_dict)
     else:
-        print("Running both scripts...")
+        print("Running all scripts...")
         write_tag_image(tags_dict)
+        write_tag_list(tags_dict)
         write_tag_table(tags_dict)
 
 
@@ -79,16 +88,17 @@ def write_tag_list(tags_dict):
                 name = item['name']
                 file.write(f"|-\n| [[File:{icon}.png|32x32px]] || [[{name}]] || {item_id}\n")
             file.write('|}')
+    print(f"Completed Tag item list script. Files can be found in '{output_dir}'")
 
 
 if __name__ == "__main__":
     script_parser.init()
     while True:
         print("""Choose a script to run.
-    0: Both
+    0: All
     1: Tag images
-    2: Tag table
-    3: Tag item list""")
+    2: Tag item list
+    3: Tag table""")
 
         user_input = input("> ")
 
