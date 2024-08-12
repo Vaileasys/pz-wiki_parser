@@ -29,9 +29,12 @@ def translate_category(category, property="DisplayCategory"):
 
 def write_to_output(sorted_items):
     language_code = translate.language_code
-    # write to output.txt
-    output_file = 'output/output.txt'
-    with open(output_file, 'w', encoding='utf-8') as file:
+    output_dir = f'output/item_list/'
+    output_file = f'item_list_{language_code.upper()}.txt'
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(output_dir, output_file)
+
+    with open(output_path, 'w', encoding='utf-8') as file:
 
         lc_subpage = ""
         if language_code != "en":
@@ -49,8 +52,8 @@ def write_to_output(sorted_items):
                 file.write(f"|-\n| {icons_image} || {item_link} || {item_id}\n")
             file.write("|}\n\n")
 
-        file.write(f"==See also==\n*{{{{ll|PZwiki:Tile list{lc_subpage}}}}}")
-    print(f"Output saved to {output_file}")
+        file.write(f"==See also==\n*{{{{ll|PZwiki:Tile list}}}}")
+    print(f"Output saved to {output_path}")
 
 
 def item_list():
