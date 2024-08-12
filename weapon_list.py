@@ -10,11 +10,7 @@ melee_header = """{| class="wikitable theme-red sortable" style="text-align: cen
 ! rowspan=2 | Name
 ! rowspan=2 | [[File:Moodle_Icon_HeavyLoad.png|link=|Encumbrance]]
 ! rowspan=2 | [[File:UI_Hand.png|32px|link=|Equipped]]
-! rowspan=2 | [[File:UI_Damage_Min-test.png|32px|link=|Minimum]]
-! rowspan=2 | [[File:UI_Damage_Max-test.png|32px|link=|Maximum]]
-! rowspan=2 | [[File:UI_Door.png|32px|link=|Door damage]]
-! rowspan=2 | [[File:Container_Plant.png|32px|link=|Tree damage]]
-! colspan=2 | Damage
+! colspan=4 | Damage
 ! colspan=2 | Range
 ! rowspan=2 | [[File:UI_SwingTime.png|32px|link=|Attack speed]]
 ! rowspan=2 | [[File:Dice.png|32px|32px|link=|Crit chance]]
@@ -25,8 +21,10 @@ melee_header = """{| class="wikitable theme-red sortable" style="text-align: cen
 ! rowspan=2 | Av. [[File:UI_Durability.png|32px|link=|Average condition at level 0]]
 ! rowspan=2 | Item ID
 |-
-! [[File:UI_Min.png|28px|link=|Minimum]]
-! [[File:UI_Max.png|28px|link=|Maximum]]
+! [[File:UI_Damage_Min-test.png|32px|link=|Minimum]]
+! [[File:UI_Damage_Max-test.png|32px|link=|Maximum]]
+! [[File:UI_Door.png|32px|link=|Door damage]]
+! rowspan=2 | [[File:Container_Plant.png|32px|link=|Tree damage]]
 ! [[File:UI_Min.png|32px|link=|Minimum]]
 ! style="border-right: var(--border-mw);" | [[File:UI_Max.png|32px|link=|Maximum]]\n"""
 
@@ -38,20 +36,18 @@ firearm_header = """{| class="wikitable theme-red sortable" style="text-align: c
 ! rowspan=2 | [[File:UI_Hand.png|32px|link=|Equipped]]
 ! rowspan=2 | [[File:UI_Ammo.png|link=|Ammunition]]
 ! rowspan=2 | [[File:BerettaClip.png|link=|Magazine size]]
-! rowspan=2 | [[File:UI_Damage_Min-test.png|32px|link=|Minimum]]
-! rowspan=2 | [[File:UI_Damage_Max-test.png|32px|link=|Maximum]]
 ! colspan=2 | Damage
 ! colspan=2 | Range
 ! rowspan=2 | [[File:UI_Accuracy-test.png|32px|link=|Accuracy]]
 ! rowspan=2 | +[[File:UI_Accuracy-test.png|32px|link=|Accuracy]] × Aiming level
 ! rowspan=2 | [[File:Dice.png|32px|link=|Crit chance]]
 ! rowspan=2 | +[[File:Dice.png|32px|link=|Additional crit chance]] × Aiming level
-! rowspan=2 | [[File:trait_keenhearing.png|36px|link=|Noise radius]]
+! rowspan=2 | [[File:trait_keenhearing.png|class=pixelart|36px|link=|Noise radius]]
 ! rowspan=2 | [[File:UI_Knockback.png|28px|link=|Knockback]]
 ! rowspan=2 | Item ID
 |-
-! [[File:UI_Min.png|28px|link=|Minimum]]
-! [[File:UI_Max.png|28px|link=|Maximum]]
+! [[File:UI_Damage_Min-test.png|32px|link=|Minimum]]
+! [[File:UI_Damage_Max-test.png|32px|link=|Maximum]]
 ! [[File:UI_Min.png|28px|link=|Minimum]]
 ! style="border-right: var(--border-mw);" | [[File:UI_Max.png|28px|link=|Maximum]]\n"""
 
