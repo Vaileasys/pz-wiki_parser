@@ -334,11 +334,11 @@ def find_most_relevant_items(current_item, all_items_infoboxes, item_id_dict):
         relevance = calculate_relevance(current_item, item)
         relevance_scores.append((relevance, item['name']))
 
-    # Pick the top 3 relevant pages
     top_relevant_items = sorted(relevance_scores, reverse=True, key=lambda x: x[0])[:3]
 
     # Ensure no items with the same name as the current item are included
     filtered_relevant_items = [item_name for score, item_name in top_relevant_items if item_name.lower() != current_item_name]
+    filtered_relevant_items.sort()
 
     return filtered_relevant_items
 
