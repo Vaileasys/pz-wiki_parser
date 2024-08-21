@@ -74,6 +74,7 @@ def item_list():
                 # check if 'IconsForTexture' property exists and use it for icon
                 icons_for_texture = []
                 if 'IconsForTexture' in item_data:
+                    icon = "Question_On"
                     icons_for_texture = item_data.get('IconsForTexture', [''])
                     if isinstance(icons_for_texture, str):
                         icons_for_texture = [icons_for_texture]
@@ -85,7 +86,6 @@ def item_list():
                         icons.append(icon)
 
                 if icon == "Question_On":
-                    icons_for_texture = item_data.get('IconsForTexture', [''])
                     if icons_for_texture:
                         icons = [icon.strip() for icon in icons_for_texture]
                 
@@ -179,7 +179,7 @@ def main():
         elif user_input == "n":
             print("Script cancelled")
             return
-        
+
         # repeat
         else:
             continue
