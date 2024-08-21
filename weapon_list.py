@@ -12,21 +12,21 @@ melee_header = """{| class="wikitable theme-red sortable" style="text-align: cen
 ! rowspan=2 | [[File:UI_Hand.png|32px|link=|Equipped]]
 ! colspan=4 | Damage
 ! colspan=2 | Range
-! rowspan=2 | [[File:UI_SwingTime.png|32px|link=|Attack speed]]
-! rowspan=2 | [[File:Dice.png|32px|32px|link=|Crit chance]]
-! rowspan=2 | [[File:Dice.png|32px|link=|Crit multiplier]]x
-! rowspan=2 | [[File:UI_Knockback.png|32px|link=|Knockback]]
-! rowspan=2 | [[File:UI_Durability.png|32px|link=|Max condition]]
-! rowspan=2 | {{Tooltip|[[File:UI_DurabilityPercent.png]]|Condition lower chance, 1 in (x + (maintenance × 2 + weapon level))}}
-! rowspan=2 | Av. [[File:UI_Durability.png|32px|link=|Average condition at level 0]]
+! rowspan=2 | [[File:UI_AttackSpeed-test.png|32px|link=|Attack speed]]
+! rowspan=2 | [[File:UI_CriticalHit_Chance.png|32px|32px|link=|Crit chance]]
+! rowspan=2 | [[File:UI_CriticalHit_Multiply.png|32px|link=|Crit multiplier]]
+! rowspan=2 | [[File:UI_Knockback-test.png|32px|link=|Knockback]]
+! rowspan=2 | [[File:UI_Condition_Max.png|32px|link=|Max condition]]
+! rowspan=2 | [[File:UI_Condition_Chance.png|Condition lower chance, 1 in (x + (maintenance × 2 + weapon level))]]
+! rowspan=2 | [[File:UI_Condition_Average.png|32px|link=|Average condition at level 0]]
 ! rowspan=2 | Item ID
 |-
-! [[File:UI_Damage_Min-test.png|32px|link=|Minimum]]
-! [[File:UI_Damage_Max-test.png|32px|link=|Maximum]]
+! [[File:UI_Damage_Min-test.png|32px|link=|Minimum damage]]
+! [[File:UI_Damage_Max-test.png|32px|link=|Maximum damage]]
 ! [[File:UI_Door.png|32px|link=|Door damage]]
 ! rowspan=2 | [[File:Container_Plant.png|32px|link=|Tree damage]]
-! [[File:UI_Min.png|32px|link=|Minimum]]
-! style="border-right: var(--border-mw);" | [[File:UI_Max.png|32px|link=|Maximum]]\n"""
+! [[File:UI_Range_Min.png|32px|link=|Minimum range]]
+! style="border-right: var(--border-mw);" | [[File:UI_Range_Max.png|32px|link=|Maximum range]]\n"""
 
 # table header for firearms
 firearm_header = """{| class="wikitable theme-red sortable" style="text-align: center;"
@@ -35,21 +35,21 @@ firearm_header = """{| class="wikitable theme-red sortable" style="text-align: c
 ! rowspan=2 | [[File:Moodle_Icon_HeavyLoad.png|link=|Encumbrance]]
 ! rowspan=2 | [[File:UI_Hand.png|32px|link=|Equipped]]
 ! rowspan=2 | [[File:UI_Ammo.png|link=|Ammunition]]
-! rowspan=2 | [[File:BerettaClip.png|link=|Magazine size]]
+! rowspan=2 | [[File:BerettaClip.png|link=|Magazine capacity]]
 ! colspan=2 | Damage
 ! colspan=2 | Range
 ! rowspan=2 | [[File:UI_Accuracy-test.png|32px|link=|Accuracy]]
-! rowspan=2 | +[[File:UI_Accuracy-test.png|32px|link=|Accuracy]] × Aiming level
-! rowspan=2 | [[File:Dice.png|32px|link=|Crit chance]]
-! rowspan=2 | +[[File:Dice.png|32px|link=|Additional crit chance]] × Aiming level
-! rowspan=2 | [[File:trait_keenhearing.png|class=pixelart|36px|link=|Noise radius]]
-! rowspan=2 | [[File:UI_Knockback.png|28px|link=|Knockback]]
+! rowspan=2 | [[File:UI_Accuracy_Add.png|32px|link=|Accuracy increased per aiming level]]
+! rowspan=2 | [[File:UI_CriticalHit_Chance.png|32px|link=|Crit chance]]
+! rowspan=2 | [[File:UI_Critical_Add.png|32px|link=|Critical hit chance increased per aiming level]]
+! rowspan=2 | [[File:UI_Noise.png|32px|link=|Noise radius]]
+! rowspan=2 | [[File:UI_Knockback-test.png|32px|link=|Knockback]]
 ! rowspan=2 | Item ID
 |-
-! [[File:UI_Damage_Min-test.png|32px|link=|Minimum]]
-! [[File:UI_Damage_Max-test.png|32px|link=|Maximum]]
-! [[File:UI_Min.png|28px|link=|Minimum]]
-! style="border-right: var(--border-mw);" | [[File:UI_Max.png|28px|link=|Maximum]]\n"""
+! [[File:UI_Damage_Min-test.png|32px|link=|Minimum damage]]
+! [[File:UI_Damage_Max-test.png|32px|link=|Maximum damage]]
+! [[File:UI_Range_Min.png|32px|link=|Minimum range]]
+! style="border-right: var(--border-mw);" | [[File:UI_Range_Max.png|32px|link=|Maximum range]]\n"""
 
 # store translated skills
 skills = {}
@@ -95,8 +95,13 @@ def process_item_firearm(item_data, item_id):
 
 
     crit_chance = item_data.get('CriticalChance', '-')
-    #IsoPlayer.class > calculateCritChance()
-    crit_chance_mod = str((int(item_data.get('AimingPerkCritModifier', 0)) / 2) + 3)
+    # calculation from: IsoPlayer.class > calculateCritChance()
+    crit_chance_mod = ((int(item_data.get('AimingPerkCritModifier', 0)) / 2) + 3)
+    # do not display decimal place if value is a whole number
+    crit_chance_mod = (
+        str(int(crit_chance_mod)) if crit_chance_mod.is_integer() 
+        else str(crit_chance_mod)
+)
 
     condition_max = item_data.get("ConditionMax", '0')
     condition_chance = item_data.get("ConditionLowerChanceOneIn", '0')
@@ -115,7 +120,7 @@ def process_item_firearm(item_data, item_id):
         "min_range": item_data.get('MinRange', '-'),
         "max_range": item_data.get('MaxRange', '-'),
         "hit_chance": item_data.get('HitChance', '-') + '%',
-        #SwipeStatePlayer.class > CalcHitChance()
+        #calculation from: SwipeStatePlayer.class > CalcHitChance()
         "hit_chance_mod": '+' + item_data.get('AimingPerkHitChanceModifier', '-') + '%',
         "crit_chance": crit_chance + '%',
         "crit_chance_mod": '+' + crit_chance_mod + '%',
