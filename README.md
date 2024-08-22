@@ -27,7 +27,7 @@ _Some scripts will prompt the user for a language code (default 'en') which is u
 Article generation requires the use of multiple modules and scripts in order to return good output.
 1. Copy the output from [here](https://github.com/CalvyPZ/pz-distribution-to-wikitable) into `resources`, and rename the folder `distribution`.
 2. (Not public/implemented) Add the output of the code scraper to the `resources` folder named `code`.
-3. Run each module in the `Data generation` to generate usable data.
+3. Run each module in the `Data generation` tree to generate usable data.
 
 ## Creating a module
 
