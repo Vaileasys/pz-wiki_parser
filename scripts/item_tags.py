@@ -10,7 +10,8 @@ import os
 import script_parser
 from core import utility
 
-def main(user_input):
+
+def generate_tags_dict():
     tags_dict = {}
     for module, module_data in script_parser.parsed_item_data.items():
         for item_type, item_data in module_data.items():
@@ -25,21 +26,41 @@ def main(user_input):
                     if tag not in tags_dict:
                         tags_dict[tag] = []
                     tags_dict[tag].append({'item_id': item_id, 'icon': icon, 'name': name})
-                    
-    if user_input == "1":
-        print("Running Tag images script...")
-        write_tag_image(tags_dict)
-    elif user_input == "2":
-        print("Running Tag item list script...")
-        write_tag_list(tags_dict)
-    elif user_input == "3":
-        print("Running Tag table script...")
-        write_tag_table(tags_dict)
-    else:
+    return tags_dict
+
+
+def main():
+    script_parser.init()
+
+    print("""Choose a script to run.
+    0: All
+    1: Tag images: Outputs all items as a cycling image.
+    2: Tag item list: Outputs a separate table for each tag with a list of items that have it.
+    3: Tag table: Outputs all tags in a single table with a list of items that have it.
+    Q: Quit.""")
+
+    user_input = input("> ") or "0"
+
+    if user_input.lower() == 'q':
+        return
+
+    tags_dict = generate_tags_dict()
+
+    script_options = {
+        "1": write_tag_image,
+        "2": write_tag_list,
+        "3": write_tag_table,
+    }
+
+    if user_input == "0":
         print("Running all scripts...")
-        write_tag_image(tags_dict)
-        write_tag_list(tags_dict)
-        write_tag_table(tags_dict)
+        for func in script_options.values():
+            func(tags_dict)
+    elif user_input in script_options:
+        print(f"Running selected script ({user_input})...")
+        script_options[user_input](tags_dict)
+    else:
+        print("Invalid option. Exiting.")
 
 
 # write each tag's item icons for `cycle-img`
@@ -92,19 +113,4 @@ def write_tag_list(tags_dict):
 
 
 if __name__ == "__main__":
-    script_parser.init()
-    while True:
-        print("""Choose a script to run.
-    0: All
-    1: Tag images
-    2: Tag item list
-    3: Tag table""")
-
-        user_input = input("> ")
-
-        if user_input == "":
-            user_input = "0"
-
-        if user_input in {"0", "1", "2", "3"}:
-            main(user_input)
-            break
+    main()

@@ -153,7 +153,7 @@ def filters_tree():
             filter_name = input("Enter a name for the filter:\n> ")
             property_name = input("Enter the property name for the filter (e.g., 'Type'):\n> ")
             property_value = input("Enter the property value for the filter (e.g., 'Weapon'):\n> ")
-            filter_name = filter_name or property_value # change filter_name to property_value if empty
+            filter_name = filter_name or property_value  # change filter_name to property_value if empty
             filters[filter_name] = (True, property_name, property_value)
             print(f"Filter added: {filter_name} ({property_name} = {property_value})")
         elif filter_input == "done":
@@ -165,24 +165,14 @@ def filters_tree():
 def main():
     script_parser.init()
     while True:
-        user_input = input("Run script ('y') or set up a filter ('filter')?\n> ")
-        if user_input == "y":
+        user_input = input("1: Run script\n2: Set up a filter\nQ: Quit\n> ").lower()
+        if user_input == "1":
             item_list()
             return
-        
-        # filters
-        elif user_input == "filter":
+        elif user_input == "2":
             filters_tree()
-            continue
-        
-        # cancel
-        elif user_input == "n":
-            print("Script cancelled")
+        elif user_input == "q":
             return
-
-        # repeat
-        else:
-            continue
 
 
 if __name__ == "__main__":

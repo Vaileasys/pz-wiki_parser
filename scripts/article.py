@@ -420,7 +420,9 @@ def main():
         warnings.append("WARNING: Fixing not found, please run fixing.py first")
 
     while True:
-        user_choice = input("Do you want to generate:\n1: All items\n2: New items (Don't exist on the wiki currently)\n")
+        user_choice = input("Do you want to generate:\n1: All items\n2: New items (Don't exist on the wiki currently)\nQ: Quit\n> ").strip().lower()
+        if user_choice == 'q':
+            return
         if user_choice in ['1', '2']:
             break
         print("Invalid input. Please enter 1 or 2.")

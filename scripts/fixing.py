@@ -158,7 +158,6 @@ def write_to_output(module, fixing_id, fixing_data, output_dir='output/fixing'):
                     skill_str = format_skills(skills[i], skill_values[i])
                     parameters[f"fixer{i+1}_skill"] = skill_str
 
-
             for key, value in parameters.items():
                 if value:
                     file.write(f"\n|{key}={value}")
@@ -190,16 +189,19 @@ def automatic_extraction():
 def main():
     script_parser.init()
 
-    choice = input("Select extraction mode (1: automatic, 2: manual):\n> ")
-    if choice == '1':
-        automatic_extraction()
-        print("Extraction complete, the files can be found in output/fixing.")
-    elif choice == '2':
-        module, fixing_id, fixing_data = get_fixing()
-        write_to_output(module, fixing_id, fixing_data)
-        print("Extraction complete, the file can be found in output/fixing.")
-    else:
-        print("Invalid choice. Please restart the script and choose 1 or 2.")
+    while True:
+        choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
+        if choice == '1':
+            automatic_extraction()
+            print("Extraction complete, the files can be found in output/fixing.")
+        elif choice == '2':
+            module, fixing_id, fixing_data = get_fixing()
+            write_to_output(module, fixing_id, fixing_data)
+            print("Extraction complete, the file can be found in output/fixing.")
+        elif choice == 'q':
+            return
+        else:
+            print("Invalid choice.")
 
 
 if __name__ == "__main__":

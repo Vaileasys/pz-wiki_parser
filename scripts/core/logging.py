@@ -16,7 +16,7 @@ def init_log_file(filename="log.txt"):
 # Used to log important info to a log file
 def log_to_file(message, filename="log.txt"):
     global is_first_log
-    filename = "logging/" + filename  # Prepend the logging directory path
+    filename = "output/logging/" + filename  # Prepend the logging directory path
 
     # If this is the first log, initialize the log file
     if is_first_log:

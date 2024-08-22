@@ -4,7 +4,7 @@ from core import translate
 
 def write_to_output(items):
     # write to output.txt
-    output_file = 'output/output.txt'
+    output_file = 'output/nutrition.txt'
     language_code = translate.language_code
     with open(output_file, 'w', encoding='utf-8') as file:
 

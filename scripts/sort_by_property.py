@@ -22,14 +22,19 @@ def sort_by_property(property):
             for module, item_type in sorted_data[property_value]:
                 file.write(f"{module}.{item_type}\n")
             file.write("\n")
-    
+
     print(f"Output saved to {output_file}")
 
 
 def main():
     script_parser.init()
     # sorts by a user-defined property
-    sort_by_property(input("Enter a property:\n> "))
+    while True:
+        property_name = input("Enter a property or Q to quit:\n> ")
+        if property_name.lower() == 'q':
+            print("Exiting...")
+            break
+        sort_by_property(property_name)
 
 
 if __name__ == "__main__":

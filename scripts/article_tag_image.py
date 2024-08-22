@@ -1,8 +1,3 @@
-"""
-Generates template articles for 'tag' cycling images.
-item_tags.py (Tag images) must be run first.
-"""
-
 import os
 import random
 
@@ -22,9 +17,9 @@ def get_item_list():
         if os.path.isfile(source_file_path):
             with open(source_file_path, 'r') as src_file:
                 content = src_file.read()
-            
+
             item_list.append((content, tag))
-    
+
     return item_list
 
 
@@ -47,7 +42,7 @@ def write_to_file(tag, item_content, see_also):
 
     os.makedirs(dest_dir, exist_ok=True)
     file_path = os.path.join(dest_dir, filename)
-    
+
     with open(file_path, 'w', encoding='utf-8') as file:
         file.write(f"<noinclude>\n{{{{Documentation|doc=\nThis template is used to add an image that cycles through all the icons for the '{tag}' tag.\n\n")
 
@@ -63,7 +58,7 @@ def write_to_file(tag, item_content, see_also):
         file.write(f"</noinclude><includeonly>{item_content}</includeonly>")
 
 
-if __name__ == "__main__":
+def main():
     item_list = get_item_list()
     if item_list:
         all_tags = [tag for _, tag in item_list]
@@ -71,3 +66,8 @@ if __name__ == "__main__":
         for content, tag in item_list:
             see_also = get_see_also(all_tags)
             write_to_file(tag, content, see_also)
+
+        print("Output successful: 'output/articles/tag images/'")
+
+if __name__ == "__main__":
+    main()

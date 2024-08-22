@@ -115,16 +115,22 @@ def automatic_extraction():
 def main():
     script_parser.init()
 
-    choice = input("Select extraction mode (1: automatic, 2: manual):\n> ")
-    if choice == '1':
-        automatic_extraction()
-        print("Extraction complete, the files can be found in output/consumables.")
-    elif choice == '2':
-        item_data, item_id = get_item()
-        write_to_output(item_data, item_id)
-        print("Extraction complete, the file can be found in output/consumables.")
-    else:
-        print("Invalid choice. Please restart the script and choose 1 or 2.")
+    while True:
+        choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
+        if choice == '1':
+            automatic_extraction()
+            print("Extraction complete, the files can be found in output/consumables.")
+            return
+        elif choice == '2':
+            item_data, item_id = get_item()
+            write_to_output(item_data, item_id)
+            print("Extraction complete, the file can be found in output/consumables.")
+            return
+        elif choice.lower() == 'q':
+            return
+        else:
+            print("Invalid choice.")
+
 
 
 if __name__ == "__main__":
