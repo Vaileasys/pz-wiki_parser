@@ -93,7 +93,6 @@ def process_item_firearm(item_data, item_id):
         ammo_icon = utility.get_icon(ammo_data, ammo_id)
         ammo = f"[[File:{ammo_icon}.png|link={ammo_page}|{ammo_name}]]"
 
-
     crit_chance = item_data.get('CriticalChance', '-')
     # calculation from: IsoPlayer.class > calculateCritChance()
     crit_chance_mod = ((int(item_data.get('AimingPerkCritModifier', 0)) / 2) + 3)
@@ -101,7 +100,7 @@ def process_item_firearm(item_data, item_id):
     crit_chance_mod = (
         str(int(crit_chance_mod)) if crit_chance_mod.is_integer() 
         else str(crit_chance_mod)
-)
+    )
 
     condition_max = item_data.get("ConditionMax", '0')
     condition_chance = item_data.get("ConditionLowerChanceOneIn", '0')

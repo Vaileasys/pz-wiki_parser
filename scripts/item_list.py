@@ -153,7 +153,7 @@ def filters_tree():
             filter_name = input("Enter a name for the filter:\n> ")
             property_name = input("Enter the property name for the filter (e.g., 'Type'):\n> ")
             property_value = input("Enter the property value for the filter (e.g., 'Weapon'):\n> ")
-            filter_name = filter_name or property_value # change filter_name to property_value if empty
+            filter_name = filter_name or property_value  # change filter_name to property_value if empty
             filters[filter_name] = (True, property_name, property_value)
             print(f"Filter added: {filter_name} ({property_name} = {property_value})")
         elif filter_input == "done":
@@ -173,7 +173,6 @@ def main():
             filters_tree()
         elif user_input == "q":
             return
-
 
 
 if __name__ == "__main__":

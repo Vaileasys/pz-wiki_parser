@@ -158,7 +158,6 @@ def write_to_output(module, fixing_id, fixing_data, output_dir='output/fixing'):
                     skill_str = format_skills(skills[i], skill_values[i])
                     parameters[f"fixer{i+1}_skill"] = skill_str
 
-
             for key, value in parameters.items():
                 if value:
                     file.write(f"\n|{key}={value}")
@@ -203,7 +202,6 @@ def main():
             return
         else:
             print("Invalid choice.")
-
 
 
 if __name__ == "__main__":

@@ -210,7 +210,6 @@ def write_to_output(item_data, item_id, output_dir='output/infoboxes'):
         logging.log_to_file(f"Error writing file {item_id}.txt: {e}")
         
 
-
 def process_item(item_data, item_id, output_dir):
     write_to_output(item_data, item_id, output_dir)
 
@@ -243,7 +242,6 @@ def main():
             return
         else:
             print("Invalid choice.")
-
 
 
 if __name__ == "__main__":
