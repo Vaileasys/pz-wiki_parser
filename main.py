@@ -81,9 +81,9 @@ def navigate_menu(menu, is_root=False):
         display_menu(menu, is_root)
         user_input = input("> ").strip().upper()
 
-        if is_root and user_input == "Q":
+        if is_root and user_input == "Q" or is_root and user_input == "B":
             break
-        elif not is_root and user_input == "B":
+        elif not is_root and user_input == "B" or not is_root and user_input == "Q":
             return  # Go back to the previous menu
 
         if user_input in menu:
