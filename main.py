@@ -19,6 +19,8 @@ menu_structure = {
             '1': {'module': 'infobox', 'name': 'Infobox', 'description': 'Generates infoboxes.'},
             '2': {'module': 'fixing', 'name': 'Fixing', 'description': 'Generates fixing recipes.'},
             '3': {'module': 'consumables', 'name': 'Consumables', 'description': 'Generate consumables tables.'},
+            '4': {'module': 'codesnip', 'name': 'Codesnips', 'description': 'Generate codesnip files.'},
+            '5': {'module': 'distribution', 'name': 'Generate distributions', 'description': 'Generate distribution files.'},
         },
     },
     '3': {
@@ -44,7 +46,7 @@ menu_structure = {
         'name': 'Dev',
         'description': 'Module testing.',
         'sub_options': {
-            '1': {'module': 'placeholder', 'name': 'placeholder name', 'description': 'placeholder description.'},
+            '1': {'module': 'placeholder', 'name': 'placeholder', 'description': 'placeholder.'},
         },
     },
 }
