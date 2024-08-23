@@ -4,6 +4,8 @@ import script_parser
 from core import translate
 from core import logging
 
+version = "41.78.16"
+
 page_mapping = {
     "Axe": "Axe (skill)",
 }

@@ -1,5 +1,6 @@
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from core import utility
 
 def extract_code_snippet(line_number, lines):
     item_code = ""
@@ -42,7 +43,7 @@ def process_file(file_path, version, output_dir):
         print(f"Error processing file {file_path}: {e}")
 
 def main():
-    version = "41.78.16"
+    version = utility.version
     output_dir = 'output/codesnips'
     resources_dir = 'resources/scripts'
 

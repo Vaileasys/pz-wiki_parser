@@ -3,6 +3,7 @@ import os
 import csv
 import shutil
 from tqdm import tqdm
+from core import utility
 
 
 def main():
@@ -688,7 +689,7 @@ def process_foraging_file(file_paths):
 
 
 def formatting(unique_items, output_path):
-    version = "41.78.16"
+    version = utility.version
     complete_output_path = os.path.join(output_path, 'complete')
     csv_output_path = os.path.join(output_path, 'csv')
 

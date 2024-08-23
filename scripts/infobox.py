@@ -184,7 +184,7 @@ def write_to_output(item_data, item_id, output_dir='output/infoboxes'):
                 "evolved_recipe": item_data.get('EvolvedRecipeName', ''),
 #                "tag": utility.get_tags(item_data),  # added with 'insert_parameters_after' 
                 "item_id": item_id,
-                "infobox_version": "41.78.16"
+                "infobox_version": utility.version
             }
 
             # new parameters to be added and parameter keys go here
