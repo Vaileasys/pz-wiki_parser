@@ -1,8 +1,10 @@
 # PZ Script Parser
 Parses Project Zomboid 'scripts' files and outputs in the desired format for PZwiki.
 
-# Requires:
+# Requirements
 * Python 3 (Written for 3.12)
+## Modules
+The following modules are required for some scripts. They can be installed by running `pip install -r requirements.txt`
 * Chardet
 * TQDM
 
