@@ -73,7 +73,7 @@ def get_require(module, fixing_data):
             for item in item_fixed:
                 item_id_new = f"{module}.{item}"
                 translated_name = translate.get_translation(item_id_new, "DisplayName")
-
+                
                 if translated_name not in name:
                     if name:
                         name += "; "
@@ -91,9 +91,10 @@ def get_require(module, fixing_data):
 def format_fixers(module, fixers):
     formatted_fixers = []
     for fixer in fixers:
-        fixer = f"{module}.{fixer}"
-        fixer = translate.get_translation(fixer, "DisplayName")
-        formatted_fixer = f"{{{{ll|{fixer}}}}}"
+        fixer_id = f"{module}.{fixer}"
+        fixer_name = f"{{{{ll|{translate.get_translation(fixer_id, "DisplayName")}}}}}"
+        fixer_icon = utility.get_icon_for_item_id(fixer_id)
+        formatted_fixer = f"{fixer_icon} {fixer_name}"
         formatted_fixers.append(formatted_fixer)
     return formatted_fixers
 
@@ -126,9 +127,10 @@ def write_to_output(module, fixing_id, fixing_data, output_dir='output/fixing'):
             file.write("{{Fixing")
 
             item_id, name = get_require(module, fixing_data)
-            condition_modifier = fixing_data.get('ConditionModifier', '')
-            if condition_modifier != '':
+            condition_modifier = fixing_data.get('ConditionModifier', 1)
+            if condition_modifier != 1:
                 condition_modifier = condition_modifier[0]
+            condition_modifier = float(condition_modifier)
             
             global_item_value = ''
             global_item = ''
@@ -136,24 +138,46 @@ def write_to_output(module, fixing_id, fixing_data, output_dir='output/fixing'):
             if global_item_dict:
                 # expect single entry
                 global_item, global_item_value = next(iter(global_item_dict.items()))
+                global_item_id = f"{module}.{global_item}"
+                global_item = f"{{{{ll|{translate.get_translation(global_item_id)}}}}}"
+                global_item_icon = utility.get_icon_for_item_id(global_item_id)
+                global_item = f"{global_item_icon} {global_item}"
 
             fixers, fixer_values, skills, skill_values = get_fixer(fixing_id)
             fixers = format_fixers(module, fixers)
             
             parameters = {
                 "name": name,
+                "fixing_id": fixing_id,
                 "item_id": item_id,
                 "global_item": global_item,
                 "global_item_value": global_item_value,
-                "condition_modifier": condition_modifier,
+            }
+
+            base_repair = {
+                0: 50,  # 1st fixer
+                1: 20,  # 2nd fixer
+                # all other fixers default to 10
             }
 
             # Add fixers, fixer_values, skills, and skill_values dynamically
             for i in range(max(len(fixers), len(fixer_values), len(skills), len(skill_values))):
+                # add fixer
                 if i < len(fixers):
                     parameters[f"fixer{i+1}"] = fixers[i]
+
+                    # add repair chance for the fixer
+                    repairs = base_repair.get(i, 10)
+                    repairs = repairs * condition_modifier
+                    if condition_modifier > 1:
+                        repairs += 1
+                    parameters[f"fixer{i+1}_repairs"] = str(round(repairs)) + '%'
+
+                # add fixer value
                 if i < len(fixer_values):
                     parameters[f"fixer{i+1}_value"] = fixer_values[i]
+
+                # add skills
                 if i < len(skills):
                     skill_str = format_skills(skills[i], skill_values[i])
                     parameters[f"fixer{i+1}_skill"] = skill_str

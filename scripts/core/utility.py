@@ -94,11 +94,25 @@ def get_icons_for_item_ids(item_ids):
             module, item_type = item_id.split('.')
         except ValueError:
             continue
-        icon = parsed_data.get(module, {}).get(item_type, {}).get('Icon', 'Unknown')
+        icon = parsed_data.get(module, {}).get(item_type, {}).get('Icon', 'Question_On')
         display_name = parsed_data.get(module, {}).get(item_type, {}).get('DisplayName', 'Unknown')
-        if icon != 'Unknown' and display_name != 'Unknown':
-            icons.append(f"[[File:{icon}.png|link={display_name}]]")
+        if icon != 'Question_On' and display_name != 'Unknown':
+            icons.append(f"[[File:{icon}.png|link={display_name}{{lcs}}]]")
     return "".join(icons)
+
+def get_icon_for_item_id(item_id):
+    parsed_data = script_parser.parsed_item_data
+    if not item_id:
+        return ""
+    
+    icon = ""
+
+    module, item_type = item_id.split('.')
+    icon = parsed_data.get(module, {}).get(item_type, {}).get('Icon', 'Question_On')
+    display_name = parsed_data.get(module, {}).get(item_type, {}).get('DisplayName', 'Unknown')
+    if icon != 'Question_On' and display_name != 'Unknown':
+        icon = (f"[[File:{icon}.png|link={display_name}{{lcs}}]]")
+    return icon
 
 
 # gets model for item_data as PNG
@@ -190,16 +204,16 @@ def format_br(values):
 # find a module for an item and return item_id (used for property values that don't define the module)
 def get_module_from_item(item_data, property_name):
     item_types = item_data.get(property_name, [])
-    modules = {}
+    item_ids = {}
     
     for item_type in item_types:
         item_type = item_type.strip()
         for module, module_data in script_parser.parsed_item_data.items():
             if item_type in module_data:
-                modules[item_type] = f"{module}.{item_type}"
+                item_ids[item_type] = f"{module}.{item_type}"
                 break
 
-    return modules
+    return item_ids
 
 
 
