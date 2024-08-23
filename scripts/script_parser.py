@@ -184,6 +184,7 @@ def parse_files_in_folder(folder_path):
 
 # for debugging - outputs all the parsed data into a txt file
 def output_parsed_data_to_txt(data, output_file):
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
     with open(output_file, 'w') as file:
         for module, module_data in data.items():
             if 'block' in module_data:
@@ -226,8 +227,8 @@ def init():
     global parsed_item_data
     global parsed_fixing_data
     parsed_item_data, parsed_fixing_data, total_item_counter, total_fixing_counter = parse_files_in_folder('resources/scripts')
-    output_parsed_data_to_txt(parsed_item_data, 'logging/parsed_data.txt')
-    output_parsed_data_to_txt(parsed_fixing_data, 'logging/parsed_fixing_data.txt')
+    output_parsed_data_to_txt(parsed_item_data, 'output/logging/parsed_item_data.txt')
+    output_parsed_data_to_txt(parsed_fixing_data, 'output/logging/parsed_fixing_data.txt')
     print("Total items parsed:", total_item_counter)
     print("Total fixings parsed:", total_fixing_counter)
 
