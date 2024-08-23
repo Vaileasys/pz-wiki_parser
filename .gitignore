@@ -1,11 +1,17 @@
+# Output
 output.txt
 parsed_data.txt
+output/
+logging/
 
+# Resources
 resources/*
 !resources/
 !resources/icons.csv
 !resources/item_id_dictionary.csv
 
-output/
+# Editor directories and files
 __pycache__/
-logging/
+.vscode/
+venv/
+.env
