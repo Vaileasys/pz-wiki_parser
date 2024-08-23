@@ -3,6 +3,7 @@ import re
 import sys
 import csv
 from difflib import SequenceMatcher
+from tqdm import tqdm
 
 
 def load_item_id_dictionary(csv_path):
@@ -24,7 +25,7 @@ def load_item_id_dictionary(csv_path):
     return item_id_dict
 
 
-def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all):
+def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir):
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             content = file.read()
@@ -73,7 +74,7 @@ def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item
 
     # Build the article
     header = generate_header(category, skill_type)
-    body_content = assemble_body(lowercase_name, os.path.basename(file_path), name, item_id, category, skill_type, infobox, consumables_dir, infobox_data_list, item_id_dict)
+    body_content = assemble_body(lowercase_name, os.path.basename(file_path), name, item_id, category, skill_type, infobox, consumables_dir, infobox_data_list, item_id_dict, fixing_dir)
     article = 'An' if lowercase_name[0] in 'aeiou' else 'A'
     new_content = f"""
 {header}
@@ -185,7 +186,7 @@ def generate_consumable_properties(item_id, consumables_dir):
     return ""
 
 
-def generate_condition(name, category, skill_type, infobox):
+def generate_condition(name, category, skill_type, infobox, fixing_dir):
     if category not in ['Weapon', 'Tool / Weapon']:
         return ""
 
@@ -202,7 +203,6 @@ def generate_condition(name, category, skill_type, infobox):
 
 {{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"""
 
-    fixing_dir = 'output/fixing'
     if os.path.exists(fixing_dir):
         fixing_files = os.listdir(fixing_dir)
 
@@ -225,9 +225,7 @@ def generate_condition(name, category, skill_type, infobox):
     return condition_text
 
 
-def generate_location(original_filename, infobox_name, item_id):
-    distribution_dir = 'resources/distribution'
-
+def generate_location(original_filename, infobox_name, item_id, distribution_dir):
     if not os.path.exists(distribution_dir):
         return ""
 
@@ -249,9 +247,7 @@ def generate_location(original_filename, infobox_name, item_id):
     return ""
 
 
-def generate_code(item_id):
-    code_dir = 'resources/code'
-
+def generate_code(item_id, code_dir):
     if not os.path.exists(code_dir):
         return ""
 
@@ -361,7 +357,7 @@ def generate_see_also(current_item, infobox_data_list, item_id_dict):
     return f"{see_also_list}\n\n{navbox}"
 
 
-def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox, consumables_dir, infobox_data_list, item_id_dict):
+def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox, consumables_dir, infobox_data_list, item_id_dict, fixing_dir):
     current_item_data = {
         'name': name,
         'category': category,
@@ -371,9 +367,9 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
     }
 
     sections = {
-        'Condition': generate_condition(name, category, skill_type, infobox),
-        'Location': generate_location(original_filename, infobox_name, item_id),
-        'Code': generate_code(item_id),
+        'Condition': generate_condition(name, category, skill_type, infobox, fixing_dir),
+        'Location': generate_location(original_filename, infobox_name, item_id, 'output/distributions/complete'),
+        'Code': generate_code(item_id, 'output/codesnips'),
         'See also': generate_see_also(current_item_data, infobox_data_list, item_id_dict)
     }
 
@@ -396,6 +392,8 @@ def main():
     consumables_dir = 'output/consumables'
     fixing_dir = 'output/fixing'
     csv_path = 'resources/item_id_dictionary.csv'
+    distribution_dir = 'output/distributions/complete'
+    code_dir = 'output/codesnips'
 
     warnings = []
 
@@ -431,9 +429,9 @@ def main():
     infobox_data_list = load_infoboxes(input_dir)
     item_id_dict = load_item_id_dictionary(csv_path)
 
-    for text_file in text_files:
+    for text_file in tqdm(text_files, desc="Generating articles", unit="file"):
         file_path = os.path.join(input_dir, text_file)
-        process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all)
+        process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir)
 
     if warnings:
         print("\n".join(warnings))

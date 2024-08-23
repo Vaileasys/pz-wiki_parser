@@ -4,6 +4,7 @@ Parses Project Zomboid 'scripts' files and outputs in the desired format for PZw
 # Requires:
 * Python 3 (Written for 3.12)
 * Chardet
+* TQDM
 
 # Instructions
 ## Setting up the resources folder
@@ -11,6 +12,13 @@ Parses Project Zomboid 'scripts' files and outputs in the desired format for PZw
 2. Add the game's scripts files to a folder called "scripts".
 3. Add the game's icons to a folder called "icons" (ensure 'Item_' prefix is removed). This is only relevant for some modules.
 4. Add the desired translations to a "Translate" folder. E.g. `ItemName_EN.txt` can go in 'resources\Translate\ItemName'. This will output the correct in-game name rather than the DisplayName value.
+5. (Only required for distributions) Add the following lua files to `resources`, all are found within `ProjectZomboid\projectzomboid\media\lua\`:
+   - `shared\Distributions.lua`
+   - `shared\ProceduralDistributions.lua`
+   - `shared\Foraging\forageDefinitions.lua`
+   - `server\Vehicles\VehicleDistributions.lua`
+   - `shared\Definitions\AttachedWeaponDefinitions.lua`
+
 _`icons.csv` and `item_id_dictionary.csv` are included with the package. The latest version of `item_id_dictionary.csv` can be found [here](https://drive.google.com/file/d/1Gjl7WJMm7qYaJ5S_J2FtM1iTlyfLI-z8/view)_
 
 ## Using a module
@@ -24,9 +32,8 @@ _Some scripts will prompt the user for a language code (default 'en') which is u
 
 ## Generating articles
 Article generation requires the use of multiple modules and scripts in order to return good output.
-1. Copy the output from [here](https://github.com/CalvyPZ/pz-distribution-to-wikitable) into `resources`, and rename the folder `distribution`.
-2. (Not public/implemented) Add the output of the code scraper to the `resources` folder named `code`.
-3. Run each module in the `Data generation` tree to generate usable data.
+1. Run each module in the `Data generation` tree to generate usable data.
+2. Run the `article` generation module.
 
 ## Creating a module
 
