@@ -4,6 +4,7 @@ Parses Project Zomboid 'scripts' files and outputs in the desired format for PZw
 # Requires:
 * Python 3 (Written for 3.12)
 * Chardet
+* TQDM
 
 # Instructions
 ## Setting up the resources folder
@@ -25,9 +26,8 @@ _Some scripts will prompt the user for a language code (default 'en') which is u
 
 ## Generating articles
 Article generation requires the use of multiple modules and scripts in order to return good output.
-1. Copy the output from [here](https://github.com/CalvyPZ/pz-distribution-to-wikitable) into `resources`, and rename the folder `distribution`.
-2. (Not public/implemented) Add the output of the code scraper to the `resources` folder named `code`.
-3. Run each module in the `Data generation` tree to generate usable data.
+1. Run each module in the `Data generation` tree to generate usable data.
+2. Run the `article` generation module.
 
 ## Creating a module
 
