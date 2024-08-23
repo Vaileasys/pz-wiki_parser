@@ -94,11 +94,25 @@ def get_icons_for_item_ids(item_ids):
             module, item_type = item_id.split('.')
         except ValueError:
             continue
-        icon = parsed_data.get(module, {}).get(item_type, {}).get('Icon', 'Unknown')
+        icon = parsed_data.get(module, {}).get(item_type, {}).get('Icon', 'Question_On')
         display_name = parsed_data.get(module, {}).get(item_type, {}).get('DisplayName', 'Unknown')
-        if icon != 'Unknown' and display_name != 'Unknown':
-            icons.append(f"[[File:{icon}.png|link={display_name}]]")
+        if icon != 'Question_On' and display_name != 'Unknown':
+            icons.append(f"[[File:{icon}.png|link={display_name}{{lcs}}]]")
     return "".join(icons)
+
+def get_icon_for_item_id(item_id):
+    parsed_data = script_parser.parsed_item_data
+    if not item_id:
+        return ""
+    
+    icon = ""
+
+    module, item_type = item_id.split('.')
+    icon = parsed_data.get(module, {}).get(item_type, {}).get('Icon', 'Question_On')
+    display_name = parsed_data.get(module, {}).get(item_type, {}).get('DisplayName', 'Unknown')
+    if icon != 'Question_On' and display_name != 'Unknown':
+        icon = (f"[[File:{icon}.png|link={display_name}{{lcs}}]]")
+    return icon
 
 
 # gets model for item_data as PNG
