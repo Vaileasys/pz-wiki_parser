@@ -12,8 +12,7 @@ Parses Project Zomboid 'scripts' files and outputs in the desired format for PZw
 2. Add the game's scripts files to a folder called "scripts".
 3. Add the game's icons to a folder called "icons" (ensure 'Item_' prefix is removed). This is only relevant for some modules.
 4. Add the desired translations to a "Translate" folder. E.g. `ItemName_EN.txt` can go in 'resources\Translate\ItemName'. This will output the correct in-game name rather than the DisplayName value.
-5. Add `item_id_dictionary.csv` from  [here](https://drive.google.com/file/d/1Gjl7WJMm7qYaJ5S_J2FtM1iTlyfLI-z8/view).
-6. Add `icons.csv` (Currently not public/implemented).
+_`icons.csv` and `item_id_dictionary.csv` are included with the package. The latest version of `item_id_dictionary.csv` can be found [here](https://drive.google.com/file/d/1Gjl7WJMm7qYaJ5S_J2FtM1iTlyfLI-z8/view)_
 
 ## Using a module
 This programme is bundled with a range of modules that can be used by first running `main.py`. Most modules will **not** work if you try to run them directly.

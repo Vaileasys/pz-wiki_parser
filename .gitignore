@@ -1,6 +1,11 @@
 output.txt
 parsed_data.txt
-resources/
+
+resources/*
+!resources/
+!resources/icons.csv
+!resources/item_id_dictionary.csv
+
 output/
 __pycache__/
 logging/
