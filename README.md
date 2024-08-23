@@ -12,7 +12,7 @@ Parses Project Zomboid 'scripts' files and outputs in the desired format for PZw
 2. Add the game's scripts files to a folder called "scripts".
 3. Add the game's icons to a folder called "icons" (ensure 'Item_' prefix is removed). This is only relevant for some modules.
 4. Add the desired translations to a "Translate" folder. E.g. `ItemName_EN.txt` can go in 'resources\Translate\ItemName'. This will output the correct in-game name rather than the DisplayName value.
-5. Add the following lua files to `resources`, all are found within `ProjectZomboid\projectzomboid\media\lua\`:
+5. (Only required for distributions) Add the following lua files to `resources`, all are found within `ProjectZomboid\projectzomboid\media\lua\`:
    - `shared\Distributions.lua`
    - `shared\ProceduralDistributions.lua`
    - `shared\Foraging\forageDefinitions.lua`
