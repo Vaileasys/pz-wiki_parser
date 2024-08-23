@@ -1,8 +1,13 @@
 import importlib
 import sys
 import os
+from core import utility
 
 menu_structure = {
+    '0': {
+        'name': 'Settings',
+        'description': 'Modify script settings',
+    },
     '1': {
         'name': 'Properties',
         'description': 'Work with item properties.',
@@ -21,6 +26,7 @@ menu_structure = {
             '3': {'module': 'consumables', 'name': 'Consumables', 'description': 'Generate consumables tables.'},
             '4': {'module': 'codesnip', 'name': 'Codesnips', 'description': 'Generate codesnip files.'},
             '5': {'module': 'distribution', 'name': 'Generate distributions', 'description': 'Generate distribution files.'},
+            '6': {'module': 'item_dict', 'name': 'Generate item dictionary', 'description': 'Generate a list of items with their item ID and compare with another version.'}
         },
     },
     '3': {
@@ -51,6 +57,13 @@ menu_structure = {
     },
 }
 
+settings_structure = {
+    '1': {
+        'name': 'Change version',
+        'description': 'Change the game version of the parsed data.'
+    },
+}
+
 
 def display_menu(menu, is_root=False):
     for key, value in menu.items():
@@ -76,6 +89,17 @@ def handle_module(module_name, user_input=None):
         print(f"An error occurred while running {module_name}: {e}")
 
 
+def handle_settings():
+    while True:
+        display_menu(settings_structure)
+        user_input = input("> ").strip().upper()
+        if user_input == "B":
+            break
+        if user_input == '1':
+            utility.version = input("Enter the game version:\n> ").strip()
+            print(f"Version updated to: {utility.version}")
+
+
 def navigate_menu(menu, is_root=False):
     while True:
         display_menu(menu, is_root)
@@ -92,6 +116,9 @@ def navigate_menu(menu, is_root=False):
             # If it's a final option, run the module
             if 'module' in selected_option:
                 handle_module(selected_option['module'])
+                print("\nReturning to the current menu...\n")
+            elif selected_option['name'] == 'Settings':
+                handle_settings()
                 print("\nReturning to the current menu...\n")
             elif 'sub_options' in selected_option:
                 # Navigate into the submenu
