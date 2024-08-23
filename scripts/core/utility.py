@@ -190,16 +190,16 @@ def format_br(values):
 # find a module for an item and return item_id (used for property values that don't define the module)
 def get_module_from_item(item_data, property_name):
     item_types = item_data.get(property_name, [])
-    modules = {}
+    item_ids = {}
     
     for item_type in item_types:
         item_type = item_type.strip()
         for module, module_data in script_parser.parsed_item_data.items():
             if item_type in module_data:
-                modules[item_type] = f"{module}.{item_type}"
+                item_ids[item_type] = f"{module}.{item_type}"
                 break
 
-    return modules
+    return item_ids
 
 
 
