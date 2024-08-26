@@ -1,12 +1,13 @@
 import importlib
 import sys
 import os
-from core import utility
+from scripts.core import version
 
 menu_structure = {
     '0': {
         'name': 'Settings',
         'description': 'Modify script settings',
+        'sub_options': None
     },
     '1': {
         'name': 'Properties',
@@ -26,7 +27,8 @@ menu_structure = {
             '3': {'module': 'consumables', 'name': 'Consumables', 'description': 'Generate consumables tables.'},
             '4': {'module': 'codesnip', 'name': 'Codesnips', 'description': 'Generate codesnip files.'},
             '5': {'module': 'distribution', 'name': 'Generate distributions', 'description': 'Generate distribution files.'},
-            '6': {'module': 'item_dict', 'name': 'Generate item dictionary', 'description': 'Generate a list of items with their item ID and compare with another version.'}
+            '6': {'module': 'item_dict', 'name': 'Generate item dictionary', 'description': 'Generate a list of items with their item ID and compare with another version.'},
+            '7': {'module': 'evolvedrecipe', 'name': 'Evolved Recipe', 'description': 'Parse evolved recipes.'}
         },
     },
     '3': {
@@ -60,18 +62,59 @@ menu_structure = {
 settings_structure = {
     '1': {
         'name': 'Change version',
-        'description': 'Change the game version of the parsed data.'
+        'description': 'Change the game version of the parsed data.',
+        'module': None  # No module needed as we'll handle it directly
     },
+    # Other settings options can be added here
 }
 
 
 def display_menu(menu, is_root=False):
+    if is_root:
+        version_number = version.get_version()
+        print("Game version:", version_number)
+
     for key, value in menu.items():
         print(f"{key}: {value['name']} - {value['description']}")
+
     if not is_root:
         print("B: Back")
     if is_root:
         print("Q: Quit")
+
+
+def change_version():
+    # Specify the path to the version.py file
+    version_file_path = os.path.join(os.path.dirname(__file__), 'scripts', 'core', 'version.py')
+
+    # Ask the user for the new version number
+    new_version = input("Enter the new version number: ").strip()
+
+    # Read the existing content of version.py
+    with open(version_file_path, 'r') as file:
+        lines = file.readlines()
+
+    # Replace the version number in the correct line
+    with open(version_file_path, 'w') as file:
+        for line in lines:
+            if 'version_number =' in line:
+                line = f'    version_number = "{new_version}"\n'
+            file.write(line)
+
+    print(f"Version number updated to {new_version} in {version_file_path}")
+
+    # Reload the version module to reflect changes immediately
+    try:
+        import scripts.core.version as version
+        importlib.reload(version)
+        # Print the new version to confirm
+        updated_version = version.get_version()
+        if updated_version:
+            print("New game version:", updated_version)
+        else:
+            print("Error: Version number is None after update.")
+    except Exception as e:
+        print(f"Error reloading version module: {e}")
 
 
 def handle_module(module_name, user_input=None):
@@ -89,39 +132,27 @@ def handle_module(module_name, user_input=None):
         print(f"An error occurred while running {module_name}: {e}")
 
 
-def handle_settings():
-    while True:
-        display_menu(settings_structure)
-        user_input = input("> ").strip().upper()
-        if user_input == "B":
-            break
-        if user_input == '1':
-            utility.version = input("Enter the game version:\n> ").strip()
-            print(f"Version updated to: {utility.version}")
-
-
 def navigate_menu(menu, is_root=False):
     while True:
         display_menu(menu, is_root)
         user_input = input("> ").strip().upper()
 
-        if is_root and user_input == "Q" or is_root and user_input == "B":
+        if is_root and user_input == "Q" or not is_root and user_input == "B":
             break
-        elif not is_root and user_input == "B" or not is_root and user_input == "Q":
-            return  # Go back to the previous menu
 
         if user_input in menu:
             selected_option = menu[user_input]
 
-            # If it's a final option, run the module
-            if 'module' in selected_option:
+            # Check if it's the settings menu and link to settings_structure
+            if selected_option['name'] == 'Settings' and selected_option['sub_options'] is None:
+                navigate_menu(settings_structure)
+            elif selected_option['name'] == 'Change version':
+                change_version()
+                print("\nReturning to the current menu...\n")
+            elif 'module' in selected_option:
                 handle_module(selected_option['module'])
                 print("\nReturning to the current menu...\n")
-            elif selected_option['name'] == 'Settings':
-                handle_settings()
-                print("\nReturning to the current menu...\n")
             elif 'sub_options' in selected_option:
-                # Navigate into the submenu
                 navigate_menu(selected_option['sub_options'])
         else:
             print("Invalid input. Please try again.")
