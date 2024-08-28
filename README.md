@@ -6,29 +6,31 @@ Parses Project Zomboid 'scripts' files and outputs in the desired format for PZw
 ## Modules
 The following modules are required for some scripts. They can be installed by running `pip install -r requirements.txt`
 * Chardet
-* TQDM
+* tqdm
 
 # Instructions
 ## Setting up the resources folder
 1. Create a folder called "resources" in the same folder as `main.py`. 
 2. Add the game's scripts files to a folder called "scripts".
 3. Add the game's icons to a folder called "icons" (ensure 'Item_' prefix is removed). This is only relevant for some modules.
-4. Add the desired translations to a "Translate" folder. E.g. `ItemName_EN.txt` can go in 'resources\Translate\ItemName'. This will output the correct in-game name rather than the DisplayName value.
-5. (Only required for distributions) Add the following lua files to `resources`, all are found within `ProjectZomboid\projectzomboid\media\lua\`:
+4. (Only required for distributions) Add the following lua files to `resources`, all are found within `ProjectZomboid\projectzomboid\media\lua\`:
    - `shared\Distributions.lua`
    - `shared\ProceduralDistributions.lua`
    - `shared\Foraging\forageDefinitions.lua`
    - `server\Vehicles\VehicleDistributions.lua`
    - `shared\Definitions\AttachedWeaponDefinitions.lua`
 
+5. (Not required unless the download fails when running `main.py`) Download translation files from [here](https://github.com/TheIndieStone/ProjectZomboidTranslations/) and place them in `resources\Translate\ItemName`.
+
 _`icons.csv` and `item_id_dictionary.csv` are included with the package. The latest version of `item_id_dictionary.csv` can be found [here](https://drive.google.com/file/d/1Gjl7WJMm7qYaJ5S_J2FtM1iTlyfLI-z8/view)_
 
-## Using a module
+## Usage
 This programme is bundled with a range of modules that can be used by first running `main.py`. Most modules will **not** work if you try to run them directly.
 1. Run `main.py`.
-2. Follow the menus to run the desired script.
-3. Follow the prompts for that module.
-4. The script will run, parsing the data, and then output. Some modules will output to a file such as `output.txt` while others will just output to the terminal.
+2. Download translations if not added manually.
+3. Follow the menus to run the desired script.
+4. Follow the prompts for that module.
+5. The script will run, parsing the data, and then output. Some modules will output to a file such as `output.txt` while others will just output to the terminal.
 
 _Some scripts will prompt the user for a language code (default 'en') which is used to translate to the desired language. The translations must have been added to the "Translate" folder._
 
