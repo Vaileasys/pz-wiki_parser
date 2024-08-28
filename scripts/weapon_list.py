@@ -162,6 +162,13 @@ def process_item_melee(item_data, item_id):
     if item_data.get("CloseKillMove") == "Jaw_Stab":
         equipped = "{{Tooltip|1H*|Has jaw stab attack.}}"
 
+    crit_chance = item_data.get("CriticalChance", "-")
+    if crit_chance != "-":
+        crit_chance = f"{crit_chance}%"
+    crit_multiplier = item_data.get("CriticalChance", "-")
+    if crit_multiplier != "-":
+        crit_multiplier = f"{crit_multiplier}×"
+
     condition_max = item_data.get("ConditionMax", '0')
     condition_chance = item_data.get("ConditionLowerChanceOneIn", '0')
     condition_average = str(int(condition_max) * int(condition_chance))
@@ -179,8 +186,8 @@ def process_item_melee(item_data, item_id):
         "min_range": item_data.get('MinRange', '-'),
         "max_range": item_data.get('MaxRange', '-'),
         "base_speed": item_data.get('BaseSpeed', '1'),
-        "crit_chance": item_data.get('CriticalChance', '-'),
-        "crit_multiplier": item_data.get('CritDmgMultiplier', '-'),
+        "crit_chance": crit_chance,
+        "crit_multiplier": crit_multiplier,
         "knockback": item_data.get('PushBackMod', '-'),
         "condition_max": condition_max,
         "condition_chance": condition_chance,
