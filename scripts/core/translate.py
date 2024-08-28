@@ -112,9 +112,9 @@ def get_translation(property_value, property_name="DisplayName", lang_code=None)
         lang_code = language_code
 
     if property_name == "DisplayName":
-        file_path = f'resources/Translate/ItemName/ItemName_{lang_code.upper()}.txt'
+        file_path = f'resources/Translate/{lang_code.upper()}/ItemName_{lang_code.upper()}.txt'
     else:
-        file_path = f'resources/Translate/IG_UI/IG_UI_{lang_code.upper()}.txt' if lang_code != "en" else 'resources/Translate/IG_UI/IG_UI_EN.txt'
+        file_path = f'resources/Translate/{lang_code.upper()}/IG_UI_{lang_code.upper()}.txt' if lang_code != "en" else f'resources/Translate/{lang_code.upper()}/IG_UI_EN.txt'
     
     property_prefix = property_prefixes.get(property_name, property_name) + property_value
     if not property_prefix:
