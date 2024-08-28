@@ -1,4 +1,5 @@
 import importlib
+import subprocess
 import sys
 import os
 from scripts.core import version
@@ -63,9 +64,8 @@ settings_structure = {
     '1': {
         'name': 'Change version',
         'description': 'Change the game version of the parsed data.',
-        'module': None  # No module needed as we'll handle it directly
+        'module': None
     },
-    # Other settings options can be added here
 }
 
 
@@ -87,7 +87,6 @@ def change_version():
     # Specify the path to the version.py file
     version_file_path = os.path.join(os.path.dirname(__file__), 'scripts', 'core', 'version.py')
 
-    # Ask the user for the new version number
     new_version = input("Enter the new version number: ").strip()
 
     # Read the existing content of version.py
@@ -158,12 +157,39 @@ def navigate_menu(menu, is_root=False):
             print("Invalid input. Please try again.")
 
 
+def check_and_download_translations():
+    translate_dir = os.path.join(os.path.dirname(__file__), 'resources', 'Translate')
+
+    # Check if the directory exists
+    if not os.path.exists(translate_dir):
+        os.makedirs(translate_dir)
+        print(f"Directory {translate_dir} created.")
+
+    # Check if the directory is empty
+    if not os.listdir(translate_dir):
+        print("Translations not found, would you like to try to automatically download them? (Y/N):")
+        user_input = input("> ").strip().upper()
+
+        if user_input == 'Y':
+            repo_url = "https://github.com/TheIndieStone/ProjectZomboidTranslations/"
+            try:
+                # Clone the repository into the Translate directory
+                subprocess.run(["git", "clone", repo_url, translate_dir], check=True)
+                print(f"Successfully cloned the repository into {translate_dir}.")
+            except subprocess.CalledProcessError as e:
+                print(f"Failed to clone the repository: {e}")
+        else:
+            print("Skipping translation download.")
+
+
 def main():
     # Add the /scripts/ directory to the system path
     script_dir = os.path.join(os.path.dirname(__file__), 'scripts')
     sys.path.append(script_dir)
 
-    print("Welcome to the script runner!")
+    check_and_download_translations()
+
+    print("Welcome to the wiki parser!")
     navigate_menu(menu_structure, is_root=True)
 
 
