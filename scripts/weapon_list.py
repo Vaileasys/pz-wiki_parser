@@ -155,10 +155,12 @@ def process_item_melee(item_data, item_id):
     icon = utility.get_icon(item_data, item_id)
 
     equipped = "1H"
-    if item_data.get("RequiresEquippedBothHands") == "TRUE":
-        equipped = "{{Tooltip|2H*|Limited impact when used one-handed.}}"
-    elif item_data.get("TwoHandWeapon", "FALSE") == "TRUE":
+    if item_data.get("RequiresEquippedBothHands", "FALSE").lower() == "true":
         equipped = "2H"
+    elif item_data.get("TwoHandWeapon", "FALSE").lower() == "true":
+        equipped = "{{Tooltip|2H*|Limited impact when used one-handed.}}"
+    if item_data.get("CloseKillMove") == "Jaw_Stab":
+        equipped = "{{Tooltip|1H*|Has jaw stab attack.}}"
 
     condition_max = item_data.get("ConditionMax", '0')
     condition_chance = item_data.get("ConditionLowerChanceOneIn", '0')
