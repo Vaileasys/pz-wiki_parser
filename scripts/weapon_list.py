@@ -12,17 +12,17 @@ melee_header = """{| class="wikitable theme-red sortable" style="text-align: cen
 ! rowspan=2 | [[File:UI_Hand.png|32px|link=|Equipped]]
 ! colspan=4 | Damage
 ! colspan=2 | Range
-! rowspan=2 | [[File:UI_AttackSpeed-test.png|32px|link=|Attack speed]]
+! rowspan=2 | [[File:UI_AttackSpeed.png|32px|link=|Attack speed]]
 ! rowspan=2 | [[File:UI_CriticalHit_Chance.png|32px|32px|link=|Crit chance]]
 ! rowspan=2 | [[File:UI_CriticalHit_Multiply.png|32px|link=|Crit multiplier]]
-! rowspan=2 | [[File:UI_Knockback-test.png|32px|link=|Knockback]]
+! rowspan=2 | [[File:UI_Knockback.png|32px|link=|Knockback]]
 ! rowspan=2 | [[File:UI_Condition_Max.png|32px|link=|Max condition]]
 ! rowspan=2 | [[File:UI_Condition_Chance.png|Condition lower chance, 1 in (x + (maintenance × 2 + weapon level))]]
 ! rowspan=2 | [[File:UI_Condition_Average.png|32px|link=|Average condition at level 0]]
 ! rowspan=2 | Item ID
 |-
-! [[File:UI_Damage_Min-test.png|32px|link=|Minimum damage]]
-! [[File:UI_Damage_Max-test.png|32px|link=|Maximum damage]]
+! [[File:UI_Damage_Min.png|32px|link=|Minimum damage]]
+! [[File:UI_Damage_Max.png|32px|link=|Maximum damage]]
 ! [[File:UI_Door.png|32px|link=|Door damage]]
 ! rowspan=2 | [[File:Container_Plant.png|32px|link=|Tree damage]]
 ! [[File:UI_Range_Min.png|32px|link=|Minimum range]]
@@ -38,16 +38,16 @@ firearm_header = """{| class="wikitable theme-red sortable" style="text-align: c
 ! rowspan=2 | [[File:BerettaClip.png|link=|Magazine capacity]]
 ! colspan=2 | Damage
 ! colspan=2 | Range
-! rowspan=2 | [[File:UI_Accuracy-test.png|32px|link=|Accuracy]]
+! rowspan=2 | [[File:UI_Accuracy.png|32px|link=|Accuracy]]
 ! rowspan=2 | [[File:UI_Accuracy_Add.png|32px|link=|Accuracy increased per aiming level]]
 ! rowspan=2 | [[File:UI_CriticalHit_Chance.png|32px|link=|Crit chance]]
 ! rowspan=2 | [[File:UI_Critical_Add.png|32px|link=|Critical hit chance increased per aiming level]]
 ! rowspan=2 | [[File:UI_Noise.png|32px|link=|Noise radius]]
-! rowspan=2 | [[File:UI_Knockback-test.png|32px|link=|Knockback]]
+! rowspan=2 | [[File:UI_Knockback.png|32px|link=|Knockback]]
 ! rowspan=2 | Item ID
 |-
-! [[File:UI_Damage_Min-test.png|32px|link=|Minimum damage]]
-! [[File:UI_Damage_Max-test.png|32px|link=|Maximum damage]]
+! [[File:UI_Damage_Min.png|32px|link=|Minimum damage]]
+! [[File:UI_Damage_Max.png|32px|link=|Maximum damage]]
 ! [[File:UI_Range_Min.png|32px|link=|Minimum range]]
 ! style="border-right: var(--border-mw);" | [[File:UI_Range_Max.png|32px|link=|Maximum range]]\n"""
 
@@ -241,4 +241,3 @@ def get_items():
 if __name__ == "__main__":
     script_parser.init()
     get_items()
-#    test()
