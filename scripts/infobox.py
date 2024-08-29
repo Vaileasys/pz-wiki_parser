@@ -234,11 +234,13 @@ def main():
         choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
         if choice == '1':
             automatic_extraction(output_dir)
-            print("Extraction complete, the files can be found in output/infoboxes.")
+            print(f"Extraction complete, the files can be found in {output_dir}.")
+            return
         elif choice == '2':
             item_data, item_id = get_item()
             write_to_output(item_data, item_id, output_dir)
-            print("Extraction complete, the file can be found in output/infoboxes.")
+            print(f"Extraction complete, the file can be found in {output_dir}.")
+            return
         elif choice == 'q':
             return
         else:

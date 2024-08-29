@@ -219,10 +219,12 @@ def main():
         if choice == '1':
             automatic_extraction(output_dir)
             print(f"Extraction complete, the files can be found in {output_dir}.")
+            return
         elif choice == '2':
             module, fixing_id, fixing_data = get_fixing()
             write_to_output(module, fixing_id, fixing_data, output_dir)
             print(f"Extraction complete, the file can be found in {output_dir}.")
+            return
         elif choice == 'q':
             return
         else:
