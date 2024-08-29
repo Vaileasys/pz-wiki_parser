@@ -1,8 +1,7 @@
 import os
 import shutil
 import script_parser
-from core import logging
-from core import translate
+from core import logging, translate
 
 
 def get_item():
@@ -29,17 +28,17 @@ def get_icon(item_data, variant=""):
 
         if variant in icon_variants:
             variant_exists = False
-            
+
             for suffix in icon_variants[variant]:
                 variant_icon = f"{icon}{suffix}"
                 if os.path.exists(os.path.join(icon_dir, variant_icon + ".png")):
                     icon = variant_icon
                     variant_exists = True
                     break
-            
+
             if not variant_exists:
                 return ''
-        
+
         else:
             raise ValueError(f"Variant '{variant}' could not be found in icon_variants dictionary")
 
@@ -53,11 +52,12 @@ def is_egg(tags):
         tags = [tags]
     if "Egg" in tags:
         value = 'true'
-    else: value = ''
+    else:
+        value = ''
     return value
 
 
-def write_to_output(item_data, item_id, output_dir='output/consumables'):
+def write_to_output(item_data, item_id, output_dir):
     if item_data.get('Type') == "Food" and ('IsCookable' in item_data or 'DaysTotallyRotten' in item_data):
         try:
             os.makedirs(output_dir, exist_ok=True)
@@ -100,8 +100,7 @@ def process_item(item_data, item_id, output_dir):
     write_to_output(item_data, item_id, output_dir)
 
 
-def automatic_extraction():
-    output_dir = 'output/consumables'
+def automatic_extraction(output_dir):
     if os.path.exists(output_dir):
         shutil.rmtree(output_dir)
     os.makedirs(output_dir)
@@ -114,23 +113,24 @@ def automatic_extraction():
 
 def main():
     script_parser.init()
+    language_code = translate.language_code
+    output_dir = f'output/{language_code}/consumables'
 
     while True:
         choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
         if choice == '1':
-            automatic_extraction()
-            print("Extraction complete, the files can be found in output/consumables.")
+            automatic_extraction(output_dir)
+            print(f"Extraction complete, the files can be found in {output_dir}.")
             return
         elif choice == '2':
             item_data, item_id = get_item()
-            write_to_output(item_data, item_id)
-            print("Extraction complete, the file can be found in output/consumables.")
+            write_to_output(item_data, item_id, output_dir)
+            print(f"Extraction complete, the file can be found in {output_dir}.")
             return
         elif choice.lower() == 'q':
             return
         else:
             print("Invalid choice.")
-
 
 
 if __name__ == "__main__":

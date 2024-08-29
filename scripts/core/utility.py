@@ -1,9 +1,7 @@
 import os
 import csv
 import script_parser
-from core import translate
-from core import logging
-from core import version
+from core import translate,logging, version
 
 version = version.get_version()
 

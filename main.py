@@ -27,9 +27,9 @@ menu_structure = {
             '2': {'module': 'fixing', 'name': 'Fixing', 'description': 'Generates fixing recipes.'},
             '3': {'module': 'consumables', 'name': 'Consumables', 'description': 'Generate consumables tables.'},
             '4': {'module': 'codesnip', 'name': 'Codesnips', 'description': 'Generate codesnip files.'},
-            '5': {'module': 'distribution', 'name': 'Generate distributions', 'description': 'Generate distribution files.'},
-            '6': {'module': 'item_dict', 'name': 'Generate item dictionary', 'description': 'Generate a list of items with their item ID and compare with another version.'},
-            '7': {'module': 'evolvedrecipe', 'name': 'Evolved Recipe', 'description': 'Parse evolved recipes.'}
+            '5': {'module': 'distribution', 'name': 'Distributions', 'description': 'Generate distribution files.'},
+            '6': {'module': 'item_dict', 'name': 'Item dictionary', 'description': 'Generate a list of items with their item ID and compare with another version.'},
+            '7': {'module': 'evolvedrecipe', 'name': 'Evolved recipes', 'description': 'Parse evolved recipes.'}
         },
     },
     '3': {

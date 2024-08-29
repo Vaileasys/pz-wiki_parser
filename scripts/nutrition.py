@@ -4,8 +4,8 @@ from core import translate
 
 def write_to_output(items):
     # write to output.txt
-    output_file = 'output/nutrition.txt'
     language_code = translate.language_code
+    output_file = f'output/{language_code}/nutrition.txt'
     with open(output_file, 'w', encoding='utf-8') as file:
 
         lc_subpage = ""

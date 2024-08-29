@@ -2,7 +2,7 @@ import os
 import shutil
 import csv
 import script_parser
-from core import utility
+from core import utility, translate
 
 """
 This script gets all the items present in a 'scripts' folder and outputs the item id and name to a csv file.
@@ -10,11 +10,9 @@ The generated file can then be compared with an existing file. This is used to c
 New items will be added to a new 'Compared' CSV file and 'new items' wikitable.
 """
 
-directory = "output/items_version"
-
-def generate_csv(data, file):
-    os.makedirs(directory, exist_ok=True)
-    file_path = os.path.join(directory, file)
+def generate_csv(data, file, output_dir):
+    os.makedirs(output_dir, exist_ok=True)
+    file_path = os.path.join(output_dir, file)
     with open(file_path, mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerows(data)
@@ -50,6 +48,9 @@ def compare_csv(file1, file2, output_file, wiki_output_file):
 
 def main():
     script_parser.init()
+    language_code = translate.language_code
+    output_dir = f'output/{language_code}/items_version'
+
     data = []
     for module, module_data in script_parser.parsed_item_data.items():
         for item_type, item_data in module_data.items():
@@ -59,16 +60,16 @@ def main():
 
     version = utility.version
     output_file = f'items_{version}.csv'
-    generate_csv(data, output_file)
-    output_file = os.path.join(directory, output_file)
+    generate_csv(data, output_file, output_dir)
+    output_file = os.path.join(output_dir, output_file)
     
     compare_option = input("Want to compare the generated file with another CSV file? (y/n):\n> ").strip().lower()
     if compare_option == 'y':
         compare_version = input("Enter the version to compare with:\n> ").strip()
-        compare_path = os.path.join(directory, f"items_{compare_version}.csv")
+        compare_path = os.path.join(output_dir, f"items_{compare_version}.csv")
         print(compare_path)
         if os.path.exists(compare_path):
-            compare_csv(output_file, compare_path, f'{directory}/Compared {compare_version} and {version}.csv', f'{directory}/{version} new items.txt')
+            compare_csv(output_file, compare_path, f'{output_dir}/Compared {compare_version} and {version}.csv', f'{output_dir}/{version} new items.txt')
         else:
             print(f"Comparison file 'items_{compare_version}.csv' not found in the output folder.")
     else:

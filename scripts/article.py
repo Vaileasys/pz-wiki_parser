@@ -4,12 +4,13 @@ import sys
 import csv
 from difflib import SequenceMatcher
 from tqdm import tqdm
+from core import translate
 
 
-def load_item_id_dictionary(csv_path):
+def load_item_id_dictionary(dictionary_dir):
     item_id_dict = {}
     try:
-        with open(csv_path, 'r', encoding='utf-8') as csvfile:
+        with open(dictionary_dir, 'r', encoding='utf-8') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
                 article_name = row[0].strip()
@@ -20,12 +21,12 @@ def load_item_id_dictionary(csv_path):
                         item_id_dict[item_id] = article_name
 
     except Exception as e:
-        print(f"Error reading {csv_path}: {e}")
+        print(f"Error reading {dictionary_dir}: {e}")
 
     return item_id_dict
 
 
-def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir):
+def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir, code_dir, distribution_dir):
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             content = file.read()
@@ -74,7 +75,7 @@ def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item
 
     # Build the article
     header = generate_header(category, skill_type)
-    body_content = assemble_body(lowercase_name, os.path.basename(file_path), name, item_id, category, skill_type, infobox, consumables_dir, infobox_data_list, item_id_dict, fixing_dir)
+    body_content = assemble_body(lowercase_name, os.path.basename(file_path), name, item_id, category, skill_type, infobox, consumables_dir, infobox_data_list, item_id_dict, fixing_dir, code_dir, distribution_dir)
     article = 'An' if lowercase_name[0] in 'aeiou' else 'A'
     new_content = f"""
 {header}
@@ -357,7 +358,7 @@ def generate_see_also(current_item, infobox_data_list, item_id_dict):
     return f"{see_also_list}\n\n{navbox}"
 
 
-def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox, consumables_dir, infobox_data_list, item_id_dict, fixing_dir):
+def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox, consumables_dir, infobox_data_list, item_id_dict, fixing_dir, code_dir, distribution_dir):
     current_item_data = {
         'name': name,
         'category': category,
@@ -368,8 +369,8 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
 
     sections = {
         'Condition': generate_condition(name, category, skill_type, infobox, fixing_dir),
-        'Location': generate_location(original_filename, infobox_name, item_id, 'output/distributions/complete'),
-        'Code': generate_code(item_id, 'output/codesnips'),
+        'Location': generate_location(original_filename, infobox_name, item_id, distribution_dir),
+        'Code': generate_code(item_id, code_dir),
         'See also': generate_see_also(current_item_data, infobox_data_list, item_id_dict)
     }
 
@@ -387,21 +388,25 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
 
 
 def main():
-    input_dir = 'output/infoboxes'
-    output_dir = 'output/articles'
-    consumables_dir = 'output/consumables'
-    fixing_dir = 'output/fixing'
-    csv_path = 'resources/item_id_dictionary.csv'
+    # Set language code in case it hasn't been set already.
+    translate.set_language_code()
+    language_code = translate.language_code
+
+    infobox_dir = f'output/{language_code}/infoboxes'
+    output_dir = f'output/{language_code}/articles'
+    consumables_dir = f'output/{language_code}/consumables'
+    fixing_dir = f'output/{language_code}/fixing'
+    dictionary_dir = 'resources/item_id_dictionary.csv'
     distribution_dir = 'output/distributions/complete'
     code_dir = 'output/codesnips'
 
     warnings = []
 
-    if not os.path.exists(input_dir):
+    if not os.path.exists(infobox_dir):
         print("Infoboxes directory not found")
         sys.exit(1)
 
-    text_files = [f for f in os.listdir(input_dir) if f.endswith('.txt')]
+    text_files = [f for f in os.listdir(infobox_dir) if f.endswith('.txt')]
 
     if not text_files:
         print("Infoboxes not found")
@@ -426,12 +431,12 @@ def main():
         print("Invalid input. Please enter 1 or 2.")
     generate_all = user_choice == '1'
 
-    infobox_data_list = load_infoboxes(input_dir)
-    item_id_dict = load_item_id_dictionary(csv_path)
+    infobox_data_list = load_infoboxes(infobox_dir)
+    item_id_dict = load_item_id_dictionary(dictionary_dir)
 
     for text_file in tqdm(text_files, desc="Generating articles", unit="file"):
-        file_path = os.path.join(input_dir, text_file)
-        process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir)
+        file_path = os.path.join(infobox_dir, text_file)
+        process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir,code_dir, distribution_dir)
 
     if warnings:
         print("\n".join(warnings))

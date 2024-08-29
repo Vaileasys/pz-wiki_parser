@@ -1,7 +1,6 @@
 import os
 import script_parser
-from core import translate
-from core import utility
+from core import translate, utility
 
 filters = {
     'MakeUp_': (True,),
@@ -29,7 +28,7 @@ def translate_category(category, property="DisplayCategory"):
 
 def write_to_output(sorted_items):
     language_code = translate.language_code
-    output_dir = f'output/item_list/'
+    output_dir = f'output/{language_code}/item_list/'
     output_file = f'item_list_{language_code.upper()}.txt'
     os.makedirs(output_dir, exist_ok=True)
     output_path = os.path.join(output_dir, output_file)

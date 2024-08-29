@@ -15,8 +15,7 @@ def main():
     forage_file_name = 'foragedefinitions.lua'
 
     # Extract unique items
-    unique_items = unique_items_extract(resources_path, file_names, forage_file_name)
-    unique_items = sorted(unique_items)
+    unique_items = sorted(unique_items_extract(resources_path, file_names, forage_file_name))
     write_unique_names(unique_items, output_path)
     item_processing(unique_items, resources_path, csv_output_path, file_names)
     attached_weapon_processing(resources_path, output_path)

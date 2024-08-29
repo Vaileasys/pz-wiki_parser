@@ -119,7 +119,7 @@ def format_skills(skills, skill_values):
     return "<br>".join(formatted_skills)
 
 
-def write_to_output(module, fixing_id, fixing_data, output_dir='output/fixing'):
+def write_to_output(module, fixing_id, fixing_data, output_dir):
     try:
         os.makedirs(output_dir, exist_ok=True)
         output_file = os.path.join(output_dir, f'{fixing_id}.txt')
@@ -197,8 +197,7 @@ def process_item(module, fixing_id, fixing_data, output_dir):
     write_to_output(module, fixing_id, fixing_data, output_dir)
 
 
-def automatic_extraction():
-    output_dir = 'output/fixing'
+def automatic_extraction(output_dir):
     if os.path.exists(output_dir):
         shutil.rmtree(output_dir)
     os.makedirs(output_dir)
@@ -212,16 +211,18 @@ def automatic_extraction():
 
 def main():
     script_parser.init()
+    language_code = translate.language_code
+    output_dir = f'output/{language_code}/fixing'
 
     while True:
         choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
         if choice == '1':
-            automatic_extraction()
-            print("Extraction complete, the files can be found in output/fixing.")
+            automatic_extraction(output_dir)
+            print(f"Extraction complete, the files can be found in {output_dir}.")
         elif choice == '2':
             module, fixing_id, fixing_data = get_fixing()
-            write_to_output(module, fixing_id, fixing_data)
-            print("Extraction complete, the file can be found in output/fixing.")
+            write_to_output(module, fixing_id, fixing_data, output_dir)
+            print(f"Extraction complete, the file can be found in {output_dir}.")
         elif choice == 'q':
             return
         else:

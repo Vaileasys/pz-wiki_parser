@@ -56,7 +56,7 @@ def insert_parameters_after(parameters, new_parameters_dict):
     return combined_parameters
 
 
-def write_to_output(item_data, item_id, output_dir='output/infoboxes'):
+def write_to_output(item_data, item_id, output_dir):
     try:
         os.makedirs(output_dir, exist_ok=True)
         output_file = os.path.join(output_dir, f'{item_id}.txt')
@@ -214,8 +214,7 @@ def process_item(item_data, item_id, output_dir):
     write_to_output(item_data, item_id, output_dir)
 
 
-def automatic_extraction():
-    output_dir = 'output/infoboxes'
+def automatic_extraction(output_dir):
     if os.path.exists(output_dir):
         shutil.rmtree(output_dir)
     os.makedirs(output_dir)
@@ -228,15 +227,17 @@ def automatic_extraction():
 
 def main():
     script_parser.init()
+    language_code = translate.language_code
+    output_dir = f'output/{language_code}/infoboxes'
 
     while True:
         choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
         if choice == '1':
-            automatic_extraction()
+            automatic_extraction(output_dir)
             print("Extraction complete, the files can be found in output/infoboxes.")
         elif choice == '2':
             item_data, item_id = get_item()
-            write_to_output(item_data, item_id)
+            write_to_output(item_data, item_id, output_dir)
             print("Extraction complete, the file can be found in output/infoboxes.")
         elif choice == 'q':
             return

@@ -1,8 +1,7 @@
 import os
 import shutil
 import script_parser
-from core import translate
-from core import utility
+from core import translate, utility
 
 # table header for melee weapons
 melee_header = """{| class="wikitable theme-red sortable" style="text-align: center;"
