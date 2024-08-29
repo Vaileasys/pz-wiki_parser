@@ -83,7 +83,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "name": translate.get_translation(item_id, "DisplayName"),
                 "model": utility.get_model(item_data),
 #                "icon": utility.get_icons(item_data),  # added with 'insert_parameters_after' 
-                "icon_name": item_data.get('DisplayName', ''),
+                "icon_name": translate.get_translation(item_id, "DisplayName"),
                 "category": category,
                 "weight": item_data.get('Weight', 1),
                 "weight_reduction": item_data.get('WeightReduction', ''),
