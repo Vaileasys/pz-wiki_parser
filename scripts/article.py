@@ -6,6 +6,154 @@ from difflib import SequenceMatcher
 from tqdm import tqdm
 from core import translate
 
+# Language dictionary
+LANGUAGE_DATA = {
+    "en": {
+        "intro_template": "{article} '''{lowercase_name}''' is an [[item]] in [[Project Zomboid]].",
+        "article": lambda lowercase_name: 'An' if lowercase_name[0] in 'aeiou' else 'A',
+        "headers": {
+            "Usage": "Usage",
+            "Condition": "Condition",
+            "Location": "Location",
+            "Code": "Code",
+            "See also": "See also",
+            "Consumable properties": "Consumable properties",
+        },
+        "help_text": "Help PZwiki by adding information to this section.",
+        "translate_reason": "Translated using game translation files.",
+    },
+    "pl": {
+        "intro_template": "'''{lowercase_name}''' to [[przedmiot]] w [[Project Zomboid/pl]].",
+        "headers": {
+            "Usage": "Zastosowanie",
+            "Condition": "Stan",
+            "Location": "Lokalizacja",
+            "Code": "Kod",
+            "See also": "Zobacz także",
+            "Consumable properties": "Właściwości konsumpcyjne",
+        },
+        "help_text": "Pomóż PZwiki, dodając informacje do tej sekcji.",
+        "translate_reason": "Przetłumaczone za pomocą plików tłumaczeń gry.",
+    },
+    "fr": {
+        "intro_template": "'''{lowercase_name}''' est {{{{ll|item}}}} dans {{{{ll|Project Zomboid}}}}.",
+        "headers": {
+            "Usage": "Utilisation",
+            "Condition": "Condition",
+            "Location": "Emplacement",
+            "Code": "Code",
+            "See also": "Voir aussi",
+            "Consumable properties": "Propriétés consommables",
+        },
+        "help_text": "Aidez PZwiki en ajoutant des informations à cette section.",
+        "translate_reason": "Traduit à l'aide des fichiers de traduction du jeu.",
+    },
+    "it": {
+        "intro_template": "'''{lowercase_name}''' è {{{{ll|item}}}} in {{{{ll|Project Zomboid}}}}.",
+        "headers": {
+            "Usage": "Utilizzo",
+            "Condition": "Condizione",
+            "Location": "Posizione",
+            "Code": "Codice",
+            "See also": "Vedi anche",
+            "Consumable properties": "Proprietà consumabili",
+        },
+        "help_text": "Aiuta PZwiki aggiungendo informazioni a questa sezione.",
+        "translate_reason": "Tradotto utilizzando i file di traduzione del gioco.",
+    },
+    "es": {
+        "intro_template": "'''{lowercase_name}''' es {{{{ll|item}}}} en {{{{ll|Project Zomboid}}}}.",
+        "headers": {
+            "Usage": "Uso",
+            "Condition": "Condición",
+            "Location": "Ubicación",
+            "Code": "Código",
+            "See also": "Ver también",
+            "Consumable properties": "Propiedades consumibles",
+        },
+        "help_text": "Ayuda a PZwiki añadiendo información a esta sección.",
+        "translate_reason": "Traducido usando los archivos de traducción del juego.",
+    },
+    "pt": {
+        "intro_template": "'''{lowercase_name}''' é {{{{ll|item}}}} em {{{{ll|Project Zomboid}}}}.",
+        "headers": {
+            "Usage": "Uso",
+            "Condition": "Condição",
+            "Location": "Localização",
+            "Code": "Código",
+            "See also": "Veja também",
+            "Consumable properties": "Propriedades consumíveis",
+        },
+        "help_text": "Ajude PZwiki adicionando informações a esta seção.",
+        "translate_reason": "Traduzido usando os arquivos de tradução do jogo.",
+    },
+    "ptbr": {
+        "intro_template": "'''{lowercase_name}''' é {{{{ll|item}}}} em {{{{ll|Project Zomboid}}}}.",
+        "headers": {
+            "Usage": "Uso",
+            "Condition": "Condição",
+            "Location": "Localização",
+            "Code": "Código",
+            "See also": "Veja também",
+            "Consumable properties": "Propriedades consumíveis",
+        },
+        "help_text": "Ajude PZwiki adicionando informações a esta seção.",
+        "translate_reason": "Traduzido usando os arquivos de tradução do jogo.",
+    },
+    "ru": {
+        "intro_template": "'''{lowercase_name}''' — это {{{{ll|item}}}} в {{{{ll|Project Zomboid}}}}.",
+        "headers": {
+            "Usage": "Использование",
+            "Condition": "Состояние",
+            "Location": "Расположение",
+            "Code": "Код",
+            "See also": "См. также",
+            "Consumable properties": "Потребляемые свойства",
+        },
+        "help_text": "Помогите PZwiki, добавив информацию в этот раздел.",
+        "translate_reason": "Переведено с использованием файлов перевода игры.",
+    },
+    "tr": {
+        "intro_template": "'''{lowercase_name}''' {{{{ll|Project Zomboid}}}}'da bir {{{{ll|item}}}}.",
+        "headers": {
+            "Usage": "Kullanım",
+            "Condition": "Durum",
+            "Location": "Konum",
+            "Code": "Kod",
+            "See also": "Ayrıca bakınız",
+            "Consumable properties": "Tüketilebilir özellikler",
+        },
+        "help_text": "Bu bölüme bilgi ekleyerek PZwiki'ye yardım edin.",
+        "translate_reason": "Oyun çeviri dosyaları kullanılarak çevrilmiştir.",
+    },
+    "jp": {
+        "intro_template": "'''{lowercase_name}'''は{{{{ll|Project Zomboid}}}}の{{{{ll|item}}}}です。",
+        "headers": {
+            "Usage": "使用方法",
+            "Condition": "状態",
+            "Location": "場所",
+            "Code": "コード",
+            "See also": "参照",
+            "Consumable properties": "消費可能な特性",
+        },
+        "help_text": "このセクションに情報を追加してPZwikiを支援してください。",
+        "translate_reason": "ゲームの翻訳ファイルを使用して翻訳されました。",
+    },
+    "ko": {
+        "intro_template": "'''{lowercase_name}'''은(는) {{{{ll|Project Zomboid}}}}의 {{{{ll|item}}}}입니다.",
+        "headers": {
+            "Usage": "사용",
+            "Condition": "상태",
+            "Location": "위치",
+            "Code": "코드",
+            "See also": "또한 참조하십시오",
+            "Consumable properties": "소모 가능한 속성",
+        },
+        "help_text": "이 섹션에 정보를 추가하여 PZwiki를 도와주세요.",
+        "translate_reason": "게임 번역 파일을 사용하여 번역되었습니다.",
+    },
+}
+
 
 def load_item_id_dictionary(dictionary_dir):
     item_id_dict = {}
@@ -26,7 +174,19 @@ def load_item_id_dictionary(dictionary_dir):
     return item_id_dict
 
 
-def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir, code_dir, distribution_dir):
+def generate_intro(lowercase_name, language_code):
+    language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
+    intro_template = language_data["intro_template"]
+    article = language_data.get("article", lambda _: "")(lowercase_name).lower()
+
+    intro = intro_template.format(article=article, lowercase_name=lowercase_name)
+    intro = intro[0].upper() + intro[1:]
+
+    return intro
+
+
+def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir,
+                 code_dir, distribution_dir, language_code):
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             content = file.read()
@@ -74,15 +234,17 @@ def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item
     skill_type = skill_type_match.group(1).strip() if skill_type_match else ""
 
     # Build the article
-    header = generate_header(category, skill_type)
-    body_content = assemble_body(lowercase_name, os.path.basename(file_path), name, item_id, category, skill_type, infobox, consumables_dir, infobox_data_list, item_id_dict, fixing_dir, code_dir, distribution_dir)
-    article = 'An' if lowercase_name[0] in 'aeiou' else 'A'
+    header = generate_header(category, skill_type, infobox_version, language_code, lowercase_name)
+    body_content = assemble_body(lowercase_name, os.path.basename(file_path), name, item_id, category, skill_type,
+                                 infobox, consumables_dir, infobox_data_list, item_id_dict, fixing_dir, code_dir,
+                                 distribution_dir, language_code)
+
+    intro = generate_intro(lowercase_name, language_code)
+
     new_content = f"""
 {header}
-{{{{Page version|{infobox_version}}}}}
-{{{{Autogenerated|B42}}}}
 {infobox}
-{article} '''{lowercase_name}''' is an [[item]] in [[Project Zomboid]].
+{intro}
 
 {body_content}
 """
@@ -99,7 +261,11 @@ def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item
         print(f"Error writing to {new_file_path}: {e}")
 
 
-def generate_header(category, skill_type):
+def generate_header(category, skill_type, infobox_version, language_code, lowercase_name):
+    language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
+    translate_reason = language_data["translate_reason"]
+
+    # Determine header based on category and skill type
     category_dict = {
         "Weapon": "use_skill_type",
         "Tool/Weapon": "use_skill_type",
@@ -154,19 +320,31 @@ def generate_header(category, skill_type):
         "Firearm": "{{Header|Project Zomboid|Items|Weapons|Firearms}}"
     }
 
+    # Remove link markup from skill type for comparison
     skill_type = re.sub(r'\[\[(?:[^\|\]]*\|)?([^\|\]]+)\]\]', r'\1', skill_type).strip()
 
+    # Determine the correct header based on the category and skill type
     if category in category_dict:
         if category_dict[category] == "use_skill_type":
-            # Check if skill type matches
-            if skill_type in skill_type_dict:
-                return skill_type_dict[skill_type]
-            else:
-                return "{{Header|Project Zomboid|Items|Weapons}}"
+            header = skill_type_dict.get(skill_type, "{{Header|Project Zomboid|Items|Weapons}}")
         else:
-            return category_dict[category]
+            header = category_dict[category]
     else:
-        return "{{Header|Project Zomboid|Items}}"
+        header = "{{Header|Project Zomboid|Items}}"
+
+    name = lowercase_name.capitalize()
+
+    if language_code == "en":
+        full_header = f"""{header}
+{{{{Page version|{infobox_version}}}}}
+{{{{Autogenerated|B42}}}}"""
+    else:
+        full_header = f"""{{{{Title|{name}}}}}
+{header}
+{{{{Autogenerated|{language_code}}}}}
+{{{{AutoT|{translate_reason}}}}}"""
+
+    return full_header
 
 
 def generate_consumable_properties(item_id, consumables_dir):
@@ -284,11 +462,15 @@ def load_infoboxes(infobox_dir):
             continue
 
         infobox_data = {
-            'name': re.search(r'\|name\s*=\s*(.+)', content).group(1).strip() if re.search(r'\|name\s*=\s*(.+)', content) else "",
-            'category': re.search(r'\|category\s*=\s*(.+)', content).group(1).strip() if re.search(r'\|category\s*=\s*(.+)', content) else "",
-            'skill_type': re.search(r'\|skill_type\s*=\s*(.+)', content).group(1).strip() if re.search(r'\|skill_type\s*=\s*(.+)', content) else "",
+            'name': re.search(r'\|name\s*=\s*(.+)', content).group(1).strip() if re.search(r'\|name\s*=\s*(.+)',
+                                                                                           content) else "",
+            'category': re.search(r'\|category\s*=\s*(.+)', content).group(1).strip() if re.search(
+                r'\|category\s*=\s*(.+)', content) else "",
+            'skill_type': re.search(r'\|skill_type\s*=\s*(.+)', content).group(1).strip() if re.search(
+                r'\|skill_type\s*=\s*(.+)', content) else "",
             'tags': [tag.strip() for tag in re.findall(r'\|tag\d?\s*=\s*(.+)', content)],
-            'item_id': re.search(r'\|item_id\s*=\s*(.+)', content).group(1).strip() if re.search(r'\|item_id\s*=\s*(.+)', content) else ""
+            'item_id': re.search(r'\|item_id\s*=\s*(.+)', content).group(1).strip() if re.search(
+                r'\|item_id\s*=\s*(.+)', content) else ""
         }
 
         infobox_data_list.append(infobox_data)
@@ -304,10 +486,10 @@ def calculate_relevance(current_item, other_item):
 
     # Weight scores
     relevance_score = (
-        name_similarity * 8 +
-        category_match * 8 +
-        tag_similarity * 5 +
-        skill_type_match * 3
+            name_similarity * 8 +
+            category_match * 8 +
+            tag_similarity * 5 +
+            skill_type_match * 3
     )
     return relevance_score
 
@@ -334,7 +516,8 @@ def find_most_relevant_items(current_item, all_items_infoboxes, item_id_dict):
     top_relevant_items = sorted(relevance_scores, reverse=True, key=lambda x: x[0])[:3]
 
     # Ensure no items with the same name as the current item are included
-    filtered_relevant_items = [item_name for score, item_name in top_relevant_items if item_name.lower() != current_item_name]
+    filtered_relevant_items = [item_name for score, item_name in top_relevant_items if
+                               item_name.lower() != current_item_name]
     filtered_relevant_items.sort()
 
     return filtered_relevant_items
@@ -358,27 +541,32 @@ def generate_see_also(current_item, infobox_data_list, item_id_dict):
     return f"{see_also_list}\n\n{navbox}"
 
 
-def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox, consumables_dir, infobox_data_list, item_id_dict, fixing_dir, code_dir, distribution_dir):
-    current_item_data = {
-        'name': name,
-        'category': category,
-        'skill_type': skill_type,
-        'tags': re.findall(r'\|tag\d?\s*=\s*(.+)', infobox),  # Extracting tags for the current item
-        'item_id': item_id
-    }
+def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox, consumables_dir,
+                  infobox_data_list, item_id_dict, fixing_dir, code_dir, distribution_dir, language_code):
+    language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
+    headers = language_data["headers"]
+    help_text = language_data["help_text"]
 
-    sections = {
-        'Condition': generate_condition(name, category, skill_type, infobox, fixing_dir),
-        'Location': generate_location(original_filename, infobox_name, item_id, distribution_dir),
-        'Code': generate_code(item_id, code_dir),
-        'See also': generate_see_also(current_item_data, infobox_data_list, item_id_dict)
-    }
+    body_content = f"\n=={headers['Usage']}==\n{help_text}\n"
 
-    body_content = "\n==Usage==\nHelp PZwiki by adding information to this section.\n"
-
+    # Example of using the consumable properties, condition, etc.
     consumable_properties = generate_consumable_properties(item_id, consumables_dir)
     if consumable_properties:
-        body_content += f"\n===Consumable properties===\n{consumable_properties}\n"
+        body_content += f"\n==={headers['Consumable properties']}===\n{consumable_properties}\n"
+
+    # Add other sections
+    sections = {
+        headers['Condition']: generate_condition(name, category, skill_type, infobox, fixing_dir),
+        headers['Location']: generate_location(original_filename, infobox_name, item_id, distribution_dir),
+        headers['Code']: generate_code(item_id, code_dir),
+        headers['See also']: generate_see_also({
+            'name': name,
+            'category': category,
+            'skill_type': skill_type,
+            'tags': re.findall(r'\|tag\d?\s*=\s*(.+)', infobox),
+            'item_id': item_id
+        }, infobox_data_list, item_id_dict)
+    }
 
     for section, content in sections.items():
         if content.strip():
@@ -423,7 +611,8 @@ def main():
         warnings.append("WARNING: Fixing not found, please run fixing.py first")
 
     while True:
-        user_choice = input("Do you want to generate:\n1: All items\n2: New items (Don't exist on the wiki currently)\nQ: Quit\n> ").strip().lower()
+        user_choice = input(
+            "Do you want to generate:\n1: All items\n2: New items (Don't exist on the wiki currently)\nQ: Quit\n> ").strip().lower()
         if user_choice == 'q':
             return
         if user_choice in ['1', '2']:
@@ -436,7 +625,8 @@ def main():
 
     for text_file in tqdm(text_files, desc="Generating articles", unit="file"):
         file_path = os.path.join(infobox_dir, text_file)
-        process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir,code_dir, distribution_dir)
+        process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir,
+                     code_dir, distribution_dir, language_code)
 
     if warnings:
         print("\n".join(warnings))
