@@ -148,14 +148,15 @@ def get_skill_type_mapping(item_data, item_id):
                 skill = "Aiming"
 
             skill_translation = translate.get_translation(skill, "Categories")
-            if translate.language_code == "en":
+            language_code = translate.get_language_code()
+            if language_code == "en":
                 skill_page = page_mapping.get(skill, skill_translation)
                 link = f"[[{skill_page}]]"
             else:
                 skill_page = page_mapping.get(skill, skill)
 
-            if translate.language_code != "en":
-                lang = f"/{translate.language_code}"
+            if language_code != "en":
+                lang = f"/{language_code}"
             else:
                 lang = ""
             if skill_page != skill_translation:
@@ -173,8 +174,9 @@ def format_link(name, page=""):
         return f"[[{name}]]"
     
     lc = ""
-    if translate.language_code != "en":
-        lc = "/" + translate.language_code
+    langauge_code = translate.get_language_code()
+    if langauge_code != "en":
+        lc = "/" + langauge_code
     
     return f"[[{page}{lc}|{name}]]"
 

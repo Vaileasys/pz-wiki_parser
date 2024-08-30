@@ -227,7 +227,7 @@ def automatic_extraction(output_dir):
 
 def main():
     script_parser.init()
-    language_code = translate.language_code
+    language_code = translate.get_language_code()
     output_dir = f'output/{language_code}/infoboxes'
 
     while True:

@@ -577,8 +577,8 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
 
 def main():
     # Set language code in case it hasn't been set already.
-    translate.set_language_code()
-    language_code = translate.language_code
+    translate.change_language()
+    language_code = translate.get_language_code()
 
     infobox_dir = f'output/{language_code}/infoboxes'
     output_dir = f'output/{language_code}/articles'
