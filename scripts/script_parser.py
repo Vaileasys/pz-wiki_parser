@@ -1,4 +1,5 @@
 import os
+import re
 from core import translate
 from core import logging
 
@@ -92,8 +93,10 @@ def parse_file(file_path, data, block_type="item"):
     block = None
     indent_level = 0
     is_comment = False
-    is_imports_block = False
+    is_skippable_block = False
     type_counter = 0
+
+    skippable_blocks = ("imports", "template")
 
     with open(file_path, 'r') as file:
         for line in file:
@@ -110,18 +113,18 @@ def parse_file(file_path, data, block_type="item"):
                     is_comment = False
                 continue
             
-            # skip imports block
-            if line.startswith('imports'):
+            # skip blocks
+            if any(re.match(rf'^{skippable_block}(\s|$)', line) for skippable_block in skippable_blocks):
                 indent_level += 1
-                is_imports_block = True
-            elif is_imports_block:
+                is_skippable_block = True
+            elif is_skippable_block:
                 if line.startswith('}'):
                     indent_level -= 1
-                    is_imports_block = False
+                    is_skippable_block = False
                 continue
                         
             # open module
-            if line.startswith('module'):
+            if re.match(r'^module(\s|$)', line):
                 block = 'module'
                 indent_level += 1
                 current_module = line.split()[1]
@@ -137,7 +140,7 @@ def parse_file(file_path, data, block_type="item"):
                 block = None
 
             # open item block
-            if line.startswith(block_type) and indent_level == 1:
+            if re.match(rf'^{block_type}(\s|$)', line) and indent_level == 1:
                 indent_level += 1
                 block = block_type
                 current_type = line[len(block_type):].strip()
