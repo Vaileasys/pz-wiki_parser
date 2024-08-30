@@ -36,16 +36,12 @@ def copy_scripts(media_dir):
         raise FileNotFoundError(f"Scripts directory not found in {scripts_dir}.")
 
     destination_dir = os.path.join('resources', 'scripts')
-    if not os.path.exists(destination_dir):
-        os.makedirs(destination_dir)
 
-    for root, _, files in os.walk(scripts_dir):
-        for file in files:
-            if file.endswith('.txt'):
-                src = os.path.join(root, file)
-                dst = os.path.join(destination_dir, file)
-                shutil.copy(src, dst)
-                print(f"Copied {file} to {dst}")
+    if os.path.exists(destination_dir):
+        shutil.rmtree(destination_dir)
+
+    shutil.copytree(scripts_dir, destination_dir)
+    print(f"Copied {scripts_dir} to {destination_dir}")
 
 
 def copy_lua_files(media_dir):
