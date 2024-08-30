@@ -1,8 +1,8 @@
 import importlib
-import subprocess
 import sys
 import os
 from scripts.core import version
+from scripts import setup
 
 menu_structure = {
     '0': {
@@ -66,6 +66,11 @@ settings_structure = {
         'description': 'Change the game version of the parsed data.',
         'module': None
     },
+    '2': {
+        'name': 'Run First Time Setup',
+        'description': 'Run the initial setup again.',
+        'module': 'setup'
+    },
 }
 
 
@@ -104,7 +109,6 @@ def change_version():
 
     # Reload the version module to reflect changes immediately
     try:
-        import scripts.core.version as version
         importlib.reload(version)
         # Print the new version to confirm
         updated_version = version.get_version()
@@ -145,41 +149,37 @@ def navigate_menu(menu, is_root=False):
             # Check if it's the settings menu and link to settings_structure
             if selected_option['name'] == 'Settings' and selected_option['sub_options'] is None:
                 navigate_menu(settings_structure)
+            elif selected_option['name'] == 'Run First Time Setup':
+                handle_module('scripts.setup')
+                print("\nReturning to the menu...\n")
             elif selected_option['name'] == 'Change version':
                 change_version()
-                print("\nReturning to the current menu...\n")
+                print("\nReturning to the menu...\n")
             elif 'module' in selected_option:
                 handle_module(selected_option['module'])
-                print("\nReturning to the current menu...\n")
+                print("\nReturning to the menu...\n")
             elif 'sub_options' in selected_option:
                 navigate_menu(selected_option['sub_options'])
         else:
             print("Invalid input. Please try again.")
 
 
-def check_and_download_translations():
-    translate_dir = os.path.join(os.path.dirname(__file__), 'resources', 'Translate')
+def check_first_run():
+    output_logging_dir = os.path.join(os.path.dirname(__file__), 'output', 'logging')
+    first_run_flag_file = os.path.join(output_logging_dir, 'first_run_flag')
+    os.makedirs(output_logging_dir, exist_ok=True)
 
-    # Check if the directory exists
-    if not os.path.exists(translate_dir):
-        os.makedirs(translate_dir)
-        print(f"Directory {translate_dir} created.")
-
-    # Check if the directory is empty
-    if not os.listdir(translate_dir):
-        print("Translations not found, would you like to try to automatically download them? (Y/N):")
-        user_input = input("> ").strip().upper()
-
-        if user_input == 'Y':
-            repo_url = "https://github.com/TheIndieStone/ProjectZomboidTranslations/"
-            try:
-                # Clone the repository into the Translate directory
-                subprocess.run(["git", "clone", repo_url, translate_dir], check=True)
-                print(f"Successfully cloned the repository into {translate_dir}.")
-            except subprocess.CalledProcessError as e:
-                print(f"Failed to clone the repository: {e}")
+    if not os.path.exists(first_run_flag_file):
+        # If the flag file does not exist, it's the first run
+        choice = input("Would you like to run the first-time setup? (Y/N): ").strip().upper()
+        if choice == 'Y':
+            setup.main()
+            with open(first_run_flag_file, 'w') as file:
+                file.write("Setup completed.")
         else:
-            print("Skipping translation download.")
+            print("Skipping first-time setup.")
+            with open(first_run_flag_file, 'w') as file:
+                file.write("Setup skipped.")
 
 
 def main():
@@ -187,7 +187,7 @@ def main():
     script_dir = os.path.join(os.path.dirname(__file__), 'scripts')
     sys.path.append(script_dir)
 
-    check_and_download_translations()
+    check_first_run()
 
     print("Welcome to the wiki parser!")
     navigate_menu(menu_structure, is_root=True)
