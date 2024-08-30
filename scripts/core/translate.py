@@ -42,15 +42,26 @@ property_prefixes = {
     'SubCategory': "IGUI_perks_",
 }
 
-
-def set_language_code():
+# getter for language code
+def get_language_code():
     global language_code
+    return language_code
+
+# setter for language code
+def set_language_code(new_language_code):
+    global language_code
+    language_code = new_language_code
+
+
+# change language code based on user input
+def change_language():
     language_code = input("Enter language code (default 'en')\n> ").strip().lower()
     if language_code in language_codes:
         print(f"Language code '{language_code}' selected.")
     else:
         language_code = "en"
         print("Unrecognised language code, setting to 'en'")
+    set_language_code(language_code)
     return language_code
 
 
@@ -107,7 +118,7 @@ lang_code: language code can be specified, leaving empty will use global 'langua
 def get_translation(property_value, property_name="DisplayName", lang_code=None):
     global language_code
     if language_code is None:
-        language_code = set_language_code()
+        language_code = change_language()
     if lang_code is None:
         lang_code = language_code
 

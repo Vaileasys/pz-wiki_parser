@@ -27,7 +27,7 @@ def translate_category(category, property="DisplayCategory"):
 
 
 def write_to_output(sorted_items):
-    language_code = translate.language_code
+    language_code = translate.get_language_code()
     output_dir = f'output/{language_code}/item_list/'
     output_file = f'item_list_{language_code.upper()}.txt'
     os.makedirs(output_dir, exist_ok=True)
@@ -105,7 +105,7 @@ def item_list():
                 page_name = utility.get_page(item_id)
                 if page_name == 'Unknown':
                     page_name = translated_item_name
-                if translate.language_code != 'en':
+                if translate.get_language_code() != 'en':
                     translated_item_name = translate.get_translation(item_id, "DisplayName")
                 
                 skip_item = False
