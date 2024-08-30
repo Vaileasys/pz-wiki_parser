@@ -6,33 +6,33 @@ from core import logging
 language_code = None
 
 language_codes = {
-    'ar': "Cp1252",
-    'ca': "ISO-8859-15",
-    'ch': "UTF-8",
-    'cn': "UTF-8",
-    'cs': "Cp1250",
-    'da': "Cp1252",
-    'de': "Cp1252",
-    'en': "UTF-8",
-    'es': "Cp1252",
-    'fi': "Cp1252",
-    'fr': "Cp1252",
-    'hu': "Cp1250",
-    'id': "UTF-8",
-    'it': "Cp1252",
-    'jp': "UTF-8",
-    'ko': "UTF-16",
-    'nl': "Cp1252",
-    'no': "Cp1252",
-    'ph': "UTF-8",
-    'pl': "Cp1250",
-    'pt': "Cp1252",
-    'ptbr': "Cp1252",
-    'ro': "UTF-8",
-    'ru': "Cp1251",
-    'th': "UTF-8",
-    'tr': "Cp1254",
-    'ua': "Cp1251"
+    'ar': ("Cp1252", "Arabic"),
+    'ca': ("ISO-8859-15", "Catalan"),
+    'ch': ("UTF-8", "Chinese"),
+    'cn': ("UTF-8", "Chinese"),
+    'cs': ("Cp1250", "Czech"),
+    'da': ("Cp1252", "Danish"),
+    'de': ("Cp1252", "German"),
+    'en': ("UTF-8", "English"),
+    'es': ("Cp1252", "Spanish"),
+    'fi': ("Cp1252", "Finnish"),
+    'fr': ("Cp1252", "French"),
+    'hu': ("Cp1250", "Hungarian"),
+    'id': ("UTF-8", "Indonesian"),
+    'it': ("Cp1252", "Italian"),
+    'jp': ("UTF-8", "Japanese"),
+    'ko': ("UTF-16", "Korean"),
+    'nl': ("Cp1252", "Dutch"),
+    'no': ("Cp1252", "Norwegian"),
+    'ph': ("UTF-8", "Filipino"),
+    'pl': ("Cp1250", "Polish"),
+    'pt': ("Cp1252", "Portuguese"),
+    'ptbr': ("Cp1252", "Portuguese (Brazilian)"),
+    'ro': ("UTF-8", "Romanian"),
+    'ru': ("Cp1251", "Russian"),
+    'th': ("UTF-8", "Thai"),
+    'tr': ("Cp1254", "Turkish"),
+    'ua': ("Cp1251", "Ukrainian")
 }
 
 property_prefixes = {
@@ -46,6 +46,7 @@ property_prefixes = {
 def get_language_code():
     global language_code
     return language_code
+
 
 # setter for language code
 def set_language_code(new_language_code):
@@ -62,6 +63,10 @@ def change_language():
         language_code = "en"
         print("Unrecognised language code, setting to 'en'")
     set_language_code(language_code)
+
+    language = language_codes.get(language_code, ("UTF-8", "Unknown"))[1]
+    print(f"Language changed to '{language_code}' ({language})")
+
     return language_code
 
 
