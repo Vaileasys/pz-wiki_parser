@@ -4,7 +4,9 @@ from core import translate, utility
 
 filters = {
     'MakeUp_': (True,),
-    'obsolete': (True, 'OBSOLETE', 'true')
+    'ZedDmg_': (True,),
+    'Wound_': (True,),
+    'obsolete': (True, 'OBSOLETE', 'true'),
 #    'ExampleFilter': (False, 'PropertyName', 'PropertyValue')
 }
 
