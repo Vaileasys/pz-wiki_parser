@@ -1,6 +1,6 @@
 import os
 import script_parser
-from core import translate, utility
+from core import translate, utility, logging
 
 filters = {
     'MakeUp_': (True,),
@@ -21,7 +21,7 @@ def translate_category(category, property="DisplayCategory"):
             cat_translated = translate.get_translation(category, property)
             categories[category] = cat_translated
         except Exception as e:
-            print(f"Error translating category '{category}': {e}")
+            logging.log_to_file(f"Error translating category '{category}': {e}")
             cat_translated = category
     else:
         cat_translated = categories[category]
@@ -132,6 +132,8 @@ def item_list():
                     continue
 
                 # add item to the sorted dictionary
+                if display_category is None:
+                    display_category = 'Unknown'
                 if display_category not in sorted_items:
                     sorted_items[display_category] = []
                 sorted_items[display_category].append((page_name, translated_item_name, icons, item_id))
