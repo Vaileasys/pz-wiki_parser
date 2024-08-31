@@ -577,7 +577,7 @@ def process_vehicle_file_formatted(file_path, item_name):
                 rows_to_add.append(formatted_row)
 
     if rows_to_add:
-        output = "|vehicle=\n" + "\n{{!}}-\n".join(rows_to_add)
+        output = "\n|vehicle=\n" + "\n{{!}}-\n".join(rows_to_add)
         return output
     return ""
 
