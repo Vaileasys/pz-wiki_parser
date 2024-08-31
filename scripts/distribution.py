@@ -523,66 +523,18 @@ def month_lookup(month_number):
     return month_dict.get(month_number, '-')
 
 
-def formatting(unique_items, output_path):
-    version = utility.version
-    complete_output_path = os.path.join(output_path, 'complete')
-    csv_output_path = os.path.join(output_path, 'csv')
-
-    if os.path.exists(complete_output_path):
-        shutil.rmtree(complete_output_path)
-    os.makedirs(complete_output_path)
-
-    # Iterate through each item and process
-    for item in tqdm(unique_items, desc="Formatting items"):
-        output_data = f"{{{{location table|section=opener|id={item}}}}}\n"
-
-        # Identify relevant files for the item
-        item_files = {file_type: None for file_type in ['container', 'vehicle', 'foraging1', 'foraging2', 'zombie']}
-        for filename in os.listdir(csv_output_path):
-            for file_type in item_files.keys():
-                if filename.startswith(item + '_') and filename.endswith(f'{file_type}.csv'):
-                    item_files[file_type] = os.path.join(csv_output_path, filename)
-
-        # Process each identified file using the corresponding functions
-        if item_files['container']:
-            output_data += process_container_file_formatted(item_files['container'], item)
-        if item_files['vehicle']:
-            output_data += process_vehicle_file_formatted(item_files['vehicle'], item)
-        if item_files['zombie']:
-            output_data += process_zombie_file_formatted(item_files['zombie'], item)
-        foraging_data = ''
-        for foraging_type in ['foraging1', 'foraging2']:
-            if item_files[foraging_type]:
-                foraging_data += process_foraging_file_formatted({foraging_type: item_files[foraging_type]}, item)
-        if foraging_data:
-            output_data += foraging_data
-
-        contains_foraging = 'true' if foraging_data else 'false'
-        output_data += f"{{{{location table|section=close|contains_foraging={contains_foraging}|id={item}}}}}\n"
-
-        output_data = '\n'.join(line for line in output_data.split('\n') if line.strip())
-
-        # Write the formatted data to a file
-        with open(os.path.join(complete_output_path, f'{item}.txt'), 'w') as output_file:
-            output_file.write(output_data)
-
-
 def process_container_file_formatted(file_path, item_name):
     rows_to_add = []
     with open(file_path, mode='r', newline='') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             effective_chance = f"{row[4]}%"
-            formatted_row = f"    {{{{!}}}} {row[0]}\n    {{{{!}}}} {{{{ll|{row[1]}}}}}\n    {{{{!}}}} {effective_chance}\n    {{{{!}}}}-"
+            formatted_row = f"{{{{!}}}} {row[0]} {{{{!}}}}{{{{!}}}} {{{{ll|{row[1]}}}}} {{{{!}}}}{{{{!}}}} {effective_chance}"
             if any(cell.strip() for cell in row):
                 rows_to_add.append(formatted_row)
 
     if rows_to_add:
-        # Ensure the last row ends with '{{!}}}'
-        last_row = rows_to_add[-1]
-        if last_row.endswith("{{!}}-"):
-            rows_to_add[-1] = last_row.replace("{{!}}-", "{{!}}}")
-        output = f"{{{{location table|section=container|id={item_name}}}}}\n" + '\n'.join(rows_to_add) + "\n</div>\n"
+        output = "|container=\n" + "\n{{!}}-\n".join(rows_to_add)
         return output
     return ""
 
@@ -593,8 +545,9 @@ def process_vehicle_file_formatted(file_path, item_name):
         reader = csv.reader(csvfile)
         for row in reader:
             effective_chance = f"{row[3]}%"
-            type_parts = re.findall('[A-Z][^A-Z]*', row[0])
 
+            # Split and process vehicle type and container as needed
+            type_parts = re.findall('[A-Z][^A-Z]*', row[0])
             if type_parts[0] == "Mc" and len(type_parts) > 1:
                 vehicle_type = type_parts[0] + type_parts[1]
                 container = ' '.join(type_parts[2:])
@@ -617,16 +570,17 @@ def process_vehicle_file_formatted(file_path, item_name):
                 vehicle_type = type_parts[0]
                 container = ' '.join(type_parts[1:])
 
-            formatted_row = f"    {{{{!}}}} {vehicle_type}\n    {{{{!}}}} {{{{ll|{container}}}}}\n    {{{{!}}}} {effective_chance}\n    {{{{!}}}}-"
+            # Format the row according to the new structure
+            formatted_row = f"{{{{!}}}} {vehicle_type} {{{{!}}}}{{{{!}}}} {{{{ll|{container}}}}} {{{{!}}}}{{{{!}}}} {effective_chance}"
+
             if any(cell.strip() for cell in row):
                 rows_to_add.append(formatted_row)
 
     if rows_to_add:
-        # Ensure the last row ends with '{{!}}}'
-        rows_to_add[-1] = rows_to_add[-1].replace("{{!}}-", "{{!}}}")
-        output = f"{{{{location table|section=vehicle|id={item_name}}}}}\n" + '\n'.join(rows_to_add) + "\n</div>\n"
+        output = "|vehicle=\n" + "\n{{!}}-\n".join(rows_to_add)
         return output
     return ""
+
 
 
 def process_zombie_file_formatted(file_path, item_name):
@@ -639,12 +593,10 @@ def process_zombie_file_formatted(file_path, item_name):
                 outfit = row[1].replace('|', '<br>')
                 days = row[2]
                 chance = row[0]
-                formatted_row = f"    {{{{!}}}} {outfit}\n    {{{{!}}}} {days}\n    {{{{!}}}} {chance}\n    {{{{!}}}}-"
+                formatted_row = f"{{{{!}}}} {outfit} {{{{!}}}}{{{{!}}}} {days} {{{{!}}}}{{{{!}}}} {chance}"
                 rows_to_add.append(formatted_row)
     if rows_to_add:
-        # Ensure the last row ends with '{{!}}}'
-        rows_to_add[-1] = rows_to_add[-1].replace("{{!}}-", "{{!}}}")
-        output = f"{{{{location table|section=zombie|id={item_name}}}}}\n" + '\n'.join(rows_to_add) + "\n</div>\n"
+        output = "\n|zombie=\n" + "\n{{!}}-\n".join(rows_to_add)
         return output
     return ""
 
@@ -668,20 +620,76 @@ def process_foraging_file_formatted(file_paths, item_name):
                         months = "<br>".join([month_lookup(x) for x in row[7].split('|') if x])
                         bonus_months = "<br>".join([month_lookup(x) for x in row[8].split('|') if x])
                         malus_months = "<br>".join([month_lookup(x) for x in row[9].split('|') if x])
-                        formatted_row = f"    {{{{!}}}} {row[0]}-{row[1]}\n    {{{{!}}}} {row[2]}\n    {{{{!}}}} {zones}\n    {{{{!}}}} {row[3]}\n    {{{{!}}}} {row[4]}\n    {{{{!}}}} {row[5]}\n    {{{{!}}}} {row[6]}\n    {{{{!}}}} {months}\n    {{{{!}}}} {bonus_months}\n    {{{{!}}}} {malus_months}\n    {{{{!}}}}-"
+                        formatted_row = (
+                            f"{{{{!}}}} {row[0]}-{{{{!}}}}{{{{!}}}}{row[1]}"
+                            f"{{{{!}}}}{{{{!}}}} {zones}"
+                            f"{{{{!}}}}{{{{!}}}} {row[3]}"
+                            f"{{{{!}}}}{{{{!}}}} {row[4]}"
+                            f"{{{{!}}}}{{{{!}}}} {row[5]}"
+                            f"{{{{!}}}}{{{{!}}}} {row[6]}"
+                            f"{{{{!}}}}{{{{!}}}} {months}"
+                            f"{{{{!}}}}{{{{!}}}} {bonus_months}"
+                            f"{{{{!}}}}{{{{!}}}} {malus_months}"
+                        )
                     elif file_type == 'foraging2':
                         chance_info = f"all with {row[0]} chance"
-                        formatted_row = f"    {{{{!}}}} 1\n    {{{{!}}}} 0\n    {{{{!}}}} {chance_info}\n    {{{{!}}}} -\n    {{{{!}}}} -\n    {{{{!}}}} -\n    {{{{!}}}} -\n    {{{{!}}}} all\n    {{{{!}}}} -\n    {{{{!}}}} -\n    {{{{!}}}}-"
+                        formatted_row = (
+                            f"{{{{!}}}} 1{{{{!}}}}{{{{!}}}}0"
+                            f"{{{{!}}}}{{{{!}}}} {chance_info}"
+                            f"{{{{!}}}}{{{{!}}}} -"
+                            f"{{{{!}}}}{{{{!}}}} -"
+                            f"{{{{!}}}}{{{{!}}}} -"
+                            f"{{{{!}}}}{{{{!}}}} -"
+                            f"{{{{!}}}}{{{{!}}}} all"
+                            f"{{{{!}}}}{{{{!}}}} -"
+                            f"{{{{!}}}}{{{{!}}}} -"
+                        )
                     if any(cell.strip() for cell in row):
                         rows_to_add.append(formatted_row)
 
     if foraging_exists and rows_to_add:
-        # Ensure the last row ends with '{{!}}}'
-        rows_to_add[-1] = rows_to_add[-1].replace("{{!}}-", "{{!}}}")
-        foraging_table = f"{{{{location table|section=foraging|id={item_name}}}}}\n" + '\n'.join(rows_to_add) + "\n</div>\n"
+        foraging_table = "|foraging=\n" + "\n{{!}}-\n".join(rows_to_add)
     return foraging_table
 
 
+def formatting(unique_items, output_path):
+    version = utility.version
+    complete_output_path = os.path.join(output_path, 'complete')
+    csv_output_path = os.path.join(output_path, 'csv')
+
+    if os.path.exists(complete_output_path):
+        shutil.rmtree(complete_output_path)
+    os.makedirs(complete_output_path)
+
+    for item in tqdm(unique_items, desc="Formatting items"):
+        output_data = f"{{{{location table|item_id={item}\n"
+
+        item_files = {file_type: None for file_type in ['container', 'vehicle', 'foraging1', 'foraging2', 'zombie']}
+        for filename in os.listdir(csv_output_path):
+            for file_type in item_files.keys():
+                if filename.startswith(item + '_') and filename.endswith(f'{file_type}.csv'):
+                    item_files[file_type] = os.path.join(csv_output_path, filename)
+
+        if item_files['container']:
+            output_data += process_container_file_formatted(item_files['container'], item)
+        if item_files['vehicle']:
+            output_data += process_vehicle_file_formatted(item_files['vehicle'], item)
+        if item_files['zombie']:
+            output_data += process_zombie_file_formatted(item_files['zombie'], item)
+
+        foraging_data = ''
+        for foraging_type in ['foraging1', 'foraging2']:
+            if item_files[foraging_type]:
+                foraging_data += process_foraging_file_formatted({foraging_type: item_files[foraging_type]}, item)
+        if foraging_data:
+            output_data += foraging_data
+
+        output_data += "\n}}"
+
+        output_data = '\n'.join(line for line in output_data.split('\n') if line.strip())
+
+        with open(os.path.join(complete_output_path, f'{item}.txt'), 'w') as output_file:
+            output_file.write(output_data)
 
 
 if __name__ == '__main__':
