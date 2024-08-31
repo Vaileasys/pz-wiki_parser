@@ -527,8 +527,15 @@ def generate_see_also(current_item, infobox_data_list, item_id_dict):
     # Find the most relevant items
     relevant_items = find_most_relevant_items(current_item, infobox_data_list, item_id_dict)
 
-    # Generate the "See also" section
-    see_also_list = '\n'.join([f"*{{{{ll|{item}}}}}" for item in relevant_items])
+    # Use the English name for each relevant item
+    english_names = []
+    for item_name in relevant_items:
+        item_infobox = next((infobox for infobox in infobox_data_list if infobox['name'].lower() == item_name.lower()), None)
+        if item_infobox:
+            english_name = item_id_dict.get(item_infobox['item_id'], item_name)
+            english_names.append(english_name)
+
+    see_also_list = '\n'.join([f"*{{{{ll|{name}}}}}" for name in english_names])
 
     category_list = ["Weapon", "Tool", "Clothing", "Food"]
 
