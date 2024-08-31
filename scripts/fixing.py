@@ -1,9 +1,7 @@
 import os
 import shutil
 import script_parser
-from core import logging
-from core import translate
-from core import utility
+from core import logging, translate, utility
 
 
 def get_fixing():
@@ -25,7 +23,7 @@ def get_fixer(fixing_id, index=""):
     skill_values = []
     module, fixing = fixing_id.split(".")
     fixing = fixing.replace("_", " ")
-    
+
     for parsed_module, module_data in script_parser.parsed_fixing_data.items():
         if parsed_module == module:
             for parsed_fixing, fixing_data in module_data.items():
@@ -49,7 +47,7 @@ def get_fixer(fixing_id, index=""):
 
                                         skills.append(item_skills)
                                         skill_values.append(item_skill_values)
-                    
+
     # handle indexing
     if index != "":
         if index < len(items):
@@ -60,7 +58,7 @@ def get_fixer(fixing_id, index=""):
         else:
             print(f"Index {index} is out of range.")
             return None, None, None, None
-                 
+
     return items, item_values, skills, skill_values
 
 
@@ -73,7 +71,7 @@ def get_require(module, fixing_data):
             for item in item_fixed:
                 item_id_new = f"{module}.{item}"
                 translated_name = translate.get_translation(item_id_new, "DisplayName")
-                
+
                 if translated_name not in name:
                     if name:
                         name += "; "
@@ -88,34 +86,49 @@ def get_require(module, fixing_data):
 
 
 # format fixers
-def format_fixers(module, fixers):
+def format_fixers(module, fixers, language_code):
     formatted_fixers = []
+
     for fixer in fixers:
         fixer_id = f"{module}.{fixer}"
-        fixer_name = f"{{{{ll|{translate.get_translation(fixer_id, "DisplayName")}}}}}"
+        translated_name = translate.get_translation(fixer_id, "DisplayName")
+        english_name = translate.get_translation(fixer_id, "DisplayName", lang_code='en')
+
+        if language_code == 'en':
+            fixer_name = english_name
+        else:
+            fixer_name = f"{english_name}/{language_code}|{translated_name}"
+
         fixer_icon = utility.get_icon_for_item_id(fixer_id)
-        formatted_fixer = f"{fixer_icon} {fixer_name}"
+        formatted_fixer = f"{fixer_icon} [[{fixer_name}]]"
         formatted_fixers.append(formatted_fixer)
+
     return formatted_fixers
 
 
 # format skills
-def format_skills(skills, skill_values):
+def format_skills(skills, skill_values, language_code):
     """Format skills and skill values into a string with <br> for line breaks."""
     if not skills or not skill_values:
         return ""
     if len(skills) != len(skill_values):
         return ""
-    
+
     formatted_skills = []
     for skill, value in zip(skills, skill_values):
         translated_skill = translate.get_translation(skill, "Categories")
-        if not translated_skill:
-            translated_skill = skill
+        english_skill_name = translate.get_translation(skill, "Categories", lang_code='en')
+
         if not value:
             value = "0"
-        formatted_skills.append(f"{value} {{{{ll|{translated_skill}}}}}")
-    
+
+        if language_code == 'en':
+            skill_name = translated_skill if translated_skill else english_skill_name
+        else:
+            skill_name = f"{english_skill_name}/{language_code}|{translated_skill}" if english_skill_name else translated_skill
+
+        formatted_skills.append(f"{value} [[{skill_name}]]")
+
     return "<br>".join(formatted_skills)
 
 
@@ -128,24 +141,31 @@ def write_to_output(module, fixing_id, fixing_data, output_dir):
 
             item_id, name = get_require(module, fixing_data)
             condition_modifier = fixing_data.get('ConditionModifier', 1)
-            if condition_modifier != 1:
-                condition_modifier = condition_modifier[0]
-            condition_modifier = float(condition_modifier)
-            
+            if isinstance(condition_modifier, list) and condition_modifier:
+                condition_modifier = float(condition_modifier[0])
+            else:
+                condition_modifier = float(condition_modifier)
+
             global_item_value = ''
             global_item = ''
             global_item_dict = fixing_data.get('GlobalItem1', {}).get('items', {})
+
+            # Debug: Check if global_item_dict is a dict
+            if not isinstance(global_item_dict, dict):
+                print(f"Expected 'GlobalItem1' to be a dict but got {type(global_item_dict)} in {fixing_id}")
+                return  # Skip processing this item
+
             if global_item_dict:
-                # expect single entry
                 global_item, global_item_value = next(iter(global_item_dict.items()))
                 global_item_id = f"{module}.{global_item}"
-                global_item = f"{{{{ll|{translate.get_translation(global_item_id)}}}}}"
+                global_item = f"[[{translate.get_translation(global_item_id)}]]"
                 global_item_icon = utility.get_icon_for_item_id(global_item_id)
                 global_item = f"{global_item_icon} {global_item}"
 
+            language_code = translate.get_language_code()
             fixers, fixer_values, skills, skill_values = get_fixer(fixing_id)
-            fixers = format_fixers(module, fixers)
-            
+            fixers = format_fixers(module, fixers, language_code)
+
             parameters = {
                 "name": name,
                 "fixing_id": fixing_id,
@@ -160,27 +180,20 @@ def write_to_output(module, fixing_id, fixing_data, output_dir):
                 # all other fixers default to 10
             }
 
-            # Add fixers, fixer_values, skills, and skill_values dynamically
             for i in range(max(len(fixers), len(fixer_values), len(skills), len(skill_values))):
-                # add fixer
                 if i < len(fixers):
-                    parameters[f"fixer{i+1}"] = fixers[i]
-
-                    # add repair chance for the fixer
-                    repairs = base_repair.get(i, 10)
-                    repairs = repairs * condition_modifier
+                    parameters[f"fixer{i + 1}"] = fixers[i]
+                    repairs = base_repair.get(i, 10) * condition_modifier
                     if condition_modifier > 1:
                         repairs += 1
-                    parameters[f"fixer{i+1}_repairs"] = str(round(repairs)) + '%'
+                    parameters[f"fixer{i + 1}_repairs"] = f"{round(repairs)}%"
 
-                # add fixer value
                 if i < len(fixer_values):
-                    parameters[f"fixer{i+1}_value"] = fixer_values[i]
+                    parameters[f"fixer{i + 1}_value"] = fixer_values[i]
 
-                # add skills
                 if i < len(skills):
-                    skill_str = format_skills(skills[i], skill_values[i])
-                    parameters[f"fixer{i+1}_skill"] = skill_str
+                    skill_str = format_skills(skills[i], skill_values[i], language_code)
+                    parameters[f"fixer{i + 1}_skill"] = skill_str
 
             for key, value in parameters.items():
                 if value:
