@@ -24,10 +24,9 @@ LANGUAGE_DATA = {
         "translate_reason": "Translated using game translation files.",
         "condition_categories": ["Weapon", "Tool / Weapon"],
         "condition_text": (
-            "The {name} has a maximum condition of {condition_max}. Its rate of degradation is influenced by the "
-            "{skill_type} and [[maintenance]] [[skill]]s. The chance of losing [[durability]] can be simplified to the following formula: "
-            "<code>1 in (35 + maintenanceMod &times; 2)</code>. Where \"maintenanceMod\" is calculated using the {skill_type} and "
-            "maintenance skills.<br>\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
+            "The {name} has a maximum condition of {condition_max}. Its rate of degradation is influenced by the {skill_type} and [[maintenance]] [[skill]]s. The chance of losing [[durability]] can be simplified to the following formula: "
+            "<code>1 in (35 + maintenanceMod &times; 2)</code>. Where \"maintenanceMod\" is calculated using the {skill_type} and maintenance skills.<br>"
+            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
         ),
     },
     "pl": {
@@ -45,10 +44,9 @@ LANGUAGE_DATA = {
         "translate_reason": "Przetłumaczone za pomocą plików tłumaczeń gry.",
         "condition_categories": ["Broń", "Narzędzia/broń"],
         "condition_text": (
-            "{name} ma maksymalny stan {condition_max}. Tempo degradacji jest zależne od umiejętności {skill_type} i [[konserwacji]]. "
-            "Szansa na utratę [[trwałości]] można uprościć do następującego wzoru: <code>1 na (35 + maintenanceMod &times; 2)</code>. "
-            "Gdzie \"maintenanceMod\" jest obliczany na podstawie umiejętności {skill_type} i konserwacji.<br>\n\n"
-            "{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
+            "{name} ma maksymalny stan {condition_max}. Na szybkość degradacji mają  wpływ [[Skill/pl|umiejętności]] {skill_type} i umiejętność [[Maintenance/pl|konserwacja]]. Szansa na zmniejszenie  [[Condition/pl|stanu]] może być uproszczona do następującej formuły: "
+            "<code>1 na (35 + maintenanceMod &times; 2)</code>. Gdzie \"maintenanceMod\" jest obliczony używając {skill_type} i umiejętności konserwacji.<br>"
+            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
         ),
     },
 }
@@ -79,9 +77,13 @@ def generate_intro(lowercase_name, language_code):
     article = language_data.get("article", lambda _: "")(lowercase_name).lower()
 
     intro = intro_template.format(article=article, lowercase_name=lowercase_name)
-    intro = intro[0].upper() + intro[1:]
+
+    first_alpha_index = next((i for i, c in enumerate(intro) if c.isalpha()), None)
+    if first_alpha_index is not None:
+        intro = intro[:first_alpha_index] + intro[first_alpha_index].upper() + intro[first_alpha_index + 1:]
 
     return intro
+
 
 
 def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir,
@@ -264,13 +266,17 @@ def generate_consumable_properties(item_id, consumables_dir):
     return ""
 
 
+import os
+import re
+
 def generate_condition(name, category, skill_type, infobox, fixing_dir, language_code):
     language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
 
-    # Check if the category is in the list of categories that require a condition section
+    # Check if the category requires a condition section
     if category not in language_data["condition_categories"]:
         return ""
 
+    # Extract condition_max and condition_lower_chance
     condition_max_match = re.search(r'\|condition_max\s*=\s*(\d+)', infobox)
     condition_lower_chance_match = re.search(r'\|condition_lower_chance\s*=\s*(\d+)', infobox)
 
@@ -280,35 +286,39 @@ def generate_condition(name, category, skill_type, infobox, fixing_dir, language
     condition_max = condition_max_match.group(1)
     condition_lower_chance = condition_lower_chance_match.group(1)
 
-    condition_text_template = language_data["condition_text"]
-
-    condition_text = condition_text_template.format(
+    # Construct the condition text
+    condition_text = language_data["condition_text"].format(
         name=name,
         condition_max=condition_max,
-        skill_type=skill_type,
+        skill_type=skill_type.lower(),
         condition_lower_chance=condition_lower_chance
     )
+
+    # Capitalize the first letter of the condition text
+    condition_text = condition_text[0].upper() + condition_text[1:]
 
     repairing_header = language_data["headers"]["Repairing"]
 
     if os.path.exists(fixing_dir):
         fixing_files = os.listdir(fixing_dir)
 
-        item_id = re.search(r'\|item_id\s*=\s*(.+)', infobox).group(1).strip()
-        item_id_search = f"|item_id={item_id}"
+        item_id_match = re.search(r'\|item_id\s*=\s*(.+)', infobox)
+        if item_id_match:
+            item_id = item_id_match.group(1).strip()
+            item_id_search = f"|item_id={item_id}"
 
-        if fixing_files:
-            for file_name in fixing_files:
-                file_path = os.path.join(fixing_dir, file_name)
-                try:
-                    with open(file_path, 'r', encoding='utf-8') as file:
-                        file_content = file.read()
-                        if item_id_search in file_content:
-                            fixing_content = file_content.strip()
-                            condition_text += f"\n\n==={repairing_header}===\n{fixing_content}"
-                            break
-                except Exception as e:
-                    print(f"Error reading {file_path}: {e}")
+            if fixing_files:
+                for file_name in fixing_files:
+                    file_path = os.path.join(fixing_dir, file_name)
+                    try:
+                        with open(file_path, 'r', encoding='utf-8') as file:
+                            file_content = file.read()
+                            if item_id_search in file_content:
+                                fixing_content = file_content.strip()
+                                condition_text += f"\n\n==={repairing_header}===\n{fixing_content}"
+                                break
+                    except Exception as e:
+                        print(f"Error reading {file_path}: {e}")
 
     return condition_text
 
