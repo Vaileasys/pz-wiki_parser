@@ -67,6 +67,11 @@ settings_structure = {
         'module': None
     },
     '2': {
+        'name': 'Change language',
+        'description': 'Change the language to be used for outputs.',
+        'module': 'core.translate'
+    },
+    '3': {
         'name': 'Run First Time Setup',
         'description': 'Run the initial setup again.',
         'module': 'setup'

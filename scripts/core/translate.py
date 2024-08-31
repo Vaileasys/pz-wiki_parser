@@ -6,33 +6,33 @@ from core import logging
 language_code = None
 
 language_codes = {
-    'ar': "Cp1252",
-    'ca': "ISO-8859-15",
-    'ch': "UTF-8",
-    'cn': "UTF-8",
-    'cs': "Cp1250",
-    'da': "Cp1252",
-    'de': "Cp1252",
-    'en': "UTF-8",
-    'es': "Cp1252",
-    'fi': "Cp1252",
-    'fr': "Cp1252",
-    'hu': "Cp1250",
-    'id': "UTF-8",
-    'it': "Cp1252",
-    'jp': "UTF-8",
-    'ko': "UTF-16",
-    'nl': "Cp1252",
-    'no': "Cp1252",
-    'ph': "UTF-8",
-    'pl': "Cp1250",
-    'pt': "Cp1252",
-    'ptbr': "Cp1252",
-    'ro': "UTF-8",
-    'ru': "Cp1251",
-    'th': "UTF-8",
-    'tr': "Cp1254",
-    'ua': "Cp1251"
+    'ar': ("Cp1252", "Arabic"),
+    'ca': ("ISO-8859-15", "Catalan"),
+    'ch': ("UTF-8", "Chinese"),
+    'cn': ("UTF-8", "Chinese"),
+    'cs': ("Cp1250", "Czech"),
+    'da': ("Cp1252", "Danish"),
+    'de': ("Cp1252", "German"),
+    'en': ("UTF-8", "English"),
+    'es': ("Cp1252", "Spanish"),
+    'fi': ("Cp1252", "Finnish"),
+    'fr': ("Cp1252", "French"),
+    'hu': ("Cp1250", "Hungarian"),
+    'id': ("UTF-8", "Indonesian"),
+    'it': ("Cp1252", "Italian"),
+    'jp': ("UTF-8", "Japanese"),
+    'ko': ("UTF-16", "Korean"),
+    'nl': ("Cp1252", "Dutch"),
+    'no': ("Cp1252", "Norwegian"),
+    'ph': ("UTF-8", "Filipino"),
+    'pl': ("Cp1250", "Polish"),
+    'pt': ("Cp1252", "Portuguese"),
+    'ptbr': ("Cp1252", "Portuguese (Brazilian)"),
+    'ro': ("UTF-8", "Romanian"),
+    'ru': ("Cp1251", "Russian"),
+    'th': ("UTF-8", "Thai"),
+    'tr': ("Cp1254", "Turkish"),
+    'ua': ("Cp1251", "Ukrainian")
 }
 
 property_prefixes = {
@@ -42,10 +42,20 @@ property_prefixes = {
     'SubCategory': "IGUI_perks_",
 }
 
+file_whitelist = (
+    "ItemName_",
+    "IG_UI_",
+)
+
+translations_en = {}
+translations_lang = {}
+
+
 # getter for language code
 def get_language_code():
     global language_code
     return language_code
+
 
 # setter for language code
 def set_language_code(new_language_code):
@@ -62,6 +72,10 @@ def change_language():
         language_code = "en"
         print("Unrecognised language code, setting to 'en'")
     set_language_code(language_code)
+
+    language = language_codes.get(language_code, ("UTF-8", "Unknown"))[1]
+    print(f"Language changed to '{language_code}' ({language})")
+
     return language_code
 
 
@@ -74,38 +88,55 @@ def detect_file_encoding(file_path):
 #        print(f"File encoded with '{encoding}'")
     return encoding
 
-def parse_translation_file(file_path, language_code, property_prefix):
-    if not os.path.exists(file_path):
-        raise FileNotFoundError(f"No file found for '{file_path}'. Ensure the file is in the correct path, or try a different language code.")
+
+def parse_translation_file(language_code):
+    base_dir = "resources/Translate"
+    language_dir = os.path.join(base_dir, language_code.upper())
+    if not os.path.exists(language_dir):
+        raise FileNotFoundError(f"No file found for '{language_dir}'. Ensure the file is in the correct path, or try a different language code.")
     
-    encoding = language_codes.get(language_code, "UTF-8")
-#    print(f"Encoding for language code '{language_code}' set to {encoding}")
-
+    # get encoding for the chosen language
+    encoding = language_codes.get(language_code, ("UTF-8", "Unknown"))[0]
     encoding_detected = False
-    translation = None
+    parsed_translations = {}
 
-    while True:
-        try:
-            with open(file_path, 'r', encoding=encoding) as file:
-                for line in file:
-                    # check if the key exists, then get its value
-                    if property_prefix in line:
+    for root, dirs, files in os.walk(language_dir):
+        for file_name in files:
+            # check if the file is whitelisted
+            if not any(file_name.startswith(prefix) for prefix in file_whitelist):
+                continue
+
+            file_path = os.path.join(root, file_name)
+            try:
+                with open(file_path, 'r', encoding=encoding) as file:
+                    for line in file:
+                        line = line.strip()
+
+                        if '=' not in line or '{' in line or '}' in line:
+                            continue
+
                         parts = line.split('=', 1)
 
+                        # ensure that the line was split into exactly two parts
                         if len(parts) == 2:
-                            translation = parts[1].split('"')[1]
-                            return translation
-                        
-        except UnicodeDecodeError:
-            if encoding_detected:
-                print(f"Unable to decode the file '{file_path}' even after trying to detect encoding.")
-                break
-            print(f"There was an issue decoding the file '{file_path}' with encoding '{encoding}'. Trying to detect encoding.")
-            encoding = detect_file_encoding(file_path)
-            encoding_detected = True
-        else: 
-            break
-    return translation
+                            key = parts[0].strip()
+                            value = parts[1].split('"')[1]
+                            parsed_translations[key] = value
+                        else:
+                            print(f"More or less than 2 parts for {line}, skipping.")
+                            
+            except UnicodeDecodeError:
+                if encoding_detected:
+                    print(f"Unable to decode the file '{file_path}' even after trying to detect encoding.")
+                    break
+                print(f"There was an issue decoding the file '{file_path}' with encoding '{encoding}'. Trying to detect encoding.")
+                encoding = detect_file_encoding(file_path)
+                encoding_detected = True
+            except Exception as e:
+                print(f"Error processing file '{file_name}': {e}")
+                continue
+
+    return parsed_translations
 
 
 """
@@ -116,26 +147,26 @@ property_name: the name of the property being translated
 lang_code: language code can be specified, leaving empty will use global 'language_code' 
 """
 def get_translation(property_value, property_name="DisplayName", lang_code=None):
-    global language_code
-    if language_code is None:
-        language_code = change_language()
-    if lang_code is None:
-        lang_code = language_code
+    if translations_en == {}:
+        init_translations()
 
-    if property_name == "DisplayName":
-        file_path = f'resources/Translate/{lang_code.upper()}/ItemName_{lang_code.upper()}.txt'
-    else:
-        file_path = f'resources/Translate/{lang_code.upper()}/IG_UI_{lang_code.upper()}.txt' if lang_code != "en" else f'resources/Translate/{lang_code.upper()}/IG_UI_EN.txt'
-    
-    property_prefix = property_prefixes.get(property_name, property_name) + property_value
-    if not property_prefix:
-        raise ValueError(f"Failed translating due to unsupported property name '{property_name}'")
-    
-    translation = parse_translation_file(file_path, lang_code, property_prefix)
-    
+    global language_code
+    if lang_code is not None:
+        if lang_code != "en" and lang_code != language_code:
+            raise ValueError(f"'lang_code' when translating {property_value} doesn't match 'language_code' or 'en'. Ensure the correct language code is used.")
+
+    property_prefix = property_prefixes.get(property_name) + property_value
+    translation = None
+    try:
+        if lang_code == "en":
+            translation = translations_en.get(property_prefix, None)
+        else:
+            translation = translations_lang.get(property_prefix, None)
+    except KeyError:
+        translation = None
 
     if translation is None:
-        logging.log_to_file(f"No translation found for item with prefix '{property_prefix}' in '{file_path}'")
+        logging.log_to_file(f"No translation found for item with prefix '{property_prefix}'")
         # try get the item's name from DisplayName instead
         if property_name == "DisplayName":
             module_check, item_check = property_value.split(".")
@@ -152,3 +183,19 @@ def get_translation(property_value, property_name="DisplayName", lang_code=None)
                                 translation = item_data.get("DisplayName", item)
 
     return translation
+
+
+def init_translations():
+    print("Initialising translations")
+    global translations_en
+    global translations_lang
+    language_code = change_language()
+    translations_en = parse_translation_file('en')
+    if language_code == 'en':
+        
+        translations_lang = translations_en
+    else:
+        translations_lang = parse_translation_file(language_code)
+
+def main():
+    init_translations()
