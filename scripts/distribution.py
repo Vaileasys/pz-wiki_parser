@@ -648,7 +648,7 @@ def process_foraging_file_formatted(file_paths, item_name):
                         rows_to_add.append(formatted_row)
 
     if foraging_exists and rows_to_add:
-        foraging_table = "|foraging=\n" + "\n{{!}}-\n".join(rows_to_add)
+        foraging_table = "\n|foraging=\n" + "\n{{!}}-\n".join(rows_to_add)
     return foraging_table
 
 
