@@ -18,12 +18,20 @@ LANGUAGE_DATA = {
             "Code": "Code",
             "See also": "See also",
             "Consumable properties": "Consumable properties",
+            "Repairing": "Repairing",
         },
         "help_text": "Help PZwiki by adding information to this section.",
         "translate_reason": "Translated using game translation files.",
+        "condition_categories": ["Weapon", "Tool / Weapon"],
+        "condition_text": (
+            "The {name} has a maximum condition of {condition_max}. Its rate of degradation is influenced by the "
+            "{skill_type} and [[maintenance]] [[skill]]s. The chance of losing [[durability]] can be simplified to the following formula: "
+            "<code>1 in (35 + maintenanceMod &times; 2)</code>. Where \"maintenanceMod\" is calculated using the {skill_type} and "
+            "maintenance skills.<br>\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
+        ),
     },
     "pl": {
-        "intro_template": "'''{lowercase_name}''' to [[przedmiot]] w [[Project Zomboid/pl]].",
+        "intro_template": "'''{lowercase_name}''' to [[Item/pl|przedmiot]] w [[Project Zomboid/pl|Project Zomboid]].",
         "headers": {
             "Usage": "Zastosowanie",
             "Condition": "Stan",
@@ -31,126 +39,17 @@ LANGUAGE_DATA = {
             "Code": "Kod",
             "See also": "Zobacz także",
             "Consumable properties": "Właściwości konsumpcyjne",
+            "Repairing": "Naprawa",
         },
         "help_text": "Pomóż PZwiki, dodając informacje do tej sekcji.",
         "translate_reason": "Przetłumaczone za pomocą plików tłumaczeń gry.",
-    },
-    "fr": {
-        "intro_template": "'''{lowercase_name}''' est {{{{ll|item}}}} dans {{{{ll|Project Zomboid}}}}.",
-        "headers": {
-            "Usage": "Utilisation",
-            "Condition": "Condition",
-            "Location": "Emplacement",
-            "Code": "Code",
-            "See also": "Voir aussi",
-            "Consumable properties": "Propriétés consommables",
-        },
-        "help_text": "Aidez PZwiki en ajoutant des informations à cette section.",
-        "translate_reason": "Traduit à l'aide des fichiers de traduction du jeu.",
-    },
-    "it": {
-        "intro_template": "'''{lowercase_name}''' è {{{{ll|item}}}} in {{{{ll|Project Zomboid}}}}.",
-        "headers": {
-            "Usage": "Utilizzo",
-            "Condition": "Condizione",
-            "Location": "Posizione",
-            "Code": "Codice",
-            "See also": "Vedi anche",
-            "Consumable properties": "Proprietà consumabili",
-        },
-        "help_text": "Aiuta PZwiki aggiungendo informazioni a questa sezione.",
-        "translate_reason": "Tradotto utilizzando i file di traduzione del gioco.",
-    },
-    "es": {
-        "intro_template": "'''{lowercase_name}''' es {{{{ll|item}}}} en {{{{ll|Project Zomboid}}}}.",
-        "headers": {
-            "Usage": "Uso",
-            "Condition": "Condición",
-            "Location": "Ubicación",
-            "Code": "Código",
-            "See also": "Ver también",
-            "Consumable properties": "Propiedades consumibles",
-        },
-        "help_text": "Ayuda a PZwiki añadiendo información a esta sección.",
-        "translate_reason": "Traducido usando los archivos de traducción del juego.",
-    },
-    "pt": {
-        "intro_template": "'''{lowercase_name}''' é {{{{ll|item}}}} em {{{{ll|Project Zomboid}}}}.",
-        "headers": {
-            "Usage": "Uso",
-            "Condition": "Condição",
-            "Location": "Localização",
-            "Code": "Código",
-            "See also": "Veja também",
-            "Consumable properties": "Propriedades consumíveis",
-        },
-        "help_text": "Ajude PZwiki adicionando informações a esta seção.",
-        "translate_reason": "Traduzido usando os arquivos de tradução do jogo.",
-    },
-    "ptbr": {
-        "intro_template": "'''{lowercase_name}''' é {{{{ll|item}}}} em {{{{ll|Project Zomboid}}}}.",
-        "headers": {
-            "Usage": "Uso",
-            "Condition": "Condição",
-            "Location": "Localização",
-            "Code": "Código",
-            "See also": "Veja também",
-            "Consumable properties": "Propriedades consumíveis",
-        },
-        "help_text": "Ajude PZwiki adicionando informações a esta seção.",
-        "translate_reason": "Traduzido usando os arquivos de tradução do jogo.",
-    },
-    "ru": {
-        "intro_template": "'''{lowercase_name}''' — это {{{{ll|item}}}} в {{{{ll|Project Zomboid}}}}.",
-        "headers": {
-            "Usage": "Использование",
-            "Condition": "Состояние",
-            "Location": "Расположение",
-            "Code": "Код",
-            "See also": "См. также",
-            "Consumable properties": "Потребляемые свойства",
-        },
-        "help_text": "Помогите PZwiki, добавив информацию в этот раздел.",
-        "translate_reason": "Переведено с использованием файлов перевода игры.",
-    },
-    "tr": {
-        "intro_template": "'''{lowercase_name}''' {{{{ll|Project Zomboid}}}}'da bir {{{{ll|item}}}}.",
-        "headers": {
-            "Usage": "Kullanım",
-            "Condition": "Durum",
-            "Location": "Konum",
-            "Code": "Kod",
-            "See also": "Ayrıca bakınız",
-            "Consumable properties": "Tüketilebilir özellikler",
-        },
-        "help_text": "Bu bölüme bilgi ekleyerek PZwiki'ye yardım edin.",
-        "translate_reason": "Oyun çeviri dosyaları kullanılarak çevrilmiştir.",
-    },
-    "jp": {
-        "intro_template": "'''{lowercase_name}'''は{{{{ll|Project Zomboid}}}}の{{{{ll|item}}}}です。",
-        "headers": {
-            "Usage": "使用方法",
-            "Condition": "状態",
-            "Location": "場所",
-            "Code": "コード",
-            "See also": "参照",
-            "Consumable properties": "消費可能な特性",
-        },
-        "help_text": "このセクションに情報を追加してPZwikiを支援してください。",
-        "translate_reason": "ゲームの翻訳ファイルを使用して翻訳されました。",
-    },
-    "ko": {
-        "intro_template": "'''{lowercase_name}'''은(는) {{{{ll|Project Zomboid}}}}의 {{{{ll|item}}}}입니다.",
-        "headers": {
-            "Usage": "사용",
-            "Condition": "상태",
-            "Location": "위치",
-            "Code": "코드",
-            "See also": "또한 참조하십시오",
-            "Consumable properties": "소모 가능한 속성",
-        },
-        "help_text": "이 섹션에 정보를 추가하여 PZwiki를 도와주세요.",
-        "translate_reason": "게임 번역 파일을 사용하여 번역되었습니다.",
+        "condition_categories": ["Broń", "Narzędzia/broń"],
+        "condition_text": (
+            "{name} ma maksymalny stan {condition_max}. Tempo degradacji jest zależne od umiejętności {skill_type} i [[konserwacji]]. "
+            "Szansa na utratę [[trwałości]] można uprościć do następującego wzoru: <code>1 na (35 + maintenanceMod &times; 2)</code>. "
+            "Gdzie \"maintenanceMod\" jest obliczany na podstawie umiejętności {skill_type} i konserwacji.<br>\n\n"
+            "{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
+        ),
     },
 }
 
@@ -365,8 +264,11 @@ def generate_consumable_properties(item_id, consumables_dir):
     return ""
 
 
-def generate_condition(name, category, skill_type, infobox, fixing_dir):
-    if category not in ['Weapon', 'Tool / Weapon']:
+def generate_condition(name, category, skill_type, infobox, fixing_dir, language_code):
+    language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
+
+    # Check if the category is in the list of categories that require a condition section
+    if category not in language_data["condition_categories"]:
         return ""
 
     condition_max_match = re.search(r'\|condition_max\s*=\s*(\d+)', infobox)
@@ -378,9 +280,16 @@ def generate_condition(name, category, skill_type, infobox, fixing_dir):
     condition_max = condition_max_match.group(1)
     condition_lower_chance = condition_lower_chance_match.group(1)
 
-    condition_text = f"""The {name} has a maximum condition of {condition_max}. Its rate of degradation is influenced by the {skill_type} and [[maintenance]] [[skill]]s. The chance of losing [[durability]] can be simplified to the following formula: <code>1 in (35 + maintenanceMod &times; 2)</code>. Where "maintenanceMod" is calculated using the {skill_type} and maintenance skills.<br>
+    condition_text_template = language_data["condition_text"]
 
-{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"""
+    condition_text = condition_text_template.format(
+        name=name,
+        condition_max=condition_max,
+        skill_type=skill_type,
+        condition_lower_chance=condition_lower_chance
+    )
+
+    repairing_header = language_data["headers"]["Repairing"]
 
     if os.path.exists(fixing_dir):
         fixing_files = os.listdir(fixing_dir)
@@ -396,7 +305,7 @@ def generate_condition(name, category, skill_type, infobox, fixing_dir):
                         file_content = file.read()
                         if item_id_search in file_content:
                             fixing_content = file_content.strip()
-                            condition_text += f"\n\n===Repairing===\n{fixing_content}"
+                            condition_text += f"\n\n==={repairing_header}===\n{fixing_content}"
                             break
                 except Exception as e:
                     print(f"Error reading {file_path}: {e}")
@@ -556,14 +465,12 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
 
     body_content = f"\n=={headers['Usage']}==\n{help_text}\n"
 
-    # Example of using the consumable properties, condition, etc.
     consumable_properties = generate_consumable_properties(item_id, consumables_dir)
     if consumable_properties:
         body_content += f"\n==={headers['Consumable properties']}===\n{consumable_properties}\n"
 
-    # Add other sections
     sections = {
-        headers['Condition']: generate_condition(name, category, skill_type, infobox, fixing_dir),
+        headers['Condition']: generate_condition(name, category, skill_type, infobox, fixing_dir, language_code),
         headers['Location']: generate_location(original_filename, infobox_name, item_id, distribution_dir),
         headers['Code']: generate_code(item_id, code_dir),
         headers['See also']: generate_see_also({
