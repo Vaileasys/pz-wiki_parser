@@ -6,6 +6,10 @@ filters = {
     'MakeUp_': (True,),
     'ZedDmg_': (True,),
     'Wound_': (True,),
+    'Bandage_': (True,),
+    'F_Hair_': (True,),
+    'M_Hair_': (True,),
+    'M_Beard_': (True,),
     'obsolete': (True, 'OBSOLETE', 'true'),
 #    'ExampleFilter': (False, 'PropertyName', 'PropertyValue')
 }
@@ -34,6 +38,9 @@ def write_to_output(sorted_items):
     output_file = f'item_list_{language_code.upper()}.txt'
     os.makedirs(output_dir, exist_ok=True)
     output_path = os.path.join(output_dir, output_file)
+
+    for display_category in sorted_items:
+        sorted_items[display_category] = sorted(sorted_items[display_category], key=lambda x: x[1])
 
     with open(output_path, 'w', encoding='utf-8') as file:
 
