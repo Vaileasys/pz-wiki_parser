@@ -1,6 +1,5 @@
 import os
 import re
-import json
 from core import translate
 from core import logging
 
@@ -187,11 +186,44 @@ def parse_files_in_folder(folder_path):
 
 
 # for debugging - outputs all the parsed data into a txt file
-def output_parsed_data_to_json(data, output_file):
+def output_parsed_data_to_txt(data, output_file):
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     
     with open(output_file, 'w') as file:
-        json.dump(data, file, indent=4)
+        for module, module_data in data.items():
+            if 'block' in module_data:
+                block_value = module_data.pop('block')
+                file.write(f"{block_value} {module}\n")
+            for item_type, type_data in module_data.items():
+                if 'block' in type_data:
+                    block_value = type_data.pop('block')
+                    file.write(f"    {block_value} {item_type}\n")
+                else:
+                    file.write(f"    {item_type}\n")
+
+                for property, property_data in type_data.items():
+                    # fixing
+                    if 'fixing' in block_value:
+                        if len(property_data) == 1:
+                            property_data = str(property_data[0])
+                            file.write(f"        {property}: {property_data}\n")
+
+                        else:
+                            if isinstance(property_data, list):
+                                items = ', '.join(property_data)
+                                file.write(f"        {property}: {items}\n")
+                            else:
+                                file.write(f"        {property}:\n")
+                                for fixer, fixer_data in property_data.items():
+                                    if fixer_data:
+                                        file.write(f"            {fixer}:\n")
+
+                                        for pair, pair_data in fixer_data.items():
+                                            file.write(f"                {pair} = {pair_data}\n")
+                    # item
+                    else:
+                        file.write(f"        {property} = {property_data}\n")
+                file.write('\n')
 
 
 # initialise parser
@@ -199,8 +231,8 @@ def init():
     global parsed_item_data
     global parsed_fixing_data
     parsed_item_data, parsed_fixing_data, total_item_counter, total_fixing_counter = parse_files_in_folder('resources/scripts')
-    output_parsed_data_to_json(parsed_item_data, 'output/logging/parsed_item_data.json')
-    output_parsed_data_to_json(parsed_fixing_data, 'output/logging/parsed_fixing_data.json')
+    output_parsed_data_to_txt(parsed_item_data, 'output/logging/parsed_item_data.txt')
+    output_parsed_data_to_txt(parsed_fixing_data, 'output/logging/parsed_fixing_data.txt')
     print("Total items parsed:", total_item_counter)
     print("Total fixings parsed:", total_fixing_counter)
 
