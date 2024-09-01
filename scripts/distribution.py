@@ -662,7 +662,7 @@ def formatting(unique_items, output_path):
     os.makedirs(complete_output_path)
 
     for item in tqdm(unique_items, desc="Formatting items"):
-        output_data = f"{{{{location table|item_id={item}\n"
+        output_data = f"{{{{Location table|item_id={item}\n"
 
         item_files = {file_type: None for file_type in ['container', 'vehicle', 'foraging1', 'foraging2', 'zombie']}
         for filename in os.listdir(csv_output_path):
