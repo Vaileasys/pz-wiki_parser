@@ -188,7 +188,8 @@ def process_item_melee(item_data, item_id):
 
 # write to file
 def write_items_to_file(skills, header, category):
-    output_dir = f'output/item_list/weapons/{category}/'
+    language_code = translate.get_language_code()
+    output_dir = f'output/{language_code.upper()}/item_list/weapons/{category}/'
     os.makedirs(output_dir, exist_ok=True)
     
     for skill, items in skills.items():
