@@ -1,5 +1,4 @@
 import os
-import shutil
 import script_parser
 from core import translate, utility
 
@@ -92,15 +91,6 @@ def process_item_firearm(item_data, item_id):
         ammo_icon = utility.get_icon(ammo_data, ammo_id)
         ammo = f"[[File:{ammo_icon}.png|link={ammo_page}|{ammo_name}]]"
 
-    crit_chance = item_data.get('CriticalChance', '-')
-    # calculation from: IsoPlayer.class > calculateCritChance()
-    crit_chance_mod = ((int(item_data.get('AimingPerkCritModifier', 0)) / 2) + 3)
-    # do not display decimal place if value is a whole number
-    crit_chance_mod = (
-        str(int(crit_chance_mod)) if crit_chance_mod.is_integer() 
-        else str(crit_chance_mod)
-    )
-
     condition_max = item_data.get("ConditionMax", '0')
     condition_chance = item_data.get("ConditionLowerChanceOneIn", '0')
     condition_average = str(int(condition_max) * int(condition_chance))
@@ -112,16 +102,15 @@ def process_item_firearm(item_data, item_id):
         "weight": item_data.get('Weight', '1'),
         "equipped": equipped,
         "ammo": ammo,
-        "clip_size": item_data.get('ClipSize', item_data.get('MaxAmmo', '')),
+        "clip_size": item_data.get('MaxAmmo', item_data.get('ClipSize', '')),
         "damage_min": item_data.get('MinDamage', '-'),
         "damage_max": item_data.get('MaxDamage', '-'),
         "min_range": item_data.get('MinRange', '-'),
         "max_range": item_data.get('MaxRange', '-'),
         "hit_chance": item_data.get('HitChance', '-') + '%',
-        #calculation from: SwipeStatePlayer.class > CalcHitChance()
         "hit_chance_mod": '+' + item_data.get('AimingPerkHitChanceModifier', '-') + '%',
-        "crit_chance": crit_chance + '%',
-        "crit_chance_mod": '+' + crit_chance_mod + '%',
+        "crit_chance": item_data.get('CriticalChance', '-') + '%',
+        "crit_chance_mod": '+' + item_data.get('AimingPerkCritModifier', '-') + '%',
         "sound_radius": item_data.get('SoundRadius', '-'),
         "knockback": item_data.get('PushBackMod', '-'),
 #        "condition_max": condition_max,
@@ -164,7 +153,7 @@ def process_item_melee(item_data, item_id):
     crit_chance = item_data.get("CriticalChance", "-")
     if crit_chance != "-":
         crit_chance = f"{crit_chance}%"
-    crit_multiplier = item_data.get("CriticalChance", "-")
+    crit_multiplier = item_data.get("CritDmgMultiplier", "-")
     if crit_multiplier != "-":
         crit_multiplier = f"{crit_multiplier}×"
 
@@ -205,8 +194,7 @@ def write_items_to_file(skills, header, category):
     for skill, items in skills.items():
         output_path = f"{output_dir}{skill}.txt"
         with open(output_path, 'w', encoding='utf-8') as file:
-            file.write(f"==={skill}===\n{header}")
-
+            file.write(f"{header}")
             sorted_items = sorted(items, key=lambda x: x['name'])
 
             for item in sorted_items:
