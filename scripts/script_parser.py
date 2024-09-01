@@ -5,6 +5,7 @@ from core import logging
 
 parsed_item_data = ""
 parsed_fixing_data = ""
+scripts_dir = "resources/scripts"
 
 
 # parse fixing properties
@@ -168,19 +169,21 @@ def parse_file(file_path, data, block_type="item"):
     return data, type_counter
 
 
-# defines the files to be parsed - will parse every txt file in the "folder_path"
-def parse_files_in_folder(folder_path):
+# defines the files to be parsed - will parse every txt file in the "scripts_dir"
+def parse_files_in_folder():
     parsed_item_data = {}
     parsed_fixing_data = {}
     total_item_counter = 0
     total_fixing_counter = 0
-    for filename in os.listdir(folder_path):
-        if filename.endswith('.txt'):
-            file_path = os.path.join(folder_path, filename)
-            parsed_item_data, item_counter = parse_file(file_path, parsed_item_data)
-            parsed_fixing_data, fixing_counter = parse_file(file_path, parsed_fixing_data, "fixing")
-            total_item_counter += item_counter
-            total_fixing_counter += fixing_counter
+    for root, dirs, files in os.walk(scripts_dir):
+        for file_name in files:
+            file_path = os.path.join(root, file_name)
+            if file_name.endswith('.txt'):
+                file_path = os.path.join(root, file_name)
+                parsed_item_data, item_counter = parse_file(file_path, parsed_item_data)
+                parsed_fixing_data, fixing_counter = parse_file(file_path, parsed_fixing_data, "fixing")
+                total_item_counter += item_counter
+                total_fixing_counter += fixing_counter
             
     return parsed_item_data, parsed_fixing_data, total_item_counter, total_fixing_counter
 
@@ -230,7 +233,7 @@ def output_parsed_data_to_txt(data, output_file):
 def init():
     global parsed_item_data
     global parsed_fixing_data
-    parsed_item_data, parsed_fixing_data, total_item_counter, total_fixing_counter = parse_files_in_folder('resources/scripts')
+    parsed_item_data, parsed_fixing_data, total_item_counter, total_fixing_counter = parse_files_in_folder()
     output_parsed_data_to_txt(parsed_item_data, 'output/logging/parsed_item_data.txt')
     output_parsed_data_to_txt(parsed_fixing_data, 'output/logging/parsed_fixing_data.txt')
     print("Total items parsed:", total_item_counter)
