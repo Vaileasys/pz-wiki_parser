@@ -685,11 +685,12 @@ def formatting(unique_items, output_path):
             output_data += foraging_data
 
         output_data += "\n}}"
-
         output_data = '\n'.join(line for line in output_data.split('\n') if line.strip())
 
-        with open(os.path.join(complete_output_path, f'{item}.txt'), 'w') as output_file:
-            output_file.write(output_data)
+        if output_data != f"{{{{location table|item_id={item}\n}}}}":
+            with open(os.path.join(complete_output_path, f'{item}.txt'), 'w') as output_file:
+                output_file.write(output_data)
+
 
 
 if __name__ == '__main__':
