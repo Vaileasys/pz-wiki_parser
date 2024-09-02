@@ -265,9 +265,6 @@ def generate_consumable_properties(item_id, consumables_dir):
     return ""
 
 
-import os
-import re
-
 def generate_condition(name, category, skill_type, infobox, fixing_dir, language_code):
     language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
 
