@@ -235,6 +235,10 @@ def get_items():
     write_items_to_file(firearm_skills, firearm_header, 'firearm')
 
 
-if __name__ == "__main__":
+def main():
     script_parser.init()
     get_items()
+
+
+if __name__ == "__main__":
+    main()
