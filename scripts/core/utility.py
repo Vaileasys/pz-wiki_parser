@@ -34,6 +34,9 @@ def get_icon(item_data, item_id=""):
     if icon in ('', 'default'):
         if 'IconsForTexture' in item_data:
             icon = item_data.get('IconsForTexture')
+            # change to a list, i.e. if it's a string
+            if not isinstance(icon, list):
+                icon = [icon]
             icon = icon[0]
         else:
             icon = item_data.get('WorldObjectSprite', 'Question_On')
