@@ -224,7 +224,7 @@ def get_module_from_item(item_data, property_name):
 
 
 # get page name based on item_id uses 'item_id_dictionary.csv'
-def get_page(item_id):
+def get_page(item_id, name="Unknown"):
     dict_csv = 'resources/item_id_dictionary.csv'
     
     with open(dict_csv, mode='r', newline='') as csv_file:
@@ -235,4 +235,4 @@ def get_page(item_id):
 
 #    print(f"Couldn't find a page for '{item_id}'")
     logging.log_to_file(f"Couldn't find a page for '{item_id}'")
-    return "Unknown"
+    return name
