@@ -36,10 +36,11 @@ menu_structure = {
         'name': 'Page generation',
         'description': 'Generate pages or lists.',
         'sub_options': {
-            '1': {'module': 'item_list', 'name': 'Item list', 'description': 'Returns all items in a list organised by DisplayCategory.'},
-            '2': {'module': 'weapon_list', 'name': 'Weapon list', 'description': 'Return all weapons in a list with stats organised by their skill.'},
-            '3': {'module': 'article', 'name': 'Article', 'description': 'Generate wiki articles.'},
-            '4': {'module': 'nutrition', 'name': 'nutrition', 'description': 'Generate nutrition page.'},
+            '1': {'module': 'article', 'name': 'Article', 'description': 'Generate wiki articles.'},
+            '2': {'module': 'item_list', 'name': 'Item list', 'description': 'Returns all items in a list organised by DisplayCategory.'},
+            '3': {'module': 'weapon_list', 'name': 'Weapon list', 'description': 'Return all weapons in a list with stats organised by their skill.'},
+            '4': {'module': 'clothing_list', 'name': 'Clothing list', 'description': 'Return all clothing in a list with stats organised by body location.'},
+            '5': {'module': 'nutrition', 'name': 'nutrition', 'description': 'Generate nutrition page.'},
         },
     },
     '4': {
