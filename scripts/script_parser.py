@@ -6,7 +6,19 @@ from core import logging
 parsed_item_data = ""
 parsed_fixing_data = ""
 scripts_dir = "resources/scripts"
-
+# TODO: add blacklist to skip when parsing
+blacklist = {
+    "MakeUp_": ('type',),
+    "ZedDmg_": ('type',),
+    "Wound_": ('type',),
+    "Bandage_": ('type',),
+    "F_Hair_": ('type',),
+    "M_Hair_": ('type',),
+    "M_Beard_": ('type',),
+    "OBSOLETE": ('property', 'true'),
+    "imports": ('block',),
+    "template": ('block',),
+}
 
 # parse fixing properties
 def get_fixing_properties(line, data, current_module, current_fixing):
