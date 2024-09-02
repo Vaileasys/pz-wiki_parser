@@ -1,3 +1,4 @@
+from tqdm import tqdm
 import os
 import script_parser
 from core import translate, utility, logging
@@ -69,7 +70,7 @@ def item_list():
     icon_dir = 'resources/icons/'
 
     for module, module_data in script_parser.parsed_item_data.items():
-        for item_type, item_data in module_data.items():
+        for item_type, item_data in tqdm(module_data.items(), desc=f"Processing {module} module items"):
             # Check if 'DisplayCategory' property exists for the item
             if 'DisplayCategory' in item_data:
                 display_category = item_data.get('DisplayCategory', 'Other')
