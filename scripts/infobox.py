@@ -71,6 +71,15 @@ def write_to_output(item_data, item_id, output_dir):
             if not material and material_value:
                 material = 'metal'
             material = material.capitalize()
+            
+            recipes = item_data.get('TeachedRecipes', '')
+            if recipes != '':
+                if isinstance(recipes, str):
+                    recipes = [recipes]
+                for i in range(len(recipes)):
+                    recipes[i] = recipes[i].replace(" ", "_")
+                    recipes[i] = translate.get_translation(recipes[i], 'TeachedRecipes')
+            recipes = utility.format_br(recipes)
 
             weapon = utility.get_module_from_item(item_data, 'MountOn')
             weapon = utility.get_icons_for_item_ids(weapon.values())
@@ -80,7 +89,7 @@ def write_to_output(item_data, item_id, output_dir):
             parameters = {
                 "name": translate.get_translation(item_id, "DisplayName"),
                 "model": utility.get_model(item_data),
-#                "icon": utility.get_icons(item_data),  # added with 'insert_parameters_after' 
+#                "icon": utility.get_icons(item_data),  # added with 'insert_parameters_after'
                 "icon_name": translate.get_translation(item_id, "DisplayName"),
                 "category": category,
                 "weight": item_data.get('Weight', 1),
@@ -98,8 +107,8 @@ def write_to_output(item_data, item_id, output_dir):
                 "material_value": material_value,
                 "can_boil_water": item_data.get('CanBoilWater', '').capitalize(),
                 "writable": item_data.get('CanBeWrite', '').capitalize(),
-                "recipes": utility.format_br(item_data.get('TeachedRecipes', '')),
-                "skill_trained": item_data.get('SkillTrained', ''),
+                "recipes": recipes,
+                "skill_trained": translate.get_translation(item_data.get('SkillTrained', ''), 'SkillTrained'),
                 "page_number": item_data.get('NumberOfPages') or item_data.get('PageToWrite', ''),
                 "packaged": item_data.get('Packaged', '').capitalize(),
                 "rain_factor": item_data.get('RainFactor', ''),
@@ -180,7 +189,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "bad_cold": item_data.get('BadCold', '').capitalize(),
                 "spice": item_data.get('Spice', '').capitalize(),
                 "evolved_recipe": item_data.get('EvolvedRecipeName', ''),
-#                "tag": utility.get_tags(item_data),  # added with 'insert_parameters_after' 
+#                "tag": utility.get_tags(item_data),  # added with 'insert_parameters_after'
                 "item_id": item_id,
                 "infobox_version": version.get_version()
             }
