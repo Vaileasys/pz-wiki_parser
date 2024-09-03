@@ -83,6 +83,14 @@ def write_to_output(item_data, item_id, output_dir):
 
             weapon = utility.get_module_from_item(item_data, 'MountOn')
             weapon = utility.get_icons_for_item_ids(weapon.values())
+
+            evolved_recipe = item_data.get('EvolvedRecipeName', '')
+            if evolved_recipe:
+                print(evolved_recipe)
+                evolved_recipe_translated = translate.get_translation(item_id, 'EvolvedRecipeName')
+                if evolved_recipe_translated:
+                    print(evolved_recipe_translated)
+                    evolved_recipe = evolved_recipe_translated
             
             tags = utility.get_tags(item_data)
 
@@ -99,7 +107,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "attachment_type": item_data.get('AttachmentType', ''),
                 "function": '',
                 "weapon": weapon,
-                "part_type": item_data.get('PartType', ''),
+                "part_type": translate.get_translation(item_data.get('PartType', ''), 'PartType'),
                 "skill_type": utility.get_skill_type_mapping(item_data, item_id),
                 "ammo_type": utility.get_icons_for_item_ids(item_data.get('AmmoType', '')),
                 "clip_size": item_data.get('MaxAmmo', ''),
@@ -188,7 +196,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "good_hot": item_data.get('GoodHot', '').capitalize(),
                 "bad_cold": item_data.get('BadCold', '').capitalize(),
                 "spice": item_data.get('Spice', '').capitalize(),
-                "evolved_recipe": item_data.get('EvolvedRecipeName', ''),
+                "evolved_recipe": evolved_recipe,
 #                "tag": utility.get_tags(item_data),  # added with 'insert_parameters_after'
                 "item_id": item_id,
                 "infobox_version": version.get_version()
