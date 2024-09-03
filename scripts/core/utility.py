@@ -126,6 +126,8 @@ def get_model(item_data):
         return ''
     if model.endswith('_Ground'):
         model = model.replace('_Ground', '')
+    elif model.endswith('Ground'):
+        model = model.replace('Ground', '')
     model = f"{model}_Model.png"
     return model
 
