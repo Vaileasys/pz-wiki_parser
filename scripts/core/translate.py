@@ -42,12 +42,16 @@ property_prefixes = {
     'SubCategory': "IGUI_perks_",
     'SkillTrained': "IGUI_perks_",
     'TeachedRecipes': "Recipe_",
+    'PartType': "Tooltip_weapon_",
+    'EvolvedRecipeName': "EvolvedRecipeName_",
 }
 
 file_whitelist = (
     "ItemName_",
     "IG_UI_",
-    "Recipes_"
+    "Recipes_",
+    "Tooltip_",
+    "EvolvedRecipeName_",
 )
 
 translations_en = {}
