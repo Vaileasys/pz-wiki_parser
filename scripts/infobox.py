@@ -86,10 +86,8 @@ def write_to_output(item_data, item_id, output_dir):
 
             evolved_recipe = item_data.get('EvolvedRecipeName', '')
             if evolved_recipe:
-                print(evolved_recipe)
                 evolved_recipe_translated = translate.get_translation(item_id, 'EvolvedRecipeName')
                 if evolved_recipe_translated:
-                    print(evolved_recipe_translated)
                     evolved_recipe = evolved_recipe_translated
             
             tags = utility.get_tags(item_data)
