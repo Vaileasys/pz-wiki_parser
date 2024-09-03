@@ -79,7 +79,7 @@ def write_to_output(item_data, item_id, output_dir):
                 for i in range(len(recipes)):
                     recipes[i] = recipes[i].replace(" ", "_")
                     recipes[i] = translate.get_translation(recipes[i], 'TeachedRecipes')
-            recipes = utility.format_br(recipes)
+                recipes = utility.format_br(recipes)
 
             weapon = utility.get_module_from_item(item_data, 'MountOn')
             weapon = utility.get_icons_for_item_ids(weapon.values())

@@ -176,6 +176,7 @@ def get_translation(property_value, property_name="DisplayName", lang_code=None)
 
     if translation is None:
         logging.log_to_file(f"No translation found for '{property_prefix}' prefix")
+        translation = property_value
         # try get the item's name from DisplayName instead
         if property_name == "DisplayName":
             module_check, item_check = property_value.split(".")
