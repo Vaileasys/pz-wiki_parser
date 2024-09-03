@@ -40,11 +40,14 @@ property_prefixes = {
     'DisplayCategory': "IGUI_ItemCat_",
     'Categories': "IGUI_perks_",
     'SubCategory': "IGUI_perks_",
+    'SkillTrained': "IGUI_perks_",
+    'TeachedRecipes': "Recipe_",
 }
 
 file_whitelist = (
     "ItemName_",
     "IG_UI_",
+    "Recipes_"
 )
 
 translations_en = {}
