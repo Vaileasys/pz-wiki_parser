@@ -1,9 +1,7 @@
 import os
 import shutil
-from core import logging
 import script_parser
-from core import translate
-from core import utility
+from core import translate, utility, logging, version
 
 
 def get_item():
@@ -184,7 +182,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "evolved_recipe": item_data.get('EvolvedRecipeName', ''),
 #                "tag": utility.get_tags(item_data),  # added with 'insert_parameters_after' 
                 "item_id": item_id,
-                "infobox_version": utility.version
+                "infobox_version": version.get_version()
             }
 
             # new parameters to be added and parameter keys go here
