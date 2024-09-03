@@ -154,6 +154,8 @@ property_name: the name of the property being translated
 lang_code: language code can be specified, leaving empty will use global 'language_code' 
 """
 def get_translation(property_value, property_name="DisplayName", lang_code=None):
+    if not property_value:
+        return property_value
     if translations_en == {}:
         init_translations()
 
@@ -173,7 +175,7 @@ def get_translation(property_value, property_name="DisplayName", lang_code=None)
         translation = None
 
     if translation is None:
-        logging.log_to_file(f"No translation found for item with prefix '{property_prefix}'")
+        logging.log_to_file(f"No translation found for '{property_prefix}' prefix")
         # try get the item's name from DisplayName instead
         if property_name == "DisplayName":
             module_check, item_check = property_value.split(".")
