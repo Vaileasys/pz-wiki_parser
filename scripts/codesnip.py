@@ -5,7 +5,11 @@ from core import utility
 
 def extract_code_snippet(line_number, lines):
     item_code = ""
-    for i in range(line_number, len(lines)):
+    first_line = lines[line_number].strip()
+    item_code += first_line + "\n"
+
+    # Process the rest of the lines normally
+    for i in range(line_number + 1, len(lines)):
         item_code += lines[i]
         if '}' in lines[i]:
             break
