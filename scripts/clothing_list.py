@@ -393,6 +393,9 @@ def get_items():
 
                     clothing_dict[heading].append(item)
 
+    for heading in clothing_dict:
+        clothing_dict[heading].sort(key=lambda x: x.get("name", ""))
+
     write_items_to_file(clothing_dict)
 
 
