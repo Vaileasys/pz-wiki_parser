@@ -2,6 +2,7 @@ import os
 import script_parser
 from core import utility, translate
 
+# used for getting table values
 table_dict = {
     "generic": ('icon', 'name', 'weight', 'body_location', 'item_id'),
     "normal": ('icon', 'name', 'weight', 'body_location', 'fabric', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
@@ -10,9 +11,11 @@ table_dict = {
     "eyes": ('icon', 'name', 'weight', 'body_location', 'fall_chance', 'have_holes', 'item_id',),
     "head": ('icon', 'name', 'weight', 'body_location', 'fall_chance', 'have_holes', 'fabric', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
     "shoes": ('icon', 'name', 'weight', 'body_location', 'stomp_power', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
-    "belt": ('icon', 'name', 'weight', 'body_location', 'extra_slots', 'item_id',)
+    "belt": ('icon', 'name', 'weight', 'body_location', 'extra_slots', 'item_id',),
+    "wrist": ('icon', 'name', 'weight', 'body_location', 'display_time', 'sound_radius', 'item_id')
 }
 
+# map table values with their headings
 columns_dict = {
     "icon": "! Icon",
     "name": "! Name",
@@ -32,9 +35,12 @@ columns_dict = {
     "insulation": "! [[File:UI Heat Protect.png|link=|Insulation]]",
     "wind_def": "! [[File:UI Wind Protect.png|link=|Wind resistance]]",
     "water_def": "! [[File:UI Wet Protect.png|link=|Water resistance]]",
+    "display_time": "! [[File:AlarmClock.png|28px|link=|Displays time]]",
+    "sound_radius": "! [[File:UI_Noise.png|28px|link=|Sound radius]]",
     "item_id": "! Item ID",
 }
 
+# table/section based on body_location
 body_location_dict = {
     "Long underwear": {
         "body_location": ('Legs1', 'Torso1Legs1'),
@@ -148,6 +154,38 @@ body_location_dict = {
         "body_location": ('Belt', 'BeltExtra', 'AmmoStrap'),
         "table": 'belt',
     },
+    "Neck": {
+        "body_location": ('Neck',),
+        "table": 'generic',
+    },
+    "Necklace": {
+        "body_location": ('Necklace',),
+        "table": 'generic',
+    },
+    "Long necklace": {
+        "body_location": ('Necklace_Long',),
+        "table": 'generic',
+    },
+    "Nose": {
+        "body_location": ('Nose',),
+        "table": 'generic',
+    },
+    "Ears": {
+        "body_location": ('Ears', 'EarTop'),
+        "table": 'generic',
+    },
+    "Fingers": {
+        "body_location": ('Right_MiddleFinger', 'Left_MiddleFinger', 'Right_RingFinger', 'Left_RingFinger'),
+        "table": 'generic',
+    },
+    "Wrists": {
+        "body_location": ('RightWrist', 'LeftWrist'),
+        "table": 'wrist',
+    },
+    "Belly": {
+        "body_location": ('BellyButton',),
+        "table": 'generic',
+    },
     "Other": {
         "body_location": ('Unknown',),
         "table": 'generic',
@@ -195,6 +233,7 @@ def process_item(item_data, item_id):
     body_location = item_data.get("BodyLocation", 'Unknown')
     heading, table_key = get_body_location(body_location)
     columns = table_dict.get(table_key, table_dict["generic"])
+    language_code = translate.get_language_code()
 
     name = item_data.get("DisplayName", 'Unknown')
     page_name = utility.get_page(item_id, name)
@@ -213,7 +252,20 @@ def process_item(item_data, item_id):
         item["weight"] = item_data.get('Weight', '1')
 
     if "body_location" in columns:
-        item["body_location"] = body_location
+        
+        if language_code == 'en':
+            item["body_location"] = f"[[Body location#{body_location}|{body_location}]]"
+        else:
+            item["body_location"] = f"[[Body location/{language_code}#{body_location}|{body_location}]]"
+
+    if "display_time" in columns:
+        if item_data.get("Type") == 'AlarmClockClothing':
+            item["display_time"] = 'True'
+        else:
+            item["display_time"] = '-'
+
+    if "sound_radius" in columns:
+        item["sound_radius"] = item_data.get("SoundRadius", '-')
 
     if "extra_slots" in columns:
         extra_slots = item_data.get("AttachmentsProvided", ['-'])
@@ -279,7 +331,7 @@ def get_items():
 
     for module, module_data in script_parser.parsed_item_data.items():
         for item_type, item_data in module_data.items():
-            if item_data.get("Type") == "Clothing":
+            if item_data.get("Type") in ("Clothing", "AlarmClockClothing"):
                 # filter out blacklisted items and 'Reverse' variants
                 if not item_type.startswith(blacklist) and not item_type.endswith("_Reverse"):
                     if "OBSOLETE" in item_data:
