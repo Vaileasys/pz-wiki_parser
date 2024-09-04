@@ -284,6 +284,29 @@ fabric_type = {
     "Leather": 'Base.LeatherStrips',
 }
 
+
+def convert_to_percentage(value, start_zero=True, percentage=False):
+    if not value or value == '-':
+        return '-'
+    
+    try:
+        value = float(value)
+    except ValueError:
+        return '-'
+    
+    if not percentage:
+        if not start_zero:
+            value -= 1
+        value *= 100
+
+    value = int(round(value))
+    
+    if value > 0:
+        return f"+{value}"
+    else:
+        return f"{value}"
+
+
 def get_body_location(body_location):
     for key, value in body_location_dict.items():
         if body_location in value['body_location']:
@@ -330,10 +353,13 @@ def process_item(item_data, item_id):
         item["extra_slots"] = extra_slots
 
     if "fall_chance" in columns:
-        item["fall_chance"] = item_data.get("ChanceToFall", '-')
+        item["fall_chance"] = convert_to_percentage(item_data.get("ChanceToFall", '-'), True, True)
+
+    if "stomp_power" in columns:
+        item["stomp_power"] = convert_to_percentage(item_data.get("StompPower", '-'), True)
 
     if "have_holes" in columns:
-        item["have_holes"] = item_data.get("CanHaveHoles", '-').upper()
+        item["have_holes"] = item_data.get("CanHaveHoles", '-').capitalize()
 
     if "fabric" in columns:
         fabric_id = fabric_type.get(item_data.get("FabricType"))
@@ -343,43 +369,38 @@ def process_item(item_data, item_id):
             fabric = utility.get_icon_for_item_id(fabric_id)
         item["fabric"] = fabric
 
-    if "stomp_power" in columns:
-        item["stomp_power"] = item_data.get("StompPower", '-')
-
     if "move_speed" in columns:
-        item["move_speed"] = item_data.get("RunSpeedModifier", '-')
+        item["move_speed"] = convert_to_percentage(item_data.get("RunSpeedModifier", '-'), False)
 
     if "attack_speed" in columns:
-        item["attack_speed"] = item_data.get("CombatSpeedModifier", '-')
+        item["attack_speed"] = convert_to_percentage(item_data.get("CombatSpeedModifier", '-'), False)
 
     if "bite_def" in columns:
-        item["bite_def"] = item_data.get("BiteDefense", '-')
+        item["bite_def"] = convert_to_percentage(item_data.get("BiteDefense", '-'), True, True)
 
     if "scratch_def" in columns:
-        item["scratch_def"] = item_data.get("ScratchDefense", '-')
+        item["scratch_def"] = convert_to_percentage(item_data.get("ScratchDefense", '-'), True, True)
 
     if "bullet_def" in columns:
-        item["bullet_def"] = item_data.get("BulletDefense", '-')
+        item["bullet_def"] = convert_to_percentage(item_data.get("BulletDefense", '-'), True, True)
 
     if "neck_def" in columns:
-        item["neck_def"] = item_data.get("NeckProtectionModifier", '-')
+        item["neck_def"] = convert_to_percentage(item_data.get("NeckProtectionModifier", '-'), True)
 
     if "insulation" in columns:
-        item["insulation"] = item_data.get("Insulation", '-')
+        item["insulation"] = convert_to_percentage(item_data.get("Insulation", '-'), True)
 
     if "wind_def" in columns:
-        item["wind_def"] = item_data.get("WindResistance", '-')
+        item["wind_def"] = convert_to_percentage(item_data.get("WindResistance", '-'), True)
 
     if "water_def" in columns:
-        item["water_def"] = item_data.get("WaterResistance", '-')
+        item["water_def"] = convert_to_percentage(item_data.get("WaterResistance", '-'), True)
 
     if "item_id" in columns:
         item["item_id"] = f"{{{{ID|{item_id}}}}}"
     
-
-
-
     return heading, item
+
 
 def get_items():
     blacklist = ("MakeUp_", "ZedDmg_", "Wound_", "Bandage_", "F_Hair_", "M_Hair_", "M_Beard_")
