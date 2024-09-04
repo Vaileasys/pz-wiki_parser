@@ -5,83 +5,83 @@ from core import utility, translate
 body_location_dict = {
     "Long underwear": {
         "body_location": ('Legs1', 'Torso1Legs1'),
-        "table": 'normal',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'torso',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Tank top": {
         "body_location": ('TankTop',),
-        "table": 'normal',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'torso',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "T-shirt": {
         "body_location": ('Tshirt',),
-        "table": 'normal',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'torso',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Short sleeve shirts": {
         "body_location": ('ShortSleeveShirt',),
-        "table": 'normal',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'torso',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Shirts": {
         "body_location": ('Shirt',),
-        "table": 'normal',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'torso',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Sweaters": {
         "body_location": ('Sweater', 'SweaterHat'),
-        "table": 'sweaters',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'torso',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Jackets": {
         "body_location": ('Jacket', 'Jacket_Bulky', 'JacketHat_Bulky'),
-        "table": 'jackets',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'torso',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Suit jackets": {
         "body_location": ('JacketSuit', 'Jacket_Down', 'JacketHat'),
-        "table": 'jackets',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'torso',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Full tops": {
         "body_location": ('BathRobe', 'FullTop'),
-        "table": 'jackets',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'torso',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Outer torso": {
         "body_location": ('TorsoExtra', 'TorsoExtraVest'),
-        "table": 'normal',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'torso',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Legs": {
         "body_location": ('Pants', 'Skirt'),
         "table": 'legs',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'move_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Dresses": {
         "body_location": ('Dress',),
-        "table": 'legs',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'move_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'torso',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Boilersuits": {
         "body_location": ('Boilersuit',),
-        "table": 'legs',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'move_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'torso',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Full suits": {
         "body_location": ('FullSuitHead', 'FullSuit'),
-        "table": 'legs',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'move_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'torso',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Socks": {
         "body_location": ('Socks',),
-        "table": 'normal',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'legs',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Shoes": {
         "body_location": ('Shoes',),
         "table": 'shoes',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'stomp_power', 'move_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
+        "columns": ('icon', 'name', 'weight', 'body_location', 'stomp_power', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Underwear": {
         "body_location": ('Underwear',),
@@ -116,27 +116,27 @@ body_location_dict = {
     "Eyewear": {
         "body_location": ('Eyes', 'LeftEye', 'RightEye'),
         "table": 'eyes',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'fall_chance', 'item_id',)
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fall_chance', 'have_holes', 'item_id',)
     },
     "Masks": {
         "body_location": ('Mask', 'MaskEyes', 'MaskFull'),
-        "table": 'mask',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fall_chance', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'head',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fall_chance', 'have_holes', 'fabric', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Headwear": {
         "body_location": ('FullHat', 'Hat', 'MaskFull'),
-        "table": 'hat',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "table": 'head',
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fall_chance', 'have_holes', 'fabric', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Scarves": {
         "body_location": ('Scarf',),
         "table": 'normal',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Gloves": {
         "body_location": ('Hands',),
         "table": 'normal',
-        "columns": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
+        "columns": ('icon', 'name', 'weight', 'body_location', 'fabric', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',)
     },
     "Belts": {
         "body_location": ('Belt', 'BeltExtra', 'AmmoStrap'),
@@ -162,21 +162,6 @@ table_header_dict = {
 ! Name
 ! [[File:Moodle_Icon_HeavyLoad.png|link=|Encumbrance]]
 ! [[File:UI BodyPart.png|32px|link=|Body location]]
-! [[File:UI BodyPart.png|32px|link=|Body part]]
-! [[File:SewingBox.png|link=|Fabric type]]
-! [[File:UI Bite Protect.png|link=|Bite defense]]
-! [[File:UI Scratch Protect.png|link=|Scratch defense]]
-! [[File:UI Bullet Protect.png|link=|Bullet defense]]
-! [[File:UI Heat Protect.png|link=|Insulation]]
-! [[File:UI Wind Protect.png|link=|Wind resistance]]
-! [[File:UI Wet Protect.png|link=|Water resistance]]
-! Item ID\n''',
-    "sweaters": '''{| class="wikitable theme-red sortable" style="text-align: center;"
-! Icon
-! Name
-! [[File:Moodle_Icon_HeavyLoad.png|link=|Encumbrance]]
-! [[File:UI BodyPart.png|32px|link=|Body location]]
-! [[File:UI BodyPart.png|32px|link=|Body part]]
 ! [[File:SewingBox.png|link=|Fabric type]]
 ! [[File:UI Bite Protect.png|link=|Bite defense]]
 ! [[File:UI Scratch Protect.png|link=|Scratch defense]]
@@ -186,15 +171,14 @@ table_header_dict = {
 ! [[File:UI Wind Protect.png|link=|Wind resistance]]
 ! [[File:UI Wet Protect.png|link=|Water resistance]]
 ! Item ID\n''',
-    "jackets": '''{| class="wikitable theme-red sortable" style="text-align: center;"
+    "torso": '''{| class="wikitable theme-red sortable" style="text-align: center;"
 ! Icon
 ! Name
 ! [[File:Moodle_Icon_HeavyLoad.png|link=|Encumbrance]]
 ! [[File:UI BodyPart.png|32px|link=|Body location]]
-! [[File:UI BodyPart.png|32px|link=|Body part]]
 ! [[File:SewingBox.png|link=|Fabric type]]
-! [[File:UI Speed.png|link=|Movement speed (without <nowiki>=</nowiki> 100%)]]
-! [[File:UI AttackSpeed.png|link=|Attack speed (without <nowiki>=</nowiki> 100%)]]
+! [[File:UI Speed.png|link=|Movement speed]]
+! [[File:UI AttackSpeed.png|link=|Attack speed]]
 ! [[File:UI Bite Protect.png|link=|Bite defense]]
 ! [[File:UI Scratch Protect.png|link=|Scratch defense]]
 ! [[File:UI Bullet Protect.png|link=|Bullet defense]]
@@ -208,9 +192,9 @@ table_header_dict = {
 ! Name
 ! [[File:Moodle_Icon_HeavyLoad.png|link=|Encumbrance]]
 ! [[File:UI BodyPart.png|32px|link=|Body location]]
-! [[File:UI BodyPart.png|32px|link=|Body part]]
 ! [[File:SewingBox.png|link=|Fabric type]]
-! [[File:UI Speed.png|link=|Movement speed (without <nowiki>=</nowiki> 100%)]]
+! [[File:UI Speed.png|link=|Movement speed]]
+! [[File:UI AttackSpeed.png|link=|Attack speed]]
 ! [[File:UI Bite Protect.png|link=|Bite defense]]
 ! [[File:UI Scratch Protect.png|link=|Scratch defense]]
 ! [[File:UI Bullet Protect.png|link=|Bullet defense]]
@@ -223,10 +207,10 @@ table_header_dict = {
 ! Name
 ! [[File:Moodle_Icon_HeavyLoad.png|link=|Encumbrance]]
 ! [[File:UI BodyPart.png|32px|link=|Body location]]
-! [[File:UI BodyPart.png|32px|link=|Body part]]
+! [[File:Image.png|32px|link=|Stomp power]]
 ! [[File:SewingBox.png|link=|Fabric type]]
-! [[File:UI Stomp.png|link=|Stomp Power (barefoot <nowiki>=</nowiki> 100%)]]
-! [[File:UI Speed.png|link=|Movement speed (without <nowiki>=</nowiki> 100%)]]
+! [[File:UI Speed.png|link=|Movement speed]]
+! [[File:UI AttackSpeed.png|link=|Attack speed]]
 ! [[File:UI Bite Protect.png|link=|Bite defense]]
 ! [[File:UI Scratch Protect.png|link=|Scratch defense]]
 ! [[File:UI Bullet Protect.png|link=|Bullet defense]]
@@ -240,31 +224,21 @@ table_header_dict = {
 ! [[File:Moodle_Icon_HeavyLoad.png|link=|Encumbrance]]
 ! [[File:UI BodyPart.png|32px|link=|Body location]]
 ! [[File:Image.png|32px|link=|Fall chance]]
+! [[File:Image.png|32px|link=|Have holes]]
 ! Item ID\n''',
-    "mask": '''{| class="wikitable theme-red sortable" style="text-align: center;"
+    "head": '''{| class="wikitable theme-red sortable" style="text-align: center;"
 ! Icon
 ! Name
 ! [[File:Moodle_Icon_HeavyLoad.png|link=|Encumbrance]]
 ! [[File:UI BodyPart.png|32px|link=|Body location]]
-! [[File:UI BodyPart.png|32px|link=|Body part]]
 ! [[File:Image.png|32px|link=|Fall chance]]
+! [[File:Image.png|32px|link=|Have holes]]
+! [[File:SewingBox.png|link=|Fabric type]]
+! [[File:UI AttackSpeed.png|link=|Attack speed]]
 ! [[File:UI Bite Protect.png|link=|Bite defense]]
 ! [[File:UI Scratch Protect.png|link=|Scratch defense]]
 ! [[File:UI Bullet Protect.png|link=|Bullet defense]]
-! [[File:UI Heat Protect.png|link=|Insulation]]
-! [[File:UI Wind Protect.png|link=|Wind resistance]]
-! [[File:UI Wet Protect.png|link=|Water resistance]]
-! Item ID\n''',
-    "hat": '''{| class="wikitable theme-red sortable" style="text-align: center;"
-! Icon
-! Name
-! [[File:Moodle_Icon_HeavyLoad.png|link=|Encumbrance]]
-! [[File:UI BodyPart.png|32px|link=|Body location]]
-! [[File:UI BodyPart.png|32px|link=|Body part]]
-! [[File:UI AttackSpeed.png|link=|Attack speed (without <nowiki>=</nowiki> 100%)]]
-! [[File:UI Bite Protect.png|link=|Bite defense]]
-! [[File:UI Scratch Protect.png|link=|Scratch defense]]
-! [[File:UI Bullet Protect.png|link=|Bullet defense]]
+! [[File:UI Neck Protect.png|32px|link=|Neck protection modifier]]
 ! [[File:UI Heat Protect.png|link=|Insulation]]
 ! [[File:UI Wind Protect.png|link=|Wind resistance]]
 ! [[File:UI Wet Protect.png|link=|Water resistance]]
@@ -341,9 +315,6 @@ def process_item(item_data, item_id):
     if "body_location" in columns:
         item["body_location"] = body_location
 
-    if "body_part" in columns:
-        item["body_part"] = "Unknown"
-
     if "extra_slots" in columns:
         extra_slots = item_data.get("AttachmentsProvided", ['-'])
         if isinstance(extra_slots, list):
@@ -409,12 +380,11 @@ def get_items():
     for module, module_data in script_parser.parsed_item_data.items():
         for item_type, item_data in module_data.items():
             if item_data.get("Type") == "Clothing":
-                # filter out blacklisted items
-                if not item_type.startswith(blacklist):
+                # filter out blacklisted items and 'Reverse' variants
+                if not item_type.startswith(blacklist) and not item_type.endswith("_Reverse"):
                     if "OBSOLETE" in item_data:
                         continue
                     item_id = f"{module}.{item_type}"
-#                    print(item_id)
                     heading, item = process_item(item_data, item_id)
 
                     # add heading to dict if it hasn't been added yet.
