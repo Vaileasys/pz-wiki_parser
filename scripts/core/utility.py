@@ -85,6 +85,7 @@ def get_item_data_from_id(item_id):
 # gets 'Icon' for list of item_id and formats as wiki image.
 def get_icons_for_item_ids(item_ids):
     parsed_data = script_parser.parsed_item_data
+    language_code = translate.get_language_code()
     if not item_ids:
         return ""
     
@@ -99,13 +100,21 @@ def get_icons_for_item_ids(item_ids):
         except ValueError:
             continue
         icon = parsed_data.get(module, {}).get(item_type, {}).get('Icon', 'Question_On')
-        display_name = parsed_data.get(module, {}).get(item_type, {}).get('DisplayName', 'Unknown')
-        if icon != 'Question_On' and display_name != 'Unknown':
-            icons.append(f"[[File:{icon}.png|link={display_name}{{lcs}}]]")
+        name = parsed_data.get(module, {}).get(item_type, {}).get('DisplayName', 'Unknown')
+        translated_name = translate.get_translation(item_id, 'DisplayName')
+        page = get_page(item_id, name)
+        if icon != 'Question_On' and name != 'Unknown':
+            if language_code == 'en':
+                icons.append(f"[[File:{icon}.png|link={page}|{name}]]")
+            else:
+                icons.append(f"[[File:{icon}.png|link={page}/{language_code}|{translated_name}]]")
     return "".join(icons)
 
+
+# get 'Icon' from an item_id and format as a wiki image.
 def get_icon_for_item_id(item_id):
     parsed_data = script_parser.parsed_item_data
+    language_code = translate.get_language_code()
     if not item_id:
         return ""
     
@@ -113,9 +122,14 @@ def get_icon_for_item_id(item_id):
 
     module, item_type = item_id.split('.')
     icon = parsed_data.get(module, {}).get(item_type, {}).get('Icon', 'Question_On')
-    display_name = parsed_data.get(module, {}).get(item_type, {}).get('DisplayName', 'Unknown')
-    if icon != 'Question_On' and display_name != 'Unknown':
-        icon = (f"[[File:{icon}.png|link={display_name}{{lcs}}]]")
+    name = parsed_data.get(module, {}).get(item_type, {}).get('DisplayName', 'Unknown')
+    translated_name = translate.get_translation(item_id, 'DisplayName')
+    page = get_page(item_id, name)
+    if icon != 'Question_On' and name != 'Unknown':
+        if language_code == 'en':
+            icon = f"[[File:{icon}.png|link={page}|{name}]]"
+        else:
+            icon = f"[[File:{icon}.png|link={page}/{language_code}|{translated_name}]]"
     return icon
 
 
@@ -225,7 +239,7 @@ def get_module_from_item(item_data, property_name):
 
 
 
-# get page name based on item_id uses 'item_id_dictionary.csv'
+# get page name based on item_id using 'item_id_dictionary.csv'
 def get_page(item_id, name="Unknown"):
     dict_csv = 'resources/item_id_dictionary.csv'
     
