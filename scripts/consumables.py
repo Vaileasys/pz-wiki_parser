@@ -92,8 +92,7 @@ def write_to_output(item_data, item_id, output_dir):
                 file.write("\n}}")
 
         except Exception as e:
-            print(f"Error writing file {item_id}.txt: {e}")
-            logging.log_to_file(f"Error writing file {item_id}.txt: {e}")
+            logging.log_to_file(f"Error writing file {item_id}.txt: {e}", True)
 
 
 def process_item(item_data, item_id, output_dir):
