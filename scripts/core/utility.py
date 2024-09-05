@@ -7,6 +7,10 @@ version = version.get_version()
 
 page_mapping = {
     "Axe": "Axe (skill)",
+    "SmallBlunt": "Short Blunt",
+    "Blunt": "Long Blunt",
+    "SmallBlade": "Short Blade",
+    "LongBlade": "Long Blade",
 }
 
 
@@ -135,14 +139,11 @@ def get_model(item_data):
 # returns a formatted skill
 def get_skill_type_mapping(item_data, item_id):
     skill = item_data.get('Categories', item_data.get('SubCategory'))
-    
     if skill is not None:
         if isinstance(skill, str):
             skill = [skill]
-        
         if "Improvised" in skill:
             skill = [cat for cat in skill if cat != "Improvised"]
-        
         if skill:
             if len(skill) > 1:
                 skill = "<br>".join(skill)
@@ -159,18 +160,13 @@ def get_skill_type_mapping(item_data, item_id):
                 link = f"[[{skill_page}]]"
             else:
                 skill_page = page_mapping.get(skill, skill)
-
-            if language_code != "en":
                 lang = f"/{language_code}"
-            else:
-                lang = ""
-            if skill_page != skill_translation:
-                link = f"[[{skill_page}{lang}|{skill_translation}]]"
-            return link
-        else:
-            return "N/A"
-        
-    return
+                if skill_page != skill_translation:
+                    link = f"[[{skill_page}{lang}|{skill_translation}]]"
+                else:
+                    link = f"[[{skill_page}{lang}]]"
+
+            return link if skill_page else "N/A"
 
 
 # format a link
