@@ -13,5 +13,6 @@ resources/*
 # Editor directories and files
 __pycache__/
 .vscode/
+.venv/
 venv/
 .env
