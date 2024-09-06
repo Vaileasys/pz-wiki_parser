@@ -1,7 +1,6 @@
 import os
 import re
-from core import translate
-from core import logging
+from scripts.core import translate, logging
 
 parsed_item_data = ""
 parsed_fixing_data = ""

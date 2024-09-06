@@ -33,11 +33,11 @@ def main():
     script_parser.init()
 
     print("""Choose a script to run.
-    0: All
-    1: Tag images: Outputs all items as a cycling image.
-    2: Tag item list: Outputs a separate table for each tag with a list of items that have it.
-    3: Tag table: Outputs all tags in a single table with a list of items that have it.
-    Q: Quit.""")
+0: All
+1: Tag images - Outputs all items as a cycling image.
+2: Tag item list - Outputs a separate table for each tag with a list of items that have it.
+3: Tag table - Outputs all tags in a single table with a list of items that have it.
+Q: Quit.""")
 
     user_input = input("> ") or "0"
 
