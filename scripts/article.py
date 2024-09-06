@@ -4,7 +4,7 @@ import sys
 import csv
 from difflib import SequenceMatcher
 from tqdm import tqdm
-from core import translate
+from core import translate, utility
 
 # Language dictionary
 LANGUAGE_DATA = {
@@ -36,7 +36,7 @@ LANGUAGE_DATA = {
             "Condition": "Stan",
             "Location": "Lokalizacja",
             "Code": "Kod",
-            "See also": "Zobacz także",
+            "See also": "Zobacz też",
             "Consumable properties": "Właściwości konsumpcyjne",
             "Repairing": "Naprawa",
         },
@@ -286,7 +286,7 @@ def generate_condition(name, category, skill_type, infobox, fixing_dir, language
     condition_text = language_data["condition_text"].format(
         name=name,
         condition_max=condition_max,
-        skill_type=skill_type.lower(),
+        skill_type=skill_type,
         condition_lower_chance=condition_lower_chance
     )
 
