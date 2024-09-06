@@ -1,9 +1,10 @@
 import os
 import chardet
-import script_parser
-from core import logging
+from scripts import script_parser
+from scripts.core import logging, config_manager
 
 language_code = None
+default_language = None
 
 language_codes = {
     'ar': ("Cp1252", "Arabic"),
@@ -61,6 +62,11 @@ translations_lang = {}
 # getter for language code
 def get_language_code():
     global language_code
+    # If language_code isn't defined, we update it
+    if language_code is None:
+        language_code = get_default_language()
+        set_language_code(language_code)
+        print(f"No language code defined, using default language {language_code}.")
     return language_code
 
 
@@ -70,14 +76,35 @@ def set_language_code(new_language_code):
     language_code = new_language_code
 
 
+def update_default_language():
+    """
+    Updates the default language to the latest config entry.
+    Use 'get_default_langauge' instead for returning the default language.
+    
+    :return: Updated default language.
+    """
+    global default_language
+    default_language = config_manager.get_config('default_language')
+    return default_language
+
+
+def get_default_language():
+    global default_language
+    if default_language is None:
+        default_language = update_default_language()
+    return default_language
+
+
 # change language code based on user input
 def change_language():
-    language_code = input("Enter language code (default 'en')\n> ").strip().lower()
+    global language_code
+    default_language = config_manager.get_config('default_language')
+    language_code = input(f"Enter language code (default '{default_language}')\n> ").strip().lower()
     if language_code in language_codes:
         print(f"Language code '{language_code}' selected.")
     else:
-        language_code = "en"
-        print("Unrecognised language code, setting to 'en'")
+        language_code = default_language
+        print(f"Unrecognised language code, setting to {default_language}")
     set_language_code(language_code)
 
     language = language_codes.get(language_code, ("UTF-8", "Unknown"))[1]
@@ -201,11 +228,12 @@ def init_translations():
     global translations_lang
     language_code = change_language()
     translations_en = parse_translation_file('en')
+
     if language_code == 'en':
-        
         translations_lang = translations_en
     else:
         translations_lang = parse_translation_file(language_code)
+
 
 def main():
     init_translations()

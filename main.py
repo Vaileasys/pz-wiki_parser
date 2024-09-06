@@ -1,7 +1,7 @@
 import importlib
 import sys
 import os
-from scripts.core import version
+from scripts.core import version, config_manager, logging
 from scripts import setup
 
 menu_structure = {
@@ -62,10 +62,15 @@ menu_structure = {
 }
 
 settings_structure = {
+    '0': {
+        'name': 'Reset config file',
+        'description': 'Reset the config file to default values.',
+        'module': 'core.config_manager'
+    },
     '1': {
         'name': 'Change version',
         'description': 'Change the game version of the parsed data.',
-        'module': None
+        'module': 'core.version'
     },
     '2': {
         'name': 'Change language',
@@ -78,7 +83,6 @@ settings_structure = {
         'module': 'setup'
     },
 }
-
 
 def display_menu(menu, is_root=False):
     if is_root:
@@ -158,9 +162,6 @@ def navigate_menu(menu, is_root=False):
             elif selected_option['name'] == 'Run First Time Setup':
                 handle_module('scripts.setup')
                 print("\nReturning to the menu...\n")
-            elif selected_option['name'] == 'Change version':
-                change_version()
-                print("\nReturning to the menu...\n")
             elif 'module' in selected_option:
                 handle_module(selected_option['module'])
                 print("\nReturning to the menu...\n")
@@ -171,21 +172,23 @@ def navigate_menu(menu, is_root=False):
 
 
 def check_first_run():
-    output_logging_dir = os.path.join(os.path.dirname(__file__), 'output', 'logging')
-    first_run_flag_file = os.path.join(output_logging_dir, 'first_run_flag')
-    os.makedirs(output_logging_dir, exist_ok=True)
+    first_time_run = config_manager.get_config('first_time_run')
+    # Convert config entry to a boolean
+    if first_time_run == '1':
+        first_time_run = True
+    else:
+        first_time_run = False
 
-    if not os.path.exists(first_run_flag_file):
-        # If the flag file does not exist, it's the first run
+    if not first_time_run:
+        # If the flag is False (0), it's the first run
         choice = input("Would you like to run the first-time setup? (Y/N): ").strip().upper()
         if choice == 'Y':
             setup.main()
-            with open(first_run_flag_file, 'w') as file:
-                file.write("Setup completed.")
+            logging.log_to_file("Setup first time set up completed.")
+
         else:
-            print("Skipping first-time setup.")
-            with open(first_run_flag_file, 'w') as file:
-                file.write("Setup skipped.")
+            logging.log_to_file("Skipping first-time setup.", True)
+        config_manager.set_config('first_time_run', '1')
 
 
 def main():
@@ -195,7 +198,7 @@ def main():
 
     check_first_run()
 
-    print("Welcome to the wiki parser!")
+    print("\nWelcome to the wiki parser!\n")
     navigate_menu(menu_structure, is_root=True)
 
 
