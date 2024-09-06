@@ -1,8 +1,7 @@
 import importlib
 import sys
 import os
-from scripts.core import version, config_manager, logging
-from scripts import setup
+from scripts.core import version, config_manager, logging, setup
 
 menu_structure = {
     '0': {
