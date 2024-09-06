@@ -2,7 +2,7 @@ import os
 import shutil
 import csv
 import script_parser
-from core import utility, translate
+from core import translate, version
 
 """
 This script gets all the items present in a 'scripts' folder and outputs the item id and name to a csv file.
@@ -58,8 +58,8 @@ def main():
             name = item_data.get('DisplayName', 'Unknown')
             data.append([item_id, name])
 
-    version = utility.version
-    output_file = f'items_{version}.csv'
+    game_version = version.get_version()
+    output_file = f'items_{game_version}.csv'
     generate_csv(data, output_file, output_dir)
     output_file = os.path.join(output_dir, output_file)
     
@@ -69,7 +69,7 @@ def main():
         compare_path = os.path.join(output_dir, f"items_{compare_version}.csv")
         print(compare_path)
         if os.path.exists(compare_path):
-            compare_csv(output_file, compare_path, f'{output_dir}/Compared {compare_version} and {version}.csv', f'{output_dir}/{version} new items.txt')
+            compare_csv(output_file, compare_path, f'{output_dir}/Compared {compare_version} and {game_version}.csv', f'{output_dir}/{game_version} new items.txt')
         else:
             print(f"Comparison file 'items_{compare_version}.csv' not found in the output folder.")
     else:

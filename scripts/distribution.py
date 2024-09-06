@@ -3,7 +3,7 @@ import os
 import csv
 import shutil
 from tqdm import tqdm
-from core import utility
+from scripts.core import version
 
 
 def main():
@@ -653,7 +653,7 @@ def process_foraging_file_formatted(file_paths, item_name):
 
 
 def formatting(unique_items, output_path):
-    version = utility.version
+    game_version = version.get_version()
     complete_output_path = os.path.join(output_path, 'complete')
     csv_output_path = os.path.join(output_path, 'csv')
 
