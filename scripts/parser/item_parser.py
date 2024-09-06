@@ -1,6 +1,7 @@
 import os
 import re
 import json
+from scripts.core import translate
 
 # blacklisted item name prefixes
 blacklist_prefix = ["MakeUp_", "ZedDmg_", "Wound_", "Bandage_", "F_Hair_", "M_Hair_", "M_Beard_"]
@@ -36,7 +37,7 @@ def is_blacklisted(item_name, item_data):
 
 
 # Parse an item and its properties
-def parse_item(lines, start_index):
+def parse_item(lines, start_index, module_name):
     global item_counter
     item_dict = {}
     item_name = None
@@ -62,6 +63,7 @@ def parse_item(lines, start_index):
             parts = re.split(r'\s+', line)
             if len(parts) >= 2:
                 item_name = parts[1]
+                item_id = f"{module_name}.{item_name}"
             else:
                 print(f"Warning: Couldn't parse item line: {line}")
                 i += 1
@@ -77,6 +79,13 @@ def parse_item(lines, start_index):
             key = key.strip()
             value = value.strip().rstrip(',')
             
+            if key == 'DisplayName':
+                display_name = translate.get_translation(item_id, 'DisplayName')
+                if display_name == item_id:
+                    display_name = value
+                value = display_name
+
+
             # handle multiple values (separated by ';')
             if ';' in value:
                 value = [v.strip() for v in value.split(';')]
@@ -98,13 +107,10 @@ def parse_module(lines):
     global item_counter
     combined_dict = {}
     module_name = None
-    inside_items_block = False # this is so we don't parse template items
 
     i = 0
-    j = 0
     while i < len(lines):
         line = lines[i].strip()
-        j += 1
 
         # detect the start of a module block
         if re.match(r'^module(\s)', line):
@@ -116,7 +122,7 @@ def parse_module(lines):
         
         # detect the start of an item block
         elif re.match(r'^item(\s)', line): # regex to return 'item' and not any suffixes
-            item_name, item_data, end_index = parse_item(lines, i)
+            item_name, item_data, end_index = parse_item(lines, i, module_name)
             if item_name and module_name and not is_blacklisted(item_name, item_data):
                 item_id = f"{module_name}.{item_name}"
                 combined_dict[item_id] = item_data
