@@ -136,10 +136,9 @@ def get_icon_for_item_id(item_id):
             icon = f"[[File:{icon}.png|link={page}/{language_code}|{translated_name}]]"
     return icon
 
-
 # gets model for item_data as PNG
 def get_model(item_data):
-    model = item_data.get('WeaponSprite', item_data.get('WorldStaticModel', item_data.get('StaticModel', '')))
+    model = item_data.get('WorldStaticModel',item_data.get('WeaponSprite', item_data.get('StaticModel', '')))
     if model == '':
         return ''
     if model.endswith('_Ground'):
