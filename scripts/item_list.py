@@ -61,7 +61,6 @@ def write_to_output(sorted_items):
                 file.write(f"|-\n| {icons_image} || {item_link} || {item_id}\n")
             file.write("|}\n\n")
 
-        file.write(f"==See also==\n*{{{{ll|PZwiki:Tile list}}}}")
     print(f"Output saved to {output_path}")
 
 
