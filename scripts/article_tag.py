@@ -1,6 +1,6 @@
 import os
 import random
-from core import version
+from scripts.core import version
 
 def get_item_list():
     source_dir = 'output/tags/item_list'

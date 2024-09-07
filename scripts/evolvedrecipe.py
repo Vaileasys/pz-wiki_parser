@@ -18,7 +18,7 @@ def main():
         # Sort alphabetically then add 'Name' and 'FoodType' columns
         evolved_recipes = sorted(evolved_recipes)
         evolved_recipes = ['Name'] + ['FoodType'] + evolved_recipes
-        
+
     except Exception as e:
         print(f"An error occurred when getting the heading: {e}")
 
@@ -50,7 +50,7 @@ def main():
                     row.append(value if value is not None else '')
                 
                 writer.writerow(row)
-                print("\nSuccessfully extracted evolved recipe values and food types.")
+            print("\nSuccessfully extracted evolved recipe values and food types.")
 
     except Exception as e:
         print(f"An error occurred: {e}")

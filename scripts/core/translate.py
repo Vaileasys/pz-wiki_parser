@@ -102,7 +102,7 @@ def change_language():
         print(f"Language code '{language_code}' selected.")
     else:
         language_code = default_language
-        print(f"Unrecognised language code, setting to {default_language}")
+        print(f"Unrecognised language code, setting to '{default_language}'")
     set_language_code(language_code)
 
     language = language_codes.get(language_code, ("UTF-8", "Unknown"))[1]
