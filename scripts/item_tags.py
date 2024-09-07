@@ -7,30 +7,27 @@ Can be output in 3 formats:
 """
 
 import os
-import script_parser
-from core import utility
+from scripts.parser import item_parser
+from scripts.core import utility
 
 
 def generate_tags_dict():
     tags_dict = {}
-    for module, module_data in script_parser.parsed_item_data.items():
-        for item_type, item_data in module_data.items():
-            if 'Tags' in item_data:
-                item_id = f"{module}.{item_type}"
-                name = item_data.get('DisplayName')
-                icon = utility.get_icon(item_data, item_id)
-                tags = item_data.get('Tags', [])
-                if isinstance(tags, str):
-                    tags = [tags]
-                for tag in tags:
-                    if tag not in tags_dict:
-                        tags_dict[tag] = []
-                    tags_dict[tag].append({'item_id': item_id, 'icon': icon, 'name': name})
+    for item_id, item_data in item_parser.get_item_data().items():
+        if 'Tags' in item_data:
+            name = item_data.get('DisplayName')
+            icon = utility.get_icon(item_data, item_id)
+            tags = item_data.get('Tags', [])
+            if isinstance(tags, str):
+                tags = [tags]
+            for tag in tags:
+                if tag not in tags_dict:
+                    tags_dict[tag] = []
+                tags_dict[tag].append({'item_id': item_id, 'icon': icon, 'name': name})
     return tags_dict
 
 
 def main():
-    script_parser.init()
 
     print("""Choose a script to run.
 0: All
@@ -63,7 +60,7 @@ Q: Quit.""")
         print("Invalid option. Exiting.")
 
 
-# write each tag's item icons for `cycle-img`
+# Write each tag's item icons for `cycle-img`
 def write_tag_image(tags_dict):
     output_dir = "output/tags/cycle-img/"
     os.makedirs(output_dir, exist_ok=True)
@@ -79,7 +76,7 @@ def write_tag_image(tags_dict):
     print(f"Completed Tag images script. Files can be found in '{output_dir}'")
 
 
-# write a wikitable showing all tags and corresponding items
+# Write a wikitable showing all tags and corresponding items
 def write_tag_table(tags_dict):
     output_dir = "output/tags/"
     os.makedirs(output_dir, exist_ok=True)
@@ -95,7 +92,7 @@ def write_tag_table(tags_dict):
     print(f"Completed Tag table script. File can be found in '{output_file}'")
 
 
-# write each tag item as an item_list
+# Write each tag item as an item_list
 def write_tag_list(tags_dict):
     output_dir = "output/tags/item_list/"
     os.makedirs(output_dir, exist_ok=True)

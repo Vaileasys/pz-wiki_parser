@@ -1,8 +1,7 @@
 import os
-import shutil
 import csv
-import script_parser
-from core import translate, version
+from scripts.parser import item_parser
+from scripts.core import translate, version
 
 """
 This script gets all the items present in a 'scripts' folder and outputs the item id and name to a csv file.
@@ -47,16 +46,13 @@ def compare_csv(file1, file2, output_file, wiki_output_file):
     print(f"Wiki list has been written to {wiki_output_file}")
 
 def main():
-    script_parser.init()
     language_code = translate.get_language_code()
     output_dir = f'output/{language_code}/items_version'
 
     data = []
-    for module, module_data in script_parser.parsed_item_data.items():
-        for item_type, item_data in module_data.items():
-            item_id = f"{module}.{item_type}"
-            name = item_data.get('DisplayName', 'Unknown')
-            data.append([item_id, name])
+    for item_id, item_data in item_parser.get_item_data().items():
+        name = item_data.get('DisplayName', 'Unknown')
+        data.append([item_id, name])
 
     game_version = version.get_version()
     output_file = f'items_{game_version}.csv'

@@ -1,6 +1,6 @@
 import os
-import script_parser
-from core import translate, utility
+from scripts.parser import item_parser
+from scripts.core import translate, utility
 
 # table header for melee weapons
 melee_header = """{| class="wikitable theme-red sortable" style="text-align: center;"
@@ -210,33 +210,30 @@ def get_items():
     melee_skills = {}
     firearm_skills = {}
 
-    for module, module_data in script_parser.parsed_item_data.items():
-        for item_type, item_data in module_data.items():
-            if item_data.get("Type") == "Weapon":
-                item_id = f"{module}.{item_type}"
+    for item_id, item_data in item_parser.get_item_data().items():
+        if item_data.get("Type") == "Weapon":
 
-                if item_data.get("Categories"):
-                    skill, item = process_item_melee(item_data, item_id)
+            if item_data.get("Categories"):
+                skill, item = process_item_melee(item_data, item_id)
 
-                    if skill not in melee_skills:
-                        melee_skills[skill] = []
-                    melee_skills[skill].append(item)
+                if skill not in melee_skills:
+                    melee_skills[skill] = []
+                melee_skills[skill].append(item)
 
-                elif item_data.get("SubCategory") == "Firearm":
-                    skill, item = process_item_firearm(item_data, item_id)
+            elif item_data.get("SubCategory") == "Firearm":
+                skill, item = process_item_firearm(item_data, item_id)
 
-                    if skill not in firearm_skills:
-                        firearm_skills[skill] = []
-                    firearm_skills[skill].append(item)
+                if skill not in firearm_skills:
+                    firearm_skills[skill] = []
+                firearm_skills[skill].append(item)
 
-                # TODO: add explosives
+            # TODO: add explosives
 
     write_items_to_file(melee_skills, melee_header, 'melee')
     write_items_to_file(firearm_skills, firearm_header, 'firearm')
 
 
 def main():
-    script_parser.init()
     get_items()
 
 

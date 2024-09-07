@@ -1,17 +1,17 @@
-import script_parser
+from scripts.parser import item_parser
 
 
 def property_list(property_name):
     sorted_properties = {}
 
-    for module, module_data in script_parser.parsed_item_data.items():
-        for item_type, type_data in module_data.items():
-            if property_name in type_data:
-                value = type_data[property_name]
-                display_category = type_data.get('DisplayCategory', 'Other')
-                if display_category not in sorted_properties:
-                    sorted_properties[display_category] = []
-                sorted_properties[display_category].append(value)
+    parsed_items = item_parser.get_item_data()
+    for item_id, item_data in parsed_items.items():
+        if property_name in item_data:
+            value = item_data[property_name]
+            display_category = item_data.get('DisplayCategory', 'Other')
+            if display_category not in sorted_properties:
+                sorted_properties[display_category] = []
+            sorted_properties[display_category].append(value)
 
     return sorted_properties
 
@@ -26,8 +26,6 @@ def save_property_list_to_file(sorted_properties, output_file):
 
 
 def main():
-    script_parser.init()
-
     while True:
         property_name = input("Enter a property or Q to quit:\n> ").strip()
 
@@ -39,7 +37,7 @@ def main():
             break
         print(f"No property found for '{property_name}'")
 
-    output_file = 'output/output.txt'
+    output_file = 'output/property_list.txt'
     save_property_list_to_file(sorted_properties, output_file)
     print(f"Property values for '{property_name}' organized by 'DisplayCategory' saved to {output_file}")
 

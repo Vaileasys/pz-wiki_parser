@@ -1,17 +1,16 @@
 import os
 import shutil
-import script_parser
-from core import logging, translate
+from scripts.parser import item_parser
+from scripts.core import logging, translate
 
 
 def get_item():
     while True:
-        item_id = input("Enter an item id\n> ")
-        for module, module_data in script_parser.parsed_item_data.items():
-            for item_type, item_data in module_data.items():
-                if f"{module}.{item_type}" == item_id:
-                    return item_data, item_id
-        print(f"No item found for '{item_id}', please try again.")
+        query_item_id = input("Enter an item id\n> ")
+        for item_id, item_data in item_parser.get_item_data().items():
+            if item_id == query_item_id:
+                return item_data, query_item_id
+        print(f"No item found for '{query_item_id}', please try again.")
 
 
 def get_icon(item_data, variant=""):
@@ -104,14 +103,11 @@ def automatic_extraction(output_dir):
         shutil.rmtree(output_dir)
     os.makedirs(output_dir)
 
-    for module, module_data in script_parser.parsed_item_data.items():
-        for item_type, item_data in module_data.items():
-            item_id = f"{module}.{item_type}"
-            process_item(item_data, item_id, output_dir)
+    for item_id, item_data in item_parser.get_item_data().items():
+        process_item(item_data, item_id, output_dir)
 
 
 def main():
-    script_parser.init()
     language_code = translate.get_language_code()
     output_dir = f'output/{language_code}/consumables'
 

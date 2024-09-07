@@ -1,18 +1,11 @@
 from tqdm import tqdm
 import os
-import script_parser
-from core import translate, utility, logging
+from scripts.parser import item_parser
+from scripts.core import translate, utility, logging
 
 filters = {
-    'MakeUp_': (True,),
-    'ZedDmg_': (True,),
-    'Wound_': (True,),
-    'Bandage_': (True,),
-    'F_Hair_': (True,),
-    'M_Hair_': (True,),
-    'M_Beard_': (True,),
-    'obsolete': (True, 'OBSOLETE', 'true'),
-#    'ExampleFilter': (False, 'PropertyName', 'PropertyValue')
+#    'ExampleItemPrefix': (True,),
+#    'ExampleProperty': (False, 'PropertyName', 'PropertyValue')
 }
 
 # store category translations in a dict to improve efficiency
@@ -61,7 +54,6 @@ def write_to_output(sorted_items):
                 file.write(f"|-\n| {icons_image} || {item_link} || {item_id}\n")
             file.write("|}\n\n")
 
-        file.write(f"==See also==\n*{{{{ll|PZwiki:Tile list}}}}")
     print(f"Output saved to {output_path}")
 
 
@@ -69,89 +61,87 @@ def item_list():
     sorted_items = {}
     icon_dir = 'resources/icons/'
 
-    for module, module_data in script_parser.parsed_item_data.items():
-        for item_type, item_data in tqdm(module_data.items(), desc=f"Processing {module} module items"):
-            # Check if 'DisplayCategory' property exists for the item
-            if 'DisplayCategory' in item_data:
-                display_category = item_data.get('DisplayCategory', 'Other')
-                display_category = translate_category(display_category)
-                
-                item_id = f"{module}.{item_type}"
-                
-                icons = []
-                
-                # check if 'IconsForTexture' property exists and use it for icon
-                icons_for_texture = []
-                if 'IconsForTexture' in item_data:
-                    icon = "Question_On"
-                    icons_for_texture = item_data.get('IconsForTexture', [''])
-                    if isinstance(icons_for_texture, str):
-                        icons_for_texture = [icons_for_texture]
-                    icons = [icon.strip() for icon in icons_for_texture]
-                else:
-                    # get 'Icon' property
-                    icon = utility.get_icon(item_data, item_id)
-                    if icon != "default":
-                        icons.append(icon)
-
-                if icon == "Question_On":
-                    if icons_for_texture:
-                        icons = [icon.strip() for icon in icons_for_texture]
-                
-                # check if icon has variants
-                icon_variants = ['Rotten', 'Spoiled', 'Cooked', '_Cooked', 'Burnt', 'Overdone']
-                for variant in icon_variants:
-                    variant_icon = f"{icon}{variant}.png"
-                    if os.path.exists(os.path.join(icon_dir, variant_icon)):
-                        icons.append(icon + variant)
-
-                # check if 'WorldObjectSprite' property exists and use it for icon
-                if icon == "default":
-                    icon = item_data.get('WorldObjectSprite', ['Flatpack'])
+    for item_id, item_data in tqdm(item_parser.get_item_data().items(), desc="Processing items"):
+        # Check if 'DisplayCategory' property exists for the item
+        if 'DisplayCategory' in item_data:
+            display_category = item_data.get('DisplayCategory', 'Other')
+            display_category = translate_category(display_category)
+            module, item_name = item_id.split('.', 1)
+            
+            icons = []
+            
+            # Check if 'IconsForTexture' property exists and use it for icon
+            icons_for_texture = []
+            if 'IconsForTexture' in item_data:
+                icon = "Question_On"
+                icons_for_texture = item_data.get('IconsForTexture', [''])
+                if isinstance(icons_for_texture, str):
+                    icons_for_texture = [icons_for_texture]
+                icons = [icon.strip() for icon in icons_for_texture]
+            else:
+                # Get 'Icon' property
+                icon = utility.get_icon(item_data, item_id)
+                if icon != "default":
                     icons.append(icon)
+
+            if icon == "Question_On":
+                if icons_for_texture:
+                    icons = [icon.strip() for icon in icons_for_texture]
+            
+            # Check if icon has variants
+            icon_variants = ['Rotten', 'Spoiled', 'Cooked', '_Cooked', 'Burnt', 'Overdone']
+            for variant in icon_variants:
+                variant_icon = f"{icon}{variant}.png"
+                if os.path.exists(os.path.join(icon_dir, variant_icon)):
+                    icons.append(icon + variant)
+
+            # Check if 'WorldObjectSprite' property exists and use it for icon
+            if icon == "default":
+                icon = item_data.get('WorldObjectSprite', ['Flatpack'])
+                icons.append(icon)
+            
+            # We don't need to translate again if language code is 'en'
+            translated_item_name = item_data.get('DisplayName', [''])
+            page_name = utility.get_page(item_id)
+            if page_name == 'Unknown':
+                page_name = translated_item_name
+            if translate.get_language_code() != 'en':
+                translated_item_name = translate.get_translation(item_id, "DisplayName")
+            
+            skip_item = False
+
+            for filter_key, conditions in filters.items():
+                enabled = conditions[0]
+                if not enabled:
+                    continue
                 
-                # we don't need to translate again if language code is 'en'
-                translated_item_name = item_data.get('DisplayName', [''])
-                page_name = utility.get_page(item_id)
-                if page_name == 'Unknown':
-                    page_name = translated_item_name
-                if translate.get_language_code() != 'en':
-                    translated_item_name = translate.get_translation(item_id, "DisplayName")
-                
-                skip_item = False
-
-                for filter_key, conditions in filters.items():
-                    enabled = conditions[0]
-                    if not enabled:
-                        continue
-
-                    if item_type.startswith(filter_key):
-                        skip_item = True
-                        continue
-
-                    if len(conditions) > 1:
-                        property_name, property_value = conditions[1:]
-                        property_filter = item_data.get(property_name)
-                        if property_filter is not None and property_filter.lower() == property_value.lower():
-                            skip_item = True
-                            break
-                    
-                if skip_item:
+                if item_name.startswith(filter_key):
+                    skip_item = True
                     continue
 
-                # add item to the sorted dictionary
-                if display_category is None:
-                    display_category = 'Unknown'
-                if display_category not in sorted_items:
-                    sorted_items[display_category] = []
-                sorted_items[display_category].append((page_name, translated_item_name, icons, item_id))
+                if len(conditions) > 1:
+                    property_name, property_value = conditions[1:]
+                    property_filter = item_data.get(property_name)
+                    if property_filter is not None and property_filter.lower() == property_value.lower():
+                        skip_item = True
+                        break
+                
+            if skip_item:
+                continue
+
+            # Add item to the sorted dictionary
+            if display_category is None:
+                display_category = 'Unknown'
+            if display_category not in sorted_items:
+                sorted_items[display_category] = []
+            sorted_items[display_category].append((page_name, translated_item_name, icons, item_id))
     write_to_output(sorted_items)
 
 
 def filters_tree():
     while True:
         print("Current filters:")
-        # print a list of filters
+        # Print a list of filters
         for filter_name, enabled in filters.items():
             print(f"{filter_name}: {'Enabled' if enabled else 'Disabled'}")
         filter_input = input("Enter filter name to toggle, 'add' to create a new filter or 'done' to exit:\n> ")
@@ -159,7 +149,7 @@ def filters_tree():
         if filter_input in filters:
             filters[filter_input] = not filters[filter_input]
 
-        # user can add a new filter
+        # User can add a new filter
         elif filter_input == "add":
             filter_name = input("Enter a name for the filter:\n> ")
             property_name = input("Enter the property name for the filter (e.g., 'Type'):\n> ")
@@ -174,7 +164,6 @@ def filters_tree():
 
 
 def main():
-    script_parser.init()
     while True:
         user_input = input("1: Run script\n2: Set up a filter\nQ: Quit\n> ").lower()
         if user_input == "1":

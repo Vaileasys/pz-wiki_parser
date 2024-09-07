@@ -1,8 +1,9 @@
 import os
 import csv
-import script_parser
-from core import translate,logging, version
+from scripts.parser import item_parser
+from scripts.core import translate, logging, version
 
+# @deprecated: Use version.get_version() directly instead.
 version = version.get_version()
 
 page_mapping = {
@@ -77,18 +78,15 @@ def get_icons(item_data):
 
 
 # gets parsed item data for an item id
-def get_item_data_from_id(item_id):
-    current_module, current_item_type = item_id.split('.')
-    for module, module_data in script_parser.parsed_item_data.items():
-        if module == current_module:
-            for item_type, item_data in module_data.items():
-                if item_type == current_item_type:
-                    return item_data
+def get_item_data_from_id(query_item_id):
+    for item_id, item_data in item_parser.get_item_data().items():
+        if query_item_id == item_id:
+            return item_data
 
 
 # gets 'Icon' for list of item_id and formats as wiki image.
 def get_icons_for_item_ids(item_ids):
-    parsed_data = script_parser.parsed_item_data
+    all_item_data = item_parser.get_item_data()
     language_code = translate.get_language_code()
     if not item_ids:
         return ""
@@ -99,12 +97,9 @@ def get_icons_for_item_ids(item_ids):
     icons = []
 
     for item_id in item_ids:
-        try:
-            module, item_type = item_id.split('.')
-        except ValueError:
-            continue
-        icon = parsed_data.get(module, {}).get(item_type, {}).get('Icon', 'Question_On')
-        name = parsed_data.get(module, {}).get(item_type, {}).get('DisplayName', 'Unknown')
+        item_data = all_item_data.get(item_id, {})
+        icon = item_data.get('Icon', 'Question_On')
+        name = item_data.get('DisplayName', 'Unknown')
         translated_name = translate.get_translation(item_id, 'DisplayName')
         page = get_page(item_id, name)
         if icon != 'Question_On' and name != 'Unknown':
@@ -117,16 +112,16 @@ def get_icons_for_item_ids(item_ids):
 
 # get 'Icon' from an item_id and format as a wiki image.
 def get_icon_for_item_id(item_id):
-    parsed_data = script_parser.parsed_item_data
+    parsed_data = item_parser.get_item_data()
     language_code = translate.get_language_code()
     if not item_id:
         return ""
     
     icon = ""
 
-    module, item_type = item_id.split('.')
-    icon = parsed_data.get(module, {}).get(item_type, {}).get('Icon', 'Question_On')
-    name = parsed_data.get(module, {}).get(item_type, {}).get('DisplayName', 'Unknown')
+    module, item_name = item_id.split('.')
+    icon = parsed_data.get(module, {}).get(item_name, {}).get('Icon', 'Question_On')
+    name = parsed_data.get(module, {}).get(item_name, {}).get('DisplayName', 'Unknown')
     translated_name = translate.get_translation(item_id, 'DisplayName')
     page = get_page(item_id, name)
     if icon != 'Question_On' and name != 'Unknown':
@@ -219,15 +214,16 @@ def format_br(values):
     
 
 # find a module for an item and return item_id (used for property values that don't define the module)
+# TODO: check if this is still needed with the new parser (item_id)
 def get_module_from_item(item_data, property_name):
-    item_types = item_data.get(property_name, [])
+    item_names = item_data.get(property_name, [])
     item_ids = {}
     
-    for item_type in item_types:
-        item_type = item_type.strip()
-        for module, module_data in script_parser.parsed_item_data.items():
-            if item_type in module_data:
-                item_ids[item_type] = f"{module}.{item_type}"
+    for item_name in item_names:
+        item_name = item_name.strip()
+        for item_id, item_data in item_parser.get_item_data().items():
+            if item_name == item_id.split('.', 1)[1]:
+                item_ids[item_name] = item_id
                 break
 
     return item_ids

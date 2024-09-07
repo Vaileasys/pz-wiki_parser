@@ -1,37 +1,53 @@
-import script_parser
+from scripts.parser import item_parser
 
 
-# gets the value of a property for a specific item
-def get_property_value(item_type, property_name=None):
-    for module, module_data in script_parser.parsed_item_data.items():
-        if item_type in module_data:
-            block = module_data[item_type]
-            if property_name and property_name in block:
-                property_value = block.get(property_name)
-                print(f"'{property_name}' value found for '{module}.{item_type}':", property_value)
+# Gets the value of a property for a specific item
+def get_property_value(query_item_id, property_name):
+    for item_id, item_data in item_parser.get_item_data().items():
+        if query_item_id == item_id:
+            if property_name in item_data:
+                property_value = item_data.get(property_name)
+                print(f"{query_item_id} {property_name} is: {property_value}")
                 return property_value
             else:
-                print("Property not found")
+                print(f"Property '{property_name}' not found")
                 return None
     return None
 
 
+# Takes user input 
 def main():
-    script_parser.init()
-    # user defines an item and property then runs the get_property_value function
-    while True:
-        item_type = input("Enter the type or Q to quit: \n> ")
-        if item_type.lower() == 'q':
-            return
-        if any(item_type in module_data for module_data in script_parser.parsed_item_data.values()):
-            break
-        print(f"No type found for {item_type}")
+    found = False
 
+    # Enter item id and compares with parsed data
+    while not found:
+        parsed_item_data = item_parser.get_item_data()
+        user_input = input("Enter the item ID (Q to quit): \n> ")
+        if user_input.lower() == 'q':
+            return
+        query_item = user_input.split('.')
+        # Item ID
+        if len(query_item) == 2:
+            item_id = user_input
+            if user_input in parsed_item_data:
+                found = True
+        # Item name only, not the module
+        elif len(query_item) == 1:
+            item_name = query_item[0]
+            for key in parsed_item_data:
+                if key.split('.')[1] == item_name:
+                    item_id = key
+                    found = True
+                    break
+        if found is False:
+            print(f"\nNo type found for '{user_input}'")
+    
+    # Enter property name
     while True:
-        property_name = input("Enter the property or Q to quit: \n> ")
+        property_name = input("Enter the property (Q to quit): \n> ")
         if property_name.lower() == 'q':
             return
-        get_property_value(item_type, property_name)
+        get_property_value(item_id, property_name)
 
 
 if __name__ == "__main__":
