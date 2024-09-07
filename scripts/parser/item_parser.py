@@ -3,11 +3,11 @@ import re
 import json
 from scripts.core import translate
 
-# blacklisted item name prefixes
+# Blacklisted item name prefixes
 blacklist_prefix = ["MakeUp_", "ZedDmg_", "Wound_", "Bandage_", "F_Hair_", "M_Hair_", "M_Beard_"]
-# blacklisted item property-value pairs
+# Blacklisted item property-value pairs
 blacklist_property = {
-    "OBSOLETE": ['true'] # multiple values can be defined for a single property
+    "OBSOLETE": ['true'] # Multiple values can be defined for a single property
 }
 
 item_counter = 0
@@ -23,11 +23,11 @@ def get_item_data():
 
 # Check if item is blacklisted
 def is_blacklisted(item_name, item_data):
-    # check if item name has a blacklisted prefix
+    # Check if item name has a blacklisted prefix
     if any(item_name.startswith(prefix) for prefix in blacklist_prefix):
         return True
 
-    # check if a property and value is blacklisted
+    # Check if a property and value is blacklisted
     for prop, blacklisted_values in blacklist_property.items():
         for item_prop, value in item_data.items():
             if item_prop.lower() == prop.lower():
@@ -47,12 +47,12 @@ def parse_item(lines, start_index, module_name):
     while i < len(lines):
         line = lines[i].strip()
 
-        # skip empty line
+        # Skip empty line
         if not line:
             i += 1
             continue
 
-        # skip comments (/* */)
+        # Skip comments (/* */)
         if '/*' in line:
             while '*/' not in line and i < len(lines):
                 i += 1
@@ -60,7 +60,7 @@ def parse_item(lines, start_index, module_name):
             i += 1
             continue
 
-        # start item block
+        # Start item block
         if re.match(r'^item(\s)', line):
             parts = re.split(r'\s+', line)
             if len(parts) >= 2:
@@ -71,33 +71,33 @@ def parse_item(lines, start_index, module_name):
                 i += 1
                 continue
         
-        # close current item block
+        # Close current item block
         elif line == '}':
             return item_name, item_dict, i
         
-        # get the item's properties
+        # Get the item's properties
         elif '=' in line:
-            key, value = line.split('=', 1)
-            key = key.strip()
-            value = value.strip().rstrip(',')
+            property_key, property_value = line.split('=', 1)
+            property_key = property_key.strip()
+            property_value = property_value.strip().rstrip(',')
             
-            if key == 'DisplayName':
+            if property_key == 'DisplayName':
                 display_name = translate.get_translation(item_id, 'DisplayName')
                 if display_name == item_id:
-                    display_name = value
-                value = display_name
+                    display_name = property_value
+                property_value = display_name
+        
+            # Handle properties (separated by ';') with key-value pairs (separated by ':')
+            if ':' in property_value:
+                property_value = {k.strip(): v.strip().split('|') if '|' in v else v.strip()
+                    for k, v in (pair.split(':') for pair in property_value.split(';'))}
 
-
-            # handle multiple values (separated by ';')
-            if ';' in value:
-                value = [v.strip() for v in value.split(';')]
+            # Handle multiple values (separated by ';')
+            elif ';' in property_value:
+                property_value = [v.strip() for v in property_value.split(';')]
             
-            # handle properties (separated by ';') with key-value pairs (separated by ':')
-            elif ':' in value:
-                value = {k.strip(): v.strip() for k, v in (pair.split(':') for pair in value.split(';'))}
-            
-            # add property and value to dictionary
-            item_dict[key] = value
+            # Add property and value to dictionary
+            item_dict[property_key] = property_value
 
         i += 1
     
@@ -114,7 +114,7 @@ def parse_module(lines):
     while i < len(lines):
         line = lines[i].strip()
 
-        # detect the start of a module block
+        # Detect the start of a module block
         if re.match(r'^module(\s)', line):
             parts = line.split(' ')
             if len(parts) >= 2:
@@ -122,7 +122,7 @@ def parse_module(lines):
             else:
                 print(f"Warning: Couldn't parse module line: {line}")
         
-        # detect the start of an item block
+        # Detect the start of an item block
         elif re.match(r'^item(\s)', line): # regex to return 'item' and not any suffixes
             item_name, item_data, end_index = parse_item(lines, i, module_name)
             if item_name and module_name and not is_blacklisted(item_name, item_data):
