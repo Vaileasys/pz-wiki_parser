@@ -16,6 +16,8 @@ parsed_data = {}
 
 def get_item_data():
     global parsed_data
+    if parsed_data == {}:
+        init()
     return parsed_data
 
 
