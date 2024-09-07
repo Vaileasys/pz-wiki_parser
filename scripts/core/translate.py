@@ -64,9 +64,7 @@ def get_language_code():
     global language_code
     # If language_code isn't defined, we update it
     if language_code is None:
-        language_code = get_default_language()
-        set_language_code(language_code)
-        print(f"No language code defined, using default language {language_code}.")
+        init_translations()
     return language_code
 
 
