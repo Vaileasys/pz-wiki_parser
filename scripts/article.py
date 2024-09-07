@@ -49,6 +49,26 @@ LANGUAGE_DATA = {
             "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
         ),
     },
+    "tr": {
+        "intro_template": "'''{lowercase_name}''' [[Project Zomboid/tr|Project Zomboid]]'de bir [[Item/tr|eşyadır]].",
+        "headers": {
+            "Usage": "Kullanım",
+            "Condition": "Sağlamlık",
+            "Location": "Dağılım",
+            "Code": "Kod",
+            "See also": "Ayrıca bakınız",
+            "Consumable properties": "Tüketilebilir nitelikler",
+            "Repairing": "Onarma",
+        },
+        "help_text": "Bu bölüme bilgi ekleyerek PZviki'ye destek olun.",
+        "translate_reason": "Oyunun çeviri dosyalaranı kullanarak çevrildi.",
+        "condition_categories": ["Silah", "Alet / Silah"],
+        "condition_text": (
+            "{name}, {condition_max} azami sağlamlığa sahiptir. Bozulma oranı {skill_type} ve [[maintenance/tr|onarım]] [[skill/tr|becerilerine]] bağlıdır. [[durability|Sağlamlığın]] düşme ihtimali şu formülü kullanarak basitleştirilebilir: "
+            "<code>1/(35 + maintenanceMod &times; 2)</code>. Buradaki \"maintenanceMod\", {skill_type} ve onarım becerilerini kullanarak hesaplanır.<br>"
+            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
+        ),
+    },
 }
 
 
