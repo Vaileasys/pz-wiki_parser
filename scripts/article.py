@@ -4,7 +4,7 @@ import sys
 import csv
 from difflib import SequenceMatcher
 from tqdm import tqdm
-from scripts.core import translate
+from core import translate, utility
 
 # Language dictionary
 LANGUAGE_DATA = {
@@ -36,7 +36,7 @@ LANGUAGE_DATA = {
             "Condition": "Stan",
             "Location": "Lokalizacja",
             "Code": "Kod",
-            "See also": "Zobacz także",
+            "See also": "Zobacz też",
             "Consumable properties": "Właściwości konsumpcyjne",
             "Repairing": "Naprawa",
         },
@@ -46,6 +46,26 @@ LANGUAGE_DATA = {
         "condition_text": (
             "{name} ma maksymalny stan {condition_max}. Na szybkość degradacji mają  wpływ [[Skill/pl|umiejętności]] {skill_type} i umiejętność [[Maintenance/pl|konserwacja]]. Szansa na zmniejszenie  [[Condition/pl|stanu]] może być uproszczona do następującej formuły: "
             "<code>1 na (35 + maintenanceMod &times; 2)</code>. Gdzie \"maintenanceMod\" jest obliczony używając {skill_type} i umiejętności konserwacji.<br>"
+            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
+        ),
+    },
+    "tr": {
+        "intro_template": "'''{lowercase_name}''' [[Project Zomboid/tr|Project Zomboid]]'de bir [[Item/tr|eşyadır]].",
+        "headers": {
+            "Usage": "Kullanım",
+            "Condition": "Sağlamlık",
+            "Location": "Dağılım",
+            "Code": "Kod",
+            "See also": "Ayrıca bakınız",
+            "Consumable properties": "Tüketilebilir nitelikler",
+            "Repairing": "Onarma",
+        },
+        "help_text": "Bu bölüme bilgi ekleyerek PZviki'ye destek olun.",
+        "translate_reason": "Oyunun çeviri dosyalaranı kullanarak çevrildi.",
+        "condition_categories": ["Silah", "Alet / Silah"],
+        "condition_text": (
+            "{name}, {condition_max} azami sağlamlığa sahiptir. Bozulma oranı {skill_type} ve [[maintenance/tr|onarım]] [[skill/tr|becerilerine]] bağlıdır. [[durability|Sağlamlığın]] düşme ihtimali şu formülü kullanarak basitleştirilebilir: "
+            "<code>1/(35 + maintenanceMod &times; 2)</code>. Buradaki \"maintenanceMod\", {skill_type} ve onarım becerilerini kullanarak hesaplanır.<br>"
             "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
         ),
     },
@@ -286,7 +306,7 @@ def generate_condition(name, category, skill_type, infobox, fixing_dir, language
     condition_text = language_data["condition_text"].format(
         name=name,
         condition_max=condition_max,
-        skill_type=skill_type.lower(),
+        skill_type=skill_type,
         condition_lower_chance=condition_lower_chance
     )
 
