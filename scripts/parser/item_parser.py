@@ -79,7 +79,7 @@ def parse_item(lines, start_index, module_name):
         elif '=' in line:
             property_key, property_value = line.split('=', 1)
             property_key = property_key.strip()
-            property_value = property_value.strip().rstrip(',')
+            property_value = property_value.rstrip(',').strip()
             
             if property_key == 'DisplayName':
                 display_name = translate.get_translation(item_id, 'DisplayName', 'en')
