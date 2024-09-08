@@ -11,6 +11,7 @@ filters = {
 # store category translations in a dict to improve efficiency
 categories = {}
 
+header = "! <<icon>> !! <<name>> !! <<item_id>>"
 
 # checks if a category exists in the dict before trying to translate
 def translate_category(category, property="DisplayCategory"):
@@ -43,8 +44,10 @@ def write_to_output(sorted_items):
             lc_subpage = f"/{language_code}"
 
         for display_category in sorted(sorted_items.keys()):
+            translated_header = translate.get_wiki_translation(header)
             file.write(f"=={display_category}==\n")
-            file.write("{| class=\"wikitable theme-blue\"\n! Icon !! Name !! Item ID\n")
+            file.write('{| class="wikitable theme-blue"\n')
+            file.write(f"{translated_header}\n")
             for page_name, translated_item_name, icons, item_id in sorted_items[display_category]:
                 icons_image = ' '.join([f"[[File:{icon}.png|32x32px]]" for icon in icons])
                 item_link = f"[[{page_name}]]"

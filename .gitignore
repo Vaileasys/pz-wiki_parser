@@ -10,6 +10,15 @@ resources/*
 !resources/icons.csv
 !resources/item_id_dictionary.csv
 
+## Translations
+resources/Translate/*
+resources/Translate/*/*
+!resources/Translate/
+!resources/Translate/EN/
+!resources/Translate/EN/Wiki_EN.json
+!resources/Translate/TR/
+!resources/Translate/TR/Wiki_TR.json
+
 # Misc
 config.ini
 
