@@ -1,23 +1,9 @@
 import os
 import re
-from scripts.core import translate, logging_file
+from scripts.core import logging_file
 
-parsed_item_data = ""
 parsed_fixing_data = ""
 scripts_dir = "resources/scripts"
-# TODO: add blacklist to skip when parsing
-blacklist = {
-    "MakeUp_": ('type',),
-    "ZedDmg_": ('type',),
-    "Wound_": ('type',),
-    "Bandage_": ('type',),
-    "F_Hair_": ('type',),
-    "M_Hair_": ('type',),
-    "M_Beard_": ('type',),
-    "OBSOLETE": ('property', 'true'),
-    "imports": ('block',),
-    "template": ('block',),
-}
 
 # parse fixing properties
 def get_fixing_properties(line, data, current_module, current_fixing):
@@ -74,32 +60,8 @@ def get_fixing_properties(line, data, current_module, current_fixing):
     return
 
 
-# parse item properties
-def get_item_properties(line, data, current_module, current_item):
-    # get properties
-    if '=' in line and current_module and current_item:
-        prop, value = line.split('=', 1)
-        prop = prop.strip()
-        value = value.rstrip(',').strip()
-
-        if prop == 'DisplayName':
-            item_id = f"{current_module}.{current_item}"
-            item_name = translate.get_translation(item_id, 'DisplayName', 'en')
-            if item_name is not None:
-                data[current_module][current_item][prop] = item_name
-            else:
-                data[current_module][current_item][prop] = value
-        else:
-            # check for ';' for fourth level
-            if ';' in value:
-                data[current_module][current_item][prop] = value.split(';')
-            else:
-                data[current_module][current_item][prop] = value
-    return
-
-
 # parse each line and add to a "data" dictionary
-def parse_file(file_path, data, block_type="item"):
+def parse_file(file_path, data, block_type="fixing"):
     current_module = None
     current_type = None
     block = None
@@ -172,12 +134,7 @@ def parse_file(file_path, data, block_type="item"):
                 indent_level -= 1
                 block = None
                 
-            # get item properties
-            elif block == "item" and indent_level == 2:
-                if not deprecated_message:
-                    deprecated_message = True
-                    print("Note: 'script_parser.py' is currently deprecated for parsing items, please use 'item_parser.py' instead.")
-                get_item_properties(line, data, current_module, current_type)
+
             elif block == "fixing" and indent_level == 2:
                 get_fixing_properties(line, data, current_module, current_type)
                 
@@ -186,21 +143,17 @@ def parse_file(file_path, data, block_type="item"):
 
 # defines the files to be parsed - will parse every txt file in the "scripts_dir"
 def parse_files_in_folder():
-    parsed_item_data = {}
     parsed_fixing_data = {}
-    total_item_counter = 0
     total_fixing_counter = 0
     for root, dirs, files in os.walk(scripts_dir):
         for file_name in files:
             file_path = os.path.join(root, file_name)
             if file_name.endswith('.txt'):
                 file_path = os.path.join(root, file_name)
-                parsed_item_data, item_counter = parse_file(file_path, parsed_item_data)
                 parsed_fixing_data, fixing_counter = parse_file(file_path, parsed_fixing_data, "fixing")
-                total_item_counter += item_counter
                 total_fixing_counter += fixing_counter
             
-    return parsed_item_data, parsed_fixing_data, total_item_counter, total_fixing_counter
+    return parsed_fixing_data, total_fixing_counter
 
 
 # for debugging - outputs all the parsed data into a txt file
@@ -246,12 +199,9 @@ def output_parsed_data_to_txt(data, output_file):
 
 # initialise parser
 def init():
-    global parsed_item_data
     global parsed_fixing_data
-    parsed_item_data, parsed_fixing_data, total_item_counter, total_fixing_counter = parse_files_in_folder()
-    output_parsed_data_to_txt(parsed_item_data, 'output/logging/parsed_item_data.txt')
+    parsed_fixing_data, total_fixing_counter = parse_files_in_folder()
     output_parsed_data_to_txt(parsed_fixing_data, 'output/logging/parsed_fixing_data.txt')
-    print("Total items parsed:", total_item_counter)
     print("Total fixings parsed:", total_fixing_counter)
 
     
