@@ -1,6 +1,6 @@
 import os
-import script_parser
-from core import utility, translate
+from scripts.parser import item_parser
+from scripts.core import utility, translate
 
 # used for getting table values
 table_dict = {
@@ -329,21 +329,20 @@ def get_items():
     blacklist = ("MakeUp_", "ZedDmg_", "Wound_", "Bandage_", "F_Hair_", "M_Hair_", "M_Beard_")
     clothing_dict = {}
 
-    for module, module_data in script_parser.parsed_item_data.items():
-        for item_type, item_data in module_data.items():
-            if item_data.get("Type") in ("Clothing", "AlarmClockClothing"):
-                # filter out blacklisted items and 'Reverse' variants
-                if not item_type.startswith(blacklist) and not item_type.endswith("_Reverse"):
-                    if "OBSOLETE" in item_data:
-                        continue
-                    item_id = f"{module}.{item_type}"
-                    heading, item = process_item(item_data, item_id)
+    for item_id, item_data in item_parser.get_item_data().items():
+        if item_data.get("Type") in ("Clothing", "AlarmClockClothing"):
+            # filter out blacklisted items and 'Reverse' variants
+            module, item_name = item_id.split('.')
+            if not item_name.startswith(blacklist) and not item_name.endswith("_Reverse"):
+                if "OBSOLETE" in item_data:
+                    continue
+                heading, item = process_item(item_data, item_id)
 
-                    # add heading to dict if it hasn't been added yet.
-                    if heading not in clothing_dict:
-                        clothing_dict[heading] = []
+                # add heading to dict if it hasn't been added yet.
+                if heading not in clothing_dict:
+                    clothing_dict[heading] = []
 
-                    clothing_dict[heading].append(item)
+                clothing_dict[heading].append(item)
 
     write_items_to_file(clothing_dict)
 
@@ -381,7 +380,6 @@ def write_items_to_file(clothing_dict):
 
 
 def main():
-    script_parser.init()
     get_items()
 
 

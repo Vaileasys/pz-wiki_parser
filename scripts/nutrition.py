@@ -1,11 +1,15 @@
-import script_parser
-from core import translate
+import os
+from scripts.parser import item_parser
+from scripts.core import translate
 
 
 def write_to_output(items):
     # write to output.txt
     language_code = translate.get_language_code()
-    output_file = f'output/{language_code}/nutrition.txt'
+    output_dir = os.path.join('output', language_code)
+    output_file = os.path.join(output_dir, 'nutrition.txt')
+    os.makedirs(output_dir, exist_ok=True)
+    
     with open(output_file, 'w', encoding='utf-8') as file:
 
         lc_subpage = ""
@@ -41,32 +45,30 @@ def write_to_output(items):
 
 def get_items():
     items = []
+    parsed_items = item_parser.get_item_data().items()
     
-    for module, module_data in script_parser.parsed_item_data.items():
-        for item_key, item_value in module_data.items():
-            if "Calories" in item_value:
-                item_id = f"{module}.{item_key}"
-                item_name = item_value.get('DisplayName')
-                translated_item_name = translate.get_translation(item_id, "DisplayName")
+    for item_id, item_data in parsed_items:
+        if "Calories" in item_data:
+            item_name = item_data.get('DisplayName')
+            translated_item_name = translate.get_translation(item_id, "DisplayName")
 
-                items.append({
-                    'item_id': item_id,
-                    'item_name': item_name,
-                    'translated_item_name': translated_item_name,
-                    'icons': [item_value.get('Icon')],
-                    'weight': item_value.get('Weight', '1'),
-                    'hunger': item_value.get('HungerChange', '0'),
-                    'calories': item_value.get('Calories', '0'),
-                    'carbohydrates': item_value.get('Carbohydrates', '0'),
-                    'lipids': item_value.get('Lipids', '0'),
-                    'proteins': item_value.get('Proteins', '0')
-                })
+            items.append({
+                'item_id': item_id,
+                'item_name': item_name,
+                'translated_item_name': translated_item_name,
+                'icons': [item_data.get('Icon')],
+                'weight': item_data.get('Weight', '1'),
+                'hunger': item_data.get('HungerChange', '0'),
+                'calories': item_data.get('Calories', '0'),
+                'carbohydrates': item_data.get('Carbohydrates', '0'),
+                'lipids': item_data.get('Lipids', '0'),
+                'proteins': item_data.get('Proteins', '0')
+            })
     
     return items
 
 
 def main():
-    script_parser.init()
     items = get_items()
     write_to_output(items)
                 

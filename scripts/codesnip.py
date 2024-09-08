@@ -1,6 +1,6 @@
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from core import utility
+from scripts.core import version
 
 
 def extract_code_snippet(line_number, lines):
@@ -57,7 +57,7 @@ def process_file(file_path, version, output_dir):
 
 
 def main():
-    version = utility.version
+    game_version = version.get_version()
     output_dir = 'output/codesnips'
     resources_dir = 'resources/scripts'
 
@@ -67,7 +67,7 @@ def main():
     files = [os.path.join(root, file) for root, _, files in os.walk(resources_dir) for file in files]
 
     with ThreadPoolExecutor(max_workers=50) as executor:
-        futures = [executor.submit(process_file, file_path, version, output_dir) for file_path in files]
+        futures = [executor.submit(process_file, file_path, game_version, output_dir) for file_path in files]
         for future in as_completed(futures):
             pass
 

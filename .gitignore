@@ -10,8 +10,12 @@ resources/*
 !resources/icons.csv
 !resources/item_id_dictionary.csv
 
+# Misc
+config.ini
+
 # Editor directories and files
 __pycache__/
 .vscode/
+.venv/
 venv/
 .env

@@ -1,7 +1,6 @@
 import os
 import re
-from core import translate
-from core import logging
+from scripts.core import translate, logging
 
 parsed_item_data = ""
 parsed_fixing_data = ""
@@ -108,6 +107,7 @@ def parse_file(file_path, data, block_type="item"):
     is_comment = False
     is_skippable_block = False
     type_counter = 0
+    deprecated_message = False
 
     skippable_blocks = ("imports", "template")
 
@@ -174,6 +174,9 @@ def parse_file(file_path, data, block_type="item"):
                 
             # get item properties
             elif block == "item" and indent_level == 2:
+                if not deprecated_message:
+                    deprecated_message = True
+                    print("Note: 'script_parser.py' is currently deprecated for parsing items, please use 'item_parser.py' instead.")
                 get_item_properties(line, data, current_module, current_type)
             elif block == "fixing" and indent_level == 2:
                 get_fixing_properties(line, data, current_module, current_type)
