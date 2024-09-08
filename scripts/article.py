@@ -24,8 +24,8 @@ LANGUAGE_DATA = {
         "translate_reason": "Translated using game translation files.",
         "condition_categories": ["Weapon", "Tool / Weapon"],
         "condition_text": (
-            "The {name} has a maximum condition of {condition_max}. Its rate of degradation is influenced by the {skill_type} and [[maintenance]] [[skill]]s. The chance of losing [[durability]] can be simplified to the following formula: "
-            "<code>1 in (35 + maintenanceMod &times; 2)</code>. Where \"maintenanceMod\" is calculated using the {skill_type} and maintenance skills.<br>"
+            "The {name} has a maximum condition of {condition_max}. Its rate of degradation is influenced by the {skill_type_lower} and [[maintenance]] [[skill]]s. The chance of losing [[durability]] can be simplified to the following formula: "
+            "<code>1 in (35 + maintenanceMod &times; 2)</code>. Where \"maintenanceMod\" is calculated using the {skill_type_lower} and maintenance skills.<br>"
             "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
         ),
     },
@@ -44,8 +44,8 @@ LANGUAGE_DATA = {
         "translate_reason": "Przetłumaczone za pomocą plików tłumaczeń gry.",
         "condition_categories": ["Broń", "Narzędzia/broń"],
         "condition_text": (
-            "{name} ma maksymalny stan {condition_max}. Na szybkość degradacji mają  wpływ [[Skill/pl|umiejętności]] {skill_type} i umiejętność [[Maintenance/pl|konserwacja]]. Szansa na zmniejszenie  [[Condition/pl|stanu]] może być uproszczona do następującej formuły: "
-            "<code>1 na (35 + maintenanceMod &times; 2)</code>. Gdzie \"maintenanceMod\" jest obliczony używając {skill_type} i umiejętności konserwacji.<br>"
+            "{name} ma maksymalny stan {condition_max}. Na szybkość degradacji mają  wpływ [[Skill/pl|umiejętności]] {skill_type_lower} i umiejętność [[Maintenance/pl|konserwacja]]. Szansa na zmniejszenie  [[Condition/pl|stanu]] może być uproszczona do następującej formuły: "
+            "<code>1 na (35 + maintenanceMod &times; 2)</code>. Gdzie \"maintenanceMod\" jest obliczony używając {skill_type_lower} i umiejętności konserwacji.<br>"
             "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
         ),
     },
@@ -64,8 +64,8 @@ LANGUAGE_DATA = {
         "translate_reason": "Oyunun çeviri dosyalaranı kullanarak çevrildi.",
         "condition_categories": ["Silah", "Alet / Silah"],
         "condition_text": (
-            "{name}, {condition_max} azami sağlamlığa sahiptir. Bozulma oranı {skill_type} ve [[maintenance/tr|onarım]] [[skill/tr|becerilerine]] bağlıdır. [[durability|Sağlamlığın]] düşme ihtimali şu formülü kullanarak basitleştirilebilir: "
-            "<code>1/(35 + maintenanceMod &times; 2)</code>. Buradaki \"maintenanceMod\", {skill_type} ve onarım becerilerini kullanarak hesaplanır.<br>"
+            "{name}, {condition_max} azami sağlamlığa sahiptir. Bozulma oranı {skill_type_lower} ve [[maintenance/tr|onarım]] [[skill/tr|becerilerine]] bağlıdır. [[durability|Sağlamlığın]] düşme ihtimali şu formülü kullanarak basitleştirilebilir: "
+            "<code>1/(35 + maintenanceMod &times; 2)</code>. Buradaki \"maintenanceMod\", {skill_type_lower} ve onarım becerilerini kullanarak hesaplanır.<br>"
             "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
         ),
     },
@@ -302,11 +302,11 @@ def generate_condition(name, category, skill_type, infobox, fixing_dir, language
     condition_max = condition_max_match.group(1)
     condition_lower_chance = condition_lower_chance_match.group(1)
 
-    # Construct the condition text
     condition_text = language_data["condition_text"].format(
         name=name,
         condition_max=condition_max,
         skill_type=skill_type,
+        skill_type_lower=skill_type.split('|')[0] + '|' + skill_type.split('|')[1].lower() if '|' in skill_type else skill_type,
         condition_lower_chance=condition_lower_chance
     )
 
