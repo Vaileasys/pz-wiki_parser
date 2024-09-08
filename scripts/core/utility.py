@@ -119,12 +119,11 @@ def get_icon_for_item_id(item_id):
     
     icon = ""
 
-    module, item_name = item_id.split('.')
-    icon = parsed_data.get(module, {}).get(item_name, {}).get('Icon', 'Question_On')
-    name = parsed_data.get(module, {}).get(item_name, {}).get('DisplayName', 'Unknown')
+    icon = parsed_data.get(item_id, {}).get('Icon', 'Question_On')
+    name = parsed_data.get(item_id, {}).get('DisplayName', 'Unknown')
     translated_name = translate.get_translation(item_id, 'DisplayName')
     page = get_page(item_id, name)
-    if icon != 'Question_On' and name != 'Unknown':
+    if name != 'Unknown':
         if language_code == 'en':
             icon = f"[[File:{icon}.png|link={page}|{name}]]"
         else:
