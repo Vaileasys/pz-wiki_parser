@@ -134,10 +134,10 @@ def get_translation(property_value, property_key="DisplayName", lang_code=langua
         return property_value
     
     if language_code is None:
-        get_language_code()
-        if lang_code is None:
-            lang_code = language_code
+        language_code = get_language_code()
 
+    if lang_code is None:
+        lang_code = language_code
 
     if lang_code is not None and lang_code != "en" and lang_code != language_code:
         raise ValueError(f"'{lang_code}' when translating {property_value} doesn't match '{language_code}' or 'en'. Ensure the correct language code is used.")
