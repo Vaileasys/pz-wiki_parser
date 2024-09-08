@@ -4,7 +4,7 @@ import sys
 import csv
 from difflib import SequenceMatcher
 from tqdm import tqdm
-from core import translate, utility
+from scripts.core import translate
 
 # Language dictionary
 LANGUAGE_DATA = {
