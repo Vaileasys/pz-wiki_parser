@@ -1,6 +1,6 @@
 import configparser
 import os
-from scripts.core import logging, translate, version
+from scripts.core import logging_file, translate, version
 
 config_file = 'config.ini'
 config_data = {}
@@ -54,7 +54,7 @@ def update_missing_entries(config=None):
     if updated:
         with open(config_file, 'w') as file:
             config.write(file)
-        logging.log_to_file(f"Repaired config file '{config_file}' as it was missing some entries.", True)
+        logging_file.log_to_file(f"Repaired config file '{config_file}' as it was missing some entries.", True)
 
 
 def open_config():
@@ -109,7 +109,7 @@ def set_config(key, value, section="Settings"):
     # Save the updated config back to the INI file
     with open(config_file, 'w') as configfile:
         config.write(configfile)
-    logging.log_to_file(f"Configuration updated: [{section}] {key} = {value}")
+    logging_file.log_to_file(f"Configuration updated: [{section}] {key} = {value}")
 
 
 def get_config(key, section='Settings'):

@@ -1,7 +1,7 @@
 import os
 import shutil
 from scripts.parser import item_parser
-from scripts.core import translate, utility, logging, version
+from scripts.core import translate, utility, logging_file, version
 
 
 def get_item():
@@ -218,7 +218,7 @@ def write_to_output(item_data, item_id, output_dir):
 
             file.write("\n}}")
     except Exception as e:
-        logging.log_to_file(f"Error writing file {item_id}.txt: {e}", True)
+        logging_file.log_to_file(f"Error writing file {item_id}.txt: {e}", True)
         
 
 def process_item(item_data, item_id, output_dir):

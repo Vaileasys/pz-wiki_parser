@@ -1,7 +1,7 @@
 import os
 import shutil
 import script_parser
-from core import logging, translate, utility
+from core import logging_file, translate, utility
 
 
 def get_fixing():
@@ -201,7 +201,7 @@ def write_to_output(module, fixing_id, fixing_data, output_dir):
 
             file.write("\n}}")
     except Exception as e:
-        logging.log_to_file(f"Error writing file {fixing_id}.txt: {e}", True)
+        logging_file.log_to_file(f"Error writing file {fixing_id}.txt: {e}", True)
     return
 
 

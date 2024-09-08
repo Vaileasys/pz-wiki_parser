@@ -1,6 +1,6 @@
 import os
 import re
-from scripts.core import translate, logging
+from scripts.core import translate, logging_file
 
 parsed_item_data = ""
 parsed_fixing_data = ""
@@ -22,7 +22,7 @@ blacklist = {
 # parse fixing properties
 def get_fixing_properties(line, data, current_module, current_fixing):
     if current_module is None or current_fixing is None:
-        logging.log_to_file(f"Skipping line due to unset module or type: {line}")
+        logging_file.log_to_file(f"Skipping line due to unset module or type: {line}")
         return
 
     if current_module not in data:
@@ -164,7 +164,7 @@ def parse_file(file_path, data, block_type="item"):
                     type_counter += 1
                 else:
                     # type already exists, skip it
-                    logging.log_to_file(f"Type '{current_type}' already exists when parsing '{block_type}'")
+                    logging_file.log_to_file(f"Type '{current_type}' already exists when parsing '{block_type}'")
                     current_type = None
                     continue
             # close item block

@@ -1,7 +1,7 @@
 from tqdm import tqdm
 import os
 from scripts.parser import item_parser
-from scripts.core import translate, utility, logging
+from scripts.core import translate, utility, logging_file
 
 filters = {
 #    'ExampleItemPrefix': (True,),
@@ -19,7 +19,7 @@ def translate_category(category, property="DisplayCategory"):
             cat_translated = translate.get_translation(category, property)
             categories[category] = cat_translated
         except Exception as e:
-            logging.log_to_file(f"Error translating category '{category}': {e}")
+            logging_file.log_to_file(f"Error translating category '{category}': {e}")
             cat_translated = category
     else:
         cat_translated = categories[category]
@@ -97,11 +97,11 @@ def item_list():
 
             # Check if 'WorldObjectSprite' property exists and use it for icon
             if icon == "default":
-                icon = item_data.get('WorldObjectSprite', ['Flatpack'])
+                icon = item_data.get('WorldObjectSprite', 'Flatpack')
                 icons.append(icon)
             
             # We don't need to translate again if language code is 'en'
-            translated_item_name = item_data.get('DisplayName', [''])
+            translated_item_name = item_data.get('DisplayName', '')
             page_name = utility.get_page(item_id)
             if page_name == 'Unknown':
                 page_name = translated_item_name

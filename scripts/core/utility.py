@@ -1,7 +1,7 @@
 import os
 import csv
 from scripts.parser import item_parser
-from scripts.core import translate, logging, version
+from scripts.core import translate, logging_file, version
 
 # @deprecated: Use version.get_version() directly instead.
 version = version.get_version()
@@ -240,5 +240,5 @@ def get_page(item_id, name="Unknown"):
                 return row[0]
 
 #    print(f"Couldn't find a page for '{item_id}'")
-    logging.log_to_file(f"Couldn't find a page for '{item_id}'")
+    logging_file.log_to_file(f"Couldn't find a page for '{item_id}'")
     return name
