@@ -4,50 +4,50 @@ from scripts.core import translate, utility
 
 # table header for melee weapons
 melee_header = """{| class="wikitable theme-red sortable" style="text-align: center;"
-! rowspan=2 | Icon
-! rowspan=2 | Name
-! rowspan=2 | [[File:Moodle_Icon_HeavyLoad.png|link=|Encumbrance]]
-! rowspan=2 | [[File:UI_Hand.png|32px|link=|Equipped]]
-! colspan=4 | Damage
-! colspan=2 | Range
-! rowspan=2 | [[File:UI_AttackSpeed.png|32px|link=|Attack speed]]
-! rowspan=2 | [[File:UI_CriticalHit_Chance.png|32px|32px|link=|Crit chance]]
-! rowspan=2 | [[File:UI_CriticalHit_Multiply.png|32px|link=|Crit multiplier]]
-! rowspan=2 | [[File:UI_Knockback.png|32px|link=|Knockback]]
-! rowspan=2 | [[File:UI_Condition_Max.png|32px|link=|Max condition]]
-! rowspan=2 | [[File:UI_Condition_Chance.png|Condition lower chance, 1 in (x + (maintenance × 2 + weapon level))]]
-! rowspan=2 | [[File:UI_Condition_Average.png|32px|link=|Average condition at level 0]]
-! rowspan=2 | Item ID
+! rowspan=2 | <<icon>>
+! rowspan=2 | <<name>>
+! rowspan=2 | [[File:Moodle_Icon_HeavyLoad.png|link=|<<weight>>]]
+! rowspan=2 | [[File:UI_Hand.png|32px|link=|<<equipped>>]]
+! colspan=4 | <<damage>>
+! colspan=2 | <<range>>
+! rowspan=2 | [[File:UI_AttackSpeed.png|32px|link=|<<attack_speed>>]]
+! rowspan=2 | [[File:UI_CriticalHit_Chance.png|32px|32px|link=|<<crit_chance>>]]
+! rowspan=2 | [[File:UI_CriticalHit_Multiply.png|32px|link=|<<crit_multiplier>>]]
+! rowspan=2 | [[File:UI_Knockback.png|32px|link=|<<knockback>>]]
+! rowspan=2 | [[File:UI_Condition_Max.png|32px|link=|<<max_condition>>]]
+! rowspan=2 | [[File:UI_Condition_Chance.png|<<condition_lower_chance>>]]
+! rowspan=2 | [[File:UI_Condition_Average.png|32px|link=|<<average_condition>>]]
+! rowspan=2 | <<item_id>>
 |-
-! [[File:UI_Damage_Min.png|32px|link=|Minimum damage]]
-! [[File:UI_Damage_Max.png|32px|link=|Maximum damage]]
-! [[File:UI_Door.png|32px|link=|Door damage]]
-! rowspan=2 | [[File:Container_Plant.png|32px|link=|Tree damage]]
-! [[File:UI_Range_Min.png|32px|link=|Minimum range]]
-! style="border-right: var(--border-mw);" | [[File:UI_Range_Max.png|32px|link=|Maximum range]]\n"""
+! [[File:UI_Damage_Min.png|32px|link=|<<min_damage>>]]
+! [[File:UI_Damage_Max.png|32px|link=|<<max_damage>>]]
+! [[File:UI_Door.png|32px|link=|<<door_damage>>]]
+! rowspan=2 | [[File:Container_Plant.png|32px|link=|<<tree_damage>>]]
+! [[File:UI_Range_Min.png|32px|link=|<<min_range>>]]
+! style="border-right: var(--border-mw);" | [[File:UI_Range_Max.png|32px|link=|<<max_range>>]]\n"""
 
 # table header for firearms
 firearm_header = """{| class="wikitable theme-red sortable" style="text-align: center;"
-! rowspan=2 | Icon
-! rowspan=2 | Name
-! rowspan=2 | [[File:Moodle_Icon_HeavyLoad.png|link=|Encumbrance]]
-! rowspan=2 | [[File:UI_Hand.png|32px|link=|Equipped]]
-! rowspan=2 | [[File:UI_Ammo.png|link=|Ammunition]]
-! rowspan=2 | [[File:BerettaClip.png|link=|Magazine capacity]]
-! colspan=2 | Damage
-! colspan=2 | Range
-! rowspan=2 | [[File:UI_Accuracy.png|32px|link=|Accuracy]]
-! rowspan=2 | [[File:UI_Accuracy_Add.png|32px|link=|Accuracy increased per aiming level]]
-! rowspan=2 | [[File:UI_CriticalHit_Chance.png|32px|link=|Crit chance]]
-! rowspan=2 | [[File:UI_Critical_Add.png|32px|link=|Critical hit chance increased per aiming level]]
-! rowspan=2 | [[File:UI_Noise.png|32px|link=|Noise radius]]
-! rowspan=2 | [[File:UI_Knockback.png|32px|link=|Knockback]]
-! rowspan=2 | Item ID
+! rowspan=2 | <<icon>>
+! rowspan=2 | <<name>>
+! rowspan=2 | [[File:Moodle_Icon_HeavyLoad.png|link=|<<weight>>]]
+! rowspan=2 | [[File:UI_Hand.png|32px|link=|<<equipped>>]]
+! rowspan=2 | [[File:UI_Ammo.png|link=|<<ammo>>]]
+! rowspan=2 | [[File:BerettaClip.png|link=|<<mag_capacity>>]]
+! colspan=2 | <<damage>>
+! colspan=2 | <<range>>
+! rowspan=2 | [[File:UI_Accuracy.png|32px|link=|<<accuracy>>]]
+! rowspan=2 | [[File:UI_Accuracy_Add.png|32px|link=|<<accuracy_add>>]]
+! rowspan=2 | [[File:UI_CriticalHit_Chance.png|32px|link=|<<crit_chance>>]]
+! rowspan=2 | [[File:UI_Critical_Add.png|32px|link=|<<crit_chance_add>>]]
+! rowspan=2 | [[File:UI_Noise.png|32px|link=|<<noise_radius>>]]
+! rowspan=2 | [[File:UI_Knockback.png|32px|link=|<<knockback>>]]
+! rowspan=2 | <<item_id>>
 |-
-! [[File:UI_Damage_Min.png|32px|link=|Minimum damage]]
-! [[File:UI_Damage_Max.png|32px|link=|Maximum damage]]
-! [[File:UI_Range_Min.png|32px|link=|Minimum range]]
-! style="border-right: var(--border-mw);" | [[File:UI_Range_Max.png|32px|link=|Maximum range]]\n"""
+! [[File:UI_Damage_Min.png|32px|link=|<<min_damage>>]]
+! [[File:UI_Damage_Max.png|32px|link=|<<max_damage>>]]
+! [[File:UI_Range_Min.png|32px|link=|<<min_range>>]]
+! style="border-right: var(--border-mw);" | [[File:UI_Range_Max.png|32px|link=|<<max_range>>]]\n"""
 
 # store translated skills
 skills = {}
@@ -78,6 +78,7 @@ def process_item_firearm(item_data, item_id):
             skill = "Shotgun"
     
     name = item_data.get('DisplayName', 'Unknown')
+    name = translate.get_translation(item_id, 'DisplayName')
     page_name = utility.get_page(item_id)
     link = utility.format_link(name, page_name)
     icon = utility.get_icon(item_data, item_id)
@@ -124,7 +125,12 @@ def process_item_firearm(item_data, item_id):
 
 # get values for each melee waepon
 def process_item_melee(item_data, item_id):
-
+    language_code = translate.get_language_code()
+    if language_code == 'en':
+        lcs = ""
+    else:
+        lcs = f"/{language_code}"
+    
     skill = item_data.get("Categories", '')
     if isinstance(skill, str):
         skill = [skill]
@@ -138,7 +144,8 @@ def process_item_melee(item_data, item_id):
         skill = skill_translated
     
     name = item_data.get('DisplayName', 'Unknown')
-    page_name = utility.get_page(item_id)
+    page_name = utility.get_page(item_id, name)
+    name = translate.get_translation(item_id, 'DisplayName')
     link = utility.format_link(name, page_name)
     icon = utility.get_icon(item_data, item_id)
 
@@ -163,7 +170,7 @@ def process_item_melee(item_data, item_id):
 
     item = {
         "name": name,
-        "icon": f"[[File:{icon}.png|link={page_name}|{name}]]",
+        "icon": f"[[File:{icon}.png|link={page_name}{lcs}|{name}]]",
         "name_link": link,
         "weight": item_data.get('Weight', '1'),
         "equipped": equipped,
@@ -195,6 +202,7 @@ def write_items_to_file(skills, header, category):
     for skill, items in skills.items():
         output_path = f"{output_dir}{skill}.txt"
         with open(output_path, 'w', encoding='utf-8') as file:
+            header = translate.get_wiki_translation(header)
             file.write(f"{header}")
             sorted_items = sorted(items, key=lambda x: x['name'])
 
