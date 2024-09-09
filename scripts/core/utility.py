@@ -177,8 +177,8 @@ def get_skill_type_mapping(item_data, item_id):
 
 
 # format a link
-def format_link(name, page=""):
-    if page == "" or name == page:
+def format_link(name, page=None):
+    if page is None or name == page:
         return f"[[{name}]]"
     
     lc = ""
