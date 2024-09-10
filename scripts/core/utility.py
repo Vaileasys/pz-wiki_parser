@@ -57,6 +57,8 @@ def get_icons(item_data):
     # check if 'IconsForTexture' property exists and use it for icon
     if 'IconsForTexture' in item_data:
         icons = item_data.get('IconsForTexture', [''])
+        if isinstance(icons, str):
+            icons = [icons]
         icons = [f"{icon}.png" for icon in icons]
     else:
         # get 'Icon' property
