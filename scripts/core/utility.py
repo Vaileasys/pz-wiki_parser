@@ -181,14 +181,15 @@ def get_skill_type_mapping(item_data, item_id):
 # format a link
 def format_link(name, page=None):
     if page is None or name == page:
-        return f"[[{name}]]"
+        link = f"[[{name}]]"
     
-    lc = ""
+    lcs = ""
     langauge_code = translate.get_language_code()
     if langauge_code != "en":
-        lc = "/" + langauge_code
-    
-    return f"[[{page}{lc}|{name}]]"
+        lcs = "/" + langauge_code
+        link = f"[[{page}{lcs}|{name}]]"
+
+    return link
 
 
 # formats values to be links (list)

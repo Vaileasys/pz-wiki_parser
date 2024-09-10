@@ -57,7 +57,7 @@ skills = {}
 def translate_skill(skill, property="Categories"):
     if skill not in skills:
         try:
-            skill_translated = translate.get_translation(skill, property)
+            skill_translated = translate.get_translation(skill, property, 'en')
             skills[skill] = skill_translated
         except Exception as e:
             print(f"Error translating skill '{skill}': {e}")
@@ -69,17 +69,23 @@ def translate_skill(skill, property="Categories"):
 
 # get values for each firearm
 def process_item_firearm(item_data, item_id):
+    language_code = translate.get_language_code()
+    if language_code == 'en':
+        lcs = ""
+    else:
+        lcs = f"/{language_code}"
     skill = "Handgun"
-    equipped = "1H"
+    equipped = "<<1h>>"
     if item_data.get("RequiresEquippedBothHands", '').lower() == "true":
         skill = "Rifle"
-        equipped = "2H"
+        equipped = "<<2h>>"
         if int(item_data.get("ProjectileCount")) > 1:
             skill = "Shotgun"
+    equipped = translate.get_wiki_translation(equipped)
     
     name = item_data.get('DisplayName', 'Unknown')
-    name = translate.get_translation(item_id, 'DisplayName')
     page_name = utility.get_page(item_id)
+    name = translate.get_translation(item_id, 'DisplayName')
     link = utility.format_link(name, page_name)
     icon = utility.get_icon(item_data, item_id)
     
@@ -88,9 +94,10 @@ def process_item_firearm(item_data, item_id):
     if ammo_id:
         ammo_data = utility.get_item_data_from_id(ammo_id)
         ammo_name = ammo_data.get('DisplayName', 'Unknown')
+        ammo_name = translate.get_translation(ammo_id)
         ammo_page = utility.get_page(ammo_id)
         ammo_icon = utility.get_icon(ammo_data, ammo_id)
-        ammo = f"[[File:{ammo_icon}.png|link={ammo_page}|{ammo_name}]]"
+        ammo = f"[[File:{ammo_icon}.png|link={ammo_page}{lcs}|{ammo_name}]]"
 
     condition_max = item_data.get("ConditionMax", '0')
     condition_chance = item_data.get("ConditionLowerChanceOneIn", '0')
@@ -98,7 +105,7 @@ def process_item_firearm(item_data, item_id):
 
     item = {
         "name": name,
-        "icon": f"[[File:{icon}.png|link={page_name}|{name}]]",
+        "icon": f"[[File:{icon}.png|link={page_name}{lcs}|{name}]]",
         "name_link": link,
         "weight": item_data.get('Weight', '1'),
         "equipped": equipped,
@@ -134,7 +141,7 @@ def process_item_melee(item_data, item_id):
     skill = item_data.get("Categories", '')
     if isinstance(skill, str):
         skill = [skill]
-    # remove "Improvised" from list
+    # Remove "Improvised" from list if more than 1
     if "Improvised" in skill and len(skill) > 1:
         skill = [cat for cat in skill if cat != "Improvised"]
 
@@ -142,6 +149,11 @@ def process_item_melee(item_data, item_id):
     skill_translated = translate_skill(skill, "Categories")
     if skill_translated is not None:
         skill = skill_translated
+    #FIXME: translate skill just before writing, so we can name files in English.
+#    if skill == "Improvised":
+#        skill = "<<improvised>>"
+#        skill = translate.get_wiki_translation(skill)
+    
     
     name = item_data.get('DisplayName', 'Unknown')
     page_name = utility.get_page(item_id, name)
@@ -149,13 +161,14 @@ def process_item_melee(item_data, item_id):
     link = utility.format_link(name, page_name)
     icon = utility.get_icon(item_data, item_id)
 
-    equipped = "1H"
+    equipped = "<<1h>>"
     if item_data.get("RequiresEquippedBothHands", "FALSE").lower() == "true":
-        equipped = "2H"
+        equipped = "<<2h>>"
     elif item_data.get("TwoHandWeapon", "FALSE").lower() == "true":
-        equipped = "{{Tooltip|2H*|Limited impact when used one-handed.}}"
+        equipped = "{{Tooltip|<<2h>>*|<<limited_impact_desc>>}}"
     if item_data.get("CloseKillMove") == "Jaw_Stab":
-        equipped = "{{Tooltip|1H*|Has jaw stab attack.}}"
+        equipped = "{{Tooltip|<<1h>>*|<<jaw_stab_desc>>}}"
+    equipped = translate.get_wiki_translation(equipped)
 
     crit_chance = item_data.get("CriticalChance", "-")
     if crit_chance != "-":
@@ -212,6 +225,13 @@ def write_items_to_file(skills, header, category):
                 item = '\n| '.join(item)
                 file.write(f"|-\n| {item}\n")
             file.write("|}")
+            footnote = ""
+            if skill in ('Axe', 'Long Blunt', 'Short Blunt', 'Long Blade', 'Spear', 'Improvised'):
+                footnote = "\n*<<limited_impact_desc>>"
+            elif skill == ('Short Blade'):
+                footnote = "\n*<<jaw_stab_desc>>"
+            footnote = translate.get_wiki_translation(footnote)
+            file.write(footnote)
 
 
 def get_items():
