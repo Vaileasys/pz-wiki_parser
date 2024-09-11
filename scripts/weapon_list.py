@@ -1,6 +1,7 @@
 import os
 from scripts.parser import item_parser
 from scripts.core import translate, utility
+from scripts import script_parser
 
 # table header for melee weapons
 melee_header = """{| class="wikitable theme-red sortable" style="text-align: center;"
@@ -11,12 +12,13 @@ melee_header = """{| class="wikitable theme-red sortable" style="text-align: cen
 ! colspan=4 | <<damage>>
 ! colspan=2 | <<range>>
 ! rowspan=2 | [[File:UI_AttackSpeed.png|32px|link=|<<attack_speed>>]]
-! rowspan=2 | [[File:UI_CriticalHit_Chance.png|32px|32px|link=|<<crit_chance>>]]
+! rowspan=2 | [[File:UI_CriticalHit_Chance.png|32px|link=|<<crit_chance>>]]
 ! rowspan=2 | [[File:UI_CriticalHit_Multiply.png|32px|link=|<<crit_multiplier>>]]
 ! rowspan=2 | [[File:UI_Knockback.png|32px|link=|<<knockback>>]]
 ! rowspan=2 | [[File:UI_Condition_Max.png|32px|link=|<<max_condition>>]]
-! rowspan=2 | [[File:UI_Condition_Chance.png|<<condition_lower_chance>>]]
+! rowspan=2 | [[File:UI_Condition_Chance.png|32px|<<condition_lower_chance>>]]
 ! rowspan=2 | [[File:UI_Condition_Average.png|32px|link=|<<average_condition>>]]
+! rowspan=2 | [[File:UI Durability.png|32px|link=|<<repairable>>]]
 ! rowspan=2 | <<item_id>>
 |-
 ! [[File:UI_Damage_Min.png|32px|link=|<<min_damage>>]]
@@ -42,6 +44,7 @@ firearm_header = """{| class="wikitable theme-red sortable" style="text-align: c
 ! rowspan=2 | [[File:UI_Critical_Add.png|32px|link=|<<crit_chance_add>>]]
 ! rowspan=2 | [[File:UI_Noise.png|32px|link=|<<noise_radius>>]]
 ! rowspan=2 | [[File:UI_Knockback.png|32px|link=|<<knockback>>]]
+! rowspan=2 | [[File:UI Durability.png|32px|link=|<<repairable>>]]
 ! rowspan=2 | <<item_id>>
 |-
 ! [[File:UI_Damage_Min.png|32px|link=|<<min_damage>>]]
@@ -65,6 +68,17 @@ def translate_skill(skill, property="Categories"):
     else:
         skill_translated = skills[skill]
     return skill_translated
+
+
+# Check if it can be fixed
+def check_fixing(item_id):
+    module, item_name = item_id.split('.')
+    parsed_fixing_data = script_parser.get_fixing_data()
+    for fixing, fixing_data in parsed_fixing_data[module].items():
+        if isinstance(fixing_data, dict) and 'Require' in fixing_data:
+            if item_name in fixing_data['Require']:
+                return '[[File:UI Tick.png|link=Condition#<<repairing>>|<<repairable>>]]'
+    return '[[File:UI Cross.png|link=Condition#<<repairing>>|<<not_repairable>>]]'
 
 
 # get values for each firearm
@@ -102,7 +116,9 @@ def process_item_firearm(item_data, item_id):
     condition_max = item_data.get("ConditionMax", '0')
     condition_chance = item_data.get("ConditionLowerChanceOneIn", '0')
     condition_average = str(int(condition_max) * int(condition_chance))
-
+    repairable = check_fixing(item_id)
+    repairable = translate.get_wiki_translation(repairable)
+    
     item = {
         "name": name,
         "icon": f"[[File:{icon}.png|link={page_name}{lcs}|{name}]]",
@@ -124,6 +140,7 @@ def process_item_firearm(item_data, item_id):
 #        "condition_max": condition_max,
 #        "condition_chance": condition_chance,
 #        "condition_average": condition_average,
+        "repairable": repairable,
         "item_id": f'{{{{ID|{item_id}}}}}',
     }
 
@@ -180,6 +197,8 @@ def process_item_melee(item_data, item_id):
     condition_max = item_data.get("ConditionMax", '0')
     condition_chance = item_data.get("ConditionLowerChanceOneIn", '0')
     condition_average = str(int(condition_max) * int(condition_chance))
+    repairable = check_fixing(item_id)
+    repairable = translate.get_wiki_translation(repairable)
 
     item = {
         "name": name,
@@ -200,6 +219,7 @@ def process_item_melee(item_data, item_id):
         "condition_max": condition_max,
         "condition_chance": condition_chance,
         "condition_average": condition_average,
+        "repairable": repairable,
         "item_id": f"{{{{ID|{item_id}}}}}",
     }
 
@@ -227,9 +247,9 @@ def write_items_to_file(skills, header, category):
             file.write("|}")
             footnote = ""
             if skill in ('Axe', 'Long Blunt', 'Short Blunt', 'Long Blade', 'Spear', 'Improvised'):
-                footnote = "\n*<<limited_impact_desc>>"
+                footnote = "\n<nowiki>*</nowiki><<limited_impact_desc>>"
             elif skill == ('Short Blade'):
-                footnote = "\n*<<jaw_stab_desc>>"
+                footnote = "\n<nowiki>*</nowiki><<jaw_stab_desc>>"
             footnote = translate.get_wiki_translation(footnote)
             file.write(footnote)
 

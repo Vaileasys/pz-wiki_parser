@@ -5,6 +5,11 @@ from scripts.core import logging_file
 parsed_fixing_data = ""
 scripts_dir = "resources/scripts"
 
+def get_fixing_data():
+    if not parsed_fixing_data:
+        init()
+    return parsed_fixing_data
+
 # parse fixing properties
 def get_fixing_properties(line, data, current_module, current_fixing):
     if current_module is None or current_fixing is None:
