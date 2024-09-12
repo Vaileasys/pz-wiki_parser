@@ -69,6 +69,26 @@ LANGUAGE_DATA = {
             "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
         ),
     },
+    "ru": {
+        "intro_template": "'''{lowercase_name}''' это [[Items/ru|предмет]] в [[Project Zomboid/ru|Project Zomboid]].",
+        "headers": {
+            "Usage": "Использование",
+            "Condition": "Состояние",
+            "Location": "Локация",
+            "Code": "Код",
+            "See also": "Смотрите также",
+            "Consumable properties": "Свойства",
+            "Repairing": "Починка",
+        },
+        "help_text": "Помогите PZwiki добавив информацию в этот раздел.",
+        "translate_reason": "Использован перевод из файлов игры.",
+        "condition_categories": ["Оружие", "Инструмент / Оружие"],
+        "condition_text": (
+            "{name} имеет максимальное состояние {condition_max}. Скорость поломки оружия зависит от уровня [[Skill/ru|навыков]] {skill_type_lower} и [[починки]]. Шанс потери одного очка [[состояния]] можно упростить до следующей формулы: <code>1 in (35 + maintenanceMod &times; 2)</code>. "
+            "В которой \"maintenanceMod\" вычислен используя навыки владения {skill_type_lower} и прочности.<br>"
+            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
+        ),
+    },
 }
 
 
