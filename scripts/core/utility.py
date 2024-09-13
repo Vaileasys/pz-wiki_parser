@@ -6,14 +6,6 @@ from scripts.core import translate, logging_file, version
 # @deprecated: Use version.get_version() directly instead.
 version = version.get_version()
 
-page_mapping = {
-    "Axe": "Axe (skill)",
-    "SmallBlunt": "Short Blunt",
-    "Blunt": "Long Blunt",
-    "SmallBlade": "Short Blade",
-    "LongBlade": "Long Blade",
-}
-
 
 # gets 'Tags' for item_data
 def get_tags(item_data):
@@ -147,6 +139,14 @@ def get_model(item_data):
 
 # returns a formatted skill
 def get_skill_type_mapping(item_data, item_id):
+    skill_mapping = {
+        "Axe": "Axe (skill)",
+        "SmallBlunt": "Short Blunt",
+        "Blunt": "Long Blunt",
+        "SmallBlade": "Short Blade",
+        "LongBlade": "Long Blade",
+    }
+
     skill = item_data.get('Categories', item_data.get('SubCategory'))
     if skill is not None:
         if isinstance(skill, str):
@@ -165,10 +165,10 @@ def get_skill_type_mapping(item_data, item_id):
             skill_translation = translate.get_translation(skill, "Categories")
             language_code = translate.get_language_code()
             if language_code == "en":
-                skill_page = page_mapping.get(skill, skill_translation)
+                skill_page = skill_mapping.get(skill, skill_translation)
                 link = f"[[{skill_page}]]"
             else:
-                skill_page = page_mapping.get(skill, skill)
+                skill_page = skill_mapping.get(skill, skill)
                 lang = f"/{language_code}"
                 if skill_page != skill_translation:
                     link = f"[[{skill_page}{lang}|{skill_translation}]]"
