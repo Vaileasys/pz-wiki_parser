@@ -80,8 +80,17 @@ def write_to_output(item_data, item_id, output_dir):
                     recipes[i] = translate.get_translation(recipes[i], 'TeachedRecipes')
                 recipes = utility.format_br(recipes)
 
-            weapon = utility.get_module_from_item(item_data, 'MountOn')
-            weapon = utility.get_icons_for_item_ids(weapon.values())
+            # (Attachments) Get weapons that it's used for.
+            weapon = ''
+            weapons = item_data.get('MountOn')
+            if weapons:
+                if isinstance(weapons, str):
+                    weapons = [weapons]
+                weapon_list = []
+                for weapon_id in weapons:
+                    weapon_icon = utility.get_icon(weapon_id, True, True, False)
+                    weapon_list.append(weapon_icon)
+                weapon = ''.join(weapon_list)
 
             evolved_recipe = item_data.get('EvolvedRecipeName', '')
             if evolved_recipe:
