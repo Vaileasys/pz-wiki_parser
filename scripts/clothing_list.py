@@ -201,6 +201,28 @@ fabric_type = {
 table_header ='{| class="wikitable theme-red sortable" style="text-align: center;"'
 
 
+def combine_clothing_files():
+    """
+    Combines all .txt files from the clothing directory into a single file.
+    """
+    lc = translate.get_language_code().upper()
+    clothing_dir = f'output/{lc}/item_list/clothing/'
+    output_file = f'output/{lc}/item_list/clothing_list.txt'
+
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+    # Open the output file to write
+    with open(output_file, 'w', encoding='utf-8') as outfile:
+        for filename in sorted(os.listdir(clothing_dir)):
+            if filename.endswith('.txt'):
+                file_path = os.path.join(clothing_dir, filename)
+                with open(file_path, 'r', encoding='utf-8') as infile:
+                    outfile.write(infile.read())
+                    outfile.write('\n\n')
+
+    print(f"Combined files written to {output_file}")
+
+
 def convert_to_percentage(value, start_zero=True, percentage=False):
     if not value or value == '-':
         return '-'
@@ -381,7 +403,14 @@ def write_items_to_file(clothing_dict):
 
 def main():
     get_items()
-
+    while True:
+        user_input = input("Want to merge list files? (Y/N)\n> ").lower()
+        
+        if user_input == "n":
+            break
+        elif user_input == "y":
+            combine_clothing_files()
+            break
 
 if __name__ == "__main__":
     main()
