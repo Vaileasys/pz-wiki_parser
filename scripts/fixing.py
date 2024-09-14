@@ -3,6 +3,7 @@ import shutil
 import script_parser
 from core import logging_file, translate, utility
 
+language_code = translate.get_language_code()
 
 def get_fixing():
     while True:
@@ -86,7 +87,7 @@ def get_require(module, fixing_data):
 
 
 # format fixers
-def format_fixers(module, fixers, language_code):
+def format_fixers(module, fixers):
     formatted_fixers = []
 
     for fixer in fixers:
@@ -99,7 +100,7 @@ def format_fixers(module, fixers, language_code):
         else:
             fixer_name = f"{english_name}/{language_code}|{translated_name}"
 
-        fixer_icon = utility.get_icon_for_item_id(fixer_id)
+        fixer_icon = utility.get_icon(fixer_id, True)
         formatted_fixer = f"{fixer_icon} [[{fixer_name}]]"
         formatted_fixers.append(formatted_fixer)
 
@@ -107,7 +108,7 @@ def format_fixers(module, fixers, language_code):
 
 
 # format skills
-def format_skills(skills, skill_values, language_code):
+def format_skills(skills, skill_values):
     """Format skills and skill values into a string with <br> for line breaks."""
     if not skills or not skill_values:
         return ""
@@ -159,12 +160,11 @@ def write_to_output(module, fixing_id, fixing_data, output_dir):
                 global_item, global_item_value = next(iter(global_item_dict.items()))
                 global_item_id = f"{module}.{global_item}"
                 global_item = f"[[{translate.get_translation(global_item_id)}]]"
-                global_item_icon = utility.get_icon_for_item_id(global_item_id)
+                global_item_icon = utility.get_icon(global_item_id, True)
                 global_item = f"{global_item_icon} {global_item}"
 
-            language_code = translate.get_language_code()
             fixers, fixer_values, skills, skill_values = get_fixer(fixing_id)
-            fixers = format_fixers(module, fixers, language_code)
+            fixers = format_fixers(module, fixers)
 
             parameters = {
                 "name": name,
@@ -192,7 +192,7 @@ def write_to_output(module, fixing_id, fixing_data, output_dir):
                     parameters[f"fixer{i + 1}_value"] = fixer_values[i]
 
                 if i < len(skills):
-                    skill_str = format_skills(skills[i], skill_values[i], language_code)
+                    skill_str = format_skills(skills[i], skill_values[i])
                     parameters[f"fixer{i + 1}_skill"] = skill_str
 
             for key, value in parameters.items():
@@ -223,7 +223,6 @@ def automatic_extraction(output_dir):
 
 def main():
     script_parser.init()
-    language_code = translate.get_language_code()
     output_dir = f'output/{language_code}/fixing'
 
     while True:

@@ -260,12 +260,12 @@ def process_item(item_data, item_id):
     name = item_data.get("DisplayName", 'Unknown')
     page_name = utility.get_page(item_id, name)
     link = utility.format_link(name, page_name)
-    icon = utility.get_icon(item_data, item_id)
+    icon = utility.get_icon(item_id, True, True, True)
 
     item = {}
 
     if "icon" in columns:
-        item["icon"] = f"[[File:{icon}.png|link={page_name}|{name}]]"
+        item["icon"] = icon
 
     if "name" in columns:
         item["name"] = link
@@ -311,7 +311,7 @@ def process_item(item_data, item_id):
         if fabric_id is None:
             fabric = "-"
         else:
-            fabric = utility.get_icon_for_item_id(fabric_id)
+            fabric = utility.get_icon(fabric_id, True)
         item["fabric"] = fabric
 
     if "move_speed" in columns:

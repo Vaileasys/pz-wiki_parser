@@ -74,15 +74,20 @@ def translate_skill(skill, property="Categories"):
 def check_fixing(item_id):
     module, item_name = item_id.split('.')
     parsed_fixing_data = script_parser.get_fixing_data()
+    language_code = translate.get_language_code()
+    lcs = ""
+    if language_code != "en":
+        lcs = f"/{language_code}"
     for fixing, fixing_data in parsed_fixing_data[module].items():
         if isinstance(fixing_data, dict) and 'Require' in fixing_data:
             if item_name in fixing_data['Require']:
-                return '[[File:UI Tick.png|link=Condition#<<repairing>>|<<repairable>>]]'
-    return '[[File:UI Cross.png|link=Condition#<<repairing>>|<<not_repairable>>]]'
+                return f'[[File:UI Tick.png|link=Condition{lcs}#<<repairing>>|<<repairable>>]]'
+    return f'[[File:UI Cross.png|link=Condition{lcs}#<<repairing>>|<<not_repairable>>]]'
 
 
 # get values for each firearm
 def process_item_firearm(item_data, item_id):
+    all_item_data = item_parser.get_item_data()
     language_code = translate.get_language_code()
     if language_code == 'en':
         lcs = ""
@@ -101,27 +106,22 @@ def process_item_firearm(item_data, item_id):
     page_name = utility.get_page(item_id)
     name = translate.get_translation(item_id, 'DisplayName')
     link = utility.format_link(name, page_name)
-    icon = utility.get_icon(item_data, item_id)
+    icon = utility.get_icon(item_id, True, True, True)
     
     ammo = "-"
     ammo_id = item_data.get('AmmoType', '')
     if ammo_id:
-        ammo_data = utility.get_item_data_from_id(ammo_id)
-        ammo_name = ammo_data.get('DisplayName', 'Unknown')
-        ammo_name = translate.get_translation(ammo_id)
-        ammo_page = utility.get_page(ammo_id)
-        ammo_icon = utility.get_icon(ammo_data, ammo_id)
-        ammo = f"[[File:{ammo_icon}.png|link={ammo_page}{lcs}|{ammo_name}]]"
+        ammo = utility.get_icon(ammo_id, True, True, True)
 
     condition_max = item_data.get("ConditionMax", '0')
     condition_chance = item_data.get("ConditionLowerChanceOneIn", '0')
     condition_average = str(int(condition_max) * int(condition_chance))
     repairable = check_fixing(item_id)
     repairable = translate.get_wiki_translation(repairable)
-    
+
     item = {
         "name": name,
-        "icon": f"[[File:{icon}.png|link={page_name}{lcs}|{name}]]",
+        "icon": icon,
         "name_link": link,
         "weight": item_data.get('Weight', '1'),
         "equipped": equipped,
@@ -176,7 +176,7 @@ def process_item_melee(item_data, item_id):
     page_name = utility.get_page(item_id, name)
     name = translate.get_translation(item_id, 'DisplayName')
     link = utility.format_link(name, page_name)
-    icon = utility.get_icon(item_data, item_id)
+    icon = utility.get_icon(item_id, True, True, True)
 
     equipped = "<<1h>>"
     if item_data.get("RequiresEquippedBothHands", "FALSE").lower() == "true":
@@ -202,7 +202,7 @@ def process_item_melee(item_data, item_id):
 
     item = {
         "name": name,
-        "icon": f"[[File:{icon}.png|link={page_name}{lcs}|{name}]]",
+        "icon": icon,
         "name_link": link,
         "weight": item_data.get('Weight', '1'),
         "equipped": equipped,

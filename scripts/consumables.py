@@ -1,7 +1,7 @@
 import os
 import shutil
 from scripts.parser import item_parser
-from scripts.core import logging_file, translate
+from scripts.core import logging_file, translate, utility
 
 
 def get_item():
@@ -13,37 +13,39 @@ def get_item():
         print(f"No item found for '{query_item_id}', please try again.")
 
 
-def get_icon(item_data, variant=""):
-    icon_dir = 'resources/icons/'
-    icon_variants = {
-        "rotten": ['Rotten'],
-        "cooked": ['Cooked', '_Cooked'],
-        "burnt": ['Burnt', 'Overdone']
-    }
+def get_icon_variant(item_id, variant=None):
+    """Gets an icon for a specific variant. Returns the base icon if there is no variant defined or it doesn't exist.
 
-    icon = item_data.get("Icon", '')
-    if variant:
+    Args:
+        item_id (str): The Item ID to get the icon for.
+        variant (str, optional): The variant type to find and output if it exists. Defaults to None.
+
+    Returns:
+        str: The icon for the defined variant. Will return the base icon if the variant isn't defined or doesn't exist.
+    """
+    icons = utility.find_icon(item_id, True)
+    if variant is not None:
         variant = variant.lower()
-
+        icon_variants = {
+            "rotten": ['Rotten', 'Spoiled'],
+            "cooked": ['Cooked'],
+            "burnt": ['Burnt', 'Overdone']
+        }
         if variant in icon_variants:
-            variant_exists = False
+            for variant_suffix in icon_variants[variant]:
+                # Build icon to compare against, removing '.png' from the original icon
+                variant_icon = f"{icons[0].replace(".png", "")}{variant_suffix}.png"
+                print(variant_icon)
+                for icon in icons:
 
-            for suffix in icon_variants[variant]:
-                variant_icon = f"{icon}{suffix}"
-                if os.path.exists(os.path.join(icon_dir, variant_icon + ".png")):
-                    icon = variant_icon
-                    variant_exists = True
-                    break
-
-            if not variant_exists:
-                return ''
-
+                    if icon == variant_icon:
+                        return icon
+            return icons[0]
         else:
-            raise ValueError(f"Variant '{variant}' could not be found in icon_variants dictionary")
-
-    icon = icon + ".png"
-
-    return icon
+            print(f"Unknown variant: {variant}, using default icon.")
+            return icons[0]
+    else:
+        return icons[0]
 
 
 def is_egg(tags):
@@ -70,10 +72,10 @@ def write_to_output(item_data, item_id, output_dir):
 
                 parameters = {
                     "name": translate.get_translation(item_id, "DisplayName"),
-                    "image": get_icon(item_data),
-                    "cooked_image": get_icon(item_data, "cooked"),
-                    "rotten_image": get_icon(item_data, "rotten"),
-                    "burned_image": get_icon(item_data, "burnt"),
+                    "image": get_icon_variant(item_id),
+                    "cooked_image": get_icon_variant(item_id, "cooked"),
+                    "rotten_image": get_icon_variant(item_id, "rotten"),
+                    "burned_image": get_icon_variant(item_id, "burnt"),
                     "hunger": item_data.get("HungerChange", ''),
                     "boredom": item_data.get("BoredomChange", ''),
                     "unhappiness": item_data.get("UnhappyChange", ''),

@@ -16,7 +16,7 @@ def generate_tags_dict():
     for item_id, item_data in item_parser.get_item_data().items():
         if 'Tags' in item_data:
             name = item_data.get('DisplayName')
-            icon = utility.get_icon(item_data, item_id)
+            icon = utility.get_icon(item_id)
             tags = item_data.get('Tags', [])
             if isinstance(tags, str):
                 tags = [tags]
@@ -25,6 +25,55 @@ def generate_tags_dict():
                     tags_dict[tag] = []
                 tags_dict[tag].append({'item_id': item_id, 'icon': icon, 'name': name})
     return tags_dict
+
+
+# Write each tag's item icons for `cycle-img`
+def write_tag_image(tags_dict):
+    output_dir = "output/tags/cycle-img/"
+    os.makedirs(output_dir, exist_ok=True)
+    for tag, tag_data in tags_dict.items():
+        output_file = os.path.join(output_dir, f'{tag}.txt')
+        with open(output_file, 'w', encoding='utf-8') as file:
+            file.write('<span class="cycle-img">')
+            for item in tag_data:
+                icon = item['icon']
+                name = item['name']
+                file.write(f"[[File:{icon}|32x32px|link={tag} (tag)|{name}]]")
+            file.write("</span>")
+    print(f"Completed Tag images script. Files can be found in '{output_dir}'")
+
+
+# Write a wikitable showing all tags and corresponding items
+def write_tag_table(tags_dict):
+    output_dir = "output/tags/"
+    os.makedirs(output_dir, exist_ok=True)
+    output_file = os.path.join(output_dir, 'tags_table.txt')
+    with open(output_file, 'w', encoding='utf-8') as file:
+        file.write('{| class="wikitable theme-blue"\n|-\n! Tag !! Items\n')
+        for tag in sorted(tags_dict.keys()):
+            tag_data = tags_dict[tag]
+            names = sorted(item['name'] for item in tag_data)
+            tag_items = ', '.join(f'[[{name}]]' for name in names)
+            file.write(f'|-\n| <span id="tag-{tag}">[[{tag} (tag)|{tag}]]</span> || {tag_items}\n')
+        file.write('|}')
+    print(f"Completed Tag table script. File can be found in '{output_file}'")
+
+
+# Write each tag item as an item_list
+def write_tag_list(tags_dict):
+    output_dir = "output/tags/item_list/"
+    os.makedirs(output_dir, exist_ok=True)
+    for tag, tag_data in tags_dict.items():
+        output_file = os.path.join(output_dir, f'{tag}.txt')
+        with open(output_file, 'w', encoding='utf-8') as file:
+            file.write('{| class="wikitable theme-blue sortable" style="text-align:center;"\n! Icon !! name !! Item ID\n')
+            for item in tag_data:
+                item_id = item['item_id']
+                icon = item['icon']
+                name = item['name']
+                file.write(f"|-\n| [[File:{icon}|32x32px]] || [[{name}]] || {item_id}\n")
+            file.write('|}')
+    print(f"Completed Tag item list script. Files can be found in '{output_dir}'")
 
 
 def main():
@@ -58,55 +107,6 @@ Q: Quit.""")
         script_options[user_input](tags_dict)
     else:
         print("Invalid option. Exiting.")
-
-
-# Write each tag's item icons for `cycle-img`
-def write_tag_image(tags_dict):
-    output_dir = "output/tags/cycle-img/"
-    os.makedirs(output_dir, exist_ok=True)
-    for tag, tag_data in tags_dict.items():
-        output_file = os.path.join(output_dir, f'{tag}.txt')
-        with open(output_file, 'w', encoding='utf-8') as file:
-            file.write('<span class="cycle-img">')
-            for item in tag_data:
-                icon = item['icon']
-                name = item['name']
-                file.write(f"[[File:{icon}.png|32x32px|link={tag} (tag)|{name}]]")
-            file.write("</span>")
-    print(f"Completed Tag images script. Files can be found in '{output_dir}'")
-
-
-# Write a wikitable showing all tags and corresponding items
-def write_tag_table(tags_dict):
-    output_dir = "output/tags/"
-    os.makedirs(output_dir, exist_ok=True)
-    output_file = os.path.join(output_dir, 'tags_table.txt')
-    with open(output_file, 'w', encoding='utf-8') as file:
-        file.write('{| class="wikitable theme-blue"\n|-\n! Tag !! Items\n')
-        for tag in sorted(tags_dict.keys()):
-            tag_data = tags_dict[tag]
-            names = sorted(item['name'] for item in tag_data)
-            tag_items = ', '.join(f'[[{name}]]' for name in names)
-            file.write(f'|-\n| <span id="tag-{tag}">[[{tag} (tag)|{tag}]]</span> || {tag_items}\n')
-        file.write('|}')
-    print(f"Completed Tag table script. File can be found in '{output_file}'")
-
-
-# Write each tag item as an item_list
-def write_tag_list(tags_dict):
-    output_dir = "output/tags/item_list/"
-    os.makedirs(output_dir, exist_ok=True)
-    for tag, tag_data in tags_dict.items():
-        output_file = os.path.join(output_dir, f'{tag}.txt')
-        with open(output_file, 'w', encoding='utf-8') as file:
-            file.write('{| class="wikitable theme-blue sortable" style="text-align:center;"\n! Icon !! name !! Item ID\n')
-            for item in tag_data:
-                item_id = item['item_id']
-                icon = item['icon']
-                name = item['name']
-                file.write(f"|-\n| [[File:{icon}.png|32x32px]] || [[{name}]] || {item_id}\n")
-            file.write('|}')
-    print(f"Completed Tag item list script. Files can be found in '{output_dir}'")
 
 
 if __name__ == "__main__":

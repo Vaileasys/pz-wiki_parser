@@ -49,7 +49,7 @@ def write_to_output(sorted_items):
             file.write('{| class="wikitable theme-blue"\n')
             file.write(f"{translated_header}\n")
             for page_name, translated_item_name, icons, item_id in sorted_items[display_category]:
-                icons_image = ' '.join([f"[[File:{icon}.png|32x32px]]" for icon in icons])
+                icons_image = ' '.join([f"[[File:{icon}|32x32px]]" for icon in icons])
                 item_link = f"[[{page_name}]]"
 
                 if language_code != "en" or page_name != translated_item_name:
@@ -70,38 +70,8 @@ def item_list():
             display_category = item_data.get('DisplayCategory', 'Other')
             display_category = translate_category(display_category)
             module, item_name = item_id.split('.', 1)
-            
-            icons = []
-            
-            # Check if 'IconsForTexture' property exists and use it for icon
-            icons_for_texture = []
-            if 'IconsForTexture' in item_data:
-                icon = "Question_On"
-                icons_for_texture = item_data.get('IconsForTexture', [''])
-                if isinstance(icons_for_texture, str):
-                    icons_for_texture = [icons_for_texture]
-                icons = [icon.strip() for icon in icons_for_texture]
-            else:
-                # Get 'Icon' property
-                icon = utility.get_icon(item_data, item_id)
-                if icon != "default":
-                    icons.append(icon)
 
-            if icon == "Question_On":
-                if icons_for_texture:
-                    icons = [icon.strip() for icon in icons_for_texture]
-            
-            # Check if icon has variants
-            icon_variants = ['Rotten', 'Spoiled', 'Cooked', '_Cooked', 'Burnt', 'Overdone']
-            for variant in icon_variants:
-                variant_icon = f"{icon}{variant}.png"
-                if os.path.exists(os.path.join(icon_dir, variant_icon)):
-                    icons.append(icon + variant)
-
-            # Check if 'WorldObjectSprite' property exists and use it for icon
-            if icon == "default":
-                icon = item_data.get('WorldObjectSprite', 'Flatpack')
-                icons.append(icon)
+            icon = utility.find_icon(item_id, True)
             
             # We don't need to translate again if language code is 'en'
             translated_item_name = item_data.get('DisplayName', '')
@@ -137,7 +107,7 @@ def item_list():
                 display_category = 'Unknown'
             if display_category not in sorted_items:
                 sorted_items[display_category] = []
-            sorted_items[display_category].append((page_name, translated_item_name, icons, item_id))
+            sorted_items[display_category].append((page_name, translated_item_name, icon, item_id))
     write_to_output(sorted_items)
 
 

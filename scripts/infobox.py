@@ -60,7 +60,7 @@ def write_to_output(item_data, item_id, output_dir):
         with open(output_file, 'w', encoding='utf-8') as file:
             file.write("{{Infobox item")
 
-            icons = utility.get_icons(item_data)
+            icons = utility.find_icon(item_id, True, True, False)
 
             category = 'DisplayCategory'
             category = translate.get_translation(item_data.get(category, 'Item'), category)
@@ -90,11 +90,11 @@ def write_to_output(item_data, item_id, output_dir):
                     evolved_recipe = evolved_recipe_translated
             
             tags = utility.get_tags(item_data)
-
+            
             parameters = {
                 "name": translate.get_translation(item_id, "DisplayName"),
                 "model": utility.get_model(item_data),
-#                "icon": utility.get_icons(item_data),  # added with 'insert_parameters_after'
+#                "icon": # added with 'insert_parameters_after'
                 "icon_name": translate.get_translation(item_id, "DisplayName"),
                 "category": category,
                 "weight": item_data.get('Weight', 1),
@@ -106,7 +106,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "weapon": weapon,
                 "part_type": translate.get_translation(item_data.get('PartType', ''), 'PartType'),
                 "skill_type": utility.get_skill_type_mapping(item_data, item_id),
-                "ammo_type": utility.get_icons_for_item_ids(item_data.get('AmmoType', '')),
+                "ammo_type": utility.get_icon(item_data.get('AmmoType', ''), True, True, False),
                 "clip_size": item_data.get('MaxAmmo', ''),
                 "material": material,
                 "material_value": material_value,
@@ -194,7 +194,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "bad_cold": item_data.get('BadCold', '').capitalize(),
                 "spice": item_data.get('Spice', '').capitalize(),
                 "evolved_recipe": evolved_recipe,
-    #                "tag": utility.get_tags(item_data),  # added with 'insert_parameters_after'
+#               "tag": # added with 'insert_parameters_after'
                 "item_id": item_id,
                 "infobox_version": version.get_version()
             }
