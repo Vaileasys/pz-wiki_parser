@@ -252,8 +252,8 @@ def get_icon(item_id, format=False, all_icons=False, cycling=False):
     :type cycling: bool, optional
 
     :return: The icon(s) associated with the item_id. If format is True, returns a formatted string. If format is False, 
-             returns either a single icon (str) or a list of icons (list[str]).
-    :rtype: icon_result (str | list[str])
+             returns either a single icon (str).
+    :rtype: icon_result (str)
     """
     # Make sure item_id has a value
     if not item_id:
