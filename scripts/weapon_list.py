@@ -56,6 +56,28 @@ firearm_header = """{| class="wikitable theme-red sortable" style="text-align: c
 skills = {}
 
 
+def combine_weapon_files(folder="melee"):
+    """
+    Combines all .txt files from the weapon directory into a single file.
+    """
+    lc = translate.get_language_code().upper()
+    weapon_dir = f'output/{lc}/item_list/weapons/{folder}'
+    output_file = f'output/{lc}/item_list/weapons/{folder}_list.txt'
+
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+    # Open the output file to write
+    with open(output_file, 'w', encoding='utf-8') as outfile:
+        for filename in sorted(os.listdir(weapon_dir)):
+            if filename.endswith('.txt'):
+                file_path = os.path.join(weapon_dir, filename)
+                with open(file_path, 'r', encoding='utf-8') as infile:
+                    outfile.write(infile.read())
+                    outfile.write('\n\n')
+
+    print(f"Combined '{folder}' files written to {output_file}")
+
+
 # function to be efficient with translating skills
 def translate_skill(skill, property="Categories"):
     if skill not in skills:
@@ -283,6 +305,15 @@ def get_items():
 
 def main():
     get_items()
+    while True:
+        user_input = input("Want to merge list files? (Y/N)\n> ").lower()
+        
+        if user_input == "n":
+            break
+        elif user_input == "y":
+            combine_weapon_files("melee")
+            combine_weapon_files("firearm")
+            break
 
 
 if __name__ == "__main__":
