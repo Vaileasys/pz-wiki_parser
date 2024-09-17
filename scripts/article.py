@@ -70,7 +70,7 @@ LANGUAGE_DATA = {
         ),
     },
     "ru": {
-        "intro_template": "'''{lowercase_name}''' это [[Items/ru|предмет]] в [[Project Zomboid/ru|Project Zomboid]].",
+        "intro_template": "'''{lowercase_name}''' это [[Item/ru|предмет]] в [[Project Zomboid/ru|Project Zomboid]].",
         "headers": {
             "Usage": "Использование",
             "Condition": "Состояние",
@@ -87,6 +87,26 @@ LANGUAGE_DATA = {
             "{name} имеет максимальное состояние {condition_max}. Скорость поломки оружия зависит от уровня [[Skill/ru|навыков]] {skill_type_lower} и [[починки]]. Шанс потери одного очка [[состояния]] можно упростить до следующей формулы: <code>1 in (35 + maintenanceMod &times; 2)</code>. "
             "В которой \"maintenanceMod\" вычислен используя навыки владения {skill_type_lower} и прочности.<br>"
             "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
+        ),
+    },
+    "it": {
+        "intro_template": "Il/la '''{lowercase_name}''' è un [[Item/it|Oggetto]] in [[Project Zomboid/it|Project Zomboid]].",
+        "headers": {
+            "Usage": "Utilizzo",
+            "Condition": "Condizione",
+            "Location": "Posizione",
+            "Code": "Codice",
+            "See also": "Vedi anche",
+            "Consumable properties": "Proprietà del consumabile",
+            "Repairing": "Riparazione",
+        },
+        "help_text": "Aiuta PZwiki aggiungendo informazioni a questa sezione.",
+        "translate_reason": "Tradotto usando file di traduzione del gioco.",
+        "condition_categories": ["Arma", "Attrezzo / Arma"],
+        "condition_text": (
+            "Il/la {name} ha una durabilità che arriva ad un massimo di :{condition_max}. Il ritmo a cui si degrada, dipende dall'abilità : {skill_type_lower} e [[maintenance/it|manutenzione]] [[skill/it|abilità]]. La probabilità di perdere [[durability/it|durabilità]] può essere semplificata nella seguente formula: <code>1 in (35 + maintenanceMod &times; 2)</code>. "
+            "Dove \"maintenanceMod\" è calcolata usando il livello di abilità in {skill_type_lower} e il livello di abilità in manutenzione.<br>"
+        "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
         ),
     },
 }
