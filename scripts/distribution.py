@@ -582,7 +582,6 @@ def process_vehicle_file_formatted(file_path, item_name):
     return ""
 
 
-
 def process_zombie_file_formatted(file_path, item_name):
     rows_to_add = []
     with open(file_path, mode='r', newline='') as csvfile:
@@ -653,7 +652,6 @@ def process_foraging_file_formatted(file_paths, item_name):
 
 
 def formatting(unique_items, output_path):
-    game_version = version.get_version()
     complete_output_path = os.path.join(output_path, 'complete')
     csv_output_path = os.path.join(output_path, 'csv')
 
@@ -687,10 +685,11 @@ def formatting(unique_items, output_path):
         output_data += "\n}}"
         output_data = '\n'.join(line for line in output_data.split('\n') if line.strip())
 
-        if output_data != f"{{{{location table|item_id={item}\n}}}}":
+        # Check if output_data has more than 2 lines before saving
+        output_lines = output_data.strip().split('\n')
+        if len(output_lines) > 2:
             with open(os.path.join(complete_output_path, f'{item}.txt'), 'w') as output_file:
                 output_file.write(output_data)
-
 
 
 if __name__ == '__main__':
