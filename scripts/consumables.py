@@ -35,7 +35,6 @@ def get_icon_variant(item_id, variant=None):
             for variant_suffix in icon_variants[variant]:
                 # Build icon to compare against, removing '.png' from the original icon
                 variant_icon = f"{icons[0].replace(".png", "")}{variant_suffix}.png"
-                print(variant_icon)
                 for icon in icons:
 
                     if icon == variant_icon:
