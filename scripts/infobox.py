@@ -60,7 +60,7 @@ def write_to_output(item_data, item_id, output_dir):
         with open(output_file, 'w', encoding='utf-8') as file:
             file.write("{{Infobox item")
 
-            icons = utility.find_icon(item_id, True, True, False)
+            icons = utility.find_icon(item_id, True)
 
             category = 'DisplayCategory'
             category = translate.get_translation(item_data.get(category, 'Item'), category)
