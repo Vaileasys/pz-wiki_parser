@@ -64,7 +64,7 @@ LANGUAGE_DATA = {
         "translate_reason": "Oyunun çeviri dosyalaranı kullanarak çevrildi.",
         "condition_categories": ["Silah", "Alet / Silah"],
         "condition_text": (
-            "{name}, {condition_max} azami sağlamlığa sahiptir. Bozulma oranı {skill_type_lower} ve [[maintenance/tr|onarım]] [[skill/tr|becerilerine]] bağlıdır. [[durability|Sağlamlığın]] düşme ihtimali şu formülü kullanarak basitleştirilebilir: "
+            "{name}, {condition_max} azami sağlamlığa sahiptir. Bozulma oranı {skill_type_lower} ve [[maintenance/tr|onarım]] [[skill/tr|becerilerine]] bağlıdır. [[durability/tr|Sağlamlığın]] düşme ihtimali şu formülü kullanarak basitleştirilebilir: "
             "<code>1/(35 + maintenanceMod &times; 2)</code>. Buradaki \"maintenanceMod\", {skill_type_lower} ve onarım becerilerini kullanarak hesaplanır.<br>"
             "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
         ),
@@ -107,6 +107,26 @@ LANGUAGE_DATA = {
             "Il/la {name} ha una durabilità che arriva ad un massimo di :{condition_max}. Il ritmo a cui si degrada, dipende dall'abilità : {skill_type_lower} e [[maintenance/it|manutenzione]] [[skill/it|abilità]]. La probabilità di perdere [[durability/it|durabilità]] può essere semplificata nella seguente formula: <code>1 in (35 + maintenanceMod &times; 2)</code>. "
             "Dove \"maintenanceMod\" è calcolata usando il livello di abilità in {skill_type_lower} e il livello di abilità in manutenzione.<br>"
         "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
+        ),
+    },
+    "es": {
+        "intro_template": "'''{lowercase_name}''' es un [[item/es|artículo]] en [[Project Zomboid/es|Project Zomboid]].",
+        "headers": {
+            "Usage": "Uso",
+            "Condition": "Estado",
+            "Location": "Localización",
+            "Code": "Código",
+            "See also": "Ver también",
+            "Consumable properties": "Propiedades de los consumibles",
+            "Repairing": "Reparación",
+        },
+        "help_text": "Ayuda a PZwiki añadiendo información en esta sección",
+        "translate_reason": "Traducido con archivos de traducción del juego.",
+        "condition_categories": ["Arma", "Herramienta / Arma"],
+        "condition_text": (
+            "El {name} tiene una condición máxima de {condition_max}. Su tasa de degradación está influenciada por la {skill_type_lower} y [[maintenance/es|maintenance]] [[skill/es|skills]]. La probabilidad de perderlo [[durability/es|durabilidad]] se puede resumir con la siguiente fórmula: "
+            "<code>1 en (35 + maintenanceMod &times; 2)</code>. Donde \"maintenanceMod\" se calcula utilizando el {skill_type_lower} y las habilidades de mantenimiento.<br>"
+            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
         ),
     },
 }
