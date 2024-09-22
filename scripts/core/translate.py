@@ -11,8 +11,8 @@ default_language = None
 LANGUAGE_CODES = {
     'ar': ("Cp1252", "Arabic"),
     'ca': ("ISO-8859-15", "Catalan"),
-    'ch': ("UTF-8", "Chinese"),
-    'cn': ("UTF-8", "Chinese"),
+    'ch': ("UTF-8", "Traditional Chinese (zh-Hant)"),
+    'cn': ("UTF-8", "Simplified Chinese (zh-Hans)"),
     'cs': ("Cp1250", "Czech"),
     'da': ("Cp1252", "Danish"),
     'de': ("Cp1252", "German"),
