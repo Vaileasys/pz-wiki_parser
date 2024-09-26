@@ -124,8 +124,28 @@ LANGUAGE_DATA = {
         "translate_reason": "Traducido con archivos de traducción del juego.",
         "condition_categories": ["Arma", "Herramienta / Arma"],
         "condition_text": (
-            "El {name} tiene una condición máxima de {condition_max}. Su tasa de degradación está influenciada por la {skill_type_lower} y [[maintenance/es|maintenance]] [[skill/es|skills]]. La probabilidad de perderlo [[durability/es|durabilidad]] se puede resumir con la siguiente fórmula: "
+            "El {name} tiene una condición máxima de {condition_max}. Su tasa de degradación está influenciada por la {skill_type_lower} y [[maintenance/es|mantenimiento]] [[skill/es|habilidad]]. La probabilidad de perderlo [[durability/es|durabilidad]] se puede resumir con la siguiente fórmula: "
             "<code>1 en (35 + maintenanceMod &times; 2)</code>. Donde \"maintenanceMod\" se calcula utilizando el {skill_type_lower} y las habilidades de mantenimiento.<br>"
+            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
+        ),
+    },
+    "pt-br": {
+        "intro_template": "'''{lowercase_name}''' é um [[item/pt-br|item]] em [[Project Zomboid/pt-br|Project Zomboid]].",
+        "headers": {
+            "Usage": "Utilidade",
+            "Condition": "Condição",
+            "Location": "Local",
+            "Code": "Código",
+            "See also": "Veja também",
+            "Consumable properties": "Propriedades consumíveis",
+            "Repairing": "Consertando",
+        },
+        "help_text": "Ajude a PZwiki adicionando mais informações a essa seção.",
+        "translate_reason": "Traduzido utilizando os arquivos de tradução do jogo.",
+        "condition_categories": ["Arma", "Ferramenta / Arma"],
+        "condition_text": (
+            "O/A {name} tem uma condição máxima de {condition_max}. Sua taxa de degradação é influenciada pelas [[skill/pt-br|habilidades]] de {skill_type_lower} and [[maintenance/pt-br|manutenção]]. A chance de perder [[durability/pt-br|durabilidade]] pode ser siplificada utilizando a seguinte fórmula: "
+            "<code>1 em (35 + maintenanceMod &times; 2)</code>. Onde \"maintenanceMod\" é calculado utilizando o nível das duas habilidades.<br>"
             "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
         ),
     },
