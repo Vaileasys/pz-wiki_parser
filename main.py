@@ -159,7 +159,7 @@ def navigate_menu(menu, is_root=False):
             if selected_option['name'] == 'Settings' and selected_option['sub_options'] is None:
                 navigate_menu(settings_structure)
             elif selected_option['name'] == 'Run First Time Setup':
-                handle_module('scripts.setup')
+                handle_module('scripts.core.setup')
                 print("\nReturning to the menu...\n")
             elif 'module' in selected_option:
                 handle_module(selected_option['module'])
