@@ -149,6 +149,46 @@ LANGUAGE_DATA = {
             "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
         ),
     },
+    "uk": {
+        "intro_template": "'''{lowercase_name}''' це [[Item/uk|предмет]] в [[Project Zomboid/uk|Project Zomboid]].",
+        "headers": {
+            "Usage": "Застосування",
+            "Condition": "Стан",
+            "Location": "Локація",
+            "Code": "Код",
+            "See also": "Дивіться також",
+            "Consumable properties": "Витратні властивості",
+            "Repairing": "Ремонт",
+        },
+        "help_text": "Допоможіть PZ-Wiki, додавши інформацію до цього розділу.",
+        "translate_reason": "Перекладено за допомогою файлів перекладу гри.",
+        "condition_categories": ["Інструмент", "Інструмент / Зброя"],
+        "condition_text": (
+            "{name} має максимальний стан {condition_max}. Його швидкість зносу залежить від {skill_type} і [[skill/uk|навички]] [[maintenance/uk|технічного обслуговування]]. Ймовірність втрати [[durability/uk|міцності]] можна спростити до наступної формули: "
+            "<code>1 із (35 + maintenanceMod &times; 2)</code>. Де \"maintenanceMod\" розраховується за допомогою {skill_type} та навички технічного обслуговування.<br>"
+            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
+        ),
+    },
+    "th": {
+        "intro_template": "'''{lowercase_name}''' คือ[[item/th|ไอเท็ม]]ใน [[Project Zomboid/th|Project Zomboid]]",
+        "headers": {
+            "Usage": "การใช้งาน",
+            "Condition": "สภาพความทนทาน",
+            "Location": "ตำแหน่ง",
+            "Code": "โค้ด",
+            "See also": "ดูเพิ่มเติม",
+            "Consumable properties": "คุณสมบัติของที่ใช้แล้วหมดไป",
+            "Repairing": "การซ่อมแซม",
+        },
+        "help_text": "ช่วย PZwiki  โดยการเพิ่มข้อมูลในส่วนนี้",
+        "translate_reason": "แปลโดยใช้ไฟล์แปลของเกม",
+        "condition_categories": ["อาวุธ", "อุปกรณ์ / อาวุธ"],
+        "condition_text": (
+            "{name}มีสภาพสูงสุด {condition_max} อัตราการเสื่อมสภาพของได้รับผลจาก[[skill/th|ทักษะ]]{skill_type_lower}และ[[maintenance/th|การดูแลรักษาอาวุธ]]สามารถสรุปโอกาสในการเสื่อม[[durability/th|สภาพความทนทาน]]ได้ด้วยสูตรดังต่อไปนี้:"
+            "<code>1 ใน (35 + maintenanceMod &times; 2)</code> โดยที่ \"maintenanceMod\" จะถูกคำนวณโดยรวมเลเวลทักษะ{skill_type_lower}บวกกับทักษะการดูแลรักษาอาวุธ<br>"
+            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
+            ),
+    },
 }
 
 
