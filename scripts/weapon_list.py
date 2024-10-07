@@ -12,13 +12,13 @@ melee_header = """{| class="wikitable theme-red sortable" style="text-align: cen
 ! colspan=4 | <<damage>>
 ! colspan=2 | <<range>>
 ! rowspan=2 | [[File:UI_AttackSpeed.png|32px|link=|<<attack_speed>>]]
-! rowspan=2 | [[File:UI_CriticalHit_Chance.png|32px|link=|<<crit_chance>>]]
-! rowspan=2 | [[File:UI_CriticalHit_Multiply.png|32px|link=|<<crit_multiplier>>]]
+! rowspan=2 | [[File:UI_Critical_Chance.png|32px|link=|<<crit_chance>>]]
+! rowspan=2 | [[File:UI_Critical_Multiply.png|32px|link=|<<crit_multiplier>>]]
 ! rowspan=2 | [[File:UI_Knockback.png|32px|link=|<<knockback>>]]
 ! rowspan=2 | [[File:UI_Condition_Max.png|32px|link=|<<max_condition>>]]
 ! rowspan=2 | [[File:UI_Condition_Chance.png|32px|<<condition_lower_chance>>]]
 ! rowspan=2 | [[File:UI_Condition_Average.png|32px|link=|<<average_condition>>]]
-! rowspan=2 | [[File:UI Durability.png|32px|link=|<<repairable>>]]
+! rowspan=2 | [[File:UI_Condition.png|32px|link=|<<repairable>>]]
 ! rowspan=2 | <<item_id>>
 |-
 ! [[File:UI_Damage_Min.png|32px|link=|<<min_damage>>]]
@@ -40,11 +40,11 @@ firearm_header = """{| class="wikitable theme-red sortable" style="text-align: c
 ! colspan=2 | <<range>>
 ! rowspan=2 | [[File:UI_Accuracy.png|32px|link=|<<accuracy>>]]
 ! rowspan=2 | [[File:UI_Accuracy_Add.png|32px|link=|<<accuracy_add>>]]
-! rowspan=2 | [[File:UI_CriticalHit_Chance.png|32px|link=|<<crit_chance>>]]
+! rowspan=2 | [[File:UI_Critical_Chance.png|32px|link=|<<crit_chance>>]]
 ! rowspan=2 | [[File:UI_Critical_Add.png|32px|link=|<<crit_chance_add>>]]
 ! rowspan=2 | [[File:UI_Noise.png|32px|link=|<<noise_radius>>]]
 ! rowspan=2 | [[File:UI_Knockback.png|32px|link=|<<knockback>>]]
-! rowspan=2 | [[File:UI Durability.png|32px|link=|<<repairable>>]]
+! rowspan=2 | [[File:UI_Condition.png|32px|link=|<<repairable>>]]
 ! rowspan=2 | <<item_id>>
 |-
 ! [[File:UI_Damage_Min.png|32px|link=|<<min_damage>>]]
