@@ -30,12 +30,13 @@ LANGUAGE_CODES = {
     'ph': ("UTF-8", "Filipino"),
     'pl': ("Cp1250", "Polish"),
     'pt': ("Cp1252", "Portuguese"),
-    'ptbr': ("Cp1252", "Portuguese (Brazilian)"),
+    'pt-br': ("Cp1252", "Portuguese (Brazilian)"),
+    # 'ptbr': ("Cp1252", "Portuguese (Brazilian)"), Commented out for now, rename translation folder to pt-br and use that for now
     'ro': ("UTF-8", "Romanian"),
     'ru': ("Cp1251", "Russian"),
     'th': ("UTF-8", "Thai"),
     'tr': ("Cp1254", "Turkish"),
-    'ua': ("Cp1251", "Ukrainian")
+    'uk': ("UTF-8", "Ukrainian")
 }
 
 PROPERTY_PREFIXES = {
