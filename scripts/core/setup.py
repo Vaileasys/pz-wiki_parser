@@ -30,18 +30,34 @@ def verify_media_directory(install_path):
     return media_dir
 
 
-def copy_scripts(media_dir):
+def copy_scripts_and_radio(media_dir):
+    # Define source directories
     scripts_dir = os.path.join(media_dir, 'scripts')
+    radio_dir = os.path.join(media_dir, 'radio')
+
+    # Define destination directories
+    scripts_destination = os.path.join('resources', 'scripts')
+    radio_destination = os.path.join('resources', 'radio')
+
+    # Check and copy scripts folder
     if not os.path.exists(scripts_dir):
         raise FileNotFoundError(f"Scripts directory not found in {scripts_dir}.")
 
-    destination_dir = os.path.join('resources', 'scripts')
+    if os.path.exists(scripts_destination):
+        shutil.rmtree(scripts_destination)
 
-    if os.path.exists(destination_dir):
-        shutil.rmtree(destination_dir)
+    shutil.copytree(scripts_dir, scripts_destination)
+    print(f"Copied {scripts_dir} to {scripts_destination}")
 
-    shutil.copytree(scripts_dir, destination_dir)
-    print(f"Copied {scripts_dir} to {destination_dir}")
+    # Check and copy radio folder
+    if not os.path.exists(radio_dir):
+        raise FileNotFoundError(f"Radio directory not found in {radio_dir}.")
+
+    if os.path.exists(radio_destination):
+        shutil.rmtree(radio_destination)
+
+    shutil.copytree(radio_dir, radio_destination)
+    print(f"Copied {radio_dir} to {radio_destination}")
 
 
 def copy_lua_files(media_dir):
@@ -117,7 +133,7 @@ def main():
         return
 
     try:
-        copy_scripts(media_dir)
+        copy_scripts_and_radio(media_dir)
         copy_lua_files(media_dir)
         handle_translations(media_dir)
     except FileNotFoundError as e:
