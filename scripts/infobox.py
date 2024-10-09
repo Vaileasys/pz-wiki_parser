@@ -4,6 +4,17 @@ from scripts.parser import item_parser
 from scripts.core import translate, utility, logging_file, version
 
 
+CLOTHING_PENALTIES = {
+    "FullSuitHead": '75',
+    "FullHat": '75',
+    "MaskFull": '50',
+    "MaskEyes": '20',
+    "Mask": '20',
+    "Eyes": '2.5',
+    "LeftEye": '2.5',
+    "RightEye": '2.5',
+}
+
 def get_item():
     while True:
         query_item_id = input("Enter an item id\n> ")
@@ -91,6 +102,12 @@ def write_to_output(item_data, item_id, output_dir):
                     weapon_icon = utility.get_icon(weapon_id, True, True, False)
                     weapon_list.append(weapon_icon)
                 weapon = ''.join(weapon_list)
+            
+            foraging = ''
+            body_location = item_data.get('BodyLocation', '')
+            if body_location in CLOTHING_PENALTIES:
+                penalty = CLOTHING_PENALTIES[body_location]
+                foraging = f"-{penalty}%"
 
             evolved_recipe = item_data.get('EvolvedRecipeName', '')
             if evolved_recipe:
@@ -123,6 +140,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "writable": item_data.get('CanBeWrite', '').capitalize(),
                 "recipes": recipes,
                 "skill_trained": translate.get_translation(item_data.get('SkillTrained', ''), 'SkillTrained'),
+                "foraging_change": foraging,
                 "page_number": item_data.get('NumberOfPages') or item_data.get('PageToWrite', ''),
                 "packaged": item_data.get('Packaged', '').capitalize(),
                 "rain_factor": item_data.get('RainFactor', ''),
