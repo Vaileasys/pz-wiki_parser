@@ -3,7 +3,7 @@ import shutil
 from scripts.parser import item_parser
 from scripts.core import translate, utility, logging_file, version
 
-
+# Values located in forageSystem.lua line 105 'clothingPenalties' (build 41.78.16)
 CLOTHING_PENALTIES = {
     "FullSuitHead": '75',
     "FullHat": '75',
@@ -106,8 +106,7 @@ def write_to_output(item_data, item_id, output_dir):
             foraging = ''
             body_location = item_data.get('BodyLocation', '')
             if body_location in CLOTHING_PENALTIES:
-                penalty = CLOTHING_PENALTIES[body_location]
-                foraging = f"-{penalty}%"
+                foraging = f"-{CLOTHING_PENALTIES[body_location]}%"
 
             evolved_recipe = item_data.get('EvolvedRecipeName', '')
             if evolved_recipe:
