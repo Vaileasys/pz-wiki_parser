@@ -15,6 +15,7 @@ CLOTHING_PENALTIES = {
     "RightEye": '2.5',
 }
 
+
 def get_item():
     while True:
         query_item_id = input("Enter an item id\n> ")
@@ -119,7 +120,7 @@ def write_to_output(item_data, item_id, output_dir):
             parameters = {
                 "name": translate.get_translation(item_id, "DisplayName"),
                 "model": utility.get_model(item_data),
-#                "icon": # added with 'insert_parameters_after'
+                # "icon":  (added with 'insert_parameters_after')
                 "icon_name": translate.get_translation(item_id, "DisplayName"),
                 "category": category,
                 "weight": item_data.get('Weight', 1),
@@ -220,7 +221,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "bad_cold": item_data.get('BadCold', '').capitalize(),
                 "spice": item_data.get('Spice', '').capitalize(),
                 "evolved_recipe": evolved_recipe,
-#               "tag": # added with 'insert_parameters_after'
+                # "tag": (added with 'insert_parameters_after')
                 "item_id": item_id,
                 "infobox_version": version.get_version()
             }
