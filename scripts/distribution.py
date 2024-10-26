@@ -1,553 +1,168 @@
-import re
+import json
 import os
-import csv
-import shutil
-from tqdm import tqdm
-from scripts.core import version
+import re
+import tqdm
+import scripts.distribution_parser as distribution_parser
 
+# Dictionary to store changes for reference across the script
+item_name_changes = {}
 
-def main():
-    root_path = os.getcwd()
-    resources_path = os.path.join(root_path, 'resources/lua')
-    output_path = os.path.join(root_path, 'output/distributions')
-    csv_output_path = os.path.join(output_path, 'csv')
-    file_names = ['distributions.lua', 'proceduraldistributions.lua', 'VehicleDistributions.lua']
-    forage_file_name = 'foragedefinitions.lua'
+def load_item_dictionary(item_name):
+    """Load and search for a modified item name based on a dictionary in itemname_en.txt."""
+    file_path = "resources/itemname_en.txt"  # Assuming the file path
 
-    # Extract unique items
-    unique_items = sorted(unique_items_extract(resources_path, file_names, forage_file_name))
-    write_unique_names(unique_items, output_path)
-    item_processing(unique_items, resources_path, csv_output_path, file_names)
-    attached_weapon_processing(resources_path, output_path)
-    formatting(unique_items, output_path)
+    if not os.path.exists(file_path):
+        return item_name  # If the file doesn't exist, return the original item name
 
-
-def unique_items_extract(resources_path, file_names, forage_file_name):
-    unique_items = set()
-    # Regex to look for 'items = {' or 'junk = {'
-    item_regex = re.compile(r'\b(items|junk)\s*=\s*\{')
-    # Regex for matching 'type' entries in foragedefinitions.lua
-    type_regex = re.compile(r'^\s*type\s*=\s*"([^"]+)",\s*$')
-
-    # Process distribution and vehicle files
-    for file_name in file_names:
-        with open(os.path.join(resources_path, file_name), 'r') as file:
-            recording = False
-            for line in file:
-                if line.strip().startswith('--'):
-                    continue
-                if recording:
-                    if '}' in line:
-                        recording = False
-                    else:
-                        items = re.findall(r'"([^"]+)"', line)
-                        cleaned_items = [re.sub(r'.*\.', '', item) for item in items]
-                        unique_items.update(cleaned_items)
-                elif item_regex.search(line):
-                    recording = True
-
-    # Process foragedefinitions.lua for 'type' entries and items blocks
-    path = os.path.join(resources_path, forage_file_name)
-    with open(path, 'r') as file:
-        recording = False
+    # Manually parse the dictionary file
+    item_dict = {}
+    with open(file_path, "r") as file:
         for line in file:
-            if line.strip().startswith('--'):
-                continue
-            if recording:
-                if '}' in line:
-                    recording = False
-                else:
-                    if type_regex.match(line):
-                        match = type_regex.match(line)
-                        full_item = match.group(1)
-                        item_name = full_item.split('.')[-1]
-                        unique_items.add(item_name)
-                    else:
-                        items = re.findall(r'"([^"]+)"', line)
-                        cleaned_items = [re.sub(r'.*\.', '', item) for item in items]
-                        unique_items.update(cleaned_items)
-            elif item_regex.search(line):
-                recording = True
-
-    return unique_items
-
-
-def write_unique_names(unique_items, output_path):
-    # Create the full path for the unique names file
-    file_path = os.path.join(output_path, 'unique_names.txt')
-    os.makedirs(output_path, exist_ok=True)
-    with open(file_path, 'w') as file:
-        for item in sorted(unique_items):
-            file.write(item + '\n')
-
-
-def item_processing(unique_items, resources_path, output_path, file_names):
-    if os.path.exists(output_path):
-        shutil.rmtree(output_path)
-    os.makedirs(output_path, exist_ok=True)
-
-    for item in tqdm(unique_items, desc="Processing items"):
-        processed_entries = item_processing_container(item, resources_path)
-        processed_entries = process_distribution_items(item, resources_path, processed_entries)
-        write_container_csv(item, output_path, processed_entries)
-        item_processing_vehicle(item, resources_path, output_path)
-        item_processing_foraging(item, resources_path, output_path)
-
-
-def item_processing_container(item, resources_path):
-    procedural_data = os.path.join(resources_path, 'proceduraldistributions.lua')
-    distribution_data = os.path.join(resources_path, 'distributions.lua')
-
-    processed_entries = []
-
-    with open(procedural_data, 'r') as file:
-        proc_lines = file.readlines()
-    with open(distribution_data, 'r') as file:
-        dist_lines = file.readlines()
-
-    item_value_pattern = re.compile(r'(?:[."]){}"\s*,\s*([0-9]+(?:\.[0-9]+)?)'.format(re.escape(item)), re.IGNORECASE)
-    id_pattern = re.compile(r'^\s{4}(\w+)\s')
-    container_pattern_primary = re.compile(r'^\s{8}(\w+)\s')
-    container_pattern_fallback = re.compile(r'^\s{4}(\w+)\s')
-    ignore_line_pattern = re.compile(r'(items|junk|rolls)', re.IGNORECASE)
-    room_pattern = re.compile(r'^\s{4}(\w+)\s')
-    rolls_pattern = re.compile(r'rolls\s*=\s*(\d+)', re.IGNORECASE)
-
-    for index, line in enumerate(proc_lines):
-        if item_value_pattern.search(line):
-            value_match = item_value_pattern.search(line)
-            quantity = float(value_match.group(1))
-
-            proc_id = None
-            rolls = None
-            checked_lines = []
-
-            # Find proc_id
-            for j in range(index, -1, -1):
-                id_match = id_pattern.match(proc_lines[j])
-                if id_match:
-                    proc_id = id_match.group(1)
-                    break
-
-            # Find rolls starting from the line where the item ID was found
-            for j in range(index, -1, -1):
-                rolls_match = rolls_pattern.search(proc_lines[j])
-                checked_lines.append(proc_lines[j].strip())  # Collect checked lines for debug
-                if rolls_match:
-                    rolls = int(rolls_match.group(1))
-                    break
-
-            if not proc_id:
-                continue
-
-            search_id_pattern = re.compile(r'"{}"'.format(re.escape(proc_id)), re.IGNORECASE)
-
-            for k, dist_line in enumerate(dist_lines):
-                if search_id_pattern.search(dist_line):
-                    # Search for container
-                    container = None
-                    for back_index in range(k - 1, -1, -1):
-                        if not ignore_line_pattern.search(dist_lines[back_index]):
-                            if container_pattern_primary.match(dist_lines[back_index]):
-                                container = container_pattern_primary.match(dist_lines[back_index]).group(1).strip()
-                                break
-                            elif container_pattern_fallback.match(dist_lines[back_index]):
-                                container = container_pattern_fallback.match(dist_lines[back_index]).group(1).strip()
-                                break
-
-                    # Search for room
-                    room = None
-                    for back_index in range(k - 1, -1, -1):
-                        if room_pattern.match(dist_lines[back_index]):
-                            room = room_pattern.match(dist_lines[back_index]).group(1).strip()
-                            break
-
-                    if rolls is None or rolls == 0:
-                        print(f"Debug: No valid rolls found for Item '{item}' - Proc ID: {proc_id}. Checked lines: {checked_lines}")
-
-                    # Add entry to processed entries if all components are found
-                    if room and container and rolls:
-                        processed_entries.append((room, container, rolls, quantity))
-
-    return processed_entries
-
-
-def process_distribution_items(item, resources_path, processed_entries):
-    distribution_data = os.path.join(resources_path, 'distributions.lua')
-
-    with open(distribution_data, 'r') as file:
-        lines = file.readlines()
-
-    # Update item_pattern to correctly format and match item names followed by a comma and a number
-    item_pattern = re.compile(r'"{}"\s*,\s*([0-9]+)'.format(re.escape(item)), re.IGNORECASE)
-    quantity_pattern = re.compile(r'(?<=,)\s*([0-9]+(?:\.[0-9]+)?)\s*,')  # Matches the number immediately after the first comma
-    room_pattern = re.compile(r'^\s{4}(\w+)\s')
-
-    matches = []  # List to store item matches
-
-    for line_number, line in enumerate(lines, start=1):
-        item_match = item_pattern.search(line)
-        if item_match:
-            matches.append((item_match.group(1), line, line_number))
-
-    debug_processed = []  # List to store debug messages for processed matches
-    for match_index, (matched_item, line, line_number) in enumerate(matches, start=1):
-
-        quantity_match = quantity_pattern.search(line)
-        if quantity_match:
-            quantity = float(quantity_match.group(1))
-            room, container, rolls_value = None, None, None
-
-            # Check previous lines for room information
-            for prev_line_number in range(line_number - 1, 0, -1):
-                prev_line = lines[prev_line_number - 1]
-                room_match = room_pattern.match(prev_line)
-                if room_match:
-                    room = room_match.group(1).strip()
-                    break
-
-            for j in range(line_number - 1, -1, -1):
-                if not container and 'rolls' in lines[j]:
-                    rolls_match = re.search(r'rolls\s*=\s*(\d+)', lines[j])
-                    if rolls_match:
-                        rolls_value = rolls_match.group(1)
-                        container_match = re.match(r'^\s*(\w+)\s*=\s*\{', lines[j - 1])
-                        if container_match:
-                            container = container_match.group(1).strip()
-                            entry = (room or "all", container, rolls_value, quantity)
-                            if entry not in processed_entries:
-                                processed_entries.append(entry)
-
-    return processed_entries
-
-
-def write_container_csv(item, output_path, processed_entries):
-    if processed_entries:
-        csv_file_path = os.path.join(output_path, f'{item}_container.csv')
-        os.makedirs(os.path.dirname(csv_file_path), exist_ok=True)
-        unique_entries = set()  # Set to store unique entries
-        with open(csv_file_path, 'w', newline='') as csvfile:
-            writer = csv.writer(csvfile)
-            for entry in sorted(processed_entries):
-                if entry not in unique_entries:  # Check if entry is unique
-                    unique_entries.add(entry)  # Add entry to set of unique entries
-                    entry_list = list(entry)
-                    rolls = float(entry_list[2])
-                    chance = float(entry_list[3])
-                    effective_chance = (1 + ((100 * chance * 0.6) + (10 * 4))) / 10000
-                    final_chance = round((1 - (1 - effective_chance) ** rolls) * 100, 2)
-                    entry_list.append(final_chance)
-                    # Write the modified list back to the CSV
-                    writer.writerow(entry_list)
-
-
-def item_processing_vehicle(item, resources_path, output_path):
-    vehicle_data_path = os.path.join(resources_path, 'VehicleDistributions.lua')
-    vehicle_entries = set()
-    item_pattern = re.compile(r'"{}"\s*,\s*(\d+(?:\.\d+)?)'.format(re.escape(item)), re.IGNORECASE)
-
-    with open(vehicle_data_path, 'r') as file:
-        lines = file.readlines()
-
-    for i, line in enumerate(lines):
-        if item_pattern.search(line):
-            # Find the first word of the line that defines vehicle type
-            for j in range(i, -1, -1):
-                if re.match(r'VehicleDistributions\.[^\s]+ = \{', lines[j]):
-                    vehicle_type = re.match(r'VehicleDistributions\.([^\s]+) = \{', lines[j]).group(1)
-                    break
-            # Find the 'rolls' value
-            rolls_value = None
-            for k in range(i, -1, -1):
-                if 'rolls' in lines[k]:
-                    rolls_value = re.search(r'rolls\s*=\s*(\d+)', lines[k]).group(1)
-                    break
-            # Extract the quantity
-            quantity = item_pattern.search(line).group(1)
-
-            vehicle_entries.add((vehicle_type, rolls_value, quantity))
-
-    # Write results to CSV only if there are entries
-    if vehicle_entries:
-        csv_file_path = os.path.join(output_path, f'{item}_vehicle.csv')
-        os.makedirs(os.path.dirname(csv_file_path), exist_ok=True)
-        with open(csv_file_path, 'w', newline='') as csvfile:
-            writer = csv.writer(csvfile)
-            for entry in sorted(vehicle_entries):
-                # Convert tuple entry to a list to modify it
-                entry_list = list(entry)
-                rolls = float(entry_list[1])
-                chance = float(entry_list[2])
-                effective_chance = (1 + ((100 * chance * 0.6) + (10 * 4))) / 10000
-                final_chance = round((1 - (1 - effective_chance) ** rolls) * 100, 2)
-                entry_list.append(final_chance)
-                # Write the modified list back to the CSV
-                writer.writerow(entry_list)
-
-
-def clean_foraging_file(resources_path):
-    forage_file_path = os.path.join(resources_path, 'forageDefinitions.lua')
-    output_path = os.path.join(resources_path, 'foraging_clean.lua')
-
-    with open(forage_file_path, 'r') as file:
-        content = file.readlines()
-
-    start_index = next((i for i, line in enumerate(content) if "======== forageDefs ========" in line), None)
-    if start_index is not None:
-        content = content[start_index + 1:]
-
-    clean_content = []
-    in_comment_block = False
-    for line in content:
-        original_line = line
-        line = line.strip()
-        if line.startswith('--[[') or ('--[[ ' in line):
-            in_comment_block = True
-        elif line.endswith(']]') or (' ]]--' in line):
-            in_comment_block = False
-            continue
-        if not in_comment_block and not line.startswith('--'):
-            clean_content.append(original_line)
-
-    with open(output_path, 'w') as file:
-        file.writelines(clean_content)
-
-    return output_path
-
-
-def item_processing_foraging(item, resources_path, output_path):
-    clean_file_path = clean_foraging_file(resources_path)
-    with open(clean_file_path, 'r') as file:
-        content = file.readlines()
-
-    details_type1 = process_type1_foraging(item, content)
-    details_type2 = process_type2_foraging(item, content)
-
-    if details_type1:
-        save_to_csv(details_type1, output_path, item, 1)
-    if details_type2:
-        save_to_csv(details_type2, output_path, item, 2)
-
-
-def process_type1_foraging(item, content):
-    details_type1 = {}
-    type1_regex = re.compile(r'type\s*=\s*"[\w\.]*' + re.escape(item) + r'"', re.IGNORECASE)
-    record_type1 = False
-    block_content = []
-    brace_count = 0  # To manage nested braces
-
-    for i, line in enumerate(content):
-        line = line.strip()
-        if type1_regex.search(line):
-            if not record_type1:
-                record_type1 = True
-                brace_count = 1  # Start counting braces from this line
-                block_content = [line]
-        elif record_type1:
-            block_content.append(line)
-            if '{' in line:
-                brace_count += line.count('{')
-            if '}' in line:
-                brace_count -= line.count('}')
-            if brace_count == 0:  # Only end recording when all opened braces are closed
-                record_type1 = False
-                block_data = extract_data_from_block(block_content)
-                details_type1[item] = block_data
-
-    return details_type1
-
-
-def process_type2_foraging(item, content):
-    details_type2 = {}
-    item_pattern = re.compile(r'{} = "Base\.{}"'.format(item, item), re.IGNORECASE)
-    context_start_pattern = re.compile(r'^\t\t\w+ = \{')  # To identify the start of a block
-    blacklist = set()
-
-    for index, line in enumerate(content):
-        line = line.strip()
-        if item_pattern.search(line) and line not in blacklist:
-            blacklist.add(line)
-            context_index = index
-            block_data = {'chance': None, 'months': None}
-
-            # First independent search for 'months'
-            months_index = context_index
-            while months_index > 0 and not block_data['months']:
-                months_index -= 1
-                current_line = content[months_index].strip()
-                if 'months =' in current_line:
-                    months = re.findall(r'\{([\s\d,]+)\}', current_line)
-                    if months:
-                        month_numbers = months[0].replace(' ', '').split(',')
-                        block_data['months'] = '|'.join(month_numbers)
-                if context_start_pattern.match(current_line):
-                    break  # Stop this search upon hitting another block start
-
-            # Second independent search for 'chance'
-            chance_index = context_index
-            while chance_index > 0 and not block_data['chance']:
-                chance_index -= 1
-                current_line = content[chance_index].strip()
-                if 'chance =' in current_line:
-                    chance_match = re.search(r'chance\s*=\s*(\d+)', current_line)
-                    if chance_match:
-                        block_data['chance'] = chance_match.group(1)
-                if context_start_pattern.match(current_line):
-                    break  # Stop this search upon hitting another block start
-
-            if block_data['months'] or block_data['chance']:
-                details_type2[item] = block_data
-
-    return details_type2
-
-
-def save_to_csv(details, output_path, item, type_number):
-    headers = {
-        1: ['minCount', 'maxCount', 'skill', 'snowChance', 'rainChance', 'dayChance', 'nightChance', 'months', 'bonusMonths', 'malusMonths', 'zones'],
-        2: ['chance', 'months']
-    }
-
-    csv_file_path = os.path.join(output_path, f'{item}_foraging{type_number}.csv')
-    with open(csv_file_path, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(headers[type_number])
-        for key, data in details.items():
-            row = [data.get(header) for header in headers[type_number]]
-            writer.writerow(row)
-
-
-def extract_data_from_block(block_content):
-    block_data = {
-        'minCount': None, 'maxCount': None, 'skill': None,
-        'xp': None, 'snowChance': None, 'rainChance': None, 'dayChance': None, 'nightChance': None,
-        'months': '', 'bonusMonths': '', 'malusMonths': '', 'zones': ''
-    }
-    for line in block_content:
-        line = line.strip()
-        if 'minCount' in line:
-            block_data['minCount'] = re.findall(r'minCount\s*=\s*(\d+)', line)[0]
-        if 'maxCount' in line:
-            block_data['maxCount'] = re.findall(r'maxCount\s*=\s*(\d+)', line)[0]
-        if 'skill' in line:
-            block_data['skill'] = re.findall(r'skill\s*=\s*(\d+)', line)[0]
-        if 'xp' in line:
-            block_data['xp'] = re.findall(r'xp\s*=\s*(\d+)', line)[0]
-        if 'snowChance' in line:
-            block_data['snowChance'] = re.findall(r'snowChance\s*=\s*(-?\d+)', line)[0]
-        # Include patterns for other fields similarly
-
-        # Handling lists within blocks for zones, months, etc.
-        if 'zones' in line and '{' in line:
-            zone_data = []
-            zone_start_index = block_content.index(line)  # Find the starting index of zones
-            for zone_line in block_content[zone_start_index:]:
-                if '}' in zone_line:
-                    break
-                zone_match = re.findall(r'(\w+)\s*=\s*(\d+)', zone_line)
-                if zone_match:
-                    zone_data.extend(zone_match)
-            block_data['zones'] = dict(zone_data)
-
-        # Parsing months, ensuring to capture lists correctly
-        if 'bonusMonths' in line:
-            bonus_months = re.findall(r'(\d+)', line)
-            block_data['bonusMonths'] = '|'.join(bonus_months)
-        if 'malusMonths' in line:
-            malus_months = re.findall(r'(\d+)', line)
-            block_data['malusMonths'] = '|'.join(malus_months)
-
-    return block_data
-
-
-def attached_weapon_processing(resources_path, output_path):
-    output_dir = os.path.join(output_path, 'csv')
-    os.makedirs(output_dir, exist_ok=True)
-
-    file_path = os.path.join(resources_path, 'AttachedWeaponDefinitions.lua')
-    with open(file_path, 'r') as file:
-        content = file.readlines()
-
-    # Remove comments indicated by '--'
-    content = [re.sub(r'--.*$', '', line) for line in content]
-    content = ''.join(content)
-
-    definition_blocks = content.split('AttachedWeaponDefinitions.')
-    item_regex = re.compile(r'(\w+)\s*=\s*\{')
-    chance_regex = re.compile(r'chance\s*=\s*(\d+)', re.IGNORECASE)
-    outfit_regex = re.compile(r'outfit\s*=\s*\{\s*"([^}]+)"\s*\}', re.IGNORECASE)
-    day_regex = re.compile(r'daySurvived\s*=\s*(\d+)', re.IGNORECASE)
-    weapon_regex = re.compile(r'weapons\s*=\s*\{\s*([^}]+)\}', re.IGNORECASE)
-
-    for index, block in enumerate(definition_blocks[1:], start=1):  # Start index at 1 since we skip the first split part
-        item_match = item_regex.search(block)
-        if item_match:
-            item_name = item_match.group(1)
-
-            chance_match = chance_regex.search(block)
-            chance = chance_match.group(1) if chance_match else "Unknown"
-
-            outfit_match = outfit_regex.search(block)
-            if outfit_match:
-                outfit = outfit_match.group(1).replace('"', '').replace(' ', '').replace(',', '|')
-            else:
-                outfit = "All"
-
-            day_match = day_regex.search(block)
-            days_survived = day_match.group(1) if day_match else "Unknown"
-
-            weapon_match = weapon_regex.search(block)
-            weapons = []
-            if weapon_match:
-                raw_weapons = weapon_match.group(1).split(',')
-                for weapon_raw in raw_weapons:
-                    weapon_clean = weapon_raw.strip().split('.')[-1].replace('"', '')
-                    weapons.append(weapon_clean)
-
-            for weapon in weapons:
-                csv_file_path = os.path.join(output_dir, f'{weapon}_zombie.csv')
-                file_exists = os.path.exists(csv_file_path)
-                with open(csv_file_path, 'a', newline='') as csvfile:  # Append mode
-                    writer = csv.writer(csvfile)
-                    if not file_exists:
-                        writer.writerow(['Chance', 'Outfit', 'Days Survived'])  # Header for new file
-                    writer.writerow([chance, outfit, days_survived])
-
-
-def month_lookup(month_number):
-    month_dict = {
-        '1': 'January', '2': 'February', '3': 'March',
-        '4': 'April', '5': 'May', '6': 'June',
-        '7': 'July', '8': 'August', '9': 'September',
-        '10': 'October', '11': 'November', '12': 'December'
-    }
-    return month_dict.get(month_number, '-')
-
-
-def process_container_file_formatted(file_path, item_name):
-    rows_to_add = []
-    with open(file_path, mode='r', newline='') as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            effective_chance = f"{row[4]}%"
-            formatted_row = f"{{{{!}}}} {row[0]} {{{{!}}}}{{{{!}}}} {{{{ll|{row[1]}}}}} {{{{!}}}}{{{{!}}}} {effective_chance}"
-            if any(cell.strip() for cell in row):
-                rows_to_add.append(formatted_row)
-
-    if rows_to_add:
-        output = "|container=\n" + "\n{{!}}-\n".join(rows_to_add)
-        return output
-    return ""
-
-
-def process_vehicle_file_formatted(file_path, item_name):
-    rows_to_add = []
-    with open(file_path, mode='r', newline='') as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            effective_chance = f"{row[3]}%"
-
-            # Split and process vehicle type and container as needed
-            type_parts = re.findall('[A-Z][^A-Z]*', row[0])
+            line = line.strip()
+            if line.startswith("ItemName_Base"):
+                # Extract key and value from lines formatted as `ItemName_Base.something = "Something",`
+                try:
+                    key, value = line.split(" = ")
+                    key = key.strip()  # The full key e.g., ItemName_Base.223Box
+                    value = value.strip().strip('",')  # Strip quotes and trailing comma
+
+                    item_dict[key] = value
+                except ValueError:
+                    continue  # Skip lines that don't fit the format
+
+    # Format item name for comparison: remove spaces and surround with double quotes
+    formatted_item_name = f'"{item_name.replace(" ", "")}"'
+
+    # Search values for a match
+    for key, value in item_dict.items():
+        if formatted_item_name == f'"{value.replace(" ", "")}"':
+            # Match found; extract new item ID from the key
+            new_item_id = key.split(".", 1)[1]
+            item_name_changes[item_name] = new_item_id  # Store original and new item name
+            return new_item_id
+
+    # If no match is found, return the original item name
+    return item_name
+
+
+def process_json(file_paths):
+    item_list = set()
+    item_counts = {}
+
+    for file_key, file_path in file_paths.items():
+        with open(file_path, "r") as file:
+            data = json.load(file)
+            count = 0
+
+            if file_key == "proceduraldistributions":
+                for distribution, content in data.items():
+                    items = content.get("items", [])
+                    for entry in items:
+                        item_list.add(entry["name"])
+                        count += 1
+                    junk_items = content.get("junk", {}).get("items", [])
+                    for entry in junk_items:
+                        item_list.add(entry["name"])
+                        count += 1
+
+            elif file_key == "foraging":
+                for key, entry in data.items():
+                    item_type = entry.get("type", "")
+                    item_type = re.sub(r"^(Base\.|Radio\.|Farming\.)", "", item_type)
+                    item_list.add(item_type)
+                    count += 1
+
+            elif file_key == "vehicle_distributions":
+                for zone, details in data.items():
+                    items = details.get("items", {})
+                    item_list.update(items.keys())
+                    count += len(items)
+                    if "junk" in details:
+                        junk_items = details["junk"].get("items", {})
+                        item_list.update(junk_items.keys())
+                        count += len(junk_items)
+
+            elif file_key == "clothing":
+                for outfit, details in data.items():
+                    for outfit_details in details.values():
+                        items = outfit_details.get("Items", [])
+                        item_list.update(items)
+                        count += len(items)
+
+            elif file_key == "attached_weapons":
+                for weapon_config, details in data.items():
+                    weapons = details.get("weapons", [])
+                    for weapon in weapons:
+                        weapon = re.sub(r"^Base\.", "", weapon)
+                        item_list.add(weapon)
+                        count += 1
+
+            elif file_key == "stories":
+                for story_key, items in data.items():
+                    for item in items:
+                        # Update item name if found in the dictionary
+                        item = load_item_dictionary(item)
+                        item_list.add(item)
+                        count += 1
+
+            cleaned_item_list = set()
+
+            for item in item_list:
+                if '.' in item:
+                    item = item.split('.', 1)[1]
+                cleaned_item_list.add(item)
+
+            item_list = cleaned_item_list
+
+            item_counts[file_key] = count
+
+    print(f"Unique items found: {len(item_list)}")
+    for file_key, count in item_counts.items():
+        print(f"Total items found in {file_key}: {count}")
+
+    os.makedirs("output", exist_ok=True)
+    with open("output/distributions/Item_list.txt", "w") as output_file:
+        for item in sorted(item_list):
+            output_file.write(item + "\n")
+
+    # Save the changes dictionary for reference
+    with open("output/distributions/json/item_name_changes.json", "w") as changes_file:
+        json.dump(item_name_changes, changes_file, indent=4)
+
+    return item_list
+
+
+def build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, attached_weapons_data,
+                    clothing_data, stories_data):
+    def get_container_info(item_name):
+        containers_info = []
+        for proclist, content in procedural_data.items():
+            items = content.get("items", [])
+            rolls = content.get("rolls", 0)
+            for entry in items:
+                if entry["name"] == item_name:
+                    chance = entry["chance"]
+                    for room, room_content in distribution_data.items():
+                        for container, container_content in room_content.items():
+                            proc_lists = container_content.get("procList", [])
+                            for proc_entry in proc_lists:
+                                if proc_entry.get("name") == proclist:
+                                    containers_info.append({
+                                        "Room": room,
+                                        "Container": container,
+                                        "Proclist": proclist,
+                                        "Chance": chance,
+                                        "Rolls": rolls
+                                    })
+        return containers_info
+
+    def get_vehicle_info(item_name):
+        vehicles_info = []
+        for label, details in vehicle_data.items():
+            # Split the label using camel case
+            type_parts = re.findall(r'[A-Z][^A-Z]*', label)
+
+            # Apply specific rules to determine vehicle_type and container
             if type_parts[0] == "Mc" and len(type_parts) > 1:
                 vehicle_type = type_parts[0] + type_parts[1]
                 container = ' '.join(type_parts[2:])
@@ -570,127 +185,420 @@ def process_vehicle_file_formatted(file_path, item_name):
                 vehicle_type = type_parts[0]
                 container = ' '.join(type_parts[1:])
 
-            # Format the row according to the new structure
-            formatted_row = f"{{{{!}}}} {vehicle_type} {{{{!}}}}{{{{!}}}} {{{{ll|{container}}}}} {{{{!}}}}{{{{!}}}} {effective_chance}"
+            # Normalize container name for "Glovebox"
+            if container.lower() == "glovebox":
+                container = "Glove Box"
 
-            if any(cell.strip() for cell in row):
-                rows_to_add.append(formatted_row)
+            # Process item details
+            rolls = details.get("rolls", 0)
+            items = details.get("items", {})
+            if item_name in items:
+                chance = items[item_name]
+                vehicles_info.append({
+                    "Type": vehicle_type,
+                    "Container": container,
+                    "Chance": chance,
+                    "Rolls": rolls
+                })
+            junk_items = details.get("junk", {}).get("items", {})
+            if item_name in junk_items:
+                chance = junk_items[item_name]
+                vehicles_info.append({
+                    "Type": vehicle_type,
+                    "Container": container,
+                    "Chance": chance,
+                    "Rolls": rolls
+                })
 
-    if rows_to_add:
-        output = "\n|vehicle=\n" + "\n{{!}}-\n".join(rows_to_add)
-        return output
-    return ""
+        return vehicles_info
 
+    def get_foraging_info(item_name):
+        item_info = foraging_data.get(item_name, {})
+        relevant_data = {}
 
-def process_zombie_file_formatted(file_path, item_name):
-    rows_to_add = []
-    with open(file_path, mode='r', newline='') as csvfile:
-        reader = csv.reader(csvfile)
-        next(reader)  # Skip the header row
-        for row in reader:
-            if any(cell.strip() for cell in row):
-                outfit = row[1].replace('|', '<br>')
-                days = row[2]
-                chance = row[0]
-                formatted_row = f"{{{{!}}}} {outfit} {{{{!}}}}{{{{!}}}} {days} {{{{!}}}}{{{{!}}}} {chance}"
-                rows_to_add.append(formatted_row)
-    if rows_to_add:
-        output = "\n|zombie=\n" + "\n{{!}}-\n".join(rows_to_add)
-        return output
-    return ""
+        parameters = [
+            "skill", "chance", "zones", "categories", "xp", "minCount",
+            "maxCount", "months", "bonusMonths", "malusMonths",
+            "snowChance", "rainChance", "dayChance", "nightChance"
+        ]
 
+        for param in parameters:
+            if param in item_info:
+                relevant_data[param] = item_info[param]
 
-def process_foraging_file_formatted(file_paths, item_name):
-    foraging_table = ''
-    rows_to_add = []
-    foraging_exists = False
+        return relevant_data
 
-    for file_type, file_path in file_paths.items():
-        if file_path:
-            with open(file_path, mode='r', newline='') as csvfile:
-                reader = csv.reader(csvfile)
-                next(reader)  # Skip the header row
-                foraging_exists = True
+    def get_attached_weapon_info(item_name):
+        attached_weapon_matches = []
 
-                for row in reader:
-                    row = [x.strip() if x else '-' for x in row]
-                    if file_type == 'foraging1':
-                        zones = re.sub(r"[{}']", "", row[10]).replace(":", " ").replace(",", "<br>")
-                        months = "<br>".join([month_lookup(x) for x in row[7].split('|') if x])
-                        bonus_months = "<br>".join([month_lookup(x) for x in row[8].split('|') if x])
-                        malus_months = "<br>".join([month_lookup(x) for x in row[9].split('|') if x])
-                        formatted_row = (
-                            f"{{{{!}}}} {row[0]}-{{{{!}}}}{{{{!}}}}{row[1]}"
-                            f"{{{{!}}}}{{{{!}}}} {zones}"
-                            f"{{{{!}}}}{{{{!}}}} {row[3]}"
-                            f"{{{{!}}}}{{{{!}}}} {row[4]}"
-                            f"{{{{!}}}}{{{{!}}}} {row[5]}"
-                            f"{{{{!}}}}{{{{!}}}} {row[6]}"
-                            f"{{{{!}}}}{{{{!}}}} {months}"
-                            f"{{{{!}}}}{{{{!}}}} {bonus_months}"
-                            f"{{{{!}}}}{{{{!}}}} {malus_months}"
-                        )
-                    elif file_type == 'foraging2':
-                        chance_info = f"all with {row[0]} chance"
-                        formatted_row = (
-                            f"{{{{!}}}} 1{{{{!}}}}{{{{!}}}}0"
-                            f"{{{{!}}}}{{{{!}}}} {chance_info}"
-                            f"{{{{!}}}}{{{{!}}}} -"
-                            f"{{{{!}}}}{{{{!}}}} -"
-                            f"{{{{!}}}}{{{{!}}}} -"
-                            f"{{{{!}}}}{{{{!}}}} -"
-                            f"{{{{!}}}}{{{{!}}}} all"
-                            f"{{{{!}}}}{{{{!}}}} -"
-                            f"{{{{!}}}}{{{{!}}}} -"
-                        )
-                    if any(cell.strip() for cell in row):
-                        rows_to_add.append(formatted_row)
+        for weapon_config, details in attached_weapons_data.items():
+            # Check if the item_name exists in the list of weapons
+            weapons = details.get("weapons", [])
+            if item_name in weapons:
+                # Assign "Any" to outfit if it isn't specified in the details
+                outfits = details.get("outfit", "Any")
+                day_survived = details.get("daySurvived", 0)
+                chance = details.get("chance", 0)
 
-    if foraging_exists and rows_to_add:
-        foraging_table = "\n|foraging=\n" + "\n{{!}}-\n".join(rows_to_add)
-    return foraging_table
+                # Ensure `outfits` is a list even if set to "Any"
+                if not isinstance(outfits, list):
+                    outfits = [outfits]
 
+                # Append each configuration to the matches list
+                for outfit in outfits:
+                    attached_weapon_matches.append({
+                        "outfit": outfit,
+                        "daySurvived": day_survived,
+                        "chance": chance
+                    })
 
-def formatting(unique_items, output_path):
-    complete_output_path = os.path.join(output_path, 'complete')
-    csv_output_path = os.path.join(output_path, 'csv')
+        return attached_weapon_matches
 
-    if os.path.exists(complete_output_path):
-        shutil.rmtree(complete_output_path)
-    os.makedirs(complete_output_path)
+    def get_clothing_info(item_name):
+        clothing_matches = []
 
-    for item in tqdm(unique_items, desc="Formatting items"):
-        output_data = f"{{{{Location table|item_id={item}\n"
+        for gender_outfits in ["FemaleOutfits", "MaleOutfits"]:
+            if gender_outfits in clothing_data:
+                for outfit_name, outfit_details in clothing_data[gender_outfits].items():
+                    items = outfit_details.get("Items", {})
+                    if item_name in items:
+                        guid = outfit_details.get("GUID", "")
+                        chance = items[item_name]
+                        clothing_matches.append({
+                            "GUID": guid,
+                            "Outfit": outfit_name,
+                            "Chance": chance
+                        })
 
-        item_files = {file_type: None for file_type in ['container', 'vehicle', 'foraging1', 'foraging2', 'zombie']}
-        for filename in os.listdir(csv_output_path):
-            for file_type in item_files.keys():
-                if filename.startswith(item + '_') and filename.endswith(f'{file_type}.csv'):
-                    item_files[file_type] = os.path.join(csv_output_path, filename)
+        return clothing_matches
 
-        if item_files['container']:
-            output_data += process_container_file_formatted(item_files['container'], item)
-        if item_files['vehicle']:
-            output_data += process_vehicle_file_formatted(item_files['vehicle'], item)
-        if item_files['zombie']:
-            output_data += process_zombie_file_formatted(item_files['zombie'], item)
+    def get_story_info(item_name):
+        matching_stories = []
+        for story_category, items in stories_data.items():
+            if item_name in items:
+                matching_stories.append(story_category)
+        return matching_stories
 
-        foraging_data = ''
-        for foraging_type in ['foraging1', 'foraging2']:
-            if item_files[foraging_type]:
-                foraging_data += process_foraging_file_formatted({foraging_type: item_files[foraging_type]}, item)
-        if foraging_data:
-            output_data += foraging_data
+    all_items = {}
 
-        output_data += "\n}}"
-        output_data = '\n'.join(line for line in output_data.split('\n') if line.strip())
+    for item in tqdm.tqdm(item_list, desc="Building item data"):
+        item_name = item_name_changes.get(item, item)  # Apply any saved name changes
+        all_items[item_name] = {
+            "name": item_name,
+            "Containers": get_container_info(item_name),
+            "Vehicles": get_vehicle_info(item_name),
+            "Foraging": get_foraging_info(item_name),
+            "AttachedWeapon": get_attached_weapon_info(item_name),  # Assign attached weapon info
+            "Clothing": get_clothing_info(item_name),
+            "Stories": get_story_info(item_name)
+        }
 
-        # Check if output_data has more than 2 lines before saving
-        output_lines = output_data.strip().split('\n')
-        if len(output_lines) > 2:
-            with open(os.path.join(complete_output_path, f'{item}.txt'), 'w') as output_file:
-                output_file.write(output_data)
+        # Output to JSON file
+    os.makedirs("output", exist_ok=True)
+    with open("output/distributions/json/all_items.json", "w") as json_file:
+        json.dump(all_items, json_file, indent=4)
+    print("Completed building JSON file")
 
 
-if __name__ == '__main__':
+def build_tables():
+    # Load the JSON data
+    with open("output/distributions/json/all_items.json", "r") as file:
+        all_items = json.load(file)
+
+    # Create the output directory if it doesn't exist
+    output_dir = "output/distributions/complete"
+    os.makedirs(output_dir, exist_ok=True)
+
+
+    # Helper functions to process each type
+    def process_containers(containers_list):
+        container_lines = []
+
+        for container in containers_list:
+            room = container["Room"]
+            container_name = container["Container"]
+            chance = container["Chance"]
+            rolls = container["Rolls"]
+
+            # Calculate effective_chance
+            effective_chance = round((1 - (1 - ((1 + ((100 * chance * 0.6) + (10 * rolls))) / 10000)) ** rolls) * 100,
+                                     2)
+
+            # Format each line with the specified format
+            container_line = f"{{{{!}}}} {room} {{{{!}}}}{{{{!}}}} {{{{ll|{container_name}}}}} {{{{!}}}}{{{{!}}}} {effective_chance}%"
+            container_lines.append(container_line)
+
+        # Join lines with `{{!}}-` only if there are two or more entries
+        if len(container_lines) > 1:
+            content = "\n{{!}}-\n".join(container_lines)
+        else:
+            content = "\n".join(container_lines)
+
+        # Prepend "|Containers=" to the final content
+        return f"|container=\n{content}"
+
+
+    def process_vehicles(vehicles_list):
+        vehicle_lines = []
+
+        for vehicle in vehicles_list:
+            type_ = vehicle["Type"]
+            container = vehicle["Container"]
+            chance = vehicle["Chance"]
+            rolls = vehicle["Rolls"]
+
+            # Calculate effective chance
+            effective_chance = round((1 - (1 - ((1 + ((100 * chance * 0.6) + (10 * rolls))) / 10000)) ** rolls) * 100,
+                                     2)
+
+            # Format each line with the specified format
+            vehicle_line = f"{{{{!}}}} {type_} {{{{!}}}}{{{{!}}}} {{{{ll|{container}}}}} {{{{!}}}}{{{{!}}}} {effective_chance}%"
+            vehicle_lines.append(vehicle_line)
+
+        # Join lines with `{{!}}-` only if there are two or more entries
+        if len(vehicle_lines) > 1:
+            content = "\n{{!}}-\n".join(vehicle_lines)
+        else:
+            content = "\n".join(vehicle_lines)
+
+        # Prepend "|vehicle=" to the final content
+        return f"|vehicle=\n{content}"
+
+
+    def process_attached_weapon(attached_weapon_list):
+        attached_weapon_lines = []
+
+        for weapon in attached_weapon_list:
+            outfit = weapon["outfit"]
+            day_survived = weapon.get("daySurvived", 0)
+            chance = weapon.get("chance", 0)
+
+            # Format the line using the provided template
+            body_line = f"{{{{!}}}} {outfit} {{{{!}}}}{{{{!}}}} {day_survived} {{{{!}}}}{{{{!}}}} {chance}"
+            attached_weapon_lines.append(body_line)
+
+        # Join lines with `{{!}}-` only if there are two or more entries
+        if len(attached_weapon_lines) > 1:
+            content = "\n{{!}}-\n".join(attached_weapon_lines)
+        else:
+            content = "\n".join(attached_weapon_lines)
+
+        # Prepend "|zombie=" to the final content
+        return f"|zombie=\n{content}"
+
+
+    def process_clothing(clothing_list):
+        clothing_lines = []
+
+        for clothing in clothing_list:
+            guid = clothing["GUID"]
+            outfit = clothing["Outfit"]
+            chance = clothing["Chance"]
+
+            # Format each line using the specified template
+            container_line = f"{{{{!}}}} {outfit} {{{{!}}}}{{{{!}}}} {chance} {{{{!}}}}{{{{!}}}} {guid}"
+            clothing_lines.append(container_line)
+
+        # Join lines with `{{!}}-` only if there are two or more entries
+        if len(clothing_lines) > 1:
+            content = "\n{{!}}-\n".join(clothing_lines)
+        else:
+            content = "\n".join(clothing_lines)
+
+        # Prepend "|clothing=" to the final content
+        return f"|outfit=\n{content}"
+
+
+    def process_stories(stories_list):
+        story_lines = []
+
+        for story in stories_list:
+            # Determine the link based on the prefix of the story
+            if story.startswith("RZS"):
+                link = "Zone stories"
+            elif story.startswith("RBTS"):
+                link = "Table stories"
+            elif story.startswith("RB") and not story.startswith("RBTS"):
+                link = "Building stories"
+            elif story.startswith("RVS"):
+                link = "Vehicle stories"
+            else:
+                link = "Randomized stories"
+
+            # Format each story line with the specified template
+            story_line = f"{{{{!}}}} {story} {{{{!}}}}{{{{!}}}} {{{{ll|{link}}}}}"
+            story_lines.append(story_line)
+
+        # Join all story lines with `{{!}}-` if there are multiple entries
+        if len(story_lines) > 1:
+            content = "\n{{!}}-\n".join(story_lines)
+        else:
+            content = "\n".join(story_lines)
+
+        # Prepend "|story=" to the final content
+        return f"|stories=\n{content}"
+
+
+    def process_foraging(foraging_data):
+        # Helper function to convert month indexes to readable month names
+        def format_months(month_obj):
+            month_names = ["January", "February", "March", "April", "May", "June",
+                           "July", "August", "September", "October", "November", "December"]
+
+            sorted_keys = sorted(map(int, month_obj.keys()))
+
+            if not sorted_keys:
+                return "-"
+
+            # Get the first and last month indices
+            start_month = month_names[sorted_keys[0] - 1]
+            end_month = month_names[sorted_keys[-1] - 1]
+
+            # Return "X to Y" or just "X" if only one month
+            return f"{start_month} to {end_month}" if start_month != end_month else start_month
+
+        # Extract and format each component
+        min_count = foraging_data.get("minCount")
+        max_count = foraging_data.get("maxCount")
+        amount = f"{min_count}-{max_count}" if min_count is not None and max_count is not None else "-"
+
+        if amount == "---" or amount == "-":
+            amount = "1"
+
+        skill_level = foraging_data.get("skill", "-")
+
+        # Formatting Biomes with line breaks if multiple zones exist
+        zones = foraging_data.get("zones", {})
+        biomes = "<br>".join([f"{zone}: {value}" for zone, value in zones.items()]) if zones else "-"
+
+        snow = foraging_data.get("snowChance", "-")
+        rain = foraging_data.get("rainChance", "-")
+        day = foraging_data.get("dayChance", "-")
+        night = foraging_data.get("nightChance", "-")
+
+        # Formatting months available, bonus months, and malus months
+        months_available = format_months(foraging_data.get("months", {}))
+        bonus_months = format_months(foraging_data.get("bonusMonths", {}))
+        malus_months = format_months(foraging_data.get("malusMonths", {}))
+
+        # Constructing the formatted string in a single line
+        foraging_info = (
+            f"|foraging=\n{{{{!}}}} "
+            f"{amount} {{{{!}}}}{{{{!}}}}"
+            f"{skill_level} {{{{!}}}}{{{{!}}}}"
+            f"{biomes} {{{{!}}}}{{{{!}}}}"
+            f"{snow} {{{{!}}}}{{{{!}}}}"
+            f"{rain} {{{{!}}}}{{{{!}}}}"
+            f"{day} {{{{!}}}}{{{{!}}}}"
+            f"{night} {{{{!}}}}{{{{!}}}}"
+            f"{months_available} {{{{!}}}}{{{{!}}}}"
+            f"{bonus_months} {{{{!}}}}{{{{!}}}}"
+            f"{malus_months}"
+        )
+
+        return foraging_info
+
+    # Process each item and create a table
+    for item_id, item_data in tqdm.tqdm(all_items.items(), desc="Processing items"):
+        table = f"{{{{Location table|item_id={item_id}"
+
+        # Process each section if it has values
+        if item_data.get("Containers"):
+            table += "\n" + process_containers(item_data["Containers"])
+        if item_data.get("Vehicles"):
+            table += "\n" + process_vehicles(item_data["Vehicles"])
+        if item_data.get("AttachedWeapon"):
+            table += "\n" + process_attached_weapon(item_data["AttachedWeapon"])
+        if item_data.get("Stories"):
+            table += "\n" + process_stories(item_data["Stories"])
+        if item_data.get("Clothing"):
+            table += "\n" + process_clothing(item_data["Clothing"])
+        if item_data.get("Foraging"):
+            table += "\n" + process_foraging(item_data["Foraging"])
+
+        # Close the table format
+        table += "\n}}"
+
+        # Write the table to a file
+        with open(f"{output_dir}/{item_id}.txt", "w") as output_file:
+            output_file.write(table)
+
+
+def calculate_missing_items(itemname_path, itemlist_path, missing_items_path):
+    # Open and create the dictionary from the ItemName_EN.txt file
+    with open(itemname_path, 'r') as file:
+        item_dict = {}
+
+        # Process each line in the file
+        for line in file:
+            # Check for lines that contain both '.' and '='
+            if '.' in line and '=' in line:
+                # Remove the part before and including the first period, then split by '='
+                key = line.split('.')[1].split('=')[0].strip()
+                value = line.split('=')[1].strip().strip('"').strip(',')
+
+                # Add to dictionary
+                item_dict[key] = value
+
+    # Load the list of keys to remove from Item_list.txt
+    with open(itemlist_path, 'r') as key_file:
+        keys_to_remove = {line.strip() for line in key_file}
+
+    # Remove any matching keys from the dictionary
+    filtered_dict = {k: v for k, v in item_dict.items() if k not in keys_to_remove}
+
+    # Output only the keys of the filtered dictionary to missing_items.txt
+    with open(missing_items_path, 'w') as output_file:
+        for key in filtered_dict.keys():
+            output_file.write(f"{key}\n")
+
+
+def main():
+    file_paths = {
+        "proceduraldistributions": "output/distributions/json/proceduraldistributions.json",
+        "foraging": "output/distributions/json/foraging.json",
+        "vehicle_distributions": "output/distributions/json/vehicle_distributions.json",
+        "clothing": "output/distributions/json/clothing.json",
+        "attached_weapons": "output/distributions/json/attached_weapons.json",
+        "stories": "output/distributions/json/stories.json",
+        "distributions": "output/distributions/json/distributions.json"
+    }
+
+    distribution_parser.main()
+    item_list = process_json(file_paths)
+
+    with open(file_paths["proceduraldistributions"], "r") as proc_file:
+        procedural_data = json.load(proc_file)
+
+    with open(file_paths["distributions"], "r") as dist_file:
+        distribution_data = json.load(dist_file)
+
+    with open(file_paths["vehicle_distributions"], "r") as vehicle_file:
+        vehicle_data = json.load(vehicle_file)
+
+    with open(file_paths["foraging"], "r") as foraging_file:
+        foraging_data = json.load(foraging_file)
+
+    with open(file_paths["attached_weapons"], "r") as attached_weapons_file:
+        attached_weapons_data = json.load(attached_weapons_file)
+
+    with open(file_paths["clothing"], "r") as clothing_file:
+        clothing_data = json.load(clothing_file)
+
+    with open(file_paths["stories"], "r") as stories_file:
+        stories_data = json.load(stories_file)
+
+    build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, attached_weapons_data,
+                    clothing_data, stories_data)
+
+    build_tables()
+
+    itemname_path = "resources/Translate/EN/ItemName_EN.txt"
+    itemlist_path = "output/distributions/Item_list.txt"
+    missing_items_path = "output/distributions/missing_items.txt"
+
+    calculate_missing_items(itemname_path, itemlist_path, missing_items_path)
+
+
+if __name__ == "__main__":
     main()
