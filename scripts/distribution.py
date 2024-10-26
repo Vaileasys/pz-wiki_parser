@@ -187,14 +187,48 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
     This function processes the input data and stores the results in a dictionary.
     The dictionary is then saved to a file named "all_items.json" in the "output/distributions/json" directory.
     """
+
     def get_container_info(item_name):
         containers_info = []
+
+        # Check the "all" object within procedural_data
+        if "all" in procedural_data:
+            for container_name, details in procedural_data["all"].items():
+                # Check items in this container
+                items = details.get("items", [])
+                rolls = details.get("rolls", 0)
+                for entry in items:
+                    if entry["name"] == item_name:
+                        chance = entry["chance"]
+                        containers_info.append({
+                            "Room": "all",
+                            "Container": container_name,
+                            "Chance": chance,
+                            "Rolls": rolls
+                        })
+
+                # Check items in the "junk" list for this container, if present
+                junk_items = details.get("junk", {}).get("items", [])
+                for junk_entry in junk_items:
+                    if junk_entry["name"] == item_name:
+                        chance = junk_entry["chance"]
+                        containers_info.append({
+                            "Room": "all",
+                            "Container": container_name,
+                            "Chance": chance,
+                            "Rolls": rolls
+                        })
+
+        # Regular processing for non-"all" items in procedural_data
         for proclist, content in procedural_data.items():
+            if proclist == "all":  # Skip "all" as it’s handled above
+                continue
             items = content.get("items", [])
             rolls = content.get("rolls", 0)
             for entry in items:
                 if entry["name"] == item_name:
                     chance = entry["chance"]
+                    # Check all rooms in distribution_data for this proclist
                     for room, room_content in distribution_data.items():
                         for container, container_content in room_content.items():
                             proc_lists = container_content.get("procList", [])
@@ -203,11 +237,11 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
                                     containers_info.append({
                                         "Room": room,
                                         "Container": container,
-                                        "Proclist": proclist,
                                         "Chance": chance,
                                         "Rolls": rolls
                                     })
         return containers_info
+
 
     def get_vehicle_info(item_name):
         vehicles_info = []
