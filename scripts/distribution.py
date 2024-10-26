@@ -415,7 +415,7 @@ def build_tables():
             container_name = container["Container"]
             chance = container["Chance"]
             rolls = container["Rolls"]
-            loot_rarity = 1
+            loot_rarity = 0.6
             luck_multiplier = 1
             density = 5.2  # Averaged
 
