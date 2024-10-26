@@ -190,65 +190,64 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
 
     def get_container_info(item_name):
         containers_info = []
+        unique_entries = set()  # Track unique entries for containers
 
         def process_nested_object(obj, room_name, container_name=None):
-            """
-            Recursively process nested objects to find items that match item_name.
-            """
-            if "items" in obj:  # Check if the current object has an items list
+            if "items" in obj:
                 items = obj["items"]
-                rolls = obj.get("rolls", 0)  # Rolls will be found at the current level
+                rolls = obj.get("rolls", 0)
                 for entry in items:
                     if entry["name"] == item_name:
-                        # If we have a match, use the nested structure for container info
                         chance = entry["chance"]
-                        containers_info.append({
-                            "Room": room_name,  # Set Room from the top level
-                            "Container": container_name,  # Set Container at the current nested level
-                            "Chance": chance,
-                            "Rolls": rolls
-                        })
+                        # Create a unique tuple of the entry details for deduplication
+                        entry_tuple = (room_name, container_name, chance, rolls)
+                        if entry_tuple not in unique_entries:
+                            containers_info.append({
+                                "Room": room_name,
+                                "Container": container_name,
+                                "Chance": chance,
+                                "Rolls": rolls
+                            })
+                            unique_entries.add(entry_tuple)  # Add to set to prevent duplicates
             else:
-                # If no items list, check each sub-object (nested container) recursively
                 for sub_key, sub_value in obj.items():
-                    if isinstance(sub_value, dict):  # Only process further if it's a dictionary
-                        # When entering a new nested level, `sub_key` represents the container
+                    if isinstance(sub_value, dict):
                         process_nested_object(sub_value, room_name, sub_key)
 
-        # Process procedural_data for initial items list and distributions
         for proclist, content in procedural_data.items():
             items = content.get("items", [])
             rolls = content.get("rolls", 0)
             if items:
                 for entry in items:
                     if entry["name"] == item_name:
-                        # Found item at the expected level, use the distribution data
                         chance = entry["chance"]
                         for room, room_content in distribution_data.items():
                             for container, container_content in room_content.items():
                                 proc_lists = container_content.get("procList", [])
                                 for proc_entry in proc_lists:
                                     if proc_entry.get("name") == proclist:
-                                        containers_info.append({
-                                            "Room": room,
-                                            "Container": container,
-                                            "Proclist": proclist,
-                                            "Chance": chance,
-                                            "Rolls": rolls
-                                        })
+                                        entry_tuple = (room, container, proclist, chance, rolls)
+                                        if entry_tuple not in unique_entries:
+                                            containers_info.append({
+                                                "Room": room,
+                                                "Container": container,
+                                                "Proclist": proclist,
+                                                "Chance": chance,
+                                                "Rolls": rolls
+                                            })
+                                            unique_entries.add(entry_tuple)
             else:
-                # No direct items list, recursively check nested objects with proclist as room
                 process_nested_object(content, room_name=proclist)
 
         return containers_info
 
     def get_vehicle_info(item_name):
         vehicles_info = []
+        unique_entries = set()  # Track unique entries for vehicles
+
         for label, details in vehicle_data.items():
-            # Split the label using camel case
             type_parts = re.findall(r'[A-Z][^A-Z]*', label)
 
-            # Apply specific rules to determine vehicle_type and container
             if type_parts[0] == "Mc" and len(type_parts) > 1:
                 vehicle_type = type_parts[0] + type_parts[1]
                 container = ' '.join(type_parts[2:])
@@ -271,30 +270,36 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
                 vehicle_type = type_parts[0]
                 container = ' '.join(type_parts[1:])
 
-            # Normalize container name for "Glovebox"
             if container.lower() == "glovebox":
                 container = "Glove Box"
 
-            # Process item details
             rolls = details.get("rolls", 0)
             items = details.get("items", {})
+
             if item_name in items:
                 chance = items[item_name]
-                vehicles_info.append({
-                    "Type": vehicle_type,
-                    "Container": container,
-                    "Chance": chance,
-                    "Rolls": rolls
-                })
+                entry_tuple = (vehicle_type, container, chance, rolls)
+                if entry_tuple not in unique_entries:
+                    vehicles_info.append({
+                        "Type": vehicle_type,
+                        "Container": container,
+                        "Chance": chance,
+                        "Rolls": rolls
+                    })
+                    unique_entries.add(entry_tuple)
+
             junk_items = details.get("junk", {}).get("items", {})
             if item_name in junk_items:
                 chance = junk_items[item_name]
-                vehicles_info.append({
-                    "Type": vehicle_type,
-                    "Container": container,
-                    "Chance": chance,
-                    "Rolls": rolls
-                })
+                entry_tuple = (vehicle_type, container, chance, rolls)
+                if entry_tuple not in unique_entries:
+                    vehicles_info.append({
+                        "Type": vehicle_type,
+                        "Container": container,
+                        "Chance": chance,
+                        "Rolls": rolls
+                    })
+                    unique_entries.add(entry_tuple)
 
         return vehicles_info
 
