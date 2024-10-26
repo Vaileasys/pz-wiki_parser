@@ -340,21 +340,22 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
 
         return attached_weapon_matches
 
-    def get_clothing_info(item_name):
+    def get_clothing_info(item_name, clothing_data):
         clothing_matches = []
 
         for gender_outfits in ["FemaleOutfits", "MaleOutfits"]:
-            if gender_outfits in clothing_data:
-                for outfit_name, outfit_details in clothing_data[gender_outfits].items():
-                    items = outfit_details.get("Items", {})
-                    if item_name in items:
-                        guid = outfit_details.get("GUID", "")
-                        chance = items[item_name]
-                        clothing_matches.append({
-                            "GUID": guid,
-                            "Outfit": outfit_name,
-                            "Chance": chance
-                        })
+            gender_outfits_data = clothing_data.get(gender_outfits, {})
+            gender = "Female" if gender_outfits == "FemaleOutfits" else "Male"
+
+            for outfit_name, outfit_details in gender_outfits_data.items():
+                items = outfit_details.get("Items", {})
+                if item_name in items:
+                    clothing_matches.append({
+                        "GUID": outfit_details.get("GUID", ""),
+                        "Outfit": outfit_name,
+                        "Chance": items[item_name],
+                        "Gender": gender
+                    })
 
         return clothing_matches
 
@@ -375,7 +376,7 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
             "Vehicles": get_vehicle_info(item_name),
             "Foraging": get_foraging_info(item_name),
             "AttachedWeapon": get_attached_weapon_info(item_name),  # Assign attached weapon info
-            "Clothing": get_clothing_info(item_name),
+            "Clothing": get_clothing_info(item_name, clothing_data),
             "Stories": get_story_info(item_name)
         }
 
@@ -488,12 +489,13 @@ def build_tables():
             guid = clothing["GUID"]
             outfit = clothing["Outfit"]
             chance = clothing["Chance"]
+            gender = clothing["Gender"]
 
-            # Format each line using the specified template
-            container_line = f"{{{{!}}}} {outfit} {{{{!}}}}{{{{!}}}} {chance}% {{{{!}}}}{{{{!}}}} {guid}"
+            # Format each line with the outfit name and gender in brackets
+            container_line = f"{{{{!}}}} {outfit} ({gender}) {{{{!}}}}{{{{!}}}} {chance}% {{{{!}}}}{{{{!}}}} {guid}"
             clothing_lines.append((outfit, guid, chance, container_line))
 
-        # Sort by outfit, then GUID, then chance numerically
+        # Sort by outfit, then GUID, then chance numerically (descending)
         clothing_lines.sort(key=lambda x: (x[0].lower(), x[1].lower(), -x[2]))
 
         # Join sorted lines
