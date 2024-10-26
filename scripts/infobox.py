@@ -36,6 +36,20 @@ def add_parameters_with_key(base_dict, key, items):
 
 # inserts new parameters into the parameters dictionary, after a defined parameter
 def insert_parameters_after(parameters, new_parameters_dict):
+    """
+    Inserts new parameters into the parameters dictionary, after a defined parameter.
+
+    Args:
+        parameters (dict): the base parameters dictionary
+        new_parameters_dict (dict): a dictionary with the new parameters to add.
+            The keys of this dictionary are the parameter names to insert after.
+            The values are dictionaries with the new parameters to add.
+            The keys of these dictionaries are the parameter names, and the values
+            can be either a single value, or a list of values.
+
+    Returns:
+        dict: a new parameters dictionary with the new parameters inserted
+    """
     combined_parameters = {}
     insertion_points = {key: False for key in new_parameters_dict.keys()}
 

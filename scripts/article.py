@@ -193,6 +193,23 @@ LANGUAGE_DATA = {
 
 
 def load_item_id_dictionary(dictionary_dir):
+    """
+    Loads the item_id dictionary from a given CSV file.
+
+    The dictionary is expected to have the following format:
+        article_name, item_id1, item_id2, ...
+
+    The function will return a dictionary with the item_id as the key and the
+    article_name as the value.
+
+    Args:
+        dictionary_dir (str): The path to the CSV file containing the item_id
+            dictionary.
+
+    Returns:
+        dict: A dictionary with the item_id as the key and the article_name as
+            the value.
+    """
     item_id_dict = {}
     try:
         with open(dictionary_dir, 'r', encoding='utf-8') as csvfile:
@@ -228,6 +245,33 @@ def generate_intro(lowercase_name, language_code):
 
 def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir,
                  code_dir, distribution_dir, language_code):
+    """
+    Processes a single file and generates the corresponding article content.
+
+    This function reads the file, extracts the item_id, name, and category from the
+    infobox, and builds the article content using the generate_header,
+    assemble_body, and generate_intro functions. The content is then written to a
+    new file in the output directory.
+
+    Args:
+        file_path (str): The path to the file to process.
+        output_dir (str): The path to the directory where the output file should
+            be written.
+        consumables_dir (str): The path to the directory containing the
+            consumable data.
+        infobox_data_list (list): A list of infobox data dictionaries.
+        item_id_dict (dict): A dictionary mapping item_id to article_name.
+        generate_all (bool): Whether to generate all articles or only those that
+            don't already have an article.
+        fixing_dir (str): The path to the directory containing the fixing data.
+        code_dir (str): The path to the directory containing the code data.
+        distribution_dir (str): The path to the directory containing the
+            distribution data.
+        language_code (str): The language code to use for the generated content.
+
+    Returns:
+        None
+    """
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             content = file.read()
@@ -406,6 +450,20 @@ def generate_consumable_properties(item_id, consumables_dir):
 
 
 def generate_condition(name, category, skill_type, infobox, fixing_dir, language_code):
+    """
+    Generates a condition section for an item page based on the item's infobox and fixing files.
+
+    Args:
+        name (str): The name of the item.
+        category (str): The category of the item.
+        skill_type (str): The skill type of the item.
+        infobox (str): The contents of the item's infobox.
+        fixing_dir (str): The directory containing the fixing files.
+        language_code (str): The language code to use for the condition text.
+
+    Returns:
+        str: The condition section for the item page.
+    """
     language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
 
     # Check if the category requires a condition section
@@ -504,6 +562,21 @@ def generate_code(item_id, code_dir):
 
 def load_infoboxes(infobox_dir):
     # Store extracted infoboxes in memory for efficiency
+    """
+    Loads infobox data from a directory of text files.
+
+    The function opens each file in the given directory, reads its content,
+    extracts the infobox data using regular expressions, and stores it in a
+    list of dictionaries. The returned list contains dictionaries with the
+    keys 'name', 'category', 'skill_type', 'tags', and 'item_id'.
+
+    Args:
+        infobox_dir (str): The path to the directory containing the infobox
+            data.
+
+    Returns:
+        list: A list of dictionaries containing the extracted infobox data.
+    """
     infobox_data_list = []
     infobox_files = [f for f in os.listdir(infobox_dir) if f.endswith('.txt')]
 
@@ -608,6 +681,28 @@ def generate_see_also(language_code, current_item, infobox_data_list, item_id_di
 
 def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox, consumables_dir,
                   infobox_data_list, item_id_dict, fixing_dir, code_dir, distribution_dir, language_code):
+    """
+    Assembles the body content for an item's article based on various parameters and data.
+
+    Args:
+        name (str): The name of the item.
+        original_filename (str): The original filename of the item.
+        infobox_name (str): The name of the infobox.
+        item_id (str): The unique ID of the item.
+        category (str): The category of the item.
+        skill_type (str): The skill type of the item.
+        infobox (str): The contents of the item's infobox.
+        consumables_dir (str): The directory containing consumables data.
+        infobox_data_list (list): A list of dictionaries containing extracted infobox data.
+        item_id_dict (dict): A dictionary mapping item IDs to names.
+        fixing_dir (str): The directory containing fixing data.
+        code_dir (str): The directory containing code data.
+        distribution_dir (str): The directory containing distribution data.
+        language_code (str): The language code to use for the generated content.
+
+    Returns:
+        str: The assembled body content for the item's article.
+    """
     language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
     headers = language_data["headers"]
     help_text = language_data["help_text"]
