@@ -191,57 +191,56 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
     def get_container_info(item_name):
         containers_info = []
 
-        # Check the "all" object within procedural_data
-        if "all" in procedural_data:
-            for container_name, details in procedural_data["all"].items():
-                # Check items in this container
-                items = details.get("items", [])
-                rolls = details.get("rolls", 0)
+        def process_nested_object(obj, room_name, container_name=None):
+            """
+            Recursively process nested objects to find items that match item_name.
+            """
+            if "items" in obj:  # Check if the current object has an items list
+                items = obj["items"]
+                rolls = obj.get("rolls", 0)  # Rolls will be found at the current level
                 for entry in items:
                     if entry["name"] == item_name:
+                        # If we have a match, use the nested structure for container info
                         chance = entry["chance"]
                         containers_info.append({
-                            "Room": "all",
-                            "Container": container_name,
+                            "Room": room_name,  # Set Room from the top level
+                            "Container": container_name,  # Set Container at the current nested level
                             "Chance": chance,
                             "Rolls": rolls
                         })
+            else:
+                # If no items list, check each sub-object (nested container) recursively
+                for sub_key, sub_value in obj.items():
+                    if isinstance(sub_value, dict):  # Only process further if it's a dictionary
+                        # When entering a new nested level, `sub_key` represents the container
+                        process_nested_object(sub_value, room_name, sub_key)
 
-                # Check items in the "junk" list for this container, if present
-                junk_items = details.get("junk", {}).get("items", [])
-                for junk_entry in junk_items:
-                    if junk_entry["name"] == item_name:
-                        chance = junk_entry["chance"]
-                        containers_info.append({
-                            "Room": "all",
-                            "Container": container_name,
-                            "Chance": chance,
-                            "Rolls": rolls
-                        })
-
-        # Regular processing for non-"all" items in procedural_data
+        # Process procedural_data for initial items list and distributions
         for proclist, content in procedural_data.items():
-            if proclist == "all":  # Skip "all" as it’s handled above
-                continue
             items = content.get("items", [])
             rolls = content.get("rolls", 0)
-            for entry in items:
-                if entry["name"] == item_name:
-                    chance = entry["chance"]
-                    # Check all rooms in distribution_data for this proclist
-                    for room, room_content in distribution_data.items():
-                        for container, container_content in room_content.items():
-                            proc_lists = container_content.get("procList", [])
-                            for proc_entry in proc_lists:
-                                if proc_entry.get("name") == proclist:
-                                    containers_info.append({
-                                        "Room": room,
-                                        "Container": container,
-                                        "Chance": chance,
-                                        "Rolls": rolls
-                                    })
-        return containers_info
+            if items:
+                for entry in items:
+                    if entry["name"] == item_name:
+                        # Found item at the expected level, use the distribution data
+                        chance = entry["chance"]
+                        for room, room_content in distribution_data.items():
+                            for container, container_content in room_content.items():
+                                proc_lists = container_content.get("procList", [])
+                                for proc_entry in proc_lists:
+                                    if proc_entry.get("name") == proclist:
+                                        containers_info.append({
+                                            "Room": room,
+                                            "Container": container,
+                                            "Proclist": proclist,
+                                            "Chance": chance,
+                                            "Rolls": rolls
+                                        })
+            else:
+                # No direct items list, recursively check nested objects with proclist as room
+                process_nested_object(content, room_name=proclist)
 
+        return containers_info
 
     def get_vehicle_info(item_name):
         vehicles_info = []
@@ -429,7 +428,7 @@ def build_tables():
             container_lines.append((room, container_name, effective_chance, container_line))
 
         # Sort by room, then container name, then effective chance numerically
-        container_lines.sort(key=lambda x: (x[0].lower(), x[1].lower(), x[2]))
+        container_lines.sort(key=lambda x: (x[0].lower(), x[1].lower(), -x[2]))
 
         # Join sorted lines
         content = "\n{{!}}-\n".join(line[3] for line in container_lines)
@@ -457,7 +456,7 @@ def build_tables():
             vehicle_lines.append((type_, container, effective_chance, vehicle_line))
 
         # Sort by type, then container, then effective chance numerically
-        vehicle_lines.sort(key=lambda x: (x[0].lower(), x[1].lower(), x[2]))
+        vehicle_lines.sort(key=lambda x: (x[0].lower(), x[1].lower(), -x[2]))
 
         # Join sorted lines
         content = "\n{{!}}-\n".join(line[3] for line in vehicle_lines)
@@ -477,7 +476,7 @@ def build_tables():
             attached_weapon_lines.append((outfit, day_survived, chance, body_line))
 
         # Sort by outfit, then day_survived, then chance numerically
-        attached_weapon_lines.sort(key=lambda x: (x[0].lower(), x[1], x[2]))
+        attached_weapon_lines.sort(key=lambda x: (x[0].lower(), x[1], -x[2]))
 
         # Join sorted lines
         content = "\n{{!}}-\n".join(line[3] for line in attached_weapon_lines)
@@ -497,7 +496,7 @@ def build_tables():
             clothing_lines.append((outfit, guid, chance, container_line))
 
         # Sort by outfit, then GUID, then chance numerically
-        clothing_lines.sort(key=lambda x: (x[0].lower(), x[1].lower(), x[2]))
+        clothing_lines.sort(key=lambda x: (x[0].lower(), x[1].lower(), -x[2]))
 
         # Join sorted lines
         content = "\n{{!}}-\n".join(line[3] for line in clothing_lines)
