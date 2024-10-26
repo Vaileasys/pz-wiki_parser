@@ -46,6 +46,31 @@ def load_item_dictionary(item_name):
 
 
 def process_json(file_paths):
+    """
+    Process JSON files and gather a list of unique items and their counts.
+
+    Parameters
+    ----------
+    file_paths : dict
+        A dictionary mapping file keys to file paths. The supported file keys are:
+            - "proceduraldistributions" : A JSON file containing procedural distribution data.
+            - "foraging" : A JSON file containing foraging data.
+            - "vehicle_distributions" : A JSON file containing vehicle distribution data.
+            - "clothing" : A JSON file containing clothing data.
+            - "attached_weapons" : A JSON file containing attached weapon data.
+            - "stories" : A JSON file containing story data.
+
+    Returns
+    -------
+    item_list : set
+        A set of unique items found in the input JSON files.
+
+    Notes
+    -----
+    This function processes the input JSON files and stores the results in a dictionary.
+    The dictionary is then saved to a file named "item_list.txt" in the "output/distributions" directory.
+    The function also saves the changes dictionary to a file named "item_name_changes.json" in the same directory.
+    """
     item_list = set()
     item_counts = {}
 
@@ -134,6 +159,33 @@ def process_json(file_paths):
 
 def build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, attached_weapons_data,
                     clothing_data, stories_data):
+    """
+    Build a JSON file containing item data.
+
+    Parameters
+    ----------
+    item_list : list
+        A list of unique items found in the input JSON files.
+    procedural_data : dict
+        A dictionary containing procedural distribution data.
+    distribution_data : dict
+        A dictionary containing distribution data.
+    vehicle_data : dict
+        A dictionary containing vehicle distribution data.
+    foraging_data : dict
+        A dictionary containing foraging data.
+    attached_weapons_data : dict
+        A dictionary containing attached weapon data.
+    clothing_data : dict
+        A dictionary containing clothing data.
+    stories_data : dict
+        A dictionary containing story data.
+
+    Notes
+    -----
+    This function processes the input data and stores the results in a dictionary.
+    The dictionary is then saved to a file named "all_items.json" in the "output/distributions/json" directory.
+    """
     def get_container_info(item_name):
         containers_info = []
         for proclist, content in procedural_data.items():
@@ -302,6 +354,16 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
 
 def build_tables():
     # Load the JSON data
+    """
+    Builds distribution tables for all items.
+
+    Reads the JSON data file created by `build_json`, processes each item, and creates a table
+    containing all the relevant distribution information. The table is then written to a file
+    in the specified output directory.
+
+    The output directory is created if it does not exist. The file name is in the format
+    `<item_id>.txt`, where `<item_id>` is the ID of the item.
+    """
     with open("output/distributions/json/all_items.json", "r") as file:
         all_items = json.load(file)
 
@@ -525,7 +587,18 @@ def build_tables():
 
 
 def calculate_missing_items(itemname_path, itemlist_path, missing_items_path):
-    # Open and create the dictionary from the ItemName_EN.txt file
+    """
+    Calculate and output the missing items between ItemName_EN.txt and Item_list.txt.
+
+    This function takes three parameters: the path to the ItemName_EN.txt file, the path to the Item_list.txt file,
+    and the path to the output file that will contain only the keys of the items that are missing.
+
+    The function creates a dictionary from the ItemName_EN.txt file, loads the keys to remove from the Item_list.txt
+    file, removes any matching keys from the dictionary, and then outputs only the keys of the filtered dictionary to
+    the output file.
+
+    The output file will contain one key per line.
+    """
     with open(itemname_path, 'r') as file:
         item_dict = {}
 
