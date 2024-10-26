@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import math
 import tqdm
 import scripts.distribution_parser as distribution_parser
 
@@ -381,10 +382,13 @@ def build_tables():
             container_name = container["Container"]
             chance = container["Chance"]
             rolls = container["Rolls"]
+            loot_rarity = 100
+            luck_multiplier = 1
+            density = 5.2  # Averaged
 
             # Calculate effective chance
-            effective_chance = round((1 - (1 - ((1 + ((100 * chance * 0.6) + (10 * rolls))) / 10000)) ** rolls) * 100,
-                                     2)
+            effective_chance = round((1 - (1 - math.floor((1 + 100 * chance * loot_rarity * luck_multiplier + 10 * density) /
+                                                          10000) / 100) ** rolls) * 100, 2)
 
             # Format each line with the specified format
             container_line = f"{{{{!}}}} {room} {{{{!}}}}{{{{!}}}} {{{{ll|{container_name}}}}} {{{{!}}}}{{{{!}}}} {effective_chance}%"
@@ -406,10 +410,13 @@ def build_tables():
             container = vehicle["Container"]
             chance = vehicle["Chance"]
             rolls = vehicle["Rolls"]
+            loot_rarity = 100
+            luck_multiplier = 1
+            density = 5.2  # Averaged
 
             # Calculate effective chance
-            effective_chance = round((1 - (1 - ((1 + ((100 * chance * 0.6) + (10 * rolls))) / 10000)) ** rolls) * 100,
-                                     2)
+            effective_chance = round((1 - (1 - math.floor((1 + 100 * chance * loot_rarity * luck_multiplier + 10 * density) /
+                                                          10000) / 100) ** rolls) * 100, 2)
 
             # Format each line with the specified format
             vehicle_line = f"{{{{!}}}} {type_} {{{{!}}}}{{{{!}}}} {{{{ll|{container}}}}} {{{{!}}}}{{{{!}}}} {effective_chance}%"
