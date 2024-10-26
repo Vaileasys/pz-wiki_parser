@@ -1,2 +1,4 @@
 chardet
 tqdm
+lupa
+slpp
