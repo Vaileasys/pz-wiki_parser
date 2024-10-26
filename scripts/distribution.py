@@ -492,7 +492,7 @@ def build_tables():
             chance = clothing["Chance"]
 
             # Format each line using the specified template
-            container_line = f"{{{{!}}}} {outfit} {{{{!}}}}{{{{!}}}} {chance} {{{{!}}}}{{{{!}}}} {guid}"
+            container_line = f"{{{{!}}}} {outfit} {{{{!}}}}{{{{!}}}} {chance}% {{{{!}}}}{{{{!}}}} {guid}"
             clothing_lines.append((outfit, guid, chance, container_line))
 
         # Sort by outfit, then GUID, then chance numerically

@@ -607,7 +607,8 @@ def parse_clothing(clothing_file_path, guid_table_path, output_file_path):
 
             for item_block in outfit.findall('m_items'):
                 probability_tag = item_block.find('probability')
-                probability = float(probability_tag.text) if probability_tag is not None else 1.0
+                probability = float(probability_tag.text)*100 if probability_tag is not None else 100
+                probability = int(probability)
 
                 item_guid = item_block.find('itemGUID').text if item_block.find('itemGUID') is not None else None
                 if item_guid:
