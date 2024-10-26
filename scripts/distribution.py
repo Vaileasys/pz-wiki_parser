@@ -415,6 +415,7 @@ def build_tables():
     # Helper functions to process each type
     def process_containers(containers_list):
         container_lines = []
+        unique_output_lines = set()  # Track unique formatted lines
 
         for container in containers_list:
             room = container["Room"]
@@ -426,11 +427,16 @@ def build_tables():
             density = 5.2  # Averaged
 
             # Calculate effective chance
-            effective_chance = round((1 - (1 - (math.floor((1 + (100 * chance * loot_rarity * luck_multiplier) + (10 * density))) / 10000)) ** rolls) * 100, 2)
+            effective_chance = round((1 - (1 - (math.floor(
+                (1 + (100 * chance * loot_rarity * luck_multiplier) + (10 * density))) / 10000)) ** rolls) * 100, 2)
 
             # Format each line with the specified format
             container_line = f"{{{{!}}}} {room} {{{{!}}}}{{{{!}}}} {{{{ll|{container_name}}}}} {{{{!}}}}{{{{!}}}} {effective_chance}%"
-            container_lines.append((room, container_name, effective_chance, container_line))
+
+            # Only add unique formatted lines to avoid duplicates
+            if container_line not in unique_output_lines:
+                container_lines.append((room, container_name, effective_chance, container_line))
+                unique_output_lines.add(container_line)
 
         # Sort by room, then container name, then effective chance numerically
         container_lines.sort(key=lambda x: (x[0].lower(), x[1].lower(), -x[2]))
@@ -442,6 +448,7 @@ def build_tables():
 
     def process_vehicles(vehicles_list):
         vehicle_lines = []
+        unique_output_lines = set()  # Track unique formatted lines
 
         for vehicle in vehicles_list:
             type_ = vehicle["Type"]
@@ -453,11 +460,16 @@ def build_tables():
             density = 5.2  # Averaged
 
             # Calculate effective chance
-            effective_chance = round((1 - (1 - (math.floor((1 + (100 * chance * loot_rarity * luck_multiplier) + (10 * density))) / 10000)) ** rolls) * 100, 2)
+            effective_chance = round((1 - (1 - (math.floor(
+                (1 + (100 * chance * loot_rarity * luck_multiplier) + (10 * density))) / 10000)) ** rolls) * 100, 2)
 
             # Format each line with the specified format
             vehicle_line = f"{{{{!}}}} {type_} {{{{!}}}}{{{{!}}}} {{{{ll|{container}}}}} {{{{!}}}}{{{{!}}}} {effective_chance}%"
-            vehicle_lines.append((type_, container, effective_chance, vehicle_line))
+
+            # Only add unique formatted lines to avoid duplicates
+            if vehicle_line not in unique_output_lines:
+                vehicle_lines.append((type_, container, effective_chance, vehicle_line))
+                unique_output_lines.add(vehicle_line)
 
         # Sort by type, then container, then effective chance numerically
         vehicle_lines.sort(key=lambda x: (x[0].lower(), x[1].lower(), -x[2]))
