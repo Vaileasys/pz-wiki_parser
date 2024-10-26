@@ -382,23 +382,21 @@ def build_tables():
             chance = container["Chance"]
             rolls = container["Rolls"]
 
-            # Calculate effective_chance
+            # Calculate effective chance
             effective_chance = round((1 - (1 - ((1 + ((100 * chance * 0.6) + (10 * rolls))) / 10000)) ** rolls) * 100,
                                      2)
 
             # Format each line with the specified format
             container_line = f"{{{{!}}}} {room} {{{{!}}}}{{{{!}}}} {{{{ll|{container_name}}}}} {{{{!}}}}{{{{!}}}} {effective_chance}%"
-            container_lines.append(container_line)
+            container_lines.append((room, container_name, effective_chance, container_line))
 
-        # Join lines with `{{!}}-` only if there are two or more entries
-        if len(container_lines) > 1:
-            content = "\n{{!}}-\n".join(container_lines)
-        else:
-            content = "\n".join(container_lines)
+        # Sort by room, then container name, then effective chance numerically
+        container_lines.sort(key=lambda x: (x[0].lower(), x[1].lower(), x[2]))
 
-        # Prepend "|Containers=" to the final content
+        # Join sorted lines
+        content = "\n{{!}}-\n".join(line[3] for line in container_lines)
+
         return f"|container=\n{content}"
-
 
     def process_vehicles(vehicles_list):
         vehicle_lines = []
@@ -415,17 +413,15 @@ def build_tables():
 
             # Format each line with the specified format
             vehicle_line = f"{{{{!}}}} {type_} {{{{!}}}}{{{{!}}}} {{{{ll|{container}}}}} {{{{!}}}}{{{{!}}}} {effective_chance}%"
-            vehicle_lines.append(vehicle_line)
+            vehicle_lines.append((type_, container, effective_chance, vehicle_line))
 
-        # Join lines with `{{!}}-` only if there are two or more entries
-        if len(vehicle_lines) > 1:
-            content = "\n{{!}}-\n".join(vehicle_lines)
-        else:
-            content = "\n".join(vehicle_lines)
+        # Sort by type, then container, then effective chance numerically
+        vehicle_lines.sort(key=lambda x: (x[0].lower(), x[1].lower(), x[2]))
 
-        # Prepend "|vehicle=" to the final content
+        # Join sorted lines
+        content = "\n{{!}}-\n".join(line[3] for line in vehicle_lines)
+
         return f"|vehicle=\n{content}"
-
 
     def process_attached_weapon(attached_weapon_list):
         attached_weapon_lines = []
@@ -435,19 +431,17 @@ def build_tables():
             day_survived = weapon.get("daySurvived", 0)
             chance = weapon.get("chance", 0)
 
-            # Format the line using the provided template
+            # Format each line using the provided template
             body_line = f"{{{{!}}}} {outfit} {{{{!}}}}{{{{!}}}} {day_survived} {{{{!}}}}{{{{!}}}} {chance}"
-            attached_weapon_lines.append(body_line)
+            attached_weapon_lines.append((outfit, day_survived, chance, body_line))
 
-        # Join lines with `{{!}}-` only if there are two or more entries
-        if len(attached_weapon_lines) > 1:
-            content = "\n{{!}}-\n".join(attached_weapon_lines)
-        else:
-            content = "\n".join(attached_weapon_lines)
+        # Sort by outfit, then day_survived, then chance numerically
+        attached_weapon_lines.sort(key=lambda x: (x[0].lower(), x[1], x[2]))
 
-        # Prepend "|zombie=" to the final content
+        # Join sorted lines
+        content = "\n{{!}}-\n".join(line[3] for line in attached_weapon_lines)
+
         return f"|zombie=\n{content}"
-
 
     def process_clothing(clothing_list):
         clothing_lines = []
@@ -459,23 +453,20 @@ def build_tables():
 
             # Format each line using the specified template
             container_line = f"{{{{!}}}} {outfit} {{{{!}}}}{{{{!}}}} {chance} {{{{!}}}}{{{{!}}}} {guid}"
-            clothing_lines.append(container_line)
+            clothing_lines.append((outfit, guid, chance, container_line))
 
-        # Join lines with `{{!}}-` only if there are two or more entries
-        if len(clothing_lines) > 1:
-            content = "\n{{!}}-\n".join(clothing_lines)
-        else:
-            content = "\n".join(clothing_lines)
+        # Sort by outfit, then GUID, then chance numerically
+        clothing_lines.sort(key=lambda x: (x[0].lower(), x[1].lower(), x[2]))
 
-        # Prepend "|clothing=" to the final content
+        # Join sorted lines
+        content = "\n{{!}}-\n".join(line[3] for line in clothing_lines)
+
         return f"|outfit=\n{content}"
-
 
     def process_stories(stories_list):
         story_lines = []
 
         for story in stories_list:
-            # Determine the link based on the prefix of the story
             if story.startswith("RZS"):
                 link = "Zone stories"
             elif story.startswith("RBTS"):
@@ -489,17 +480,15 @@ def build_tables():
 
             # Format each story line with the specified template
             story_line = f"{{{{!}}}} {story} {{{{!}}}}{{{{!}}}} {{{{ll|{link}}}}}"
-            story_lines.append(story_line)
+            story_lines.append((story, link, story_line))
 
-        # Join all story lines with `{{!}}-` if there are multiple entries
-        if len(story_lines) > 1:
-            content = "\n{{!}}-\n".join(story_lines)
-        else:
-            content = "\n".join(story_lines)
+        # Sort by story, then link
+        story_lines.sort(key=lambda x: (x[0].lower(), x[1].lower()))
 
-        # Prepend "|story=" to the final content
+        # Join sorted lines
+        content = "\n{{!}}-\n".join(line[2] for line in story_lines)
+
         return f"|stories=\n{content}"
-
 
     def process_foraging(foraging_data):
         # Helper function to convert month indexes to readable month names
@@ -529,9 +518,9 @@ def build_tables():
 
         skill_level = foraging_data.get("skill", "-")
 
-        # Formatting Biomes with line breaks if multiple zones exist
+        # Sorting zones alphabetically and formatting each zone with line breaks if multiple zones exist
         zones = foraging_data.get("zones", {})
-        biomes = "<br>".join([f"{zone}: {value}" for zone, value in zones.items()]) if zones else "-"
+        sorted_zones = "<br>".join([f"{zone}: {value}" for zone, value in sorted(zones.items())]) if zones else "-"
 
         snow = foraging_data.get("snowChance", "-")
         rain = foraging_data.get("rainChance", "-")
@@ -548,7 +537,7 @@ def build_tables():
             f"|foraging=\n{{{{!}}}} "
             f"{amount} {{{{!}}}}{{{{!}}}}"
             f"{skill_level} {{{{!}}}}{{{{!}}}}"
-            f"{biomes} {{{{!}}}}{{{{!}}}}"
+            f"{sorted_zones} {{{{!}}}}{{{{!}}}}"
             f"{snow} {{{{!}}}}{{{{!}}}}"
             f"{rain} {{{{!}}}}{{{{!}}}}"
             f"{day} {{{{!}}}}{{{{!}}}}"
