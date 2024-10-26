@@ -2,7 +2,6 @@ import os
 import shutil
 import subprocess
 
-
 def get_install_path():
     print("Please select your install location:")
     print("1: C:\\Program Files (x86)\\Steam\\steamapps\\common\\ProjectZomboid")
@@ -87,6 +86,24 @@ def copy_lua_files(media_dir):
                 print(f"Copied {file} to {dst}")
 
 
+def copy_xml_files(media_dir):
+    # Define the specific XML files and their locations
+    files_to_copy = {
+        'clothing.xml': os.path.join(media_dir, 'clothing', 'clothing.xml'),
+        'fileGuidTable.xml': os.path.join(media_dir, 'fileGuidTable.xml')
+    }
+    destination_dir = 'resources'
+
+    # Copy each file to the resources directory
+    for file_name, src_path in files_to_copy.items():
+        dst_path = os.path.join(destination_dir, file_name)
+        if os.path.exists(src_path):
+            shutil.copy(src_path, dst_path)
+            print(f"Copied {file_name} to {dst_path}")
+        else:
+            print(f"{file_name} not found in {src_path}, skipping.")
+
+
 def handle_translations(media_dir):
     print("Would you like to use:")
     print("1: Local translation")
@@ -135,6 +152,7 @@ def main():
     try:
         copy_scripts_and_radio(media_dir)
         copy_lua_files(media_dir)
+        copy_xml_files(media_dir)
         handle_translations(media_dir)
     except FileNotFoundError as e:
         print(e)
