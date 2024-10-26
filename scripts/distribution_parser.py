@@ -65,6 +65,14 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
         # Access the global distributionTable from Lua
         distribution_table = lua.globals().distributionTable
 
+        # Helper function to remove unwanted prefixes in both cases
+        def remove_prefixes(name):
+            prefixes = ["Base.", "Farming.", "Radio.", "Camping.", "farming.", "radio.", "camping."]
+            for prefix in prefixes:
+                if name.startswith(prefix):
+                    return name[len(prefix):]
+            return name
+
         # Create the final nested dictionary for the procedural-only containers
         output_json = {}
 
@@ -85,7 +93,7 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
                                 item = container_content['procList'][i]
                                 if lua.globals().is_table(item):
                                     container_details['procList'].append({
-                                        'name': item['name'],
+                                        'name': remove_prefixes(item['name']),  # Remove prefixes here
                                         'min': item['min'] if 'min' in item else 0,
                                         'max': item['max'] if 'max' in item else 0,
                                         'weightChance': item['weightChance'] if 'weightChance' in item else None
@@ -101,7 +109,7 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
                             items_list = container_content['items']
                             non_procedural_details['items'] = []
                             for i in range(1, len(items_list), 2):
-                                item_name = items_list[i]
+                                item_name = remove_prefixes(items_list[i])  # Apply prefix removal here
                                 item_chance = items_list[i + 1]
                                 non_procedural_details['items'].append({
                                     'name': item_name,
@@ -115,7 +123,7 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
                                 'items': []
                             }
                             for i in range(1, len(junk_items_list), 2):
-                                item_name = junk_items_list[i]
+                                item_name = remove_prefixes(junk_items_list[i])  # Apply prefix removal here as well
                                 item_chance = junk_items_list[i + 1]
                                 non_procedural_details['junk']['items'].append({
                                     'name': item_name,
@@ -148,6 +156,15 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
         # Create the final nested dictionary that will be converted to JSON
         output_json = {}
 
+        # Helper function to remove unwanted prefixes in both cases
+        def remove_prefixes(name):
+            prefixes = ["Base.", "Farming.", "Radio.", "Camping.", "farming.", "radio.", "camping."]
+
+            for prefix in prefixes:
+                if name.startswith(prefix):
+                    return name[len(prefix):]
+            return name
+
         # Process the content of the procedural distribution table
         for table_name, table_content in distribution_table.items():
             if not lua.globals().is_table(table_content):
@@ -162,7 +179,7 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
                 items_list = table_content['items']
                 table_details['items'] = []
                 for i in range(1, len(items_list), 2):
-                    item_name = items_list[i]
+                    item_name = remove_prefixes(items_list[i])  # Apply prefix removal here
                     item_chance = items_list[i + 1]
                     table_details['items'].append({
                         'name': item_name,
@@ -176,7 +193,7 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
                     'items': []
                 }
                 for i in range(1, len(junk_items_list), 2):
-                    item_name = junk_items_list[i]
+                    item_name = remove_prefixes(junk_items_list[i])  # Apply prefix removal here as well
                     item_chance = junk_items_list[i + 1]
                     table_details['junk']['items'].append({
                         'name': item_name,
