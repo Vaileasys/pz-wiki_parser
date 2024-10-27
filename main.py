@@ -40,7 +40,8 @@ menu_structure = {
             '3': {'module': 'weapon_list', 'name': 'Weapon list', 'description': 'Return all weapons in a list with stats organised by their skill.'},
             '4': {'module': 'clothing_list', 'name': 'Clothing list', 'description': 'Return all clothing in a list with stats organised by body location.'},
             '5': {'module': 'nutrition', 'name': 'nutrition', 'description': 'Generate nutrition page.'},
-            '6': {'module': 'radio_parser', 'name': 'Radio transcripts', 'description': 'Generate radio transcripts.'}
+            '6': {'module': 'radio_parser', 'name': 'Radio transcripts', 'description': 'Generate radio transcripts.'},
+            '7': {'module': 'outfit_parser', 'name': 'Outfit parser', 'description': 'Parse outfit xml files.'}
         },
     },
     '4': {
