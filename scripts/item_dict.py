@@ -58,7 +58,7 @@ def main():
     output_file = f'items_{game_version}.csv'
     generate_csv(data, output_file, output_dir)
     output_file = os.path.join(output_dir, output_file)
-    
+
     compare_option = input("Want to compare the generated file with another CSV file? (y/n):\n> ").strip().lower()
     if compare_option == 'y':
         compare_version = input("Enter the version to compare with:\n> ").strip()

@@ -354,7 +354,10 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
 
             for outfit_name, outfit_details in gender_outfits_data.items():
                 items = outfit_details.get("Items", {})
-                outfit_name = outfit_name.replace("_", " ")
+
+                outfit_name = outfit_name.replace("_", "")
+                outfit_name = re.sub(r'(?<!^)(?=[A-Z])', ' ', outfit_name)
+
                 if item_name in items:
                     # Format the outfit name with the gender and create a wiki link
                     formatted_outfit_name = f"[[{outfit_name} ({gender.lower()} outfit)|{outfit_name} ({gender.lower()})]]"
