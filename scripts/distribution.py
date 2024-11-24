@@ -553,22 +553,56 @@ def build_tables():
         return f"|stories=\n{content}"
 
     def process_foraging(foraging_data):
-        # Helper function to convert month indexes to readable month names
-        def format_months(month_obj):
+        # Updated format_months function
+        def format_months(month_list):
+            if not month_list:
+                return "-"
+
+            # Convert all month values to integers and sort them
+            months = sorted(set(int(month) for month in month_list))
+
+            # Build a list representing the 12 months, marking available months
+            month_flags = [False] * 12
+            for month in months:
+                month_flags[month - 1] = True
+
+            # Duplicate the month flags to handle wrap-around
+            month_flags_extended = month_flags + month_flags
+
+            max_length = 0
+            max_start_idx = 0
+            current_length = 0
+            current_start_idx = 0
+
+            for idx in range(len(month_flags_extended)):
+                month_idx = idx % 12
+                if month_flags_extended[idx]:
+                    if current_length == 0:
+                        current_start_idx = month_idx
+                    current_length += 1
+                    if current_length > max_length:
+                        max_length = current_length
+                        max_start_idx = current_start_idx
+                else:
+                    current_length = 0
+                # Stop if we've checked a full year
+                if idx - current_start_idx >= 12:
+                    break
+
+            # Calculate end index
+            end_idx = (max_start_idx + max_length - 1) % 12
+
+            # Build month names
             month_names = ["January", "February", "March", "April", "May", "June",
                            "July", "August", "September", "October", "November", "December"]
 
-            sorted_keys = sorted(map(int, month_obj.keys()))
+            start_name = month_names[max_start_idx]
+            end_name = month_names[end_idx]
 
-            if not sorted_keys:
-                return "-"
-
-            # Get the first and last month indices
-            start_month = month_names[sorted_keys[0] - 1]
-            end_month = month_names[sorted_keys[-1] - 1]
-
-            # Return "X to Y" or just "X" if only one month
-            return f"{start_month} to {end_month}" if start_month != end_month else start_month
+            if max_start_idx == end_idx:
+                return start_name
+            else:
+                return f"{start_name} to {end_name}"
 
         # Extract and format each component
         min_count = foraging_data.get("minCount")
@@ -589,10 +623,10 @@ def build_tables():
         day = foraging_data.get("dayChance", "-")
         night = foraging_data.get("nightChance", "-")
 
-        # Formatting months available, bonus months, and malus months
-        months_available = format_months(foraging_data.get("months", {}))
-        bonus_months = format_months(foraging_data.get("bonusMonths", {}))
-        malus_months = format_months(foraging_data.get("malusMonths", {}))
+        # Adjusted to pass months list to format_months
+        months_available = format_months(foraging_data.get("months", []))
+        bonus_months = format_months(foraging_data.get("bonusMonths", []))
+        malus_months = format_months(foraging_data.get("malusMonths", []))
 
         # Constructing the formatted string in a single line
         foraging_info = (

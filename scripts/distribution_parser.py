@@ -375,31 +375,19 @@ def parse_foraging(forage_definitions_path, output_path):
     # Get the forageDefs table
     forageDefs = lua.globals().forageDefs
 
-    # Function to convert Lua table to Python dict
+    # Updated lua_table_to_python function
     def lua_table_to_python(obj):
         if lupa.lua_type(obj) == 'table':
-            py_dict = {}
-            for key in obj:
-                py_key = key
-                py_value = obj[key]
-                # Convert key
-                if lupa.lua_type(py_key) in ('table', 'function'):
-                    py_key = str(py_key)
-                else:
-                    py_key = lua_table_to_python(py_key)
-                # Convert value
-                if lupa.lua_type(py_value) == 'table':
-                    py_value = lua_table_to_python(py_value)
-                elif lupa.lua_type(py_value) == 'function':
-                    py_value = str(py_value)
-                else:
-                    py_value = py_value
-                py_dict[py_key] = py_value
-            return py_dict
-        elif lupa.lua_type(obj) == 'function':
-            return str(obj)
-        else:
+            keys = list(obj.keys())
+            if all(isinstance(key, int) for key in keys):
+                values = [lua_table_to_python(obj[key]) for key in sorted(keys)]
+                return values
+            else:
+                return {str(k): lua_table_to_python(v) for k, v in obj.items()}
+        elif isinstance(obj, (str, int, float, bool)):
             return obj
+        else:
+            return str(obj)
 
     # Convert the forageDefs table to a Python dictionary
     forage_defs_dict = lua_table_to_python(forageDefs)
