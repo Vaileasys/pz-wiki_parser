@@ -188,6 +188,32 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
     The dictionary is then saved to a file named "all_items.json" in the "output/distributions/json" directory.
     """
 
+    # Load the outfits data from outfits.json
+    outfits_json_path = "output/outfits/json/outfits.json"
+    if not os.path.exists(outfits_json_path):
+        raise FileNotFoundError("RUN OUTFITS MODULE FIRST: 'output/outfits/json/outfits.json' not found.")
+
+    with open(outfits_json_path, "r") as outfits_file:
+        outfits_data = json.load(outfits_file)
+
+    # Define special cases for outfit name splitting
+    special_cases = {
+        "1RJTest": "1RJTest",
+        "BaseballFanKY": "Baseball Fan KY",
+        "BaseballPlayerKY": "Baseball Player KY",
+        "Gas2Go": "Gas 2 Go",
+        "GigaMartEmployee": "GigaMart Employee",
+    }
+
+    def split_outfit_name(name):
+        # Check for special cases
+        if name in special_cases:
+            return special_cases[name]
+        else:
+            # Split by capital letters
+            split_name = re.sub(r'(?<!^)(?=[A-Z])', ' ', name)
+            return split_name
+
     def get_container_info(item_name):
         containers_info = []
         unique_entries = set()  # Track unique entries for containers
@@ -326,7 +352,6 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
             # Check if the item_name exists in the list of weapons
             weapons = details.get("weapons", [])
             if item_name in weapons:
-                # Assign "Any" to outfit if it isn't specified in the details
                 outfits = details.get("outfit", "Any")
                 day_survived = details.get("daySurvived", 0)
                 chance = details.get("chance", 0)
@@ -335,10 +360,44 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
                 if not isinstance(outfits, list):
                     outfits = [outfits]
 
-                # Append each configuration to the matches list
                 for outfit in outfits:
+                    # Initialize variables to check if the outfit is found in male, female, or both
+                    found_in_male = False
+                    found_in_female = False
+
+                    # Search for the outfit in MaleOutfits and FemaleOutfits
+                    male_outfits = outfits_data.get("MaleOutfits", {})
+                    female_outfits = outfits_data.get("FemaleOutfits", {})
+
+                    if outfit in male_outfits:
+                        found_in_male = True
+                    if outfit in female_outfits:
+                        found_in_female = True
+
+                    # Determine the gender(s)
+                    if found_in_male and found_in_female:
+                        genders = ["male", "female"]
+                    elif found_in_male:
+                        genders = ["male"]
+                    elif found_in_female:
+                        genders = ["female"]
+                    else:
+                        genders = ["any"]
+
+                    # Format the outfit name
+                    split_name = split_outfit_name(outfit)
+
+                    formatted_outfits = []
+                    for gender in genders:
+                        if gender == "any":
+                            formatted_outfit_name = f"{split_name}"
+                        else:
+                            formatted_outfit_name = f"{{{{ll|{split_name} ({gender} outfit)}}}}"
+                        formatted_outfits.append(formatted_outfit_name)
+
+                    # Create the match entry
                     attached_weapon_matches.append({
-                        "outfit": outfit,
+                        "outfit": ', '.join(formatted_outfits),
                         "daySurvived": day_survived,
                         "chance": chance
                     })
@@ -391,15 +450,14 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
             "Stories": get_story_info(item_name)
         }
 
-        # Output to JSON file
-    os.makedirs("output", exist_ok=True)
+    # Output to JSON file
+    os.makedirs("output/distributions/json", exist_ok=True)
     with open("output/distributions/json/all_items.json", "w") as json_file:
         json.dump(all_items, json_file, indent=4)
     print("Completed building JSON file")
 
 
 def build_tables():
-    # Load the JSON data
     """
     Builds distribution tables for all items.
 
@@ -416,6 +474,33 @@ def build_tables():
     # Create the output directory if it doesn't exist
     output_dir = "output/distributions/complete"
     os.makedirs(output_dir, exist_ok=True)
+
+    # Load outfits.json
+    outfits_json_path = "output/outfits/json/outfits.json"
+    if not os.path.exists(outfits_json_path):
+        raise FileNotFoundError("RUN OUTFITS MODULE FIRST: 'output/outfits/json/outfits.json' not found.")
+
+    with open(outfits_json_path, "r") as outfits_file:
+        outfits_data = json.load(outfits_file)
+
+    # Define special cases for outfit name splitting
+    special_cases = {
+        "1RJTest": "1RJTest",
+        "BaseballFanKY": "Baseball Fan KY",
+        "BaseballPlayerKY": "Baseball Player KY",
+        "Gas2Go": "Gas 2 Go",
+        "GigaMartEmployee": "GigaMart Employee",
+    }
+
+    # Helper function to split outfit names
+    def split_outfit_name(name):
+        # Check for special cases
+        if name in special_cases:
+            return special_cases[name]
+        else:
+            # Split by capital letters
+            split_name = re.sub(r'(?<!^)(?=[A-Z])', ' ', name)
+            return split_name
 
 
     # Helper functions to process each type
@@ -436,12 +521,54 @@ def build_tables():
             effective_chance = round((1 - (1 - (math.floor(
                 (1 + (100 * chance * loot_rarity * luck_multiplier) + (10 * density))) / 10000)) ** rolls) * 100, 2)
 
+            # Check if container_name starts with "Outfit_"
+            if container_name.startswith("Outfit_"):
+                outfit_name = container_name[len("Outfit_"):]
+                split_name = split_outfit_name(outfit_name)
+
+                # Initialize variables to check if the outfit is found in male, female, or both
+                found_in_male = False
+                found_in_female = False
+
+                # Search for the outfit in MaleOutfits and FemaleOutfits
+                male_outfits = outfits_data.get("MaleOutfits", {})
+                female_outfits = outfits_data.get("FemaleOutfits", {})
+
+                if outfit_name in male_outfits:
+                    found_in_male = True
+                if outfit_name in female_outfits:
+                    found_in_female = True
+
+                # Determine the gender(s)
+                genders = []
+                if found_in_male:
+                    genders.append("male")
+                if found_in_female:
+                    genders.append("female")
+                if not genders:
+                    genders.append("any")
+
+                # Format the outfit name
+                formatted_containers = []
+                for gender in genders:
+                    if gender == "any":
+                        formatted_container_name = f"{split_name}"
+                    else:
+                        formatted_container_name = f"{{{{ll|{split_name} ({gender} outfit)}}}}"
+                    formatted_containers.append(formatted_container_name)
+
+                # Join the formatted container names with <br>
+                container_name_formatted = "<br>".join(formatted_containers)
+            else:
+                # Use the original container name
+                container_name_formatted = f"{{{{ll|{container_name}}}}}"
+
             # Format each line with the specified format
-            container_line = f"{{{{!}}}} {room} {{{{!}}}}{{{{!}}}} {{{{ll|{container_name}}}}} {{{{!}}}}{{{{!}}}} {effective_chance}%"
+            container_line = f"{{{{!}}}} {room} {{{{!}}}}{{{{!}}}} {container_name_formatted} {{{{!}}}}{{{{!}}}} {effective_chance}%"
 
             # Only add unique formatted lines to avoid duplicates
             if container_line not in unique_output_lines:
-                container_lines.append((room, container_name, effective_chance, container_line))
+                container_lines.append((room, container_name_formatted, effective_chance, container_line))
                 unique_output_lines.add(container_line)
 
         # Sort by room, then container name, then effective chance numerically
