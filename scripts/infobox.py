@@ -131,9 +131,11 @@ def write_to_output(item_data, item_id, output_dir):
             
             tags = utility.get_tags(item_data)
             
+            guid = utility.get_guid(item_data)
+            
             parameters = {
                 "name": translate.get_translation(item_id, "DisplayName"),
-                "model": utility.get_model(item_data),
+                "model": utility.get_model(item_data), # TODO: get all clothing models, like icons
                 # "icon":  (added with 'insert_parameters_after')
                 "icon_name": translate.get_translation(item_id, "DisplayName"),
                 "category": category,
@@ -237,6 +239,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "spice": item_data.get('Spice', '').capitalize(),
                 "evolved_recipe": evolved_recipe,
                 # "tag": (added with 'insert_parameters_after')
+                "guid": guid,
                 "item_id": item_id,
                 "infobox_version": version.get_version()
             }

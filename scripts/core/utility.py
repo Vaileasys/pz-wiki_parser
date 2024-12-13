@@ -1,5 +1,6 @@
 import os
 import csv
+import xml.etree.ElementTree as ET
 from scripts.parser import item_parser
 from scripts.core import translate, logging_file
 
@@ -46,10 +47,51 @@ def fix_item_id(item_id):
             return item_id
 
 
-# TODO: add clothing checks
+def get_clothing_xml_value(item_data, xml_value):
+    if 'ClothingItem' in item_data:
+        clothing_item = item_data['ClothingItem']
+        file_path = os.path.join("resources", "clothing", "clothingItems", f"{clothing_item}.xml")
+
+        if not os.path.exists(file_path):
+            print(f"No XML file found for ClothingItem '{clothing_item}'. Is it in the correct directory?")
+            return None
+        
+        try:
+            # Parse the XML file
+            tree = ET.parse(file_path)
+            root = tree.getroot()
+            
+            # Find all matching elements
+            elements = root.findall(xml_value)
+            if elements:
+                # If there's only one element, return it as a string
+                if len(elements) == 1:
+                    value = elements[0].text
+                    print(f"Single value found for '{xml_value}': {value}")
+                    return value
+                # If there are multiple elements, return a list of strings
+                values = [element.text for element in elements if element.text]
+                print(f"Multiple values found for '{xml_value}': {values}")
+                return values
+            else:
+                print(f"'{xml_value}' not found for '{clothing_item}'")
+                return None
+        except ET.ParseError as e:
+            print(f"Error parsing XML file: {file_path}\n{e}")
+            return None
+        
+
 # gets model for item_data as PNG
 def get_model(item_data):
-    model = item_data.get('WorldStaticModel',item_data.get('WeaponSprite', item_data.get('StaticModel', '')))
+    if 'ClothingItem' in item_data:
+        model = get_clothing_xml_value(item_data, "textureChoices")
+        if isinstance(model, list):
+            # TODO: return all clothing models like icons
+            model = model[0]
+        model = model.capitalize()
+    else:
+        model = item_data.get('WorldStaticModel',item_data.get('WeaponSprite', item_data.get('StaticModel', '')))
+
     if model == '':
         return ''
     if model.endswith('_Ground'):
@@ -57,6 +99,7 @@ def get_model(item_data):
     elif model.endswith('Ground'):
         model = model.replace('Ground', '')
     model = f"{model}_Model.png"
+
     return model
 
 
@@ -305,3 +348,11 @@ def get_icon(item_id, format=False, all_icons=False, cycling=False):
 
     return icon_result
 
+def get_guid(item_data):
+    guid = get_clothing_xml_value(item_data, 'm_GUID')
+
+    if isinstance(guid, list):
+        print("Multiple GUIDs found:", guid)
+        return ''
+    
+    return guid
