@@ -138,6 +138,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "icon_name": translate.get_translation(item_id, "DisplayName"),
                 "category": category,
                 "weight": item_data.get('Weight', 1),
+                "capacity": item_data.get('Capacity', ''),
                 "weight_reduction": item_data.get('WeightReduction', ''),
                 "max_units": item_data.get('UseDelta', ''),
                 "equipped": item_data.get('CanBeEquipped', ''),
