@@ -224,7 +224,7 @@ def generate_name_guid_table(translated_names, outfits_json, output_file):
 def main():
     """Main function to process XML files, generate JSON, and create articles."""
     guid_table_path = os.path.join("resources", "fileGuidTable.xml")
-    outfits_xml_path = os.path.join("resources", "clothing.xml")
+    outfits_xml_path = os.path.join("resources", "clothing", "clothing.xml")
     json_output_dir = os.path.join("output", "outfits", "json")
     articles_output_dir = os.path.join("output", "outfits", "articles")
     name_table_output = os.path.join("output", "outfits", "name_table.txt")
