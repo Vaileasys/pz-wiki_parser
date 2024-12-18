@@ -88,6 +88,8 @@ def write_to_output(item_data, item_id, output_dir):
 
             icons = utility.find_icon(item_id, True)
 
+            model = utility.get_model(item_data)
+
             category = 'DisplayCategory'
             category = translate.get_translation(item_data.get(category, 'Item'), category)
 
@@ -135,7 +137,7 @@ def write_to_output(item_data, item_id, output_dir):
             
             parameters = {
                 "name": translate.get_translation(item_id, "DisplayName"),
-                "model": utility.get_model(item_data), # TODO: get all clothing models, like icons
+                # "model": (added with 'insert_parameters_after')
                 # "icon":  (added with 'insert_parameters_after')
                 "icon_name": translate.get_translation(item_id, "DisplayName"),
                 "category": category,
@@ -248,13 +250,13 @@ def write_to_output(item_data, item_id, output_dir):
             }
 
             # new parameters to be added and parameter keys go here
-            icon_parameters = {'icon': icons}
+            icon_model_parameters = {'model': model, 'icon': icons}
             tag_parameters = {'tag': tags}
 
             # These parameters will be added afterwards. For parameters that need to be defined, e.g. icon2, icon3, etc.
             # 'after_param': param_key,
             new_parameters_dict = {
-                'model': icon_parameters,
+                'name': icon_model_parameters,
                 'evolved_recipe': tag_parameters
             }
 
