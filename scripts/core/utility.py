@@ -67,11 +67,11 @@ def get_clothing_xml_value(item_data, xml_value):
                 # If there's only one element, return it as a string
                 if len(elements) == 1:
                     value = elements[0].text
-                    print(f"Single value found for '{xml_value}': {value}")
+ #                   print(f"Single value found for '{xml_value}': {value}")
                     return value
                 # If there are multiple elements, return a list of strings
                 values = [element.text for element in elements if element.text]
-                print(f"Multiple values found for '{xml_value}': {values}")
+#                print(f"Multiple values found for '{xml_value}': {values}")
                 return values
             else:
                 print(f"'{xml_value}' not found for '{clothing_item}'")
@@ -83,14 +83,16 @@ def get_clothing_xml_value(item_data, xml_value):
 
 # gets model for item_data as PNG
 def get_model(item_data):
-    if 'ClothingItem' in item_data:
-        model = get_clothing_xml_value(item_data, "textureChoices")
-        if isinstance(model, list):
+#    if 'ClothingItem' in item_data:
+#        model = get_clothing_xml_value(item_data, "textureChoices")
+#        if model is None:
+#            model = get_clothing_xml_value(item_data, "m_BaseTextures") #TODO: check what BaseTextures is used for. Maybe shouldn't use this as the model.
+#        if isinstance(model, list):
             # TODO: return all clothing models like icons
-            model = model[0]
-        model = model.capitalize()
-    else:
-        model = item_data.get('WorldStaticModel',item_data.get('WeaponSprite', item_data.get('StaticModel', '')))
+#            model = model[0]
+#        model = model.capitalize()
+#    else:
+    model = item_data.get('WorldStaticModel',item_data.get('WeaponSprite', item_data.get('StaticModel', '')))
 
     if model == '':
         return ''
