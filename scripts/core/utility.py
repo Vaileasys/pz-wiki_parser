@@ -253,6 +253,10 @@ def find_icon(item_id, all_icons=False):
 
             elif 'IconsForTexture' in item_data:
                 icon = item_data['IconsForTexture']
+            
+            # tile items may not have `Icon` but will still use `WorldObjectSprite` as icon
+            elif 'WorldObjectSprite' in item_data:
+                icon = item_data['WorldObjectSprite']
             else:
                 icon = icon_default     
 
