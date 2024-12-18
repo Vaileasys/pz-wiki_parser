@@ -244,7 +244,7 @@ def generate_intro(lowercase_name, language_code):
 
 
 def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir,
-                 code_dir, distribution_dir, language_code):
+                 code_dir, distribution_dir, language_code, history_dir):
     """
     Processes a single file and generates the corresponding article content.
 
@@ -322,7 +322,7 @@ def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item
     header = generate_header(category, skill_type, infobox_version, language_code, name)
     body_content = assemble_body(lowercase_name, os.path.basename(file_path), name, item_id, category, skill_type,
                                  infobox, consumables_dir, infobox_data_list, item_id_dict, fixing_dir, code_dir,
-                                 distribution_dir, language_code)
+                                 distribution_dir, history_dir, language_code)
 
     intro = generate_intro(lowercase_name, language_code)
 
@@ -539,6 +539,23 @@ def generate_location(original_filename, infobox_name, item_id, distribution_dir
     return ""
 
 
+def generate_history(item_id, history_dir, language_code):
+    if language_code != "en":
+        return ""
+
+    history_file_name = f"{item_id}.txt"
+    history_file_path = os.path.join(history_dir, history_file_name)
+
+    if os.path.isfile(history_file_path):
+        try:
+            with open(history_file_path, 'r', encoding='utf-8') as file:
+                contents = file.read().strip()
+                return f"==History==\n{contents}"
+        except Exception as e:
+            print(f"Error reading {history_file_path}: {e}")
+    return f"==History==\n{{{{HistoryTable|\n|item_id={item_id}\n}}}}"
+
+
 def generate_code(item_id, code_dir):
     if not os.path.exists(code_dir):
         return ""
@@ -680,9 +697,9 @@ def generate_see_also(language_code, current_item, infobox_data_list, item_id_di
 
 
 def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox, consumables_dir,
-                  infobox_data_list, item_id_dict, fixing_dir, code_dir, distribution_dir, language_code):
+                  infobox_data_list, item_id_dict, fixing_dir, code_dir, distribution_dir, history_dir, language_code):
     """
-    Assembles the body content for an item's article based on various parameters and data.
+    Assembles the body content for an item's article.
 
     Args:
         name (str): The name of the item.
@@ -698,6 +715,7 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
         fixing_dir (str): The directory containing fixing data.
         code_dir (str): The directory containing code data.
         distribution_dir (str): The directory containing distribution data.
+        history_dir (str): The directory containing history files.
         language_code (str): The language code to use for the generated content.
 
     Returns:
@@ -716,6 +734,7 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
     sections = {
         headers['Condition']: generate_condition(name, category, skill_type, infobox, fixing_dir, language_code),
         headers['Location']: generate_location(original_filename, infobox_name, item_id, distribution_dir),
+        "History": generate_history(item_id, history_dir, language_code),
         headers['Code']: generate_code(item_id, code_dir),
         headers['See also']: generate_see_also(language_code, {
             'name': name,
@@ -744,6 +763,7 @@ def main():
     fixing_dir = f'output/{language_code}/fixing'
     dictionary_dir = 'resources/item_id_dictionary.csv'
     distribution_dir = 'output/distributions/complete'
+    history_dir = 'resources/history'
     code_dir = 'output/codesnips'
 
     warnings = []
@@ -784,7 +804,7 @@ def main():
     for text_file in tqdm(text_files, desc="Generating articles", unit="file"):
         file_path = os.path.join(infobox_dir, text_file)
         process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir,
-                     code_dir, distribution_dir, language_code)
+                     code_dir, distribution_dir, language_code, history_dir)
 
     if warnings:
         print("\n".join(warnings))

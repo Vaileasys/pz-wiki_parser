@@ -37,6 +37,76 @@ def is_blacklisted(item_name, item_data):
     
     return False
 
+# Parse fluid container
+def parse_fluid_container(lines, start_index):
+    properties = {}
+    fluid_list = []
+    block_level = 1  # Entering FluidContainer block
+    i = start_index
+
+    # Regex for key-value pairs
+    key_value_pattern = re.compile(r'^\s*(\w+)\s*=\s*(.+?),?\s*$')
+
+    while i < len(lines):
+        line = lines[i].strip()
+
+        # End of current block
+        if line == '}':
+            block_level -= 1
+            if block_level == 0:
+                break
+            i += 1
+            continue
+
+        # Start Fluids block
+        if re.match(r'^\s*Fluids\b', line):
+            block_level += 1
+            i += 1
+            # Stay in the Fluids block
+            while block_level >= 2:
+                line = lines[i].strip()
+                if line == '}':
+                    block_level -= 1
+                    i += 1
+                    continue
+
+                # Parse fluid entries
+                fluid_match = key_value_pattern.match(line)
+                if fluid_match and fluid_match.group(1) == "fluid":
+                    fluid_value = fluid_match.group(2).strip()
+
+                    # Split fluid into components
+                    fluid_parts = fluid_value.split(':', 2)  # Split into up to 3 parts
+                    fluid_data = {
+                        'FluidID': fluid_parts[0],                      # First part: FluidID
+                        'LiquidCount': float(fluid_parts[1]),           # Second part: LiquidCount
+                    }
+                    if len(fluid_parts) == 3:  # Third part: Optional Color
+                        color_part = fluid_parts[2]
+                        if all(c.replace('.', '', 1).isdigit() for c in color_part.split(':')):  
+                            # Check if the Color part contains numbers (RGB float)
+                            fluid_data['Color'] = [float(c) for c in color_part.split(':')]
+                        else:
+                            # Otherwise, store it as a name
+                            fluid_data['Color'] = color_part
+
+                    fluid_list.append(fluid_data)
+                i += 1
+            continue
+
+        # Parse other key-value pairs in FluidContainer
+        key_value_match = key_value_pattern.match(line)
+        if key_value_match:
+            key, value = key_value_match.groups()
+            properties[key.strip()] = value.strip()
+
+        i += 1
+
+    # Add fluids list to properties
+    if fluid_list:
+        properties['fluids'] = fluid_list
+
+    return properties, i
 
 # Parse an item and its properties
 def parse_item(lines, start_index, module_name):
@@ -44,6 +114,7 @@ def parse_item(lines, start_index, module_name):
     item_dict = {}
     item_name = None
     i = start_index
+
     while i < len(lines):
         line = lines[i].strip()
 
@@ -52,13 +123,33 @@ def parse_item(lines, start_index, module_name):
             i += 1
             continue
 
-        # Skip comments (/* */)
+        # Skip block comments (/* */) and inline comments (/** **/)
         if '/*' in line:
-            while '*/' not in line and i < len(lines):
-                i += 1
-                line = lines[i].strip()
-            i += 1
+            # Inline comments
+            if '*/' in line:
+                line = re.sub(r'/\*.*?\*/', '', line).strip()
+            else:
+                # Multi-line block comments
+                while '*/' not in line and i < len(lines) - 1:
+                    i += 1
+                    line = lines[i].strip()
+                # Remove the remaining part of the block comment
+                if '*/' in line:
+                    line = re.sub(r'.*\*/', '', line).strip()
+                else:
+                    # If no closing comment, skip the entire line
+                    i += 1
+                    continue
+        
+        # Start FluidCOntainer block
+        if re.match(r'^component\sFluidContainer\b', line):
+            fluid_properties = {}
+            fluid_properties, i = parse_fluid_container(lines, i + 1)
+            item_dict.update(fluid_properties)
             continue
+
+
+
 
         # Start item block
         if re.match(r'^item(\s)', line):
@@ -86,15 +177,28 @@ def parse_item(lines, start_index, module_name):
                 if display_name == item_id:
                     display_name = property_value
                 property_value = display_name
-        
+
+
+            blacklist_keys = ['DisplayName', 'DummyProperty']
             # Handle properties (separated by ';') with key-value pairs (separated by ':')
             if ':' in property_value:
-                property_value = {k.strip(): v.strip().split('|') if '|' in v else v.strip()
-                    for k, v in (pair.split(':') for pair in property_value.split(';'))}
+                # Skip blacklisted keys
+                if property_key in blacklist_keys:
+                    pass
+                else:
+                    try:
+                        property_value = {
+                            k.strip(): v.strip().split('|') if '|' in v else v.strip()
+                            for pair in property_value.split(';')
+                            if ':' in pair
+                            for k, v in [pair.split(':', 1)]
+                        }
+                    except ValueError:
+                        print(f"Warning: Skipping invalid key-value pair in line: {line}")
 
             # Handle multiple values (separated by ';')
             elif ';' in property_value:
-                property_value = [v.strip() for v in property_value.split(';')]
+                property_value = [v.strip() for v in property_value.split(';') if v.strip()]
             
             # Add property and value to dictionary
             item_dict[property_key] = property_value
@@ -109,6 +213,7 @@ def parse_module(lines):
     global item_counter
     combined_dict = {}
     module_name = None
+    block_level = 0
 
     i = 0
     while i < len(lines):
@@ -124,14 +229,18 @@ def parse_module(lines):
         
         # Detect the start of an item block
         elif re.match(r'^item(\s)', line): # regex to return 'item' and not any suffixes
-            item_name, item_data, end_index = parse_item(lines, i, module_name)
-            if item_name and module_name and not is_blacklisted(item_name, item_data):
-                item_id = f"{module_name}.{item_name}"
-                combined_dict[item_id] = item_data
-                item_counter += 1
-            else:
-                item_id = f"{module_name}.{item_name}"
-            i = end_index
+            parts = line.split(' ')
+            if len(parts) == 2:
+                item_name, item_data, end_index = parse_item(lines, i, module_name)
+                if item_name and module_name and not is_blacklisted(item_name, item_data):
+                    item_id = f"{module_name}.{item_name}"
+                    combined_dict[item_id] = item_data
+                    item_counter += 1
+                else:
+                    item_id = f"{module_name}.{item_name}"
+                i = end_index
+#            else:
+#                print(f"Warning: Skipping item line: {line}")
         
         i += 1
 

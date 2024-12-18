@@ -22,7 +22,7 @@ menu_structure = {
         'name': 'Data generation',
         'description': 'Generate working data.',
         'sub_options': {
-            '1': {'module': 'infobox', 'name': 'Infobox', 'description': 'Generates infoboxes.'},
+            '1': {'module': 'item_infobox', 'name': 'Item infobox', 'description': 'Generates item infoboxes.'},
             '2': {'module': 'fixing', 'name': 'Fixing', 'description': 'Generates fixing recipes.'},
             '3': {'module': 'consumables', 'name': 'Consumables', 'description': 'Generate consumables tables.'},
             '4': {'module': 'codesnip', 'name': 'Codesnips', 'description': 'Generate codesnip files.'},

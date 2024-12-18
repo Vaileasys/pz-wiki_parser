@@ -131,13 +131,16 @@ def write_to_output(item_data, item_id, output_dir):
             
             tags = utility.get_tags(item_data)
             
+            guid = utility.get_guid(item_data)
+            
             parameters = {
                 "name": translate.get_translation(item_id, "DisplayName"),
-                "model": utility.get_model(item_data),
+                "model": utility.get_model(item_data), # TODO: get all clothing models, like icons
                 # "icon":  (added with 'insert_parameters_after')
                 "icon_name": translate.get_translation(item_id, "DisplayName"),
                 "category": category,
                 "weight": item_data.get('Weight', 1),
+                "capacity": item_data.get('Capacity', ''),
                 "weight_reduction": item_data.get('WeightReduction', ''),
                 "max_units": item_data.get('UseDelta', ''),
                 "equipped": item_data.get('CanBeEquipped', ''),
@@ -161,9 +164,11 @@ def write_to_output(item_data, item_id, output_dir):
                 "days_fresh": item_data.get('DaysFresh', ''),
                 "days_rotten": item_data.get('DaysTotallyRotten', ''),
                 "cant_be_frozen": item_data.get('CantBeFrozen', '').capitalize(),
+                "feed_type": item_data.get('AnimalFeedType', ''),
                 "condition_max": item_data.get('ConditionMax', ''),
                 "condition_lower_chance": item_data.get('ConditionLowerChanceOneIn', ''),
                 "run_speed": item_data.get('RunSpeedModifier', ''),
+                "stomp_power": item_data.get('StompPower', ''),
                 "combat_speed": item_data.get('CombatSpeedModifier', ''),
                 "scratch_defense": item_data.get('ScratchDefense', ''),
                 "bite_defense": item_data.get('BiteDefense', ''),
@@ -187,6 +192,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "max_damage": item_data.get('MaxDamage', ''),
                 "door_damage": item_data.get('DoorDamage', ''),
                 "tree_damage": item_data.get('TreeDamage', ''),
+                "sharpness": item_data.get('Sharpness', ''),
                 "min_range": item_data.get('MinRange', ''),
                 "max_range": item_data.get('MaxRange', ''),
                 "min_range_mod": item_data.get('MinRangeModifier', ''),
@@ -236,6 +242,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "spice": item_data.get('Spice', '').capitalize(),
                 "evolved_recipe": evolved_recipe,
                 # "tag": (added with 'insert_parameters_after')
+                "guid": guid,
                 "item_id": item_id,
                 "infobox_version": version.get_version()
             }

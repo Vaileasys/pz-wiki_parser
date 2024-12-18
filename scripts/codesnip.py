@@ -1,5 +1,5 @@
 import os
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 from scripts.core import version
 
 
@@ -64,12 +64,18 @@ def main():
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    files = [os.path.join(root, file) for root, _, files in os.walk(resources_dir) for file in files]
+    # Exclude files that don't parse well
+    EXCLUDED_PREFIXES = ("recipes", "entity_", "xs_", "craftrecipe", "template_", "vehicle_", "dbg_")
+
+    files = [
+        os.path.join(root, file)
+        for root, _, files in os.walk(resources_dir)
+        for file in files
+        if not file.startswith(EXCLUDED_PREFIXES)
+    ]
 
     with ThreadPoolExecutor(max_workers=50) as executor:
-        futures = [executor.submit(process_file, file_path, game_version, output_dir) for file_path in files]
-        for future in as_completed(futures):
-            pass
+        executor.map(process_file, files, [game_version] * len(files), [output_dir] * len(files))
 
 
 if __name__ == "__main__":

@@ -89,10 +89,17 @@ def copy_lua_files(media_dir):
 def copy_xml_files(media_dir):
     # Define the specific XML files and their locations
     files_to_copy = {
-        'clothing.xml': os.path.join(media_dir, 'clothing', 'clothing.xml'),
         'fileGuidTable.xml': os.path.join(media_dir, 'fileGuidTable.xml')
     }
-    destination_dir = 'resources'
+    source_clothing_dir = os.path.join(media_dir, 'clothing')
+    destination_dir = os.path.join('resources')
+    clothing_destination_dir = os.path.join('resources', 'clothing')
+
+    # Ensure destination directory exists
+    if not os.path.exists(destination_dir):
+        os.makedirs(destination_dir)
+    if not os.path.exists(clothing_destination_dir):
+        os.makedirs(clothing_destination_dir)
 
     # Copy each file to the resources directory
     for file_name, src_path in files_to_copy.items():
@@ -102,6 +109,19 @@ def copy_xml_files(media_dir):
             print(f"Copied {file_name} to {dst_path}")
         else:
             print(f"{file_name} not found in {src_path}, skipping.")
+
+    # Copy contents of the clothing folder
+    if os.path.exists(source_clothing_dir):
+        for item in os.listdir(source_clothing_dir):
+            src_path = os.path.join(source_clothing_dir, item)
+            dst_path = os.path.join(clothing_destination_dir, item)
+            if os.path.isdir(src_path):
+                shutil.copytree(src_path, dst_path, dirs_exist_ok=True)
+            else:
+                shutil.copy2(src_path, dst_path)
+            print(f"Copied {item} to {dst_path}")
+    else:
+        print(f"Clothing folder not found at {source_clothing_dir}, skipping.")
 
 
 def copy_java_files(install_path):
