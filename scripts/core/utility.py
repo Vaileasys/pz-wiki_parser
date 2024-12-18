@@ -67,14 +67,14 @@ def get_clothing_xml_value(item_data, xml_value):
                 # If there's only one element, return it as a string
                 if len(elements) == 1:
                     value = elements[0].text
- #                   print(f"Single value found for '{xml_value}': {value}")
+#                    print(f"Single value found for '{xml_value}': {value}")
                     return value
                 # If there are multiple elements, return a list of strings
                 values = [element.text for element in elements if element.text]
 #                print(f"Multiple values found for '{xml_value}': {values}")
                 return values
             else:
-                print(f"'{xml_value}' not found for '{clothing_item}'")
+#                print(f"'{xml_value}' not found for '{clothing_item}'")
                 return None
         except ET.ParseError as e:
             print(f"Error parsing XML file: {file_path}\n{e}")
@@ -83,24 +83,43 @@ def get_clothing_xml_value(item_data, xml_value):
 
 # gets model for item_data as PNG
 def get_model(item_data):
-#    if 'ClothingItem' in item_data:
-#        model = get_clothing_xml_value(item_data, "textureChoices")
-#        if model is None:
-#            model = get_clothing_xml_value(item_data, "m_BaseTextures") #TODO: check what BaseTextures is used for. Maybe shouldn't use this as the model.
-#        if isinstance(model, list):
-            # TODO: return all clothing models like icons
-#            model = model[0]
-#        model = model.capitalize()
-#    else:
-    model = item_data.get('WorldStaticModel',item_data.get('WeaponSprite', item_data.get('StaticModel', '')))
+    model = None
+    if 'ClothingItem' in item_data:
+        model = get_clothing_xml_value(item_data, "textureChoices")
+        if model is None:
+            model = get_clothing_xml_value(item_data, "m_BaseTextures")
+        
+        # Remove filepath and capitalize
+        if model is not None:
+            if isinstance(model, list):
+                model = [value.split("\\")[-1].capitalize() for value in model]
+            else:
+                model = model.split("\\")[-1].capitalize()
+
+
+    elif 'WorldStaticModelsByIndex' in item_data:
+        model = item_data['WorldStaticModelsByIndex']
+
+    if model is None:
+        model = item_data.get('WorldStaticModel',item_data.get('WeaponSprite', item_data.get('StaticModel', '')))
 
     if model == '':
         return ''
-    if model.endswith('_Ground'):
-        model = model.replace('_Ground', '')
-    elif model.endswith('Ground'):
-        model = model.replace('Ground', '')
-    model = f"{model}_Model.png"
+    
+    # Add _Ground suffix
+    if isinstance(model, list):
+        model = [value.replace('_Ground', '').replace('Ground', '') for value in model]
+    else: 
+        if model.endswith('_Ground'):
+            model = model.replace('_Ground', '')
+        elif model.endswith('Ground'):
+            model = model.replace('Ground', '')
+    
+    # Add PNG extension
+    if isinstance(model, list):
+        model = [f"{value}_Model.png" for value in model]
+    elif isinstance(model, str):
+        model = f"{model}_Model.png"
 
     return model
 
