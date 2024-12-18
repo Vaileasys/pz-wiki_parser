@@ -8,6 +8,7 @@ import scripts.distribution_parser as distribution_parser
 # Dictionary to store changes for reference across the script
 item_name_changes = {}
 
+
 def load_item_dictionary(item_name):
     """Load and search for a modified item name based on a dictionary in itemname_en.txt."""
     file_path = "resources/itemname_en.txt"  # Assuming the file path
@@ -26,10 +27,10 @@ def load_item_dictionary(item_name):
                     key, value = line.split(" = ")
                     key = key.strip()  # The full key e.g., ItemName_Base.223Box
                     value = value.strip().strip('",')  # Strip quotes and trailing comma
-
                     item_dict[key] = value
                 except ValueError:
-                    continue  # Skip lines that don't fit the format
+                    # Skip lines that don't fit the format
+                    pass
 
     # Format item name for comparison: remove spaces and surround with double quotes
     formatted_item_name = f'"{item_name.replace(" ", "")}"'
@@ -49,34 +50,12 @@ def load_item_dictionary(item_name):
 def process_json(file_paths):
     """
     Process JSON files and gather a list of unique items and their counts.
-
-    Parameters
-    ----------
-    file_paths : dict
-        A dictionary mapping file keys to file paths. The supported file keys are:
-            - "proceduraldistributions" : A JSON file containing procedural distribution data.
-            - "foraging" : A JSON file containing foraging data.
-            - "vehicle_distributions" : A JSON file containing vehicle distribution data.
-            - "clothing" : A JSON file containing clothing data.
-            - "attached_weapons" : A JSON file containing attached weapon data.
-            - "stories" : A JSON file containing story data.
-
-    Returns
-    -------
-    item_list : set
-        A set of unique items found in the input JSON files.
-
-    Notes
-    -----
-    This function processes the input JSON files and stores the results in a dictionary.
-    The dictionary is then saved to a file named "item_list.txt" in the "output/distributions" directory.
-    The function also saves the changes dictionary to a file named "item_name_changes.json" in the same directory.
     """
     item_list = set()
     item_counts = {}
 
-    for file_key, file_path in file_paths.items():
-        with open(file_path, "r") as file:
+    for file_key, fp in file_paths.items():
+        with open(fp, "r") as file:
             data = json.load(file)
             count = 0
 
@@ -127,17 +106,16 @@ def process_json(file_paths):
                 for story_key, items in data.items():
                     for item in items:
                         # Update item name if found in the dictionary
+                        original_item = item
                         item = load_item_dictionary(item)
                         item_list.add(item)
                         count += 1
 
             cleaned_item_list = set()
-
             for item in item_list:
                 if '.' in item:
                     item = item.split('.', 1)[1]
                 cleaned_item_list.add(item)
-
             item_list = cleaned_item_list
 
             item_counts[file_key] = count
@@ -146,12 +124,11 @@ def process_json(file_paths):
     for file_key, count in item_counts.items():
         print(f"Total items found in {file_key}: {count}")
 
-    os.makedirs("output", exist_ok=True)
+    os.makedirs("output/distributions", exist_ok=True)
     with open("output/distributions/Item_list.txt", "w") as output_file:
         for item in sorted(item_list):
             output_file.write(item + "\n")
 
-    # Save the changes dictionary for reference
     with open("output/distributions/json/item_name_changes.json", "w") as changes_file:
         json.dump(item_name_changes, changes_file, indent=4)
 
@@ -160,37 +137,10 @@ def process_json(file_paths):
 
 def build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, attached_weapons_data,
                     clothing_data, stories_data):
-    """
-    Build a JSON file containing item data.
-
-    Parameters
-    ----------
-    item_list : list
-        A list of unique items found in the input JSON files.
-    procedural_data : dict
-        A dictionary containing procedural distribution data.
-    distribution_data : dict
-        A dictionary containing distribution data.
-    vehicle_data : dict
-        A dictionary containing vehicle distribution data.
-    foraging_data : dict
-        A dictionary containing foraging data.
-    attached_weapons_data : dict
-        A dictionary containing attached weapon data.
-    clothing_data : dict
-        A dictionary containing clothing data.
-    stories_data : dict
-        A dictionary containing story data.
-
-    Notes
-    -----
-    This function processes the input data and stores the results in a dictionary.
-    The dictionary is then saved to a file named "all_items.json" in the "output/distributions/json" directory.
-    """
 
     def get_container_info(item_name):
         containers_info = []
-        unique_entries = set()  # Track unique entries for containers
+        unique_entries = set()
 
         def process_nested_object(obj, room_name, container_name=None):
             if "items" in obj:
@@ -199,7 +149,6 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
                 for entry in items:
                     if entry["name"] == item_name:
                         chance = entry["chance"]
-                        # Create a unique tuple of the entry details for deduplication
                         entry_tuple = (room_name, container_name, chance, rolls)
                         if entry_tuple not in unique_entries:
                             containers_info.append({
@@ -208,7 +157,7 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
                                 "Chance": chance,
                                 "Rolls": rolls
                             })
-                            unique_entries.add(entry_tuple)  # Add to set to prevent duplicates
+                            unique_entries.add(entry_tuple)
             else:
                 for sub_key, sub_value in obj.items():
                     if isinstance(sub_value, dict):
@@ -221,6 +170,7 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
                 for entry in items:
                     if entry["name"] == item_name:
                         chance = entry["chance"]
+                        # Now find it in distribution_data
                         for room, room_content in distribution_data.items():
                             for container, container_content in room_content.items():
                                 proc_lists = container_content.get("procList", [])
@@ -237,38 +187,40 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
                                             })
                                             unique_entries.add(entry_tuple)
             else:
+                # Procedural entry with no items, check nested objects
                 process_nested_object(content, room_name=proclist)
 
         return containers_info
 
     def get_vehicle_info(item_name):
         vehicles_info = []
-        unique_entries = set()  # Track unique entries for vehicles
+        unique_entries = set()
 
         for label, details in vehicle_data.items():
             type_parts = re.findall(r'[A-Z][^A-Z]*', label)
 
-            if type_parts[0] == "Mc" and len(type_parts) > 1:
+            # Various parsing conditions
+            if type_parts and type_parts[0] == "Mc" and len(type_parts) > 1:
                 vehicle_type = type_parts[0] + type_parts[1]
                 container = ' '.join(type_parts[2:])
-            elif ' '.join(type_parts[:2]) == "Metal Welder" and len(type_parts) > 2:
+            elif len(type_parts) > 2 and ' '.join(type_parts[:2]) == "Metal Welder":
                 vehicle_type = ' '.join(type_parts[:2])
                 container = ' '.join(type_parts[2:])
-            elif ' '.join(type_parts[:3]) == "Mass Gen Fac" and len(type_parts) > 3:
+            elif len(type_parts) > 3 and ' '.join(type_parts[:3]) == "Mass Gen Fac":
                 vehicle_type = ' '.join(type_parts[:3])
                 container = ' '.join(type_parts[3:])
-            elif ' '.join(type_parts[:2]) == "Construction Worker" and len(type_parts) > 2:
+            elif len(type_parts) > 2 and ' '.join(type_parts[:2]) == "Construction Worker":
                 vehicle_type = ' '.join(type_parts[:2])
                 container = ' '.join(type_parts[2:])
-            elif type_parts[0] == "Glove" or ' '.join(type_parts[:2]) == "Glove box":
+            elif type_parts and (type_parts[0] == "Glove" or ' '.join(type_parts[:2]) == "Glove box"):
                 vehicle_type = "All"
                 container = ' '.join(type_parts)
-            elif type_parts[0] == "Trunk":
+            elif type_parts and type_parts[0] == "Trunk":
                 vehicle_type = ' '.join(type_parts[1:])
                 container = type_parts[0]
             else:
-                vehicle_type = type_parts[0]
-                container = ' '.join(type_parts[1:])
+                vehicle_type = type_parts[0] if type_parts else "Unknown"
+                container = ' '.join(type_parts[1:]) if len(type_parts) > 1 else "Unknown"
 
             if container.lower() == "glovebox":
                 container = "Glove Box"
@@ -323,19 +275,15 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
         attached_weapon_matches = []
 
         for weapon_config, details in attached_weapons_data.items():
-            # Check if the item_name exists in the list of weapons
             weapons = details.get("weapons", [])
             if item_name in weapons:
-                # Assign "Any" to outfit if it isn't specified in the details
                 outfits = details.get("outfit", "Any")
                 day_survived = details.get("daySurvived", 0)
                 chance = details.get("chance", 0)
 
-                # Ensure `outfits` is a list even if set to "Any"
                 if not isinstance(outfits, list):
                     outfits = [outfits]
 
-                # Append each configuration to the matches list
                 for outfit in outfits:
                     attached_weapon_matches.append({
                         "outfit": outfit,
@@ -355,13 +303,12 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
             for outfit_name, outfit_details in gender_outfits_data.items():
                 items = outfit_details.get("Items", {})
 
+                outfit_name_original = outfit_name
                 outfit_name = outfit_name.replace("_", "")
                 outfit_name = re.sub(r'(?<!^)(?=[A-Z])', ' ', outfit_name)
 
                 if item_name in items:
-                    # Format the outfit name with the gender and create a wiki link
                     formatted_outfit_name = f"[[{outfit_name} ({gender.lower()} outfit)|{outfit_name} ({gender.lower()})]]"
-
                     clothing_matches.append({
                         "GUID": outfit_details.get("GUID", ""),
                         "outfit_name": formatted_outfit_name,
@@ -378,7 +325,6 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
         return matching_stories
 
     all_items = {}
-
     for item in tqdm.tqdm(item_list, desc="Building item data"):
         item_name = item_name_changes.get(item, item)
         all_items[item_name] = {
@@ -391,37 +337,21 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
             "Stories": get_story_info(item_name)
         }
 
-        # Output to JSON file
-    os.makedirs("output", exist_ok=True)
+    os.makedirs("output/distributions/json", exist_ok=True)
     with open("output/distributions/json/all_items.json", "w") as json_file:
         json.dump(all_items, json_file, indent=4)
-    print("Completed building JSON file")
 
 
 def build_tables():
-    # Load the JSON data
-    """
-    Builds distribution tables for all items.
-
-    Reads the JSON data file created by `build_json`, processes each item, and creates a table
-    containing all the relevant distribution information. The table is then written to a file
-    in the specified output directory.
-
-    The output directory is created if it does not exist. The file name is in the format
-    `<item_id>.txt`, where `<item_id>` is the ID of the item.
-    """
     with open("output/distributions/json/all_items.json", "r") as file:
         all_items = json.load(file)
 
-    # Create the output directory if it doesn't exist
     output_dir = "output/distributions/complete"
     os.makedirs(output_dir, exist_ok=True)
 
-
-    # Helper functions to process each type
     def process_containers(containers_list):
         container_lines = []
-        unique_output_lines = set()  # Track unique formatted lines
+        unique_output_lines = set()
 
         for container in containers_list:
             room = container["Room"]
@@ -432,29 +362,22 @@ def build_tables():
             luck_multiplier = 1
             density = 5.2  # Averaged
 
-            # Calculate effective chance
             effective_chance = round((1 - (1 - (math.floor(
                 (1 + (100 * chance * loot_rarity * luck_multiplier) + (10 * density))) / 10000)) ** rolls) * 100, 2)
 
-            # Format each line with the specified format
             container_line = f"{{{{!}}}} {room} {{{{!}}}}{{{{!}}}} {{{{ll|{container_name}}}}} {{{{!}}}}{{{{!}}}} {effective_chance}%"
 
-            # Only add unique formatted lines to avoid duplicates
             if container_line not in unique_output_lines:
                 container_lines.append((room, container_name, effective_chance, container_line))
                 unique_output_lines.add(container_line)
 
-        # Sort by room, then container name, then effective chance numerically
         container_lines.sort(key=lambda x: (x[0].lower(), x[1].lower(), -x[2]))
-
-        # Join sorted lines
         content = "\n{{!}}-\n".join(line[3] for line in container_lines)
-
         return f"|container=\n{content}"
 
     def process_vehicles(vehicles_list):
         vehicle_lines = []
-        unique_output_lines = set()  # Track unique formatted lines
+        unique_output_lines = set()
 
         for vehicle in vehicles_list:
             type_ = vehicle["Type"]
@@ -463,46 +386,32 @@ def build_tables():
             rolls = vehicle["Rolls"]
             loot_rarity = 0.6
             luck_multiplier = 1
-            density = 5.2  # Averaged
+            density = 5.2
 
-            # Calculate effective chance
             effective_chance = round((1 - (1 - (math.floor(
                 (1 + (100 * chance * loot_rarity * luck_multiplier) + (10 * density))) / 10000)) ** rolls) * 100, 2)
 
-            # Format each line with the specified format
             vehicle_line = f"{{{{!}}}} {type_} {{{{!}}}}{{{{!}}}} {{{{ll|{container}}}}} {{{{!}}}}{{{{!}}}} {effective_chance}%"
 
-            # Only add unique formatted lines to avoid duplicates
             if vehicle_line not in unique_output_lines:
                 vehicle_lines.append((type_, container, effective_chance, vehicle_line))
                 unique_output_lines.add(vehicle_line)
 
-        # Sort by type, then container, then effective chance numerically
         vehicle_lines.sort(key=lambda x: (x[0].lower(), x[1].lower(), -x[2]))
-
-        # Join sorted lines
         content = "\n{{!}}-\n".join(line[3] for line in vehicle_lines)
-
         return f"|vehicle=\n{content}"
 
     def process_attached_weapon(attached_weapon_list):
         attached_weapon_lines = []
-
         for weapon in attached_weapon_list:
             outfit = weapon["outfit"]
             day_survived = weapon.get("daySurvived", 0)
             chance = weapon.get("chance", 0)
-
-            # Format each line using the provided template
             body_line = f"{{{{!}}}} {outfit} {{{{!}}}}{{{{!}}}} {day_survived} {{{{!}}}}{{{{!}}}} {chance}"
             attached_weapon_lines.append((outfit, day_survived, chance, body_line))
 
-        # Sort by outfit, then day_survived, then chance numerically
         attached_weapon_lines.sort(key=lambda x: (x[0].lower(), x[1], -x[2]))
-
-        # Join sorted lines
         content = "\n{{!}}-\n".join(line[3] for line in attached_weapon_lines)
-
         return f"|zombie=\n{content}"
 
     def process_clothing(clothing_list):
@@ -512,22 +421,15 @@ def build_tables():
             guid = clothing["GUID"]
             outfit_name = clothing["outfit_name"]
             chance = clothing["Chance"]
-
-            # Format each line with the outfit name and gender in brackets
             container_line = f"{{{{!}}}} {outfit_name} {{{{!}}}}{{{{!}}}} {chance}% {{{{!}}}}{{{{!}}}} {guid}"
             clothing_lines.append((outfit_name, guid, chance, container_line))
 
-        # Sort by outfit, then GUID, then chance numerically (descending)
         clothing_lines.sort(key=lambda x: (x[0].lower(), x[1].lower(), -x[2]))
-
-        # Join sorted lines
         content = "\n{{!}}-\n".join(line[3] for line in clothing_lines)
-
         return f"|outfit=\n{content}"
 
     def process_stories(stories_list):
         story_lines = []
-
         for story in stories_list:
             if story.startswith("RZS"):
                 link = "Zone stories"
@@ -540,61 +442,42 @@ def build_tables():
             else:
                 link = "Randomized stories"
 
-            # Format each story line with the specified template
             story_line = f"{{{{!}}}} {story} {{{{!}}}}{{{{!}}}} {{{{ll|{link}}}}}"
             story_lines.append((story, link, story_line))
 
-        # Sort by story, then link
         story_lines.sort(key=lambda x: (x[0].lower(), x[1].lower()))
-
-        # Join sorted lines
         content = "\n{{!}}-\n".join(line[2] for line in story_lines)
-
         return f"|stories=\n{content}"
 
     def process_foraging(foraging_data):
-        # Helper function to convert month indexes to readable month names
         def format_months(month_obj):
             month_names = ["January", "February", "March", "April", "May", "June",
                            "July", "August", "September", "October", "November", "December"]
-
             sorted_keys = sorted(map(int, month_obj.keys()))
-
             if not sorted_keys:
                 return "-"
-
-            # Get the first and last month indices
             start_month = month_names[sorted_keys[0] - 1]
             end_month = month_names[sorted_keys[-1] - 1]
-
-            # Return "X to Y" or just "X" if only one month
             return f"{start_month} to {end_month}" if start_month != end_month else start_month
 
-        # Extract and format each component
         min_count = foraging_data.get("minCount")
         max_count = foraging_data.get("maxCount")
         amount = f"{min_count}-{max_count}" if min_count is not None and max_count is not None else "-"
-
         if amount == "---" or amount == "-":
             amount = "1"
 
         skill_level = foraging_data.get("skill", "-")
-
-        # Sorting zones alphabetically and formatting each zone with line breaks if multiple zones exist
         zones = foraging_data.get("zones", {})
         sorted_zones = "<br>".join([f"{zone}: {value}" for zone, value in sorted(zones.items())]) if zones else "-"
-
         snow = foraging_data.get("snowChance", "-")
         rain = foraging_data.get("rainChance", "-")
         day = foraging_data.get("dayChance", "-")
         night = foraging_data.get("nightChance", "-")
 
-        # Formatting months available, bonus months, and malus months
         months_available = format_months(foraging_data.get("months", {}))
         bonus_months = format_months(foraging_data.get("bonusMonths", {}))
         malus_months = format_months(foraging_data.get("malusMonths", {}))
 
-        # Constructing the formatted string in a single line
         foraging_info = (
             f"|foraging=\n{{{{!}}}} "
             f"{amount} {{{{!}}}}{{{{!}}}}"
@@ -611,11 +494,9 @@ def build_tables():
 
         return foraging_info
 
-    # Process each item and create a table
     for item_id, item_data in tqdm.tqdm(all_items.items(), desc="Processing items"):
         table = f"{{{{Location table|item_id={item_id}"
 
-        # Process each section if it has values
         if item_data.get("Containers"):
             table += "\n" + process_containers(item_data["Containers"])
         if item_data.get("Vehicles"):
@@ -629,49 +510,26 @@ def build_tables():
         if item_data.get("Foraging"):
             table += "\n" + process_foraging(item_data["Foraging"])
 
-        # Close the table format
         table += "\n}}"
-
-        # Write the table to a file
-        with open(f"{output_dir}/{item_id}.txt", "w") as output_file:
+        output_path = f"{output_dir}/{item_id}.txt"
+        with open(output_path, "w") as output_file:
             output_file.write(table)
 
 
 def calculate_missing_items(itemname_path, itemlist_path, missing_items_path):
-    """
-    Calculate and output the missing items between ItemName_EN.txt and Item_list.txt.
-
-    This function takes three parameters: the path to the ItemName_EN.txt file, the path to the Item_list.txt file,
-    and the path to the output file that will contain only the keys of the items that are missing.
-
-    The function creates a dictionary from the ItemName_EN.txt file, loads the keys to remove from the Item_list.txt
-    file, removes any matching keys from the dictionary, and then outputs only the keys of the filtered dictionary to
-    the output file.
-
-    The output file will contain one key per line.
-    """
     with open(itemname_path, 'r') as file:
         item_dict = {}
-
-        # Process each line in the file
         for line in file:
-            # Check for lines that contain both '.' and '='
             if '.' in line and '=' in line:
-                # Remove the part before and including the first period, then split by '='
                 key = line.split('.')[1].split('=')[0].strip()
                 value = line.split('=')[1].strip().strip('"').strip(',')
-
-                # Add to dictionary
                 item_dict[key] = value
 
-    # Load the list of keys to remove from Item_list.txt
     with open(itemlist_path, 'r') as key_file:
         keys_to_remove = {line.strip() for line in key_file}
 
-    # Remove any matching keys from the dictionary
     filtered_dict = {k: v for k, v in item_dict.items() if k not in keys_to_remove}
 
-    # Output only the keys of the filtered dictionary to missing_items.txt
     with open(missing_items_path, 'w') as output_file:
         for key in filtered_dict.keys():
             output_file.write(f"{key}\n")
@@ -712,9 +570,7 @@ def main():
     with open(file_paths["stories"], "r") as stories_file:
         stories_data = json.load(stories_file)
 
-    build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, attached_weapons_data,
-                    clothing_data, stories_data)
-
+    build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, attached_weapons_data, clothing_data, stories_data)
     build_tables()
 
     itemname_path = "resources/Translate/EN/ItemName_EN.txt"
@@ -722,6 +578,7 @@ def main():
     missing_items_path = "output/distributions/missing_items.txt"
 
     calculate_missing_items(itemname_path, itemlist_path, missing_items_path)
+    print("Script completed successfully.")
 
 
 if __name__ == "__main__":
