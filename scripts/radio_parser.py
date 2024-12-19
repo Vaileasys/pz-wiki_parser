@@ -206,20 +206,21 @@ def main():
 
     # Hardcoded file path for input and output
     file_path = os.path.join('resources', 'radio', 'RadioData.xml')
-    output_file_path = os.path.join('output', 'radio', 'radio_output.txt')
+    output_dir = os.path.join('output', 'radio')
+    output_file_path = os.path.join(output_dir, 'radio_output.txt')
 
     # Ensure the output directory exists
-    os.makedirs(os.path.dirname(output_file_path), exist_ok=True)
+    os.makedirs(os.path.dirname(output_dir), exist_ok=True)
 
     # Extract directory of the script
-    script_dir = os.path.dirname(os.path.realpath(__file__))
+    logging_dir = os.path.join('output', 'logging')
+    logging_file_path = os.path.join(logging_dir, 'radio_log.txt')
+    os.makedirs(logging_dir, exist_ok=True)
 
     tree = ET.parse(file_path)
     root = tree.getroot()
 
-    with open(output_file_path, 'w', encoding='utf-8') as output_file, open(
-        os.path.join(script_dir, 'Log.txt'), 'w', encoding='utf-8'
-    ) as log_file:
+    with open(output_file_path, 'w', encoding='utf-8') as output_file, open(logging_file_path, 'w', encoding='utf-8') as log_file:
         for element in root:
             if element.tag == 'Adverts':
                 output_file.write("==Adverts==\n")
