@@ -222,8 +222,19 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
                 vehicle_type = type_parts[0] if type_parts else "Unknown"
                 container = ' '.join(type_parts[1:]) if len(type_parts) > 1 else "Unknown"
 
+            # Adjust container and type per rules
             if container.lower() == "glovebox":
                 container = "Glove Box"
+
+            if vehicle_type == "Pick" and container.startswith("Up Truck Lights_ Airport"):
+                vehicle_type = "Pick Up Truck Lights Airport"
+            elif vehicle_type == "Pick":
+                vehicle_type = "Pick Up Truck"
+
+            if container.startswith("Up Truck Lights_ Airport"):
+                container = container.replace("Up Truck Lights_ Airport", "", 1).strip()
+            elif container.startswith("Up Truck"):
+                container = container.replace("Up Truck", "", 1).strip()
 
             rolls = details.get("rolls", 0)
             items = details.get("items", {})
