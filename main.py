@@ -41,7 +41,8 @@ menu_structure = {
             '4': {'module': 'lists.clothing_list', 'name': 'Clothing list', 'description': 'Return all clothing in a list with stats organised by body location.'},
             '5': {'module': 'lists.nutrition', 'name': 'nutrition', 'description': 'Generate nutrition page.'},
             '6': {'module': 'radio_parser', 'name': 'Radio transcripts', 'description': 'Generate radio transcripts.'},
-            '7': {'module': 'outfit_parser', 'name': 'Outfit parser', 'description': 'Parse outfit xml files.'}
+            '7': {'module': 'outfit_parser', 'name': 'Outfit parser', 'description': 'Parse outfit xml files.'},
+            '8': {'module': 'roomdefine', 'name': 'Room definitions', 'description': 'Create roomdef item page.'}
         },
     },
     '4': {
