@@ -36,10 +36,10 @@ menu_structure = {
         'description': 'Generate pages or lists.',
         'sub_options': {
             '1': {'module': 'item_article', 'name': 'Item Article', 'description': 'Generate articles for items.'},
-            '2': {'module': 'item_list', 'name': 'Item list', 'description': 'Returns all items in a list organised by DisplayCategory.'},
+            '2': {'module': 'lists.item_list', 'name': 'Item list', 'description': 'Returns all items in a list organised by DisplayCategory.'},
             '3': {'module': 'lists.weapon_list', 'name': 'Weapon list', 'description': 'Return all weapons in a list with stats organised by their skill.'},
             '4': {'module': 'lists.clothing_list', 'name': 'Clothing list', 'description': 'Return all clothing in a list with stats organised by body location.'},
-            '5': {'module': 'nutrition', 'name': 'nutrition', 'description': 'Generate nutrition page.'},
+            '5': {'module': 'lists.nutrition', 'name': 'nutrition', 'description': 'Generate nutrition page.'},
             '6': {'module': 'radio_parser', 'name': 'Radio transcripts', 'description': 'Generate radio transcripts.'},
             '7': {'module': 'outfit_parser', 'name': 'Outfit parser', 'description': 'Parse outfit xml files.'}
         },
