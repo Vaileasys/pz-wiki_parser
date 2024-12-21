@@ -1,6 +1,7 @@
 import os
 import shutil
 import subprocess
+from pathlib import Path
 
 def get_install_path():
     print("Please select your install location:")
@@ -59,29 +60,55 @@ def copy_scripts_and_radio(media_dir):
     print(f"Copied {radio_dir} to {radio_destination}")
 
 
-def copy_lua_files(media_dir):
-    lua_dir = os.path.join(media_dir, 'lua')
-    if not os.path.exists(lua_dir):
+def copy_lua_files(media_dir: str) -> None:
+    """
+    Copies specific Lua files from the Project Zomboid 'lua' directory to the
+    local 'resources/lua' directory.
+
+    :param media_dir: The path to the 'media' directory in the Project Zomboid installation.
+    """
+    lua_dir = Path(media_dir) / 'lua'
+    if not lua_dir.exists():
         raise FileNotFoundError(f"Lua directory not found in {lua_dir}.")
 
-    lua_files_to_copy = [
-        'ProceduralDistributions.lua',
-        'Distributions.lua',
-        'AttachedWeaponDefinitions.lua',
-        'VehicleDistributions.lua',
-        'foraging_clean.lua',
-        'forageDefinitions.lua'
-    ]
+    # List of Lua files to copy, sorted alphabetically
+    lua_files_to_copy = sorted([
+        'Ammo.lua',
+        'Animals.lua',
+        'Berries.lua',
+        'Clothing.lua',
+        'DeadAnimals.lua',
+        'Distribution_BagsAndContainers.lua',
+        'Distribution_BinJunk.lua',
+        'Distribution_ClosetJunk.lua',
+        'Distribution_CounterJunk.lua',
+        'Distribution_DeskJunk.lua',
+        'Distribution_ShelfJunk.lua',
+        'Distribution_SideTableJunk.lua',
+        'Fruits.lua',
+        'ForestGoods.lua',
+        'ForestRarities.lua',
+        'Herbs.lua',
+        'Insects.lua',
+        'Junk.lua',
+        'MedicinalPlants.lua',
+        'Medical.lua',
+        'Mushrooms.lua',
+        'Stones.lua',
+        'Vegetables.lua',
+        'WildPlants.lua',
+        'forageSystem.lua',
+    ])
 
-    destination_dir = os.path.join('resources', 'lua')
-    if not os.path.exists(destination_dir):
-        os.makedirs(destination_dir)
+    destination_dir = Path('resources/lua')
+    destination_dir.mkdir(parents=True, exist_ok=True)
 
+    # Copy each file from the lua directory to the destination
     for root, _, files in os.walk(lua_dir):
         for file in files:
             if file in lua_files_to_copy:
-                src = os.path.join(root, file)
-                dst = os.path.join(destination_dir, file)
+                src = Path(root) / file
+                dst = destination_dir / file
                 shutil.copy(src, dst)
                 print(f"Copied {file} to {dst}")
 
