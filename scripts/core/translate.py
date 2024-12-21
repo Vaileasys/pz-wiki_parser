@@ -72,7 +72,7 @@ def get_wiki_translation(value):
     :rtype: str
     """
     placeholders = re.findall(r'\<\<(.*?)\>\>', value)
-    
+
     # Replace each placeholder with its translation
     for placeholder in placeholders:
         placeholder = f"{placeholder}"
@@ -123,7 +123,7 @@ def get_translation(property_value, property_key="DisplayName", lang_code=langua
 
     if not property_value:
         return property_value
-    
+
     if language_code is None:
         language_code = get_language_code()
 
@@ -145,7 +145,7 @@ def get_translation(property_value, property_key="DisplayName", lang_code=langua
             item_data = item_parser.get_item_data().get(property_value)
             if item_data:
                 translation = item_data.get("DisplayName", property_value)
-            else: 
+            else:
                 # Special case: handle 'SaucePan' in fixing (should be 'Saucepan')
                 item_data = item_parser.get_item_data().get(property_value.capitalize())
                 if item_data:
@@ -157,7 +157,7 @@ def parse_translation_file(language_code):
     language_dir = os.path.join("resources", "Translate", language_code.upper())
     if not os.path.exists(language_dir):
         raise FileNotFoundError(f"No file found for '{language_dir}'. Ensure the file is in the correct path, or try a different language code.")
-    
+
     # Get encoding for the chosen language
     encoding = LANGUAGE_CODES.get(language_code, ("UTF-8", "Unknown"))[0]
     encoding_detected = False
@@ -187,6 +187,7 @@ def parse_translation_file(language_code):
             try:
                 with open(file_path, 'r', encoding=encoding) as file:
                     for line in file:
+                        line = remove_comments(line)
                         line = line.strip()
 
                         if '=' not in line or '{' in line or '}' in line:
@@ -228,16 +229,26 @@ def parse_translation_file(language_code):
     return parsed_translations
 
 
+def remove_comments(line: str) -> str:
+    # If, after stripping whitespace, the line starts with '--', it's a comment-only line
+    if line.strip().startswith('--'):
+        return ''  # Return empty string -> skip this line entirely
+
+    # Otherwise, remove any text following '--'
+    line = re.split(r'--', line, maxsplit=1)[0]
+    return line.strip()
+
+
 def cache_translations():
     global translations_cache
     for language_code in LANGUAGE_CODES:
         try:
             # Parse translation files for the language
             parsed_translations = parse_translation_file(language_code)
-            
+
             # Store the parsed translations in the translations_cache
             translations_cache[language_code] = parsed_translations
-        
+
         except FileNotFoundError as e:
             print(f"Error: {e}")
         except Exception as e:
@@ -250,7 +261,7 @@ def cache_translations():
 
     with open(output_file, 'w', encoding='utf-8') as json_file:
         json.dump(translations_cache, json_file, ensure_ascii=False, indent=4)
-    
+
     return translations_cache
 
 
@@ -270,7 +281,7 @@ def update_default_language():
     """
     Updates the default language to the latest config entry.
     Use 'get_default_langauge' instead for returning the default language.
-    
+
     :return: Updated default language.
     """
     global default_language
