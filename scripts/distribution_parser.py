@@ -4,68 +4,60 @@ import re
 import struct
 import lupa
 from lupa import LuaRuntime
-from slpp import slpp as lua_parser
 import xml.etree.ElementTree as ET
 
 
 def parse_container_files(distributions_lua_path, procedural_distributions_path, output_path):
-    # Ensure output directory exists
     """
     Parses Lua container files to extract distribution data and convert it to JSON format.
-
-    This function processes two Lua files: one containing general distribution data and the
-    other containing procedural distribution data. It modifies the Lua code to make tables
-    global, executes the Lua code using a Lua runtime, and extracts data from the tables.
-    The data is then converted to Python dictionaries and saved as JSON files.
-
-    Args:
-        distributions_lua_path (str): The file path to the Lua file containing distribution data.
-        procedural_distributions_path (str): The file path to the Lua file containing procedural
-            distribution data.
-        output_path (str): The directory where the output JSON files ('distributions.json' and
-            'proceduraldistributions.json') will be saved.
-
-    Raises:
-        Exception: If there is an error executing Lua code or processing the tables.
+    Includes debug statements at each step for troubleshooting.
     """
     os.makedirs(output_path, exist_ok=True)
 
-    # Helper function to convert Lua tables into Python-friendly structures
     def lua_table_to_python(obj):
-        if isinstance(obj, dict):  # Lua table as a dict
+        if isinstance(obj, dict):
             return {k: lua_table_to_python(v) for k, v in obj.items()}
-        elif hasattr(obj, 'items'):  # _LuaTable, convert to Python dict
+        elif hasattr(obj, 'items'):
             return {k: lua_table_to_python(v) for k, v in obj.items()}
-        elif isinstance(obj, list):  # Already a Python list
+        elif isinstance(obj, list):
             return [lua_table_to_python(item) for item in obj]
-        return obj  # Return the object if it's not a table
+        return obj
 
-    # Function to read and modify Lua file content
     def read_and_modify_lua_file(filename, table_name):
-        # Read the Lua file into memory
-        with open(filename, 'r') as file:
+        with open(filename, 'r', encoding='utf-8') as file:
             lua_content = file.read()
-
-        # Modify the content: change `local` to make it global
-        lua_content = lua_content.replace(f"local {table_name}", table_name)
-
+        # Make local table global if needed
+        if f"local {table_name}" in lua_content:
+            lua_content = lua_content.replace(f"local {table_name}", table_name)
         return lua_content
 
-    # Parser for `distributions.lua` (modified to append non-procedural tables to procedural memory)
     def distributions_parser(lua_code, procedural_memory):
-        # Initialize the Lua runtime
         lua = LuaRuntime(unpack_returned_tuples=True)
 
-        # Define the `is_table` helper function in Lua
-        lua.execute('function is_table(x) return type(x) == "table" end')
+        # Load clutter tables first
+        distributions_dir = os.path.dirname(distributions_lua_path)
+        clutter_files = [
+            "Distribution_BinJunk.lua",
+            "Distribution_ShelfJunk.lua",
+            "Distribution_BagsAndContainers.lua",
+            "Distribution_ClosetJunk.lua",
+            "Distribution_CounterJunk.lua",
+            "Distribution_DeskJunk.lua",
+            "Distribution_SideTableJunk.lua"
+        ]
 
-        # Execute the modified Lua code in memory
+        for cf in clutter_files:
+            cf_path = os.path.join(distributions_dir, cf)
+            if os.path.exists(cf_path):
+                with open(cf_path, 'r', encoding='utf-8') as cff:
+                    lua_code_clutter = cff.read()
+                    lua.execute(lua_code_clutter)
+
+        lua.execute('function pz_is_table(x) return type(x) == "table" end')
         lua.execute(lua_code)
 
-        # Access the global distributionTable from Lua
         distribution_table = lua.globals().distributionTable
 
-        # Helper function to remove unwanted prefixes in both cases
         def remove_prefixes(name):
             prefixes = ["Base.", "Farming.", "Radio.", "Camping.", "farming.", "radio.", "camping."]
             for prefix in prefixes:
@@ -73,17 +65,17 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
                     return name[len(prefix):]
             return name
 
-        # Create the final nested dictionary for the procedural-only containers
         output_json = {}
+        pz_is_table = lua.globals().pz_is_table
 
-        # Process the content of the distribution table
         for room_name, room_content in distribution_table.items():
             containers = {}
-            if lua.globals().is_table(room_content):
-                for container_name, container_content in room_content.items():
-                    if not lua.globals().is_table(container_content):
+            if pz_is_table(room_content):
+                # Convert room_content to Python before processing
+                python_room_content = lua_table_to_python(room_content)
+                for container_name, container_content in python_room_content.items():
+                    if not isinstance(container_content, dict):
                         continue
-
                     container_details = {}
                     if 'procedural' in container_content and container_content['procedural']:
                         container_details['procedural'] = True
@@ -91,83 +83,97 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
                             container_details['procList'] = []
                             for i in range(1, len(container_content['procList']) + 1):
                                 item = container_content['procList'][i]
-                                if lua.globals().is_table(item):
+                                if isinstance(item, dict):
+                                    # item is already Python dict, safe to use .get()
                                     container_details['procList'].append({
-                                        'name': remove_prefixes(item['name']),  # Remove prefixes here
-                                        'min': item['min'] if 'min' in item else 0,
-                                        'max': item['max'] if 'max' in item else 0,
-                                        'weightChance': item['weightChance'] if 'weightChance' in item else None
+                                        'name': remove_prefixes(item.get('name', '')),
+                                        'min': item.get('min', 0),
+                                        'max': item.get('max', 0),
+                                        'weightChance': item.get('weightChance', None)
                                     })
                         containers[container_name] = container_details
                     else:
-                        # Process non-procedural items (convert to list of {"name": <item_name>, "chance": <item_chance>})
                         non_procedural_details = {}
                         if 'rolls' in container_content:
                             non_procedural_details['rolls'] = container_content['rolls']
 
-                        if 'items' in container_content and lua.globals().is_table(container_content['items']):
+                        if 'items' in container_content and isinstance(container_content['items'], list):
                             items_list = container_content['items']
                             non_procedural_details['items'] = []
                             for i in range(1, len(items_list), 2):
-                                item_name = remove_prefixes(items_list[i])  # Apply prefix removal here
+                                item_name = remove_prefixes(items_list[i])
                                 item_chance = items_list[i + 1]
                                 non_procedural_details['items'].append({
                                     'name': item_name,
                                     'chance': item_chance
                                 })
 
-                        if 'junk' in container_content and lua.globals().is_table(container_content['junk']['items']):
+                        if 'junk' in container_content and 'items' in container_content['junk'] and isinstance(container_content['junk']['items'], list):
                             junk_items_list = container_content['junk']['items']
                             non_procedural_details['junk'] = {
                                 'rolls': container_content['junk']['rolls'],
                                 'items': []
                             }
                             for i in range(1, len(junk_items_list), 2):
-                                item_name = remove_prefixes(junk_items_list[i])  # Apply prefix removal here as well
+                                item_name = remove_prefixes(junk_items_list[i])
                                 item_chance = junk_items_list[i + 1]
                                 non_procedural_details['junk']['items'].append({
                                     'name': item_name,
                                     'chance': item_chance
                                 })
 
-                        # Append non-procedural tables to the procedural memory
+                        # Append non-procedural tables to procedural_memory
                         procedural_memory[room_name] = procedural_memory.get(room_name, {})
                         procedural_memory[room_name][container_name] = non_procedural_details
 
-            if containers:  # Only add procedural rooms to the output
+            if containers:
                 output_json[room_name] = containers
 
         return lua_table_to_python(output_json)
 
-    # Parser for `proceduraldistributions.lua` (modified for new `items` output format)
     def procedural_distributions_parser(lua_code, procedural_memory):
-        # Initialize the Lua runtime
         lua = LuaRuntime(unpack_returned_tuples=True)
 
-        # Define the `is_table` helper function in Lua
-        lua.execute('function is_table(x) return type(x) == "table" end')
+        # Just like in distributions_parser, load clutter tables here
+        distributions_dir = os.path.dirname(distributions_lua_path)
+        clutter_files = [
+            "Distribution_BinJunk.lua",
+            "Distribution_ShelfJunk.lua",
+            "Distribution_BagsAndContainers.lua",
+            "Distribution_ClosetJunk.lua",
+            "Distribution_CounterJunk.lua",
+            "Distribution_DeskJunk.lua",
+            "Distribution_SideTableJunk.lua"
+        ]
 
-        # Execute the modified Lua code in memory
+        for cf in clutter_files:
+            cf_path = os.path.join(distributions_dir, cf)
+            if os.path.exists(cf_path):
+                with open(cf_path, 'r', encoding='utf-8') as cff:
+                    lua_code_clutter = cff.read()
+                    lua.execute(lua_code_clutter)
+
+        # Define pz_is_table after clutter tables are loaded
+        lua.execute('function pz_is_table(x) return type(x) == "table" end')
+
         lua.execute(lua_code)
-
-        # Access the ProceduralDistributions.list from Lua
         distribution_table = lua.globals().ProceduralDistributions.list
 
-        # Create the final nested dictionary that will be converted to JSON
-        output_json = {}
-
-        # Helper function to remove unwanted prefixes in both cases
         def remove_prefixes(name):
-            prefixes = ["Base.", "Farming.", "Radio.", "Camping.", "farming.", "radio.", "camping."]
+            if not isinstance(name, str):
+                name = str(name)
 
+            prefixes = ["Base.", "Farming.", "Radio.", "Camping.", "farming.", "radio.", "camping."]
             for prefix in prefixes:
                 if name.startswith(prefix):
                     return name[len(prefix):]
             return name
 
-        # Process the content of the procedural distribution table
+        pz_is_table = lua.globals().pz_is_table
+        output_json = {}
+
         for table_name, table_content in distribution_table.items():
-            if not lua.globals().is_table(table_content):
+            if not pz_is_table(table_content):
                 continue
 
             table_details = {}
@@ -175,25 +181,25 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
             if 'rolls' in table_content:
                 table_details['rolls'] = table_content['rolls']
 
-            if 'items' in table_content and lua.globals().is_table(table_content['items']):
+            if 'items' in table_content and pz_is_table(table_content['items']):
                 items_list = table_content['items']
                 table_details['items'] = []
                 for i in range(1, len(items_list), 2):
-                    item_name = remove_prefixes(items_list[i])  # Apply prefix removal here
+                    item_name = remove_prefixes(items_list[i])
                     item_chance = items_list[i + 1]
                     table_details['items'].append({
                         'name': item_name,
                         'chance': item_chance
                     })
 
-            if 'junk' in table_content and lua.globals().is_table(table_content['junk']['items']):
+            if 'junk' in table_content and 'items' in table_content['junk'] and pz_is_table(table_content['junk']['items']):
                 junk_items_list = table_content['junk']['items']
                 table_details['junk'] = {
                     'rolls': table_content['junk']['rolls'],
                     'items': []
                 }
                 for i in range(1, len(junk_items_list), 2):
-                    item_name = remove_prefixes(junk_items_list[i])  # Apply prefix removal here as well
+                    item_name = remove_prefixes(junk_items_list[i])
                     item_chance = junk_items_list[i + 1]
                     table_details['junk']['items'].append({
                         'name': item_name,
@@ -202,7 +208,6 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
 
             output_json[table_name] = table_details
 
-        # Now, append the non-procedural data that was passed from distributions_parser
         for table_name, table_content in procedural_memory.items():
             if table_name not in output_json:
                 output_json[table_name] = table_content
@@ -213,181 +218,99 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
 
     # Function to save JSON to file
     def save_to_json(data, filename):
-        with open(filename, 'w') as json_file:
+        with open(filename, 'w', encoding='utf-8') as json_file:
             json.dump(data, json_file, indent=4)
 
     def main():
-        # Read both Lua files into memory
         lua_code_distributions = read_and_modify_lua_file(distributions_lua_path, 'distributionTable')
         lua_code_procedural = read_and_modify_lua_file(procedural_distributions_path, 'ProceduralDistributions')
 
-        # Initialize an empty dict to store the non-procedural containers from distributions
         procedural_memory = {}
-
-        # First, process 'distributions.lua', appending non-procedural tables to procedural_memory
         room_data = distributions_parser(lua_code_distributions, procedural_memory)
         save_to_json(room_data, os.path.join(output_path, 'distributions.json'))
 
-        # Then, process 'proceduraldistributions.lua', incorporating the appended non-procedural tables
         procedural_data = procedural_distributions_parser(lua_code_procedural, procedural_memory)
         save_to_json(procedural_data, os.path.join(output_path, 'proceduraldistributions.json'))
 
-    # Run the main function
     main()
 
 
 def parse_foraging(forage_definitions_path, output_path):
     """
-    Parses a Lua file containing foraging definitions and extracts item data
-    to generate a JSON file with item chances.
+    Parses foraging-related Lua files and combines their data into a single JSON output.
 
-    This function reads a Lua file from the specified path, executes the Lua
-    code to access the 'forageDefs' table, and extracts item information. It
-    then augments the item data with chance values extracted from specified
-    Lua table names. The resulting data is saved as a JSON file in the
-    specified output directory.
+    This function reads the main forageDefinitions.lua and other foraging-related Lua files, extracts
+    relevant data, and augments the extracted data with additional information like item chances. The
+    results are then saved into a JSON file.
 
     Args:
-        forage_definitions_path (str): The file path to the Lua file containing
-            foraging definitions.
-        output_path (str): The directory where the output JSON file
-            ('foraging.json') will be saved.
-
-    Raises:
-        Exception: If there is an error parsing any of the Lua tables.
+        forage_definitions_path (str): Path to the primary forageDefinitions.lua file.
+        output_path (str): Directory where the final foraging JSON will be saved.
     """
-    with open(forage_definitions_path, 'r', encoding='utf-8') as f:
-        lua_code = f.read()
 
-    # Function to extract a Lua table given its name
-    def extract_lua_table(lua_code, table_name):
-        pattern = r'local\s+' + re.escape(table_name) + r'\s*=\s*\{'
-        match = re.search(pattern, lua_code)
-        if not match:
-            return None
-        start = match.end() - 1  # Position of the opening brace
-        brace_level = 1
-        end = start + 1
-        while end < len(lua_code):
-            char = lua_code[end]
-            if char == '{':
-                brace_level += 1
-            elif char == '}':
-                brace_level -= 1
-                if brace_level == 0:
-                    # Found the matching closing brace
-                    break
-            end += 1
-        table_str = lua_code[start:end+1]
-        return table_str
-
-    # List of table names to extract
-    table_names = [
-        'ammunition',
-        'clothing',
-        'medical',
-        'junkWeapons',
-        'junkItems',
-        'trashItems',
-        # Add other tables if needed
+    additional_files = [
+        "Ammo", "Animals", "Berries", "Clothing", "DeadAnimals", "ForestGoods",
+        "ForestRarities", "Fruits", "Herbs", "Insects", "Junk", "Medical",
+        "MedicinalPlants", "Mushrooms", "Stones", "Vegetables", "WildPlants"
     ]
 
-    # Extract tables
-    tables = {}
-    for table_name in table_names:
-        table_str = extract_lua_table(lua_code, table_name)
-        if table_str:
-            tables[table_name] = table_str
+    def preprocess_lua_code(lua_code):
+        """
+        Removes or comments out the `require` statements from Lua code.
+        """
+        pattern = r'require\s*["\']Foraging/[^"\']*["\']\s*;'
+        return re.sub(pattern, '-- [REMOVED] \\g<0>', lua_code)
 
-    # Build a mapping from item names to chance values
-    item_chance_mapping = {}
-
-    for table_name, table_str in tables.items():
+    def parse_lua_file(file_path):
+        """
+        Reads and processes a Lua file to extract relevant data.
+        """
         try:
-            table_dict = lua_parser.decode(table_str)
+            with open(file_path, 'r', encoding='utf-8') as f:
+                lua_code = f.read()
+
+            # Preprocess the Lua code to handle `require` statements
+            lua_code = preprocess_lua_code(lua_code)
+
+            # Execute the Lua code in the Lua runtime
+            lua = LuaRuntime(unpack_returned_tuples=True)
+
+            # Inject global tables and dummy functions to prevent runtime errors
+            lua.execute('forageDefs = {}')
+            lua.execute('forageSystem = {}')
+            lua.execute('forageSystem.worldSprites = { berryBushes = "dummy_texture_path" }')
+            lua.execute('function getTexture(path) return path end')
+
+            lua.execute('''
+                worldSprites = {
+                    add = function() end,
+                    remove = function() end,
+                    update = function() end
+                }
+            ''')
+
+            # Execute the Lua script
+            lua.execute(lua_code)
+            forage_defs = lua.globals().forageDefs
+            return lua_table_to_python(forage_defs)
         except Exception as e:
-            print(f"Error parsing table {table_name}: {e}")
-            continue
-        # Handle different structures based on table content
-        if 'items' in table_dict and 'chance' in table_dict:
-            # Single-level table
-            chance = table_dict['chance']
-            items = table_dict['items']
-            for item_name, item_full_name in items.items():
-                item_chance_mapping[item_name] = chance
-        else:
-            # Multi-level table (e.g., with rarity levels)
-            for rarity_level, data in table_dict.items():
-                if isinstance(data, dict):
-                    chance = data.get('chance')
-                    items = data.get('items')
-                    if chance and items:
-                        for item_name, item_full_name in items.items():
-                            item_chance_mapping[item_name] = chance
-                    else:
-                        # Some tables may have items directly under rarity levels
-                        for sub_rarity, sub_data in data.items():
-                            if isinstance(sub_data, dict):
-                                chance = sub_data.get('chance')
-                                items = sub_data.get('items')
-                                if chance and items:
-                                    for item_name, item_full_name in items.items():
-                                        item_chance_mapping[item_name] = chance
+            print(f"Error processing Lua file {file_path}: {e}")
+            return {}
 
-    # Now execute the Lua code
-    # Create Lua runtime
-    lua = LuaRuntime(unpack_returned_tuples=True)
-
-    # Lua code to define missing functions and variables
-    prelude = '''
-    -- Define empty functions to prevent errors during execution
-    doWildFoodSpawn = function() end
-    doRandomAgeSpawn = function() end
-    doWildCropSpawn = function() end
-    doPoisonItemSpawn = function() end
-    doDeadTrapAnimalSpawn = function() end
-    doClothingItemSpawn = function() end
-    doJunkWeaponSpawn = function() end
-    doGenericItemSpawn = function() end
-    doWildMushroomSpawn = function() end
-    doForageItemIcon = function() end
-    doItemSize = function() end
-    doWeight = function() end
-
-    -- Define worldSprites table with necessary keys
-    worldSprites = {
-        shrubs = {},
-        wildPlants = {},
-        vines = {},
-        smallTrees = {},
-        berryBushes = {},
-    }
-    -- Define getTexture function
-    getTexture = function(path) return path end
-    '''
-
-    # Combine prelude and Lua code
-    full_lua_code = prelude + lua_code
-
-    # Execute the modified Lua code
-    lua.execute(full_lua_code)
-
-    # Get the forageDefs table
-    forageDefs = lua.globals().forageDefs
-
-    # Function to convert Lua table to Python dict
     def lua_table_to_python(obj):
+        """
+        Converts a Lua table to a Python dictionary or list.
+        """
         if lupa.lua_type(obj) == 'table':
             py_dict = {}
             for key in obj:
                 py_key = key
                 py_value = obj[key]
-                # Convert key
                 if lupa.lua_type(py_key) in ('table', 'function'):
                     py_key = str(py_key)
                 else:
                     py_key = lua_table_to_python(py_key)
-                # Convert value
+
                 if lupa.lua_type(py_value) == 'table':
                     py_value = lua_table_to_python(py_value)
                 elif lupa.lua_type(py_value) == 'function':
@@ -401,21 +324,28 @@ def parse_foraging(forage_definitions_path, output_path):
         else:
             return obj
 
-    # Convert the forageDefs table to a Python dictionary
-    forage_defs_dict = lua_table_to_python(forageDefs)
+    # Parse the main forageDefinitions.lua file
+    forage_data = parse_lua_file(forage_definitions_path)
 
-    # Now, augment each item with its chance value
-    for item_name, item_data in forage_defs_dict.items():
-        chance = item_chance_mapping.get(item_name)
-        if chance is not None:
-            item_data['chance'] = chance
+    # Process each additional Lua file and merge its data
+    for file_name in additional_files:
+        file_path = os.path.join(os.path.dirname(forage_definitions_path), f"{file_name}.lua")
+        if os.path.exists(file_path):
+            additional_data = parse_lua_file(file_path)
+            if additional_data:
+                for key, value in additional_data.items():
+                    if key in forage_data:
+                        forage_data[key].update(value)
+                    else:
+                        forage_data[key] = value
 
     # Ensure the output directory exists
     os.makedirs(output_path, exist_ok=True)
 
-    # Write the dictionary to a JSON file
-    with open(os.path.join(output_path, 'foraging.json'), 'w', encoding='utf-8') as f:
-        json.dump(forage_defs_dict, f, ensure_ascii=False, indent=4)
+    # Save the combined data to a JSON file
+    output_file_path = os.path.join(output_path, 'foraging.json')
+    with open(output_file_path, 'w', encoding='utf-8') as f:
+        json.dump(forage_data, f, ensure_ascii=False, indent=4)
 
 
 def parse_vehicles(vehicle_distributions_path, output_path):
@@ -426,6 +356,7 @@ def parse_vehicles(vehicle_distributions_path, output_path):
         vehicle_distributions_path (str): Path to the Lua file to parse.
         output_path (str): Path where the output JSON file will be written.
     """
+
     def parse_lua_table(lua_content):
         key_pattern = re.compile(r'VehicleDistributions\.(\w+)\s*=\s*{')
         rolls_pattern = re.compile(r'rolls\s*=\s*(\d+),')
@@ -444,6 +375,11 @@ def parse_vehicles(vehicle_distributions_path, output_path):
             key_match = key_pattern.search(line)
             if key_match:
                 current_key = key_match.group(1)
+
+                if current_key.startswith("Up Truck") and "Pick" in current_key:
+                    current_key = current_key.replace("Up Truck", "").strip()
+                    current_key = "Pick Up Truck" + current_key
+
                 distribution_dict[current_key] = {'rolls': 1, 'items': {}, 'junk': {}}
                 inside_junk = False
                 continue
@@ -453,7 +389,9 @@ def parse_vehicles(vehicle_distributions_path, output_path):
             item_match = item_pattern.findall(line)
             if item_match and current_key and not inside_junk:
                 for item, weight in item_match:
-                    distribution_dict[current_key]['items'][item] = distribution_dict[current_key]['items'].get(item, 0) + float(weight)
+                    distribution_dict[current_key]['items'][item] = distribution_dict[current_key]['items'].get(item,
+                                                                                                                0) + float(
+                        weight)
             junk_match = junk_pattern.search(line)
             if junk_match and current_key:
                 inside_junk = True
@@ -669,34 +607,35 @@ def parse_stories(class_files_directory, output_path):
     """
 
     def read_constant_pool(file):
-        """
-        Reads the constant pool of a .class file and extracts relevant string constants.
-
-        This function takes a binary file object as input and reads the constant pool
-        section of the .class file. It then extracts any relevant string constants
-        and returns them as a list. The constants that are extracted are those that
-        contain a period and start with "Base.", "Farming.", or "Radio.".
-
-        :param file: A binary file object
-        :return: A list of relevant string constants
-        """
         # Skip the first 8 bytes (magic number and minor/major version)
-        file.read(8)
+        initial_bytes = file.read(8)
+        if len(initial_bytes) < 8:
+            return []
 
         # Read the constant pool count
-        constant_pool_count = struct.unpack(">H", file.read(2))[0] - 1
+        count_bytes = file.read(2)
+        if len(count_bytes) < 2:
+            return []
+        constant_pool_count = struct.unpack(">H", count_bytes)[0] - 1
 
         constants = []
-
-        # Loop through the constant pool
         i = 0
         while i < constant_pool_count:
-            # Each entry starts with a 1-byte tag
-            tag = struct.unpack("B", file.read(1))[0]
+            # Attempt to read the tag byte
+            tag_byte = file.read(1)
+            if len(tag_byte) < 1:
+                break  # Stop processing as we've hit EOF prematurely
+
+            tag = struct.unpack("B", tag_byte)[0]
 
             if tag == 1:  # CONSTANT_Utf8
-                length = struct.unpack(">H", file.read(2))[0]
+                length_bytes = file.read(2)
+                if len(length_bytes) < 2:
+                    break
+                length = struct.unpack(">H", length_bytes)[0]
                 value = file.read(length)
+                if len(value) < length:
+                    break
                 try:
                     decoded_value = value.decode("utf-8")
                     # Only add constants that contain a period and start with specified prefixes
@@ -711,16 +650,30 @@ def parse_stories(class_files_directory, output_path):
                         else:
                             constants.append(decoded_value)
                 except UnicodeDecodeError:
-                    pass  # Skip non-UTF-8 constants
-            elif tag in {7, 8}:  # CONSTANT_Class or CONSTANT_String
-                file.read(2)  # Skip over 2 bytes (index reference)
-            elif tag in {3, 4}:  # CONSTANT_Integer or CONSTANT_Float
-                file.read(4)  # Skip over 4 bytes
-            elif tag in {5, 6}:  # CONSTANT_Long or CONSTANT_Double (take two entries)
-                file.read(8)  # Skip over 8 bytes
-                i += 1  # These take up two entries in the constant pool
-            elif tag in {9, 10, 11, 12, 15, 16, 18}:  # Other reference types
-                file.read(4)  # Skip over 4 bytes
+                    # Skip non-UTF-8 constants
+                    pass
+            elif tag in {7, 8}:
+                # Skip over 2 bytes (index reference)
+                skip_bytes = file.read(2)
+                if len(skip_bytes) < 2:
+                    break
+            elif tag in {3, 4}:
+                # Skip over 4 bytes
+                skip_bytes = file.read(4)
+                if len(skip_bytes) < 4:
+                    break
+            elif tag in {5, 6}:
+                # Skip over 8 bytes
+                skip_bytes = file.read(8)
+                if len(skip_bytes) < 8:
+                    break
+                i += 1  # Long/double take two entries
+            elif tag in {9, 10, 11, 12, 15, 16, 18}:
+                # Skip over 4 bytes
+                skip_bytes = file.read(4)
+                if len(skip_bytes) < 4:
+                    break
+
             i += 1
 
         return constants
@@ -760,7 +713,7 @@ def main():
     forage_definitions_path = "resources/lua/forageDefinitions.lua"
     procedural_distributions_path = "resources/lua/ProceduralDistributions.lua"
     vehicle_distributions_path = "resources/lua/VehicleDistributions.lua"
-    clothing_file_path = "resources/clothing.xml"
+    clothing_file_path = "resources/clothing/clothing.xml"
     guid_table_path = "resources/fileGuidTable.xml"
     class_files_directory = "resources/Java"
 

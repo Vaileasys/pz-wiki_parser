@@ -9,33 +9,33 @@ language_code = None
 default_language = None
 
 LANGUAGE_CODES = {
-    'ar': ("Cp1252", "Arabic"),
-    'ca': ("ISO-8859-15", "Catalan"),
+    'ar': ("ISO-8859-1", "Arabic"),
+    'ca': ("ISO-8859-1", "Catalan"),
     'ch': ("UTF-8", "Traditional Chinese (zh-Hant)"),
     'cn': ("UTF-8", "Simplified Chinese (zh-Hans)"),
-    'cs': ("Cp1250", "Czech"),
-    'da': ("Cp1252", "Danish"),
-    'de': ("Cp1252", "German"),
+    'cs': ("UTF-8", "Czech"),
+    'da': ("UTF-8", "Danish"),
+    'de': ("UTF-8", "German"),
     'en': ("UTF-8", "English"),
-    'es': ("Cp1252", "Spanish"),
-    'fi': ("Cp1252", "Finnish"),
-    'fr': ("Cp1252", "French"),
-    'hu': ("Cp1250", "Hungarian"),
+    'es': ("UTF-8", "Spanish"),
+    'fi': ("UTF-8", "Finnish"),
+    'fr': ("UTF-8", "French"),
+    'hu': ("UTF-8", "Hungarian"),
     'id': ("UTF-8", "Indonesian"),
-    'it': ("Cp1252", "Italian"),
+    'it': ("UTF-8", "Italian"),
     'jp': ("UTF-8", "Japanese"),
     'ko': ("UTF-16", "Korean"),
-    'nl': ("Cp1252", "Dutch"),
-    'no': ("Cp1252", "Norwegian"),
+    'nl': ("UTF-8", "Dutch"),
+    'no': ("UTF-8", "Norwegian"),
     'ph': ("UTF-8", "Filipino"),
-    'pl': ("Cp1250", "Polish"),
-    'pt': ("Cp1252", "Portuguese"),
-    'pt-br': ("Cp1252", "Portuguese (Brazilian)"),
+    'pl': ("UTF-8", "Polish"),
+    'pt': ("UTF-8", "Portuguese"),
+    'pt-br': ("UTF-8", "Portuguese (Brazilian)"),
     # 'ptbr': ("Cp1252", "Portuguese (Brazilian)"), Commented out for now, rename translation folder to pt-br and use that for now
     'ro': ("UTF-8", "Romanian"),
-    'ru': ("Cp1251", "Russian"),
+    'ru': ("UTF-8", "Russian"),
     'th': ("UTF-8", "Thai"),
-    'tr': ("Cp1254", "Turkish"),
+    'tr': ("UTF-8", "Turkish"),
     'uk': ("UTF-8", "Ukrainian")
 }
 
@@ -72,7 +72,7 @@ def get_wiki_translation(value):
     :rtype: str
     """
     placeholders = re.findall(r'\<\<(.*?)\>\>', value)
-    
+
     # Replace each placeholder with its translation
     for placeholder in placeholders:
         placeholder = f"{placeholder}"
@@ -123,7 +123,7 @@ def get_translation(property_value, property_key="DisplayName", lang_code=langua
 
     if not property_value:
         return property_value
-    
+
     if language_code is None:
         language_code = get_language_code()
 
@@ -145,7 +145,7 @@ def get_translation(property_value, property_key="DisplayName", lang_code=langua
             item_data = item_parser.get_item_data().get(property_value)
             if item_data:
                 translation = item_data.get("DisplayName", property_value)
-            else: 
+            else:
                 # Special case: handle 'SaucePan' in fixing (should be 'Saucepan')
                 item_data = item_parser.get_item_data().get(property_value.capitalize())
                 if item_data:
@@ -157,7 +157,7 @@ def parse_translation_file(language_code):
     language_dir = os.path.join("resources", "Translate", language_code.upper())
     if not os.path.exists(language_dir):
         raise FileNotFoundError(f"No file found for '{language_dir}'. Ensure the file is in the correct path, or try a different language code.")
-    
+
     # Get encoding for the chosen language
     encoding = LANGUAGE_CODES.get(language_code, ("UTF-8", "Unknown"))[0]
     encoding_detected = False
@@ -187,6 +187,7 @@ def parse_translation_file(language_code):
             try:
                 with open(file_path, 'r', encoding=encoding) as file:
                     for line in file:
+                        line = remove_comments(line)
                         line = line.strip()
 
                         if '=' not in line or '{' in line or '}' in line:
@@ -194,29 +195,31 @@ def parse_translation_file(language_code):
 
                         parts = line.split('=', 1)
 
-
-                        if len(parts[1].split('"')) > 1:
-                            value = parts[1].split('"')[1]
-                        else:
-                            value = parts[1].strip()
-
                         # Ensure the line was split into exactly two parts
                         if len(parts) == 2:
                             key = parts[0].strip()
-                            if len(parts[1].split('"')) > 1:
-                                value = parts[1].split('"')[1]
-                            else:
-                                # Special case: Translations don't contain 2 quotation marks
-                                value = parts[1].strip()
-                            parsed_translations[key] = value
+                            line_value = parts[1].strip()
+
+                            if line_value.endswith(','):
+                                line_value = line_value[:-1].rstrip()
+
+                            # Count how many double quotes are in this value
+                            quote_count = line_value.count('"')
+
+                            # Preserve internal quotes for strings that have them.
+                            if quote_count >= 2 and line_value.startswith('"') and line_value.endswith('"'):
+                                line_value = line_value[1:-1]
+
+                            parsed_translations[key] = line_value
                         else:
                             print(f"More or less than 2 parts for {line}, skipping.")
-                            
+
             except UnicodeDecodeError:
                 if encoding_detected:
                     print(f"Unable to decode the file '{file_name}' even after trying to detect encoding.")
                     break
-                logging_file.log_to_file(f"There was an issue decoding the file '{file_name}' with encoding '{encoding}'. Trying to detect encoding.")
+                logging_file.log_to_file(
+                    f"There was an issue decoding the file '{file_name}' with encoding '{encoding}'. Trying to detect encoding.")
                 encoding = detect_file_encoding(file_path)
                 encoding_detected = True
             except Exception as e:
@@ -226,16 +229,26 @@ def parse_translation_file(language_code):
     return parsed_translations
 
 
+def remove_comments(line: str) -> str:
+    # If, after stripping whitespace, the line starts with '--', it's a comment-only line
+    if line.strip().startswith('--'):
+        return ''  # Return empty string -> skip this line entirely
+
+    # Otherwise, remove any text following '--'
+    line = re.split(r'--', line, maxsplit=1)[0]
+    return line.strip()
+
+
 def cache_translations():
     global translations_cache
     for language_code in LANGUAGE_CODES:
         try:
             # Parse translation files for the language
             parsed_translations = parse_translation_file(language_code)
-            
+
             # Store the parsed translations in the translations_cache
             translations_cache[language_code] = parsed_translations
-        
+
         except FileNotFoundError as e:
             print(f"Error: {e}")
         except Exception as e:
@@ -248,7 +261,7 @@ def cache_translations():
 
     with open(output_file, 'w', encoding='utf-8') as json_file:
         json.dump(translations_cache, json_file, ensure_ascii=False, indent=4)
-    
+
     return translations_cache
 
 
@@ -268,7 +281,7 @@ def update_default_language():
     """
     Updates the default language to the latest config entry.
     Use 'get_default_langauge' instead for returning the default language.
-    
+
     :return: Updated default language.
     """
     global default_language

@@ -550,10 +550,11 @@ def generate_history(item_id, history_dir, language_code):
         try:
             with open(history_file_path, 'r', encoding='utf-8') as file:
                 contents = file.read().strip()
-                return f"==History==\n{contents}"
+                content = f"{contents}"
         except Exception as e:
             print(f"Error reading {history_file_path}: {e}")
-    return f"==History==\n{{{{HistoryTable|\n|item_id={item_id}\n}}}}"
+            content = f"{{{{HistoryTable|\n|item_id={item_id}\n}}}}"
+        return content
 
 
 def generate_code(item_id, code_dir):
