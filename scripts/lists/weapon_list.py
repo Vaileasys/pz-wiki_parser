@@ -4,7 +4,8 @@ from scripts.core import translate, utility
 from scripts import script_parser
 
 # table header for melee weapons
-melee_header = """{| class="wikitable theme-red sortable" style="text-align: center;"
+melee_header = """<div style="overflow: auto; white-space: nowrap;">
+{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"
 ! rowspan=2 | <<icon>>
 ! rowspan=2 | <<name>>
 ! rowspan=2 | [[File:Moodle_Icon_HeavyLoad.png|link=|<<weight>>]]
@@ -18,23 +19,26 @@ melee_header = """{| class="wikitable theme-red sortable" style="text-align: cen
 ! rowspan=2 | [[File:UI_Condition_Max.png|32px|link=|<<max_condition>>]]
 ! rowspan=2 | [[File:UI_Condition_Chance.png|32px|<<condition_lower_chance>>]]
 ! rowspan=2 | [[File:UI_Condition_Average.png|32px|link=|<<average_condition>>]]
-! rowspan=2 | [[File:UI_Condition.png|32px|link=|<<repairable>>]]
 ! rowspan=2 | <<item_id>>
 |-
 ! [[File:UI_Damage_Min.png|32px|link=|<<min_damage>>]]
 ! [[File:UI_Damage_Max.png|32px|link=|<<max_damage>>]]
-! [[File:UI_Door.png|32px|link=|<<door_damage>>]]
+! [[File:Door.png|32px|link=|<<door_damage>>]]
 ! rowspan=2 | [[File:Container_Plant.png|32px|link=|<<tree_damage>>]]
 ! [[File:UI_Range_Min.png|32px|link=|<<min_range>>]]
 ! style="border-right: var(--border-mw);" | [[File:UI_Range_Max.png|32px|link=|<<max_range>>]]\n"""
 
+# TODO: re-add this line after fixing repairing - goes before item_id
+# ! rowspan=2 | [[File:UI_Condition.png|32px|link=|<<repairable>>]]
+
 # table header for firearms
-firearm_header = """{| class="wikitable theme-red sortable" style="text-align: center;"
+firearm_header = """<div style="overflow: auto; white-space: nowrap;">
+{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"
 ! rowspan=2 | <<icon>>
 ! rowspan=2 | <<name>>
 ! rowspan=2 | [[File:Moodle_Icon_HeavyLoad.png|link=|<<weight>>]]
 ! rowspan=2 | [[File:UI_Hand.png|32px|link=|<<equipped>>]]
-! rowspan=2 | [[File:UI_Ammo.png|link=|<<ammo>>]]
+! rowspan=2 | [[File:PistolAmmo.png|link=|<<ammo>>]]
 ! rowspan=2 | [[File:BerettaClip.png|link=|<<mag_capacity>>]]
 ! colspan=2 | <<damage>>
 ! colspan=2 | <<range>>
@@ -44,13 +48,15 @@ firearm_header = """{| class="wikitable theme-red sortable" style="text-align: c
 ! rowspan=2 | [[File:UI_Critical_Add.png|32px|link=|<<crit_chance_add>>]]
 ! rowspan=2 | [[File:UI_Noise.png|32px|link=|<<noise_radius>>]]
 ! rowspan=2 | [[File:UI_Knockback.png|32px|link=|<<knockback>>]]
-! rowspan=2 | [[File:UI_Condition.png|32px|link=|<<repairable>>]]
 ! rowspan=2 | <<item_id>>
 |-
 ! [[File:UI_Damage_Min.png|32px|link=|<<min_damage>>]]
 ! [[File:UI_Damage_Max.png|32px|link=|<<max_damage>>]]
 ! [[File:UI_Range_Min.png|32px|link=|<<min_range>>]]
 ! style="border-right: var(--border-mw);" | [[File:UI_Range_Max.png|32px|link=|<<max_range>>]]\n"""
+
+# TODO: re-add this line after fixing repairing - goes before item_id
+# ! rowspan=2 | [[File:UI_Condition.png|32px|link=|<<repairable>>]]
 
 # store translated skills
 skills = {}
@@ -162,7 +168,7 @@ def process_item_firearm(item_data, item_id):
 #        "condition_max": condition_max,
 #        "condition_chance": condition_chance,
 #        "condition_average": condition_average,
-        "repairable": repairable,
+#        "repairable": repairable, # TODO: re-add after fixing repairing
         "item_id": f'{{{{ID|{item_id}}}}}',
     }
 
@@ -241,7 +247,7 @@ def process_item_melee(item_data, item_id):
         "condition_max": condition_max,
         "condition_chance": condition_chance,
         "condition_average": condition_average,
-        "repairable": repairable,
+#        "repairable": repairable, # TODO: re-add after fixing repairing
         "item_id": f"{{{{ID|{item_id}}}}}",
     }
 
@@ -266,7 +272,7 @@ def write_items_to_file(skills, header, category):
                 item = [value for key, value in item.items() if key != 'name']
                 item = '\n| '.join(item)
                 file.write(f"|-\n| {item}\n")
-            file.write("|}")
+            file.write("|}</div>")
             footnote = ""
             if skill in ('Axe', 'Long Blunt', 'Short Blunt', 'Long Blade', 'Spear', 'Improvised'):
                 footnote = "\n<nowiki>*</nowiki><<limited_impact_desc>>"
