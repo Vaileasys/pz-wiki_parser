@@ -146,6 +146,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "weight_reduction": item_data.get('WeightReduction', ''),
                 "max_units": item_data.get('UseDelta', ''),
                 "equipped": item_data.get('CanBeEquipped', ''),
+                "body_location": item_data.get('BodyLocation', ''),
                 "attachment_type": item_data.get('AttachmentType', ''),
                 "function": '',
                 "weapon": weapon,
