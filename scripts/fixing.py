@@ -1,6 +1,6 @@
 import os
 import shutil
-import script_parser
+from scripts.parser import script_parser
 from core import logging_file, translate, utility
 
 language_code = translate.get_language_code()

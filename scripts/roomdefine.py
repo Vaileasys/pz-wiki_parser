@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from tqdm import tqdm
 import concurrent.futures
-import scripts.distribution_parser as distribution_parser
+import scripts.parser.distribution_parser as distribution_parser
 from scripts.core import version, translate
 
 

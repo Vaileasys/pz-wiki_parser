@@ -1,7 +1,6 @@
 import os
-from scripts.parser import item_parser
+from scripts.parser import item_parser, script_parser
 from scripts.core import translate, utility
-from scripts import script_parser
 
 # table header for melee weapons
 melee_header = """<div style="overflow: auto; white-space: nowrap;">

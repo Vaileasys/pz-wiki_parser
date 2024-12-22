@@ -3,7 +3,7 @@ import os
 import re
 import math
 import tqdm
-import scripts.distribution_parser as distribution_parser
+import scripts.parser.distribution_parser as distribution_parser
 
 # Dictionary to store changes for reference across the script
 item_name_changes = {}
