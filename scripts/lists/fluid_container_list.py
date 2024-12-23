@@ -4,6 +4,7 @@ This will be fleshed out more with translations and the new list system once com
 """
 
 import os
+import json
 from scripts.core import translate, utility
 from scripts.parser import item_parser
 
@@ -43,6 +44,10 @@ def get_items():
     fluid_items = []
     i = 0 # fluid containers
     j = 0 # fluid containers with a fluid
+
+    with open("resources/color_reference.json", "r") as f:
+        color_reference = json.load(f)
+
     for item_id, item_data in item_parser.get_item_data().items():
         if 'capacity' in item_data:
             display_name = translate.get_translation(item_id, 'DisplayName')
@@ -68,16 +73,20 @@ def get_items():
                         fluids_list.append(fluid_id)
                         continue
 
-                    # Convert colors to RGB format
-                    print(f"{item_id}: {colors}")
+                    # lookup color_reference for RGB values
                     if isinstance(colors, str):
-                        colors_str = colors
+                        # Colour references found in 'Colors.class'
+                        rgb_values = color_reference["colors"].get(colors, [0.0, 0.0, 0.0])
                     else:
-                        colors_str = "RGB: " + ", ".join([f"{color:.2f}" for color in colors])
+                        rgb_values = colors
+
+                    colors_rgb = [int(c * 255) for c in rgb_values]
+                    colors_str = f"{{{{rgb|{colors_rgb[0]}, {colors_rgb[1]}, {colors_rgb[2]}}}}}"
+
 
                     # Append the formatted string
 #                    fluids_list.append(f"{liquid_count_str} × {fluid_id} ({colors_str})")
-                    fluids_list.append(f"{fluid_id} ({colors_str})")
+                    fluids_list.append(f"{fluid_id} {colors_str}")
 
                 fluids_list = "<br>".join(fluids_list)
                 

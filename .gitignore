@@ -9,6 +9,7 @@ resources/*
 !resources/
 !resources/icons.csv
 !resources/item_id_dictionary.csv
+!resources/color_reference.json
 
 ## Translations
 resources/Translate/*
