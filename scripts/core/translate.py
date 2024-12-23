@@ -48,6 +48,7 @@ PROPERTY_PREFIXES = {
     'TeachedRecipes': "Recipe_",
     'PartType': "Tooltip_weapon_",
     'EvolvedRecipeName': "EvolvedRecipeName_",
+    'FluidID': "Fluid_Name_",
     'Wiki': "Wiki_",
 }
 
@@ -57,6 +58,7 @@ FILE_WHITELIST = (
     "Recipes_",
     "Tooltip_",
     "EvolvedRecipeName_",
+    "Fluids_",
     "Wiki_"
 )
 

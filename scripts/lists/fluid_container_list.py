@@ -61,7 +61,16 @@ def get_items():
             if "fluids" in item_data:
                 fluids_list = []
                 for fluid in item_data.get("fluids", []):
-                    fluid_id = fluid.get("FluidID", "-")
+                    fluid_id = fluid.get("FluidID", None)
+                    if fluid_id is not None:
+                        fluid_name = translate.get_translation(fluid_id, 'FluidID')
+                        #TODO: get fluid_name for english and translation separately
+                        if translate.language_code != "en":
+                            fluid_name = f"[[{fluid_name} (fluid)/{translate.language_code}|{fluid_name}]]"
+                        else:
+                            fluid_name = f"[[{fluid_name} (fluid)|{fluid_name}]]"
+                    else:
+                        fluid_name = "-"
 #                    liquid_count = fluid.get("LiquidCount", 0)
                     colors = fluid.get("Color", [])
 
@@ -69,8 +78,8 @@ def get_items():
 #                    liquid_count_str = f"{int(fluid_capacity_ml * float(liquid_count))}mL"
 
                     if not colors:
-#                        fluids_list.append(f"{liquid_count_str} × {fluid_id}")
-                        fluids_list.append(fluid_id)
+#                        fluids_list.append(f"{liquid_count_str} × {fluid_name}")
+                        fluids_list.append(fluid_name)
                         continue
 
                     # lookup color_reference for RGB values
@@ -85,8 +94,8 @@ def get_items():
 
 
                     # Append the formatted string
-#                    fluids_list.append(f"{liquid_count_str} × {fluid_id} ({colors_str})")
-                    fluids_list.append(f"{fluid_id} {colors_str}")
+#                    fluids_list.append(f"{liquid_count_str} × {fluid_name} ({colors_str})")
+                    fluids_list.append(f"{fluid_name} {colors_str}")
 
                 fluids_list = "<br>".join(fluids_list)
                 
