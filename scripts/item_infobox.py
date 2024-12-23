@@ -94,7 +94,9 @@ def write_to_output(item_data, item_id, output_dir):
             category = translate.get_translation(item_data.get(category, 'Item'), category)
 
             fluid_capacity_ml = float(item_data.get('capacity', 0)) * 1000
-            fluid_capacity = f"{str(int(fluid_capacity_ml))}mL"
+            fluid_capacity = ''
+            if fluid_capacity_ml != 0.0:
+                fluid_capacity = f"{str(int(fluid_capacity_ml))}mL"
 
             material = item_data.get('FabricType', '')
             material_value = item_data.get('MetalValue', '')
