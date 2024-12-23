@@ -13,8 +13,13 @@ HEADER = """{| class="wikitable theme-red sortable sticky-column" style="text-al
 ! Container name
 ! Weight
 ! Capacity
+! Spawned fluid(s)
 ! Item ID
 |-"""
+
+FLUID_COLORS = {
+
+}
 
 def write_items_to_file(items, file_name):
     language_code = translate.get_language_code()
@@ -23,7 +28,7 @@ def write_items_to_file(items, file_name):
         os.makedirs(output_dir)
 
     output_file = os.path.join(output_dir, f"{file_name}.txt")
-    with open(output_file, "w") as file:
+    with open(output_file, "w", encoding="utf-8") as file:
         file.write(HEADER)
         for item in items:
             for value in item.values():
@@ -45,15 +50,44 @@ def get_items():
             item_link = utility.format_link(display_name, page_name)
             icon = utility.get_icon(item_id, True, True, True)
 
-            fluid_capacity = str(int(float(item_data.get('capacity', 0)) * 1000)) + "mL"
+            fluid_capacity_ml = float(item_data.get('capacity', 0)) * 1000
+            fluid_capacity = f"{str(int(fluid_capacity_ml))}mL"
+            fluids_list = "-"
+            if "fluids" in item_data:
+                fluids_list = []
+                for fluid in item_data.get("fluids", []):
+                    fluid_id = fluid.get("FluidID", "-")
+#                    liquid_count = fluid.get("LiquidCount", 0)
+                    colors = fluid.get("Color", [])
 
+                    # Convert liquid_count to mL
+#                    liquid_count_str = f"{int(fluid_capacity_ml * float(liquid_count))}mL"
 
+                    if not colors:
+#                        fluids_list.append(f"{liquid_count_str} × {fluid_id}")
+                        fluids_list.append(fluid_id)
+                        continue
+
+                    # Convert colors to RGB format
+                    print(f"{item_id}: {colors}")
+                    if isinstance(colors, str):
+                        colors_str = colors
+                    else:
+                        colors_str = "RGB: " + ", ".join([f"{color:.2f}" for color in colors])
+
+                    # Append the formatted string
+#                    fluids_list.append(f"{liquid_count_str} × {fluid_id} ({colors_str})")
+                    fluids_list.append(f"{fluid_id} ({colors_str})")
+
+                fluids_list = "<br>".join(fluids_list)
+                
             item = {
                 "icon": icon,
                 "name": item_link,
                 "ContainerName": item_data.get('ContainerName', '-'),
                 "weight": item_data.get('Weight', '1'),
                 "capacity": fluid_capacity,
+                "fluids": fluids_list,
                 "item_id": item_id,
             }
 
