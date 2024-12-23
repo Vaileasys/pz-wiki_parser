@@ -93,6 +93,9 @@ def write_to_output(item_data, item_id, output_dir):
             category = 'DisplayCategory'
             category = translate.get_translation(item_data.get(category, 'Item'), category)
 
+            fluid_capacity_ml = float(item_data.get('capacity', 0)) * 1000
+            fluid_capacity = f"{str(int(fluid_capacity_ml))}mL"
+
             material = item_data.get('FabricType', '')
             material_value = item_data.get('MetalValue', '')
             if not material and material_value:
@@ -143,8 +146,10 @@ def write_to_output(item_data, item_id, output_dir):
                 "category": category,
                 "weight": item_data.get('Weight', 1),
                 "capacity": item_data.get('Capacity', ''),
+                "container_name": translate.get_translation(item_data.get('ContainerName', ''), 'ContainerName'),
                 "weight_reduction": item_data.get('WeightReduction', ''),
                 "max_units": item_data.get('UseDelta', ''),
+                "fluid_capacity": fluid_capacity,
                 "equipped": item_data.get('CanBeEquipped', ''),
                 "body_location": item_data.get('BodyLocation', ''),
                 "attachment_type": item_data.get('AttachmentType', ''),
