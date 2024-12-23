@@ -49,6 +49,7 @@ PROPERTY_PREFIXES = {
     'PartType': "Tooltip_weapon_",
     'EvolvedRecipeName': "EvolvedRecipeName_",
     'FluidID': "Fluid_Name_",
+    'ContainerName': 'Fluid_Container_',
     'Wiki': "Wiki_",
 }
 

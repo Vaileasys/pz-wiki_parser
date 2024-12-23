@@ -54,6 +54,8 @@ def get_items():
             page_name = utility.get_page(item_id, display_name)
             item_link = utility.format_link(display_name, page_name)
             icon = utility.get_icon(item_id, True, True, True)
+            container_name = item_data.get('ContainerName', '-')
+            container_name = translate.get_translation(container_name, 'ContainerName')
 
             fluid_capacity_ml = float(item_data.get('capacity', 0)) * 1000
             fluid_capacity = f"{str(int(fluid_capacity_ml))}mL"
@@ -64,11 +66,11 @@ def get_items():
                     fluid_id = fluid.get("FluidID", None)
                     if fluid_id is not None:
                         fluid_name = translate.get_translation(fluid_id, 'FluidID')
-                        #TODO: get fluid_name for english and translation separately
+                        fluid_name_en = translate.get_translation(fluid_id, 'FluidID', 'en')
                         if translate.language_code != "en":
-                            fluid_name = f"[[{fluid_name} (fluid)/{translate.language_code}|{fluid_name}]]"
+                            fluid_name = f"[[{fluid_name_en} (fluid)/{translate.language_code}|{fluid_name}]]"
                         else:
-                            fluid_name = f"[[{fluid_name} (fluid)|{fluid_name}]]"
+                            fluid_name = f"[[{fluid_name_en} (fluid)|{fluid_name}]]"
                     else:
                         fluid_name = "-"
 #                    liquid_count = fluid.get("LiquidCount", 0)
@@ -102,7 +104,7 @@ def get_items():
             item = {
                 "icon": icon,
                 "name": item_link,
-                "ContainerName": item_data.get('ContainerName', '-'),
+                "ContainerName": container_name,
                 "weight": item_data.get('Weight', '1'),
                 "capacity": fluid_capacity,
                 "fluids": fluids_list,
