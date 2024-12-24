@@ -2,6 +2,7 @@
     "Wiki_name": "Name",
     "Wiki_icon": "Icon",
     "Wiki_item_id": "Item ID",
+    "Wiki_fluid_id": "Fluid ID",
     "Wiki_weight": "Encumbrance",
     "Wiki_weight_reduction": "Encumbrance reduction",
     "Wiki_weight_full": "Full encumbrance",
@@ -60,8 +61,9 @@
     "Wiki_thirst": "Thirst",
     "Wiki_unhappiness": "Unhappiness",
     "Wiki_boredom": "Boredom",
-    "Wiki_Stress": "Stress",
+    "Wiki_stress": "Stress",
     "Wiki_fatigue": "Fatigue",
+    "Wiki_tired": "Tired",
     "Wiki_food_sickness": "Food sickness",
     "Wiki_poison": "Poison",
     "Wiki_spice": "Spice",
@@ -94,5 +96,8 @@
     "Wiki_standard": "Standard",
     "Wiki_off_road": "Off-road",
     "Wiki_wheel_friction": "Wheel friction",
-    "Wiki_category": "Category"
+    "Wiki_category": "Category",
+    "Wiki_categories": "Categories",
+    "Wiki_color": "Color",
+    "Wiki_alcohol": "Alcohol"
 }
