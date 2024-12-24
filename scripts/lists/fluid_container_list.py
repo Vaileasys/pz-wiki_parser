@@ -18,10 +18,6 @@ HEADER = """{| class="wikitable theme-red sortable sticky-column" style="text-al
 ! Item ID
 |-"""
 
-FLUID_COLORS = {
-
-}
-
 def write_items_to_file(items, file_name):
     language_code = translate.get_language_code()
     output_dir = os.path.join("output", language_code, "item_list")
@@ -37,11 +33,10 @@ def write_items_to_file(items, file_name):
             file.write(f"\n|-")
         file.write("\n|}")
 
-    print(f"Item names written to (output_file)")
+    print(f"Item names written to {output_file}")
 
 def get_items():
     fluid_containers = []
-    fluid_items = []
     i = 0 # fluid containers
     j = 0 # fluid containers with a fluid
 
@@ -116,12 +111,10 @@ def get_items():
             i = i +1
 
             if 'fluids' in item_data:
-#                fluid_items.append(item_id)
                 j = j +1
     print(f"Found {i} items that are a fluid container")
     print(f"Found {j} items with a fluid")
-    write_items_to_file(fluid_containers, 'fluid_list')
-#    write_items_to_file(fluid_items, 'fluid_items_list')
+    write_items_to_file(fluid_containers, 'fluid_container_list')
         
 
 def main():
