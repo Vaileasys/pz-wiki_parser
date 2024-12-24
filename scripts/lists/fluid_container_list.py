@@ -6,7 +6,7 @@ This will be fleshed out more with translations and the new list system once com
 import os
 import json
 from scripts.core import translate, utility
-from scripts.parser import item_parser
+from scripts.parser import item_parser, fluid_parser
 
 HEADER = """{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"
 ! Icon
@@ -37,6 +37,7 @@ def write_items_to_file(items, file_name):
 
 def get_items():
     fluid_containers = []
+    fluid_data = fluid_parser.get_fluid_data()
     i = 0 # fluid containers
     j = 0 # fluid containers with a fluid
 
@@ -74,10 +75,14 @@ def get_items():
                     # Convert liquid_count to mL
 #                    liquid_count_str = f"{int(fluid_capacity_ml * float(liquid_count))}mL"
 
-                    if not colors:
-#                        fluids_list.append(f"{liquid_count_str} × {fluid_name}")
-                        fluids_list.append(fluid_name)
-                        continue
+                    # Get the fluid color from the fluid_id
+                    if not colors and fluid_id:
+                        if fluid_data[fluid_id]['ColorReference']:
+                            colors = fluid_data[fluid_id]['ColorReference']
+                        elif fluid_data[fluid_id]['Color']:
+                            colors = fluid_data[fluid_id]['Color']
+                        else:
+                            colors = [0.0, 0.0, 0.0]
 
                     # lookup color_reference for RGB values
                     if isinstance(colors, str):
