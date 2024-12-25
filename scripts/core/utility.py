@@ -258,7 +258,7 @@ def find_icon(item_id, all_icons=False):
 
                 # Check if icon has variants
                 else:
-                    icon_variants = ['Rotten', 'Spoiled', 'Cooked', 'Burnt', 'Overdone']
+                    icon_variants = ['Rotten', '_Rotten', 'Spoiled', 'Cooked', 'Burnt', '_Burnt', 'Overdone']
                     icons = []
                     if isinstance(icon, str):
                         icons = [icon]
