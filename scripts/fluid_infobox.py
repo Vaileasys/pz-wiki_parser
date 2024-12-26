@@ -61,15 +61,19 @@ def write_to_output(fluid_data, fluid_id, output_dir):
             blend_whitelist = ''
             if 'BlendWhiteList' in fluid_data:
                 blend_whitelist_data = fluid_data['BlendWhiteList']
-                if blend_whitelist_data['whitelist']:
-                    blend_whitelist = '<br>'.join(blend_whitelist_data['categories'])
+                if isinstance(blend_whitelist_data, dict): # Fix for 'Test' being a string and not a dict
+                    if blend_whitelist_data['whitelist']:
+                        blend_whitelist = '<br>'.join(blend_whitelist_data['categories'])
+                else: blend_whitelist_data = {}
 
             blend_blacklist_data = {}
             blend_blacklist = ''
             if 'BlendBlackList' in fluid_data:
                 blend_blacklist_data = fluid_data['BlendBlackList']
-                if blend_blacklist_data['whitelist']:
-                    blend_blacklist = '<br>'.join(blend_blacklist_data['categories'])
+                if isinstance(blend_blacklist_data, dict): # Fix for 'Test' being a string and not a dict
+                    if blend_blacklist_data['blacklist']:
+                        blend_blacklist = '<br>'.join(blend_blacklist_data['categories'])
+                else: blend_blacklist_data = {}
 
             parameters = {
                 "name": name,
@@ -93,9 +97,9 @@ def write_to_output(fluid_data, fluid_id, output_dir):
                 "poison_max_effect": poison_max_effect,
                 "poison_min_amount": poison_data.get('minAmount', ''),
                 "poison_dilute_ratio": poison_data.get('diluteRatio', ''),
-                "fluid_id": f"Base.{fluid_id}",
                 "fluid_color": fluid_color,
                 "fluid_color_ref": fluid_data.get('ColorReference', ''),
+                "fluid_id": f"Base.{fluid_id}",
                 "infobox_version": version.get_version()
             }
 
