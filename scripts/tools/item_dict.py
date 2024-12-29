@@ -1,13 +1,13 @@
-import os
-import csv
-from scripts.parser import item_parser
-from scripts.core import translate, version
-
 """
 This script gets all the items present in a 'scripts' folder and outputs the item id and name to a csv file.
 The generated file can then be compared with an existing file. This is used to compare which items have been added/removed between versions. 
 New items will be added to a new 'Compared' CSV file and 'new items' wikitable.
 """
+
+import os
+import csv
+from scripts.parser import item_parser
+from scripts.core import translate, version
 
 def generate_csv(data, file, output_dir):
     os.makedirs(output_dir, exist_ok=True)

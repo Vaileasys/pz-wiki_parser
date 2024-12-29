@@ -309,5 +309,7 @@ def main():
 
     generate_article(infobox_dir, output_dir)
 
+    print(f"Fluid articles generated and saved to '{output_dir}'")
+
 if __name__ == "__main__":
     main()

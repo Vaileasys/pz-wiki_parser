@@ -23,11 +23,11 @@ menu_structure = {
         'description': 'Generate working data.',
         'sub_options': {
             '1': {'module': 'item_infobox', 'name': 'Item infobox', 'description': 'Generates item infoboxes.'},
-            '2': {'module': 'fixing', 'name': 'Fixing', 'description': 'Generates fixing recipes.'},
-            '3': {'module': 'consumables', 'name': 'Consumables', 'description': 'Generate consumables tables.'},
-            '4': {'module': 'codesnip', 'name': 'Codesnips', 'description': 'Generate codesnip files.'},
-            '5': {'module': 'distribution', 'name': 'Distributions', 'description': 'Generate distribution files.'},
-            '6': {'module': 'item_dict', 'name': 'Item dictionary', 'description': 'Generate a list of items with their item ID and compare with another version.'},
+            '2': {'module': 'fluid_infobox', 'name': 'Fluid infobox', 'description': 'Generates fluid infoboxes.'},
+            '3': {'module': 'fixing', 'name': 'Fixing', 'description': 'Generates fixing recipes.'},
+            '4': {'module': 'consumables', 'name': 'Consumables', 'description': 'Generate consumables tables.'},
+            '5': {'module': 'codesnip', 'name': 'Codesnips', 'description': 'Generate codesnip files.'},
+            '6': {'module': 'distribution', 'name': 'Distributions', 'description': 'Generate distribution files.'},
             '7': {'module': 'evolvedrecipe', 'name': 'Evolved recipes', 'description': 'Parse evolved recipes.'}
         },
     },
@@ -35,15 +35,16 @@ menu_structure = {
         'name': 'Page generation',
         'description': 'Generate pages or lists.',
         'sub_options': {
-            '1': {'module': 'item_article', 'name': 'Item Article', 'description': 'Generate articles for items.'},
-            '2': {'module': 'lists.item_list', 'name': 'Item list', 'description': 'Returns all items in a list organised by DisplayCategory.'},
-            '3': {'module': 'lists.weapon_list', 'name': 'Weapon list', 'description': 'Return all weapons in a list with stats organised by their skill.'},
-            '4': {'module': 'lists.clothing_list', 'name': 'Clothing list', 'description': 'Return all clothing in a list with stats organised by body location.'},
-            '5': {'module': 'lists.nutrition', 'name': 'nutrition', 'description': 'Generate nutrition page.'},
-            '6': {'module': 'scripts.parser.radio_parser', 'name': 'Radio transcripts', 'description': 'Generate radio transcripts.'},
-            '7': {'module': 'scripts.parser.outfit_parser', 'name': 'Outfit parser', 'description': 'Parse outfit xml files.'},
-            '8': {'module': 'roomdefine', 'name': 'Room definitions', 'description': 'Create roomdef item page.'},
-            '9': {'module': 'recipe_format', 'name': 'Recipe parser', 'description': 'Create recipe list page.'}
+            '1': {'module': 'item_article', 'name': 'Item article', 'description': 'Generate articles for items.'},
+            '2': {'module': 'fluid_article', 'name': 'Fluid article', 'description': 'Generate articles for fluids.'},
+            '3': {'module': 'lists.item_list', 'name': 'Item list', 'description': 'Returns all items in a list organised by DisplayCategory.'},
+            '4': {'module': 'lists.weapon_list', 'name': 'Weapon list', 'description': 'Return all weapons in a list with stats organised by their skill.'},
+            '5': {'module': 'lists.clothing_list', 'name': 'Clothing list', 'description': 'Return all clothing in a list with stats organised by body location.'},
+            '6': {'module': 'lists.nutrition', 'name': 'nutrition', 'description': 'Generate nutrition page.'},
+            '7': {'module': 'scripts.parser.radio_parser', 'name': 'Radio transcripts', 'description': 'Generate radio transcripts.'},
+            '8': {'module': 'scripts.parser.outfit_parser', 'name': 'Outfit parser', 'description': 'Parse outfit xml files.'},
+            '9': {'module': 'roomdefine', 'name': 'Room definitions', 'description': 'Create roomdef item page.'},
+            '10': {'module': 'recipe_format', 'name': 'Recipe parser', 'description': 'Create recipe list page.'}
         },
     },
     '4': {
@@ -56,6 +57,14 @@ menu_structure = {
         },
     },
     '5': {
+        'name': 'Tools',
+        'description': 'Data analysis and generate reports.',
+        'sub_options': {
+            '1': {'module': 'tools.item_dict', 'name': 'Item dictionary', 'description': 'Generate a list of items with their item ID and compare with another version.'},
+            '2': {'module': 'tools.compare_item_lists', 'name': 'Compare item lists', 'description': "Generates a list of unique items comparing 'PZwiki:Item_list' versions."}
+        },
+    },
+    '6': {
         'name': 'Dev',
         'description': 'Module testing.',
         'sub_options': {
