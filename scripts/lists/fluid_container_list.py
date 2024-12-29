@@ -37,7 +37,7 @@ def write_items_to_file(items, file_name):
 
 def get_items():
     fluid_containers = []
-    fluid_data = fluid_parser.get_fluid_data()
+    parsed_fluid_data = fluid_parser.get_fluid_data()
     i = 0 # fluid containers
     j = 0 # fluid containers with a fluid
 
@@ -60,9 +60,10 @@ def get_items():
                 fluids_list = []
                 for fluid in item_data.get("fluids", []):
                     fluid_id = fluid.get("FluidID", None)
+                    fluid_data = parsed_fluid_data[fluid_id]
                     if fluid_id is not None:
-                        fluid_name = translate.get_translation(fluid_id, 'FluidID')
-                        fluid_name_en = translate.get_translation(fluid_id, 'FluidID', 'en')
+                        fluid_name = utility.get_fluid_name(fluid_data)
+                        fluid_name_en = utility.get_fluid_name(fluid_data, 'en')
                         if translate.language_code != "en":
                             fluid_name = f"[[{fluid_name_en} (fluid)/{translate.language_code}|{fluid_name}]]"
                         else:
@@ -77,10 +78,10 @@ def get_items():
 
                     # Get the fluid color from the fluid_id
                     if not colors and fluid_id:
-                        if fluid_data[fluid_id]['ColorReference']:
-                            colors = fluid_data[fluid_id]['ColorReference']
-                        elif fluid_data[fluid_id]['Color']:
-                            colors = fluid_data[fluid_id]['Color']
+                        if fluid_data['ColorReference']:
+                            colors = fluid_data['ColorReference']
+                        elif fluid_data['Color']:
+                            colors = fluid_data['Color']
                         else:
                             colors = [0.0, 0.0, 0.0]
 

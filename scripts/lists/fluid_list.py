@@ -1,6 +1,6 @@
 import os
 import json
-from scripts.core import translate
+from scripts.core import translate, utility
 from scripts.parser import fluid_parser
 
 #TODO: add translations
@@ -56,14 +56,9 @@ def get_fluids():
     for fluid_id, fluid_data in fluid_parser.get_fluid_data().items():
         fluid_id = f"Base.{fluid_id}" # Assume fluid ID is in the 'Base' module
 
-        display_name = fluid_data.get('DisplayName', 'Fluid')
-        display_name_prefix = "Fluid_Name_"
-        if display_name.startswith(display_name_prefix):
-            display_name = display_name[len(display_name_prefix):]
-
-        name = translate.get_translation(display_name, 'FluidID')
+        name = utility.get_fluid_name(fluid_data)
         if translate.language_code != "en":
-            name_en = translate.get_translation(display_name, 'FluidID', 'en')
+            name_en = utility.get_fluid_name(fluid_data, "en")
             name = f"[[{name_en} (fluid)/{translate.language_code}|{name}]]"
         else:
             name = f"[[{name} (fluid)|{name}]]"

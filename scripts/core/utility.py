@@ -381,3 +381,16 @@ def get_guid(item_data):
         return ''
     
     return guid
+
+
+def get_fluid_name(fluid_data, lang=None):
+    display_name = fluid_data.get('DisplayName', 'Fluid')
+    display_name_prefix = "Fluid_Name_"
+    if display_name.startswith(display_name_prefix):
+        display_name = display_name[len(display_name_prefix):]
+
+    if lang is None:
+        name = translate.get_translation(display_name, 'FluidID')
+    else:
+        name = translate.get_translation(display_name, 'FluidID', lang)
+    return name

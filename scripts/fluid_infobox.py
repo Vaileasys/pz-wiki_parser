@@ -2,7 +2,7 @@ import os
 import shutil
 import json
 from scripts.parser import fluid_parser
-from scripts.core import translate, logging_file, version
+from scripts.core import translate, logging_file, version, utility
 print(f"Current Working Directory: {os.getcwd()}")
 
 
@@ -28,12 +28,7 @@ def write_to_output(fluid_data, fluid_id, output_dir):
         with open(output_file, 'w', encoding='utf-8') as file:
             file.write("{{Infobox fluid")
 
-            display_name = fluid_data.get('DisplayName', 'Fluid')
-            display_name_prefix = "Fluid_Name_"
-            if display_name.startswith(display_name_prefix):
-                display_name = display_name[len(display_name_prefix):]
-
-            name = translate.get_translation(display_name, 'FluidID')
+            name = utility.get_fluid_name(fluid_data)
             # Special case for TaintedWater
             if fluid_id == "TaintedWater":
                 # Get translation for tainted water string
