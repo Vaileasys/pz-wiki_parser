@@ -107,16 +107,16 @@ def parse_fluid_file(filepath):
 
     # Find all fluid blocks
     for match in fluid_pattern.finditer(content):
-        fluid_name = match.group(1)
-        fluid_content = get_block_content(content, f"fluid {fluid_name}")
+        fluid_id = match.group(1)
+        fluid_content = get_block_content(content, f"fluid {fluid_id}")
         if fluid_content is not None:
-            fluid_blocks.append((fluid_name, fluid_content))
+            fluid_blocks.append((fluid_id, fluid_content))
         
     # Define each sub-block so they don't get included in the fluid (top-level) block
     sub_blocks = ['Categories', 'Properties', 'Poison', 'BlendWhiteList', 'BlendBlackList']
 
     # Parse each fluid block
-    for fluid_name, fluid_content in fluid_blocks:
+    for fluid_id, fluid_content in fluid_blocks:
         fluid_counter += 1
         fluid_dict = {}
 
@@ -185,7 +185,7 @@ def parse_fluid_file(filepath):
 
             fluid_dict['BlendBlackList'] = blend_black_data
 
-        fluids_data[fluid_name] = fluid_dict
+        fluids_data[fluid_id] = fluid_dict
 
     return fluids_data
 

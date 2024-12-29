@@ -20,6 +20,22 @@ def check_name(fluid_id, name, method):
         'SpiffoJuice': {
             'lower': "Spiffo's juice",
             'capitalize': "Spiffo's juice"
+        },
+        'Test': {
+            'lower': "FLUID_TEST",
+            'capitalize': "FLUID_TEST"
+        },
+        'FilterTestA': {
+            'lower': "Fluid_Filter_A",
+            'capitalize': "Fluid_Filter_A"
+        },
+        'FilterTestB': {
+            'lower': "Fluid_Filter_B",
+            'capitalize': "Fluid_Filter_B"
+        },
+        'FilterTestC': {
+            'lower': "Fluid_Filter_C",
+            'capitalize': "Fluid_Filter_C"
         }
     }
         
@@ -249,6 +265,13 @@ def generate_article(infobox_dir, output_dir):
                     else:
                         file.write(f"\n{check_name(fluid_id, name, 'capitalize')} can be mixed with other fluids that have the following categories:")
                         file.write(f"\n*{'\n*'.join(processed_fluid_data['whitelist_categories'])}")
+
+                # History
+                file.write(f"\n\n==History==")
+                file.write("\n{{HistoryTable|")
+                file.write(f"\n{{{{HistoryLine|Build {version.get_version().split(".")[0]}|Build {version.get_version()}|Released on this version.}}}}")
+                file.write(f"\n|fluid_id=Base.{fluid_id}")
+                file.write("\n}}")
 
                 # See also
                 file.write(f"\n\n==See also==")
