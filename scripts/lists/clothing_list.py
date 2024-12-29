@@ -3,24 +3,25 @@ from scripts.parser import item_parser
 from scripts.core import utility, translate
 
 # used for getting table values
-table_dict = {
-    "generic": ('icon', 'name', 'weight', 'body_location', 'item_id'),
-    "normal": ('icon', 'name', 'weight', 'body_location', 'fabric', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
-    "torso": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
-    "legs": ('icon', 'name', 'weight', 'body_location', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
-    "eyes": ('icon', 'name', 'weight', 'body_location', 'fall_chance', 'have_holes', 'item_id',),
-    "head": ('icon', 'name', 'weight', 'body_location', 'fall_chance', 'have_holes', 'fabric', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
-    "shoes": ('icon', 'name', 'weight', 'body_location', 'stomp_power', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
-    "belt": ('icon', 'name', 'weight', 'body_location', 'extra_slots', 'item_id',),
-    "wrist": ('icon', 'name', 'weight', 'body_location', 'display_time', 'sound_radius', 'item_id')
+TABLE_DICT = {
+    "generic": ('icon', 'name', 'weight', 'body_location', 'body_part', 'item_id'),
+    "normal": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
+    "torso": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
+    "legs": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
+    "eyes": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fall_chance', 'have_holes', 'item_id',),
+    "head": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fall_chance', 'have_holes', 'fabric', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
+    "shoes": ('icon', 'name', 'weight', 'body_location', 'body_part', 'stomp_power', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
+    "belt": ('icon', 'name', 'weight', 'body_location', 'body_part', 'extra_slots', 'item_id',),
+    "wrist": ('icon', 'name', 'weight', 'body_location', 'body_part', 'display_time', 'sound_radius', 'item_id')
 }
 
 # map table values with their headings
-columns_dict = {
+COLUMNS_DICT = {
     "icon": "! Icon",
     "name": "! Name",
-    "weight": "! [[File:Status_HeavyLoad.png|link=|Encumbrance]]",
+    "weight": "! [[File:Status_HeavyLoad.png|32px|link=|Encumbrance]]",
     "body_location": "! [[File:UI_BodyPart.png|32px|link=|Body location]]",
+    "body_part": "! [[File:UI_BodyPart.png|32px|link=|Body part(s)]]",
     "extra_slots": "! Extra slots",
     "fall_chance": "! [[File:Image.png|32px|link=|Fall chance]]",
     "have_holes": "! [[File:Image.png|32px|link=|Can have holes]]",
@@ -41,7 +42,7 @@ columns_dict = {
 }
 
 # table/section based on body_location
-body_location_dict = {
+BODY_LOCATION_DICT = {
     "Long underwear": {
         "body_location": ('Legs1', 'Torso1Legs1'),
         "table": 'torso',
@@ -192,13 +193,71 @@ body_location_dict = {
     }
 }
 
-fabric_type = {
+BODY_PART_DICT = {
+    "Apron": ["Torso_Upper", "Torso_Lower", "UpperLeg_L", "UpperLeg_R"],
+    "ShirtNoSleeves": ["Torso_Upper", "Torso_Lower", "Back"],
+    "JumperNoSleeves": ["Torso_Upper", "Torso_Lower", "Back"],
+    "Shirt": ["Torso_Upper", "Torso_Lower", "Back", "UpperArm_L", "UpperArm_R"],
+    "ShirtLongSleeves": ["Torso_Upper", "Torso_Lower", "Back", "UpperArm_L", "UpperArm_R", "ForeArm_L", "ForeArm_R"],
+    "Jumper": ["Torso_Upper", "Torso_Lower", "Back", "UpperArm_L", "UpperArm_R", "ForeArm_L", "ForeArm_R"],
+    "Jacket": ["Torso_Upper", "Torso_Lower", "Back", "UpperArm_L", "UpperArm_R", "ForeArm_L", "ForeArm_R", "Neck"],
+    "LongJacket": ["Torso_Upper", "Torso_Lower", "Back", "UpperArm_L", "UpperArm_R", "ForeArm_L", "ForeArm_R", "Neck", "Groin", "UpperLeg_L", "UpperLeg_R"],
+    "ShortsShort": ["Groin", "UpperLeg_L", "UpperLeg_R"],
+    "Trousers": ["Groin", "UpperLeg_L", "UpperLeg_R", "LowerLeg_L", "LowerLeg_R"],
+    "Shoes": ["Foot_L", "Foot_R"],
+    "FullHelmet": ["Head"],
+    "Bag": ["Back"],
+    "Hands": ["Hand_L", "Hand_R"],
+    "Hand_L": ["Hand_L"],
+    "Hand_R": ["Hand_R"],
+    "Head": ["Head"],
+    "Neck": ["Neck"],
+    "Groin": ["Groin"],
+    "UpperBody": ["Torso_Upper"],
+    "LowerBody": ["Torso_Lower"],
+    "LowerLegs": ["LowerLeg_L", "LowerLeg_R"],
+    "LowerLeg_L": ["LowerLeg_L"],
+    "LowerLeg_R": ["LowerLeg_R"],
+    "UpperLegs": ["UpperLeg_L", "UpperLeg_R"],
+    "UpperLeg_L": ["UpperLeg_L"],
+    "UpperLeg_R": ["UpperLeg_R"],
+    "UpperArms": ["UpperArm_L", "UpperArm_R"],
+    "UpperArm_L": ["UpperArm_L"],
+    "UpperArm_R": ["UpperArm_R"],
+    "LowerArms": ["ForeArm_L", "ForeArm_R"],
+    "ForeArm_L": ["ForeArm_L"],
+    "ForeArm_R": ["ForeArm_R"],
+}
+
+BODY_PART_TRANSLATIONS = {
+    "Hand_L": "Left_Hand",
+    "Hand_R": "Right_Hand",
+    "ForeArm_L": "Left_Forearm",
+    "ForeArm_R": "Right_Forearm",
+    "UpperArm_L": "Left_Upper_Arm",
+    "UpperArm_R": "Right_Upper_Arm",
+    "Torso_Upper": "Upper_Torso",
+    "Torso_Lower": "Lower_Torso",
+    "Head": "Head",
+    "Neck": "Neck",
+    "Groin": "Groin",
+    "UpperLeg_L": "Left_Thigh",
+    "UpperLeg_R": "Right_Thigh",
+    "LowerLeg_L": "Left_Shin",
+    "LowerLeg_R": "Right_Shin",
+    "Foot_L": "Left_Foot",
+    "Foot_R": "Right_Foot",
+    "Back": "Back",
+    "Unknown": "Unknown_Body_Part"
+}
+
+FABRIC_TYPE = {
     "Cotton": 'Base.RippedSheets',
     "Denim": 'Base.DenimStrips',
     "Leather": 'Base.LeatherStrips',
 }
 
-table_header ='{| class="wikitable theme-red sortable" style="text-align: center;"'
+TABLE_HEADER ='{| class="wikitable theme-red sortable" style="text-align: center;"'
 
 
 def combine_clothing_files():
@@ -243,7 +302,7 @@ def convert_to_percentage(value, start_zero=True, percentage=False):
 
 
 def get_body_location(body_location):
-    for key, value in body_location_dict.items():
+    for key, value in BODY_LOCATION_DICT.items():
         if body_location in value['body_location']:
             # return body location heading and table header
             return key, value['table']
@@ -251,10 +310,30 @@ def get_body_location(body_location):
     return 'Other', 'generic'
 
 
+def get_body_part(blood_location):
+    #Convert string to list to simplify further processing
+    if isinstance(blood_location, str):
+        blood_location = [blood_location]
+
+    body_part_values = []
+    
+    for value in blood_location:
+        if value in BODY_PART_DICT:
+            for part in BODY_PART_DICT[value]:
+                translation_string = BODY_PART_TRANSLATIONS.get(part, "Unknown_Body_Part")
+                translated_part = translate.get_translation(translation_string, 'BodyPart')
+                body_part_values.append(translated_part)
+        else:
+            body_part_values.append(value)
+
+    body_part = '<br>'.join(body_part_values)
+    return body_part
+
+
 def process_item(item_data, item_id):
     body_location = item_data.get("BodyLocation", 'Unknown')
     heading, table_key = get_body_location(body_location)
-    columns = table_dict.get(table_key, table_dict["generic"])
+    columns = TABLE_DICT.get(table_key, TABLE_DICT["generic"])
     language_code = translate.get_language_code()
 
     name = item_data.get("DisplayName", 'Unknown')
@@ -279,6 +358,9 @@ def process_item(item_data, item_id):
             item["body_location"] = f"[[Body location#{body_location}|{body_location}]]"
         else:
             item["body_location"] = f"[[Body location/{language_code}#{body_location}|{body_location}]]"
+
+    if "body_part" in columns:
+        item["body_part"] = get_body_part(item_data.get('BloodLocation', '-'))
 
     if "display_time" in columns:
         if item_data.get("Type") == 'AlarmClockClothing':
@@ -307,7 +389,7 @@ def process_item(item_data, item_id):
         item["have_holes"] = item_data.get("CanHaveHoles", '-').capitalize()
 
     if "fabric" in columns:
-        fabric_id = fabric_type.get(item_data.get("FabricType"))
+        fabric_id = FABRIC_TYPE.get(item_data.get("FabricType"))
         if fabric_id is None:
             fabric = "-"
         else:
@@ -376,13 +458,13 @@ def write_items_to_file(clothing_dict):
     os.makedirs(output_dir, exist_ok=True)
     
     for heading, items in clothing_dict.items():
-        table_key = body_location_dict[heading]['table']
-        columns = table_dict.get(table_key, table_dict["generic"])
+        table_key = BODY_LOCATION_DICT[heading]['table']
+        columns = TABLE_DICT.get(table_key, TABLE_DICT["generic"])
 
         # build the table heading based on values
         table_headings = []
         for col in columns:
-            mapped_heading = columns_dict.get(col, col)
+            mapped_heading = COLUMNS_DICT.get(col, col)
             table_headings.append(mapped_heading)
         table_headings = "\n".join(table_headings)
 
@@ -390,7 +472,7 @@ def write_items_to_file(clothing_dict):
         with open(output_path, 'w', encoding='utf-8') as file:
             # write wiki heading and table headings
             file.write(f"=={heading}==\n")
-            file.write(f"{table_header}\n")
+            file.write(f"{TABLE_HEADER}\n")
             file.write(f"{table_headings}\n")
 
             sorted_items = sorted(items, key=lambda x: x['name'])

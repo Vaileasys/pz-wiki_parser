@@ -45,6 +45,7 @@ PROPERTY_PREFIXES = {
     'Categories': "IGUI_perks_",
     'SubCategory': "IGUI_perks_",
     'SkillTrained': "IGUI_perks_",
+    'BodyPart': "IGUI_health_",
     'IGUI': 'IGUI_', # added for 'IGUI_ItemNameTaintedWater'
     'TeachedRecipes': "Recipe_",
     'PartType': "Tooltip_weapon_",
