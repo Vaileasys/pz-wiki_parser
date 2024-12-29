@@ -34,6 +34,11 @@ def write_to_output(fluid_data, fluid_id, output_dir):
                 display_name = display_name[len(display_name_prefix):]
 
             name = translate.get_translation(display_name, 'FluidID')
+            # Special case for TaintedWater
+            if fluid_id == "TaintedWater":
+                # Get translation for tainted water string
+                tainted_water = translate.get_translation("ItemNameTaintedWater", 'IGUI')
+                name = tainted_water.replace("%1", name)
 
             color = fluid_data.get('ColorReference', fluid_data.get('Color', [0.0, 0.0, 0.0])),
 

@@ -45,12 +45,13 @@ PROPERTY_PREFIXES = {
     'Categories': "IGUI_perks_",
     'SubCategory': "IGUI_perks_",
     'SkillTrained': "IGUI_perks_",
+    'IGUI': 'IGUI_', # added for 'IGUI_ItemNameTaintedWater'
     'TeachedRecipes': "Recipe_",
     'PartType': "Tooltip_weapon_",
     'EvolvedRecipeName': "EvolvedRecipeName_",
     'FluidID': "Fluid_Name_",
     'ContainerName': 'Fluid_Container_',
-    'Wiki': "Wiki_",
+    'Wiki': "Wiki_"
 }
 
 FILE_WHITELIST = (

@@ -96,7 +96,7 @@ def calculate_similar_fluids(fluid_id, fluid_data):
                 if target_value == compared_value:
                     score += weight
 
-        similar_fluids.append({'name': other_data.get('DisplayName', 'Fluid'), 'score': score})
+        similar_fluids.append({'id': other_id, 'name': other_data.get('DisplayName', 'Fluid'), 'score': score})
 
     # Sort and return the top 3 names
     similar_fluids.sort(key=lambda x: x['score'], reverse=True)
@@ -107,9 +107,15 @@ def calculate_similar_fluids(fluid_id, fluid_data):
         if display_name.startswith(display_name_prefix):
             display_name = display_name[len(display_name_prefix):]
         name_en = translate.get_translation(display_name, 'FluidID', 'en')
-        name_translated = name_en
+        # Special case for TaintedWater
+        if fluid['id'] == "TaintedWater":
+            # Get translation for tainted water string
+            tainted_water = translate.get_translation("ItemNameTaintedWater", 'IGUI')
+            name_translated = tainted_water.replace("%1", name_en)
+        else:
+            name_translated = name_en
+        page_name = f"{name_translated} (fluid)"
 
-        page_name = f"{name_en} (fluid)"
         language_code = translate.get_language_code()
         if language_code != 'en':
             name_translated = translate.get_translation(display_name, 'FluidID')
