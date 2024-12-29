@@ -207,12 +207,11 @@ def parse_translation_file(language_code):
                             if line_value.endswith(','):
                                 line_value = line_value[:-1].rstrip()
 
-                            # Count how many double quotes are in this value
-                            quote_count = line_value.count('"')
-
-                            # Preserve internal quotes for strings that have them.
-                            if quote_count >= 2 and line_value.startswith('"') and line_value.endswith('"'):
-                                line_value = line_value[1:-1]
+                            # Remove quotes (") from start and end only once, preserving internal quotes for strings that have them
+                            if line_value.startswith('"'):
+                                line_value = line_value[1:]
+                            if line_value.endswith('"'):
+                                line_value = line_value[:-1]
 
                             parsed_translations[key] = line_value
                         else:
