@@ -8,10 +8,17 @@ def sort_by_property(property):
     for item_id, item_data in item_parser.get_item_data().items():
         if property in item_data:
             property_value = item_data.get(property)
-            if property_value not in sorted_data:
-                print(property_value)
-                sorted_data[property_value] = []
-            sorted_data[property_value].append((item_id))
+            if isinstance(property_value, list):
+                for value in property_value:
+                    if value not in sorted_data:
+                        print(value)
+                        sorted_data[value] = []
+                        sorted_data[value].append((item_id))
+            else:
+                if property_value not in sorted_data:
+                    print(property_value)
+                    sorted_data[property_value] = []
+                sorted_data[property_value].append((item_id))
 
     # Write to output.txt
     output_file = 'output/output.txt'

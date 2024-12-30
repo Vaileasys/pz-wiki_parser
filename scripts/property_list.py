@@ -7,11 +7,15 @@ def property_list(property_name):
     parsed_items = item_parser.get_item_data()
     for item_id, item_data in parsed_items.items():
         if property_name in item_data:
-            value = item_data[property_name]
+            property_value = item_data[property_name]
             display_category = item_data.get('DisplayCategory', 'Other')
             if display_category not in sorted_properties:
                 sorted_properties[display_category] = []
-            sorted_properties[display_category].append(value)
+            if isinstance(property_value, list):
+                for value in property_value:
+                    sorted_properties[display_category].append(value)
+            else:
+                sorted_properties[display_category].append(property_value)
 
     return sorted_properties
 
