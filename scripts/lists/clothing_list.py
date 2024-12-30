@@ -389,30 +389,6 @@ def get_body_location(body_location):
     return heading, table
 
 
-# Gets a list of the body parts based on the BloodLocation
-def get_body_part(blood_location):
-    #Convert string to list to simplify further processing
-    if isinstance(blood_location, str):
-        blood_location = [blood_location]
-
-    body_part_values = []
-    
-    for value in blood_location:
-        if value in BODY_PART_DICT:
-            for part in BODY_PART_DICT[value]:
-                translation_string = BODY_PART_TRANSLATIONS.get(part, "Unknown_Body_Part")
-                translated_part = translate.get_translation(translation_string, 'BodyPart')
-                body_part_values.append(f"[[Body parts#{translated_part}|{translated_part}]]")
-        else:
-            if value != "-":
-                body_part_values.append(f"[[Body parts#{value}|{value}]]")
-            else:
-                body_part_values.append(value)
-
-    body_parts = '<br>'.join(body_part_values)
-    return body_parts
-
-
 # Gets the item's properties based on the BodyLocation as defined for its table
 def process_item(item_data, item_id):
     body_location = item_data.get("BodyLocation", 'Unknown')
@@ -444,11 +420,8 @@ def process_item(item_data, item_id):
             item["body_location"] = f"[[BodyLocation/{language_code}#{body_location}|{body_location}]]"
 
     if "body_part" in columns:
-        item["body_part"] = get_body_part(item_data.get('BloodLocation', '-'))
-#        body_part = item_data.get('BloodLocation', '-')
-#        if isinstance(body_part, list):
-#            body_part = "<br>".join(body_part)
-#        item["body_part"] = body_part
+        body_parts_list = utility.get_body_parts(item_data, "-")
+        item["body_part"] = '<br>'.join(body_parts_list)
 
     if "display_time" in columns:
         if item_data.get("Type") == 'AlarmClockClothing':
