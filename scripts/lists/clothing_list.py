@@ -27,8 +27,10 @@ COLUMNS_DICT = {
     "display_time": "! [[File:AlarmClock.png|28px|link=|Displays time]]",
     "sound_radius": "! [[File:UI_Noise.png|28px|link=|Sound radius]]",
     "extra_slots": "! Extra slots",
-    "fall_chance": "! [[File:Image.png|32px|link=|Fall chance]]",
-    "have_holes": "! [[File:Image.png|32px|link=|Can have holes]]",
+#    "fall_chance": "! [[File:Image.png|32px|link=|Fall chance]]",
+    "fall_chance": "! Fall chance",
+#    "have_holes": "! [[File:Image.png|32px|link=|Can get holes]]",
+    "have_holes": "! Can get holes",
     "fabric": "! [[File:SewingBox.png|link=|Fabric type]]",
     "stomp_power": "! [[File:UI_Stomp.png|32px|link=|Stomp power]]",
     "move_speed": "! [[File:UI_Speed.png|link=|Movement speed]]",
@@ -158,8 +160,12 @@ BODY_LOCATION_DICT = {
         "table": 'normal',
     },
     "Belts": {
-        "body_location": ('Belt', 'BeltExtra', 'AmmoStrap', 'SCBA', 'SCBAnotank', 'AnkleHolster'),
+        "body_location": ('Belt', 'BeltExtra', 'AmmoStrap', 'SCBA', 'SCBAnotank', 'AnkleHolster', 'Webbing', 'ShoulderHolster', 'FannyPackFront', 'FannyPackBack'),
         "table": 'belt',
+    },
+    "Back": {
+        "body_location": ('Back',),
+        "table": 'normal',
     },
     "Neck": {
         "body_location": ('Neck', 'Scarf',),
@@ -237,6 +243,7 @@ SECTION_DICT = {
         'Wrists': None,
         'Fingers': None,
         'Belts': None,
+        'Back': None,
         'Belly': None,
     }
 }
@@ -391,7 +398,7 @@ def get_body_location(body_location):
 
 # Gets the item's properties based on the BodyLocation as defined for its table
 def process_item(item_data, item_id):
-    body_location = item_data.get("BodyLocation", 'Unknown')
+    body_location = item_data.get("BodyLocation", item_data.get("CanBeEquipped", 'Unknown'))
     heading, table_key = get_body_location(body_location)
     columns = TABLE_DICT.get(table_key, TABLE_DICT["generic"])
     language_code = translate.get_language_code()
@@ -447,7 +454,14 @@ def process_item(item_data, item_id):
         item["stomp_power"] = convert_to_percentage(item_data.get("StompPower", '-'), True)
 
     if "have_holes" in columns:
-        item["have_holes"] = item_data.get("CanHaveHoles", '-').capitalize()
+        can_have_holes = item_data.get("CanHaveHoles", '-').lower()
+        if can_have_holes == 'true':
+            item["have_holes"] = "[[File:UI_Tick.png|link=|Can get holes]]"
+        elif can_have_holes == 'false':
+            item["have_holes"] = "[[File:UI_Cross.png|link=|Cannot get holes]]"
+        else:
+            item["have_holes"] = '-'
+
 
     if "fabric" in columns:
         fabric_id = FABRIC_TYPE.get(item_data.get("FabricType"))
@@ -495,7 +509,7 @@ def get_items():
     clothing_dict = {}
 
     for item_id, item_data in tqdm(item_parser.get_item_data().items(), desc="Processing items"):
-        if item_data.get("Type") in ("Clothing", "AlarmClockClothing"):
+        if item_data.get("Type") in ("Clothing", "AlarmClockClothing") or 'CanBeEquipped' in item_data:
             # filter out blacklisted items and 'Reverse' variants
             module, item_name = item_id.split('.')
             if not item_name.startswith(blacklist) and not item_name.endswith("_Reverse"):
