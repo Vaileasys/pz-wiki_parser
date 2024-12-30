@@ -28,7 +28,8 @@ menu_structure = {
             '4': {'module': 'consumables', 'name': 'Consumables', 'description': 'Generate consumables tables.'},
             '5': {'module': 'codesnip', 'name': 'Codesnips', 'description': 'Generate codesnip files.'},
             '6': {'module': 'distribution', 'name': 'Distributions', 'description': 'Generate distribution files.'},
-            '7': {'module': 'evolvedrecipe', 'name': 'Evolved recipes', 'description': 'Parse evolved recipes.'}
+            '7': {'module': 'evolvedrecipe', 'name': 'Evolved recipes', 'description': 'Parse evolved recipes.'},
+            '8': {'module': 'item_body_part', 'name': 'Body part', 'description': 'Generates body part templates.'}
         },
     },
     '3': {

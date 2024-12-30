@@ -420,7 +420,7 @@ def process_item(item_data, item_id):
             item["body_location"] = f"[[BodyLocation/{language_code}#{body_location}|{body_location}]]"
 
     if "body_part" in columns:
-        body_parts_list = utility.get_body_parts(item_data, "-")
+        body_parts_list = utility.get_body_parts(item_data, True, "-")
         item["body_part"] = '<br>'.join(body_parts_list)
 
     if "display_time" in columns:

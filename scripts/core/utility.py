@@ -124,7 +124,7 @@ def get_model(item_data):
     return model
 
 
-def get_body_parts(item_data, default=""):
+def get_body_parts(item_data, link=True, default=""):
     """Gets body parts for an item and returns as a list.
 
     :returns: Translated body parts.
@@ -204,17 +204,25 @@ def get_body_parts(item_data, default=""):
     for location in blood_location:
         if location in BODY_PART_DICT:
             for part in BODY_PART_DICT[location]:
-                translation_string = BODY_PART_TRANSLATIONS.get(part, "Unknown_Body_Part")
-                translated_part = translate.get_translation(translation_string, 'BodyPart')
-                if language_code != 'en':
-                    body_parts.append(f"[[Body parts/{language_code}#{translated_part}|{translated_part}]]")
+                if link:
+                    translation_string = BODY_PART_TRANSLATIONS.get(part, "Unknown_Body_Part")
+                    translated_part = translate.get_translation(translation_string, 'BodyPart')
+                
+                    if language_code != 'en':
+                        body_parts.append(f"[[Body parts/{language_code}#{translated_part}|{translated_part}]]")
+                    else:
+                        body_parts.append(f"[[Body parts#{translated_part}|{translated_part}]]")
                 else:
-                    body_parts.append(f"[[Body parts#{translated_part}|{translated_part}]]")
+                    body_parts.append(part)
+
         else:
-            if language_code != 'en':
-                body_parts.append(f"[[Body parts#{location}|{location}]]")
+            if link:
+                if language_code != 'en':
+                    body_parts.append(f"[[Body parts#{location}|{location}]]")
+                else:
+                    body_parts.append(f"[[Body parts/{language_code}#{location}|{location}]]")
             else:
-                body_parts.append(f"[[Body parts/{language_code}#{location}|{location}]]")
+                body_parts.append(location)
 
     return body_parts
 
