@@ -253,6 +253,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "evolved_recipe": evolved_recipe,
                 # "tag": (added with 'insert_parameters_after')
                 "guid": guid,
+                "clothing_item": item_data.get('ClothingItem', ''),
                 "item_id": item_id,
                 "infobox_version": version.get_version()
             }
