@@ -51,9 +51,14 @@ def write_tag_table(tags_dict):
     with open(output_file, 'w', encoding='utf-8') as file:
         file.write('{| class="wikitable theme-blue"\n|-\n! Tag !! Items\n')
         for tag in sorted(tags_dict.keys()):
-            tag_data = tags_dict[tag]
-            names = sorted(item['name'] for item in tag_data)
-            tag_items = ', '.join(f'[[{name}]]' for name in names)
+            tag_data = sorted(tags_dict[tag], key=lambda item: item['name'])
+
+            # Generate link for each item
+            tag_items = ', '.join(
+                utility.format_link(item['name'], utility.get_page(item['item_id'], item['name']))
+                for item in tag_data
+            )
+
             file.write(f'|-\n| <span id="tag-{tag}">[[{tag} (tag)|{tag}]]</span> || {tag_items}\n')
         file.write('|}')
     print(f"Completed Tag table script. File can be found in '{output_file}'")
@@ -71,7 +76,9 @@ def write_tag_list(tags_dict):
                 item_id = item['item_id']
                 icon = item['icon']
                 name = item['name']
-                file.write(f"|-\n| [[File:{icon}|32x32px]] || [[{name}]] || {item_id}\n")
+                page = utility.get_page(item_id, name)
+                link = utility.format_link(name, page)
+                file.write(f"|-\n| [[File:{icon}|32x32px]] || {link} || {item_id}\n")
             file.write('|}')
     print(f"Completed Tag item list script. Files can be found in '{output_dir}'")
 
