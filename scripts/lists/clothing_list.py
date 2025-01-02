@@ -7,6 +7,7 @@ from scripts.core import utility, translate
 TABLE_DICT = {
     "generic": ('icon', 'name', 'weight', 'body_location', 'item_id'),
     "normal": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
+    "back": ('icon', 'name', 'weight', 'body_location', 'body_part', 'extra_slots', 'fabric', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
     "torso": ('icon', 'name', 'weight', 'body_location', 'body_part', 'have_holes', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
     "legs": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
     "eyes": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fall_chance', 'scratch_def', 'item_id',),
@@ -165,7 +166,7 @@ BODY_LOCATION_DICT = {
     },
     "Back": {
         "body_location": ('Back',),
-        "table": 'normal',
+        "table": 'back',
     },
     "Neck": {
         "body_location": ('Neck', 'Scarf',),
