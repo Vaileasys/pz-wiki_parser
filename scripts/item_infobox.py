@@ -3,11 +3,13 @@ import shutil
 from scripts.parser import item_parser
 from scripts.core import translate, utility, logging_file, version
 
-# Values located in forageSystem.lua line 105 'clothingPenalties' (build 41.78.16)
+# Values located in forageSystem.lua line 102 'clothingPenalties' (Build 42.0.2)
 CLOTHING_PENALTIES = {
     "FullSuitHead": '75',
     "FullHat": '75',
     "MaskFull": '50',
+    "SCBA": '50',
+    "SCBAnotank": '50',
     "MaskEyes": '20',
     "Mask": '20',
     "Eyes": '2.5',
