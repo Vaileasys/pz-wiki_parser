@@ -107,7 +107,13 @@ def copy_lua_files(media_dir: str) -> None:
         'VehicleDistribution_SeatJunk.lua',
         'VehicleDistribution_TrunkJunk.lua',
         'VehicleDistribution_GloveBoxJunk.lua',
-        'forageDefinitions.lua'
+        'forageDefinitions.lua',
+        'SpecialLootSpawns.lua',
+        'SpecialItemData_Books.lua',
+        'SpecialItemData_Comics.lua',
+        'SpecialItemData_Magazines.lua',
+        'SpecialItemData_Misc.lua',
+        'SpecialItemData_Photos.lua',
     ])
 
     destination_dir = Path('resources/lua')
