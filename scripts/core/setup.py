@@ -100,6 +100,14 @@ def copy_lua_files(media_dir: str) -> None:
         'WildPlants.lua',
         'forageSystem.lua',
         'BodyLocations.lua'
+        'Distributions.lua',
+        'ProceduralDistributions.lua',
+        'AttachedWeaponDefinitions.lua',
+        'VehicleDistributions.lua',
+        'VehicleDistribution_SeatJunk.lua',
+        'VehicleDistribution_TrunkJunk.lua',
+        'VehicleDistribution_GloveBoxJunk.lua',
+        'forageDefinitions.lua'
     ])
 
     destination_dir = Path('resources/lua')
