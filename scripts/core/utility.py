@@ -1,5 +1,7 @@
 import os
 import csv
+import json
+from pathlib import Path
 import xml.etree.ElementTree as ET
 from scripts.parser import item_parser
 from scripts.core import translate, logging_file
@@ -83,7 +85,9 @@ def get_clothing_xml_value(item_data, xml_value):
 
 # gets model for item_data as PNG
 def get_model(item_data):
+    texture_names_path = Path("resources") / "texture_names.json"
     model = None
+
     if 'ClothingItem' in item_data:
         model = get_clothing_xml_value(item_data, "textureChoices")
         if model is None:
@@ -96,6 +100,24 @@ def get_model(item_data):
             else:
                 model = model.split("\\")[-1].capitalize()
 
+            with open(texture_names_path, 'r') as file:
+                texture_data = json.load(file)
+
+            if isinstance(model, str):
+                model = [model]
+            
+            # Check the json file and get the correct capitalisation for the model texture
+            for i, model_value in enumerate(model):
+                for values in texture_data.values():
+                    for value in values:
+                        
+                        if value.lower() == model_value.lower():
+                            model[i] = value
+                            break
+
+                    else:
+                        continue
+                    break
 
     elif 'WorldStaticModelsByIndex' in item_data:
         model = item_data['WorldStaticModelsByIndex']
@@ -106,7 +128,7 @@ def get_model(item_data):
     if model == '':
         return ''
     
-    # Add _Ground suffix
+    # Remove _Ground suffix
     if isinstance(model, list):
         model = [value.replace('_Ground', '').replace('Ground', '') for value in model]
     else: 

@@ -1,4 +1,5 @@
 import os
+import json
 import shutil
 import subprocess
 from pathlib import Path
@@ -112,6 +113,57 @@ def copy_lua_files(media_dir: str) -> None:
                 dst = destination_dir / file
                 shutil.copy(src, dst)
                 print(f"Copied {file} to {dst}")
+
+
+def copy_texture_names(media_dir):
+    """Copies file names in specific folders in the game's 'textures' directory.
+    
+    :param media_dir: The path to the 'media' directory in the Project Zomboid installation."""
+    output_json = "texture_names.json"
+    textures_dir = Path(media_dir) / 'textures'
+    if not textures_dir.exists():
+        raise FileNotFoundError(f"Textures directory not found in {textures_dir}.")
+    
+    # Files beginning with these prefixes will be skipped
+    prefix_blacklist = ["Build_", "Item_"]
+    
+    # List of texture folders that should be copied
+    texture_folders = [
+        ".",
+        "Clothes",
+    ]
+
+    collected_files = {}
+
+    for folder_name in texture_folders:
+        source_folder = textures_dir / folder_name if folder_name != "." else textures_dir
+        if source_folder.exists():
+            if folder_name == ".":
+                # Non-recursive for root folder
+                file_names = [
+                    file.stem for file in source_folder.iterdir() 
+                    if file.is_file() and not any(file.stem.startswith(prefix) for prefix in prefix_blacklist)
+                ]
+                folder_key = "Root"
+            else:
+                # Recursive for other folders
+                file_names = [
+                    file.stem for file in source_folder.rglob("*") 
+                    if file.is_file() and not any(file.stem.startswith(prefix) for prefix in prefix_blacklist)
+                ]
+                folder_key = folder_name
+            
+            collected_files[folder_key] = file_names
+        else:
+            print(f"Source folder {source_folder} does not exist, skipping...")
+    
+    resources_dir = Path("resources")
+    resources_dir.mkdir(parents=True, exist_ok=True)
+
+    json_path = resources_dir / output_json
+    with open(json_path, 'w') as file:
+        json.dump(collected_files, file, indent=4)
+    print(f"Copied texture names saved to '{json_path}'")
 
 
 def copy_xml_files(media_dir):
@@ -228,6 +280,7 @@ def main():
 
     try:
         copy_scripts_and_radio(media_dir)
+        copy_texture_names(media_dir)
         copy_lua_files(media_dir)
         copy_xml_files(media_dir)
         copy_java_files(install_path)
