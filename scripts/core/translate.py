@@ -47,8 +47,11 @@ PROPERTY_PREFIXES = {
     'SkillTrained': "IGUI_perks_",
     'BodyPart': "IGUI_health_",
     'Photo': "IGUI_Photo_",
+    'MagazineTitle': "IGUI_MagazineTitle_",
+    'ComicTitle': "IGUI_ComicTitle_",
     'BookTitle': "IGUI_BookTitle_",
-    'IGUI': 'IGUI_', # added for 'IGUI_ItemNameTaintedWater'
+    'RPG': "IGUI_RPG_",
+    'IGUI': 'IGUI_', # general IGUI translations (no special prefix)'
     'TeachedRecipes': "Recipe_",
     'PartType': "Tooltip_weapon_",
     'EvolvedRecipeName': "EvolvedRecipeName_",
@@ -141,7 +144,8 @@ def get_translation(property_value, property_key="DisplayName", lang_code=langua
         raise ValueError(f"'{lang_code}' when translating {property_value} doesn't match '{language_code}' or 'en'. Ensure the correct language code is used.")
 
     translations_lang = translations_cache.get(lang_code, {})
-    property_prefix = PROPERTY_PREFIXES.get(property_key) + property_value
+    # get the value from the property_key, otherwise use just the property_value
+    property_prefix = PROPERTY_PREFIXES.get(property_key, "") + property_value
     translation = translations_lang.get(property_prefix)
     if translation is None:
         logging_file.log_to_file(f"No translation found for '{property_prefix}' prefix")
