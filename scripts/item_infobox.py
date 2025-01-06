@@ -98,7 +98,7 @@ def write_to_output(item_data, item_id, output_dir):
             fluid_capacity_ml = float(item_data.get('capacity', 0)) * 1000
             fluid_capacity = ''
             if fluid_capacity_ml != 0.0:
-                fluid_capacity = f"{str(int(fluid_capacity_ml))}mL"
+                fluid_capacity = f"{str(int(fluid_capacity_ml))}"
 
             material = item_data.get('FabricType', '')
             material_value = item_data.get('MetalValue', '')
