@@ -351,8 +351,28 @@ def find_icon(item_id, all_icons=False):
     :return: The icon (or list of icons) associated with the item_id. Returns the default icon ("Question_On") if no specific icon is found.
     :rtype: icon (list[str])
     """
+    icon_dir = os.path.join('resources', 'icons')
     icon_default = "Question_On"
     icon = icon_default
+
+    def check_icon_exists(icon_name):
+        if os.path.exists(icon_dir):
+            files = os.listdir(icon_dir)
+
+            if isinstance(icon_name, list):
+                updated_icons = []
+                for name in icon_name:
+                    for file in files:
+                        if file.lower() == name.lower():
+                            updated_icons.append(file)
+                            break
+                return updated_icons
+
+            elif isinstance(icon_name, str):
+                for file in files:
+                    if file.lower() == icon_name.lower():
+                        return file
+        return icon_name 
 
     if item_id:
 
@@ -388,21 +408,28 @@ def find_icon(item_id, all_icons=False):
                     if isinstance(icon, str):
                         icons = [icon]
                     for variant in icon_variants:
-                        icon_dir = os.path.join('resources', 'icons')
                         variant_icon = f"{icon}{variant}.png"
                         if os.path.exists(os.path.join(icon_dir, variant_icon)):
                             icons.append(variant_icon)
                     icon = icons
-                    
 
-            elif 'IconsForTexture' in item_data:
-                icon = item_data['IconsForTexture']
+            # Get 'IconsForTexture' icons
+            # We need to check for lowercase property key as game now ignores case (╯°□°）╯︵ ┻━┻
+            elif any(key.lower() == 'iconsfortexture' for key in item_data):
+                icon = next(value for key, value in item_data.items() if key.lower() == 'iconsfortexture')
             
             # tile items may not have `Icon` but will still use `WorldObjectSprite` as icon
             elif 'WorldObjectSprite' in item_data:
                 icon = item_data['WorldObjectSprite']
             else:
-                icon = icon_default     
+                icon = icon_default
+
+            # Remove 'Item_' prefix if it has it
+            if isinstance(icon, str):
+                icon = icon.removeprefix("Item_")
+            elif isinstance(icon, list):
+                icon = [i.removeprefix("Item_") for i in icon]
+
 
         else:
             print(f"'{item_id}' could not be found while getting icon.")
@@ -425,6 +452,16 @@ def find_icon(item_id, all_icons=False):
         if not icon.endswith('.png'):
             icon = f"{icon}.png"
     
+
+    # Check if the icon exists
+    matched_icon = check_icon_exists(icon)
+    if matched_icon:
+        if matched_icon != icon:
+            logging_file.log_to_file(f"Icon was modified for {item_id} with icon: {icon}", False, "log_modified_icons.txt")
+        icon = matched_icon
+    else:
+        logging_file.log_to_file(f"Missiong icon for '{item_id}' with icon: {icon}", False, "log_missing_icons.txt")
+
     return icon
 
 
