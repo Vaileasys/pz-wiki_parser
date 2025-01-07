@@ -1,5 +1,6 @@
 import os
 import shutil
+from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.core import translate, utility, logging_file, version
 
@@ -126,6 +127,8 @@ def write_to_output(item_data, item_id, output_dir):
                     weapon_icon = utility.get_icon(weapon_id, True, True, False)
                     weapon_list.append(weapon_icon)
                 weapon = ''.join(weapon_list)
+
+            burn_time = utility.get_burn_time(item_id, item_data)
             
             foraging = ''
             body_location = item_data.get('BodyLocation', '')
@@ -193,6 +196,7 @@ def write_to_output(item_data, item_id, output_dir):
                 "light_strength": item_data.get('LightStrength', ''),
                 "torch_cone": item_data.get('TorchCone', ''),
                 "wet_cooldown": item_data.get('WetCooldown', ''),
+                "burn_time": burn_time,
                 "sensor_range": item_data.get('SensorRange') or item_data.get('RemoteRange', ''),
                 "two_way": item_data.get('TwoWay', ''),
                 "mic_range": item_data.get('MicRange', ''),
@@ -291,8 +295,11 @@ def automatic_extraction(output_dir):
         shutil.rmtree(output_dir)
     os.makedirs(output_dir)
 
-    for item_id, item_data in item_parser.get_item_data().items():
-        process_item(item_data, item_id, output_dir)
+    parsed_item_data = item_parser.get_item_data()
+    with tqdm(total=len(parsed_item_data), desc="Processing items", unit=" items", unit_scale=True) as bar:
+        for item_id, item_data in parsed_item_data.items():
+            process_item(item_data, item_id, output_dir)
+            bar.update(1)
 
 
 def main():

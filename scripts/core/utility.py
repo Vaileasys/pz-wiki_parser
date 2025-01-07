@@ -1,11 +1,14 @@
 import os
 import csv
 import json
+import re
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from scripts.parser import item_parser
 from scripts.core import translate, logging_file
 
+
+parsed_burn_data = {}
 
 # gets 'Tags' for item_data
 def get_tags(item_data):
@@ -55,7 +58,7 @@ def get_clothing_xml_value(item_data, xml_value):
         file_path = os.path.join("resources", "clothing", "clothingItems", f"{clothing_item}.xml")
 
         if not os.path.exists(file_path):
-            print(f"No XML file found for ClothingItem '{clothing_item}'. Is it in the correct directory?")
+            logging_file.log_to_file(f"No XML file found for ClothingItem '{clothing_item}'. Is it in the correct directory?")
             return None
         
         try:
@@ -288,6 +291,149 @@ def get_skill_type_mapping(item_data, item_id):
                     link = f"[[{skill_page}{lang}]]"
 
             return link if skill_page else "N/A"
+
+
+# parses burn info from camping_fuel.lua
+def get_burn_data(tables=None):
+    """Parses burn time from camping_fuel.lua.
+
+    Args:
+        tables (list, optional): List of table names to retrieve from the parsed data. If None, returns all parsed data. Defaults to None.
+
+    Returns:
+        dict: Parsed burn data, either all tables or the specified ones.
+    """
+    global parsed_burn_data
+    output_data = {}
+
+    # Record first run so we don't parse data every call
+    if parsed_burn_data != {}:
+        first_run = False
+    else:
+        first_run = True
+
+    # Only parse data once, not on every call
+    if first_run:
+        file_path = Path("resources") / "lua" / "camping_fuel.lua"
+        json_file_path = Path("output") / "logging" / "parsed_burn_data.json"
+
+        if not file_path.exists():
+            print(f"Lua file not found, ensure 'setup' has been run: {file_path}")
+            return
+        
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+
+        table_pattern= re.compile(r"(\w+)\s*=\s*{(.*?)}", re.DOTALL)
+        key_value_pattern = re.compile(r'(\w+)\s*=\s*([\d./]+)')
+
+        # Parse table/dict
+        for match in table_pattern.finditer(content):
+            table_name = match.group(1)
+            table_content = match.group(2)
+
+            # Parse key-value pairs
+            table_data = {}
+            for kv_match in key_value_pattern.finditer(table_content):
+                key = kv_match.group(1)
+                value = kv_match.group(2)
+
+                if '/' in value:
+                    value = eval(value)
+                else:
+                    value = float(value)
+
+                table_data[key] = value
+            
+            # Add the table to data dictionary
+            parsed_burn_data[table_name] = table_data
+
+        # Save parsed data to a json file, for debugging
+        json_file_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(json_file_path, 'w', encoding='utf-8') as json_file:
+            json.dump(parsed_burn_data, json_file, indent=4)
+#            print(f"JSON file saved to {json_file_path}")
+
+    if tables is None:
+        return parsed_burn_data
+    
+    for table in tables:
+        output_data[table] = parsed_burn_data[table]
+
+    return output_data
+
+
+# Gets and calculates the burn time and outputs it as an hours and minutes string.
+def get_burn_time(item_id, item_data):
+    valid_fuel = False
+    module, item_type = item_id.split(".")
+    category = item_data["Type"]
+    weight = float(item_data.get("Weight", 1))
+    tags = item_data.get("Tags", [])
+    if isinstance(tags, str): tags = [tags]
+    fabric_type = item_data.get("FabricType", "")
+    fuel_data = get_burn_data()
+    fire_fuel_ratio = float(item_data.get("FireFuelRatio", 0))
+    campingFuelType = fuel_data["campingFuelType"]
+    campingFuelCategory = fuel_data["campingFuelCategory"]
+    campingLightFireType = fuel_data["campingLightFireType"]
+    campingLightFireCategory = fuel_data["campingLightFireCategory"]
+
+    # Logic copied from `ISCampingMenu.shouldBurn()` and `ISCampingMenu.isValidFuel()`
+    if "IsFireFuel" in tags or float(item_data.get("FireFuelRatio", 0)) > 0: valid_fuel = True
+    if campingFuelType.get(item_type) or campingFuelCategory.get(category): valid_fuel = True
+    if campingFuelType.get(item_type) == 0: valid_fuel = False
+    if campingFuelCategory.get(category) == 0: valid_fuel = False
+    if "NotFireFuel" in tags: valid_fuel = False
+    if item_data["Type"].lower() == "clothing" and (fabric_type == "" or fabric_type.lower() == "leather"): valid_fuel = False
+
+    if valid_fuel:
+        # Logic copied from `ISCampingMenu.getFuelDurationForItemInHours()`
+        value = None
+        if campingFuelType.get(item_type): value = campingFuelType[item_type]
+        elif campingLightFireType.get(item_type): value = campingLightFireType[item_type]
+        elif campingFuelCategory.get(category): value = campingFuelCategory[category]
+        elif campingLightFireCategory.get(category): value = campingLightFireCategory[category]
+
+        burn_ratio = float(weight) * 2/3
+
+        if category in ["Clothing", "Container", "Literature", "Map"]: burn_ratio = float(weight) * 1/4
+        if fire_fuel_ratio > 0: burn_ratio = fire_fuel_ratio
+        weight_value = weight * burn_ratio
+
+        if value:
+            value = min(value, weight_value)
+        else:
+            value = weight_value
+
+        # Process value, changing to 'hours, minutes'
+        hours = int(value)
+        minutes = (value - hours) * 60
+
+        # Translate 'hour' and 'minute' then determine if should be plural
+        hours_unit = translate.get_translation("IGUI_Gametime_hour", None)
+        minutes_unit = translate.get_translation("IGUI_Gametime_minute", None)
+        if hours != 1: hours_unit = translate.get_translation("IGUI_Gametime_hours", None)
+        if minutes != 1: minutes_unit = translate.get_translation("IGUI_Gametime_minutes", None)
+
+        # Remove decimal where appropriate
+        if minutes % 1 == 0:
+            minutes = f"{int(minutes)}"
+        else:
+            minutes = f"{minutes:.1f}".removesuffix(".0")
+
+        # Convert to appropriate string layout
+        if hours > 0:
+            if minutes != 0:
+                burn_time = f"{hours} {hours_unit}, {minutes} {minutes_unit}"
+            else:
+                burn_time = f"{hours} {hours_unit}"
+        else:
+            burn_time = f"{minutes} {minutes_unit}"
+    else:
+        burn_time = ""
+    
+    return burn_time
 
 
 # format a link
