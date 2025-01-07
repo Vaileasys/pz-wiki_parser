@@ -379,7 +379,7 @@ def main():
             continue
         on_create = item_data["OnCreate"]
         # Remove "SpecialLootSpawns." prefix
-        on_create.removeprefix("SpecialLootSpawns.")
+        on_create = on_create.removeprefix("SpecialLootSpawns.")
         if on_create in BOOK:
             process_book(item_id, item_data, on_create)
         elif on_create in MAGAZINE:
