@@ -385,7 +385,7 @@ def get_burn_time(item_id, item_data):
     if campingFuelType.get(item_type) == 0: valid_fuel = False
     if campingFuelCategory.get(category) == 0: valid_fuel = False
     if "NotFireFuel" in tags: valid_fuel = False
-    if item_data["Type"].lower() == "clothing" and (fabric_type == "" or fabric_type.lower() == "leather"): valid_fuel = False
+    if category.lower() == "clothing" and (fabric_type == "" or fabric_type.lower() == "leather"): valid_fuel = False
 
     if valid_fuel:
         # Logic copied from `ISCampingMenu.getFuelDurationForItemInHours()`
@@ -395,9 +395,9 @@ def get_burn_time(item_id, item_data):
         elif campingFuelCategory.get(category): value = campingFuelCategory[category]
         elif campingLightFireCategory.get(category): value = campingLightFireCategory[category]
 
-        burn_ratio = float(weight) * 2/3
+        burn_ratio = 2/3
 
-        if category in ["Clothing", "Container", "Literature", "Map"]: burn_ratio = float(weight) * 1/4
+        if category.lower() in ["clothing", "container", "literature", "map"]: burn_ratio = 1/4
         if fire_fuel_ratio > 0: burn_ratio = fire_fuel_ratio
         weight_value = weight * burn_ratio
 
