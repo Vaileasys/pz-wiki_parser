@@ -161,7 +161,8 @@ def get_translation(property_value, property_key="DisplayName", lang_code=langua
                 item_data = item_parser.get_item_data().get(property_value.capitalize())
                 if item_data:
                     translation = item_data.get("DisplayName", property_value.capitalize())
-    return translation
+                    
+    return translation.strip()
 
 
 def parse_translation_file(language_code):
