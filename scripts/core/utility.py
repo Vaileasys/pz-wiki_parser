@@ -134,11 +134,8 @@ def get_model(item_data):
     # Remove _Ground suffix
     if isinstance(model, list):
         model = [value.replace('_Ground', '').replace('Ground', '') for value in model]
-    else: 
-        if model.endswith('_Ground'):
-            model = model.replace('_Ground', '')
-        elif model.endswith('Ground'):
-            model = model.replace('Ground', '')
+    else:
+        model = model.replace('_Ground', '').replace('Ground', '')
     
     # Add PNG extension
     if isinstance(model, list):
