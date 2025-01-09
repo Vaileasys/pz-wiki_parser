@@ -666,7 +666,7 @@ def get_icon(item_id, format=False, all_icons=False, cycling=False):
 
             # Convert to cycling icon if enabled and more than one icon
             if cycling and len(icon_list) > 1:
-                icon_result = f'<span class="cycle-img">{''.join(icon_list)}</span>'
+                icon_result = f'<span class="cycle-img">{"".join(icon_list)}</span>'
             else:
                 icon_result = ''.join(icon_list)
 
