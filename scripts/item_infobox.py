@@ -89,6 +89,12 @@ def write_to_output(item_data, item_id, output_dir):
         with open(output_file, 'w', encoding='utf-8') as file:
             file.write("{{Infobox item")
 
+            name = translate.get_translation(item_id, "DisplayName")
+            # Custom naming for The Bible
+            if item_id in ["Base.Book_Bible", "Base.BookFancy_Bible", "Base.Paperback_Bible"]:
+                bible = translate.get_translation("IGUI_BookTitle_TheBible", "IGUI_BookTitle_TheBible")
+                name = f"{name}: {bible}"
+
             icons = utility.find_icon(item_id, True)
 
             model = utility.get_model(item_data)
@@ -146,10 +152,10 @@ def write_to_output(item_data, item_id, output_dir):
             guid = utility.get_guid(item_data)
             
             parameters = {
-                "name": translate.get_translation(item_id, "DisplayName"),
+                "name": name,
                 # "model": (added with 'insert_parameters_after')
                 # "icon":  (added with 'insert_parameters_after')
-                "icon_name": translate.get_translation(item_id, "DisplayName"),
+                "icon_name": name,
                 "category": category,
                 "weight": item_data.get('Weight', 1),
                 "capacity": item_data.get('Capacity', ''),
