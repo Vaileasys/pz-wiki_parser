@@ -97,7 +97,7 @@ MAGAZINE = {
 }
 
 # 0: literature type
-# 0: multipleChance -- taken from SpecialLootSpawns.lua
+# 1: multipleChance -- taken from SpecialLootSpawns.lua
 SCHEMATIC = {
     "OnCreateExplosivesSchematic": ["ExplosiveSchematics", 40],
     "OnCreateMeleeWeaponSchematic": ["MeleeWeaponSchematics", 30],
@@ -106,6 +106,12 @@ SCHEMATIC = {
     "OnCreateCookwareSchematic": ["CookwareSchematic", 40]
 }
 
+SPECIAL = {
+    "OnCreateLocket": "Locket",
+    "OnCreateDoodleKids": "DoodleKids",
+    "OnCreateDoodle": "Doodle",
+    "OnCreatePostcard": "Postcards"
+}
 
 # 0: literature type
 # 1: translation key
@@ -146,6 +152,18 @@ def process_generic(item_id, item_data, on_create):
             literature_titles[i] = translate.get_translation(title, translation_str)
 
         write_to_file(item_id, literature_titles, "generic")
+
+
+# Process special items
+def process_special(item_id, item_data, on_create):
+    literature_data = literature_parser.get_literature_data()
+    special_titles = []
+
+    if on_create in SPECIAL:
+        title_type = SPECIAL[on_create]
+        special_titles = literature_data[title_type]
+
+        write_to_file(item_id, special_titles, title_type.lower())
 
 
 # Process schematic data
@@ -349,6 +367,46 @@ def write_to_file(item_id, literature_titles, literature_type):
                 file.write(f"* {title}\n")
             file.write('</div>')
 
+        elif literature_type == "locket":
+            file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
+            name = translate.get_translation(item_id)
+            locket_text = translate.get_translation("IGUI_LocketText", "IGUI_LocketText")
+            for title in sorted(literature_titles):
+                photo = translate.get_translation(title, "Photo")
+                full_name = f"{name} {locket_text} {photo}"
+                file.write(f"* {full_name}\n")
+            file.write('</div>')
+
+        elif literature_type == "doodlekids":
+            file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
+            name = translate.get_translation(item_id)
+            photo_text = translate.get_translation("IGUI_PhotoOf", "IGUI_PhotoOf")
+            for title in sorted(literature_titles):
+                photo = translate.get_translation(title, "Doodle")
+                full_name = f"{name} {photo_text} {photo}"
+                file.write(f"* {full_name}\n")
+            file.write('</div>')
+
+        elif literature_type == "doodle":
+            file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
+            name = translate.get_translation(item_id)
+            photo_text = translate.get_translation("IGUI_PhotoOf", "IGUI_PhotoOf")
+            for title in sorted(literature_titles):
+                photo = translate.get_translation(title, "Photo")
+                full_name = f"{name} {photo_text} {photo}"
+                file.write(f"* {full_name}\n")
+            file.write('</div>')
+
+        elif literature_type == "postcards":
+            file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
+            name = translate.get_translation(item_id)
+            photo_text = translate.get_translation("IGUI_PhotoOf", "IGUI_PhotoOf")
+            for title in sorted(literature_titles):
+                photo = translate.get_translation(title, "Photo")
+                full_name = f"{name} {photo_text} {photo}"
+                file.write(f"* {full_name}\n")
+            file.write('</div>')
+
         else:
             file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
             for title in sorted(literature_titles):
@@ -389,6 +447,8 @@ def main():
             process_comic(item_id, item_data, on_create)
         elif on_create in SCHEMATIC:
             process_schematic(item_id, item_data, on_create)
+        elif on_create in SPECIAL:
+            process_special(item_id, item_data, on_create)
         elif on_create in GENERIC_LITERATURE:
             process_generic(item_id, item_data, on_create)
 

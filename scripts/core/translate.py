@@ -47,6 +47,7 @@ PROPERTY_PREFIXES = {
     'SkillTrained': "IGUI_perks_",
     'BodyPart': "IGUI_health_",
     'Photo': "IGUI_Photo_",
+    'Doodle': "IGUI_Doodle_",
     'MagazineTitle': "IGUI_MagazineTitle_",
     'NewspaperTitle': "IGUI_NewspaperTitle_",
     'ComicTitle': "IGUI_ComicTitle_",
