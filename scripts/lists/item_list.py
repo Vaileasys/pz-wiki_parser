@@ -73,13 +73,13 @@ def item_list():
 
             icon = utility.find_icon(item_id, True)
             
-            # We don't need to translate again if language code is 'en'
-            translated_item_name = item_data.get('DisplayName', '')
+            # Get the item name and use it as the page name if there isn't one defined.
+            translated_item_name = utility.get_name(item_id, item_data, "en")
             page_name = utility.get_page(item_id)
             if page_name == 'Unknown':
                 page_name = translated_item_name
             if translate.get_language_code() != 'en':
-                translated_item_name = translate.get_translation(item_id, "DisplayName")
+                translated_item_name = utility.get_name(item_id, item_data)
             
             skip_item = False
 

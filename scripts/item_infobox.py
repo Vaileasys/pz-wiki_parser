@@ -89,11 +89,7 @@ def write_to_output(item_data, item_id, output_dir):
         with open(output_file, 'w', encoding='utf-8') as file:
             file.write("{{Infobox item")
 
-            name = translate.get_translation(item_id, "DisplayName")
-            # Custom naming for The Bible
-            if item_id in ["Base.Book_Bible", "Base.BookFancy_Bible", "Base.Paperback_Bible"]:
-                bible = translate.get_translation("IGUI_BookTitle_TheBible", "IGUI_BookTitle_TheBible")
-                name = f"{name}: {bible}"
+            name = utility.get_name(item_id, item_data)
 
             icons = utility.find_icon(item_id, True)
 

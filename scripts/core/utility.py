@@ -468,6 +468,74 @@ def format_br(values):
     return "<br>".join(values)
 
 
+# Gets an item name. This is for special cases where the name needs to be manipulated.
+def get_name(item_id, item_data, language="en"):
+    lang_code = translate.get_language_code()
+    # The following keys are used to construct the name:
+    # item_id: The item ID this special case is applicable to.
+    # prefix: The text to appear at the beginning of the string.
+    # infix: The text to appear in the middle of the string. Default will be the DisplayName.
+    # suffix: The text to appear at the end of the string.
+    # replace: Replace the entire string with this. This overwrites all other strings.
+    ITEM_NAMES = {
+        "bible": {
+            "item_id": ["Base.Book_Bible", "Base.BookFancy_Bible", "Base.Paperback_Bible"],
+            "suffix": f": {translate.get_translation("TheBible", "BookTitle", language if language == "en" else lang_code)}"
+        },
+        "Newspaper_Dispatch_New": {
+            "item_id": ["Base.Newspaper_Dispatch_New"],
+            "suffix": f": {translate.get_translation("NationalDispatch", "NewspaperTitle", language if language == "en" else lang_code)}"
+        },
+        "Newspaper_Herald_New": {
+            "item_id": ["Base.Newspaper_Herald_New"],
+            "suffix": f": {translate.get_translation("KentuckyHerald", "NewspaperTitle", language if language == "en" else lang_code)}"
+        },
+        "Newspaper_Knews_New": {
+            "item_id": ["Base.Newspaper_Knews_New"],
+            "suffix": f": {translate.get_translation("KnoxKnews", "NewspaperTitle", language if language == "en" else lang_code)}"
+        },
+        "Newspaper_Times_New": {
+            "item_id": ["Base.Newspaper_Times_New"],
+            "suffix": f": {translate.get_translation("LouisvilleSunTimes", "NewspaperTitle", language if language == "en" else lang_code)}"
+        }
+    }
+
+    # Check if item_id is in the dict, and therefore is a special case
+    item_key = None
+    for key, value in ITEM_NAMES.items():
+        if item_id in value["item_id"]:
+            item_key = key
+            break
+
+    # If the item_id doesn't exist in the dict, we return the translation (normal)
+    if item_key is None:
+        # We don't need to translate if language is "en", as it's already been translated in the parser.
+        if translate.get_language_code() == "en" or language == "en":
+            return item_data.get("DisplayName", "Unknown")
+        return translate.get_translation(item_id, "DisplayName")
+
+    special_case = ITEM_NAMES[item_key]
+
+    # Special case: return 'replace' value
+    if special_case.get("replace"):
+        return special_case["replace"]
+
+    # Special case: combine 'prefix', 'infix', 'suffix'
+    prefix = special_case.get("prefix", "")
+    infix = special_case.get("infix", "")
+    suffix = special_case.get("suffix", "")
+    # infix should always be present, and defaults to DisplayName
+    if infix == "":
+        if language == "en":
+            infix = translate.get_translation(item_id, "DisplayName", "en")
+        else:
+            infix = translate.get_translation(item_id, "DisplayName")
+
+    item_name = prefix + infix + suffix
+
+    return item_name
+
+
 # get page name based on item_id using 'item_id_dictionary.csv'
 def get_page(item_id, name="Unknown"):
     dict_csv = 'resources/item_id_dictionary.csv'

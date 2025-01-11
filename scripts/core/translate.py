@@ -48,6 +48,7 @@ PROPERTY_PREFIXES = {
     'BodyPart': "IGUI_health_",
     'Photo': "IGUI_Photo_",
     'MagazineTitle': "IGUI_MagazineTitle_",
+    'NewspaperTitle': "IGUI_NewspaperTitle_",
     'ComicTitle': "IGUI_ComicTitle_",
     'BookTitle': "IGUI_BookTitle_",
     'RPG': "IGUI_RPG_",
