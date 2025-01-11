@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from scripts.core import translate
 from scripts.parser import literature_parser, item_parser
@@ -288,7 +287,7 @@ def write_to_file(item_id, literature_titles, literature_type):
             # Determine if the format has multiple dictionaries
             if len(literature_titles) == 1 and "Default" in literature_titles:
                 # No subjects
-                file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
+                file.write('<div class="list-columns" style="column-width:450px; max-width:1500px;">\n')
                 for title in sorted(literature_titles["Default"]):
                     file.write(f"* {title}\n")
                 file.write('</div>\n')
@@ -297,7 +296,7 @@ def write_to_file(item_id, literature_titles, literature_type):
                 for subject in sorted(literature_titles):  # Sort subjects alphabetically
                     titles = sorted(literature_titles[subject])
                     file.write(f"==={subject}===\n")
-                    file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
+                    file.write('<div class="list-columns" style="column-width:450px; max-width:1500px;">\n')
                     for title in titles:
                         file.write(f"* {title}\n")
                     file.write('</div>\n\n')
@@ -306,14 +305,16 @@ def write_to_file(item_id, literature_titles, literature_type):
             # Determine if the format has multiple dictionaries
             if len(literature_titles) == 1 and "Default" in literature_titles:
                 # No subjects
-                file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
+                file.write('{| class="wikitable theme-red mw-collapsible sortable" style="text-align:center;"\n')
+                file.write('|+ style="min-width: 300px;" | List of magazine variants\n')
+                file.write('! Title !! Earliest year\n')
                 for title in sorted(literature_titles["Default"]):
                     first_year = literature_titles["Default"][title].get("firstYear", "1970")
                     year_range = f"{first_year}–1993"
                     if first_year == "1993":
                         year_range = first_year
-                    file.write(f"* {title} ({year_range})\n")
-                file.write('</div>\n')
+                    file.write(f"|-\n| {title} || {first_year}\n")
+                file.write('|}\n')
             else:
                 # Subjects
                 for subject in sorted(literature_titles):
@@ -325,18 +326,18 @@ def write_to_file(item_id, literature_titles, literature_type):
                     file.write('</div>\n\n')
 
         elif literature_type == "comic":
-            file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
+            file.write('{| class="wikitable theme-red mw-collapsible mw-collapsed sortable" style="text-align:center;"\n')
+            file.write('|+ style="min-width: 300px;" | List of comic book variants\n')
+            file.write('! Title !! First available !! Total issues\n')
             for title in sorted(literature_titles):
-                issues = literature_titles[title].get("issues", 1)
-                issues_range = 1
+                issues = literature_titles[title].get("issues", 0) + 1
+                issues_start = 1
                 if issues > 1:
-                    issues_start = 1
                     if item_id == "Base.ComicBook_Retail":
                         # Earliest issue will be 4 less than the latest
                         issues_start = max(issues - 4 + 1, 1)
-                    issues_range = f"{issues_start}–{str(issues)}"
-                file.write(f"* {title} ({issues_range})\n")
-            file.write('</div>\n')
+                file.write(f"|-\n| {title} || {issues_start} || {issues}\n")
+            file.write('|}\n')
 
         elif literature_type == "schematic":
             multiple_chance = literature_titles[-1]
