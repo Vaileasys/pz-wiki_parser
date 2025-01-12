@@ -110,7 +110,11 @@ SPECIAL = {
     "OnCreateLocket": "Locket",
     "OnCreateDoodleKids": "DoodleKids",
     "OnCreateDoodle": "Doodle",
-    "OnCreatePostcard": "Postcards"
+    "OnCreatePostcard": "Postcards",
+    "OnCreatePhoto": "OldPhotos",
+    "OnCreatePhoto_Secret": "SecretPhotos",
+    "OnCreatePhoto_Racy": "RacyPhotos",
+    "OnCreateBusinessCard": ["BusinessCards", "JobTitles"]
 }
 
 # 0: literature type
@@ -124,14 +128,6 @@ GENERIC_LITERATURE = {
     "OnCreateLetterHandwritten": ["LetterHandwritten", "IGUI"],
     "OnCreateDogTag_Pet": ["DogTags", "IGUI_PetName_"]
 }
-
-# TODO: add business cards. These may combine 'BusinessCards' with 'JobTitles'. It also gets a random forename and surname. 
-
-# TODO: Creates the string from various translation strings, only 1 is from OnCreate
-# OnCreateLocket: "DisplayName" + "IGUI_LocketText" + "IGUI_Photo_..." + "Locket"
-# OnCreateDoodleKids: "DisplayName" + "IGUI_PhotoOf" + "IGUI_Photo_..." + "DoodleKids"
-# OnCreateDoodle: "DisplayName" + "IGUI_PhotoOf" + "IGUI_Photo_..." + "Doodle"
-# OnCreatePostcards: "DisplayName" + "IGUI_PhotoOf" + "IGUI_Photo_..." + "Postcards"
 
 # Process generic literature
 def process_generic(item_id, item_data, on_create):
@@ -161,9 +157,17 @@ def process_special(item_id, item_data, on_create):
 
     if on_create in SPECIAL:
         title_type = SPECIAL[on_create]
-        special_titles = literature_data[title_type]
+        if isinstance(title_type, list):
+            for id in title_type:
+                special_titles = literature_data[id]
+                write_to_file(item_id, special_titles, id.lower())
+        else:
+            special_titles = literature_data[title_type]
+            
+            if "Photo" in on_create:
+                title_type = "photo"
 
-        write_to_file(item_id, special_titles, title_type.lower())
+            write_to_file(item_id, special_titles, title_type.lower())
 
 
 # Process schematic data
@@ -387,7 +391,8 @@ def write_to_file(item_id, literature_titles, literature_type):
                 file.write(f"* {full_name}\n")
             file.write('</div>')
 
-        elif literature_type == "doodle":
+         # postcards, doodles and photos are generated the same
+        elif literature_type in ["postcards", "doodle", "photo"]:
             file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
             name = translate.get_translation(item_id)
             photo_text = translate.get_translation("IGUI_PhotoOf", "IGUI_PhotoOf")
@@ -396,15 +401,11 @@ def write_to_file(item_id, literature_titles, literature_type):
                 full_name = f"{name} {photo_text} {photo}"
                 file.write(f"* {full_name}\n")
             file.write('</div>')
-
-        elif literature_type == "postcards":
-            file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
-            name = translate.get_translation(item_id)
-            photo_text = translate.get_translation("IGUI_PhotoOf", "IGUI_PhotoOf")
+        
+        elif literature_type in ["businesscards", "jobtitles"]:
+            file.write('<div class="list-columns" style="column-width:300px; max-width:1300px;">\n')
             for title in sorted(literature_titles):
-                photo = translate.get_translation(title, "Photo")
-                full_name = f"{name} {photo_text} {photo}"
-                file.write(f"* {full_name}\n")
+                file.write(f"* {translate.get_translation(title, "IGUI")}\n")
             file.write('</div>')
 
         else:

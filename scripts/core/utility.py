@@ -497,6 +497,10 @@ def get_name(item_id, item_data, language="en"):
         "Newspaper_Times_New": {
             "item_id": ["Base.Newspaper_Times_New"],
             "suffix": f": {translate.get_translation("LouisvilleSunTimes", "NewspaperTitle", language if language == "en" else lang_code)}"
+        },
+        "BusinessCard_Nolans": {
+            "item_id": ["Base.BusinessCard_Nolans"],
+            "suffix": f": {translate.get_translation("NolansUsedCars", "IGUI", language if language == "en" else lang_code)}"
         }
     }
 
