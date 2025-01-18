@@ -48,6 +48,8 @@ PROPERTY_PREFIXES = {
     'BodyPart': "IGUI_health_",
     'Photo': "IGUI_Photo_",
     'Doodle': "IGUI_Doodle_",
+    'PrintText': "Print_Text_",
+    'PrintMedia': "Print_Media_",
     'MagazineTitle': "IGUI_MagazineTitle_",
     'NewspaperTitle': "IGUI_NewspaperTitle_",
     'ComicTitle': "IGUI_ComicTitle_",
@@ -69,7 +71,9 @@ FILE_WHITELIST = (
     "Tooltip_",
     "EvolvedRecipeName_",
     "Fluids_",
-    "Wiki_"
+    "Wiki_",
+    "Print_Text_",
+    "Print_Media_"
 )
 
 translations_cache = {}

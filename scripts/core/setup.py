@@ -114,6 +114,7 @@ def copy_lua_files(media_dir: str) -> None:
         'SpecialItemData_Magazines.lua',
         'SpecialItemData_Misc.lua',
         'SpecialItemData_Photos.lua',
+        'PrintMediaDefinitions.lua',
         'camping_fuel.lua'
     ])
 
