@@ -37,6 +37,9 @@ def write_tag_image(tags_dict):
             file.write('<span class="cycle-img">')
             for item in tag_data:
                 icon = item['icon']
+                #TODO: look into what is causing it to be a list
+                if isinstance(icon, list):
+                    icon = icon[0]
                 name = item['name']
                 file.write(f"[[File:{icon}|32x32px|link={tag} (tag)|{name}]]")
             file.write("</span>")
