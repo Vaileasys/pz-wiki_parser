@@ -456,7 +456,7 @@ def write_to_file(item_id, literature_titles, literature_type):
         elif literature_type in ["businesscards", "jobtitles"]:
             file.write('<div class="list-columns" style="column-width:300px; max-width:1300px;">\n')
             for title in sorted(literature_titles):
-                file.write(f"* {translate.get_translation(title, "IGUI")}\n")
+                file.write(f'* {translate.get_translation(title, "IGUI")}\n')
             file.write('</div>')
 
         elif literature_type == "flier":
