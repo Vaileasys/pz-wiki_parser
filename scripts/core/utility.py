@@ -591,7 +591,7 @@ def find_icon(item_id, all_icons=False):
                 for file in files:
                     if file.lower() == icon_name.lower():
                         return file
-        return icon_name 
+        return icon_name
 
     if item_id:
 
@@ -605,7 +605,10 @@ def find_icon(item_id, all_icons=False):
                         icon = row['icon'] + ".png"
                         icon = [icon]
 
-                        return icon
+                        # Return the icon in the expected format based on 'all_icons'
+                        if all_icons:
+                            return icon
+                        return icon[0]
         else:
             print(f"File '{icons_csv}' does not exist. Getting icon from item properties.")
 
@@ -753,6 +756,7 @@ def get_icon(item_id, format=False, all_icons=False, cycling=False):
         print(f"Item ID '{item_id}' doesn't exist")
 
     return icon_result
+
 
 def get_guid(item_data):
     guid = get_clothing_xml_value(item_data, 'm_GUID')
