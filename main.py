@@ -51,11 +51,7 @@ menu_structure = {
     '4': {
         'name': 'Tags',
         'description': 'Manage and generate tags.',
-        'sub_options': {
-            '1': {'module': 'item_tags', 'name': 'Item tags', 'description': 'Outputs all tags and items with those tags.'},
-            '2': {'module': 'article_tag', 'name': 'Article tags', 'description': 'Generates modding articles for tags.'},
-            '3': {'module': 'article_tag_image', 'name': 'Article tag images', 'description': 'Generates template articles for tag cycling images.'},
-        },
+        'sub_options': None # Handled by item_tags.py
     },
     '5': {
         'name': 'Tools',
@@ -174,6 +170,9 @@ def navigate_menu(menu, is_root=False):
                 navigate_menu(settings_structure)
             elif selected_option['name'] == 'Run First Time Setup':
                 handle_module('scripts.core.setup')
+                print("\nReturning to the menu...\n")
+            elif selected_option['name'] == 'Tags':
+                handle_module('scripts.item_tags')
                 print("\nReturning to the menu...\n")
             elif 'module' in selected_option:
                 handle_module(selected_option['module'])
