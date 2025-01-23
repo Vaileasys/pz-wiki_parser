@@ -12,8 +12,9 @@ HEADER = """{| class="wikitable theme-red sortable sticky-column" style="text-al
 ! Icon
 ! Name
 ! Container name
-! Weight
+! [[File:Status_HeavyLoad_32.png|32px|link=|Weight]] (empty)
 ! Capacity
+! [[File:Status_HeavyLoad_32.png|32px|link=|Weight]] (full)
 ! Spawned fluid(s)
 ! Item ID
 |-"""
@@ -28,6 +29,7 @@ def write_items_to_file(items, file_name):
     with open(output_file, "w", encoding="utf-8") as file:
         file.write(HEADER)
         for item in items:
+            del item['item_name'] # Delete 'item_name' as it was only used for sorting
             for value in item.values():
                 file.write(f"\n| {value}")
             file.write(f"\n|-")
@@ -54,7 +56,18 @@ def get_items():
             container_name = translate.get_translation(container_name, 'ContainerName')
 
             fluid_capacity_ml = float(item_data.get('capacity', 0)) * 1000
-            fluid_capacity = f"{str(int(fluid_capacity_ml))}mL"
+            fluid_capacity = int(fluid_capacity_ml)
+            weight = float(item_data.get('Weight', 1))
+            weight_ml = (fluid_capacity / 1000) + weight
+            if weight_ml.is_integer():
+                weight_ml = int(weight_ml)
+            else:
+                weight_ml = round(weight_ml, 1)
+            if weight.is_integer():
+                weight = int(weight)
+            else:
+                weight = round(weight, 1)
+
             fluids_list = "-"
             if "fluids" in item_data:
                 fluids_list = []
@@ -101,23 +114,30 @@ def get_items():
                     fluids_list.append(f"{fluid_name} {colors_str}")
 
                 fluids_list = "<br>".join(fluids_list)
-                
+
             item = {
                 "icon": icon,
-                "name": item_link,
+                "item_link": item_link,
                 "ContainerName": container_name,
-                "weight": item_data.get('Weight', '1'),
-                "capacity": fluid_capacity,
+                "weight": str(weight),
+                "capacity": str(fluid_capacity) + "mL",
+                "weight_ml": str(weight_ml),
                 "fluids": fluids_list,
                 "item_id": item_id,
+                "item_name": display_name
             }
 
             fluid_containers.append(item)
+
 
             i = i +1
 
             if 'fluids' in item_data:
                 j = j +1
+    
+    # Sort by the item_name
+    fluid_containers.sort(key=lambda e: e['item_name'])
+
     print(f"Found {i} items that are a fluid container")
     print(f"Found {j} items with a fluid")
     write_items_to_file(fluid_containers, 'fluid_container_list')
