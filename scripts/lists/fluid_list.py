@@ -8,17 +8,17 @@ from scripts.parser import fluid_parser
 HEADER = """{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"
 ! <<name>>
 ! <<color>>
-! [[File:Status_Hunger.png|32px|link=|<<hunger>>]]
-! [[File:Status_Thirst.png|32px|link=|<<thirst>>]]
+! [[File:Status_Hunger_32.png|32px|link=|<<hunger>>]]
+! [[File:Status_Thirst_32.png|32px|link=|<<thirst>>]]
 ! [[File:Fire_01_1.png|32px|link=|<<calories>>]]
 ! [[File:Wheat.png|32px|link=|<<carbohydrates>>]]
 ! [[File:Butter.png|32px|link=|<<fat>>]]
 ! [[File:Steak.png|32px|link=|<<proteins>>]]
 ! [[File:SkullPoison.png|link=|<<poison>>]]
-! [[File:Mood_Drunk.png|32px|link=|<<alcohol>>]]
-! [[File:Mood_Sleepy.png|32px|link=|<<fatigue>>]]
-! [[File:Mood_Stressed.png|32px|link=|<<stress>>]]
-! [[File:Mood_Sad.png|32px|link=|<<unhappiness>>]]
+! [[File:Mood_Drunk_32.png|32px|link=|<<alcohol>>]]
+! [[File:Mood_Sleepy_32.png|32px|link=|<<fatigue>>]]
+! [[File:Mood_Stressed_32.png|32px|link=|<<stress>>]]
+! [[File:Mood_Sad_32.png|32px|link=|<<unhappiness>>]]
 ! <<fluid_id>>
 |-"""
 
