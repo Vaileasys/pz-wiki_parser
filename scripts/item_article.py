@@ -747,8 +747,11 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
     }
 
     for section, content in sections.items():
-        if content.strip():
-            body_content += f"\n=={section}==\n{content}\n"
+        if content is not None:
+            if content.strip():
+                body_content += f"\n=={section}==\n{content}\n"
+        else:
+            tqdm.write(f"{item_id}: skipping '{section}' as content is '{content}'")
 
     return body_content.strip()
 
