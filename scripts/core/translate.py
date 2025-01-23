@@ -61,7 +61,9 @@ PROPERTY_PREFIXES = {
     'EvolvedRecipeName': "EvolvedRecipeName_",
     'FluidID': "Fluid_Name_",
     'ContainerName': 'Fluid_Container_',
-    'Wiki': "Wiki_"
+    'Wiki': "Wiki_",
+    "Trait": "UI_trait_",
+    "Perks": "IGUI_perks_"
 }
 
 FILE_WHITELIST = (
@@ -72,6 +74,7 @@ FILE_WHITELIST = (
     "EvolvedRecipeName_",
     "Fluids_",
     "Wiki_",
+    "UI_",
     "Print_Text_",
     "Print_Media_"
 )
