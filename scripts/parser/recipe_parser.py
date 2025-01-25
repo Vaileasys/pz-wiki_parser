@@ -332,6 +332,7 @@ def parse_item_line(line):
 
 
 def main():
+    global parsed_data
     lines = gather_recipe_lines(RECIPES_DIR)
     recipe_blocks = extract_recipe_blocks(lines)
     recipes = []
