@@ -5,6 +5,18 @@ RECIPES_DIR = "resources/scripts"
 OUTPUT_JSON = "output/recipes/recipes.json"
 os.makedirs(os.path.dirname(OUTPUT_JSON), exist_ok=True)
 
+# Global dictionary to store the parsed recipe data
+parsed_data = {}
+
+
+def get_recipe_data():
+    """Returns the parsed recipe data. Initialises if the parsed data is empty."""
+    global parsed_data
+    if not parsed_data:
+        main()
+    return parsed_data
+
+
 def gather_recipe_lines(directory: str):
     all_lines = []
     for root, dirs, files in os.walk(directory):
@@ -326,9 +338,9 @@ def main():
     for recipe_name, recipe_text in recipe_blocks:
         parsed = parse_recipe_block(recipe_name, recipe_text)
         recipes.append(parsed)
-    output_data = {"recipes": recipes}
+    parsed_data = {"recipes": recipes}
     with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
-        json.dump(output_data, f, indent=4)
+        json.dump(parsed_data, f, indent=4)
     print(f"{len(recipes)} recipes written to {OUTPUT_JSON}")
 
 if __name__ == "__main__":
