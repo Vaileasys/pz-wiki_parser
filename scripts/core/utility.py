@@ -682,7 +682,7 @@ def find_icon(item_id, all_icons=False):
             logging_file.log_to_file(f"Icon was modified for {item_id} with icon: {icon}", False, "log_modified_icons.txt")
         icon = matched_icon
     else:
-        logging_file.log_to_file(f"Missiong icon for '{item_id}' with icon: {icon}", False, "log_missing_icons.txt")
+        logging_file.log_to_file(f"Missing icon for '{item_id}' with icon: {icon}", False, "log_missing_icons.txt")
 
     return icon
 

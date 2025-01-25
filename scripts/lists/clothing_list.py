@@ -3,6 +3,8 @@ from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.core import utility, translate
 
+pbar_format = "{l_bar}{bar:30}{r_bar}"
+
 # Used for getting table values
 TABLE_DICT = {
     "generic": ('icon', 'name', 'weight', 'body_location', 'item_id'),
@@ -352,14 +354,14 @@ def combine_clothing_files():
                             output_f.write(f"====={subkey}=====\n")
                             output_f.write(f"{content}\n\n")
                         else:
-                            print(f"Error: no content found for '{subkey}'.")
+                            print(f"Skipping '{subkey}': No content found.")
                 else:
                     content = file_dict.get(key, None)
                     if content is not None:
                         output_f.write(f"===={key}====\n")
                         output_f.write(f"{content}\n\n")
                     else:
-                        print(f"Error: no content found for '{key}'.")
+                        print(f"Skipping '{key}': No content found.")
 
     print(f"Combined files written to {output_file}")
 
@@ -508,22 +510,26 @@ def process_item(item_data, item_id):
 def get_items():
     blacklist = ("MakeUp_", "ZedDmg_", "Wound_", "Bandage_", "F_Hair_", "M_Hair_", "M_Beard_")
     clothing_dict = {}
+    parsed_item_data = item_parser.get_item_data()
 
-    for item_id, item_data in tqdm(item_parser.get_item_data().items(), desc="Processing items"):
-        if item_data.get("Type") in ("Clothing", "AlarmClockClothing") or 'CanBeEquipped' in item_data:
-            # filter out blacklisted items and 'Reverse' variants
-            module, item_name = item_id.split('.')
-            if not item_name.startswith(blacklist) and not item_name.endswith("_Reverse"):
-                if "OBSOLETE" in item_data:
-                    continue
-                heading, item = process_item(item_data, item_id)
+    with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=pbar_format, unit=" items") as pbar:
+        for item_id, item_data in parsed_item_data.items():
+            pbar.set_postfix_str(f"Processing: {item_id[:15]}")
+            if item_data.get("Type") in ("Clothing", "AlarmClockClothing") or 'CanBeEquipped' in item_data:
+                # filter out blacklisted items and 'Reverse' variants
+                module, item_name = item_id.split('.')
+                if not item_name.startswith(blacklist) and not item_name.endswith("_Reverse"):
+                    if "OBSOLETE" in item_data:
+                        continue
+                    heading, item = process_item(item_data, item_id)
 
-                # add heading to dict if it hasn't been added yet.
-                if heading not in clothing_dict:
-                    clothing_dict[heading] = []
+                    # add heading to dict if it hasn't been added yet.
+                    if heading not in clothing_dict:
+                        clothing_dict[heading] = []
 
-                clothing_dict[heading].append(item)
-
+                    clothing_dict[heading].append(item)
+            pbar.update(1)
+        pbar.bar_format = f"Items processed."
     write_items_to_file(clothing_dict)
 
 
@@ -548,6 +554,7 @@ def write_items_to_file(clothing_dict):
         with open(output_path, 'w', encoding='utf-8') as file:
             # write wiki heading and table headings
 #            file.write(f"=={heading}==\n")
+            file.write(f"<!--BOT_FLAG-start-{heading.replace(" ", "_")}. DO NOT REMOVE-->")
             file.write(f"{TABLE_HEADER}\n")
             file.write(f"{table_headings}\n")
 
@@ -557,6 +564,7 @@ def write_items_to_file(clothing_dict):
                 file.write(f"|-\n| {row}\n")
 
             file.write("|}")
+            file.write(f"<!--BOT_FLAG-end-{heading.replace(" ", "_")}. DO NOT REMOVE-->")
 
 
 def main():

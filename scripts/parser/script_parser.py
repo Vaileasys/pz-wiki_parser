@@ -5,9 +5,9 @@ from scripts.core import logging_file
 parsed_fixing_data = ""
 scripts_dir = "resources/scripts"
 
-def get_fixing_data():
+def get_fixing_data(suppress=False):
     if not parsed_fixing_data:
-        init()
+        init(suppress)
     return parsed_fixing_data
 
 # parse fixing properties
@@ -203,11 +203,12 @@ def output_parsed_data_to_txt(data, output_file):
 
 
 # initialise parser
-def init():
+def init(suppress=False):
     global parsed_fixing_data
     parsed_fixing_data, total_fixing_counter = parse_files_in_folder()
     output_parsed_data_to_txt(parsed_fixing_data, 'output/logging/parsed_fixing_data.txt')
-    print("Total fixings parsed:", total_fixing_counter)
+    if not suppress:
+        print("Total fixings parsed:", total_fixing_counter)
 
     
 if __name__ == "__main__":

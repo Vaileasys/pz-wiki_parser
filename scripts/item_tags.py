@@ -25,7 +25,7 @@ def write_tag_image():
     with tqdm(total=len(tags_dict), desc="Generating tag images", bar_format=pbar_format, unit=" tags") as pbar:
         for tag, tag_data in tags_dict.items():
             # Change the string at the end of the progress bar
-            pbar.set_postfix_str(f"Processing: {tag}")
+            pbar.set_postfix_str(f"Processing: {tag[:15]}")
             output_file = os.path.join(output_dir, f'{tag}.txt')
             with open(output_file, 'w', encoding='utf-8') as file:
                 file.write('<span class="cycle-img">')
@@ -50,7 +50,7 @@ def write_tag_table():
             file.write('{| class="wikitable theme-blue"\n|-\n! Tag !! Items\n')
             for tag in sorted(tags_dict.keys()):
                 # Change the string at the end of the progress bar
-                pbar.set_postfix_str(f"Processing: {tag}")
+                pbar.set_postfix_str(f"Processing: {tag[:15]}")
 
                 tag_data = sorted(tags_dict[tag], key=lambda item: item['name'])
 
@@ -75,7 +75,7 @@ def write_tag_list():
     with tqdm(total=len(tags_dict), desc="Generating tag item list", bar_format=pbar_format, unit=" tags") as pbar:
         for tag, tag_data in tags_dict.items():
             # Change the string at the end of the progress bar
-            pbar.set_postfix_str(f"Processing: {tag}")
+            pbar.set_postfix_str(f"Processing: {tag[:15]}")
 
             output_file = os.path.join(output_dir, f'{tag}.txt')
             with open(output_file, 'w', encoding='utf-8') as file:
@@ -211,7 +211,7 @@ def generate_article_modding():
         with tqdm(total=len(item_list), desc="Generating modding articles", bar_format=pbar_format, unit=" tags") as pbar:
             for content, tag in item_list:
                 # Change the string at the end of the progress bar
-                pbar.set_postfix_str(f"Processing: {tag}")
+                pbar.set_postfix_str(f"Processing: {tag[:15]}")
 
                 see_also = get_see_also(all_tags, tag)
                 write_article(tag, content, see_also, dest_dir)
@@ -236,7 +236,7 @@ def generate_article_templates():
         with tqdm(total=len(item_list), desc="Generating template articles", bar_format=pbar_format, unit=" tags") as pbar:
             for content, tag in item_list:
                 # Change the string at the end of the progress bar
-                pbar.set_postfix_str(f"Processing: {tag}")
+                pbar.set_postfix_str(f"Processing: {tag[:15]}")
 
                 see_also = get_see_also(all_tags, tag)
                 write_article(tag, content, see_also, dest_dir)

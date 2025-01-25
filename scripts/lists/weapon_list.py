@@ -1,13 +1,16 @@
 import os
+from tqdm import tqdm
 from scripts.parser import item_parser, script_parser
 from scripts.core import translate, utility
+
+pbar_format = "{l_bar}{bar:30}{r_bar}"
 
 # table header for melee weapons
 melee_header = """<div style="overflow: auto; white-space: nowrap;">
 {| class="wikitable theme-red sortable sticky-column" style="text-align: center;"
 ! rowspan=2 | <<icon>>
 ! rowspan=2 | <<name>>
-! rowspan=2 | [[File:Moodle_Icon_HeavyLoad.png|link=|<<weight>>]]
+! rowspan=2 | [[File:Status_HeavyLoad_32.png|link=|<<weight>>]]
 ! rowspan=2 | [[File:UI_Hand.png|32px|link=|<<equipped>>]]
 ! colspan=4 | <<damage>>
 ! colspan=2 | <<range>>
@@ -35,7 +38,7 @@ firearm_header = """<div style="overflow: auto; white-space: nowrap;">
 {| class="wikitable theme-red sortable sticky-column" style="text-align: center;"
 ! rowspan=2 | <<icon>>
 ! rowspan=2 | <<name>>
-! rowspan=2 | [[File:Moodle_Icon_HeavyLoad.png|link=|<<weight>>]]
+! rowspan=2 | [[File:Status_HeavyLoad_32.png|link=|<<weight>>]]
 ! rowspan=2 | [[File:UI_Hand.png|32px|link=|<<equipped>>]]
 ! rowspan=2 | [[File:PistolAmmo.png|link=|<<ammo>>]]
 ! rowspan=2 | [[File:BerettaClip.png|link=|<<mag_capacity>>]]
@@ -65,7 +68,7 @@ def combine_weapon_files(folder="melee"):
     """
     Combines all .txt files from the weapon directory into a single file.
     """
-    lc = translate.get_language_code().upper()
+    lc = translate.get_language_code()
     weapon_dir = f'output/{lc}/item_list/weapons/{folder}'
     output_file = f'output/{lc}/item_list/weapons/{folder}_list.txt'
 
@@ -100,7 +103,7 @@ def translate_skill(skill, property="Categories"):
 # Check if it can be fixed
 def check_fixing(item_id):
     module, item_name = item_id.split('.')
-    parsed_fixing_data = script_parser.get_fixing_data()
+    parsed_fixing_data = script_parser.get_fixing_data(True)
     language_code = translate.get_language_code()
     lcs = ""
     if language_code != "en":
@@ -256,12 +259,13 @@ def process_item_melee(item_data, item_id):
 # write to file
 def write_items_to_file(skills, header, category):
     language_code = translate.get_language_code()
-    output_dir = f'output/{language_code.upper()}/item_list/weapons/{category}/'
+    output_dir = f'output/{language_code}/item_list/weapons/{category}/'
     os.makedirs(output_dir, exist_ok=True)
     
     for skill, items in skills.items():
         output_path = f"{output_dir}{skill}.txt"
         with open(output_path, 'w', encoding='utf-8') as file:
+            file.write(f"<!--BOT FLAG-start-{skill}. DO NOT REMOVE-->")
             header = translate.get_wiki_translation(header)
             file.write(f"{header}")
             sorted_items = sorted(items, key=lambda x: x['name'])
@@ -271,38 +275,47 @@ def write_items_to_file(skills, header, category):
                 item = [value for key, value in item.items() if key != 'name']
                 item = '\n| '.join(item)
                 file.write(f"|-\n| {item}\n")
-            file.write("|}</div>")
-            footnote = ""
-            if skill in ('Axe', 'Long Blunt', 'Short Blunt', 'Long Blade', 'Spear', 'Improvised'):
-                footnote = "\n<nowiki>*</nowiki><<limited_impact_desc>>"
+            caption = ""
+            if skill in ('Axe', 'Long Blunt', 'Short Blunt', 'Long Blade', 'Spear'):
+                caption = '|-\n|+ style="caption-side:bottom; font-weight:normal;" | <nowiki>*</nowiki><<limited_impact_desc>>\n'
             elif skill == ('Short Blade'):
-                footnote = "\n<nowiki>*</nowiki><<jaw_stab_desc>>"
-            footnote = translate.get_wiki_translation(footnote)
-            file.write(footnote)
+                caption = '|-\n|+ style="caption-side:bottom; font-weight:normal;" | <nowiki>*</nowiki><<jaw_stab_desc>>\n'
+            caption = translate.get_wiki_translation(caption)
+            file.write(caption)
+            file.write("|}</div>")
+            file.write(f"<!--BOT_FLAG-end-{skill.replace(" ", "_")}. DO NOT REMOVE-->")
+    
+    print(f"{category.title()} tables completed. Files can be found in '{output_dir}'")
 
 
 def get_items():
     melee_skills = {}
     firearm_skills = {}
+    parsed_item_data = item_parser.get_item_data()
 
-    for item_id, item_data in item_parser.get_item_data().items():
-        if item_data.get("Type") == "Weapon":
+    with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=pbar_format, unit=" items") as pbar:
+        for item_id, item_data in parsed_item_data.items():
+            pbar.set_postfix_str(f"Processing: {item_id[:15]}")
+            if item_data.get("Type") == "Weapon":
 
-            if item_data.get("Categories"):
-                skill, item = process_item_melee(item_data, item_id)
+                if item_data.get("Categories"):
+                    skill, item = process_item_melee(item_data, item_id)
 
-                if skill not in melee_skills:
-                    melee_skills[skill] = []
-                melee_skills[skill].append(item)
+                    if skill not in melee_skills:
+                        melee_skills[skill] = []
+                    melee_skills[skill].append(item)
 
-            elif item_data.get("SubCategory") == "Firearm":
-                skill, item = process_item_firearm(item_data, item_id)
+                elif item_data.get("SubCategory") == "Firearm":
+                    skill, item = process_item_firearm(item_data, item_id)
 
-                if skill not in firearm_skills:
-                    firearm_skills[skill] = []
-                firearm_skills[skill].append(item)
+                    if skill not in firearm_skills:
+                        firearm_skills[skill] = []
+                    firearm_skills[skill].append(item)
 
-            # TODO: add explosives
+                # TODO: add explosives
+
+            pbar.update(1)
+        pbar.bar_format = f"Items processed."
 
     write_items_to_file(melee_skills, melee_header, 'melee')
     write_items_to_file(firearm_skills, firearm_header, 'firearm')
