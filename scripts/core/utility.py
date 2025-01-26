@@ -468,6 +468,38 @@ def format_br(values):
     return "<br>".join(values)
 
 
+# Converts a value to a percentage str
+def convert_to_percentage(value, start_zero=True, percentage=False):
+    """Converts a numeric value to a percentage string.
+
+    Args:
+        value (str, int, float): The value to be converted to a percentage. Can be a number or a string representation of a number.
+        start_zero (bool, optional): If True, treats the value as a fraction (e.g., 0.5 -> 50%).
+                                     If False, assumes the value starts from 100% (e.g., 1.5 -> 150%). Defaults to True.
+        percentage (bool, optional): If True, the value is already a percentage and will not be scaled. Defaults to False.
+
+    Returns:
+        str: The formatted percentage as a string with a '%' sign.
+             Returns '-' for invalid inputs.
+    """
+    if not value or value == '-':
+        return '-'
+    
+    try:
+        value = float(value)
+    except ValueError:
+        return '-'
+    
+    if not percentage:
+        if not start_zero:
+            value -= 1
+        value *= 100
+
+    value = int(round(value))
+    
+    return f"{value}%"
+
+
 # Gets an item name. This is for special cases where the name needs to be manipulated.
 def get_name(item_id, item_data, language="en"):
     lang_code = translate.get_language_code()

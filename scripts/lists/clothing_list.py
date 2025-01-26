@@ -366,26 +366,6 @@ def combine_clothing_files():
     print(f"Combined files written to {output_file}")
 
 
-# Converts a value to a percentage str
-def convert_to_percentage(value, start_zero=True, percentage=False):
-    if not value or value == '-':
-        return '-'
-    
-    try:
-        value = float(value)
-    except ValueError:
-        return '-'
-    
-    if not percentage:
-        if not start_zero:
-            value -= 1
-        value *= 100
-
-    value = int(round(value))
-    
-    return f"{value}%"
-
-
 # Gets the section and table for a BodyLocation
 def get_body_location(body_location):
     for key, value in BODY_LOCATION_DICT.items():
@@ -451,10 +431,10 @@ def process_item(item_data, item_id):
         item["extra_slots"] = extra_slots
 
     if "fall_chance" in columns:
-        item["fall_chance"] = convert_to_percentage(item_data.get("ChanceToFall", '-'), True, True)
+        item["fall_chance"] = utility.convert_to_percentage(item_data.get("ChanceToFall", '-'), True, True)
 
     if "stomp_power" in columns:
-        item["stomp_power"] = convert_to_percentage(item_data.get("StompPower", '-'), True)
+        item["stomp_power"] = utility.convert_to_percentage(item_data.get("StompPower", '-'), True)
 
     if "have_holes" in columns:
         can_have_holes = item_data.get("CanHaveHoles", '-').lower()
@@ -475,31 +455,31 @@ def process_item(item_data, item_id):
         item["fabric"] = fabric
 
     if "move_speed" in columns:
-        item["move_speed"] = convert_to_percentage(item_data.get("RunSpeedModifier", '-'), False)
+        item["move_speed"] = utility.convert_to_percentage(item_data.get("RunSpeedModifier", '-'), False)
 
     if "attack_speed" in columns:
-        item["attack_speed"] = convert_to_percentage(item_data.get("CombatSpeedModifier", '-'), False)
+        item["attack_speed"] = utility.convert_to_percentage(item_data.get("CombatSpeedModifier", '-'), False)
 
     if "bite_def" in columns:
-        item["bite_def"] = convert_to_percentage(item_data.get("BiteDefense", '-'), True, True)
+        item["bite_def"] = utility.convert_to_percentage(item_data.get("BiteDefense", '-'), True, True)
 
     if "scratch_def" in columns:
-        item["scratch_def"] = convert_to_percentage(item_data.get("ScratchDefense", '-'), True, True)
+        item["scratch_def"] = utility.convert_to_percentage(item_data.get("ScratchDefense", '-'), True, True)
 
     if "bullet_def" in columns:
-        item["bullet_def"] = convert_to_percentage(item_data.get("BulletDefense", '-'), True, True)
+        item["bullet_def"] = utility.convert_to_percentage(item_data.get("BulletDefense", '-'), True, True)
 
     if "neck_def" in columns:
-        item["neck_def"] = convert_to_percentage(item_data.get("NeckProtectionModifier", '-'), True)
+        item["neck_def"] = utility.convert_to_percentage(item_data.get("NeckProtectionModifier", '-'), True)
 
     if "insulation" in columns:
-        item["insulation"] = convert_to_percentage(item_data.get("Insulation", '-'), True)
+        item["insulation"] = utility.convert_to_percentage(item_data.get("Insulation", '-'), True)
 
     if "wind_def" in columns:
-        item["wind_def"] = convert_to_percentage(item_data.get("WindResistance", '-'), True)
+        item["wind_def"] = utility.convert_to_percentage(item_data.get("WindResistance", '-'), True)
 
     if "water_def" in columns:
-        item["water_def"] = convert_to_percentage(item_data.get("WaterResistance", '-'), True)
+        item["water_def"] = utility.convert_to_percentage(item_data.get("WaterResistance", '-'), True)
 
     if "item_id" in columns:
         item["item_id"] = f"{{{{ID|{item_id}}}}}"
