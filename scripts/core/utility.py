@@ -687,7 +687,7 @@ def find_icon(item_id, all_icons=False):
     return icon
 
 
-def get_icon(item_id, format=False, all_icons=False, cycling=False):
+def get_icon(item_id, format=False, all_icons=False, cycling=False, custom_name=None):
     """
     Retrieves the icon(s) associated with a given item_id, with optional formatting and cycling through multiple icons.
 
@@ -731,16 +731,20 @@ def get_icon(item_id, format=False, all_icons=False, cycling=False):
                 lcs = f"/{language_code}"
 
             item_data = parsed_item_data[item_id]
-            name = item_data.get('DisplayName', 'Unknown')
-            page = get_page(item_id, name)
-            name = translate.get_translation(item_id, 'DisplayName')
+            if custom_name:
+                display_name = custom_name
+                translated_name = custom_name
+            else:
+                display_name = item_data.get('DisplayName', 'Unknown')
+                translated_name = translate.get_translation(item_id, 'DisplayName')
+            page = get_page(item_id, display_name)
             # Convert strings to a list for further processing
             if isinstance(icons, str):
                 icons = [icons]
             icon_list = []
             # Iterate through each icon and format it
             for icon in icons:
-                icon_formatted = f"[[File:{icon}|32x32px|link={page}{lcs}|{name}]]"
+                icon_formatted = f"[[File:{icon}|32x32px|link={page}{lcs}|{translated_name}]]"
                 icon_list.append(icon_formatted)
 
             # Convert to cycling icon if enabled and more than one icon
