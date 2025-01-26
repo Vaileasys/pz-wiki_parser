@@ -76,7 +76,8 @@ FILE_WHITELIST = (
     "Wiki_",
     "UI_",
     "Print_Text_",
-    "Print_Media_"
+    "Print_Media_",
+    "Stash_"
 )
 
 translations_cache = {}
