@@ -72,62 +72,78 @@ def copy_lua_files(media_dir: str) -> None:
     if not lua_dir.exists():
         raise FileNotFoundError(f"Lua directory not found in {lua_dir}.")
 
-    # List of Lua files to copy, sorted alphabetically
-    lua_files_to_copy = sorted([
-        'Ammo.lua',
-        'Animals.lua',
-        'Berries.lua',
-        'Clothing.lua',
-        'DeadAnimals.lua',
-        'Distribution_BagsAndContainers.lua',
-        'Distribution_BinJunk.lua',
-        'Distribution_ClosetJunk.lua',
-        'Distribution_CounterJunk.lua',
-        'Distribution_DeskJunk.lua',
-        'Distribution_ShelfJunk.lua',
-        'Distribution_SideTableJunk.lua',
-        'Fruits.lua',
-        'ForestGoods.lua',
-        'ForestRarities.lua',
-        'Herbs.lua',
-        'Insects.lua',
-        'Junk.lua',
-        'MedicinalPlants.lua',
-        'Medical.lua',
-        'Mushrooms.lua',
-        'Stones.lua',
-        'Vegetables.lua',
-        'WildPlants.lua',
-        'forageSystem.lua',
-        'BodyLocations.lua'
-        'Distributions.lua',
-        'ProceduralDistributions.lua',
-        'AttachedWeaponDefinitions.lua',
-        'VehicleDistributions.lua',
-        'VehicleDistribution_SeatJunk.lua',
-        'VehicleDistribution_TrunkJunk.lua',
-        'VehicleDistribution_GloveBoxJunk.lua',
-        'forageDefinitions.lua',
-        'SpecialLootSpawns.lua',
-        'SpecialItemData_Books.lua',
-        'SpecialItemData_Comics.lua',
-        'SpecialItemData_Magazines.lua',
-        'SpecialItemData_Misc.lua',
-        'SpecialItemData_Photos.lua',
-        'PrintMediaDefinitions.lua',
-        'camping_fuel.lua',
-        'MainCreationMethods.lua'
-    ])
+    # Lua files to copy, with their destination folder
+    # Key: Lua file
+    # Value: destination folder inside 'resources/lua'. Leave blank to add to 'lua' folder.
+    lua_files_to_copy = {
+        'Ammo.lua': '',
+        'Animals.lua': '',
+        'Berries.lua': '',
+        'Clothing.lua': '',
+        'DeadAnimals.lua': '',
+        'Distribution_BagsAndContainers.lua': '',
+        'Distribution_BinJunk.lua': '',
+        'Distribution_ClosetJunk.lua': '',
+        'Distribution_CounterJunk.lua': '',
+        'Distribution_DeskJunk.lua': '',
+        'Distribution_ShelfJunk.lua': '',
+        'Distribution_SideTableJunk.lua': '',
+        'Fruits.lua': '',
+        'ForestGoods.lua': '',
+        'ForestRarities.lua': '',
+        'Herbs.lua': '',
+        'Insects.lua': '',
+        'Junk.lua': '',
+        'MedicinalPlants.lua': '',
+        'Medical.lua': '',
+        'Mushrooms.lua': '',
+        'Stones.lua': '',
+        'Vegetables.lua': '',
+        'WildPlants.lua': '',
+        'forageSystem.lua': '',
+        'BodyLocations.lua': '',
+        'Distributions.lua': '',
+        'ProceduralDistributions.lua': '',
+        'AttachedWeaponDefinitions.lua': '',
+        'VehicleDistributions.lua': '',
+        'VehicleDistribution_SeatJunk.lua': '',
+        'VehicleDistribution_TrunkJunk.lua': '',
+        'VehicleDistribution_GloveBoxJunk.lua': '',
+        'forageDefinitions.lua': '',
+        'SpecialLootSpawns.lua': '',
+        'SpecialItemData_Books.lua': '',
+        'SpecialItemData_Comics.lua': '',
+        'SpecialItemData_Magazines.lua': '',
+        'SpecialItemData_Misc.lua': '',
+        'SpecialItemData_Photos.lua': '',
+        'PrintMediaDefinitions.lua': '',
+        'camping_fuel.lua': '',
+        'MainCreationMethods.lua': '',
+        'BrandenburgStashDesc.lua': 'stashes',
+        'EkronStashDesc.lua': 'stashes',
+        'IrvingtonStashDesc.lua': 'stashes',
+        'LouisvilleStashDesc.lua': 'stashes',
+        'MarchRidgeStashDesc.lua': 'stashes',
+        'MulStashDesc.lua': 'stashes',
+        'RiversideStashDesc.lua': 'stashes',
+        'RosewoodStashDesc.lua': 'stashes',
+        'WorldStashDesc.lua': 'stashes',
+        'WpStashDesc.lua': 'stashes',
+    }
 
     destination_dir = Path('resources/lua')
-    destination_dir.mkdir(parents=True, exist_ok=True)
 
     # Copy each file from the lua directory to the destination
     for root, _, files in os.walk(lua_dir):
         for file in files:
             if file in lua_files_to_copy:
                 src = Path(root) / file
-                dst = destination_dir / file
+                dst = destination_dir
+                folder = lua_files_to_copy[file]
+                if folder:
+                    dst = destination_dir / folder
+                dst.mkdir(parents=True, exist_ok=True)
+                dst = dst / file
                 shutil.copy(src, dst)
                 print(f"Copied {file} to {dst}")
 
