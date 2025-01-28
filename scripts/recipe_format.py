@@ -1,4 +1,6 @@
-import os, re, json
+import os
+import re
+import json
 from scripts.parser import recipe_parser, literature_parser
 from scripts.core import version, translate
 import recipe_output, item_tags
@@ -21,15 +23,12 @@ def process_recipe(recipe, parsed_item_data):
 
     processed_data = {}
 
-    # Process and store each field
     processed_data["name"] = process_name(recipe)
     processed_data["inputs"] = process_inputs(recipe)
     processed_data["outputs"] = process_outputs(recipe)
     processed_data["requirements"] = process_requirements(recipe, parsed_item_data)
     processed_data["workstation"] = process_workstation(recipe)
     processed_data["xp"] = process_xp(recipe)
-
-    # Return the processed data
     return processed_data
 
 
@@ -43,7 +42,6 @@ def process_name(recipe):
     Returns:
         tuple: A tuple containing the raw name and translated name, or (None, None) if the name field is not found.
     """
-    # Check if 'name' exists in the recipe
     if "name" not in recipe or not isinstance(recipe["name"], str):
         print("No 'name' field found or 'name' is not a valid string.")
         return None, None
@@ -104,7 +102,7 @@ def process_inputs(recipe):
             # Filter out excluded items from the tools
             filtered_items = [item for item in tool["items"] if item not in EXCLUDED_ITEMS]
             if not filtered_items:
-                return {}  # If all items were excluded, return an empty dict
+                return {}
 
             return {
                 tool_key: [
@@ -121,7 +119,6 @@ def process_inputs(recipe):
         if any("mapper" in str(value).lower() for value in input_item.values()):
             continue
 
-        # Before processing, remove excluded items from "items" if they exist
         if "items" in input_item and isinstance(input_item["items"], list):
             input_item["items"] = [
                 i for i in input_item["items"] if i not in EXCLUDED_ITEMS
@@ -272,7 +269,7 @@ def process_outputs(recipe):
         return {}
 
     processed_outputs = {}
-    output_index = 1  # Start numbering outputs from 1
+    output_index = 1
 
     for output in recipe[outputs_key]:
         # Handle energy outputs
@@ -286,14 +283,14 @@ def process_outputs(recipe):
             output_index += 1
             continue
 
-        # Handle outputs with a 'mapper'
+        # Handle outputs with mapper
         if "mapper" in output:
             mapper_string = output["mapper"]
             processed_outputs[f"output{output_index}"] = process_output_mapper(recipe, mapper_string)
             output_index += 1
             continue
 
-        # Handle outputs with a 'fluidModifier'
+        # Handle outputs with a fluidModifier
         fluid_modifier = output.get("fluidModifier")
         if fluid_modifier and isinstance(fluid_modifier, dict):
             processed_outputs[f"output{output_index}"] = {
@@ -306,7 +303,7 @@ def process_outputs(recipe):
             output_index += 1
             continue
 
-        # Handle normal outputs (non-fluid and non-mapper)
+        # Handle item outputs
         if "items" in output and isinstance(output["items"], list):
             for raw_product in output["items"]:
                 translated_product = translate.get_translation(raw_product)
@@ -358,23 +355,18 @@ def process_output_mapper(recipe, mapper_string):
     # Build the output dictionary, including both raw and translated outputs
     output_mapper = {
         "mapper": True,
-        "Amount": recipe.get("index", 1),  # Default index to 1 if not provided
+        "Amount": recipe.get("index", 1),
         "RawOutputs": [],
         "TranslatedOutputs": [],
     }
 
     # Iterate over mapper keys and process them, excluding 'default'
     for key, target_raw_names in mapper_data.items():
-        if key.lower() == "default":  # Skip the 'default' key
+        if key.lower() == "default":
             continue
 
-        # Use the key as the raw_item
         raw_items = [key]
-
-        # Translate the key
         translated_items = [translate.get_translation(key.strip())]
-
-        # Append the raw and translated names to the output lists
         output_mapper["RawOutputs"].append(raw_items)
         output_mapper["TranslatedOutputs"].append(translated_items)
 
@@ -428,14 +420,20 @@ def process_requirements(recipe, parsed_item_data):
                 translated_item_name = translate.get_translation(item_name)
                 requirements["skillbooks"].append(translated_item_name)
 
-        # Add to schematics based on parsed literature data
+        # Add schematics based on parsed literature data
         try:
             with open("output/logging/parsed_literature_data.json", "r", encoding="utf-8") as file:
-                literature_data = json.load(file)
+                literature_data = json.load(file)  # Load parsed literature data
 
-            for schematic_list, recipe_names in literature_data.items():
-                if raw_name in recipe_names:
-                    requirements["schematics"].append(schematic_list)
+            # Access the nested SpecialLootSpawns structure
+            special_loot_spawns = literature_data.get("SpecialLootSpawns", {})
+            for schematic_category, schematic_list in special_loot_spawns.items():
+                if raw_name in schematic_list:
+                    if "schematics" not in requirements:
+                        requirements["schematics"] = []
+                    requirements["schematics"].append(schematic_category)
+        except Exception as e:
+            print(f"Error adding schematics from parsed literature data: {e}")
 
         except FileNotFoundError:
             print("File not found: output/logging/parsed_literature_data.json")
@@ -449,19 +447,15 @@ def process_requirements(recipe, parsed_item_data):
 
             for line in lua_lines:
                 line = line.strip()
-                if line.startswith("--"):  # Skip comments
+                if line.startswith("--"):
                     continue
-                # Match recipe name (raw or translated) as a whole string within quotes
+                # Match recipe name as a whole string within quotes
                 if re.search(rf'"{re.escape(raw_name)}"', line) or re.search(rf'"{re.escape(translated_name)}"', line):
                     if ":" in line:
-                        # Extract trait name (string before the first ':')
                         trait = line.split(":")[0].strip()
-
-                        # Check for TraitFactory.addTrait
                         trait_add_pattern = rf"local\s+{re.escape(trait)}\s*=\s*TraitFactory\.addTrait\("
                         for add_trait_line in lua_lines:
                             if re.search(trait_add_pattern, add_trait_line):
-                                # Parse the getText string for translation
                                 match = re.search(r'getText\("([^"]+)"\)', add_trait_line)
                                 if match:
                                     text_key = match.group(1)
@@ -575,13 +569,13 @@ def process_xp(recipe):
     xp_award = recipe["xpAward"]
 
     if isinstance(xp_award, str) and ":" in xp_award:
-        # Handle single string format
         string_part, value = xp_award.split(":", 1)
+        if string_part == "WoodWork":
+            string_part = string_part.lower().capitalize()
         translated_string = translate.get_translation(string_part.strip(), "Perks")
         return f"[[{translated_string}]] {value.strip()}"
 
     elif isinstance(xp_award, list):
-        # Handle list format
         formatted_xp = []
         for entry in xp_award:
             if ":" in entry:

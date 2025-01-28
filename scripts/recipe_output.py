@@ -1,4 +1,5 @@
-import os, json
+import os
+import json
 from collections import defaultdict
 from scripts.parser import fluid_parser
 from scripts.core import translate, utility
@@ -35,7 +36,7 @@ def process_ingredients(data):
 
             fluid_strings = []
             for fluid_id in fluid_types:
-                fluid_info = fluid_rgb(fluid_id)  # Assume fluid_rgb returns {name, R, G, B}
+                fluid_info = fluid_rgb(fluid_id)
                 display_name = fluid_info["name"]
                 R, G, B = fluid_info["R"], fluid_info["G"], fluid_info["B"]
 
@@ -71,7 +72,7 @@ def process_ingredients(data):
             final_numbered_str = "<br>".join(numbered_strings)
             parsed_ingredients.append(("item", final_numbered_str, "One of"))
 
-        # Standard item-based ingredients
+        # Standard ingredients
         elif "items" in ingredient_info and ingredient_info["items"]:
             item_list = ingredient_info["items"]
             amount = ingredient_info.get("index", 1)
@@ -99,7 +100,6 @@ def process_ingredients(data):
         else:
             parsed_ingredients.append(("item", "Unknown Ingredient", "One of"))
 
-    # Build the final string
     final_ingredients_str = "ingredients="
     added_something = False
     last_descriptor = None
@@ -107,16 +107,12 @@ def process_ingredients(data):
     for ingredient_type, ingredient_str, descriptor in parsed_ingredients:
         # Add the descriptor only if it hasn't already been added
         if descriptor != last_descriptor or not (ingredient_type == "fluid" and descriptor == "Each of"):
-            # If something was added before, separate sections with one <br>
             if added_something:
                 final_ingredients_str += "<br>"
-            # Add descriptor and ensure a single <br> after it
             final_ingredients_str += f"<small>{descriptor}:</small><br>"
             last_descriptor = descriptor
-            added_something = False  # Reset to ensure no extra <br> is added immediately
-
-        # Append the ingredient string
-        if added_something:  # Add <br> only if there is already an ingredient in the section
+            added_something = False
+        if added_something:
             final_ingredients_str += "<br>"
 
         final_ingredients_str += ingredient_str
@@ -169,6 +165,7 @@ def process_tools(data):
                 tool_entry = f"[[file:{icon}|32x32px|class=pixelart]] [[{translated_name}]]"
                 each_of_parts.append(tool_entry + "<br>")
         elif key.endswith("_tags"):
+
             # Handle tagged groups
             tool_flags = tools_data.get(f"{key[:-5]}_flags", [])
             list_parts = []
@@ -182,7 +179,6 @@ def process_tools(data):
                 list_parts.append(tag_entry + "<br>")
             one_of_parts.append("<small>One of:</small><br>" + "".join(list_parts))
 
-    # Final output
     result = "tools="
     if each_of_parts:
         result += "<small>Each of:</small><br>" + "".join(each_of_parts)
@@ -314,11 +310,8 @@ def process_products(data):
     Returns:
         str: A formatted string representing the processed outputs.
     """
-    # Extract the translated_name from the "name" field
     names = data.get("name", [])
     translated_name = names[1] if len(names) > 1 else "Unknown Recipe"
-
-    # Base product string starts with the translated name
     products_str = f"products=<small>''{translated_name}''</small><br>"
 
     outputs_data = data.get("outputs", {}).get("outputs", {})
@@ -331,7 +324,6 @@ def process_products(data):
 
     for key, output_info in outputs_data.items():
         if "raw_product" in output_info and "translated_product" in output_info:
-            # Legacy item outputs
             raw_product = output_info["raw_product"]
             translated_product = output_info["translated_product"]
             products_number = output_info.get("products_number", 1)
@@ -349,7 +341,6 @@ def process_products(data):
             )
 
         elif output_info.get("mapper"):
-            # Handle mappers with both legacy and nested list formats
             raw_outputs = output_info.get("RawOutputs", [])
             translated_outputs = output_info.get("TranslatedOutputs", [])
             amount = output_info.get("Amount", 1)
@@ -371,7 +362,6 @@ def process_products(data):
                             f"[[file:{icon}|64x64px|class=pixelart]]<br>[[{translated_output}]] ×{amount}"
                         )
                 else:
-                    # Legacy format
                     try:
                         icon = utility.get_icon(raw_output_group) if raw_output_group else "Question On.png"
                         if isinstance(icon, list):
@@ -396,15 +386,12 @@ def process_products(data):
                 )
 
         elif output_info.get("energy"):
-            # Energy outputs
             energy_type = output_info.get("type", "Unknown")
             amount = output_info.get("amount", 0)
             energy_section.append(f"[[{energy_type} energy]] ×{amount}")
 
-    # Build the final products string
     if items_section:
         if len(items_section) == 1:
-            # Only one item output
             products_str += items_section[0]
         else:
             products_str += "<small>Each of:</small><br>" + "<br>".join(items_section)
@@ -557,7 +544,7 @@ def output(processed_recipes):
     combined_footer = "}}</includeonly>"
     combined_content.append(combined_footer)
 
-    combined_output_file = 'output/recipes/recipes_combined.txt'
+    combined_output_file = 'output/recipes/finished_template.txt'
     with open(combined_output_file, 'w', encoding='utf-8') as combined_file:
         combined_file.write("\n".join(combined_content))
 
@@ -568,11 +555,10 @@ def gather_item_usage(recipes_data, tags_data):
     it appears as an input and the set of recipe names in which it appears as an output.
     Includes tag-based ingredient and tool handling.
     """
-    item_input_map = defaultdict(set)  # Maps raw_name -> set of recipes where it's an input
-    item_output_map = defaultdict(set)  # Maps raw_name -> set of recipes where it's an output
+    item_input_map = defaultdict(set)
+    item_output_map = defaultdict(set)
 
     for recipe_name, recipe in recipes_data.items():
-        # --- Gather Inputs (Ingredients and Tools) ---
         inputs = recipe.get("inputs", {})
 
         # Process Ingredients
@@ -600,7 +586,7 @@ def gather_item_usage(recipes_data, tags_data):
                     if raw and raw != "Any fluid container":
                         item_input_map[raw].add(recipe_name)
 
-        # Process Tools (similar to Ingredients)
+        # Process Tools
         tools = inputs.get("tools", {})
         for key, tool_info in tools.items():
             if key.endswith("_tags") and isinstance(tool_info, list):
@@ -613,11 +599,9 @@ def gather_item_usage(recipes_data, tags_data):
                                 item_input_map[raw].add(recipe_name)
 
             elif key.endswith("_flags"):
-                # Ignore or handle tool flags if needed (currently ignored)
                 pass
 
             elif isinstance(tool_info, dict):
-                # Handle older format with "items", "tags", or "numbered_list"
                 if "items" in tool_info:
                     for item_dict in tool_info["items"]:
                         raw = item_dict.get("raw_name")
@@ -639,7 +623,6 @@ def gather_item_usage(recipes_data, tags_data):
                         if raw:
                             item_input_map[raw].add(recipe_name)
 
-        # --- Gather Outputs ---
         outputs = recipe.get("outputs", {}).get("outputs", {})
         for _, output_info in outputs.items():
             if "raw_product" in output_info:
@@ -684,14 +667,12 @@ def output_item_usage(item_input_map, item_output_map):
         with open(combined_file, 'w', encoding='utf-8') as f:
             f.write("==Crafting==\n")
             if output_recipes:
-                # Create crafting template for "How to craft"
                 crafting_id = f"{raw_name}_howtocraft"
                 crafting_template = ["{{Crafting/sandbox|item=" + crafting_id]
                 for recipe in output_recipes:
                     crafting_template.append(f"|{recipe}")
                 crafting_template.append("}}")
 
-                # Write to combined file
                 f.write("===How it's made===\n")
                 f.write("\n".join(crafting_template) + "\n\n")
 

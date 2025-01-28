@@ -42,7 +42,7 @@ def extract_recipe_blocks(lines):
     current_lines = []
     current_name = None
     craft_recipe_pattern = re.compile(r'^\s*craftRecipe\s+(\S+)', re.IGNORECASE)
-    comment_pattern = re.compile(r'/\*.*?\*/', re.DOTALL)  # Pattern to match multi-line comments
+    comment_pattern = re.compile(r'/\*.*?\*/', re.DOTALL)
 
     for line in lines:
         if not in_recipe:
@@ -57,13 +57,8 @@ def extract_recipe_blocks(lines):
             bracket_level += line.count('{')
             bracket_level -= line.count('}')
             if bracket_level <= 0:
-                # Combine all collected lines into a single block
                 recipe_text = "".join(current_lines)
-
-                # Remove multi-line comments from the recipe block
                 recipe_text = re.sub(comment_pattern, "", recipe_text)
-
-                # Append the cleaned recipe block
                 blocks.append((current_name, recipe_text))
 
                 # Reset state for next recipe block
@@ -112,14 +107,11 @@ def parse_recipe_block(recipe_name, recipe_text):
     m = outputs_pattern.search(recipe_text)
     if m:
         block_text = m.group(1)
-        # Parse the output block
         new_outputs = parse_items_block(block_text, is_output=True, recipe_dict=recipe_dict)
 
-        # Combine new outputs with any existing outputs (e.g., added during inputs parsing)
         existing_outputs = recipe_dict.get("outputs", [])
         recipe_dict["outputs"] = existing_outputs + new_outputs
 
-        # Remove the parsed block from the remaining recipe_text
         s, e = m.span()
         recipe_text = recipe_text[:s] + recipe_text[e:]
 
@@ -186,7 +178,6 @@ def parse_items_block(block_text, is_output=False, recipe_dict=None):
                         "fluidType": fl["items"],
                         "amount": fl["amount"]
                     }
-                    # Ensure outputs are correctly appended to the recipe dictionary
                     if not is_output:
                         outputs = recipe_dict.setdefault("outputs", [])
                         outputs.append(copy_item)
