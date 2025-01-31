@@ -1,4 +1,5 @@
 import os
+import shutil
 import csv
 import json
 import re
@@ -313,7 +314,7 @@ def get_burn_data(tables=None):
     # Only parse data once, not on every call
     if first_run:
         file_path = Path("resources") / "lua" / "camping_fuel.lua"
-        json_file_path = Path("output") / "logging" / "parsed_burn_data.json"
+        JSON_FILE = "burn_data.json"
 
         if not file_path.exists():
             print(f"Lua file not found, ensure 'setup' has been run: {file_path}")
@@ -347,18 +348,12 @@ def get_burn_data(tables=None):
             parsed_burn_data[table_name] = table_data
 
         # Save parsed data to a json file, for debugging
-        json_file_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(json_file_path, 'w', encoding='utf-8') as json_file:
-            json.dump(parsed_burn_data, json_file, indent=4)
-#            print(f"JSON file saved to {json_file_path}")
+        save_cache(parsed_burn_data, JSON_FILE, suppress=True)
 
     if tables is None:
         return parsed_burn_data
-    
-    for table in tables:
-        output_data[table] = parsed_burn_data[table]
 
-    return output_data
+    return parsed_burn_data
 
 
 # Gets and calculates the burn time and outputs it as an hours and minutes string.
@@ -469,8 +464,112 @@ def format_br(values):
     return "<br>".join(values)
 
 
+# Save parsed data to json file
+def save_cache(data: dict, data_file: str, data_dir=DATA_PATH, suppress=False):
+    """Caches data by saving it to a json file.
+
+    Args:
+        data (dict): Data to be cached, by storing it in a json file.
+        data_file (str): Name of the JSON file to be saved as. Including the file extension is optional.
+        data_dir (_type_, optional): Custom directory for the JSON file. Defaults to value of 'scripts.core.constants.DATA_PATH'.
+        suppress (bool, optional): Suppress displaying warnings/print statements. Defaults to False.
+    """
+    if not data_file.endswith(".json"):
+        data_file + ".json"
+    data_file_path = os.path.join(data_dir, data_file)
+    os.makedirs(os.path.dirname(data_file_path), exist_ok=True)
+
+    # Adds space between words for CamelCase strings and cleans string
+    cache_name = re.sub(r'(?<=[a-z])([A-Z])', r' \1', data_file.replace(".json", "")).replace("_", " ").strip().lower()
+
+    # Add version number to data. Version can be checked to save time parsing.
+    data_copy = data.copy() # Copy so we don't modify the existing usable data.
+    data_copy["version"] = version.get_version()
+    with open(data_file_path, 'w', encoding='utf-8') as json_file:
+        json.dump(data_copy, json_file, ensure_ascii=False, indent=4)
+    
+    if not suppress:
+        print(f"{cache_name.capitalize()} saved to '{data_file_path}'")
+
+
+def get_cache(cache_file, cache_name="data", get_old=False):
+    """Loads the cache from a json file if it exists for the version.
+
+    Args:
+        cache_file (str): Path to the cache file.
+        cache_name (str, optional): String to be used in prints. Should be a name for the type of cache, e.g. 'item'. Defaults to None.
+        get_old (bool, optional): If True, backs up the old cached data when the version differs. Defaults to False.
+
+    Returns:
+        dict: Cached data if valid, otherwise an empty dictionary.
+        bool: If 'get_old' is True, also returns a boolean indicating if the cache was old.
+    """
+    json_cache = {}
+    is_old = False
+    if cache_name.strip().lower() != "data":
+        cache_name = cache_name.strip() + " data"
+
+    try:
+        if os.path.exists(cache_file):
+            with open(cache_file, 'r', encoding='utf-8') as file:
+                json_cache = json.load(file)
+
+            if json_cache.get("version") == version.get_version():
+                print(f"{cache_name.capitalize()} loaded from cache: '{cache_file}'")
+                # Remove 'version' key before returning.
+                json_cache.pop("version", None)
+
+            else:
+                if get_old:
+                    is_old = True
+                    shutil.copy(cache_file, cache_file.replace(".json", "_old.json"))
+
+                print(f"{cache_name.capitalize()} cache is for a different version.")
+
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON file 'cache_file': {e}")
+
+    except Exception as e:
+        print(f"Error getting {cache_name.lower()} '{cache_file}': {e}")
+
+    if get_old:
+        return json_cache, is_old
+    return json_cache
+
+
+def clear_cache(cache_path=DATA_PATH, cache_name=None, suppress=False):
+    """Clears the cache at a specified file path.
+
+    Args:
+        cache_path (str): File path of the cache to be deleted. Can be a single file, or entire folder. Must be a file or folder in 'scripts.core.constants.DATA_PATH'.
+        cache_name (str, optional): String to be used in print statements. Should be a name for the type of cache, e.g. 'item'. Defaults to None.
+        suppress (bool, optional): Suppress displaying print statements (errors still displayed). Defaults to False.
+    """
+    if cache_name:
+        cache_name = cache_name + " cache"
+    else:
+        cache_name = "cache"
+    try:
+        if cache_path != DATA_PATH:
+            cache_path = os.path.join(DATA_PATH, cache_path)
+
+        # Check if it's a file or directory
+        if os.path.exists(cache_path):
+            if os.path.isdir(cache_path):
+                shutil.rmtree(cache_path)  # Delete directory
+                os.makedirs(cache_path)  # Recreate directory
+            else:
+                os.remove(cache_path)  # Delete file
+
+        if not suppress:
+            print(f"{cache_name.capitalize()} cleared.")
+    except Exception as e:
+        print(f"Error clearing {cache_name.lower()} '{cache_path}': {e}")
+
+
+
 # Converts a value to a percentage str
-def convert_to_percentage(value, start_zero=True, percentage=False):
+def convert_to_percentage(value: str | int | float, start_zero=True, percentage=False) -> str:
     """Converts a numeric value to a percentage string.
 
     Args:
@@ -501,9 +600,26 @@ def convert_to_percentage(value, start_zero=True, percentage=False):
     return f"{value}%"
 
 
+def convert_int(value: int | float) -> int | float:
+    """Converts a value to an integer if it has no decimal (isn't float-like)."""
+
+    # Try to convert string to a float.
+    if isinstance(value, str):
+        try:
+            value = float(value)
+        except ValueError:
+            return str(value)
+
+    # Convert to an int if it's not float-like.
+    if isinstance(value, (int, float)) and value == int(value):
+        return str(int(value))
+
+    return str(value)
+
+
 # Gets an item name. This is for special cases where the name needs to be manipulated.
 def get_name(item_id, item_data, language="en"):
-    lang_code = translate.get_language_code()
+    language_code = translate.get_language_code()
     # The following keys are used to construct the name:
     # item_id: The item ID this special case is applicable to.
     # prefix: The text to appear at the beginning of the string.
@@ -513,31 +629,31 @@ def get_name(item_id, item_data, language="en"):
     ITEM_NAMES = {
         "bible": {
             "item_id": ["Base.Book_Bible", "Base.BookFancy_Bible", "Base.Paperback_Bible"],
-            "suffix": f': {translate.get_translation("TheBible", "BookTitle", language if language == "en" else lang_code)}'
+            "suffix": f': {translate.get_translation("TheBible", "BookTitle", language if language == "en" else language_code)}'
         },
         "Newspaper_Dispatch_New": {
             "item_id": ["Base.Newspaper_Dispatch_New"],
-            "suffix": f': {translate.get_translation("NationalDispatch", "NewspaperTitle", language if language == "en" else lang_code)}'
+            "suffix": f': {translate.get_translation("NationalDispatch", "NewspaperTitle", language if language == "en" else language_code)}'
         },
         "Newspaper_Herald_New": {
             "item_id": ["Base.Newspaper_Herald_New"],
-            "suffix": f': {translate.get_translation("KentuckyHerald", "NewspaperTitle", language if language == "en" else lang_code)}'
+            "suffix": f': {translate.get_translation("KentuckyHerald", "NewspaperTitle", language if language == "en" else language_code)}'
         },
         "Newspaper_Knews_New": {
             "item_id": ["Base.Newspaper_Knews_New"],
-            "suffix": f': {translate.get_translation("KnoxKnews", "NewspaperTitle", language if language == "en" else lang_code)}'
+            "suffix": f': {translate.get_translation("KnoxKnews", "NewspaperTitle", language if language == "en" else language_code)}'
         },
         "Newspaper_Times_New": {
             "item_id": ["Base.Newspaper_Times_New"],
-            "suffix": f': {translate.get_translation("LouisvilleSunTimes", "NewspaperTitle", language if language == "en" else lang_code)}'
+            "suffix": f': {translate.get_translation("LouisvilleSunTimes", "NewspaperTitle", language if language == "en" else language_code)}'
         },
         "BusinessCard_Nolans": {
             "item_id": ["Base.BusinessCard_Nolans"],
-            "suffix": f': {translate.get_translation("NolansUsedCars", "IGUI", language if language == "en" else lang_code)}'
+            "suffix": f': {translate.get_translation("NolansUsedCars", "IGUI", language if language == "en" else language_code)}'
         },
         "Flier_Nolans": {
             "item_id": ["Base.Flier_Nolans"],
-            "suffix": f': {translate.get_translation("NolansUsedCars_title", "PrintMedia", language if language == "en" else lang_code)}'
+            "suffix": f': {translate.get_translation("NolansUsedCars_title", "PrintMedia", language if language == "en" else language_code)}'
         }
     }
 
@@ -551,7 +667,7 @@ def get_name(item_id, item_data, language="en"):
     # If the item_id doesn't exist in the dict, we return the translation (normal)
     if item_key is None:
         # We don't need to translate if language is "en", as it's already been translated in the parser.
-        if translate.get_language_code() == "en" or language == "en":
+        if language_code == "en" or language == "en":
             return item_data.get("DisplayName", "Unknown")
         return translate.get_translation(item_id, "DisplayName")
 

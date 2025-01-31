@@ -87,6 +87,11 @@ settings_structure = {
         'module': 'core.translate'
     },
     '3': {
+        'name': 'Clear cache',
+        'description': 'Clear the data cache.',
+        'module': 'setup'
+    },
+    '4': {
         'name': 'Run First Time Setup',
         'description': 'Run the initial setup again.',
         'module': 'setup'
@@ -168,6 +173,9 @@ def navigate_menu(menu, is_root=False):
             # Check if it's the settings menu and link to settings_structure
             if selected_option['name'] == 'Settings' and selected_option['sub_options'] is None:
                 navigate_menu(settings_structure)
+            elif selected_option['name'] == 'Clear cache':
+                utility.clear_cache()
+                print("\nReturning to the menu...\n")
             elif selected_option['name'] == 'Run First Time Setup':
                 handle_module('scripts.core.setup')
                 print("\nReturning to the menu...\n")
