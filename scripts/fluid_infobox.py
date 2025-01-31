@@ -2,7 +2,7 @@ import os
 import shutil
 import json
 from scripts.parser import fluid_parser
-from scripts.core import translate, logging_file, version, utility
+from scripts.core import translate, logger, version, utility
 print(f"Current Working Directory: {os.getcwd()}")
 
 
@@ -109,7 +109,7 @@ def write_to_output(fluid_data, fluid_id, output_dir):
 
             file.write("\n}}")
     except Exception as e:
-        logging_file.log_to_file(f"Error writing file {fluid_id}.txt: {e}", True)
+        logger.write(f"Error writing file {fluid_id}.txt: {e}", True)
 
 
 def process_fluid(fluid_data, fluid_id, output_dir):

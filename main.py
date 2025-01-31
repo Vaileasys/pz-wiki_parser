@@ -1,7 +1,7 @@
 import importlib
 import sys
 import os
-from scripts.core import version, config_manager, logging_file, setup
+from scripts.core import version, config_manager, setup, logger, utility
 
 menu_structure = {
     '0': {
@@ -196,10 +196,10 @@ def check_first_run():
         choice = input("Would you like to run the first-time setup? (Y/N): ").strip().upper()
         if choice == 'Y':
             setup.main()
-            logging_file.log_to_file("Setup first time set up completed.")
+            logger.write("Setup first time set up completed.")
 
         else:
-            logging_file.log_to_file("Skipping first-time setup.", True)
+            logger.write("Skipping first-time setup.", True)
         config_manager.set_config('first_time_run', '1')
 
 

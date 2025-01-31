@@ -1,7 +1,7 @@
 from tqdm import tqdm
 import os
 from scripts.parser import item_parser
-from scripts.core import translate, utility, logging_file
+from scripts.core import translate, utility, logger
 
 pbar_format = "{l_bar}{bar:30}{r_bar}"
 
@@ -22,7 +22,7 @@ def translate_category(category, property="DisplayCategory"):
             cat_translated = translate.get_translation(category, property)
             categories[category] = cat_translated
         except Exception as e:
-            logging_file.log_to_file(f"Error translating category '{category}': {e}")
+            logger.write(f"Error translating category '{category}': {e}")
             cat_translated = category
     else:
         cat_translated = categories[category]

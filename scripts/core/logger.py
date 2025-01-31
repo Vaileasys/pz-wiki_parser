@@ -12,7 +12,7 @@ def init_log_file(file_name="log.txt"):
 
 
 # Used to log important info to a log file
-def log_to_file(message, print_bool="False", file_name="log.txt"):
+def write(message, print_bool="False", file_name="log.txt"):
     global is_first_log
     file_name = "output/logging/" + file_name
 

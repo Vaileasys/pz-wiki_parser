@@ -5,7 +5,8 @@ import re
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from scripts.parser import item_parser
-from scripts.core import translate, logging_file
+from scripts.core import translate, logger, version
+from scripts.core.constants import DATA_PATH
 
 
 parsed_burn_data = {}
@@ -58,7 +59,7 @@ def get_clothing_xml_value(item_data, xml_value):
         file_path = os.path.join("resources", "clothing", "clothingItems", f"{clothing_item}.xml")
 
         if not os.path.exists(file_path):
-            logging_file.log_to_file(f"No XML file found for ClothingItem '{clothing_item}'. Is it in the correct directory?")
+            logger.write(f"No XML file found for ClothingItem '{clothing_item}'. Is it in the correct directory?")
             return None
         
         try:
@@ -587,7 +588,7 @@ def get_page(item_id, name="Unknown"):
                 return row[0]
 
 #    print(f"Couldn't find a page for '{item_id}'")
-    logging_file.log_to_file(f"Couldn't find a page for '{item_id}'")
+    logger.write(f"Couldn't find a page for '{item_id}'")
     return name
 
 
@@ -711,10 +712,10 @@ def find_icon(item_id, all_icons=False):
     matched_icon = check_icon_exists(icon)
     if matched_icon:
         if matched_icon != icon:
-            logging_file.log_to_file(f"Icon was modified for {item_id} with icon: {icon}", False, "log_modified_icons.txt")
+            logger.write(f"Icon was modified for {item_id} with icon: {icon}", False, "log_modified_icons.txt")
         icon = matched_icon
     else:
-        logging_file.log_to_file(f"Missing icon for '{item_id}' with icon: {icon}", False, "log_missing_icons.txt")
+        logger.write(f"Missing icon for '{item_id}' with icon: {icon}", False, "log_missing_icons.txt")
 
     return icon
 

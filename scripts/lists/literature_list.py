@@ -2,9 +2,9 @@ import os
 from tqdm import tqdm
 from scripts.parser import item_parser, recipe_parser, stash_parser
 from scripts.core import translate, utility
+from scripts.core.constants import PBAR_FORMAT
 
 language_code = "en"
-pbar_format = "{l_bar}{bar:30}{r_bar}"
 
 # Used for getting table values
 TABLE_DICT = {
@@ -449,9 +449,9 @@ def get_items():
     parsed_stash_data = stash_parser.get_stash_data()
 
     # Get items
-    with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=pbar_format, unit=" items") as pbar:
+    with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items") as pbar:
         for item_id, item_data in parsed_item_data.items():
-            pbar.set_postfix_str(f"Processing: {item_id[:30]}")
+            pbar.set_postfix_str(f"Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})")
             if item_data.get("Type") in ("Literature", "Map") or item_data.get("DisplayCategory") == "Literature":
                 heading, item = process_item(item_id, item_data)
 
@@ -466,10 +466,10 @@ def get_items():
         pbar.bar_format = f"Items processed."
     
     # Get annotated maps
-    with tqdm(total=len(parsed_item_data), desc="Processing annotated maps", bar_format=pbar_format, unit=" items") as pbar:
+    with tqdm(total=len(parsed_item_data), desc="Processing annotated maps", bar_format=PBAR_FORMAT, unit=" items") as pbar:
         for map_region, region_data in parsed_stash_data.items():
             for map_id, map_data in region_data.items():
-                pbar.set_postfix_str(f"Processing: {map_id[:30]}")
+                pbar.set_postfix_str(f"Processing: Map ({map_id[:30]})")
                 heading, annotated_map = process_map(map_region, map_id, map_data)
 
                 # All annotated maps should be "Annotated map", but we'll be consistent.

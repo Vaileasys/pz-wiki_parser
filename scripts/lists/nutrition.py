@@ -2,19 +2,18 @@ import os
 from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.core import translate, utility
-
-pbar_format = "{l_bar}{bar:30}{r_bar}"
+from scripts.core.constants import PBAR_FORMAT
 
 def write_to_output(items):
     items = sorted(items, key=lambda x: x['item_name'].lower())
 
     # write to output.txt
     language_code = translate.get_language_code()
-    output_dir = os.path.join('output', language_code)
-    output_file = os.path.join(output_dir, 'item_list', 'nutrition.txt')
+    output_dir = os.path.join("output", language_code, 'item_list')
+    output_file = os.path.join(output_dir, 'nutrition.txt')
     os.makedirs(output_dir, exist_ok=True)
 
-    with tqdm(total=len(items), desc="Writing nutrition table", bar_format=pbar_format, unit=" items") as pbar:
+    with tqdm(total=len(items), desc="Writing nutrition table", bar_format=PBAR_FORMAT, unit=" items") as pbar:
     
         with open(output_file, 'w', encoding='utf-8') as file:
 
@@ -49,10 +48,10 @@ def get_items():
     parsed_items = item_parser.get_item_data().items()
     language_code = translate.get_language_code()
     
-    with tqdm(total=len(parsed_items), desc="Getting food items", bar_format=pbar_format, unit=" items") as pbar:
+    with tqdm(total=len(parsed_items), desc="Getting food items", bar_format=PBAR_FORMAT, unit=" items") as pbar:
         for item_id, item_data in parsed_items:
             # Change the string at the end of the progress bar
-            pbar.set_postfix_str(f"Processing: {item_id}")
+            pbar.set_postfix_str(f"Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})")
 
             if "Calories" in item_data:
                 if language_code != "en":

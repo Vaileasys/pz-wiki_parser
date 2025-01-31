@@ -2,7 +2,8 @@ import os
 import shutil
 from tqdm import tqdm
 from scripts.parser import item_parser
-from scripts.core import translate, utility, logging_file, version
+from scripts.core import translate, utility, logger, version
+from scripts.core.constants import PBAR_FORMAT
 
 # Values located in forageSystem.lua line 102 'clothingPenalties' (Build 42.0.2)
 CLOTHING_PENALTIES = {
@@ -285,8 +286,8 @@ def write_to_output(item_data, item_id, output_dir):
 
             file.write("\n}}")
     except Exception as e:
-        logging_file.log_to_file(f"Error writing file {item_id}.txt: {e}", True)
-        
+        logger.write(f"Error writing file {item_id}.txt: {e}", True)
+
 
 def process_item(item_data, item_id, output_dir):
     write_to_output(item_data, item_id, output_dir)
@@ -298,10 +299,11 @@ def automatic_extraction(output_dir):
     os.makedirs(output_dir)
 
     parsed_item_data = item_parser.get_item_data()
-    with tqdm(total=len(parsed_item_data), desc="Processing items", unit=" items", unit_scale=True) as bar:
+    with tqdm(total=len(parsed_item_data), desc="Processing items", unit=" items", bar_format=PBAR_FORMAT, unit_scale=True) as pbar:
         for item_id, item_data in parsed_item_data.items():
+            pbar.set_postfix_str(f"Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})")
             process_item(item_data, item_id, output_dir)
-            bar.update(1)
+            pbar.update(1)
 
 
 def main():

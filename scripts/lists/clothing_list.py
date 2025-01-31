@@ -2,8 +2,7 @@ import os
 from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.core import utility, translate
-
-pbar_format = "{l_bar}{bar:30}{r_bar}"
+from scripts.core.constants import PBAR_FORMAT
 
 # Used for getting table values
 TABLE_DICT = {
@@ -492,9 +491,9 @@ def get_items():
     clothing_dict = {}
     parsed_item_data = item_parser.get_item_data()
 
-    with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=pbar_format, unit=" items") as pbar:
+    with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=constants.PBAR_FORMAT, unit=" items") as pbar:
         for item_id, item_data in parsed_item_data.items():
-            pbar.set_postfix_str(f"Processing: {item_id[:15]}")
+            pbar.set_postfix_str(f"Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})")
             if item_data.get("Type") in ("Clothing", "AlarmClockClothing") or 'CanBeEquipped' in item_data:
                 # filter out blacklisted items and 'Reverse' variants
                 module, item_name = item_id.split('.')

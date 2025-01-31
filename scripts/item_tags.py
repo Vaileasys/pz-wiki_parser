@@ -4,12 +4,12 @@ from difflib import SequenceMatcher
 from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.core import utility, translate, version
+from scripts.core.constants import (OUTPUT_PATH, PBAR_FORMAT)
 
 is_run_locally = False
 
-pbar_format = "{l_bar}{bar:30}{r_bar}"
 language_code = translate.get_language_code()
-tags_dir = os.path.join("output", language_code, "tags")
+output_tags_dir = os.path.join(OUTPUT_PATH, language_code, "tags")
 
 tag_data = {}
 
@@ -19,13 +19,13 @@ tag_data = {}
 def write_tag_image():
     """Write each tag's item icons for `cycle-img`."""
     tags_dict = get_tag_data()
-    output_dir = os.path.join(tags_dir, "cycle-img")
+    output_dir = os.path.join(output_tags_dir, "cycle-img")
     os.makedirs(output_dir, exist_ok=True)
 
-    with tqdm(total=len(tags_dict), desc="Generating tag images", bar_format=pbar_format, unit=" tags") as pbar:
+    with tqdm(total=len(tags_dict), desc="Generating tag images", bar_format=PBAR_FORMAT, unit=" tags") as pbar:
         for tag, tag_data in tags_dict.items():
             # Change the string at the end of the progress bar
-            pbar.set_postfix_str(f"Processing: {tag[:15]}")
+            pbar.set_postfix_str(f"Processing: {tag[:30]}")
             output_file = os.path.join(output_dir, f'{tag}.txt')
             with open(output_file, 'w', encoding='utf-8') as file:
                 file.write('<span class="cycle-img">')
@@ -41,16 +41,16 @@ def write_tag_image():
 def write_tag_table():
     """Write a wikitable showing all tags and corresponding items."""
     tags_dict = get_tag_data()
-    output_dir = tags_dir
+    output_dir = output_tags_dir
     os.makedirs(output_dir, exist_ok=True)
     output_file = os.path.join(output_dir, 'tags_table.txt')
 
-    with tqdm(total=len(tags_dict), desc="Generating tags table", bar_format=pbar_format, unit=" tags") as pbar:
+    with tqdm(total=len(tags_dict), desc="Generating tags table", bar_format=PBAR_FORMAT, unit=" tags") as pbar:
         with open(output_file, 'w', encoding='utf-8') as file:
             file.write('{| class="wikitable theme-blue"\n|-\n! Tag !! Items\n')
             for tag in sorted(tags_dict.keys()):
                 # Change the string at the end of the progress bar
-                pbar.set_postfix_str(f"Processing: {tag[:15]}")
+                pbar.set_postfix_str(f"Processing: {tag[:30]}")
 
                 tag_data = sorted(tags_dict[tag], key=lambda item: item['name'])
 
@@ -69,13 +69,13 @@ def write_tag_table():
 def write_tag_list():
     """Write each tag item as an item_list."""
     tags_dict = get_tag_data()
-    output_dir = os.path.join(tags_dir, "item_list")
+    output_dir = os.path.join(output_tags_dir, "item_list")
     os.makedirs(output_dir, exist_ok=True)
 
-    with tqdm(total=len(tags_dict), desc="Generating tag item list", bar_format=pbar_format, unit=" tags") as pbar:
+    with tqdm(total=len(tags_dict), desc="Generating tag item list", bar_format=PBAR_FORMAT, unit=" tags") as pbar:
         for tag, tag_data in tags_dict.items():
             # Change the string at the end of the progress bar
-            pbar.set_postfix_str(f"Processing: {tag[:15]}")
+            pbar.set_postfix_str(f"Processing: {tag[:30]}")
 
             output_file = os.path.join(output_dir, f'{tag}.txt')
             with open(output_file, 'w', encoding='utf-8') as file:
@@ -199,19 +199,19 @@ def get_item_list(source_dir):
 ## -------------------- TAG ARTICLE (MODDING) -------------------- ##
 
 def generate_article_modding():
-    source_dir = os.path.join(tags_dir, "item_list")
+    source_dir = os.path.join(output_tags_dir, "item_list")
     if not os.path.exists(source_dir):
         print(f"'source_dir' doesn't exist, running 'Tag item list'")
         write_tag_list()
-    dest_dir = os.path.join(tags_dir, "articles", "modding")
+    dest_dir = os.path.join(output_tags_dir, "articles", "modding")
     item_list = get_item_list(source_dir)
     if item_list:
         all_tags = [tag for _, tag in item_list]
 
-        with tqdm(total=len(item_list), desc="Generating modding articles", bar_format=pbar_format, unit=" tags") as pbar:
+        with tqdm(total=len(item_list), desc="Generating modding articles", bar_format=PBAR_FORMAT, unit=" tags") as pbar:
             for content, tag in item_list:
                 # Change the string at the end of the progress bar
-                pbar.set_postfix_str(f"Processing: {tag[:15]}")
+                pbar.set_postfix_str(f"Processing: {tag[:30]}")
 
                 see_also = get_see_also(all_tags, tag)
                 write_article(tag, content, see_also, dest_dir)
@@ -224,19 +224,19 @@ def generate_article_modding():
 ## -------------------- TEMPLATE ARTICLE -------------------- ##
 
 def generate_article_templates():
-    source_dir = os.path.join(tags_dir, "cycle-img")
+    source_dir = os.path.join(output_tags_dir, "cycle-img")
     if not os.path.exists(source_dir):
         print(f"'source_dir' doesn't exist, running 'Tag item list'")
         write_tag_image()
-    dest_dir = os.path.join(tags_dir, "articles", "templates")
+    dest_dir = os.path.join(output_tags_dir, "articles", "templates")
     item_list = get_item_list(source_dir)
     if item_list:
         all_tags = [tag for _, tag in item_list]
 
-        with tqdm(total=len(item_list), desc="Generating template articles", bar_format=pbar_format, unit=" tags") as pbar:
+        with tqdm(total=len(item_list), desc="Generating template articles", bar_format=PBAR_FORMAT, unit=" tags") as pbar:
             for content, tag in item_list:
                 # Change the string at the end of the progress bar
-                pbar.set_postfix_str(f"Processing: {tag[:15]}")
+                pbar.set_postfix_str(f"Processing: {tag[:30]}")
 
                 see_also = get_see_also(all_tags, tag)
                 write_article(tag, content, see_also, dest_dir)
@@ -270,9 +270,9 @@ def generate_tags_dict():
     tags_dict = {}
     parsed_item_data = item_parser.get_item_data()
 
-    with tqdm(total=len(parsed_item_data), desc="Generating tag data", bar_format=pbar_format, unit=" items") as pbar:
+    with tqdm(total=len(parsed_item_data), desc="Generating tag data", bar_format=PBAR_FORMAT, unit=" items") as pbar:
         for item_id, item_data in parsed_item_data.items():
-            pbar.set_postfix_str(f"Processing: {item_id[:15]}")
+            pbar.set_postfix_str(f"Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})")
             if 'Tags' in item_data:
                 name = utility.get_name(item_id, item_data)
                 page = utility.get_page(item_id, name)

@@ -3,7 +3,8 @@ import json
 import chardet
 import re
 from scripts.parser import item_parser
-from scripts.core import logging_file, config_manager
+from scripts.core import logger, config_manager, utility
+from scripts.core.constants import DATA_PATH
 
 language_code = None
 default_language = None
@@ -126,7 +127,7 @@ def detect_file_encoding(file_path):
         raw_data = file.read()
         result = chardet.detect(raw_data)
         encoding = result['encoding']
-        logging_file.log_to_file(f"File encoded with '{encoding}'")
+        logger.write(f"File encoded with '{encoding}'")
     return encoding
 
 
@@ -158,7 +159,7 @@ def get_translation(property_value, property_key="DisplayName", lang_code=langua
     property_prefix = PROPERTY_PREFIXES.get(property_key, "") + property_value
     translation = translations_lang.get(property_prefix)
     if translation is None:
-        logging_file.log_to_file(f"No translation found for '{property_prefix}' prefix")
+        logger.write(f"No translation found for '{property_prefix}' prefix")
         translation = property_value
 
         # Try get the item's name from DisplayName instead
@@ -239,8 +240,7 @@ def parse_translation_file(language_code):
                 if encoding_detected:
                     print(f"Unable to decode the file '{file_name}' even after trying to detect encoding.")
                     break
-                logging_file.log_to_file(
-                    f"There was an issue decoding the file '{file_name}' with encoding '{encoding}'. Trying to detect encoding.")
+                logger.write(f"There was an issue decoding the file '{file_name}' with encoding '{encoding}'. Trying to detect encoding.")
                 encoding = detect_file_encoding(file_path)
                 encoding_detected = True
             except Exception as e:
