@@ -509,6 +509,10 @@ def load_cache(cache_file, cache_name="data", get_version=False, backup_old=Fals
     cache_version = None
     json_cache = {}
 
+    # Check if cache_file includes a directory path
+    if not os.path.dirname(cache_file):
+        cache_file = os.path.join(DATA_PATH, cache_file)
+
     if cache_name.strip().lower() != "data":
         cache_name = cache_name.strip() + " data"
 
