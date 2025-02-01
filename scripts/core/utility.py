@@ -492,20 +492,23 @@ def save_cache(data: dict, data_file: str, data_dir=DATA_PATH, suppress=False):
         print(f"{cache_name.capitalize()} saved to '{data_file_path}'")
 
 
-def load_cache(cache_file, cache_name="data", get_old=False):
+def load_cache(cache_file, cache_name="data", get_version=False, backup_old=False, suppress=False):
     """Loads the cache from a json file if it exists for the version.
 
     Args:
         cache_file (str): Path to the cache file.
         cache_name (str, optional): String to be used in prints. Should be a name for the type of cache, e.g. 'item'. Defaults to None.
-        get_old (bool, optional): If True, backs up the old cached data when the version differs. Defaults to False.
+        get_version (bool, optional): If True, returns the version of the cached data. Defaults to False.
+        backup_old (bool, optional): If True, backs up the cache, only if it's an old version. Defaults to False.
+        suppress (bool, optional): Suppress displaying print statements (errors still displayed). Defaults to False.
 
     Returns:
         dict: Cached data if valid, otherwise an empty dictionary.
-        bool: If 'get_old' is True, also returns a boolean indicating if the cache was old.
+        str: Version of the cached data, if 'get_version' is True.
     """
+    cache_version = None
     json_cache = {}
-    is_old = False
+
     if cache_name.strip().lower() != "data":
         cache_name = cache_name.strip() + " data"
 
@@ -513,18 +516,16 @@ def load_cache(cache_file, cache_name="data", get_old=False):
         if os.path.exists(cache_file):
             with open(cache_file, 'r', encoding='utf-8') as file:
                 json_cache = json.load(file)
+            
+            cache_version = json_cache.get("version")
+            # Remove 'version' key before returning.
+            json_cache.pop("version", None)
 
-            if json_cache.get("version") == version.get_version():
-                print(f"{cache_name.capitalize()} loaded from cache: '{cache_file}'")
-                # Remove 'version' key before returning.
-                json_cache.pop("version", None)
+            if not suppress:
+                print(f"{cache_name.capitalize()} loaded from cache: '{cache_file}' ({cache_version})")
 
-            else:
-                if get_old:
-                    is_old = True
-                    shutil.copy(cache_file, cache_file.replace(".json", "_old.json"))
-
-                print(f"{cache_name.capitalize()} cache is for a different version.")
+            if backup_old and cache_version != version.get_version():
+                shutil.copy(cache_file, cache_file.replace(".json", "_old.json"))
 
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON file 'cache_file': {e}")
@@ -532,8 +533,8 @@ def load_cache(cache_file, cache_name="data", get_old=False):
     except Exception as e:
         print(f"Error getting {cache_name.lower()} '{cache_file}': {e}")
 
-    if get_old:
-        return json_cache, is_old
+    if get_version:
+        return json_cache, cache_version
     return json_cache
 
 

@@ -1,5 +1,5 @@
 import os, re
-from scripts.core import utility
+from scripts.core import utility, version
 from scripts.core.constants import DATA_PATH
 
 RECIPES_DIR = "resources/scripts"
@@ -327,10 +327,10 @@ def main():
 
     cache_file = os.path.join(DATA_PATH, CACHE_JSON)
     # Try to get cache from json file
-    parsed_data = utility.load_cache(cache_file)
+    parsed_data, cache_version = utility.load_cache(cache_file, get_version=True)
 
     # Parse recipes if there is no cache, or it's outdated.
-    if not parsed_data:
+    if cache_version != version.get_version():
         lines = gather_recipe_lines(RECIPES_DIR)
         recipe_blocks = extract_recipe_blocks(lines)
         recipes = []

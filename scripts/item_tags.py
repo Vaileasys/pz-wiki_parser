@@ -254,9 +254,11 @@ def generate_tags_dict():
     tags_dict = {}
 
     cache_file = os.path.join(DATA_PATH, CACHE_JSON)
-    tags_dict = utility.load_cache(cache_file, "tags")
+    tags_dict, cache_version = utility.load_cache(cache_file, "tags", get_version=True)
+    game_version = version.get_version()
 
-    if not tags_dict:
+    # If cache version is old, we generate new data
+    if cache_version != game_version:
         parsed_item_data = item_parser.get_item_data()
 
         with tqdm(total=len(parsed_item_data), desc="Generating tag data", bar_format=PBAR_FORMAT, unit=" items") as pbar:

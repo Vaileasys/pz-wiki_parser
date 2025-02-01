@@ -1,6 +1,6 @@
 import os
 import re
-from scripts.core import logger, utility
+from scripts.core import logger, utility, version
 from scripts.core.constants import DATA_PATH
 
 CACHE_JSON = 'fixing_data.json'
@@ -162,10 +162,10 @@ def init(suppress=False):
 
     cache_file = os.path.join(DATA_PATH, CACHE_JSON)
     # Try to get cache from json file
-    parsed_fixing_data = utility.load_cache(cache_file)
+    parsed_fixing_data, cache_version = utility.load_cache(cache_file, get_version=True)
 
     # Parse items if there is no cache, or it's outdated.
-    if not parsed_fixing_data:
+    if cache_version != version.get_version():
         parsed_fixing_data = parse_files_in_folder()
         utility.save_cache(parsed_fixing_data, CACHE_JSON)
 

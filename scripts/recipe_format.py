@@ -5,7 +5,7 @@ from tqdm import tqdm
 from scripts.parser import recipe_parser, literature_parser, item_parser
 from scripts.core import version, translate, utility
 import recipe_output, item_tags
-from scripts.core.constants import PBAR_FORMAT
+from scripts.core.constants import (PBAR_FORMAT, DATA_PATH)
 
 processed_recipes = {}
 
@@ -611,13 +611,14 @@ def main():
 
     print("Parsers complete, please wait...")
 
-    OUTPUT_FILE = "data/recipes_processed_data.json"
+    CACHE_FILE = "recipes_processed_data.json"
+    cache_file = os.path.join(DATA_PATH, CACHE_FILE)
 
     # Try to load data from cache
-    processed_recipes = utility.load_cache(OUTPUT_FILE, "processed recipe")
+    processed_recipes, cache_version = utility.load_cache(cache_file, "processed recipe", get_version=True)
 
-    # If we don't have any data from cache, or cache is outdated, we regenerate it
-    if not processed_recipes:
+    # If cache version is old, we generate new data
+    if cache_version != game_version:
         data = recipe_parser.get_recipe_data()
 
         if "recipes" not in data or not isinstance(data["recipes"], list):
@@ -639,7 +640,7 @@ def main():
             
             pbar.bar_format = f"Recipes processed."
 
-        utility.save_cache(processed_recipes, OUTPUT_FILE)
+        utility.save_cache(processed_recipes, CACHE_FILE)
 
     recipe_output.main(processed_recipes)
 

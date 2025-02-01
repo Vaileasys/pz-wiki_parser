@@ -2,7 +2,7 @@
 
 import os
 from lupa import LuaRuntime
-from scripts.core import utility
+from scripts.core import utility, version
 from scripts.core.constants import DATA_PATH
 
 LUA_DIRECTORY = "resources/lua/"
@@ -99,10 +99,10 @@ def init():
 
     cache_file = os.path.join(DATA_PATH, CACHE_JSON)
     # Try to get cache from json file
-    parsed_data = utility.load_cache(cache_file, "literature")
+    parsed_data, cache_version = utility.load_cache(cache_file, "literature", get_version=True)
 
     # Parse items if there is no cache, or it's outdated.
-    if not parsed_data:
+    if cache_version != version.get_version():
         parsed_data = parse_lua_files()
         utility.save_cache(parsed_data, CACHE_JSON)
 

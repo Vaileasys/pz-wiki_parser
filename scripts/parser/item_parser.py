@@ -1,6 +1,6 @@
 import os
 import re
-from scripts.core import translate, utility
+from scripts.core import translate, utility, version
 from scripts.core.constants import DATA_PATH
 
 RESOURCE_PATH = 'resources/scripts/'
@@ -296,17 +296,17 @@ def init():
 
     cache_file = os.path.join(DATA_PATH, CACHE_JSON)
     # Try to get cache from json file
-    cached_data, is_old = utility.load_cache(cache_file, "item", True)
+    cached_data, cache_version = utility.load_cache(cache_file, "item", get_version=True)
+    game_version = version.get_version()
 
     # Parse items if there is no cache, or it's outdated.
-    if is_old or not os.path.exists(cache_file):
+    if cache_version != game_version:
         parsed_data = parse_files(RESOURCE_PATH)
     else:
         parsed_data = cached_data.copy()
 
     # Compare parsed_data with cached data.
-    if cached_data != parsed_data and is_old:
-        print("Cached data is different!")
+    if cached_data and cached_data != parsed_data and cache_version != game_version:
         new_items, modified_items = get_new_items(cached_data, parsed_data)
         utility.save_cache(new_items, CACHE_JSON.replace(".json", "") + "_new.json")
         utility.save_cache(modified_items, CACHE_JSON.replace(".json", "") + "_changes.json")

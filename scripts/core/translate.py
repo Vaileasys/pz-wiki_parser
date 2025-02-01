@@ -2,8 +2,7 @@ import os
 import json
 import chardet
 import re
-from scripts.parser import item_parser
-from scripts.core import logger, config_manager, utility
+from scripts.core import logger, config_manager, utility, version
 from scripts.core.constants import DATA_PATH
 
 language_code = None
@@ -254,10 +253,10 @@ def cache_translations():
     global translations_data
     cache_file = os.path.join(DATA_PATH, CACHE_JSON)
     # Try to get cache from json file
-    translations_data = utility.load_cache(cache_file, "translation")
+    translations_data, cache_version = utility.load_cache(cache_file, "translation", get_version=True)
 
     # Parse translations if there is no cache, or it's outdated.
-    if not translations_data:
+    if cache_version != version.get_version():
         for language_code in LANGUAGE_CODES:
             try:
                 # Parse translation files for the language
