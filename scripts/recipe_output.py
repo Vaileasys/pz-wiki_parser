@@ -204,7 +204,8 @@ def process_recipes(data):
         "MeleeWeaponSchematics": ["Schematic (melee weapon)"],
         "BSToolsSchematics": ["Tools Schematic"],
         "ArmorSchematics": ["Schematic (armor)"],
-        "CookwareSchematic": ["Cookware Schematic"]
+        "CookwareSchematic": ["Cookware Schematic"],
+        "FoodRecipes": ["Recipe"]
     }
 
     skillbooks = data.get("requirements", {}).get("skillbooks", [])
