@@ -499,7 +499,12 @@ def main():
             continue
 
         # Remove "SpecialLootSpawns." prefix
-        on_create = item_data["OnCreate"].removeprefix("SpecialLootSpawns.")
+        on_create = item_data["OnCreate"]
+        #FIXME: we currently skip if it's a list. We need to incorporate this into the script.
+        if isinstance(on_create, list):
+            print(f"Skipping: '{item_id}' as OnCreate is a list.")
+            continue
+        on_create.removeprefix("SpecialLootSpawns.")
         if on_create in BOOK:
             process_book(item_id, item_data, on_create)
         elif on_create in MAGAZINE:
