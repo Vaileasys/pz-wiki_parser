@@ -1,6 +1,7 @@
 import os
 import json
 from collections import defaultdict
+from scripts import item_tags, recipe_format
 from scripts.parser import fluid_parser
 from scripts.core import translate, utility
 
@@ -699,16 +700,15 @@ def output_item_usage(item_input_map, item_output_map):
                     craft_file.write("\n".join(crafting_template))
 
 
-def main():
+def main(recipes_data=None):
     print("Processing recipe output...")
 
     # Load the recipe data
-    with open('output/recipes/recipes_processed.json', 'r') as file:
-        recipes_data = json.load(file)
+    if not recipes_data: # Avoid circular imports if running from recipe_format.py
+        recipes_data = recipe_format.get_processed_recipes()
 
     # Load the tags data
-    with open('output/tags/tags.json', 'r') as file:
-        tags_data = json.load(file)
+    tags_data = item_tags.get_tag_data()
 
     processed_recipes = {}
     for raw_name, recipe in recipes_data.items():

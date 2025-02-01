@@ -1,9 +1,21 @@
 import os
 import re
 import json
-from scripts.parser import recipe_parser, literature_parser
-from scripts.core import version, translate
+from tqdm import tqdm
+from scripts.parser import recipe_parser, literature_parser, item_parser
+from scripts.core import version, translate, utility
 import recipe_output, item_tags
+from scripts.core.constants import PBAR_FORMAT
+
+processed_recipes = {}
+
+def get_processed_recipes():
+    """Returns the processed recipe data. Initialises if the parsed data is empty."""
+
+    print("getting processed recipes")
+    if not processed_recipes:
+        main()
+    return processed_recipes
 
 
 def process_recipe(recipe, parsed_item_data):
@@ -421,9 +433,9 @@ def process_requirements(recipe, parsed_item_data):
                 requirements["skillbooks"].append(translated_item_name)
 
         # Add schematics based on parsed literature data
+        
         try:
-            with open("output/logging/parsed_literature_data.json", "r", encoding="utf-8") as file:
-                literature_data = json.load(file)  # Load parsed literature data
+            literature_data = literature_parser.get_literature_data()
 
             # Access the nested SpecialLootSpawns structure
             special_loot_spawns = literature_data.get("SpecialLootSpawns", {})
@@ -434,11 +446,6 @@ def process_requirements(recipe, parsed_item_data):
                     requirements["schematics"].append(schematic_category)
         except Exception as e:
             print(f"Error adding schematics from parsed literature data: {e}")
-
-        except FileNotFoundError:
-            print("File not found: output/logging/parsed_literature_data.json")
-        except json.JSONDecodeError as e:
-            print(f"Error decoding JSON in literature data: {e}")
 
         # Add to traits based on MainCreationMethods.lua
         try:
@@ -588,62 +595,53 @@ def process_xp(recipe):
 
 
 def main():
+    global processed_recipes
     language_code = translate.get_language_code()
     game_version = version.get_version()
 
-    recipe_parser.main()
-    literature_parser.init()
-    item_tags.write_json_list()
+    #pre-load data
+    try:
+        parser_name = "item"
+        parsed_item_data = item_parser.get_item_data()
+        parser_name = "literature"
+        literature_parser.get_literature_data()
+    except Exception as e:
+        print(f"Error getting {parser_name} data: {e}")
+        return
 
     print("Parsers complete, please wait...")
 
-    input_file = "output/recipes/recipes.json"
-    parsed_item_file = "output/logging/parsed_item_data.json"
-    output_file = "output/recipes/recipes_processed.json"
+    OUTPUT_FILE = "data/recipes_processed_data.json"
 
-    try:
-        with open(input_file, 'r', encoding='utf-8') as file:
-            data = json.load(file)
-    except FileNotFoundError:
-        print(f"File not found: {input_file}")
-        return
-    except json.JSONDecodeError as e:
-        print(f"Error decoding JSON: {e}")
-        return
+    # Try to load data from cache
+    processed_recipes = utility.load_cache(OUTPUT_FILE, "processed recipe")
 
-    if "recipes" not in data or not isinstance(data["recipes"], list):
-        print("Unexpected JSON structure: 'recipes' key not found or not a list.")
-        return
+    # If we don't have any data from cache, or cache is outdated, we regenerate it
+    if not processed_recipes:
+        data = recipe_parser.get_recipe_data()
 
-    try:
-        with open(parsed_item_file, "r", encoding="utf-8") as file:
-            parsed_item_data = json.load(file)
-    except FileNotFoundError:
-        print(f"File not found: {parsed_item_file}")
-        return
-    except json.JSONDecodeError as e:
-        print(f"Error decoding JSON in parsed item data: {e}")
-        return
+        if "recipes" not in data or not isinstance(data["recipes"], list):
+            print("Unexpected JSON structure: 'recipes' key not found or not a list.")
+            return
 
-    processed_recipes = {}
+        with tqdm(total=len(data["recipes"]), desc="Processing recipes", bar_format=PBAR_FORMAT, unit=" recipes") as pbar:
+            for recipe in data["recipes"]:
+                pbar.set_postfix_str(f"Processing: {recipe["name"][:30]}")
+                recipe_str = json.dumps(recipe)
+                recipe_str = recipe_str.replace("Electricity", "Electrical")
+                recipe = json.loads(recipe_str)
 
-    for recipe in data["recipes"]:
-        recipe_str = json.dumps(recipe)
-        recipe_str = recipe_str.replace("Electricity", "Electrical")
-        recipe = json.loads(recipe_str)
+                processed = process_recipe(recipe, parsed_item_data)
+                if processed and processed["name"][0]:
+                    recipe_name = processed["name"][0]
+                    processed_recipes[recipe_name] = processed
+                pbar.update(1)
+            
+            pbar.bar_format = f"Recipes processed."
 
-        processed = process_recipe(recipe, parsed_item_data)
-        if processed and processed["name"][0]:
-            recipe_name = processed["name"][0]
-            processed_recipes[recipe_name] = processed
+        utility.save_cache(processed_recipes, OUTPUT_FILE)
 
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    with open(output_file, "w", encoding="utf-8") as f:
-        json.dump(processed_recipes, f, ensure_ascii=False, indent=4)
-
-    print(f"Processed recipes written to {output_file}")
-
-    recipe_output.main()
+    recipe_output.main(processed_recipes)
 
 
 if __name__ == "__main__":

@@ -1,9 +1,9 @@
-import os, re, json
-
+import os, re
+from scripts.core import utility
+from scripts.core.constants import DATA_PATH
 
 RECIPES_DIR = "resources/scripts"
-OUTPUT_JSON = "output/recipes/recipes.json"
-os.makedirs(os.path.dirname(OUTPUT_JSON), exist_ok=True)
+CACHE_JSON = "recipes_data.json"
 
 # Global dictionary to store the parsed recipe data
 parsed_data = {}
@@ -324,16 +324,23 @@ def parse_item_line(line):
 
 def main():
     global parsed_data
-    lines = gather_recipe_lines(RECIPES_DIR)
-    recipe_blocks = extract_recipe_blocks(lines)
-    recipes = []
-    for recipe_name, recipe_text in recipe_blocks:
-        parsed = parse_recipe_block(recipe_name, recipe_text)
-        recipes.append(parsed)
-    parsed_data = {"recipes": recipes}
-    with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
-        json.dump(parsed_data, f, indent=4)
-    print(f"{len(recipes)} recipes written to {OUTPUT_JSON}")
+
+    cache_file = os.path.join(DATA_PATH, CACHE_JSON)
+    # Try to get cache from json file
+    parsed_data = utility.load_cache(cache_file)
+
+    # Parse recipes if there is no cache, or it's outdated.
+    if not parsed_data:
+        lines = gather_recipe_lines(RECIPES_DIR)
+        recipe_blocks = extract_recipe_blocks(lines)
+        recipes = []
+        for recipe_name, recipe_text in recipe_blocks:
+            parsed = parse_recipe_block(recipe_name, recipe_text)
+            recipes.append(parsed)
+        parsed_data = {"recipes": recipes}
+        utility.save_cache(parsed_data, CACHE_JSON)
+
+    print(f"Number of recipes found: {len(parsed_data["recipes"])}")
 
 if __name__ == "__main__":
     main()
