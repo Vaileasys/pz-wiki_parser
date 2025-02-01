@@ -340,7 +340,7 @@ def main():
         parsed_data = {"recipes": recipes}
         utility.save_cache(parsed_data, CACHE_JSON)
 
-    print(f"Number of recipes found: {len(parsed_data["recipes"])}")
+    print(f'Number of recipes found: {len(parsed_data["recipes"])}')
 
 if __name__ == "__main__":
     main()
