@@ -491,7 +491,7 @@ def get_items():
     clothing_dict = {}
     parsed_item_data = item_parser.get_item_data()
 
-    with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=constants.PBAR_FORMAT, unit=" items") as pbar:
+    with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items") as pbar:
         for item_id, item_data in parsed_item_data.items():
             pbar.set_postfix_str(f"Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})")
             if item_data.get("Type") in ("Clothing", "AlarmClockClothing") or 'CanBeEquipped' in item_data:

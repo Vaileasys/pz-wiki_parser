@@ -1,7 +1,10 @@
 import os
 import re
-import json
-from scripts.core import translate
+from scripts.core import translate, utility
+from scripts.core.constants import DATA_PATH
+
+RESOURCE_PATH = 'resources/scripts/'
+CACHE_JSON = 'item_data.json'
 
 # Blacklisted item name prefixes
 blacklist_prefix = ["MakeUp_", "ZedDmg_", "Wound_", "Bandage_", "F_Hair_", "M_Hair_", "M_Beard_"]
@@ -10,7 +13,6 @@ blacklist_property = {
     "OBSOLETE": ['true'] # Multiple values can be defined for a single property
 }
 
-item_counter = 0
 parsed_data = {}
 
 
@@ -36,6 +38,7 @@ def is_blacklisted(item_name, item_data):
                     return True
     
     return False
+
 
 # Parse fluid container
 def parse_fluid_container(lines, start_index):
@@ -108,9 +111,9 @@ def parse_fluid_container(lines, start_index):
 
     return properties, i
 
+
 # Parse an item and its properties
 def parse_item(lines, start_index, module_name):
-    global item_counter
     item_dict = {}
     item_name = None
     i = start_index
@@ -148,9 +151,6 @@ def parse_item(lines, start_index, module_name):
             item_dict.update(fluid_properties)
             continue
 
-
-
-
         # Start item block
         if re.match(r'^item(\s)', line):
             parts = re.split(r'\s+', line)
@@ -171,13 +171,6 @@ def parse_item(lines, start_index, module_name):
             property_key, property_value = line.split('=', 1)
             property_key = property_key.strip()
             property_value = property_value.rstrip(',').strip()
-            
-            if property_key == 'DisplayName':
-                display_name = translate.get_translation(item_id, 'DisplayName', 'en')
-                if display_name == item_id:
-                    display_name = property_value
-                property_value = display_name
-
 
             blacklist_keys = ['DisplayName', 'DummyProperty']
             # Handle properties (separated by ';') with key-value pairs (separated by ':')
@@ -210,10 +203,8 @@ def parse_item(lines, start_index, module_name):
 
 # Parse the module and its items
 def parse_module(lines):
-    global item_counter
     combined_dict = {}
     module_name = None
-    block_level = 0
 
     i = 0
     while i < len(lines):
@@ -235,13 +226,12 @@ def parse_module(lines):
                 if item_name and module_name and not is_blacklisted(item_name, item_data):
                     item_id = f"{module_name}.{item_name}"
                     combined_dict[item_id] = item_data
-                    item_counter += 1
                 else:
                     item_id = f"{module_name}.{item_name}"
                 i = end_index
+                
 #            else:
 #                print(f"Warning: Skipping item line: {line}")
-        
         i += 1
 
     return combined_dict
@@ -260,24 +250,69 @@ def parse_files(directory):
                     lines = f.readlines()
                     parsed_data.update(parse_module(lines))
     
+    # Replace DisplayName with en translation
+    for item_id, item_data in parsed_data.items():
+        display_name = translate.get_translation(item_id, "DisplayName", "en")
+        if display_name != item_id:
+            parsed_data[item_id]["DisplayName"] = display_name
+
+    utility.save_cache(parsed_data, CACHE_JSON)
+
+    parsed_data = dict(sorted(parsed_data.items(), key=lambda x: x[1]["Type"]))
+    
     return parsed_data
 
 
-# Save parsed data to json file
-def save_to_json(data, output_file):
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    with open(output_file, 'w') as json_file:
-        json.dump(data, json_file, indent=4)
+def get_new_items(old_dict, new_dict):
+    """Compares the new dict with the old dict and returns a dict of new items and another for changed properties."""
+    new_keys_dict = {}
+    changed_values_dict = {}
+
+    for key in new_dict:
+        if key not in old_dict:
+            new_keys_dict[key] = new_dict[key]
+
+    def compare_dicts(old, new):
+        changes = {}
+        for key, value in new.items():
+            if key in old:
+                if isinstance(value, dict) and isinstance(old[key], dict):
+                    nested_changes = compare_dicts(old[key], value)
+                    if nested_changes:
+                        changes[key] = nested_changes
+                elif old[key] != value:
+                    changes[key] = value
+        return changes
+
+    changed_values_dict = compare_dicts(old_dict, new_dict)
+
+    return new_keys_dict, changed_values_dict
 
 
 # Initialise parser
 def init():
     global parsed_data
-    resources_path = 'resources/scripts/'
-    output_file = 'output/logging/parsed_item_data.json'
-    parsed_data = parse_files(resources_path)
-    save_to_json(parsed_data, output_file)
-    print(f"Total number of items parsed: {item_counter}")
+    translate.get_language_code() # Initialise so we don't interrupt progress bars
+
+    cache_file = os.path.join(DATA_PATH, CACHE_JSON)
+    # Try to get cache from json file
+    cached_data, is_old = utility.load_cache(cache_file, "item", True)
+
+    # Parse items if there is no cache, or it's outdated.
+    if is_old or not os.path.exists(cache_file):
+        parsed_data = parse_files(RESOURCE_PATH)
+    else:
+        parsed_data = cached_data.copy()
+
+    # Compare parsed_data with cached data.
+    if cached_data != parsed_data and is_old:
+        print("Cached data is different!")
+        new_items, modified_items = get_new_items(cached_data, parsed_data)
+        utility.save_cache(new_items, CACHE_JSON.replace(".json", "") + "_new.json")
+        utility.save_cache(modified_items, CACHE_JSON.replace(".json", "") + "_changes.json")
+
+    item_count = len(parsed_data)
+    print(f"Number of items found: {item_count}")
 
 if __name__ == "__main__":
     init()

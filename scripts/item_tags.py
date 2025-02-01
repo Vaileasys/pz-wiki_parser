@@ -4,8 +4,9 @@ from difflib import SequenceMatcher
 from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.core import utility, translate, version
-from scripts.core.constants import (OUTPUT_PATH, PBAR_FORMAT)
+from scripts.core.constants import (OUTPUT_PATH, PBAR_FORMAT, DATA_PATH)
 
+CACHE_JSON = "tags_data.json"
 is_run_locally = False
 
 language_code = translate.get_language_code()
@@ -91,23 +92,6 @@ def write_tag_list():
                 file.write('|}')
             pbar.update(1)
         pbar.bar_format = f"Tags list completed. Files can be found in '{output_dir}'"
-
-
-# Write a json with each tag, and a list of its items
-def write_json_list():
-    tags_dict = generate_tags_dict()
-    output_dir = "output/tags/"
-    os.makedirs(output_dir, exist_ok=True)
-    output_file = os.path.join(output_dir, 'tags.json')
-    json_data = {}
-    for tag, tag_data in tags_dict.items():
-        json_data[tag] = [
-            {"item_id": item["item_id"], "name": item["name"], "icon": item["icon"]}
-            for item in tag_data
-        ]
-    with open(output_file, 'w', encoding='utf-8') as file:
-        json.dump(json_data, file, indent=4, ensure_ascii=False)
-    print(f"Completed JSON export. File can be found in '{output_file}'")
 
 
 ## -------------------- ARTICLES -------------------- ##
@@ -268,24 +252,31 @@ def get_tag_data():
 def generate_tags_dict():
     """Generate a tags dictionary, mapping them to their associated items."""
     tags_dict = {}
-    parsed_item_data = item_parser.get_item_data()
 
-    with tqdm(total=len(parsed_item_data), desc="Generating tag data", bar_format=PBAR_FORMAT, unit=" items") as pbar:
-        for item_id, item_data in parsed_item_data.items():
-            pbar.set_postfix_str(f"Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})")
-            if 'Tags' in item_data:
-                name = utility.get_name(item_id, item_data)
-                page = utility.get_page(item_id, name)
-                icon = utility.get_icon(item_id)
-                tags = item_data.get('Tags', [])
-                if isinstance(tags, str):
-                    tags = [tags]
-                for tag in tags:
-                    if tag not in tags_dict:
-                        tags_dict[tag] = []
-                    tags_dict[tag].append({'item_id': item_id, 'icon': icon, 'name': name, 'page': page})
-            pbar.update(1)
-        pbar.bar_format = f"Tag data generated."
+    cache_file = os.path.join(DATA_PATH, CACHE_JSON)
+    tags_dict = utility.load_cache(cache_file, "tags")
+
+    if not tags_dict:
+        parsed_item_data = item_parser.get_item_data()
+
+        with tqdm(total=len(parsed_item_data), desc="Generating tag data", bar_format=PBAR_FORMAT, unit=" items") as pbar:
+            for item_id, item_data in parsed_item_data.items():
+                pbar.set_postfix_str(f"Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})")
+                if 'Tags' in item_data:
+                    name = utility.get_name(item_id, item_data)
+                    page = utility.get_page(item_id, name)
+                    icon = utility.get_icon(item_id)
+                    tags = item_data.get('Tags', [])
+                    if isinstance(tags, str):
+                        tags = [tags]
+                    for tag in tags:
+                        if tag not in tags_dict:
+                            tags_dict[tag] = []
+                        tags_dict[tag].append({'item_id': item_id, 'icon': icon, 'name': name, 'page': page})
+                pbar.update(1)
+            pbar.bar_format = f"Tag data generated."
+            
+        utility.save_cache(tags_dict, CACHE_JSON)
     return tags_dict
 
 

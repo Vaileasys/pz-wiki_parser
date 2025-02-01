@@ -1,12 +1,12 @@
 # Parses literature lua files
 
 import os
-import json
 from lupa import LuaRuntime
+from scripts.core import utility
+from scripts.core.constants import DATA_PATH
 
 LUA_DIRECTORY = "resources/lua/"
-JSON_DIR = "output/logging"
-JSON_FILE = "parsed_literature_data.json"
+CACHE_JSON = "literature_data.json"
 
 FILES_LIST = [
     'SpecialItemData_Books.lua',
@@ -21,7 +21,7 @@ parsed_data = {}
 
 
 def get_literature_data():
-    global parsed_data
+
     if parsed_data == {}:
         init()
     return parsed_data
@@ -60,13 +60,10 @@ def merge_dicts(base_dict, new_dict):
     return base_dict
 
 
-def init():
-    global parsed_data
+def parse_lua_files():
     lua = LuaRuntime(unpack_returned_tuples=True)
-    os.makedirs(JSON_DIR, exist_ok=True)
 
-    printmedia_dict = {}
-    specialloot_dict = {}
+    VALID_KEYS = ["PrintMediaDefinitions", "SpecialLootSpawns"]
 
     for lua_file_name in FILES_LIST:
         lua_file_path = os.path.join(LUA_DIRECTORY, lua_file_name)
@@ -81,40 +78,33 @@ def init():
         lua.execute(lua_script)
         globals_table = lua.globals()
 
-        # Check if this file is for PrintMediaDefinitions
-        if "PrintMediaDefinitions" in globals_table.keys():
-            print_media_dict = globals_table["PrintMediaDefinitions"]
-        else:
-            print_media_dict = None
-        if print_media_dict:
-            parsed_pm = lua_to_python(print_media_dict)
-            if isinstance(parsed_pm, dict):
-                merge_dicts(printmedia_dict, parsed_pm)
-            else:
-                print(f"Warning: 'PrintMediaDefinitions' in {lua_file_name} isn't a dict. Skipped.")
 
-        # Check if this file is for SpecialLootSpawns
-        if "SpecialLootSpawns" in globals_table.keys():
-            special_loot_dict = globals_table["SpecialLootSpawns"]
-        else:
-            special_loot_dict = None
-        if special_loot_dict:
-            parsed_sl = lua_to_python(special_loot_dict)
-            if isinstance(parsed_sl, dict):
-                merge_dicts(specialloot_dict, parsed_sl)
-            else:
-                print(f"Warning: 'SpecialLootSpawns' in {lua_file_name} isn't a dict. Skipped.")
+        for definition in globals_table.keys():
+            if definition in VALID_KEYS:
+                lua_data = globals_table[definition]
+                if lua_data:
+                    parsed_dict = lua_to_python(lua_data)
+                    if isinstance(parsed_dict, dict):
+                        if definition not in parsed_data:
+                            parsed_data[definition] = {}
+                        merge_dicts(parsed_data[definition], parsed_dict)
+                    else:
+                        print(f"Warning: '{definition}' in {lua_file_name} isn't a dict. Skipping.")
+    
+    return parsed_data
 
-    parsed_data = {
-        "PrintMediaDefinitions": printmedia_dict,
-        "SpecialLootSpawns": specialloot_dict
-    }
 
-    # Dump to JSON
-    json_file_path = os.path.join(JSON_DIR, JSON_FILE)
-    with open(json_file_path, "w", encoding="utf-8") as json_file:
-        json.dump(parsed_data, json_file, indent=4)
-        print(f"Data dumped to JSON file: {json_file_path}")
+def init():
+    global parsed_data
+
+    cache_file = os.path.join(DATA_PATH, CACHE_JSON)
+    # Try to get cache from json file
+    parsed_data = utility.load_cache(cache_file, "literature")
+
+    # Parse items if there is no cache, or it's outdated.
+    if not parsed_data:
+        parsed_data = parse_lua_files()
+        utility.save_cache(parsed_data, CACHE_JSON)
 
 
 if __name__ == "__main__":

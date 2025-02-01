@@ -1,8 +1,10 @@
 import os
-import json
 from lupa import LuaRuntime
+from scripts.core import utility
+from scripts.core.constants import DATA_PATH
 
 STASH_DIRECTORY = "resources/lua/stashes"
+CACHE_JSON = "stash_data.json"
 
 stash_data = {}
 
@@ -96,32 +98,27 @@ def remove_functions(data):
 
 def parse_all_stash_files(directory):
     """Parse all lua stash files, returning them as a dictionary, separated by file name."""
-    all_stashes = {}
+    global stash_data
 
-    for filename in os.listdir(directory):
-        if filename.endswith(".lua"):
-            file_path = os.path.join(directory, filename)
-            file_key = os.path.splitext(filename)[0]
-            stashes = parse_lua_stash(file_path)
-            all_stashes[file_key] = stashes
+    cache_file = os.path.join(DATA_PATH, CACHE_JSON)
+    # Try to get cache from json file
+    stash_cache = utility.load_cache(cache_file, "stash")
 
-    return all_stashes
+    # Parse stash if there is no cache, or it's outdated.
+    if not stash_cache:
+        for filename in os.listdir(directory):
+            if filename.endswith(".lua"):
+                file_path = os.path.join(directory, filename)
+                file_key = os.path.splitext(filename)[0]
+                stashes = parse_lua_stash(file_path)
+                stash_data[file_key] = stashes
 
-
-def dump_to_json(data):
-    """Dump data to JSON for debugging."""
-    output_file = "output/logging/parsed_stash_data.json"
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    with open(output_file, 'w') as json_file:
-        json.dump(data, json_file, indent=4)
-    print(f"Data dumped to JSON file '{output_file}'")
+        utility.save_cache(stash_data, CACHE_JSON)
 
 
 def init():
-    """Initialise script, replacing 'stash_data' dictionary"""
-    global stash_data
-    stash_data = parse_all_stash_files(STASH_DIRECTORY)
-    dump_to_json(stash_data)
+    """Initialise script"""
+    parse_all_stash_files(STASH_DIRECTORY)
 
 
 if __name__ == "__main__":

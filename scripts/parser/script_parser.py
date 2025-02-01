@@ -1,19 +1,23 @@
 import os
 import re
-from scripts.core import logging_file
+from scripts.core import logger, utility
+from scripts.core.constants import DATA_PATH
 
-parsed_fixing_data = ""
-scripts_dir = "resources/scripts"
+CACHE_JSON = 'fixing_data.json'
+SCRIPTS_DIR = "resources/scripts"
+
+parsed_fixing_data = {}
 
 def get_fixing_data(suppress=False):
     if not parsed_fixing_data:
         init(suppress)
     return parsed_fixing_data
 
+
 # parse fixing properties
 def get_fixing_properties(line, data, current_module, current_fixing):
     if current_module is None or current_fixing is None:
-        logging_file.log_to_file(f"Skipping line due to unset module or type: {line}")
+        logger.write(f"Skipping line due to unset module or type: {line}")
         return
 
     if current_module not in data:
@@ -66,6 +70,7 @@ def get_fixing_properties(line, data, current_module, current_fixing):
 
 
 # parse each line and add to a "data" dictionary
+#TODO: remove item parsing
 def parse_file(file_path, data, block_type="fixing"):
     current_module = None
     current_type = None
@@ -73,8 +78,6 @@ def parse_file(file_path, data, block_type="fixing"):
     indent_level = 0
     is_comment = False
     is_skippable_block = False
-    type_counter = 0
-    deprecated_message = False
 
     skippable_blocks = ("imports", "template")
 
@@ -110,9 +113,6 @@ def parse_file(file_path, data, block_type="fixing"):
                 current_module = line.split()[1]
                 if current_module not in data:
                     data[current_module] = {}
-                # module already exists, update block value
-                if 'block' not in data[current_module]:
-                    data[current_module]['block'] = block
             # close module block
             elif line.startswith('}') and indent_level == 1:
                 indent_level -= 1
@@ -126,12 +126,9 @@ def parse_file(file_path, data, block_type="fixing"):
                 current_type = line[len(block_type):].strip()
                 if current_module not in data:
                     data[current_module] = {}
-                if current_type not in data[current_module]:
-                    data[current_module][current_type] = {'block': block}
-                    type_counter += 1
-                else:
+                if current_type in data[current_module]:
                     # type already exists, skip it
-                    logging_file.log_to_file(f"Type '{current_type}' already exists when parsing '{block_type}'")
+                    logger.write(f"Type '{current_type}' already exists when parsing '{block_type}'")
                     current_type = None
                     continue
             # close item block
@@ -143,72 +140,41 @@ def parse_file(file_path, data, block_type="fixing"):
             elif block == "fixing" and indent_level == 2:
                 get_fixing_properties(line, data, current_module, current_type)
                 
-    return data, type_counter
+    return data
 
 
-# defines the files to be parsed - will parse every txt file in the "scripts_dir"
+# defines the files to be parsed - will parse every txt file in the "SCRIPTS_DIR"
 def parse_files_in_folder():
     parsed_fixing_data = {}
-    total_fixing_counter = 0
-    for root, dirs, files in os.walk(scripts_dir):
+    for root, dirs, files in os.walk(SCRIPTS_DIR):
         for file_name in files:
             file_path = os.path.join(root, file_name)
             if file_name.endswith('.txt'):
                 file_path = os.path.join(root, file_name)
-                parsed_fixing_data, fixing_counter = parse_file(file_path, parsed_fixing_data, "fixing")
-                total_fixing_counter += fixing_counter
+                parsed_fixing_data = parse_file(file_path, parsed_fixing_data, "fixing")
             
-    return parsed_fixing_data, total_fixing_counter
-
-
-# for debugging - outputs all the parsed data into a txt file
-def output_parsed_data_to_txt(data, output_file):
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    
-    with open(output_file, 'w') as file:
-        for module, module_data in data.items():
-            if 'block' in module_data:
-                block_value = module_data.pop('block')
-                file.write(f"{block_value} {module}\n")
-            for item_type, type_data in module_data.items():
-                if 'block' in type_data:
-                    block_value = type_data.pop('block')
-                    file.write(f"    {block_value} {item_type}\n")
-                else:
-                    file.write(f"    {item_type}\n")
-
-                for property, property_data in type_data.items():
-                    # fixing
-                    if 'fixing' in block_value:
-                        if len(property_data) == 1:
-                            property_data = str(property_data[0])
-                            file.write(f"        {property}: {property_data}\n")
-
-                        else:
-                            if isinstance(property_data, list):
-                                items = ', '.join(property_data)
-                                file.write(f"        {property}: {items}\n")
-                            else:
-                                file.write(f"        {property}:\n")
-                                for fixer, fixer_data in property_data.items():
-                                    if fixer_data:
-                                        file.write(f"            {fixer}:\n")
-
-                                        for pair, pair_data in fixer_data.items():
-                                            file.write(f"                {pair} = {pair_data}\n")
-                    # item
-                    else:
-                        file.write(f"        {property} = {property_data}\n")
-                file.write('\n')
+    return parsed_fixing_data
 
 
 # initialise parser
 def init(suppress=False):
     global parsed_fixing_data
-    parsed_fixing_data, total_fixing_counter = parse_files_in_folder()
-    output_parsed_data_to_txt(parsed_fixing_data, 'output/logging/parsed_fixing_data.txt')
+
+    cache_file = os.path.join(DATA_PATH, CACHE_JSON)
+    # Try to get cache from json file
+    parsed_fixing_data = utility.load_cache(cache_file)
+
+    # Parse items if there is no cache, or it's outdated.
+    if not parsed_fixing_data:
+        parsed_fixing_data = parse_files_in_folder()
+        utility.save_cache(parsed_fixing_data, CACHE_JSON)
+
     if not suppress:
-        print("Total fixings parsed:", total_fixing_counter)
+        fixing_counter = 0
+        for module, fixing_data in parsed_fixing_data.items():
+            fixing_counter += len(fixing_data)
+    
+    print("Number of fixings found:", fixing_counter)
 
     
 if __name__ == "__main__":

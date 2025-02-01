@@ -8,6 +8,9 @@ from scripts.core.constants import DATA_PATH
 
 language_code = None
 default_language = None
+translations_data = {}
+
+CACHE_JSON = "translations_data.json"
 
 LANGUAGE_CODES = {
     'ar': ("ISO-8859-1", "Arabic"),
@@ -81,8 +84,6 @@ FILE_WHITELIST = (
     "Stash_"
 )
 
-translations_cache = {}
-
 
 def get_wiki_translation(value):
     """
@@ -154,7 +155,7 @@ def get_translation(property_value, property_key="DisplayName", lang_code=langua
     if lang_code is not None and lang_code != "en" and lang_code != language_code:
         raise ValueError(f"'{lang_code}' when translating {property_value} doesn't match '{language_code}' or 'en'. Ensure the correct language code is used.")
 
-    translations_lang = translations_cache.get(lang_code, {})
+    translations_lang = translations_data.get(lang_code, {})
     # get the value from the property_key, otherwise use just the property_value
     property_prefix = PROPERTY_PREFIXES.get(property_key, "") + property_value
     translation = translations_lang.get(property_prefix)
@@ -162,17 +163,6 @@ def get_translation(property_value, property_key="DisplayName", lang_code=langua
         logger.write(f"No translation found for '{property_prefix}' prefix")
         translation = property_value
 
-        # Try get the item's name from DisplayName instead
-        if property_key == "DisplayName":
-            item_data = item_parser.get_item_data().get(property_value)
-            if item_data:
-                translation = item_data.get("DisplayName", property_value)
-            else:
-                # Special case: handle 'SaucePan' in fixing (should be 'Saucepan')
-                item_data = item_parser.get_item_data().get(property_value.capitalize())
-                if item_data:
-                    translation = item_data.get("DisplayName", property_value.capitalize())
-                    
     return translation.strip()
 
 
@@ -251,7 +241,7 @@ def parse_translation_file(language_code):
 
 
 def remove_comments(line: str) -> str:
-    # If, after stripping whitespace, the line starts with '--', it's a comment-only line
+    # Skip lines starting with '--' (comment)
     if line.strip().startswith('--'):
         return ''  # Return empty string -> skip this line entirely
 
@@ -261,29 +251,28 @@ def remove_comments(line: str) -> str:
 
 
 def cache_translations():
-    global translations_cache
-    for language_code in LANGUAGE_CODES:
-        try:
-            # Parse translation files for the language
-            parsed_translations = parse_translation_file(language_code)
+    global translations_data
+    cache_file = os.path.join(DATA_PATH, CACHE_JSON)
+    # Try to get cache from json file
+    translations_data = utility.load_cache(cache_file, "translation")
 
-            # Store the parsed translations in the translations_cache
-            translations_cache[language_code] = parsed_translations
+    # Parse translations if there is no cache, or it's outdated.
+    if not translations_data:
+        for language_code in LANGUAGE_CODES:
+            try:
+                # Parse translation files for the language
+                parsed_translations = parse_translation_file(language_code)
 
-        except FileNotFoundError as e:
-            print(f"Error: {e}")
-        except Exception as e:
-            print(f"An error occurred for language '{language_code}': {e}")
+                # Store the parsed translations in the translations_cache
+                translations_data[language_code] = parsed_translations
 
-    # Save to json for debugging.
-    output_dir = os.path.join('output', 'logging')
-    os.makedirs(output_dir, exist_ok=True)
-    output_file = os.path.join(output_dir, 'translations_cache.json')
+            except FileNotFoundError as e:
+                print(f"Error: {e}")
+            except Exception as e:
+                print(f"An error occurred for language '{language_code}': {e}")
 
-    with open(output_file, 'w', encoding='utf-8') as json_file:
-        json.dump(translations_cache, json_file, ensure_ascii=False, indent=4)
-
-    return translations_cache
+        # Save to json cache.
+        utility.save_cache(translations_data, CACHE_JSON, suppress=True)
 
 
 def get_language_code():
@@ -319,7 +308,6 @@ def get_default_language():
 
 def init_translations():
     print("Initialising translations")
-    global translations_cache
     global default_language
     global language_code
     default_language = config_manager.get_config('default_language')

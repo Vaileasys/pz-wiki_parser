@@ -1,6 +1,9 @@
 import re
-import json
 import os
+from scripts.core import utility
+
+RESOURCE_PATH = "resources/scripts/"
+DATA_FILE = "fluid_data.json"
 
 fluid_counter = 0
 parsed_data = {}
@@ -204,23 +207,12 @@ def parse_files(directory):
     return parsed_data
 
 
-# Save parsed data to json file
-def save_to_json(data, output_file):
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    with open(output_file, 'w') as json_file:
-        json.dump(data, json_file, indent=4)
-    
-    print(f"Fluids data has been saved to {output_file}")
-
-
 # Initialise parser
 def init():
     global fluid_counter
-    RESOURCE_PATH = "resources/scripts/"
-    OUTPUT_PATH = "output/logging/fluids_data.json"
 
     fluid_data = parse_files(RESOURCE_PATH)
-    save_to_json(fluid_data, OUTPUT_PATH)
+    utility.save_cache(fluid_data, DATA_FILE)
     print(f"Total number of fluids parsed: {fluid_counter}")
 
     

@@ -492,7 +492,7 @@ def save_cache(data: dict, data_file: str, data_dir=DATA_PATH, suppress=False):
         print(f"{cache_name.capitalize()} saved to '{data_file_path}'")
 
 
-def get_cache(cache_file, cache_name="data", get_old=False):
+def load_cache(cache_file, cache_name="data", get_old=False):
     """Loads the cache from a json file if it exists for the version.
 
     Args:
