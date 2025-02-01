@@ -28,13 +28,17 @@ def write_tag_image():
             # Change the string at the end of the progress bar
             pbar.set_postfix_str(f"Processing: {tag[:30]}")
             output_file = os.path.join(output_dir, f'{tag}.txt')
+            output_list = []
+            for item in tag_data:
+                icon = item['icon']
+                name = item['name']
+                entry = f"[[File:{icon}|32x32px|link={tag} (tag)|{name}]]"
+                if entry not in output_list:
+                    output_list.append(entry)
+
             with open(output_file, 'w', encoding='utf-8') as file:
-                file.write('<span class="cycle-img">')
-                for item in tag_data:
-                    icon = item['icon']
-                    name = item['name']
-                    file.write(f"[[File:{icon}|32x32px|link={tag} (tag)|{name}]]")
-                file.write("</span>")
+                tag_string = "".join(output_list)
+                file.write(f'<span class="cycle-img">{tag_string}</span>')
             pbar.update(1)
         pbar.bar_format = f"Tag images completed. Files can be found in '{output_dir}'"
 
