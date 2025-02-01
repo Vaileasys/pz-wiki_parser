@@ -2,6 +2,7 @@ import os
 import json
 import chardet
 import re
+from scripts.parser import item_parser
 from scripts.core import logger, config_manager, utility, version
 from scripts.core.constants import DATA_PATH
 
@@ -161,6 +162,11 @@ def get_translation(property_value, property_key="DisplayName", lang_code=langua
     if translation is None:
         logger.write(f"No translation found for '{property_prefix}' prefix")
         translation = property_value
+        # Try get the item's name from DisplayName instead
+        if property_key == "DisplayName":
+            item_data = item_parser.get_item_data().get(property_value)
+            if item_data:
+                translation = item_data.get("DisplayName", property_value)
 
     return translation.strip()
 
