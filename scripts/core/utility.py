@@ -307,12 +307,14 @@ def get_burn_data():
     CACHE_FILE = "burn_data.json"
 
     if not parsed_burn_data:
-        parsed_burn_data, cache_version = load_cache(CACHE_FILE, "burn", True)
+        parsed_burn_data, cache_version = load_cache(CACHE_FILE, "burn", True, suppress=True)
 
         if cache_version != version.get_version():
             parsed_burn_data = lua_helper.parse_lua_tables(["camping_fuel.lua"], TABLES)
 
             save_cache(parsed_burn_data, "burn_data.json")
+
+    return parsed_burn_data
 
 
 # Gets and calculates the burn time and outputs it as an hours and minutes string.
@@ -896,7 +898,3 @@ def get_fluid_name(fluid_data, lang=None):
     else:
         name = translate.get_translation(display_name, 'FluidID', lang)
     return name
-
-
-if __name__ == "__main__":
-    get_burn_data()
