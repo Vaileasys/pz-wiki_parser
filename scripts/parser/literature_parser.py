@@ -27,13 +27,6 @@ def get_literature_data():
     return parsed_data
 
 
-def merge_dicts(base_dict, new_dict):
-    """Merge each key in new_dict with base_dict."""
-    for key, val in new_dict.items():
-        base_dict[key] = val
-    return base_dict
-
-
 def parse_lua_files():
     lua = LuaRuntime(unpack_returned_tuples=True)
     VALID_KEYS = ["PrintMediaDefinitions", "SpecialLootSpawns"]
@@ -63,7 +56,8 @@ def parse_lua_files():
                     if isinstance(parsed_dict, dict):
                         if definition not in parsed_data:
                             parsed_data[definition] = {}
-                        merge_dicts(parsed_data[definition], parsed_dict)
+                        # Merge dictionaries
+                        parsed_data[definition] = {**parsed_data[definition], **parsed_dict}
                     else:
                         print(f"Warning: '{definition}' in {lua_file_name} isn't a dict. Skipping.")
     

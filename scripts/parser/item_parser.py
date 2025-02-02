@@ -250,15 +250,15 @@ def parse_files(directory):
                     lines = f.readlines()
                     parsed_data.update(parse_module(lines))
     
-    # Replace DisplayName with en translation
     for item_id, item_data in parsed_data.items():
+        # Replace DisplayName with en translation
         display_name = translate.get_translation(item_id, "DisplayName", "en")
         if display_name != item_id:
             parsed_data[item_id]["DisplayName"] = display_name
 
-    utility.save_cache(parsed_data, CACHE_JSON)
-
     parsed_data = dict(sorted(parsed_data.items(), key=lambda x: x[1]["Type"]))
+
+    utility.save_cache(parsed_data, CACHE_JSON)
     
     return parsed_data
 

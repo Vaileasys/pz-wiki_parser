@@ -304,6 +304,7 @@ def automatic_extraction(output_dir):
             pbar.set_postfix_str(f"Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})")
             process_item(item_data, item_id, output_dir)
             pbar.update(1)
+        pbar.bar_format = f"Finished processing items."
 
 
 def main():
