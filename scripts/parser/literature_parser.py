@@ -1,8 +1,8 @@
 # Parses literature lua files
 
 import os
-from lupa import LuaRuntime
-from scripts.core import utility, version
+from lupa import LuaRuntime, LuaError
+from scripts.core import utility, version, lua_helper
 from scripts.core.constants import DATA_PATH
 
 LUA_DIRECTORY = "resources/lua/"
@@ -27,32 +27,6 @@ def get_literature_data():
     return parsed_data
 
 
-def lua_to_python(value):
-    """Convert Lua data to Python dict/list/value."""
-    
-    # Return basic values
-    if isinstance(value, (float, int, bool, str, type(None))):
-        return value
-
-    # Determine whether it's a list (array) or dict
-    if type(value).__name__ == '_LuaTable':
-        keys = list(value.keys())
-        is_array = all(isinstance(k, int) for k in keys)
-        if is_array:
-            keys.sort()
-            return [lua_to_python(value[k]) for k in keys]
-        else:
-            result = {}
-            for k in keys:
-                py_key = lua_to_python(k)
-                py_val = lua_to_python(value[k])
-                result[py_key] = py_val
-            return result
-    
-    # Return string as a fallback
-    return str(value)
-
-
 def merge_dicts(base_dict, new_dict):
     """Merge each key in new_dict with base_dict."""
     for key, val in new_dict.items():
@@ -62,8 +36,8 @@ def merge_dicts(base_dict, new_dict):
 
 def parse_lua_files():
     lua = LuaRuntime(unpack_returned_tuples=True)
-
     VALID_KEYS = ["PrintMediaDefinitions", "SpecialLootSpawns"]
+    parsed_data = {}
 
     for lua_file_name in FILES_LIST:
         lua_file_path = os.path.join(LUA_DIRECTORY, lua_file_name)
@@ -72,10 +46,12 @@ def parse_lua_files():
             print(f"Warning: {lua_file_path} does not exist. Skipping.")
             continue
 
-        with open(lua_file_path, "r", encoding="utf-8") as f:
-            lua_script = f.read()
+        try:
+            lua = lua_helper.load_lua_file(lua, lua_file_path)
+        except (FileNotFoundError, LuaError) as e:
+            print(f"Error processing {lua_file_name}: {e}")
+            continue
 
-        lua.execute(lua_script)
         globals_table = lua.globals()
 
 
@@ -83,7 +59,7 @@ def parse_lua_files():
             if definition in VALID_KEYS:
                 lua_data = globals_table[definition]
                 if lua_data:
-                    parsed_dict = lua_to_python(lua_data)
+                    parsed_dict = lua_helper.lua_to_python(lua_data)
                     if isinstance(parsed_dict, dict):
                         if definition not in parsed_data:
                             parsed_data[definition] = {}

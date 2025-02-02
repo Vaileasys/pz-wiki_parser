@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from scripts.parser import item_parser
-from scripts.core import translate, logger, version
+from scripts.core import translate, logger, version, lua_helper
 from scripts.core.constants import DATA_PATH
 
 
@@ -293,67 +293,26 @@ def get_skill_type_mapping(item_data, item_id):
 
 
 # parses burn info from camping_fuel.lua
-def get_burn_data(tables=None):
-    """Parses burn time from camping_fuel.lua.
-
-    Args:
-        tables (list, optional): List of table names to retrieve from the parsed data. If None, returns all parsed data. Defaults to None.
-
-    Returns:
-        dict: Parsed burn data, either all tables or the specified ones.
-    """
+def get_burn_data():
+    """Returns burn time data from camping_fuel.lua."""
     global parsed_burn_data
-    output_data = {}
 
-    # Record first run so we don't parse data every call
-    if parsed_burn_data != {}:
-        first_run = False
-    else:
-        first_run = True
+    TABLES = [
+        "campingFuelType",
+        "campingFuelCategory",
+        "campingLightFireType",
+        "campingLightFireCategory"
+    ]
 
-    # Only parse data once, not on every call
-    if first_run:
-        file_path = Path("resources") / "lua" / "camping_fuel.lua"
-        JSON_FILE = "burn_data.json"
+    CACHE_FILE = "burn_data.json"
 
-        if not file_path.exists():
-            print(f"Lua file not found, ensure 'setup' has been run: {file_path}")
-            return
-        
-        with open(file_path, 'r', encoding='utf-8') as file:
-            content = file.read()
+    if not parsed_burn_data:
+        parsed_burn_data, cache_version = load_cache(CACHE_FILE, "burn", True)
 
-        table_pattern= re.compile(r"(\w+)\s*=\s*{(.*?)}", re.DOTALL)
-        key_value_pattern = re.compile(r'(\w+)\s*=\s*([\d./]+)')
+        if cache_version != version.get_version():
+            parsed_burn_data = lua_helper.parse_lua_tables(["camping_fuel.lua"], TABLES)
 
-        # Parse table/dict
-        for match in table_pattern.finditer(content):
-            table_name = match.group(1)
-            table_content = match.group(2)
-
-            # Parse key-value pairs
-            table_data = {}
-            for kv_match in key_value_pattern.finditer(table_content):
-                key = kv_match.group(1)
-                value = kv_match.group(2)
-
-                if '/' in value:
-                    value = eval(value)
-                else:
-                    value = float(value)
-
-                table_data[key] = value
-            
-            # Add the table to data dictionary
-            parsed_burn_data[table_name] = table_data
-
-        # Save parsed data to a json file, for debugging
-        save_cache(parsed_burn_data, JSON_FILE, suppress=True)
-
-    if tables is None:
-        return parsed_burn_data
-
-    return parsed_burn_data
+            save_cache(parsed_burn_data, "burn_data.json")
 
 
 # Gets and calculates the burn time and outputs it as an hours and minutes string.
@@ -482,8 +441,8 @@ def save_cache(data: dict, data_file: str, data_dir=DATA_PATH, suppress=False):
     # Adds space between words for CamelCase strings and cleans string
     cache_name = re.sub(r'(?<=[a-z])([A-Z])', r' \1', data_file.replace(".json", "")).replace("_", " ").strip().lower()
 
-    # Add version number to data. Version can be checked to save time parsing.
     data_copy = data.copy() # Copy so we don't modify the existing usable data.
+    # Add version number to data. Version can be checked to save time parsing.
     data_copy["version"] = version.get_version()
     with open(data_file_path, 'w', encoding='utf-8') as json_file:
         json.dump(data_copy, json_file, ensure_ascii=False, indent=4)
@@ -937,3 +896,7 @@ def get_fluid_name(fluid_data, lang=None):
     else:
         name = translate.get_translation(display_name, 'FluidID', lang)
     return name
+
+
+if __name__ == "__main__":
+    get_burn_data()
