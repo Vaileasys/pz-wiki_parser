@@ -5,6 +5,11 @@ import struct
 import lupa
 from lupa import LuaRuntime
 import xml.etree.ElementTree as ET
+from scripts.core import utility
+from scripts.core.constants import DATA_PATH
+
+
+cache_path = os.path.join(DATA_PATH, "distributions")
 
 
 def parse_container_files(distributions_lua_path, procedural_distributions_path, output_path):
@@ -12,7 +17,6 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
     Parses Lua container files to extract distribution data and convert it to JSON format.
     Includes debug statements at each step for troubleshooting.
     """
-    os.makedirs(output_path, exist_ok=True)
 
     def lua_table_to_python(obj):
         if isinstance(obj, dict):
@@ -216,21 +220,16 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
 
         return lua_table_to_python(output_json)
 
-    # Function to save JSON to file
-    def save_to_json(data, filename):
-        with open(filename, 'w', encoding='utf-8') as json_file:
-            json.dump(data, json_file, indent=4)
-
     def main():
         lua_code_distributions = read_and_modify_lua_file(distributions_lua_path, 'distributionTable')
         lua_code_procedural = read_and_modify_lua_file(procedural_distributions_path, 'ProceduralDistributions')
 
         procedural_memory = {}
         room_data = distributions_parser(lua_code_distributions, procedural_memory)
-        save_to_json(room_data, os.path.join(output_path, 'distributions.json'))
+        utility.save_cache(room_data, 'distributions.json', output_path)
 
         procedural_data = procedural_distributions_parser(lua_code_procedural, procedural_memory)
-        save_to_json(procedural_data, os.path.join(output_path, 'proceduraldistributions.json'))
+        utility.save_cache(procedural_data, 'proceduraldistributions.json', output_path)
 
     main()
 
@@ -339,13 +338,9 @@ def parse_foraging(forage_definitions_path, output_path):
                     else:
                         forage_data[key] = value
 
-    # Ensure the output directory exists
-    os.makedirs(output_path, exist_ok=True)
 
     # Save the combined data to a JSON file
-    output_file_path = os.path.join(output_path, 'foraging.json')
-    with open(output_file_path, 'w', encoding='utf-8') as f:
-        json.dump(forage_data, f, ensure_ascii=False, indent=4)
+    utility.save_cache(forage_data, 'foraging.json', output_path)
 
 
 def parse_vehicles(vehicle_distributions_path, output_path):
@@ -417,18 +412,14 @@ def parse_vehicles(vehicle_distributions_path, output_path):
     except Exception as e:
         print(f"Error reading {vehicle_distributions_path}: {e}")
         return
+    
     try:
         vehicle_distributions = parse_lua_table(lua_content)
     except Exception as e:
         print(f"Error parsing Lua content: {e}")
         return
-    try:
-        os.makedirs(output_path, exist_ok=True)
-        output_file_path = os.path.join(output_path, 'vehicle_distributions.json')
-        with open(output_file_path, 'w', encoding='utf-8') as json_file:
-            json.dump(vehicle_distributions, json_file, indent=4)
-    except Exception as e:
-        print(f"Error writing JSON file: {e}")
+    
+    utility.save_cache(vehicle_distributions, 'vehicle_distributions.json', output_path)
 
 
 def parse_attachedweapons(attached_weapon_path, output_path):
@@ -501,22 +492,10 @@ def parse_attachedweapons(attached_weapon_path, output_path):
             weapon_definitions[cleaned_key] = value
 
     # Write the weapon definitions to the JSON file
-    try:
-        # Ensure output directory exists
-        if not os.path.exists(output_path):
-            os.makedirs(output_path)
-
-        output_file_path = os.path.join(output_path, 'attached_weapons.json')
-        with open(output_file_path, 'w') as json_file:
-            json.dump(weapon_definitions, json_file, indent=4)
-
-    except IOError as e:
-        print(f"Error writing to file {output_file_path}: {e}")
-    except Exception as e:
-        print(f"Unexpected error: {e}")
+    utility.save_cache(weapon_definitions, 'attached_weapons.json', output_path)
 
 
-def parse_clothing(clothing_file_path, guid_table_path, output_file_path):
+def parse_clothing(clothing_file_path, guid_table_path, output_file):
     """
     Parse the clothing XML file and generate a JSON file containing outfit data with item probabilities.
 
@@ -525,7 +504,6 @@ def parse_clothing(clothing_file_path, guid_table_path, output_file_path):
     :param output_file_path: The path to the output JSON file
     :return: None
     """
-    os.makedirs(os.path.dirname(output_file_path), exist_ok=True)
 
     def guid_item_mapping(guid_table):
         guid_mapping = {}
@@ -586,11 +564,10 @@ def parse_clothing(clothing_file_path, guid_table_path, output_file_path):
     guid_mapping = guid_item_mapping(guid_table_path)
     outfits_data = get_outfits(clothing_file_path, guid_mapping)
 
-    with open(output_file_path, "w") as f_out:
-        json.dump(outfits_data, f_out, indent=4)
+    utility.save_cache(outfits_data, output_file, cache_path)
 
 
-def parse_stories(class_files_directory, output_path):
+def parse_stories(class_files_directory, output_file):
 
     """
     Processes all .class files in the given directory and collects their relevant string constants.
@@ -695,15 +672,9 @@ def parse_stories(class_files_directory, output_path):
 
         return constants_by_file
 
-    def save_to_json(data, output_path):
-        """Saves the data to a JSON file at the specified output path."""
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=4, ensure_ascii=False)
-
     # Execute the process
     constants_by_file = process_class_files(class_files_directory)
-    save_to_json(constants_by_file, output_path)
+    utility.save_cache(constants_by_file, output_file, cache_path)
 
 
 def main():
@@ -722,12 +693,12 @@ def main():
          procedural_distributions_path, vehicle_distributions_path, clothing_file_path, guid_table_path)
 
     # Parse files into json
-    parse_container_files(distributions_lua_path, procedural_distributions_path, "output/distributions/json/")
-    parse_foraging(forage_definitions_path, "output/distributions/json/")
-    parse_vehicles(vehicle_distributions_path, "output/distributions/json/")
-    parse_attachedweapons(attached_weapon_path, "output/distributions/json/")
-    parse_clothing(clothing_file_path, guid_table_path, "output/distributions/json/clothing.json")
-    parse_stories(class_files_directory, "output/distributions/json/stories.json")
+    parse_container_files(distributions_lua_path, procedural_distributions_path, cache_path)
+    parse_foraging(forage_definitions_path, cache_path)
+    parse_vehicles(vehicle_distributions_path, cache_path)
+    parse_attachedweapons(attached_weapon_path, cache_path)
+    parse_clothing(clothing_file_path, guid_table_path, "clothing.json")
+    parse_stories(class_files_directory, "stories.json")
 
 
 # Function to check if all resources are found

@@ -3,15 +3,16 @@ from pathlib import Path
 from tqdm import tqdm
 import concurrent.futures
 import scripts.parser.distribution_parser as distribution_parser
-from scripts.core import version, translate
+from scripts.core import version, translate, utility
+from scripts.core.constants import DATA_PATH
 
 
 def main():
     distribution_parser.main()
 
-    json_path = Path("output/distributions/json/all_items.json")
-    with json_path.open("r", encoding="utf-8") as f:
-        data = json.load(f)
+    json_path = Path(DATA_PATH) / "distributions" / "all_items.json"
+
+    data = utility.load_cache(json_path)
 
     unique_rooms = set()
     for obj_key, obj_value in data.items():

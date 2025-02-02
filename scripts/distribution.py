@@ -4,6 +4,10 @@ import re
 import math
 import tqdm
 import scripts.parser.distribution_parser as distribution_parser
+import scripts.core.utility as utility
+from scripts.core.constants import DATA_PATH
+
+cache_path = os.path.join(DATA_PATH, "distributions")
 
 # Dictionary to store changes for reference across the script
 item_name_changes = {}
@@ -55,70 +59,69 @@ def process_json(file_paths):
     item_counts = {}
 
     for file_key, fp in file_paths.items():
-        with open(fp, "r") as file:
-            data = json.load(file)
-            count = 0
+        data = utility.load_cache(fp, suppress=False)
+        count = 0
 
-            if file_key == "proceduraldistributions":
-                for distribution, content in data.items():
-                    items = content.get("items", [])
-                    for entry in items:
-                        item_list.add(entry["name"])
-                        count += 1
-                    junk_items = content.get("junk", {}).get("items", [])
-                    for entry in junk_items:
-                        item_list.add(entry["name"])
-                        count += 1
-
-            elif file_key == "foraging":
-                for key, entry in data.items():
-                    item_type = entry.get("type", "")
-                    item_type = re.sub(r"^(Base\.|Radio\.|Farming\.)", "", item_type)
-                    item_list.add(item_type)
+        if file_key == "proceduraldistributions":
+            for distribution, content in data.items():
+                items = content.get("items", [])
+                for entry in items:
+                    item_list.add(entry["name"])
+                    count += 1
+                junk_items = content.get("junk", {}).get("items", [])
+                for entry in junk_items:
+                    item_list.add(entry["name"])
                     count += 1
 
-            elif file_key == "vehicle_distributions":
-                for zone, details in data.items():
-                    items = details.get("items", {})
-                    item_list.update(items.keys())
+        elif file_key == "foraging":
+            for key, entry in data.items():
+                item_type = entry.get("type", "")
+                item_type = re.sub(r"^(Base\.|Radio\.|Farming\.)", "", item_type)
+                item_list.add(item_type)
+                count += 1
+
+        elif file_key == "vehicle_distributions":
+            for zone, details in data.items():
+                items = details.get("items", {})
+                item_list.update(items.keys())
+                count += len(items)
+                if "junk" in details:
+                    junk_items = details["junk"].get("items", {})
+                    item_list.update(junk_items.keys())
+                    count += len(junk_items)
+
+        elif file_key == "clothing":
+            for outfit, details in data.items():
+                for outfit_details in details.values():
+                    items = outfit_details.get("Items", [])
+                    item_list.update(items)
                     count += len(items)
-                    if "junk" in details:
-                        junk_items = details["junk"].get("items", {})
-                        item_list.update(junk_items.keys())
-                        count += len(junk_items)
 
-            elif file_key == "clothing":
-                for outfit, details in data.items():
-                    for outfit_details in details.values():
-                        items = outfit_details.get("Items", [])
-                        item_list.update(items)
-                        count += len(items)
+        elif file_key == "attached_weapons":
+            for weapon_config, details in data.items():
+                weapons = details.get("weapons", [])
+                for weapon in weapons:
+                    weapon = re.sub(r"^Base\.", "", weapon)
+                    item_list.add(weapon)
+                    count += 1
 
-            elif file_key == "attached_weapons":
-                for weapon_config, details in data.items():
-                    weapons = details.get("weapons", [])
-                    for weapon in weapons:
-                        weapon = re.sub(r"^Base\.", "", weapon)
-                        item_list.add(weapon)
-                        count += 1
+        elif file_key == "stories":
+            for story_key, items in data.items():
+                for item in items:
+                    # Update item name if found in the dictionary
+                    original_item = item
+                    item = load_item_dictionary(item)
+                    item_list.add(item)
+                    count += 1
 
-            elif file_key == "stories":
-                for story_key, items in data.items():
-                    for item in items:
-                        # Update item name if found in the dictionary
-                        original_item = item
-                        item = load_item_dictionary(item)
-                        item_list.add(item)
-                        count += 1
+        cleaned_item_list = set()
+        for item in item_list:
+            if '.' in item:
+                item = item.split('.', 1)[1]
+            cleaned_item_list.add(item)
+        item_list = cleaned_item_list
 
-            cleaned_item_list = set()
-            for item in item_list:
-                if '.' in item:
-                    item = item.split('.', 1)[1]
-                cleaned_item_list.add(item)
-            item_list = cleaned_item_list
-
-            item_counts[file_key] = count
+        item_counts[file_key] = count
 
     print(f"Unique items found: {len(item_list)}")
     for file_key, count in item_counts.items():
@@ -129,8 +132,7 @@ def process_json(file_paths):
         for item in sorted(item_list):
             output_file.write(item + "\n")
 
-    with open("output/distributions/json/item_name_changes.json", "w") as changes_file:
-        json.dump(item_name_changes, changes_file, indent=4)
+    utility.save_cache(item_name_changes, "item_name_changes.json", cache_path)
 
     return item_list
 
@@ -348,14 +350,12 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
             "Stories": get_story_info(item_name)
         }
 
-    os.makedirs("output/distributions/json", exist_ok=True)
-    with open("output/distributions/json/all_items.json", "w") as json_file:
-        json.dump(all_items, json_file, indent=4)
+    utility.save_cache(all_items, "all_items.json", cache_path)
 
 
 def build_tables():
-    with open("output/distributions/json/all_items.json", "r") as file:
-        all_items = json.load(file)
+    json_path = os.path.join(DATA_PATH, "distributions", "all_items.json")
+    all_items = utility.load_cache(json_path)
 
     output_dir = "output/distributions/complete"
     os.makedirs(output_dir, exist_ok=True)
@@ -548,38 +548,31 @@ def calculate_missing_items(itemname_path, itemlist_path, missing_items_path):
 
 def main():
     file_paths = {
-        "proceduraldistributions": "output/distributions/json/proceduraldistributions.json",
-        "foraging": "output/distributions/json/foraging.json",
-        "vehicle_distributions": "output/distributions/json/vehicle_distributions.json",
-        "clothing": "output/distributions/json/clothing.json",
-        "attached_weapons": "output/distributions/json/attached_weapons.json",
-        "stories": "output/distributions/json/stories.json",
-        "distributions": "output/distributions/json/distributions.json"
+        "proceduraldistributions": DATA_PATH + "/distributions/proceduraldistributions.json",
+        "foraging": DATA_PATH + "/distributions/foraging.json",
+        "vehicle_distributions": DATA_PATH + "/distributions/vehicle_distributions.json",
+        "clothing": DATA_PATH + "/distributions/clothing.json",
+        "attached_weapons": DATA_PATH + "/distributions/attached_weapons.json",
+        "stories": DATA_PATH + "/distributions/stories.json",
+        "distributions": DATA_PATH + "/distributions/distributions.json"
     }
 
     distribution_parser.main()
     item_list = process_json(file_paths)
 
-    with open(file_paths["proceduraldistributions"], "r") as proc_file:
-        procedural_data = json.load(proc_file)
+    procedural_data = utility.load_cache(file_paths["proceduraldistributions"])
 
-    with open(file_paths["distributions"], "r") as dist_file:
-        distribution_data = json.load(dist_file)
+    distribution_data = utility.load_cache(file_paths["distributions"])
 
-    with open(file_paths["vehicle_distributions"], "r") as vehicle_file:
-        vehicle_data = json.load(vehicle_file)
+    vehicle_data = utility.load_cache(file_paths["vehicle_distributions"])
 
-    with open(file_paths["foraging"], "r") as foraging_file:
-        foraging_data = json.load(foraging_file)
+    foraging_data = utility.load_cache(file_paths["foraging"])
 
-    with open(file_paths["attached_weapons"], "r") as attached_weapons_file:
-        attached_weapons_data = json.load(attached_weapons_file)
+    attached_weapons_data = utility.load_cache(file_paths["attached_weapons"])
 
-    with open(file_paths["clothing"], "r") as clothing_file:
-        clothing_data = json.load(clothing_file)
+    clothing_data = utility.load_cache(file_paths["clothing"])
 
-    with open(file_paths["stories"], "r") as stories_file:
-        stories_data = json.load(stories_file)
+    stories_data = utility.load_cache(file_paths["stories"])
 
     build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, attached_weapons_data, clothing_data, stories_data)
     build_tables()
