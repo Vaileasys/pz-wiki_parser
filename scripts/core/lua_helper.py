@@ -3,15 +3,20 @@ from lupa import LuaRuntime, LuaError
 from scripts.core import utility
 from scripts.core.constants import LUA_PATH
 
-def load_lua_file(lua_runtime: LuaRuntime, file_path: str, dependencies: list[str]=None) -> LuaRuntime:
+def load_lua_file(lua_runtime: LuaRuntime, file_path: str, dependencies: list[str]=None, lua_fallback: str=None) -> LuaRuntime:
     """
     Loads and executes a Lua file in the given Lua runtime.
 
     :param lua_runtime (LuaRuntime): The initialized Lua runtime.
     :param file_path (str): The path to the Lua file to load.
-    :param dependencies (list[str]): A list of additional Lua files to load (for dependencies). The 'LUA_PATH' constant will be added.
+    :param dependencies (list[str], optional): List of additional Lua files to load (LUA_PATH is already included). Defaults to None.
+    :param lua_fallback (str, optional): Lua code for handling undefined variables. Defaults to None.
     :return: The Lua runtime after executing the files.
     """
+    if lua_fallback:
+    # Global fallback for undefined variables
+        lua_runtime.execute(lua_fallback)
+    
     try:
         # Load extra Lua files if provided
         if dependencies:
@@ -54,7 +59,6 @@ def lua_to_python(lua_data: object) -> object:
     :param lua_data: The Lua data to convert (basic type or Lua table).
     :return: The corresponding Python data (dict, list, basic type, or string).
     """
-    
     try:
         # Return basic values
         if isinstance(lua_data, (float, int, bool, str, type(None))):
@@ -66,10 +70,23 @@ def lua_to_python(lua_data: object) -> object:
             is_array = all(isinstance(k, int) for k in keys)
 
             if is_array:
-                keys.sort()
                 return [lua_to_python(lua_data[k]) for k in keys]
             else:
-                return {lua_to_python(k): lua_to_python(lua_data[k]) for k in keys}
+                # Move lua functions to the bottom of the data
+                regular_items = {}
+                function_items = {}
+
+                for k in keys:
+                    value = lua_data[k]
+                    python_key = lua_to_python(k)
+
+                    if type(value).__name__ == '_LuaFunction':
+                        function_items[python_key] = str(value)
+                    else:
+                        regular_items[python_key] = lua_to_python(value)
+
+                # Merge dicts, adding regular items first
+                return {**regular_items, **function_items}
 
         # Return string as a fallback
         return str(lua_data)
@@ -82,7 +99,7 @@ def lua_to_python(lua_data: object) -> object:
         raise TypeError(f"Unsupported data type encountered: {e}")
 
 
-def parse_lua_tables(lua_files: list[str], tables: list[str] = None) -> dict:
+def parse_lua_tables(lua_files: list[str], tables: list[str] = None, lua_fallback=None) -> dict:
     """
     Parses Lua files and extracts specified tables, converting them to Python data structures.
 
@@ -103,7 +120,7 @@ def parse_lua_tables(lua_files: list[str], tables: list[str] = None) -> dict:
             file_path = os.path.join(LUA_PATH, file)
 
             # Load the Lua file
-            lua_runtime = load_lua_file(lua_runtime, file_path)
+            lua_runtime = load_lua_file(lua_runtime, file_path, lua_fallback=lua_fallback)
 
             globals_dict = lua_runtime.globals()
 
@@ -129,7 +146,30 @@ def parse_lua_tables(lua_files: list[str], tables: list[str] = None) -> dict:
 
 
 # For testing lua file
+test_lua_fallback = ("""
+    local function fallback()
+        return setmetatable({}, {
+            __index = function(_, key)
+                return function() return tostring(key) end
+            end
+        })
+    end
+
+    Events = Events or {}
+
+    setmetatable(Events, {
+        __index = function(_, key)
+            return fallback()
+        end
+    })
+
+    setmetatable(_G, {
+        __index = function(_, key)
+            return fallback()
+        end
+    })
+""")
 #if __name__ == "__main__":
-#    lua_files = ["camping_fuel.lua"]
-#    parsed_data = parse_lua_tables(lua_files)
-#    utility.save_cache(parsed_data, "burn_data_2.json")
+#    lua_files = ["forageSystem.lua"]
+#    parsed_data = parse_lua_tables(lua_files, lua_fallback=test_lua_fallback)
+#    utility.save_cache(parsed_data, "foraging_2.json")
