@@ -135,7 +135,10 @@ def parse_lua_tables(lua_runtime: LuaRuntime, tables: list[str] = None) -> dict:
     return parsed_data
 
 
-# For testing lua file
+## ------------------------- EVERYTHING BENEATH HERE IS FOR TESTING/EXAMPLE ------------------------- ##
+
+
+# Inject lua: Foraging - initialises and stubs Events table
 test_lua_fallback = ("""
     local function fallback()
         return setmetatable({}, {
@@ -159,7 +162,112 @@ test_lua_fallback = ("""
         end
     })
 """)
-#if __name__ == "__main__":
-#    lua_files = ["forageSystem.lua"]
-#    parsed_data = parse_lua_tables(lua_files, lua_fallback=test_lua_fallback)
-#    utility.save_cache(parsed_data, "foraging_2.json")
+if __name__ == "__main__":
+    lua_runtime = load_lua_file("forageSystem.lua", inject_lua=test_lua_fallback)
+    parsed_data = parse_lua_tables(lua_runtime)
+    utility.save_cache(parsed_data, "foraging_2.json")
+
+# Basic usage: Recorded media
+if __name__ == "__main__":
+    lua_runtime = load_lua_file("recorded_media.lua")
+    parsed_data = parse_lua_tables(lua_runtime)
+    utility.save_cache(parsed_data, "recorded_media.json")
+
+# Basic usage: Burn time
+if __name__ == "__main__":
+    lua_runtime = load_lua_file("camping_fuel.lua")
+    parsed_data = parse_lua_tables(lua_runtime)
+    utility.save_cache(parsed_data, "camping_fuel.json")
+
+# Basic usage: Attached weapon definitions
+if __name__ == "__main__":
+    lua_runtime = load_lua_file("AttachedWeaponDefinitions.lua")
+    parsed_data = parse_lua_tables(lua_runtime)
+    utility.save_cache(parsed_data, "attached_weapon_definitions.json")
+
+# Inject lua and multiple files: All distributions - initialises ClutterTables and BagsAndContainers tables
+distributions_lua = ("""
+    ClutterTables = ClutterTables or setmetatable({}, {
+        __index = function(_, key)
+            return setmetatable({}, {
+                __index = function(_, inner_key)
+                    return function() return tostring(inner_key) end
+                end
+            })
+        end
+    })
+
+    BagsAndContainers = BagsAndContainers or setmetatable({}, {
+        __index = function(_, key)
+            return setmetatable({}, {
+                __index = function(_, inner_key)
+                    return function() return tostring(inner_key) end
+                end
+            })
+        end
+    })
+""")
+DISTRIBUTION_LUA_FILES = [
+    "ProceduralDistributions.lua",
+    "VehicleDistributions.lua",
+    "VehicleDistribution_GloveBoxJunk.lua",
+    "VehicleDistribution_SeatJunk.lua",
+    "VehicleDistribution_TrunkJunk.lua",
+    "Distribution_BinJunk.lua",
+    "Distribution_BagsAndContainers.lua",
+    "Distribution_BinJunk.lua",
+    "Distribution_ClosetJunk.lua",
+    "Distribution_CounterJunk.lua",
+    "Distribution_DeskJunk.lua",
+    "Distribution_ShelfJunk.lua",
+    "Distribution_SideTableJunk.lua",
+]
+if __name__ == "__main__":
+    lua_runtime = load_lua_file("Distributions.lua", dependencies=DISTRIBUTION_LUA_FILES, inject_lua=distributions_lua) # Initialise and load lua files into lua environment
+    parsed_data = parse_lua_tables(lua_runtime) # Get all the tables and convert to python data
+    utility.save_cache(parsed_data, "distributions_all.json") # Save to json file
+
+copy_table_fallback = ("""
+    function copyTable(tbl)
+        local copy = {}
+        for k, v in pairs(tbl) do
+            if type(v) == "table" then
+                copy[k] = copyTable(v)  -- Recursively copy nested tables
+            else
+                copy[k] = v
+            end
+        end
+        return copy
+    end
+""")
+ANIMAL_LUA_FILES = [
+    "animal/ChickenDefinitions.lua",
+    "animal/CowDefinitions.lua",
+    "animal/DeerDefinitions.lua",
+    "animal/MouseDefinitions.lua",
+    "animal/PigDefinitions.lua",
+    "animal/RabbitDefinitions.lua",
+    "animal/RaccoonDefinitions.lua",
+    "animal/RatDefinitions.lua",
+    "animal/SheepDefinitions.lua",
+    "animal/TurkeyDefinitions.lua",
+]
+if __name__ == "__main__":
+    lua_runtime = load_lua_file(ANIMAL_LUA_FILES, inject_lua=copy_table_fallback)
+    parsed_data = parse_lua_tables(lua_runtime)
+    utility.save_cache(parsed_data, "animal_definitions.json")
+
+
+TABLES = ["PrintMediaDefinitions"]
+FILES_LIST = [
+    'SpecialItemData_Books.lua',
+    'SpecialItemData_Comics.lua',
+    'SpecialItemData_Magazines.lua',
+    'SpecialItemData_Misc.lua',
+    'SpecialItemData_Photos.lua',
+    'PrintMediaDefinitions.lua'
+]
+if __name__ == "__main__":
+    lua_runtime = load_lua_file(FILES_LIST) # Initialise and load lua files into lua environment
+    parsed_data = parse_lua_tables(lua_runtime, tables=TABLES) # Get only the defined tables and convert to python data
+    utility.save_cache(parsed_data, "literature2.json") # Save to json file
