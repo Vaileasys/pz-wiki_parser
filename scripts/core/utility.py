@@ -310,7 +310,8 @@ def get_burn_data():
         parsed_burn_data, cache_version = load_cache(CACHE_FILE, "burn", True, suppress=True)
 
         if cache_version != version.get_version():
-            parsed_burn_data = lua_helper.parse_lua_tables(["camping_fuel.lua"], TABLES)
+            lua_runtime = lua_helper.load_lua_file("camping_fuel.lua")
+            parsed_burn_data = lua_helper.parse_lua_tables(lua_runtime, TABLES)
 
             save_cache(parsed_burn_data, "burn_data.json")
 
@@ -454,7 +455,7 @@ def save_cache(data: dict, data_file: str, data_dir=DATA_PATH, suppress=False):
 
 
 def load_cache(cache_file, cache_name="data", get_version=False, backup_old=False, suppress=False):
-    """Loads the cache from a json file if it exists for the version.
+    """Loads the cache from a json file with the option to return the version of it, and back it up if it's old.
 
     Args:
         cache_file (str): Path to the cache file.

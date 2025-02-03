@@ -1,11 +1,9 @@
 # Parses literature lua files
 
 import os
-from lupa import LuaRuntime, LuaError
 from scripts.core import utility, version, lua_helper
 from scripts.core.constants import DATA_PATH
 
-LUA_DIRECTORY = "resources/lua/"
 CACHE_JSON = "literature_data.json"
 
 FILES_LIST = [
@@ -19,47 +17,21 @@ FILES_LIST = [
 
 parsed_data = {}
 
-
 def get_literature_data():
-
     if parsed_data == {}:
         init()
     return parsed_data
 
 
 def parse_lua_files():
-    lua = LuaRuntime(unpack_returned_tuples=True)
-    VALID_KEYS = ["PrintMediaDefinitions", "SpecialLootSpawns"]
+    LUA_TABLES = ["SpecialLootSpawns", "PrintMediaDefinitions"]
     parsed_data = {}
 
-    for lua_file_name in FILES_LIST:
-        lua_file_path = os.path.join(LUA_DIRECTORY, lua_file_name)
+    # Initialise and load files into lua runtime environment
+    lua_runtime = lua_helper.load_lua_file(FILES_LIST)
 
-        if not os.path.exists(lua_file_path):
-            print(f"Warning: {lua_file_path} does not exist. Skipping.")
-            continue
-
-        try:
-            lua = lua_helper.load_lua_file(lua, lua_file_path)
-        except (FileNotFoundError, LuaError) as e:
-            print(f"Error processing {lua_file_name}: {e}")
-            continue
-
-        globals_table = lua.globals()
-
-
-        for definition in globals_table.keys():
-            if definition in VALID_KEYS:
-                lua_data = globals_table[definition]
-                if lua_data:
-                    parsed_dict = lua_helper.lua_to_python(lua_data)
-                    if isinstance(parsed_dict, dict):
-                        if definition not in parsed_data:
-                            parsed_data[definition] = {}
-                        # Merge dictionaries
-                        parsed_data[definition] = {**parsed_data[definition], **parsed_dict}
-                    else:
-                        print(f"Warning: '{definition}' in {lua_file_name} isn't a dict. Skipping.")
+    # Parse lua tables and convert to python data
+    parsed_data = lua_helper.parse_lua_tables(lua_runtime, tables=LUA_TABLES)
     
     return parsed_data
 

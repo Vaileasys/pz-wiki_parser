@@ -3,19 +3,23 @@ from lupa import LuaRuntime, LuaError
 from scripts.core import utility
 from scripts.core.constants import LUA_PATH
 
-def load_lua_file(lua_runtime: LuaRuntime, file_path: str, dependencies: list[str]=None, lua_fallback: str=None) -> LuaRuntime:
+def load_lua_file(lua_files: list[str], lua_runtime: LuaRuntime=None, dependencies: list[str]=None, inject_lua: str=None) -> LuaRuntime:
     """
     Loads and executes a Lua file in the given Lua runtime.
 
-    :param lua_runtime (LuaRuntime): The initialized Lua runtime.
-    :param file_path (str): The path to the Lua file to load.
-    :param dependencies (list[str], optional): List of additional Lua files to load (LUA_PATH is already included). Defaults to None.
-    :param lua_fallback (str, optional): Lua code for handling undefined variables. Defaults to None.
+    :param lua_files (list[str]): List of Lua file paths to load and execute. A single file path can also be provided as a string.
+    :param lua_runtime (LuaRuntime, optional): An existing Lua runtime instance. If not provided, a new Lua runtime will be initialised.
+    :param dependencies (list[str], optional): List of additional Lua dependency files to load before the main files (LUA_PATH is already included).
+    :param inject_lua (str, optional): Lua code to inject directly into the runtime before executing any files. Useful for adding stubs or fallbacks.
     :return: The Lua runtime after executing the files.
     """
-    if lua_fallback:
-    # Global fallback for undefined variables
-        lua_runtime.execute(lua_fallback)
+    # Initialise new Lua runtime environment if one wasn't provided
+    if not lua_runtime:
+        lua_runtime = LuaRuntime(unpack_returned_tuples=True)
+
+    # Inject Lua into the runtime environemnt. Can be used for fallbacks, such as creating stubs.
+    if inject_lua:
+        lua_runtime.execute(inject_lua)
     
     try:
         # Load extra Lua files if provided
@@ -30,20 +34,22 @@ def load_lua_file(lua_runtime: LuaRuntime, file_path: str, dependencies: list[st
                         lua_runtime.execute(f.read())
                     except LuaError as e:
                         raise LuaError(f"Error executing extra Lua file '{dependency_path}': {e}")
+                    
+        if isinstance(lua_files, str):
+            lua_files = [lua_files]
+        
+        for lua_file in lua_files:
+            lua_file_path = os.path.join(LUA_PATH, lua_file)
 
-        # Check if cache_file includes a directory path
-        if not os.path.dirname(file_path):
-            file_path = os.path.join(LUA_PATH, file_path)
+            # Load the Lua files
+            if not os.path.isfile(lua_file_path):
+                raise FileNotFoundError(f"Lua file not found: {lua_file_path}")
 
-        # Load the main Lua file
-        if not os.path.isfile(file_path):
-            raise FileNotFoundError(f"Main Lua file not found: {file_path}")
-
-        with open(file_path, 'r', encoding='utf-8') as lua_file:
-            try:
-                lua_runtime.execute(lua_file.read())
-            except LuaError as e:
-                raise LuaError(f"Error executing main Lua file '{file_path}': {e}")
+            with open(lua_file_path, 'r', encoding='utf-8') as lua_file:
+                try:
+                    lua_runtime.execute(lua_file.read())
+                except LuaError as e:
+                    raise LuaError(f"Error executing main Lua file '{lua_file_path}': {e}")
 
     except (FileNotFoundError, IOError, LuaError) as e:
         print(f"Error: {e}")
@@ -56,8 +62,8 @@ def lua_to_python(lua_data: object) -> object:
     """
     Converts Lua data to its Python equivalent (dict, list, or basic value).
 
-    :param lua_data: The Lua data to convert (basic type or Lua table).
-    :return: The corresponding Python data (dict, list, basic type, or string).
+    :param lua_data: The Lua data to convert. Can be a basic type (int, float, bool, str, None), Lua table (converted to Python dict or list), or a Lua function (converted to a string).
+    :return: The corresponding Python data structure (dict, list, basic type, or string).
     """
     try:
         # Return basic values
@@ -99,48 +105,32 @@ def lua_to_python(lua_data: object) -> object:
         raise TypeError(f"Unsupported data type encountered: {e}")
 
 
-def parse_lua_tables(lua_files: list[str], tables: list[str] = None, lua_fallback=None) -> dict:
+def parse_lua_tables(lua_runtime: LuaRuntime, tables: list[str] = None) -> dict:
     """
-    Parses Lua files and extracts specified tables, converting them to Python data structures.
+    Parses Lua tables from the provided Lua runtime and converts them into Python data structures.
 
-    :param lua_files: List of Lua file paths to parse.
-    :param tables: List of table names to extract. If None, extracts all relevant tables.
+    :param lua_runtime: The initialised Lua runtime environment containing the Lua code to parse.
+    :param tables: List of Lua table names to extract. If None, all global tables (excluding standard Lua libraries) will be extracted.
     :return: Dictionary containing extracted tables with their Python data representations.
     """
     parsed_data = {}
-    lua_runtime = LuaRuntime(unpack_returned_tuples=True)
+    globals_dict = lua_runtime.globals()
 
-    # Common Lua standard libraries to skip
     STANDARD_LUA_LIBS = {
         "math", "os", "io", "string", "table", "debug", "coroutine", "package", "utf8", "python", "_G"
     }
 
-    for file in lua_files:
-        try:
-            file_path = os.path.join(LUA_PATH, file)
-
-            # Load the Lua file
-            lua_runtime = load_lua_file(lua_runtime, file_path, lua_fallback=lua_fallback)
-
-            globals_dict = lua_runtime.globals()
-
-            # If specific tables are provided, only extract those
-            if tables:
-                for table_name in tables:
-                    try:
-                        lua_table = lua_runtime.eval(table_name)
-                        parsed_data[table_name] = lua_to_python(lua_table)
-                    except LuaError:
-                        print(f"Warning: Table '{table_name}' not found in '{file_path}'.")
-            else:
-                # Extract all relevant tables, excluding standard libraries
-                for key, value in globals_dict.items():
-                    if key not in STANDARD_LUA_LIBS and type(value).__name__ == '_LuaTable':
-                        parsed_data[key] = lua_to_python(value)
-
-        except (FileNotFoundError, IOError, LuaError) as e:
-            print(f"Error processing '{file_path}': {e}")
-            continue
+    if tables:
+        for table_name in tables:
+            try:
+                lua_table = lua_runtime.eval(table_name)
+                parsed_data[table_name] = lua_to_python(lua_table)
+            except LuaError:
+                print(f"Warning: Table '{table_name}' not found.")
+    else:
+        for key, value in globals_dict.items():
+            if key not in STANDARD_LUA_LIBS and type(value).__name__ == '_LuaTable':
+                parsed_data[key] = lua_to_python(value)
 
     return parsed_data
 
