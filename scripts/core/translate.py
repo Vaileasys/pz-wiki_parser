@@ -13,34 +13,33 @@ translations_data = {}
 CACHE_JSON = "translations_data.json"
 
 LANGUAGE_CODES = {
-    'ar': ("ISO-8859-1", "Arabic"),
-    'ca': ("ISO-8859-1", "Catalan"),
-    'ch': ("UTF-8", "Traditional Chinese (zh-Hant)"),
-    'cn': ("UTF-8", "Simplified Chinese (zh-Hans)"),
-    'cs': ("UTF-8", "Czech"),
-    'da': ("UTF-8", "Danish"),
-    'de': ("UTF-8", "German"),
-    'en': ("UTF-8", "English"),
-    'es': ("UTF-8", "Spanish"),
-    'fi': ("UTF-8", "Finnish"),
-    'fr': ("UTF-8", "French"),
-    'hu': ("UTF-8", "Hungarian"),
-    'id': ("UTF-8", "Indonesian"),
-    'it': ("UTF-8", "Italian"),
-    'jp': ("UTF-8", "Japanese"),
-    'ko': ("UTF-16", "Korean"),
-    'nl': ("UTF-8", "Dutch"),
-    'no': ("UTF-8", "Norwegian"),
-    'ph': ("UTF-8", "Filipino"),
-    'pl': ("UTF-8", "Polish"),
-    'pt': ("UTF-8", "Portuguese"),
-    'pt-br': ("UTF-8", "Portuguese (Brazilian)"),
-    # 'ptbr': ("Cp1252", "Portuguese (Brazilian)"), Commented out for now, rename translation folder to pt-br and use that for now
-    'ro': ("UTF-8", "Romanian"),
-    'ru': ("UTF-8", "Russian"),
-    'th': ("UTF-8", "Thai"),
-    'tr': ("UTF-8", "Turkish"),
-    'uk': ("UTF-8", "Ukrainian")
+    'ar': {"encoding": "CP1252", "language": "Arabic"},
+    'ca': {"encoding": "ISO-8859-15", "language": "Catalan"},
+    'zh-hant': {"encoding": "UTF-8", "language": "Traditional Chinese (zh-Hant)", "code": "CH"},
+    'zh-hans': {"encoding": "UTF-8", "language": "Simplified Chinese (zh-Hans)", "code": "CN"},
+    'cs': {"encoding": "Cp1250", "language": "Czech"},
+    'da': {"encoding": "UTF-8", "language": "Danish"},
+    'de': {"encoding": "UTF-8", "language": "German"},
+    'en': {"encoding": "UTF-8", "language": "English"},
+    'es': {"encoding": "UTF-8", "language": "Spanish"},
+    'fi': {"encoding": "UTF-8", "language": "Finnish"},
+    'fr': {"encoding": "UTF-8", "language": "French"},
+    'hu': {"encoding": "UTF-8", "language": "Hungarian"},
+    'id': {"encoding": "UTF-8", "language": "Indonesian"},
+    'it': {"encoding": "UTF-8", "language": "Italian"},
+    'jp': {"encoding": "UTF-8", "language": "Japanese"},
+    'ko': {"encoding": "UTF-16", "language": "Korean"},
+    'nl': {"encoding": "UTF-8", "language": "Dutch"},
+    'no': {"encoding": "UTF-8", "language": "Norwegian"},
+    'ph': {"encoding": "UTF-8", "language": "Filipino"},
+    'pl': {"encoding": "UTF-8", "language": "Polish"},
+    'pt': {"encoding": "UTF-8", "language": "Portuguese"},
+    'pt-br': {"encoding": "UTF-8", "language": "Portuguese (Brazilian)", "code": "PTBR"},
+    'ro': {"encoding": "UTF-8", "language": "Romanian"},
+    'ru': {"encoding": "UTF-8", "language": "Russian"},
+    'th': {"encoding": "UTF-8", "language": "Thai"},
+    'tr': {"encoding": "UTF-8", "language": "Turkish"},
+    'uk': {"encoding": "UTF-8", "language": "Ukrainian", "code": "UA"}
 }
 
 PROPERTY_PREFIXES = {
@@ -116,7 +115,7 @@ def change_language():
 
     set_language_code(language_code)
 
-    language = LANGUAGE_CODES.get(language_code, ("UTF-8", "Unknown"))[1]
+    language = LANGUAGE_CODES[language_code].get("language", "Unknown")
     print(f"Language changed to '{language_code}' ({language})")
 
     return language_code
@@ -171,13 +170,13 @@ def get_translation(property_value, property_key="DisplayName", lang_code=langua
     return translation.strip()
 
 
-def parse_translation_file(language_code):
-    language_dir = os.path.join("resources", "Translate", language_code.upper())
+def parse_translation_file(wiki_language_code, game_language_code):
+    language_dir = os.path.join("resources", "Translate", game_language_code.upper())
     if not os.path.exists(language_dir):
         raise FileNotFoundError(f"No file found for '{language_dir}'. Ensure the file is in the correct path, or try a different language code.")
 
     # Get encoding for the chosen language
-    encoding = LANGUAGE_CODES.get(language_code, ("UTF-8", "Unknown"))[0]
+    encoding = LANGUAGE_CODES[wiki_language_code].get("encoding", "UTF-8")
     encoding_detected = False
     parsed_translations = {}
 
@@ -263,18 +262,20 @@ def cache_translations():
 
     # Parse translations if there is no cache, or it's outdated.
     if cache_version != version.get_version():
-        for language_code in LANGUAGE_CODES:
+        for wiki_language_code in LANGUAGE_CODES:
             try:
+                
+                game_language_code = LANGUAGE_CODES[wiki_language_code].get("code", wiki_language_code)
                 # Parse translation files for the language
-                parsed_translations = parse_translation_file(language_code)
+                parsed_translations = parse_translation_file(wiki_language_code, game_language_code)
 
                 # Store the parsed translations in the translations_cache
-                translations_data[language_code] = parsed_translations
+                translations_data[wiki_language_code] = parsed_translations
 
             except FileNotFoundError as e:
                 print(f"Error: {e}")
             except Exception as e:
-                print(f"An error occurred for language '{language_code}': {e}")
+                print(f"An error occurred for language '{wiki_language_code}': {e}")
 
         # Save to json cache.
         utility.save_cache(translations_data, CACHE_JSON, suppress=True)
