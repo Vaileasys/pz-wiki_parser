@@ -87,23 +87,20 @@ def init():
         # Check if cache is outdated
         if cache_version != version.get_version():
             CLUTTER_FILES = [
+                "Distribution_BagsAndContainers.lua",
                 "Distribution_BinJunk.lua",
                 "Distribution_ShelfJunk.lua",
-                "Distribution_BagsAndContainers.lua",
                 "Distribution_ClosetJunk.lua",
                 "Distribution_CounterJunk.lua",
                 "Distribution_DeskJunk.lua",
-                "Distribution_SideTableJunk.lua"
+                "Distribution_SideTableJunk.lua",
+                "ProceduralDistributions.lua"
             ]
 
-            lua_runtime = LuaRuntime(unpack_returned_tuples=True)
-            lua_runtime = lua_helper.load_lua_file(lua_runtime, LUA_FILE, dependencies=CLUTTER_FILES)
-            lua_table = lua_runtime.eval("SuburbsDistributions")
-            parsed_data = lua_helper.lua_to_python(lua_table)
-            processed_data = convert_list_to_dict(parsed_data) # Convert dict-like lists into key-value pairs
-            sorted_data = sort_keys(processed_data, is_top_level=True) # Sort keys for readability in json file
-
-            utility.save_cache(sorted_data, CACHE_JSON)
+            lua_runtime = lua_helper.load_lua_file(LUA_FILE, dependencies=CLUTTER_FILES)
+            parsed_data = lua_helper.parse_lua_tables(lua_runtime)
+            parsed_data = sort_keys(parsed_data, is_top_level=True) # Sort keys for readability in json file
+            utility.save_cache(parsed_data, CACHE_JSON)
         else:
             parsed_data = cached_data
 
