@@ -252,9 +252,8 @@ def parse_files(directory):
     
     for item_id, item_data in parsed_data.items():
         # Replace DisplayName with en translation
-        display_name = translate.get_translation(item_id, "DisplayName", "en")
-        if display_name != item_id:
-            parsed_data[item_id]["DisplayName"] = display_name
+        display_name = translate.get_translation(item_id, "DisplayName", "en", default=item_data.get("DisplayName"))
+        parsed_data[item_id]["DisplayName"] = display_name
 
     parsed_data = dict(sorted(parsed_data.items(), key=lambda x: x[1]["Type"]))
 
