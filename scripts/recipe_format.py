@@ -120,7 +120,7 @@ def process_inputs(recipe):
                 tool_key: [
                     {
                         "raw_name": item,
-                        "translated_name": translate.get_translation(item),
+                        "translated_name": translate.get_translation(item, "DisplayName"),
                     }
                     for item in filtered_items
                 ]
@@ -148,7 +148,7 @@ def process_inputs(recipe):
                     "items": [
                         {
                             "raw_name": item,
-                            "translated_name": translate.get_translation(item),
+                            "translated_name": translate.get_translation(item, "DisplayName"),
                         }
                         for item in input_item.get("items", [])
                     ],
@@ -180,7 +180,7 @@ def process_inputs(recipe):
                     "items": [
                         {
                             "raw_name": item,
-                            "translated_name": translate.get_translation(item),
+                            "translated_name": translate.get_translation(item, "DisplayName"),
                         }
                         for item in input_item.get("items", [])
                     ],
@@ -200,7 +200,7 @@ def process_inputs(recipe):
                         parsed_items.append({
                             "raw_name": raw_name.strip(),
                             "amount": int(amount.strip()),
-                            "translated_name": translate.get_translation(raw_name.strip()),
+                            "translated_name": translate.get_translation(raw_name.strip(), "DisplayName"),
                         })
 
                 if numbered_list:
@@ -215,7 +215,7 @@ def process_inputs(recipe):
                         "items": [
                             {
                                 "raw_name": item,
-                                "translated_name": translate.get_translation(item),
+                                "translated_name": translate.get_translation(item, "DisplayName"),
                             }
                             for item in input_item["items"]
                         ],
@@ -231,7 +231,7 @@ def process_inputs(recipe):
                     "items": [
                         {
                             "raw_name": item,
-                            "translated_name": translate.get_translation(item),
+                            "translated_name": translate.get_translation(item, "DisplayName"),
                         }
                         for item in input_item.get("items", [])
                     ],
@@ -252,7 +252,7 @@ def process_inputs(recipe):
                     "items": [
                         {
                             "raw_name": item,
-                            "translated_name": translate.get_translation(item),
+                            "translated_name": translate.get_translation(item, "DisplayName"),
                         }
                         for item in input_item["items"]
                     ],
@@ -318,7 +318,7 @@ def process_outputs(recipe):
         # Handle item outputs
         if "items" in output and isinstance(output["items"], list):
             for raw_product in output["items"]:
-                translated_product = translate.get_translation(raw_product)
+                translated_product = translate.get_translation(raw_product, "DisplayName")
                 product_number = output.get("index", None)  # Retrieve the 'index' field if present
 
                 # Create a dictionary for this output
@@ -378,7 +378,7 @@ def process_output_mapper(recipe, mapper_string):
             continue
 
         raw_items = [key]
-        translated_items = [translate.get_translation(key.strip())]
+        translated_items = [translate.get_translation(key.strip(), "DisplayName")]
         output_mapper["RawOutputs"].append(raw_items)
         output_mapper["TranslatedOutputs"].append(translated_items)
 
@@ -429,7 +429,7 @@ def process_requirements(recipe, parsed_item_data):
         # Add to skillbooks based on teached recipes
         for item_name, item_details in parsed_item_data.items():
             if "TeachedRecipes" in item_details and raw_name in item_details["TeachedRecipes"]:
-                translated_item_name = translate.get_translation(item_name)
+                translated_item_name = translate.get_translation(item_name, "DisplayName")
                 requirements["skillbooks"].append(translated_item_name)
 
         # Add schematics based on parsed literature data

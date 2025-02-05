@@ -424,7 +424,7 @@ def write_to_file(item_id, literature_titles, literature_type):
 
         elif literature_type == "locket":
             file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
-            name = translate.get_translation(item_id)
+            name = translate.get_translation(item_id, "DisplayName")
             locket_text = translate.get_translation("IGUI_LocketText", "IGUI_LocketText")
             for title in sorted(literature_titles):
                 photo = translate.get_translation(title, "Photo")
@@ -434,7 +434,7 @@ def write_to_file(item_id, literature_titles, literature_type):
 
         elif literature_type == "doodlekids":
             file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
-            name = translate.get_translation(item_id)
+            name = translate.get_translation(item_id, "DisplayName")
             photo_text = translate.get_translation("IGUI_PhotoOf", "IGUI_PhotoOf")
             for title in sorted(literature_titles):
                 photo = translate.get_translation(title, "Doodle")
@@ -445,7 +445,7 @@ def write_to_file(item_id, literature_titles, literature_type):
         # postcards, doodles and photos are generated the same
         elif literature_type in ["postcards", "doodle", "photo"]:
             file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
-            name = translate.get_translation(item_id)
+            name = translate.get_translation(item_id, "DisplayName")
             photo_text = translate.get_translation("IGUI_PhotoOf", "IGUI_PhotoOf")
             for title in sorted(literature_titles):
                 photo = translate.get_translation(title, "Photo")

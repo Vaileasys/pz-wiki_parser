@@ -144,7 +144,7 @@ def get_recipes(item_data):
 
     # Get and format the link
     def get_link_from_id(id, recipe_name):
-        product_name = translate.get_translation(id)
+        product_name = translate.get_translation(id, "DisplayName")
         product_page = utility.get_page(id, product_name)
 #        product_link = utility.format_link(product_name, product_page)
         product_link = f"[[{product_page}|{recipe_name}]]"

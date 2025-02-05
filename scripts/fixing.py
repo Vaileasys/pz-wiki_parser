@@ -159,7 +159,7 @@ def write_to_output(module, fixing_id, fixing_data, output_dir):
             if global_item_dict:
                 global_item, global_item_value = next(iter(global_item_dict.items()))
                 global_item_id = f"{module}.{global_item}"
-                global_item = f"[[{translate.get_translation(global_item_id)}]]"
+                global_item = f"[[{translate.get_translation(global_item_id, "DisplayName")}]]"
                 global_item_icon = utility.get_icon(global_item_id, True)
                 global_item = f"{global_item_icon} {global_item}"
 

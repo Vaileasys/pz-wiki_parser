@@ -131,13 +131,14 @@ def detect_file_encoding(file_path):
     return encoding
 
 
-def get_translation(property_value, property_key="DisplayName", lang_code=language_code):
+def get_translation(property_value, property_key=None, lang_code=language_code, default=None):
     """
     Searches for the property value based on the property key and language code to return the translation.
 
     :param property_value: Property value to be translated.
-    :param property_key: Key for the property being translated (optional).
-    :param lang_code: Language code forced for translations. Leaving empty will use global 'language_code' (optional).
+    :param property_key (optional): Key for the property being translated.
+    :param lang_code (optional): Language code forced for translations. Leaving empty will use global 'language_code'.
+    :param default (optional): Default translation to use if no translation can be found. Uses 'property_value' if undefined.
     :return: Translation for the property.
     """
     global language_code
@@ -158,14 +159,14 @@ def get_translation(property_value, property_key="DisplayName", lang_code=langua
     # get the value from the property_key, otherwise use just the property_value
     property_prefix = PROPERTY_PREFIXES.get(property_key, "") + property_value
     translation = translations_lang.get(property_prefix)
+
+    # If a translation couldn't be found, we use the default
     if translation is None:
         logger.write(f"No translation found for '{property_prefix}' prefix")
-        translation = property_value
-        # Try get the item's name from DisplayName instead
-        if property_key == "DisplayName":
-            item_data = item_parser.get_item_data().get(property_value)
-            if item_data:
-                translation = item_data.get("DisplayName", property_value)
+        if default:
+            translation = default
+        else:
+            translation = property_value
 
     return translation.strip()
 
