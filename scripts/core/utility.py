@@ -585,7 +585,17 @@ def convert_int(value: int | float) -> int | float:
 
 
 # Gets an item name. This is for special cases where the name needs to be manipulated.
-def get_name(item_id, item_data, language=None):
+def get_name(item_id, item_data=None, language=None):
+    """Gets an item name if it has a special case, otherwise translates the DisplayName.
+
+    Args:
+        item_id (str): Item ID for the item to get the name for.
+        item_data (dict, optional): The item properties to get the DisplayName from. Default will get the data based on the item ID, adds more overhead.
+        language (str, optional): The language code to use when translating. Defaults to selected language code.
+
+    Returns:
+        str: The items name as it is displayed in-game.
+    """
     language_code = translate.get_language_code()
     # The following keys are used to construct the name:
     # item_id: The item ID this special case is applicable to.
@@ -635,6 +645,8 @@ def get_name(item_id, item_data, language=None):
     if item_key is None:
         # We don't need to translate if language is "en", as it's already been translated in the parser.
         if language_code == "en" or language == "en":
+            if not item_data:
+                item_data = get_item_data_from_id(item_id)
             return item_data.get("DisplayName", "Unknown")
         return translate.get_translation(item_id, "DisplayName")
 
