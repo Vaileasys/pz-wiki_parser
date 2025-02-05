@@ -585,7 +585,7 @@ def convert_int(value: int | float) -> int | float:
 
 
 # Gets an item name. This is for special cases where the name needs to be manipulated.
-def get_name(item_id, item_data, language="en"):
+def get_name(item_id, item_data, language=None):
     language_code = translate.get_language_code()
     # The following keys are used to construct the name:
     # item_id: The item ID this special case is applicable to.
