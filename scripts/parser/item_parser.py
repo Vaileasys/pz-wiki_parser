@@ -212,7 +212,7 @@ def parse_module(lines):
 
         # Detect the start of a module block
         if re.match(r'^module(\s)', line):
-            parts = line.split(' ')
+            parts = re.split(r'\s+', line)
             if len(parts) >= 2:
                 module_name = parts[1]
             else:
@@ -220,7 +220,7 @@ def parse_module(lines):
         
         # Detect the start of an item block
         elif re.match(r'^item(\s)', line): # regex to return 'item' and not any suffixes
-            parts = line.split(' ')
+            parts = re.split(r'\s+', line)
             if len(parts) == 2:
                 item_name, item_data, end_index = parse_item(lines, i, module_name)
                 if item_name and module_name and not is_blacklisted(item_name, item_data):
