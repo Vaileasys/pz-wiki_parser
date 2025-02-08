@@ -21,6 +21,7 @@ def get_tags(item_data):
 
 # Gets parsed item data for an item id
 def get_item_data_from_id(item_id):
+    item_id = fix_item_id(item_id)
     all_item_data = item_parser.get_item_data()
     item_data = all_item_data[item_id]
     return item_data
@@ -50,7 +51,7 @@ def fix_item_id(item_id):
             if key.endswith(f'.{item_id}'):
                 return key
         else:
-            print(f"No Item ID found for '{item_id}'")
+            logger.write(f"No Item ID found for '{item_id}'")
             return item_id
 
 
