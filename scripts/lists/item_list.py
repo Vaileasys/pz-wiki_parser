@@ -68,7 +68,7 @@ def item_list():
 
     with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=pbar_format, unit=" items") as pbar:
         for item_id, item_data in parsed_item_data.items():
-            pbar.set_postfix_str(f"Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})")
+            pbar.set_postfix_str(f"Processing: {item_data.get('Type', 'Unknown')} ({item_id[:30]})")
             # Check if 'DisplayCategory' property exists for the item
             if 'DisplayCategory' in item_data:
                 display_category = item_data.get('DisplayCategory', 'Other')
