@@ -627,7 +627,7 @@ def main():
 
         with tqdm(total=len(data["recipes"]), desc="Processing recipes", bar_format=PBAR_FORMAT, unit=" recipes") as pbar:
             for recipe in data["recipes"]:
-                pbar.set_postfix_str(f"Processing: {recipe["name"][:30]}")
+                pbar.set_postfix_str(f'Processing: {recipe["name"][:30]}')
                 recipe_str = json.dumps(recipe)
                 recipe_str = recipe_str.replace("Electricity", "Electrical")
                 recipe = json.loads(recipe_str)
