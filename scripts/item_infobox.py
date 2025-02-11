@@ -301,7 +301,7 @@ def automatic_extraction(output_dir):
     parsed_item_data = item_parser.get_item_data()
     with tqdm(total=len(parsed_item_data), desc="Processing items", unit=" items", bar_format=PBAR_FORMAT, unit_scale=True) as pbar:
         for item_id, item_data in parsed_item_data.items():
-            pbar.set_postfix_str(f"Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})")
+            pbar.set_postfix_str(f'Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})')
             process_item(item_data, item_id, output_dir)
             pbar.update(1)
         pbar.bar_format = f"Finished processing items."
