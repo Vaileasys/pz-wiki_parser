@@ -267,7 +267,7 @@ def generate_tags_dict():
 
         with tqdm(total=len(parsed_item_data), desc="Generating tag data", bar_format=PBAR_FORMAT, unit=" items") as pbar:
             for item_id, item_data in parsed_item_data.items():
-                pbar.set_postfix_str(f"Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})")
+                pbar.set_postfix_str(f'Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})')
                 if 'Tags' in item_data:
                     name = utility.get_name(item_id, item_data)
                     page = utility.get_page(item_id, name)
