@@ -10,7 +10,7 @@ config_default = {
     "Settings": {
         "first_time_run": '0',
         "default_language": 'en',
-        "version": '42.2.0',
+        "version": '42.3.0',
     }
 }
 
