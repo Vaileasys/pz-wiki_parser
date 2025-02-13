@@ -11,6 +11,7 @@ resources/*
 !resources/icons.csv
 !resources/item_id_dictionary.csv
 !resources/color_reference.json
+!resources/sprite_list.json
 
 ## Translations
 resources/Translate/*
