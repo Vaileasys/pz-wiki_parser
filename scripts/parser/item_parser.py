@@ -295,7 +295,7 @@ def init():
 
     cache_file = os.path.join(DATA_PATH, CACHE_JSON)
     # Try to get cache from json file
-    cached_data, cache_version = utility.load_cache(cache_file, "item", get_version=True)
+    cached_data, cache_version = utility.load_cache(cache_file, "item", get_version=True, backup_old=True)
     game_version = version.get_version()
 
     # Parse items if there is no cache, or it's outdated.

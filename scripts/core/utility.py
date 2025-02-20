@@ -702,24 +702,24 @@ def find_icon(item_id, all_icons=False):
     icon_dir = os.path.join('resources', 'icons')
     icon_default = "Question_On"
     icon = icon_default
+    icon_cache = load_cache("resources/sprite_list.json", "sprite cache", suppress=True)
+    icon_cache_files = icon_cache.get("Item", [])
 
-    def check_icon_exists(icon_name):
-        if os.path.exists(icon_dir):
-            files = os.listdir(icon_dir)
+    def check_icon_exists(icon_name, icon_cache_files):
 
-            if isinstance(icon_name, list):
-                updated_icons = []
-                for name in icon_name:
-                    for file in files:
-                        if file.lower() == name.lower():
-                            updated_icons.append(file)
-                            break
-                return updated_icons
+        if isinstance(icon_name, list):
+            updated_icons = []
+            for name in icon_name:
+                for file in icon_cache_files:
+                    if file.lower() == name.lower():
+                        updated_icons.append(file)
+                        break
+            return updated_icons
 
-            elif isinstance(icon_name, str):
-                for file in files:
-                    if file.lower() == icon_name.lower():
-                        return file
+        elif isinstance(icon_name, str):
+            for file in icon_cache_files:
+                if file.lower() == icon_name.lower():
+                    return file
         return icon_name
 
     if item_id:
@@ -760,7 +760,7 @@ def find_icon(item_id, all_icons=False):
                         icons = [icon]
                     for variant in icon_variants:
                         variant_icon = f"{icon}{variant}.png"
-                        if os.path.exists(os.path.join(icon_dir, variant_icon)):
+                        if variant_icon in icon_cache_files:
                             icons.append(variant_icon)
                     icon = icons
 
@@ -803,9 +803,8 @@ def find_icon(item_id, all_icons=False):
         if not icon.endswith('.png'):
             icon = f"{icon}.png"
     
-
     # Check if the icon exists
-    matched_icon = check_icon_exists(icon)
+    matched_icon = check_icon_exists(icon, icon_cache_files)
     if matched_icon:
         if matched_icon != icon:
             logger.write(f"Icon was modified for {item_id} with icon: {icon}", False, "log_modified_icons.txt")
