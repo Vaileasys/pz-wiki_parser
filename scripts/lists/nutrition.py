@@ -51,7 +51,7 @@ def get_items():
     with tqdm(total=len(parsed_items), desc="Getting food items", bar_format=PBAR_FORMAT, unit=" items") as pbar:
         for item_id, item_data in parsed_items:
             # Change the string at the end of the progress bar
-            pbar.set_postfix_str(f"Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})")
+            pbar.set_postfix_str(f'Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})')
 
             if "Calories" in item_data:
                 if language_code != "en":

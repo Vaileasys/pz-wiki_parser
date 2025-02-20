@@ -451,7 +451,7 @@ def get_items():
     # Get items
     with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items") as pbar:
         for item_id, item_data in parsed_item_data.items():
-            pbar.set_postfix_str(f"Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})")
+            pbar.set_postfix_str(f'Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})')
             if item_data.get("Type") in ("Literature", "Map") or item_data.get("DisplayCategory") == "Literature":
                 heading, item = process_item(item_id, item_data)
 
@@ -506,7 +506,7 @@ def write_to_output(literature_dict):
 
         output_path = os.path.join(output_dir, f"{heading}.txt")
         with open(output_path, "w", encoding="utf-8") as file:
-            file.write(f"<!--BOT_FLAG-start-{heading.replace(" ", "_")}. DO NOT REMOVE-->")
+            file.write(f'<!--BOT_FLAG-start-{heading.replace(" ", "_")}. DO NOT REMOVE-->')
             file.write(f"{TABLE_HEADER}\n")
             file.write(f"{table_headings}\n")
 
@@ -518,7 +518,7 @@ def write_to_output(literature_dict):
                 file.write(f"|-\n| {row}\n")
 
             file.write("|}")
-            file.write(f"<!--BOT_FLAG-end-{heading.replace(" ", "_")}. DO NOT REMOVE-->")
+            file.write(f'<!--BOT_FLAG-end-{heading.replace(" ", "_")}. DO NOT REMOVE-->')
 
     print(f"Output saved to {output_dir}")
 
