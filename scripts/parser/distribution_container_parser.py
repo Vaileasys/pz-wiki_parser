@@ -9,6 +9,11 @@ LUA_FILE = "Distributions.lua"
 parsed_data = {}
 
 
+def get_distribution_data():
+    if parsed_data == {}:
+        init()
+    return parsed_data
+
 def convert_list_to_dict(data):
     """Converts lists with alternating key-value pairs into dicts.
     E.g. ["Apple", 8, "Banana", 10] -> {"Apple": 8, "Banana": 10}
@@ -99,6 +104,7 @@ def init():
 
             lua_runtime = lua_helper.load_lua_file(LUA_FILE, dependencies=CLUTTER_FILES)
             parsed_data = lua_helper.parse_lua_tables(lua_runtime)
+#            parsed_data = convert_list_to_dict(parsed_data)
             parsed_data = sort_keys(parsed_data, is_top_level=True) # Sort keys for readability in json file
             utility.save_cache(parsed_data, CACHE_JSON)
         else:
