@@ -244,34 +244,34 @@ def generate_intro(lowercase_name, language_code):
 
 
 def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir,
-                 code_dir, distribution_dir, language_code, history_dir):
+                 code_dir, distribution_dir, history_dir, crafting_dir, language_code):
     """
-    Processes a single file and generates the corresponding article content.
+        Processes a single file and generates the corresponding article content.
 
-    This function reads the file, extracts the item_id, name, and category from the
-    infobox, and builds the article content using the generate_header,
-    assemble_body, and generate_intro functions. The content is then written to a
-    new file in the output directory.
+        This function reads the file, extracts the item_id, name, and category from the
+        infobox, and builds the article content using the generate_header,
+        assemble_body, and generate_intro functions. The content is then written to a
+        new file in the output directory.
 
-    Args:
-        file_path (str): The path to the file to process.
-        output_dir (str): The path to the directory where the output file should
-            be written.
-        consumables_dir (str): The path to the directory containing the
-            consumable data.
-        infobox_data_list (list): A list of infobox data dictionaries.
-        item_id_dict (dict): A dictionary mapping item_id to article_name.
-        generate_all (bool): Whether to generate all articles or only those that
-            don't already have an article.
-        fixing_dir (str): The path to the directory containing the fixing data.
-        code_dir (str): The path to the directory containing the code data.
-        distribution_dir (str): The path to the directory containing the
-            distribution data.
-        language_code (str): The language code to use for the generated content.
+        Args:
+            file_path (str): The path to the file to process.
+            output_dir (str): The path to the directory where the output file should
+                be written.
+            consumables_dir (str): The path to the directory containing the
+                consumable data.
+            infobox_data_list (list): A list of infobox data dictionaries.
+            item_id_dict (dict): A dictionary mapping item_id to article_name.
+            generate_all (bool): Whether to generate all articles or only those that
+                don't already have an article.
+            fixing_dir (str): The path to the directory containing the fixing data.
+            code_dir (str): The path to the directory containing the code data.
+            distribution_dir (str): The path to the directory containing the
+                distribution data.
+            language_code (str): The language code to use for the generated content.
 
-    Returns:
-        None
-    """
+        Returns:
+            None
+        """
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             content = file.read()
@@ -292,7 +292,6 @@ def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item
 
     item_id = item_id_match.group(1).strip()
 
-    # Check if we should skip this item_id
     if not generate_all and item_id in item_id_dict:
         return
 
@@ -310,19 +309,16 @@ def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item
     name = name_match.group(1).strip()
     lowercase_name = name.lower()
 
-    # Extract category
     category_match = re.search(r'\|category\s*=\s*(.+)', infobox)
     category = category_match.group(1).strip() if category_match else ""
 
-    # Extract skill type
     skill_type_match = re.search(r'\|skill_type\s*=\s*(.+)', infobox)
     skill_type = skill_type_match.group(1).strip() if skill_type_match else ""
 
-    # Build the article
     header = generate_header(category, skill_type, infobox_version, language_code, name)
     body_content = assemble_body(lowercase_name, os.path.basename(file_path), name, item_id, category, skill_type,
                                  infobox, consumables_dir, infobox_data_list, item_id_dict, fixing_dir, code_dir,
-                                 distribution_dir, history_dir, language_code)
+                                 distribution_dir, history_dir, crafting_dir, language_code)
 
     intro = generate_intro(lowercase_name, language_code)
 
@@ -334,11 +330,9 @@ def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item
 {body_content}
 """
 
-    # Sanitize the item_id to create a valid filename
     safe_item_id = re.sub(r'[^\w\-_\. ]', '_', item_id) + '.txt'
     new_file_path = os.path.join(output_dir, safe_item_id)
 
-    # Write the content to the output file
     try:
         with open(new_file_path, 'w', encoding='utf-8') as new_file:
             new_file.write(new_content.strip())
@@ -515,6 +509,26 @@ def generate_condition(name, category, skill_type, infobox, fixing_dir, language
                         print(f"Error reading {file_path}: {e}")
 
     return condition_text
+
+
+def generate_crafting(item_id, crafting_dir, language_code):
+    if language_code != "en":
+        return ""
+
+    if not os.path.exists(crafting_dir):
+        return ""
+
+    filename = f"{item_id}.txt"
+    file_path = os.path.join(crafting_dir, filename)
+
+    if os.path.isfile(file_path):
+        try:
+            with open(file_path, 'r', encoding='utf-8') as file:
+                return file.read().strip()
+        except Exception as e:
+            print(f"Error reading {file_path}: {e}")
+
+    return ""
 
 
 def generate_location(original_filename, infobox_name, item_id, distribution_dir):
@@ -698,30 +712,32 @@ def generate_see_also(language_code, current_item, infobox_data_list, item_id_di
 
 
 def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox, consumables_dir,
-                  infobox_data_list, item_id_dict, fixing_dir, code_dir, distribution_dir, history_dir, language_code):
+                  infobox_data_list, item_id_dict, fixing_dir, code_dir, distribution_dir, history_dir, crafting_dir,
+                  language_code):
     """
-    Assembles the body content for an item's article.
+        Assembles the body content for an item's article.
 
-    Args:
-        name (str): The name of the item.
-        original_filename (str): The original filename of the item.
-        infobox_name (str): The name of the infobox.
-        item_id (str): The unique ID of the item.
-        category (str): The category of the item.
-        skill_type (str): The skill type of the item.
-        infobox (str): The contents of the item's infobox.
-        consumables_dir (str): The directory containing consumables data.
-        infobox_data_list (list): A list of dictionaries containing extracted infobox data.
-        item_id_dict (dict): A dictionary mapping item IDs to names.
-        fixing_dir (str): The directory containing fixing data.
-        code_dir (str): The directory containing code data.
-        distribution_dir (str): The directory containing distribution data.
-        history_dir (str): The directory containing history files.
-        language_code (str): The language code to use for the generated content.
+        Args:
+            name (str): The name of the item.
+            original_filename (str): The original filename of the item.
+            infobox_name (str): The name of the infobox.
+            item_id (str): The unique ID of the item.
+            category (str): The category of the item.
+            skill_type (str): The skill type of the item.
+            infobox (str): The contents of the item's infobox.
+            consumables_dir (str): The directory containing consumables data.
+            infobox_data_list (list): A list of dictionaries containing extracted infobox data.
+            item_id_dict (dict): A dictionary mapping item IDs to names.
+            fixing_dir (str): The directory containing fixing data.
+            code_dir (str): The directory containing code data.
+            distribution_dir (str): The directory containing distribution data.
+            history_dir (str): The directory containing history files.
+            language_code (str): The language code to use for the generated content.
 
-    Returns:
-        str: The assembled body content for the item's article.
-    """
+        Returns:
+            str: The assembled body content for the item's article.
+        """
+
     language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
     headers = language_data["headers"]
     help_text = language_data["help_text"]
@@ -734,6 +750,7 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
 
     sections = {
         headers['Condition']: generate_condition(name, category, skill_type, infobox, fixing_dir, language_code),
+        "Crafting": generate_crafting(item_id, crafting_dir, language_code),
         headers['Location']: generate_location(original_filename, infobox_name, item_id, distribution_dir),
         "History": generate_history(item_id, history_dir, language_code),
         headers['Code']: generate_code(item_id, code_dir),
@@ -747,17 +764,15 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
     }
 
     for section, content in sections.items():
-        if content is not None:
-            if content.strip():
-                body_content += f"\n=={section}==\n{content}\n"
+        if content.strip():
+            body_content += f"\n=={section}==\n{content}\n"
         else:
-            tqdm.write(f"{item_id}: skipping '{section}' as content is '{content}'")
+            continue
 
     return body_content.strip()
 
 
 def main():
-    # Set language code in case it hasn't been set already.
     translate.change_language()
     language_code = translate.get_language_code()
 
@@ -769,6 +784,7 @@ def main():
     distribution_dir = 'output/distributions/complete'
     history_dir = 'resources/history'
     code_dir = 'output/codesnips'
+    crafting_dir = 'output/recipes/crafting_combined'
 
     warnings = []
 
@@ -787,11 +803,6 @@ def main():
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    if not os.path.exists(consumables_dir) or not os.listdir(consumables_dir):
-        warnings.append("WARNING: Consumables not found, please run consumables.py first")
-    if not os.path.exists(fixing_dir) or not os.listdir(fixing_dir):
-        warnings.append("WARNING: Fixing not found, please run fixing.py first")
-
     while True:
         user_choice = input(
             "Do you want to generate:\n1: All items\n2: New items (Don't exist on the wiki currently)\nQ: Quit\n> ").strip().lower()
@@ -808,7 +819,7 @@ def main():
     for text_file in tqdm(text_files, desc="Generating articles", unit="file"):
         file_path = os.path.join(infobox_dir, text_file)
         process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir,
-                     code_dir, distribution_dir, language_code, history_dir)
+                     code_dir, distribution_dir, history_dir, crafting_dir, language_code)
 
     if warnings:
         print("\n".join(warnings))
