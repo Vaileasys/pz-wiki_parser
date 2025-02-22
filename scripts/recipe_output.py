@@ -667,7 +667,6 @@ def output_item_usage(item_input_map, item_output_map):
         # Write combined file
         combined_file = os.path.join(combined_output_dir, f"{raw_name}.txt")
         with open(combined_file, 'w', encoding='utf-8') as f:
-            f.write("==Crafting==\n")
             if output_recipes:
                 crafting_id = f"{raw_name}_howtocraft"
                 crafting_template = ["{{Crafting/sandbox|item=" + crafting_id]
