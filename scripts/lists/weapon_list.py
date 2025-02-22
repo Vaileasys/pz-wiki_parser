@@ -283,7 +283,7 @@ def write_items_to_file(skills, header, category):
             caption = translate.get_wiki_translation(caption)
             file.write(caption)
             file.write("|}</div>")
-            file.write(f"<!--BOT_FLAG-end-{skill.replace(" ", "_")}. DO NOT REMOVE-->")
+            file.write(f'<!--BOT_FLAG-end-{skill.replace(" ", "_")}. DO NOT REMOVE-->')
     
     print(f"{category.title()} tables completed. Files can be found in '{output_dir}'")
 

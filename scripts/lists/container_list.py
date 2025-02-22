@@ -352,7 +352,7 @@ def write_to_output(container_dict):
 
         output_path = os.path.join(output_dir, f"{heading}.txt")
         with open(output_path, "w", encoding="utf-8") as file:
-            file.write(f"<!--BOT_FLAG-start-{heading.replace(" ", "_")}. DO NOT REMOVE-->")
+            file.write(f'<!--BOT_FLAG-start-{heading.replace(" ", "_")}. DO NOT REMOVE-->')
             file.write(f"{TABLE_HEADER}\n")
             file.write(f"{table_headings}\n")
 
@@ -364,7 +364,7 @@ def write_to_output(container_dict):
                 file.write(f"|-\n| {row}\n")
 
             file.write("|}")
-            file.write(f"<!--BOT_FLAG-end-{heading.replace(" ", "_")}. DO NOT REMOVE-->")
+            file.write(f'<!--BOT_FLAG-end-{heading.replace(" ", "_")}. DO NOT REMOVE-->')
 
     print(f"Output saved to {output_dir}")
 

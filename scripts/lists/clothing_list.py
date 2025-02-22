@@ -493,7 +493,7 @@ def get_items():
 
     with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items") as pbar:
         for item_id, item_data in parsed_item_data.items():
-            pbar.set_postfix_str(f"Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})")
+            pbar.set_postfix_str(f'Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})')
             if item_data.get("Type") in ("Clothing", "AlarmClockClothing") or 'CanBeEquipped' in item_data:
                 # filter out blacklisted items and 'Reverse' variants
                 module, item_name = item_id.split('.')
@@ -533,7 +533,7 @@ def write_items_to_file(clothing_dict):
         with open(output_path, 'w', encoding='utf-8') as file:
             # write wiki heading and table headings
 #            file.write(f"=={heading}==\n")
-            file.write(f"<!--BOT_FLAG-start-{heading.replace(" ", "_")}. DO NOT REMOVE-->")
+            file.write(f'<!--BOT_FLAG-start-{heading.replace(" ", "_")}. DO NOT REMOVE-->')
             file.write(f"{TABLE_HEADER}\n")
             file.write(f"{table_headings}\n")
 
@@ -543,7 +543,7 @@ def write_items_to_file(clothing_dict):
                 file.write(f"|-\n| {row}\n")
 
             file.write("|}")
-            file.write(f"<!--BOT_FLAG-end-{heading.replace(" ", "_")}. DO NOT REMOVE-->")
+            file.write(f'<!--BOT_FLAG-end-{heading.replace(" ", "_")}. DO NOT REMOVE-->')
 
 
 def main():
