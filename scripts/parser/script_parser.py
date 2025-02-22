@@ -162,7 +162,7 @@ def init(suppress=False):
 
     cache_file = os.path.join(DATA_PATH, CACHE_JSON)
     # Try to get cache from json file
-    parsed_fixing_data, cache_version = utility.load_cache(cache_file, get_version=True)
+    parsed_fixing_data, cache_version = utility.load_cache(cache_file, get_version=True, suppress=suppress)
 
     # Parse items if there is no cache, or it's outdated.
     if cache_version != version.get_version():
@@ -174,7 +174,7 @@ def init(suppress=False):
         for module, fixing_data in parsed_fixing_data.items():
             fixing_counter += len(fixing_data)
     
-    print("Number of fixings found:", fixing_counter)
+        print("Number of fixings found:", fixing_counter)
 
     
 if __name__ == "__main__":
