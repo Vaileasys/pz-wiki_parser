@@ -4,21 +4,38 @@ from scripts.parser import item_parser
 from scripts.core import translate, utility
 from scripts.core.constants import PBAR_FORMAT
 
+HEADER = """{| class=\"wikitable theme-red sortable\" style=\"text-align:center;
+! Icon
+! Name
+! [[File:Status_HeavyLoad_32.png|32px|link=Heavy load|Encumbrance]]
+! [[File:Status_Hunger_32.png|32px|link=Hungry|Hunger]]
+! [[File:Fire_01_1.png|32px|link=Nutrition#Calories|Calories]]
+! [[File:Wheat.png|32px|link=Nutrition#Carbohydrates|Carbohydrates]]
+! [[File:Steak.png|32px|link=Nutrition#Proteins|Proteins]]
+! [[File:Butter.png|32px|link=Nutrition#Fat|Fat]]
+! Item ID"""
+
+
 def write_to_output(items):
     items = sorted(items, key=lambda x: x['item_name'].lower())
 
     # write to output.txt
     language_code = translate.get_language_code()
     output_dir = os.path.join("output", language_code, 'item_list')
-    output_file = os.path.join(output_dir, 'nutrition.txt')
+    file_name = "nutrition"
+    output_file = os.path.join(output_dir, f'{file_name}.txt')
     os.makedirs(output_dir, exist_ok=True)
 
     with tqdm(total=len(items), desc="Writing nutrition table", bar_format=PBAR_FORMAT, unit=" items") as pbar:
     
         with open(output_file, 'w', encoding='utf-8') as file:
 
-            file.write("{| class=\"wikitable theme-red sortable\" style=\"text-align:center;\"")
-            file.write("\n! Icon !! Name !! [[File:Status_HeavyLoad_32.png|32px|link=Heavy load|Encumbrance]] !! [[File:Status_Hunger_32.png|32px|link=Hungry|Hunger]] !! [[File:Fire_01_1.png|32px|link=Nutrition#Calories|Calories]] !! [[File:Wheat.png|32px|link=Nutrition#Carbohydrates|Carbohydrates]] !! [[File:Steak.png|32px|link=Nutrition#Proteins|Proteins]] !! [[File:Butter.png|32px|link=Nutrition#Fat|Fat]] !! Item ID\n")
+            table_content = []
+
+            bot_flag_start = f'<!--BOT_FLAG-start-{file_name.replace(" ", "_")}. DO NOT REMOVE-->'
+            bot_flag_end = f'<!--BOT_FLAG-end-{file_name.replace(" ", "_")}. DO NOT REMOVE-->'
+
+            table_content.append(bot_flag_start + HEADER)
         
             for item in items:
                 item_id = item['item_id']
@@ -34,11 +51,14 @@ def write_to_output(items):
                 lipids = item['lipids']
                 proteins = item['proteins']
 
-                file.write(f"|-\n| {icons} || {item_link} || {weight} || {hunger} || {calories} || {carbohydrates} || {proteins} || {lipids} || {item_id}\n")
+                table_content.append(f"\n|-\n| {icons} || {item_link} || {weight} || {hunger} || {calories} || {carbohydrates} || {proteins} || {lipids} || {item_id}")
 
                 pbar.update(1)
 
-            file.write("|}")
+            table_content.append("\n|}" + bot_flag_end)
+
+            file.write("".join(table_content))
+
         pbar.clear()
         pbar.bar_format = f"Nutrition table completed. File can be found in '{output_file}'\n"
 

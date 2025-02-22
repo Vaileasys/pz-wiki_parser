@@ -23,7 +23,7 @@ TABLE_DICT = {
 COLUMNS_DICT = {
     "icon": "! Icon",
     "name": "! Name",
-    "weight": "! [[File:Status_HeavyLoad.png|32px|link=|Encumbrance]]",
+    "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
     "body_location": "! [[File:UI_BodyPart.png|32px|link=|Body location]]",
     "body_part": "! [[File:UI_BodyPart.png|32px|link=|Body part(s)]]",
     "display_time": "! [[File:AlarmClock.png|28px|link=|Displays time]]",

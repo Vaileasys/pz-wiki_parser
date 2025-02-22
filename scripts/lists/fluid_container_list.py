@@ -27,13 +27,15 @@ def write_items_to_file(items, file_name):
 
     output_file = os.path.join(output_dir, f"{file_name}.txt")
     with open(output_file, "w", encoding="utf-8") as file:
-        file.write(HEADER)
+        bot_flag_start = f'<!--BOT_FLAG-start-{file_name.replace(" ", "_")}. DO NOT REMOVE-->'
+        bot_flag_end = f'<!--BOT_FLAG-end-{file_name.replace(" ", "_")}. DO NOT REMOVE-->'
+        file.write(bot_flag_start + HEADER)
         for item in items:
             del item['item_name'] # Delete 'item_name' as it was only used for sorting
             for value in item.values():
                 file.write(f"\n| {value}")
             file.write(f"\n|-")
-        file.write("\n|}")
+        file.write("\n|}" + bot_flag_end)
 
     print(f"Item names written to {output_file}")
 
@@ -140,7 +142,7 @@ def get_items():
 
     print(f"Found {i} items that are a fluid container")
     print(f"Found {j} items with a fluid")
-    write_items_to_file(fluid_containers, 'fluid_container_list')
+    write_items_to_file(fluid_containers, 'fluid_container')
         
 
 def main():

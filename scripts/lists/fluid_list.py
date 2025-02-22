@@ -33,14 +33,16 @@ def write_fluids_to_file(items, file_name):
     output_file = os.path.join(output_dir, f"{file_name}.txt")
     with open(output_file, "w", encoding="utf-8") as file:
         translated_header = translate.get_wiki_translation(HEADER)
-        file.write(translated_header)
+        bot_flag_start = f'<!--BOT_FLAG-start-{file_name.replace(" ", "_")}. DO NOT REMOVE-->'
+        bot_flag_end = f'<!--BOT_FLAG-end-{file_name.replace(" ", "_")}. DO NOT REMOVE-->'
+        file.write(bot_flag_start + translated_header)
         for item in items:
             for value in item.values():
                 # Replace '0' with '-'
                 value = '-' if value == 0 or value == '0' or value == 'None' else value
                 file.write(f"\n| {value}")
             file.write(f"\n|-")
-        file.write("\n|}")
+        file.write("\n|}" + bot_flag_end)
 
     print(f"Fluids written to: {output_file}")
 
@@ -107,7 +109,7 @@ def get_fluids():
 
         fluids.append(fluid_values)
 
-    write_fluids_to_file(fluids, 'fluid_list')
+    write_fluids_to_file(fluids, 'fluid')
 
 
 def main():

@@ -490,7 +490,7 @@ def get_items():
 def write_to_output(literature_dict):
     # write to output.txt
     language_code = translate.get_language_code()
-    output_dir = os.path.join('output', language_code, 'literature')
+    output_dir = os.path.join('output', language_code, 'item_list', 'literature')
 
     os.makedirs(output_dir, exist_ok=True)
 
