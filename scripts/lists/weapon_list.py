@@ -132,9 +132,9 @@ def process_item_firearm(item_data, item_id):
             skill = "Shotgun"
     equipped = translate.get_wiki_translation(equipped)
     
-    name = item_data.get('DisplayName', 'Unknown')
+    name = utility.get_name(item_id, item_data, language="en")
     page_name = utility.get_page(item_id)
-    name = translate.get_translation(item_id, 'DisplayName')
+    name = utility.get_name(item_id, item_data)
     link = utility.format_link(name, page_name)
     icon = utility.get_icon(item_id, True, True, True)
     
@@ -202,9 +202,9 @@ def process_item_melee(item_data, item_id):
 #        skill = translate.get_wiki_translation(skill)
     
     
-    name = item_data.get('DisplayName', 'Unknown')
+    name = utility.get_name(item_id, item_data, language="en")
     page_name = utility.get_page(item_id, name)
-    name = translate.get_translation(item_id, 'DisplayName')
+    name = utility.get_name(item_id, item_data)
     link = utility.format_link(name, page_name)
     icon = utility.get_icon(item_id, True, True, True)
 
