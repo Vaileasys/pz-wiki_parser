@@ -34,8 +34,8 @@ def write_snippet(name, cleaned_code, line, source, version, output_dir):
 
 
 def save_snippet(item_name, item_code, line, source, version, output_dir):
-    # Remove trailing whitespace
-    cleaned_code = "\n".join([line.rstrip() for line in item_code.splitlines()])
+    # Remove trailing whitespace and replace | with {{!}}
+    cleaned_code = "\n".join([line.rstrip().replace('|', '{{!}}') for line in item_code.splitlines()])
     write_snippet(item_name, cleaned_code, line, source, version, output_dir)
 
     if item_name.endswith("TEXTURE_TINT") or item_name.endswith("DECAL_TINT"):
