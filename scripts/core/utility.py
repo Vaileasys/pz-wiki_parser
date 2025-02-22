@@ -648,8 +648,11 @@ def get_name(item_id, item_data=None, language=None):
         if language_code == "en" or language == "en":
             if not item_data:
                 item_data = get_item_data_from_id(item_id)
-            return item_data.get("DisplayName", "Unknown")
-        return translate.get_translation(item_id, "DisplayName")
+            return item_data.get("DisplayName", item_id)
+        translated_name = translate.get_translation(item_id, "DisplayName")
+        if translated_name == item_id:
+            translated_name = item_data.get("DisplayName", item_id)
+        return translated_name
 
     special_case = ITEM_NAMES[item_key]
 
@@ -864,7 +867,7 @@ def get_icon(item_id, format=False, all_icons=False, cycling=False, custom_name=
                 translated_name = custom_name
             else:
                 display_name = item_data.get('DisplayName', 'Unknown')
-                translated_name = translate.get_translation(item_id, 'DisplayName')
+                translated_name = get_name(item_id, item_data)
             page = get_page(item_id, display_name)
             # Convert strings to a list for further processing
             if isinstance(icons, str):
