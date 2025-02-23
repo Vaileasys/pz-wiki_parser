@@ -58,15 +58,15 @@ PROPERTY_PREFIXES = {
     'ComicTitle': "IGUI_ComicTitle_",
     'BookTitle': "IGUI_BookTitle_",
     'RPG': "IGUI_RPG_",
-    'IGUI': 'IGUI_', # general IGUI translations (no special prefix)'
+    'IGUI': 'IGUI_', # general IGUI translations (no special prefix)
     'TeachedRecipes': "Recipe_",
     'PartType': "Tooltip_weapon_",
     'EvolvedRecipeName': "EvolvedRecipeName_",
     'FluidID': "Fluid_Name_",
     'ContainerName': 'Fluid_Container_',
-    'Wiki': "Wiki_",
-    "Trait": "UI_trait_",
-    "Perks": "IGUI_perks_"
+    'Wiki': 'Wiki_',
+    'Trait': 'UI_trait_',
+    'Perk': 'IGUI_perks_'
 }
 
 FILE_WHITELIST = (
