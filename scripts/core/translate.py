@@ -48,6 +48,7 @@ PROPERTY_PREFIXES = {
     'Categories': "IGUI_perks_",
     'SubCategory': "IGUI_perks_",
     'SkillTrained': "IGUI_perks_",
+    'Perk': 'IGUI_perks_',
     'BodyPart': "IGUI_health_",
     'Photo': "IGUI_Photo_",
     'Doodle': "IGUI_Doodle_",
@@ -65,8 +66,7 @@ PROPERTY_PREFIXES = {
     'FluidID': "Fluid_Name_",
     'ContainerName': 'Fluid_Container_',
     'Wiki': 'Wiki_',
-    'Trait': 'UI_trait_',
-    'Perk': 'IGUI_perks_'
+    'Trait': 'UI_trait_'
 }
 
 FILE_WHITELIST = (
