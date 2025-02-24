@@ -775,6 +775,9 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
     }
 
     for section, content in sections.items():
+        if content is None:
+            pbar.write(f"{item_id} has no content for '{section}'")
+            continue
         if content.strip():
             body_content += f"\n=={section}==\n{content}\n"
         else:
@@ -783,8 +786,11 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
     return body_content.strip()
 
 
-def main():
-    translate.change_language()
+def main(run_directly=False):
+    # 'run_directly' is used to determine if the script was run directly, or called from another module, such as main.py.
+    if not run_directly:
+        # Only change the language if the script wasn't run directly - this is already done by get_language_code() if it's undefined.
+        translate.change_language()
     language_code = translate.get_language_code()
 
     global see_also_cache
@@ -848,4 +854,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(run_directly=True)
