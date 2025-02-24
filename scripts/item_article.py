@@ -4,7 +4,8 @@ import sys
 import csv
 from difflib import SequenceMatcher
 from tqdm import tqdm
-from scripts.core import translate
+from scripts.core import translate, utility
+from scripts.core.constants import (PBAR_FORMAT, DATA_PATH)
 
 # Language dictionary
 LANGUAGE_DATA = {
@@ -244,7 +245,7 @@ def generate_intro(lowercase_name, language_code):
 
 
 def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir,
-                 code_dir, distribution_dir, history_dir, crafting_dir, language_code):
+                 code_dir, distribution_dir, history_dir, crafting_dir, language_code, pbar):
     """
         Processes a single file and generates the corresponding article content.
 
@@ -268,6 +269,7 @@ def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item
             distribution_dir (str): The path to the directory containing the
                 distribution data.
             language_code (str): The language code to use for the generated content.
+            pbar (tqdm object): The tqdm progress bar object.
 
         Returns:
             None
@@ -318,7 +320,7 @@ def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item
     header = generate_header(category, skill_type, infobox_version, language_code, name)
     body_content = assemble_body(lowercase_name, os.path.basename(file_path), name, item_id, category, skill_type,
                                  infobox, consumables_dir, infobox_data_list, item_id_dict, fixing_dir, code_dir,
-                                 distribution_dir, history_dir, crafting_dir, language_code)
+                                 distribution_dir, history_dir, crafting_dir, language_code, pbar)
 
     intro = generate_intro(lowercase_name, language_code)
 
@@ -685,10 +687,19 @@ def find_most_relevant_items(current_item, all_items_infoboxes, item_id_dict):
 
     return relevant_english_names
 
+see_also_cache = {}
 
 def generate_see_also(language_code, current_item, infobox_data_list, item_id_dict):
-    # Find the most relevant items, ensuring they have English names
-    relevant_items = find_most_relevant_items(current_item, infobox_data_list, item_id_dict)
+    global see_also_cache
+
+    item_id = current_item.get("item_id")
+
+    if item_id in see_also_cache:
+        relevant_items = see_also_cache[item_id]
+    else:
+        # Find the most relevant items, ensuring they have English names
+        relevant_items = find_most_relevant_items(current_item, infobox_data_list, item_id_dict)
+        see_also_cache[item_id] = relevant_items
 
     # Create a 'See also' list formatted for a wiki page, ensuring all names are in English
     see_also_list = '\n'.join([f"*{{{{ll|{name}}}}}" for name in relevant_items])
@@ -713,7 +724,7 @@ def generate_see_also(language_code, current_item, infobox_data_list, item_id_di
 
 def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox, consumables_dir,
                   infobox_data_list, item_id_dict, fixing_dir, code_dir, distribution_dir, history_dir, crafting_dir,
-                  language_code):
+                  language_code, pbar):
     """
         Assembles the body content for an item's article.
 
@@ -776,6 +787,11 @@ def main():
     translate.change_language()
     language_code = translate.get_language_code()
 
+    global see_also_cache
+    CACHE_FILE = "item_see_also_data.json"
+    see_also_cache_file = os.path.join(DATA_PATH, CACHE_FILE)
+    see_also_cache = utility.load_cache(see_also_cache_file, "see also")
+
     infobox_dir = f'output/{language_code}/infoboxes'
     output_dir = f'output/{language_code}/articles'
     consumables_dir = f'output/{language_code}/consumables'
@@ -816,13 +832,19 @@ def main():
     infobox_data_list = load_infoboxes(infobox_dir)
     item_id_dict = load_item_id_dictionary(dictionary_dir)
 
-    for text_file in tqdm(text_files, desc="Generating articles", unit="file"):
-        file_path = os.path.join(infobox_dir, text_file)
-        process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir,
-                     code_dir, distribution_dir, history_dir, crafting_dir, language_code)
+    with tqdm(total=len(text_files), desc="Generating articles", bar_format=PBAR_FORMAT, unit=" files") as pbar:
+        for text_file in text_files:
+            pbar.set_postfix_str(f"Processing: {text_file[:60].rstrip('.txt')}")
+            file_path = os.path.join(infobox_dir, text_file)
+            process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir,
+                        code_dir, distribution_dir, history_dir, crafting_dir, language_code, pbar=pbar)
+            
+            pbar.update(1)
 
     if warnings:
         print("\n".join(warnings))
+    
+    utility.save_cache(see_also_cache, CACHE_FILE, suppress=True)
 
 
 if __name__ == "__main__":
