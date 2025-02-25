@@ -369,9 +369,9 @@ def build_tables():
             container_name = container["Container"]
             chance = container["Chance"]
             rolls = container["Rolls"]
-            loot_rarity = 0.6
-            luck_multiplier = 1
-            density = 5.2  # Averaged
+            loot_rarity = 0.4  # 0.6 B41
+            luck_multiplier = 1  # Luck no longer changes, but still calculated
+            density = 0.06280941113673441  # 5.2 B41 average
 
             effective_chance = round((1 - (1 - (math.floor(
                 (1 + (100 * chance * loot_rarity * luck_multiplier) + (10 * density))) / 10000)) ** rolls) * 100, 2)
@@ -395,9 +395,9 @@ def build_tables():
             container = vehicle["Container"]
             chance = vehicle["Chance"]
             rolls = vehicle["Rolls"]
-            loot_rarity = 0.6
-            luck_multiplier = 1
-            density = 5.2
+            loot_rarity = 0.4 #0.6 B41
+            luck_multiplier = 1 #Luck no longer changes, but still calculated
+            density = 0.06280941113673441 #5.2 B41
 
             effective_chance = round((1 - (1 - (math.floor(
                 (1 + (100 * chance * loot_rarity * luck_multiplier) + (10 * density))) / 10000)) ** rolls) * 100, 2)
