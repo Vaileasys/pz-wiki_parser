@@ -120,6 +120,8 @@ def copy_lua_files(media_dir: str) -> None:
         'PrintMediaDefinitions.lua': None,
         'camping_fuel.lua': None,
         'MainCreationMethods.lua': None,
+        'ISHotbarAttachDefinition.lua': None,
+        'AttachedLocations.lua': None,
         # stashes
         'BrandenburgStashDesc.lua': 'stashes',
         'EkronStashDesc.lua': 'stashes',
