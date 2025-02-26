@@ -846,6 +846,7 @@ def main(run_directly=False):
                         code_dir, distribution_dir, history_dir, crafting_dir, language_code, pbar=pbar)
             
             pbar.update(1)
+        pbar.bar_format = f"Item articles written to '{output_dir}'."
 
     if warnings:
         print("\n".join(warnings))
