@@ -9,6 +9,36 @@ CACHE_JSON = "recipes_data.json"
 parsed_data = {}
 
 
+def remove_comments(text):
+    """
+    Removes block comments from text.
+    Comments start with /* and end with */.
+    Supports nested comments.
+    """
+    result = []
+    i = 0
+    n = len(text)
+    while i < n:
+        # If we find a comment start, enter comment mode
+        if text[i:i+2] == "/*":
+            i += 2
+            nest = 1
+            # Skip characters until we find the matching closing comment
+            while i < n and nest > 0:
+                if text[i:i+2] == "/*":
+                    nest += 1
+                    i += 2
+                elif text[i:i+2] == "*/":
+                    nest -= 1
+                    i += 2
+                else:
+                    i += 1
+        else:
+            result.append(text[i])
+            i += 1
+    return "".join(result)
+
+
 def get_recipe_data():
     """Returns the parsed recipe data. Initialises if the parsed data is empty."""
     global parsed_data
@@ -58,6 +88,7 @@ def extract_recipe_blocks(lines):
             bracket_level -= line.count('}')
             if bracket_level <= 0:
                 recipe_text = "".join(current_lines)
+                # Remove any block comments from the recipe text
                 recipe_text = re.sub(comment_pattern, "", recipe_text)
                 blocks.append((current_name, recipe_text))
 
@@ -70,6 +101,7 @@ def extract_recipe_blocks(lines):
 
 
 def parse_recipe_block(recipe_name, recipe_text):
+    recipe_text = remove_comments(recipe_text)
     recipe_dict = {"name": recipe_name, "inputs": [], "outputs": []}
     mapper_pattern = re.compile(r'itemMapper\s+(\S+)\s*\{(.*?)\}', re.DOTALL | re.IGNORECASE)
     mappers = {}
@@ -77,6 +109,7 @@ def parse_recipe_block(recipe_name, recipe_text):
     def mapper_replacer(match):
         mapper_name = match.group(1).strip()
         body = match.group(2).strip()
+        body = remove_comments(body)
         mapper_dict = {}
         for ln in body.splitlines():
             ln = re.sub(r'/\*.*?\*/', '', ln.strip().rstrip(','))
@@ -140,10 +173,14 @@ def parse_recipe_block(recipe_name, recipe_text):
 def parse_items_block(block_text, is_output=False, recipe_dict=None):
     if recipe_dict is None:
         recipe_dict = {}
+    # Remove block comments from the entire block
+    block_text = remove_comments(block_text)
     results = []
     lines = re.split(r'[\r\n]+', block_text)
     last_item = None
     for line in lines:
+        # Remove block comments from each line
+        line = re.sub(r'/\*.*?\*/', '', line, flags=re.DOTALL)
         line = line.strip().rstrip(',')
         if not line or line.startswith('//'):
             continue
@@ -251,6 +288,7 @@ def parse_item_line(line):
 
     index = int(m.group(1))
     rest = m.group(2).strip()
+    rest = re.sub(r'/\*.*?\*/', '', rest, flags=re.DOTALL)
     result = {"index": index}
 
     mpsec = re.compile(r'mappers?\[.*?\]', re.IGNORECASE)
@@ -321,6 +359,194 @@ def parse_item_line(line):
 
     return result
 
+def extract_block(text, start_index):
+    """
+    Given a text and an index of an opening '{', this function returns the block text (including the braces)
+    and the index immediately after the block.
+    """
+    bracket_level = 0
+    end_index = start_index
+    while end_index < len(text):
+        char = text[end_index]
+        if char == '{':
+            bracket_level += 1
+        elif char == '}':
+            bracket_level -= 1
+            if bracket_level == 0:
+                return text[start_index:end_index + 1], end_index + 1
+        end_index += 1
+    return text[start_index:], end_index
+
+
+def parse_module_block(text):
+    """Extracts module blocks from the file text."""
+    modules = []
+    module_pattern = re.compile(r'module\s+(\w+)\s*\{', re.IGNORECASE)
+    pos = 0
+    while True:
+        m = module_pattern.search(text, pos)
+        if not m:
+            break
+        module_name = m.group(1)
+        block, new_pos = extract_block(text, m.end() - 1)
+        modules.append({"name": module_name, "block": block})
+        pos = new_pos
+    return modules
+
+
+def parse_module_skin_mapping(module_block):
+    """
+    Parses the xuiSkin block to extract a mapping of entity styles to their DisplayName and Icon.
+    """
+    mapping = {}
+    skin_pattern = re.compile(r'xuiSkin\s+(\w+)\s*\{', re.IGNORECASE)
+    m = skin_pattern.search(module_block)
+    if m:
+        skin_name = m.group(1)
+        skin_block, _ = extract_block(module_block, m.end() - 1)
+        entity_pattern = re.compile(r'entity\s+(\S+)\s*\{', re.IGNORECASE)
+        pos = 0
+        while True:
+            m_entity = entity_pattern.search(skin_block, pos)
+            if not m_entity:
+                break
+            entity_name = m_entity.group(1)
+            ent_block, new_pos = extract_block(skin_block, m_entity.end() - 1)
+            dn_match = re.search(r'DisplayName\s*=\s*([^,\n]+)', ent_block, re.IGNORECASE)
+            icon_match = re.search(r'Icon\s*=\s*([^,\n]+)', ent_block, re.IGNORECASE)
+            displayName = dn_match.group(1).strip() if dn_match else None
+            icon = icon_match.group(1).strip() if icon_match else None
+            mapping[entity_name] = {"DisplayName": displayName, "Icon": icon}
+            pos = new_pos
+    return mapping
+
+
+def parse_entity_blocks(module_block, skin_mapping):
+    """
+    Extracts entity blocks from the module and parses any component blocks.
+    """
+    entities = []
+    entity_pattern = re.compile(r'entity\s+(\S+)\s*\{', re.IGNORECASE)
+    pos = 0
+    while True:
+        m = entity_pattern.search(module_block, pos)
+        if not m:
+            break
+        entity_name = m.group(1)
+        entity_block, new_pos = extract_block(module_block, m.end() - 1)
+        entity_data = {"name": entity_name, "components": {}}
+        # Extract component blocks within the entity
+        component_pattern = re.compile(r'component\s+(\S+)\s*\{', re.IGNORECASE)
+        comp_pos = 0
+        while True:
+            m_comp = component_pattern.search(entity_block, comp_pos)
+            if not m_comp:
+                break
+            comp_name = m_comp.group(1)
+            comp_block, comp_new_pos = extract_block(entity_block, m_comp.end() - 1)
+            entity_data["components"][comp_name] = comp_block
+            comp_pos = comp_new_pos
+        # From UiConfig, try to extract entityStyle
+        if "UiConfig" in entity_data["components"]:
+            ui_config_block = entity_data["components"]["UiConfig"]
+            m_es = re.search(r'entityStyle\s*=\s*(\S+)', ui_config_block, re.IGNORECASE)
+            if m_es:
+                entity_data["entityStyle"] = m_es.group(1).strip().rstrip(',')
+        entities.append(entity_data)
+        pos = new_pos
+    return entities
+
+
+def parse_sprite_config(block_text):
+    """
+    Parses the SpriteConfig component to extract sprite rows grouped by face direction
+    and the skillBaseHealth attribute.
+
+    For each face block (e.g., "face S" or "face E"), this function extracts all row assignments,
+    splits any multiple sprite identifiers (separated by whitespace), and returns a dictionary
+    mapping the face identifier to a list of sprite entries.
+
+    Returns:
+        tuple: (sprites_by_face, skillBaseHealth)
+            sprites_by_face: dict with keys as face directions and values as lists of sprites.
+            skillBaseHealth: float or None.
+    """
+    sprites_by_face = {}
+    skillBaseHealth = None
+    m_health = re.search(r'skillBaseHealth\s*=\s*([\d\.]+)', block_text, re.IGNORECASE)
+    if m_health:
+        try:
+            skillBaseHealth = float(m_health.group(1))
+        except ValueError:
+            skillBaseHealth = None
+
+    # Find each face block
+    face_pattern = re.compile(r'face\s+(\S+)\s*\{', re.IGNORECASE)
+    pos = 0
+    while True:
+        m_face = face_pattern.search(block_text, pos)
+        if not m_face:
+            break
+        face_direction = m_face.group(1).strip()
+        face_block, new_pos = extract_block(block_text, m_face.end() - 1)
+        # Find all row assignments inside this face block.
+        row_matches = re.findall(r'row\s*=\s*([^,}\n]+)', face_block, re.IGNORECASE)
+        sprites = []
+        for row_text in row_matches:
+            row_text = row_text.strip().rstrip(',')
+            # Split on whitespace to separate multiple sprites in one row
+            entries = row_text.split()
+            for entry in entries:
+                entry = entry.strip()
+                if entry:
+                    sprites.append(entry)
+        sprites_by_face[face_direction] = sprites
+        pos = new_pos
+
+    return sprites_by_face, skillBaseHealth
+
+
+def parse_construction_recipe(text):
+    """
+    Processes the full text for module blocks and extracts construction recipes
+    by combining CraftRecipe, SpriteConfig, and xuiSkin (via UiConfig) data.
+    """
+    # Remove block comments from the full text first.
+    text = remove_comments(text)
+    recipes = []
+    modules = parse_module_block(text)
+    for module in modules:
+        skin_mapping = parse_module_skin_mapping(module["block"])
+        entities = parse_entity_blocks(module["block"], skin_mapping)
+        for entity in entities:
+            if "CraftRecipe" in entity["components"]:
+                recipe = {}
+                recipe["name"] = entity["name"]
+                # Parse the CraftRecipe component using the existing parser logic.
+                craft_recipe_text = entity["components"]["CraftRecipe"]
+                craft_recipe_parsed = parse_recipe_block(entity["name"], craft_recipe_text)
+                recipe.update(craft_recipe_parsed)
+                # Add outputs from xuiSkin using the entityStyle defined in UiConfig.
+                entityStyle = entity.get("entityStyle")
+                if entityStyle and entityStyle in skin_mapping:
+                    mapping = skin_mapping[entityStyle]
+                    recipe.setdefault("outputs", []).append({
+                        "displayName": mapping.get("DisplayName"),
+                        "icon": mapping.get("Icon")
+                    })
+                # Parse the SpriteConfig component, if it exists.
+                if "SpriteConfig" in entity["components"]:
+                    sprite_text = entity["components"]["SpriteConfig"]
+                    face_sprites, health = parse_sprite_config(sprite_text)
+                    # Instead of a flat list, store sprite outputs nested by face.
+                    recipe["spriteOutputs"] = face_sprites
+                    if health is not None:
+                        recipe["skillBaseHealth"] = health
+                # Mark this recipe as a construction recipe.
+                recipe["construction"] = True
+                recipes.append(recipe)
+    return recipes
+
 
 def main():
     global parsed_data
@@ -331,16 +557,31 @@ def main():
 
     # Parse recipes if there is no cache, or it's outdated.
     if cache_version != version.get_version():
+        # Gather raw lines and join into one text block.
         lines = gather_recipe_lines(RECIPES_DIR)
-        recipe_blocks = extract_recipe_blocks(lines)
+        file_text = "".join(lines)
+        # Remove all block comments from the complete text.
+        file_text = remove_comments(file_text)
+        # Re-split the text into lines for further processing.
+        lines = file_text.splitlines(keepends=True)
         recipes = []
-        for recipe_name, recipe_text in recipe_blocks:
+
+        # Process normal recipe blocks from the comment-free text.
+        normal_recipe_blocks = extract_recipe_blocks(lines)
+        for recipe_name, recipe_text in normal_recipe_blocks:
             parsed = parse_recipe_block(recipe_name, recipe_text)
             recipes.append(parsed)
+
+        # Process construction recipes if module blocks exist.
+        if "module" in file_text:
+            construction_recipes = parse_construction_recipe(file_text)
+            recipes.extend(construction_recipes)
+
         parsed_data = {"recipes": recipes}
         utility.save_cache(parsed_data, CACHE_JSON)
 
     print(f'Number of recipes found: {len(parsed_data["recipes"])}')
+
 
 if __name__ == "__main__":
     main()

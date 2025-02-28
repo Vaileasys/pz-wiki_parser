@@ -263,7 +263,7 @@ def process_recipes(data):
         for i, (key, value) in enumerate(autolearn.items()):
             if i > 0:
                 recipe_parts.append("<br><small>and</small><br>")
-            translated_key = translate.get_translation(key, "Perks")
+            translated_key = translate.get_translation(key, "Perk")
             recipe_parts.append(f"[[{translated_key}]] {value}")
 
     return "".join(recipe_parts)
@@ -285,7 +285,7 @@ def process_skills(data):
 
     skills_list = []
     for skill, level in skills_data.items():
-        skill = translate.get_translation(skill, "Perks")
+        skill = translate.get_translation(skill, "Perk")
         skills_list.append(f"[[{skill}]] {level}")
 
     skills_str = "<br><small>and</small><br>".join(skills_list)
@@ -304,14 +304,17 @@ def process_workstation(data):
 def process_products(data):
     """
     Processes the 'outputs' field from the data and formats it, including icons for item products and mapper objects.
-    Ensures the 'translated_name' is always prepended to the returned products string.
 
-    Args:
-        data (dict): The recipe data containing outputs.
+    For construction recipes:
+      - If an "icon" field exists, that image is used.
+      - Otherwise, the code falls back to searching the (potentially nested) "spriteOutputs" structure
+        for the first sprite value.
+      - If the resulting icon name starts with "Item_", the prefix is removed and the icon is rendered at 64x64.
+      - Otherwise, it is rendered at 96x96.
 
-    Returns:
-        str: A formatted string representing the processed outputs.
+    For non-construction recipes, standard processing is applied.
     """
+    construction = data.get("construction", False)
     names = data.get("name", [])
     translated_name = names[1] if len(names) > 1 else "Unknown Recipe"
     products_str = f"products=<small>''{translated_name}''</small><br>"
@@ -324,20 +327,45 @@ def process_products(data):
     mappers_section = []
     energy_section = []
 
+    # Construction
     for key, output_info in outputs_data.items():
-        if "raw_product" in output_info and "translated_product" in output_info:
-            raw_product = output_info["raw_product"]
-            translated_product = output_info["translated_product"]
+        if construction:
+            icon = output_info.get("icon")
+
+            translated_product = output_info.get("translated_product", translated_name)
             products_number = output_info.get("products_number", 1)
 
-            try:
-                icon = utility.get_icon(raw_product) if raw_product else "Question On.png"
-                if isinstance(icon, list):
-                    icon = icon[0] if icon else "Question On.png"
-            except Exception as e:
-                print(f"Error fetching icon for raw_product '{raw_product}': {e}")
-                icon = "Question On.png"
+            if icon.startswith("Item_",):
+                icon = icon[len("Item_"):]
+                size = "64x64px"
+            elif icon.startswith("Build_",):
+                size = "96x96px"
+            else:
+                size = "64x128px"
 
+            items_section.append(
+                f"[[file:{icon}.png|{size}|class=pixelart]]<br>[[{translated_product}]] ×{products_number}"
+            )
+
+        # Standard
+        elif "raw_product" in output_info and "translated_product" in output_info:
+            raw_product = output_info.get("raw_product")
+            translated_product = output_info["translated_product"]
+            products_number = output_info.get("products_number", 1)
+            if raw_product:
+                try:
+                    icon = utility.get_icon(raw_product) if raw_product else "Question On.png"
+                    if isinstance(icon, list):
+                        icon = icon[0] if icon else "Question On.png"
+                except Exception as e:
+                    print(f"Error fetching icon for raw_product '{raw_product}': {e}")
+                    icon = "Question On.png"
+            else:
+                try:
+                    icon = output_info.get("icon", "Question On.png")
+                except Exception as e:
+                    print(f"Error fetching icon for product: {e}")
+                    icon = "Question On.png"
             items_section.append(
                 f"[[file:{icon}|64x64px|class=pixelart]]<br>[[{translated_product}]] ×{products_number}"
             )
@@ -472,43 +500,225 @@ def fluid_rgb(fluid_id):
         raise RuntimeError(f"Error processing fluid '{fluid_id}': {e}")
 
 
+def gather_item_usage(recipes_data, tags_data):
+    """
+    For each item (by its raw name), collect the set of recipe names in which
+    it appears as an input and the set of recipe names in which it appears as an output.
+    Tag-based ingredients and tools are processed separately for regular and construction recipes.
+    """
+    normal_item_input_map = defaultdict(set)
+    normal_item_output_map = defaultdict(set)
+    construction_item_input_map = defaultdict(set)
+    construction_item_output_map = defaultdict(set)
+
+    for recipe_name, recipe in recipes_data.items():
+        is_construction = recipe.get("construction", False)
+        inputs = recipe.get("inputs", {})
+
+        # Process Ingredients
+        ingredients = inputs.get("ingredients", {})
+        for _, ingredient_info in ingredients.items():
+            if "items" in ingredient_info:
+                for item_dict in ingredient_info["items"]:
+                    raw = item_dict.get("raw_name")
+                    if raw and raw != "Any fluid container":
+                        if is_construction:
+                            construction_item_input_map[raw].add(recipe_name)
+                        else:
+                            normal_item_input_map[raw].add(recipe_name)
+            elif "tags" in ingredient_info and ingredient_info["tags"]:
+                # Tag-based ingredients
+                for tag in ingredient_info["tags"]:
+                    if tag in tags_data:
+                        for item in tags_data[tag]:
+                            raw = item.get("item_id")
+                            if raw:
+                                if is_construction:
+                                    construction_item_input_map[raw].add(recipe_name)
+                                else:
+                                    normal_item_input_map[raw].add(recipe_name)
+            elif "numbered_list" in ingredient_info and ingredient_info["numbered_list"]:
+                numbered_items = ingredient_info.get("items", [])
+                for item_dict in numbered_items:
+                    raw = item_dict.get("raw_name")
+                    if raw and raw != "Any fluid container":
+                        if is_construction:
+                            construction_item_input_map[raw].add(recipe_name)
+                        else:
+                            normal_item_input_map[raw].add(recipe_name)
+
+        # Process Tools
+        tools = inputs.get("tools", {})
+        for key, tool_info in tools.items():
+            if key.endswith("_tags") and isinstance(tool_info, list):
+                # Handle tag-based tools
+                for tag in tool_info:
+                    if tag in tags_data:
+                        for item in tags_data[tag]:
+                            raw = item.get("item_id")
+                            if raw:
+                                if is_construction:
+                                    construction_item_input_map[raw].add(recipe_name)
+                                else:
+                                    normal_item_input_map[raw].add(recipe_name)
+            elif key.endswith("_flags"):
+                pass
+            elif isinstance(tool_info, dict):
+                if "items" in tool_info:
+                    for item_dict in tool_info["items"]:
+                        raw = item_dict.get("raw_name")
+                        if raw:
+                            if is_construction:
+                                construction_item_input_map[raw].add(recipe_name)
+                            else:
+                                normal_item_input_map[raw].add(recipe_name)
+                elif "tags" in tool_info and tool_info["tags"]:
+                    for tag in tool_info["tags"]:
+                        if tag in tags_data:
+                            for item in tags_data[tag]:
+                                raw = item.get("item_id")
+                                if raw:
+                                    if is_construction:
+                                        construction_item_input_map[raw].add(recipe_name)
+                                    else:
+                                        normal_item_input_map[raw].add(recipe_name)
+                elif "numbered_list" in tool_info and tool_info["numbered_list"]:
+                    numbered_items = tool_info.get("items", [])
+                    for item_dict in numbered_items:
+                        raw = item_dict.get("raw_name")
+                        if raw:
+                            if is_construction:
+                                construction_item_input_map[raw].add(recipe_name)
+                            else:
+                                normal_item_input_map[raw].add(recipe_name)
+
+        # Process Outputs
+        outputs = recipe.get("outputs", {}).get("outputs", {})
+        for _, output_info in outputs.items():
+            if "raw_product" in output_info:
+                raw_output = output_info["raw_product"]
+                if raw_output:
+                    if is_construction:
+                        construction_item_output_map[raw_output].add(recipe_name)
+                    else:
+                        normal_item_output_map[raw_output].add(recipe_name)
+            elif output_info.get("mapper"):
+                raw_outputs = output_info.get("RawOutputs", [])
+                for entry in raw_outputs:
+                    if isinstance(entry, list):
+                        for raw in entry:
+                            if raw:
+                                if is_construction:
+                                    construction_item_output_map[raw].add(recipe_name)
+                                else:
+                                    normal_item_output_map[raw].add(recipe_name)
+                    else:
+                        if entry:
+                            if is_construction:
+                                construction_item_output_map[entry].add(recipe_name)
+                            else:
+                                normal_item_output_map[entry].add(recipe_name)
+
+    return normal_item_input_map, normal_item_output_map, construction_item_input_map, construction_item_output_map
+
+
+def output_item_usage(normal_item_input_map, normal_item_output_map, construction_item_input_map, construction_item_output_map):
+    """
+    Outputs combined files and individual recipe files for item usage, separated by type.
+
+    - Non-construction combined files are saved in output/recipes/crafting_combined/.
+    - Non-construction individual recipe files are saved in output/recipes/crafting/.
+    - Construction combined files are saved in output/recipes/construction_crafting_combined/.
+    - Construction individual recipe files are saved in output/recipes/construction_crafting/.
+    """
+    # Process non-construction items
+    combined_output_dir_normal = 'output/recipes/crafting_combined/'
+    individual_dir_normal = 'output/recipes/crafting/'
+    os.makedirs(combined_output_dir_normal, exist_ok=True)
+    os.makedirs(individual_dir_normal, exist_ok=True)
+
+    all_normal_items = sorted(set(normal_item_input_map.keys()) | set(normal_item_output_map.keys()))
+    for raw_name in all_normal_items:
+        output_recipes = sorted(normal_item_output_map[raw_name])
+        input_recipes = sorted(normal_item_input_map[raw_name])
+        if output_recipes:
+            crafting_id = f"{raw_name}_howtocraft"
+            crafting_template = ["{{Crafting/sandbox|item=" + crafting_id]
+            for recipe in output_recipes:
+                crafting_template.append(f"|{recipe}")
+            crafting_template.append("}}")
+            combined_file = os.path.join(combined_output_dir_normal, f"{raw_name}.txt")
+            with open(combined_file, 'w', encoding='utf-8') as f:
+                f.write("===How it's made===\n")
+                f.write("\n".join(crafting_template) + "\n\n")
+            individual_file = os.path.join(individual_dir_normal, f"{crafting_id}.txt")
+            with open(individual_file, 'w', encoding='utf-8') as craft_file:
+                craft_file.write("\n".join(crafting_template))
+        if input_recipes:
+            crafting_id = f"{raw_name}_whatitcrafts"
+            crafting_template = ["{{Crafting/sandbox|item=" + crafting_id]
+            for recipe in input_recipes:
+                crafting_template.append(f"|{recipe}")
+            crafting_template.append("}}")
+            combined_file = os.path.join(combined_output_dir_normal, f"{raw_name}.txt")
+            with open(combined_file, 'a', encoding='utf-8') as f:
+                f.write("===What it makes===\n")
+                f.write("\n".join(crafting_template) + "\n")
+            individual_file = os.path.join(individual_dir_normal, f"{crafting_id}.txt")
+            with open(individual_file, 'w', encoding='utf-8') as craft_file:
+                craft_file.write("\n".join(crafting_template))
+
+    # Process construction items
+    combined_output_dir_construction = 'output/recipes/construction_crafting_combined/'
+    individual_dir_construction = 'output/recipes/construction_crafting/'
+    os.makedirs(combined_output_dir_construction, exist_ok=True)
+    os.makedirs(individual_dir_construction, exist_ok=True)
+
+    all_construction_items = sorted(set(construction_item_input_map.keys()) | set(construction_item_output_map.keys()))
+    for raw_name in all_construction_items:
+        output_recipes = sorted(construction_item_output_map[raw_name])
+        input_recipes = sorted(construction_item_input_map[raw_name])
+        if output_recipes:
+            crafting_id = f"{raw_name}_constructionhowtomake"
+            crafting_template = ["{{Construction/sandbox|item=" + crafting_id]
+            for recipe in output_recipes:
+                crafting_template.append(f"|{recipe}")
+            crafting_template.append("}}")
+            combined_file = os.path.join(combined_output_dir_construction, f"{raw_name}.txt")
+            with open(combined_file, 'w', encoding='utf-8') as f:
+                f.write("===How it's made===\n")
+                f.write("\n".join(crafting_template) + "\n\n")
+            individual_file = os.path.join(individual_dir_construction, f"{crafting_id}.txt")
+            with open(individual_file, 'w', encoding='utf-8') as craft_file:
+                craft_file.write("\n".join(crafting_template))
+        if input_recipes:
+            crafting_id = f"{raw_name}_constructionwhatitcrafts"
+            crafting_template = ["{{Construction/sandbox|item=" + crafting_id]
+            for recipe in input_recipes:
+                crafting_template.append(f"|{recipe}")
+            crafting_template.append("}}")
+            combined_file = os.path.join(combined_output_dir_construction, f"{raw_name}.txt")
+            with open(combined_file, 'a', encoding='utf-8') as f:
+                f.write("===What it makes===\n")
+                f.write("\n".join(crafting_template) + "\n")
+            individual_file = os.path.join(individual_dir_construction, f"{crafting_id}.txt")
+            with open(individual_file, 'w', encoding='utf-8') as craft_file:
+                craft_file.write("\n".join(crafting_template))
+
+
 def output(processed_recipes):
     """
-    Outputs the processed recipes to individual files and a combined file in the specified format,
+    Outputs the processed recipes to individual files and two combined files in the specified format,
     ensuring all files are encoded in UTF-8.
-
-    Args:
-        processed_recipes (dict): A dictionary containing processed recipes.
     """
-    output_dir = 'output/recipes/recipes_seperate/'
-    os.makedirs(output_dir, exist_ok=True)
-
-    recipe_names = [raw_name.lower() for raw_name in processed_recipes.keys()]
-    limited_recipe_names = recipe_names[:150]
-    recipe_list = "\n".join([f"|{name}" for name in limited_recipe_names])
-
-    combined_header = (
-        "<noinclude>[[Category:Crafting templates]]\n"
-        "{{Documentation|doc=\n"
-        "{{Crafting/sandbox\n"
-        f"{recipe_list}\n"
-        "}}\n"
-        "}}\n"
-        "</noinclude><includeonly><!--\n\n"
-        "#############################################\n"
-        "###           START OF RECIPES            ###\n"
-        "#############################################\n\n"
-        "-->\n"
-        "{{#switch: {{{1|}}}\n"
-        "|#default=\n"
-        "  {{!}}-\n"
-        "  {{!}} N/A\n"
-        "  {{!}}{{!}} This index number contains no data\n"
-    )
-
-    combined_content = [combined_header]
-
+    # Output individual recipe files separated by type
     for raw_name, recipe_data in processed_recipes.items():
+        if recipe_data.get("construction", False):
+            output_dir = 'output/recipes/construction_recipes_seperate/'
+        else:
+            output_dir = 'output/recipes/recipes_seperate/'
+        os.makedirs(output_dir, exist_ok=True)
+
         ingredients = recipe_data["ingredients"]
         tools = recipe_data["tools"]
         recipes = recipe_data["recipes"]
@@ -530,7 +740,49 @@ def output(processed_recipes):
             out_file.write(f"        |{products}\n")
             out_file.write("    }}")
 
-        combined_content.append(
+    # Separate recipes based on construction flag for combined templates
+    crafting_recipes = {}
+    construction_recipes = {}
+    for raw_name, recipe_data in processed_recipes.items():
+        if recipe_data.get("construction", False):
+            construction_recipes[raw_name] = recipe_data
+        else:
+            crafting_recipes[raw_name] = recipe_data
+
+    # Crafting Template for non-construction recipes
+    recipe_names_crafting = [raw_name.lower() for raw_name in crafting_recipes.keys()]
+    limited_recipe_names_crafting = recipe_names_crafting[:150]
+    recipe_list_crafting = "\n".join([f"|{name}" for name in limited_recipe_names_crafting])
+    combined_header_crafting = (
+        "<noinclude>[[Category:Crafting templates]]\n"
+        "{{Documentation|doc=\n"
+        "{{Crafting/sandbox\n"
+        f"{recipe_list_crafting}\n"
+        "}}\n"
+        "}}\n"
+        "</noinclude><includeonly><!--\n\n"
+        "#############################################\n"
+        "###           START OF RECIPES            ###\n"
+        "#############################################\n\n"
+        "-->\n"
+        "{{#switch: {{{1|}}}\n"
+        "|#default=\n"
+        "  {{!}}-\n"
+        "  {{!}} N/A\n"
+        "  {{!}}{{!}} This index number contains no data\n"
+    )
+    combined_content_crafting = [combined_header_crafting]
+
+    for raw_name, recipe_data in crafting_recipes.items():
+        ingredients = recipe_data["ingredients"]
+        tools = recipe_data["tools"]
+        recipes = recipe_data["recipes"]
+        skills = recipe_data["skills"]
+        workstation = recipe_data["workstation"]
+        products = recipe_data["products"]
+        xp = recipe_data["xp"]
+
+        combined_content_crafting.append(
             f"    |{raw_name.lower()}=\n"
             f"        {{{{Recipe/sandbox\n"
             f"            |{ingredients}\n"
@@ -544,167 +796,70 @@ def output(processed_recipes):
         )
 
     combined_footer = "}}</includeonly>"
-    combined_content.append(combined_footer)
+    combined_content_crafting.append(combined_footer)
 
-    combined_output_file = 'output/recipes/finished_template.txt'
-    with open(combined_output_file, 'w', encoding='utf-8') as combined_file:
-        combined_file.write("\n".join(combined_content))
+    combined_output_file_crafting = 'output/recipes/crafting_template.txt'
+    with open(combined_output_file_crafting, 'w', encoding='utf-8') as combined_file:
+        combined_file.write("\n".join(combined_content_crafting))
 
+    # Construction Template for construction recipes
+    recipe_names_construction = [raw_name.lower() for raw_name in construction_recipes.keys()]
+    limited_recipe_names_construction = recipe_names_construction[:150]
+    recipe_list_construction = "\n".join([f"|{name}" for name in limited_recipe_names_construction])
+    combined_header_construction = (
+        "<noinclude>[[Category:Construction templates]]\n"
+        "{{Documentation|doc=\n"
+        "{{Construction/sandbox\n"
+        f"{recipe_list_construction}\n"
+        "}}\n"
+        "}}\n"
+        "</noinclude><includeonly><!--\n\n"
+        "#############################################\n"
+        "###           START OF RECIPES            ###\n"
+        "#############################################\n\n"
+        "-->\n"
+        "{{#switch: {{{1|}}}\n"
+        "|#default=\n"
+        "  {{!}}-\n"
+        "  {{!}} N/A\n"
+        "  {{!}}{{!}} This index number contains no data\n"
+    )
+    combined_content_construction = [combined_header_construction]
 
-def gather_item_usage(recipes_data, tags_data):
-    """
-    For each item (by its raw name), collect the set of recipe names in which
-    it appears as an input and the set of recipe names in which it appears as an output.
-    Includes tag-based ingredient and tool handling.
-    """
-    item_input_map = defaultdict(set)
-    item_output_map = defaultdict(set)
+    for raw_name, recipe_data in construction_recipes.items():
+        ingredients = recipe_data["ingredients"]
+        tools = recipe_data["tools"]
+        recipes = recipe_data["recipes"]
+        skills = recipe_data["skills"]
+        workstation = recipe_data["workstation"]
+        products = recipe_data["products"]
+        xp = recipe_data["xp"]
 
-    for recipe_name, recipe in recipes_data.items():
-        inputs = recipe.get("inputs", {})
+        combined_content_construction.append(
+            f"    |{raw_name.lower()}=\n"
+            f"        {{{{Recipe/sandbox\n"
+            f"            |{ingredients}\n"
+            f"            |{tools}\n"
+            f"            |{recipes}\n"
+            f"            |{skills}\n"
+            f"            |{workstation}\n"
+            f"            |{xp}\n"
+            f"            |{products}\n"
+            f"        }}}}"
+        )
 
-        # Process Ingredients
-        ingredients = inputs.get("ingredients", {})
-        for _, ingredient_info in ingredients.items():
-            if "items" in ingredient_info:
-                for item_dict in ingredient_info["items"]:
-                    raw = item_dict.get("raw_name")
-                    if raw and raw != "Any fluid container":
-                        item_input_map[raw].add(recipe_name)
+    combined_content_construction.append(combined_footer)
 
-            elif "tags" in ingredient_info and ingredient_info["tags"]:
-                # Tag-based ingredients
-                for tag in ingredient_info["tags"]:
-                    if tag in tags_data:
-                        for item in tags_data[tag]:
-                            raw = item.get("item_id")
-                            if raw:
-                                item_input_map[raw].add(recipe_name)
-
-            elif "numbered_list" in ingredient_info and ingredient_info["numbered_list"]:
-                numbered_items = ingredient_info.get("items", [])
-                for item_dict in numbered_items:
-                    raw = item_dict.get("raw_name")
-                    if raw and raw != "Any fluid container":
-                        item_input_map[raw].add(recipe_name)
-
-        # Process Tools
-        tools = inputs.get("tools", {})
-        for key, tool_info in tools.items():
-            if key.endswith("_tags") and isinstance(tool_info, list):
-                # Handle tag-based tools
-                for tag in tool_info:
-                    if tag in tags_data:
-                        for item in tags_data[tag]:
-                            raw = item.get("item_id")
-                            if raw:
-                                item_input_map[raw].add(recipe_name)
-
-            elif key.endswith("_flags"):
-                pass
-
-            elif isinstance(tool_info, dict):
-                if "items" in tool_info:
-                    for item_dict in tool_info["items"]:
-                        raw = item_dict.get("raw_name")
-                        if raw:
-                            item_input_map[raw].add(recipe_name)
-
-                elif "tags" in tool_info and tool_info["tags"]:
-                    for tag in tool_info["tags"]:
-                        if tag in tags_data:
-                            for item in tags_data[tag]:
-                                raw = item.get("item_id")
-                                if raw:
-                                    item_input_map[raw].add(recipe_name)
-
-                elif "numbered_list" in tool_info and tool_info["numbered_list"]:
-                    numbered_items = tool_info.get("items", [])
-                    for item_dict in numbered_items:
-                        raw = item_dict.get("raw_name")
-                        if raw:
-                            item_input_map[raw].add(recipe_name)
-
-        outputs = recipe.get("outputs", {}).get("outputs", {})
-        for _, output_info in outputs.items():
-            if "raw_product" in output_info:
-                raw_output = output_info["raw_product"]
-                if raw_output:
-                    item_output_map[raw_output].add(recipe_name)
-
-            elif output_info.get("mapper"):
-                raw_outputs = output_info.get("RawOutputs", [])
-                for entry in raw_outputs:
-                    if isinstance(entry, list):
-                        for raw in entry:
-                            if raw:
-                                item_output_map[raw].add(recipe_name)
-                    else:
-                        if entry:
-                            item_output_map[entry].add(recipe_name)
-
-    return item_input_map, item_output_map
-
-
-def output_item_usage(item_input_map, item_output_map):
-    """
-    Outputs combined files and individual recipe files in a single folder.
-
-    - Combined files are saved in output/recipes/combined/.
-    - Individual recipe files are saved in output/recipes/crafting/ with the filename as the dummy parameter.
-    """
-    combined_output_dir = 'output/recipes/crafting_combined/'
-    crafting_output_dir = 'output/recipes/crafting/'
-    os.makedirs(combined_output_dir, exist_ok=True)
-    os.makedirs(crafting_output_dir, exist_ok=True)
-
-    all_items = sorted(set(item_input_map.keys()) | set(item_output_map.keys()))
-
-    for raw_name in all_items:
-        output_recipes = sorted(item_output_map[raw_name])
-        input_recipes = sorted(item_input_map[raw_name])
-
-        # Write combined file
-        combined_file = os.path.join(combined_output_dir, f"{raw_name}.txt")
-        with open(combined_file, 'w', encoding='utf-8') as f:
-            if output_recipes:
-                crafting_id = f"{raw_name}_howtocraft"
-                crafting_template = ["{{Crafting/sandbox|item=" + crafting_id]
-                for recipe in output_recipes:
-                    crafting_template.append(f"|{recipe}")
-                crafting_template.append("}}")
-
-                f.write("===How it's made===\n")
-                f.write("\n".join(crafting_template) + "\n\n")
-
-                # Write to individual file
-                crafting_file = os.path.join(crafting_output_dir, f"{crafting_id}.txt")
-                with open(crafting_file, 'w', encoding='utf-8') as craft_file:
-                    craft_file.write("\n".join(crafting_template))
-
-            if input_recipes:
-                # Create crafting template for "What it crafts"
-                crafting_id = f"{raw_name}_whatitcrafts"
-                crafting_template = ["{{Crafting/sandbox|item=" + crafting_id]
-                for recipe in input_recipes:
-                    crafting_template.append(f"|{recipe}")
-                crafting_template.append("}}")
-
-                # Write to combined file
-                f.write("===What it makes===\n")
-                f.write("\n".join(crafting_template) + "\n")
-
-                # Write to individual file
-                crafting_file = os.path.join(crafting_output_dir, f"{crafting_id}.txt")
-                with open(crafting_file, 'w', encoding='utf-8') as craft_file:
-                    craft_file.write("\n".join(crafting_template))
+    combined_output_file_construction = 'output/recipes/construction_template.txt'
+    with open(combined_output_file_construction, 'w', encoding='utf-8') as combined_file:
+        combined_file.write("\n".join(combined_content_construction))
 
 
 def main(recipes_data=None):
     print("Processing recipe output...")
 
     # Load the recipe data
-    if not recipes_data: # Avoid circular imports if running from recipe_format.py
+    if not recipes_data:  # Avoid circular imports if running from recipe_format.py
         recipes_data = recipe_format.get_processed_recipes()
 
     # Load the tags data
@@ -719,6 +874,7 @@ def main(recipes_data=None):
         workstation = process_workstation(recipe)
         products = process_products(recipe)
         xp = process_xp(recipe)
+        construction_flag = recipe.get("construction", False)
 
         processed_recipes[raw_name] = {
             "ingredients": ingredients,
@@ -727,14 +883,15 @@ def main(recipes_data=None):
             "skills": skills,
             "workstation": workstation,
             "products": products,
-            "xp": xp
+            "xp": xp,
+            "construction": construction_flag
         }
 
     output(processed_recipes)
 
-    item_input_map, item_output_map = gather_item_usage(recipes_data, tags_data)
+    normal_item_input_map, normal_item_output_map, construction_item_input_map, construction_item_output_map = gather_item_usage(recipes_data, tags_data)
 
-    output_item_usage(item_input_map, item_output_map)
+    output_item_usage(normal_item_input_map, normal_item_output_map, construction_item_input_map, construction_item_output_map)
 
 
 if __name__ == "__main__":

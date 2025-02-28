@@ -41,6 +41,7 @@ def process_recipe(recipe, parsed_item_data):
     processed_data["requirements"] = process_requirements(recipe, parsed_item_data)
     processed_data["workstation"] = process_workstation(recipe)
     processed_data["xp"] = process_xp(recipe)
+    processed_data["construction"] = recipe.get("construction", False)
     return processed_data
 
 
@@ -86,6 +87,14 @@ def process_inputs(recipe):
     # Always skip these items
     EXCLUDED_ITEMS = {"Base.bobOmb"}
 
+    def safe_get_name(item):
+        if item == "Any fluid container":
+            return item
+        try:
+            return utility.get_name(item)
+        except Exception:
+            return item
+
     def process_tool(tool):
         """
         Processes a tool input and categorizes it as either tags or items.
@@ -120,7 +129,7 @@ def process_inputs(recipe):
                 tool_key: [
                     {
                         "raw_name": item,
-                        "translated_name": translate.get_translation(item, "DisplayName"),
+                        "translated_name": safe_get_name(item),
                     }
                     for item in filtered_items
                 ]
@@ -148,7 +157,7 @@ def process_inputs(recipe):
                     "items": [
                         {
                             "raw_name": item,
-                            "translated_name": translate.get_translation(item, "DisplayName"),
+                            "translated_name": safe_get_name(item),
                         }
                         for item in input_item.get("items", [])
                     ],
@@ -180,7 +189,7 @@ def process_inputs(recipe):
                     "items": [
                         {
                             "raw_name": item,
-                            "translated_name": translate.get_translation(item, "DisplayName"),
+                            "translated_name": safe_get_name(item),
                         }
                         for item in input_item.get("items", [])
                     ],
@@ -195,12 +204,12 @@ def process_inputs(recipe):
                 for item in input_item["items"]:
                     if ":" in item:
                         numbered_list = True
-                        prefix_removed = item.replace("Base.", "", 1)  # Remove the first "Base."
+                        prefix_removed = item.replace("Base.", "", 1)
                         amount, raw_name = prefix_removed.split(":", 1)
                         parsed_items.append({
                             "raw_name": raw_name.strip(),
                             "amount": int(amount.strip()),
-                            "translated_name": translate.get_translation(raw_name.strip(), "DisplayName"),
+                            "translated_name": safe_get_name(raw_name.strip()),
                         })
 
                 if numbered_list:
@@ -215,7 +224,7 @@ def process_inputs(recipe):
                         "items": [
                             {
                                 "raw_name": item,
-                                "translated_name": translate.get_translation(item, "DisplayName"),
+                                "translated_name": safe_get_name(item),
                             }
                             for item in input_item["items"]
                         ],
@@ -231,7 +240,7 @@ def process_inputs(recipe):
                     "items": [
                         {
                             "raw_name": item,
-                            "translated_name": translate.get_translation(item, "DisplayName"),
+                            "translated_name": safe_get_name(item),
                         }
                         for item in input_item.get("items", [])
                     ],
@@ -252,7 +261,7 @@ def process_inputs(recipe):
                     "items": [
                         {
                             "raw_name": item,
-                            "translated_name": translate.get_translation(item, "DisplayName"),
+                            "translated_name": safe_get_name(item),
                         }
                         for item in input_item["items"]
                     ],
@@ -261,6 +270,74 @@ def process_inputs(recipe):
                 }
 
     return processed_inputs
+
+
+def construction_output(outputs, recipe):
+    """
+    Processes construction-type outputs.
+    For each output, if an "icon" exists, it is copied over.
+    Otherwise, if no icon exists and a sprite is available from "spriteOutputs",
+    that sprite value is used as the icon.
+    If the outputs list is empty, a new output is generated using the recipe's
+    translated name (the second value in the "name" tuple) and the first sprite found.
+
+    Args:
+        outputs (list): The outputs list from a construction recipe.
+        recipe (dict): The full recipe, which may also contain a 'spriteOutputs' key.
+
+    Returns:
+        dict: A dictionary with key 'outputs' holding the processed outputs.
+    """
+    processed_outputs = {}
+    output_index = 1
+
+    # Helper function to recursively search for the first valid value.
+    def find_first_value(obj):
+        if isinstance(obj, (str, int, float)):
+            return obj
+        elif isinstance(obj, dict):
+            for value in obj.values():
+                result = find_first_value(value)
+                if result is not None:
+                    return result
+        elif isinstance(obj, list):
+            for item in obj:
+                result = find_first_value(item)
+                if result is not None:
+                    return result
+        return None
+
+    # Determine candidate sprite icon from spriteOutputs if available.
+    sprite_icon = None
+    if "spriteOutputs" in recipe:
+        sprite_icon = find_first_value(recipe["spriteOutputs"])
+
+    if outputs:
+        for output in outputs:
+            new_output = {}
+            if "displayName" in output:
+                translated = translate.get_translation(output["displayName"])
+                new_output["translated_product"] = translated
+            if "icon" in output:
+                new_output["icon"] = output["icon"]
+            elif sprite_icon is not None:
+                new_output["icon"] = sprite_icon
+
+            if not new_output:
+                new_output = output
+            processed_outputs[f"output{output_index}"] = new_output
+            output_index += 1
+    else:
+        if "name" in recipe:
+            translated_name = translate.get_translation(recipe["name"], property_key="TeachedRecipes")
+        else:
+            translated_name = ""
+        new_output = {"translated_product": translated_name}
+        if sprite_icon is not None:
+            new_output["icon"] = sprite_icon
+        processed_outputs[f"output{output_index}"] = new_output
+
+    return {"outputs": processed_outputs}
 
 
 def process_outputs(recipe):
@@ -279,6 +356,9 @@ def process_outputs(recipe):
     if outputs_key not in recipe or not isinstance(recipe[outputs_key], list):
         print("No 'outputs' field found or 'outputs' is not a valid list.")
         return {}
+
+    if recipe.get("construction", False):
+        return construction_output(recipe[outputs_key], recipe)
 
     processed_outputs = {}
     output_index = 1
@@ -318,7 +398,7 @@ def process_outputs(recipe):
         # Handle item outputs
         if "items" in output and isinstance(output["items"], list):
             for raw_product in output["items"]:
-                translated_product = translate.get_translation(raw_product, "DisplayName")
+                translated_product = utility.get_name(raw_product)
                 product_number = output.get("index", None)  # Retrieve the 'index' field if present
 
                 # Create a dictionary for this output
@@ -378,7 +458,7 @@ def process_output_mapper(recipe, mapper_string):
             continue
 
         raw_items = [key]
-        translated_items = [translate.get_translation(key.strip(), "DisplayName")]
+        translated_items = [utility.get_name(key.strip())]
         output_mapper["RawOutputs"].append(raw_items)
         output_mapper["TranslatedOutputs"].append(translated_items)
 
@@ -429,7 +509,7 @@ def process_requirements(recipe, parsed_item_data):
         # Add to skillbooks based on teached recipes
         for item_name, item_details in parsed_item_data.items():
             if "TeachedRecipes" in item_details and raw_name in item_details["TeachedRecipes"]:
-                translated_item_name = translate.get_translation(item_name, "DisplayName")
+                translated_item_name = utility.get_name(item_name)
                 requirements["skillbooks"].append(translated_item_name)
 
         # Add schematics based on parsed literature data
@@ -578,8 +658,8 @@ def process_xp(recipe):
     if isinstance(xp_award, str) and ":" in xp_award:
         string_part, value = xp_award.split(":", 1)
         if string_part == "WoodWork":
-            string_part = string_part.lower().capitalize()
-        translated_string = translate.get_translation(string_part.strip(), "Perks")
+            string_part = string_part.capitalize()
+        translated_string = translate.get_translation(string_part.strip(), "Perk")
         return f"[[{translated_string}]] {value.strip()}"
 
     elif isinstance(xp_award, list):
@@ -587,7 +667,7 @@ def process_xp(recipe):
         for entry in xp_award:
             if ":" in entry:
                 string_part, value = entry.split(":", 1)
-                translated_string = translate.get_translation(string_part.strip(), "Perks")
+                translated_string = translate.get_translation(string_part.strip(), "Perk")
                 formatted_xp.append(f"[[{translated_string}]] {value.strip()}")
         return "<br>".join(formatted_xp)
 
