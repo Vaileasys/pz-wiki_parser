@@ -65,7 +65,7 @@ def write_tag_table():
                     for item in tag_data
                 )
 
-                file.write(f'|-\n| <span id="tag-{tag}">[[{tag} (tag)|{tag}]]</span> || {tag_items}\n')
+                file.write(f'|- id="tag-{tag}"\n| [[{tag} (tag)|{tag}]] || {tag_items}\n')
                 pbar.update(1)
             file.write('|}')
         pbar.bar_format = f"Tags table completed. File can be found in '{output_file}'"

@@ -84,8 +84,8 @@ def build_table(lua_file_path, output_file_path):
         exclusives_str = ", ".join(f"[[#{excl}|{excl}]]" for excl in exclusives)
         hidden_locs_str = ", ".join(f"[[#{hidden}|{hidden}]]" for hidden in hidden_locs)
 
-        wikilines.append('|-')
-        wikilines.append(f'| <span id="{location}">{location}</span> || {exclusives_str} || {hidden_locs_str}')
+        wikilines.append(f'|- id="{location}"')
+        wikilines.append(f'| {location} || {exclusives_str} || {hidden_locs_str}')
 
     wikilines.append('|}')
 
