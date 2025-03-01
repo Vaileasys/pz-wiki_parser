@@ -5,8 +5,10 @@ import random
 from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.core import translate, utility, version
+from scripts.lists import hotbar_slots
 from scripts.core.constants import PBAR_FORMAT
 
+hotbar_data = {}
 
 # Used for getting table values
 TABLE_DICT = {
@@ -304,7 +306,9 @@ def process_item(item_id, item_data, pbar):
             extra_slots = [extra_slots]
         for slot in extra_slots:
             if slot != "-":
-                slot = translate.get_translation("IGUI_HotbarAttachment_" + slot, "")
+                slot_name = hotbar_data.get(slot, {}).get("name")
+                slot_page = f"AttachmentsProvided#{slot}"
+                slot = utility.format_link(name=slot_name, page=slot_page)
             slots_list.append(slot)
         item["extra_slots"] = "<br>".join(slots_list)
 
@@ -441,7 +445,9 @@ def combine_files():
 
 def main():
     global language_code
+    global hotbar_data
     language_code = language_code = translate.get_language_code()
+    hotbar_data = hotbar_slots.get_hotbar_slots(suppress=True)
     items = get_items()
     write_to_output(items)
     combine_files()
