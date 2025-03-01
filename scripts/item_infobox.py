@@ -3,6 +3,7 @@ import shutil
 from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.core import translate, utility, logger, version
+from scripts.lists import hotbar_slots
 from scripts.core.constants import PBAR_FORMAT
 
 # Values located in forageSystem.lua line 102 'clothingPenalties' (Build 42.0.2)
@@ -18,6 +19,8 @@ CLOTHING_PENALTIES = {
     "LeftEye": '2.5',
     "RightEye": '2.5',
 }
+
+hotbar_slot_data = {}
 
 
 def get_item():
@@ -104,6 +107,34 @@ def write_to_output(item_data, item_id, output_dir):
             if fluid_capacity_ml != 0.0:
                 fluid_capacity = f"{str(int(fluid_capacity_ml))}"
 
+            attachment_type = item_data.get("AttachmentType"),
+            hotbar_attachments = []
+            if attachment_type:
+                for attachment in attachment_type:
+                    for slot, slot_data in hotbar_slot_data.items():
+                        slot_attachments = slot_data.get("attachments", {})
+                        if attachment in slot_attachments:
+                            slot_name = slot_data.get("name")
+                            slot_link = f"[[AttachmentsProvided#{slot}|{slot_name}]]"
+                            hotbar_attachments.append(slot_link)
+                attachment_type = "<br>".join(hotbar_attachments)
+            else:
+                attachment_type = ''
+            
+            attachments_provided = item_data.get('AttachmentsProvided')
+            if attachments_provided:
+                if isinstance(attachments_provided, str):
+                    attachments_provided = [attachments_provided]
+                hotbar_attachments = []
+
+                for slot in attachments_provided:
+                    slot_name = hotbar_slot_data[slot].get("name")
+                    slot_link = f"[[AttachmentsProvided#{slot}|{slot_name}]]"
+                    hotbar_attachments.append(slot_link)
+                attachments_provided = "<br>".join(hotbar_attachments)
+            else:
+                attachments_provided = ''
+
             material = item_data.get('FabricType', '')
             material_value = item_data.get('MetalValue', '')
             if not material and material_value:
@@ -162,7 +193,9 @@ def write_to_output(item_data, item_id, output_dir):
                 "fluid_capacity": fluid_capacity,
                 "equipped": item_data.get('CanBeEquipped', ''),
                 "body_location": item_data.get('BodyLocation', ''),
-                "attachment_type": item_data.get('AttachmentType', ''),
+#                "attachment_type": attachment_type,
+                "attachment_type": item_data.get("AttachmentType"),
+                "attachments_provided": attachments_provided,
                 "function": '',
                 "weapon": weapon,
                 "part_type": translate.get_translation(item_data.get('PartType', ''), 'PartType'),
@@ -308,8 +341,11 @@ def automatic_extraction(output_dir):
 
 
 def main():
+    global hotbar_slot_data
     language_code = translate.get_language_code()
     output_dir = f'output/{language_code}/infoboxes'
+
+    hotbar_slot_data = hotbar_slots.get_hotbar_slots()
 
     while True:
         choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
