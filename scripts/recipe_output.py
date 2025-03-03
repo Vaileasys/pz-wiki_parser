@@ -53,22 +53,24 @@ def process_ingredients(data):
             numbered_items = ingredient_info["items"]
             numbered_strings = []
             for item in numbered_items:
-                raw_name = item.get("raw_name", "Unknown Item")
                 amount = item.get("amount", 1)
-                translated_name = item.get("translated_name", raw_name)
-                if raw_name != "Any fluid container":
+                item_id = item.get("raw_name", "Unknown Item")
+                name = utility.get_name(item_id)
+                page = utility.get_page(item_id, name)
+                link = utility.format_link(name, page)
+                if item_id != "Any fluid container":
                     try:
-                        icon = utility.get_icon(raw_name) if raw_name else "Question On.png"
+                        icon = utility.get_icon(item_id) if item_id else "Question On.png"
                         if isinstance(icon, list):
                             icon = icon[0] if icon else "Question On.png"
                     except Exception as e:
-                        print(f"Error fetching icon for raw_name '{raw_name}': {e}")
+                        print(f"Error fetching icon for raw_name '{item_id}': {e}")
                         icon = "Question On.png"
                 else:
                     icon = "Question On.png"
 
                 numbered_strings.append(
-                    f"[[file:{icon}|32x32px|class=pixelart]] [[{translated_name}]] <small>×{amount}</small>"
+                    f"[[file:{icon}|32x32px|class=pixelart]] {link} <small>×{amount}</small>"
                 )
             final_numbered_str = "<br>".join(numbered_strings)
             parsed_ingredients.append(("item", final_numbered_str, "One of"))
@@ -80,20 +82,22 @@ def process_ingredients(data):
             item_strings = []
 
             for item in item_list:
-                raw_name = item.get("raw_name", "Unknown Item")
-                translated_name = item.get("translated_name", raw_name)
-                if raw_name != "Any fluid container":
+                item_id = item.get("raw_name", "Unknown Item")
+                name = utility.get_name(item_id)
+                page = utility.get_page(item_id, name)
+                link = utility.format_link(name, page)
+                if item_id != "Any fluid container":
                     try:
-                        icon = utility.get_icon(raw_name) if raw_name else "Question On.png"
+                        icon = utility.get_icon(item_id) if item_id else "Question On.png"
                         if isinstance(icon, list):
                             icon = icon[0] if icon else "Question On.png"
                     except Exception as e:
-                        print(f"Error fetching icon for raw_name '{raw_name}': {e}")
+                        print(f"Error fetching icon for raw_name '{item_id}': {e}")
                         icon = "Question On.png"
                 else:
                     icon = "Question On.png"
 
-                item_strings.append(f"[[file:{icon}|32x32px|class=pixelart]] [[{translated_name}]] <small>×{amount}</small>")
+                item_strings.append(f"[[file:{icon}|32x32px|class=pixelart]] {link} <small>×{amount}</small>")
             final_item_str = "<br>".join(item_strings)
             descriptor = "One of" if len(item_list) > 1 else "Each of"
             parsed_ingredients.append(("item", final_item_str, descriptor))
@@ -153,17 +157,19 @@ def process_tools(data):
         if key.startswith("tool") and not key.endswith("_tags") and not key.endswith("_flags"):
             # Handle individual tools
             for tool in value:
-                raw_name = tool.get("raw_name", "Unknown Item")
-                translated_name = tool.get("translated_name", raw_name)
+                item_id = tool.get("raw_name", "Unknown Item")
+                name = utility.get_name(item_id)
+                page = utility.get_page(item_id, name)
+                link = utility.format_link(name, page)
                 try:
-                    icon = utility.get_icon(raw_name) if raw_name else "Question On.png"
+                    icon = utility.get_icon(item_id) if item_id else "Question On.png"
                     if isinstance(icon, list):
                         icon = icon[0] if icon else "Question On.png"
                 except Exception as e:
-                    print(f"Error fetching icon for raw_name '{raw_name}': {e}")
+                    print(f"Error fetching icon for raw_name '{item_id}': {e}")
                     icon = "Question On.png"
 
-                tool_entry = f"[[file:{icon}|32x32px|class=pixelart]] [[{translated_name}]]"
+                tool_entry = f"[[file:{icon}|32x32px|class=pixelart]] {link}"
                 each_of_parts.append(tool_entry + "<br>")
         elif key.endswith("_tags"):
 
@@ -349,16 +355,19 @@ def process_products(data):
 
         # Standard
         elif "raw_product" in output_info and "translated_product" in output_info:
-            raw_product = output_info.get("raw_product")
-            translated_product = output_info["translated_product"]
+            item_id = output_info.get("raw_product")
+            name = utility.get_name(item_id)
+            page = utility.get_page(item_id, name)
+            link = utility.format_link(name, page)
+
             products_number = output_info.get("products_number", 1)
-            if raw_product:
+            if item_id:
                 try:
-                    icon = utility.get_icon(raw_product) if raw_product else "Question On.png"
+                    icon = utility.get_icon(item_id) if item_id else "Question On.png"
                     if isinstance(icon, list):
                         icon = icon[0] if icon else "Question On.png"
                 except Exception as e:
-                    print(f"Error fetching icon for raw_product '{raw_product}': {e}")
+                    print(f"Error fetching icon for ID '{item_id}': {e}")
                     icon = "Question On.png"
             else:
                 try:
@@ -367,7 +376,7 @@ def process_products(data):
                     print(f"Error fetching icon for product: {e}")
                     icon = "Question On.png"
             items_section.append(
-                f"[[file:{icon}|64x64px|class=pixelart]]<br>[[{translated_product}]] ×{products_number}"
+                f"[[file:{icon}|64x64px|class=pixelart]]<br>{link} ×{products_number}"
             )
 
         elif output_info.get("mapper"):
@@ -380,6 +389,10 @@ def process_products(data):
                 if isinstance(raw_output_group, list):
                     # Nested list format
                     for raw_output, translated_output in zip(raw_output_group, translated_output_group):
+                        item_id = raw_output
+                        name = utility.get_name(item_id)
+                        page = utility.get_page(item_id, name)
+                        link = utility.format_link(name, page)
                         try:
                             icon = utility.get_icon(raw_output) if raw_output else "Question On.png"
                             if isinstance(icon, list):
@@ -389,7 +402,7 @@ def process_products(data):
                             icon = "Question On.png"
 
                         mapper_lines.append(
-                            f"[[file:{icon}|64x64px|class=pixelart]]<br>[[{translated_output}]] ×{amount}"
+                            f"[[file:{icon}|64x64px|class=pixelart]]<br>{link} ×{amount}"
                         )
                 else:
                     try:
@@ -399,7 +412,6 @@ def process_products(data):
                     except Exception as e:
                         print(f"Error fetching icon for mapper product '{raw_output_group}': {e}")
                         icon = "Question On.png"
-
                     mapper_lines.append(
                         f"[[file:{icon}|64x64px|class=pixelart]]<br>[[{translated_output_group}]] ×{amount}"
                     )
@@ -680,7 +692,7 @@ def output_item_usage(normal_item_input_map, normal_item_output_map, constructio
         input_recipes = sorted(construction_item_input_map[raw_name])
         if output_recipes:
             crafting_id = f"{raw_name}_constructionhowtomake"
-            crafting_template = ["{{Construction/sandbox|item=" + crafting_id]
+            crafting_template = ["{{Building|item=" + crafting_id]
             for recipe in output_recipes:
                 crafting_template.append(f"|{recipe}")
             crafting_template.append("}}")
@@ -693,7 +705,7 @@ def output_item_usage(normal_item_input_map, normal_item_output_map, constructio
                 craft_file.write("\n".join(crafting_template))
         if input_recipes:
             crafting_id = f"{raw_name}_constructionwhatitcrafts"
-            crafting_template = ["{{Construction/sandbox|item=" + crafting_id]
+            crafting_template = ["{{Building|item=" + crafting_id]
             for recipe in input_recipes:
                 crafting_template.append(f"|{recipe}")
             crafting_template.append("}}")
@@ -754,7 +766,7 @@ def output(processed_recipes):
     limited_recipe_names_crafting = recipe_names_crafting[:150]
     recipe_list_crafting = "\n".join([f"|{name}" for name in limited_recipe_names_crafting])
     combined_header_crafting = (
-        "<noinclude>[[Category:Crafting templates]]\n"
+        "<noinclude>[[Category:Crafting templates]]\n{{wip}}\n"
         "{{Documentation|doc=\n"
         "{{Crafting/sandbox\n"
         f"{recipe_list_crafting}\n"
@@ -798,7 +810,7 @@ def output(processed_recipes):
     combined_footer = "}}</includeonly>"
     combined_content_crafting.append(combined_footer)
 
-    combined_output_file_crafting = 'output/recipes/crafting_template.txt'
+    combined_output_file_crafting = 'output/recipes/recipe list.txt'
     with open(combined_output_file_crafting, 'w', encoding='utf-8') as combined_file:
         combined_file.write("\n".join(combined_content_crafting))
 
@@ -807,9 +819,9 @@ def output(processed_recipes):
     limited_recipe_names_construction = recipe_names_construction[:150]
     recipe_list_construction = "\n".join([f"|{name}" for name in limited_recipe_names_construction])
     combined_header_construction = (
-        "<noinclude>[[Category:Construction templates]]\n"
+        "<noinclude>[[Category:Construction templates]]\n{{wip}}\n"
         "{{Documentation|doc=\n"
-        "{{Construction/sandbox\n"
+        "{{Building\n"
         f"{recipe_list_construction}\n"
         "}}\n"
         "}}\n"
@@ -850,7 +862,7 @@ def output(processed_recipes):
 
     combined_content_construction.append(combined_footer)
 
-    combined_output_file_construction = 'output/recipes/construction_template.txt'
+    combined_output_file_construction = 'output/recipes/building_list.txt'
     with open(combined_output_file_construction, 'w', encoding='utf-8') as combined_file:
         combined_file.write("\n".join(combined_content_construction))
 
