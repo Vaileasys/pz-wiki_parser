@@ -72,6 +72,8 @@ def generate_hotbar_slots():
             hotbar_slots[slot]["name"] = slot_name
         hotbar_slots[slot]["items"] = []
         for item_id, item_data in attachment_item_data.items():
+            if isinstance(item_data["AttachmentsProvided"], str):
+                item_data["AttachmentsProvided"] = [item_data["AttachmentsProvided"]]
             if slot in item_data["AttachmentsProvided"]:
                 hotbar_slots[slot]["items"].append(item_id)
                 # Get and store item data
