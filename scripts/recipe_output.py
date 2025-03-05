@@ -159,7 +159,7 @@ def process_tools(data):
             for tool in value:
                 item_id = tool.get("raw_name", "Unknown Item")
 
-                if item_id == "Base.*":
+                if item_id.startswith("Base.*"):
                     name = "Any fluid container"
                 else:
                     name = utility.get_name(item_id)
