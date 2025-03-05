@@ -186,7 +186,7 @@ def write_to_file(data):
         output_file = os.path.join(output_dir, f'{item_id}.txt')
         with open(output_file, 'w', encoding='utf-8') as file:
             body_part_ref = get_body_part_ref(body_parts)
-            file.write(f"{{{{Body part|{body_part_ref}}}}}")
+            file.write(f"{{{{Body part|id={item_id}|{body_part_ref}}}}}")
         
         i += 1
 
