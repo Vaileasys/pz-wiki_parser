@@ -5,7 +5,7 @@ import json
 import re
 from pathlib import Path
 import xml.etree.ElementTree as ET
-from scripts.parser import item_parser
+from scripts.parser import item_parser, recipe_parser
 from scripts.core import translate, logger, version, lua_helper
 from scripts.core.constants import DATA_PATH
 
@@ -914,3 +914,42 @@ def get_fluid_name(fluid_data, lang=None):
     else:
         name = translate.get_translation(display_name, 'FluidID', lang)
     return name
+
+# TODO: this is a WIP
+def get_recipe(recipe_name):
+    try:
+        parsed_recipe_data = recipe_parser.get_recipe_data()
+        for recipe in parsed_recipe_data["recipes"]:
+            if recipe.get("name") == recipe_name:
+    #                print(recipe_name)
+                outputs = recipe.get("outputs")[0]
+                items = outputs.get("items") #FIXME: traps are not currently listed in the item_id_dictionary, as they use infobox_tile.
+                if items is None:
+                    mapper = outputs.get("mapper")
+                    if mapper is not None:
+                        product_id = recipe.get("itemMappers").get(mapper).get("default")
+                else:
+                    product_id = items[0]
+                product_page = get_page(product_id)
+                recipe_name_new = translate.get_translation(recipe_name, None, "en")
+                if recipe_name_new == recipe_name:
+                    recipe_name_new = translate.get_translation(recipe_name, "TeachedRecipes")
+#                if product_page == "Unknown" and product_id is not None:
+#                    print(f"Couldn't find page: {product_id}")
+                if product_page != "Unknown":
+                    product = f"[[{product_page}|{recipe_name_new}]]"
+                    return product
+    #                if "[" not in recipe_name:
+    #                    print(f"No link for: {recipe_name}")
+
+                return recipe_name_new
+    #        if "[" not in recipe_name:
+    #            print(f"No link for: {recipe_name}")
+    except:
+        print(f"Error getting recipe for {recipe_name}")
+        recipe_name_new = translate.get_translation(recipe_name, None, "en")
+        if recipe_name_new == recipe_name:
+            recipe_name_new = translate.get_translation(recipe_name, "TeachedRecipes")
+        recipe_name = recipe_name_new
+
+    return recipe_name

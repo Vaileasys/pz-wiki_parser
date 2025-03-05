@@ -224,9 +224,7 @@ def process_schematic(item_id, item_data, on_create):
         schematic_recipes = literature_data["SpecialLootSpawns"][literature]
 
         for i, title in enumerate(schematic_recipes):
-            schematic_recipes[i] = translate.get_translation(title, None, "en")
-            if schematic_recipes[i] == title:
-                schematic_recipes[i] = translate.get_translation(title, "TeachedRecipes")
+            schematic_recipes[i] = utility.get_recipe(title)
         
         multiple_chance = SCHEMATIC[on_create][1]
         schematic_recipes.append(multiple_chance)

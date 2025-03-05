@@ -164,32 +164,7 @@ def get_recipes(item_data):
         recipes = []
 
         for recipe in recipes_raw:
-            recipe_name = translate.get_translation(recipe, "")
-            if recipe_name == recipe:
-                recipe_name = translate.get_translation(recipe, "TeachedRecipes")
-            # Check if recipe is in the recipe data. Some won't be in there, such as farming.
-            if recipe.lower() in [rec["name"].lower() for rec in parsed_recipe_data["recipes"]]:
-
-                for rec in parsed_recipe_data["recipes"]:
-                    if rec["name"].lower() == recipe.lower():
-                        # Check if it's a mapping product
-                        if rec.get("outputs", [{}])[0].get("mapper"):
-                            mapper = rec.get("outputs", [{}])[0].get("mapper")
-                            product_link= f'<span title="Recipe mapper: {mapper}">{recipe_name}</span>'
-                            #TODO: decide how to handle recipe product mapping
-#                            product_id = next(iter(rec.get("itemMappers", {}).get(mapper, {}).values()), "")
-#                            product_link = get_link_from_id(product_id, recipe_name)
-                        else:
-                            product_id = rec["outputs"][0]["items"]
-                            if len(product_id) > 1:
-                                print("WARNING: More than 1 product.")
-                            product_link = get_link_from_id(product_id[0], recipe_name)
-
-                        #Add the product to the list if it hasn't already
-                        if product_link not in recipes:
-                            recipes.append(product_link)
-            else:
-                recipes.append(recipe_name)
+            recipes.append(utility.get_recipe(recipe))
 
         
         recipes_output = "<br>".join(recipes)
