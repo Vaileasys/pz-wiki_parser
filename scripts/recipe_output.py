@@ -158,7 +158,12 @@ def process_tools(data):
             # Handle individual tools
             for tool in value:
                 item_id = tool.get("raw_name", "Unknown Item")
-                name = utility.get_name(item_id)
+
+                if item_id == "Base.*":
+                    name = "Any fluid container"
+                else:
+                    name = utility.get_name(item_id)
+
                 page = utility.get_page(item_id, name)
                 link = utility.format_link(name, page)
                 try:
@@ -172,7 +177,6 @@ def process_tools(data):
                 tool_entry = f"[[file:{icon}|32x32px|class=pixelart]] {link}"
                 each_of_parts.append(tool_entry + "<br>")
         elif key.endswith("_tags"):
-
             # Handle tagged groups
             tool_flags = tools_data.get(f"{key[:-5]}_flags", [])
             list_parts = []
