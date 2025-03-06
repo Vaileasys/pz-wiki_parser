@@ -916,11 +916,15 @@ def get_fluid_name(fluid_data, lang=None):
     return name
 
 # TODO: this is a WIP
-def get_recipe(recipe_name):
+def get_recipe(recipe_id):
+    recipe_name = translate.get_translation(recipe_id, None, "en")
+    if recipe_name == recipe_id:
+        recipe_name = translate.get_translation(recipe_id, "TeachedRecipes")
+    
     try:
         parsed_recipe_data = recipe_parser.get_recipe_data()
         for recipe in parsed_recipe_data["recipes"]:
-            if recipe.get("name") == recipe_name:
+            if recipe.get("name") == recipe_id:
     #                print(recipe_name)
                 outputs = recipe.get("outputs")[0]
                 items = outputs.get("items") #FIXME: traps are not currently listed in the item_id_dictionary, as they use infobox_tile.
@@ -931,25 +935,18 @@ def get_recipe(recipe_name):
                 else:
                     product_id = items[0]
                 product_page = get_page(product_id)
-                recipe_name_new = translate.get_translation(recipe_name, None, "en")
-                if recipe_name_new == recipe_name:
-                    recipe_name_new = translate.get_translation(recipe_name, "TeachedRecipes")
 #                if product_page == "Unknown" and product_id is not None:
 #                    print(f"Couldn't find page: {product_id}")
                 if product_page != "Unknown":
-                    product = f"[[{product_page}|{recipe_name_new}]]"
+                    product = f"[[{product_page}|{recipe_name}]]"
                     return product
     #                if "[" not in recipe_name:
     #                    print(f"No link for: {recipe_name}")
 
-                return recipe_name_new
+                return recipe_name
     #        if "[" not in recipe_name:
     #            print(f"No link for: {recipe_name}")
     except:
-        print(f"Error getting recipe for {recipe_name}")
-        recipe_name_new = translate.get_translation(recipe_name, None, "en")
-        if recipe_name_new == recipe_name:
-            recipe_name_new = translate.get_translation(recipe_name, "TeachedRecipes")
-        recipe_name = recipe_name_new
+        print(f"Error getting recipe for {recipe_id}")
 
     return recipe_name

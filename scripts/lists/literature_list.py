@@ -142,14 +142,6 @@ def get_list_type(item_id, item_data, special_data):
 # TODO: Partially incomplete. Waiting for construction recipes.
 def get_recipes(item_data):
 
-    # Get and format the link
-    def get_link_from_id(id, recipe_name):
-        product_name = translate.get_translation(id, "DisplayName")
-        product_page = utility.get_page(id, product_name)
-#        product_link = utility.format_link(product_name, product_page)
-        product_link = f"[[{product_page}|{recipe_name}]]"
-        return product_link
-
     if item_data.get("OnCreate"):
         return "''Randomized''"
     else:
@@ -158,13 +150,13 @@ def get_recipes(item_data):
             return "-"
         elif isinstance(recipes_raw, str):
             recipes_raw = [recipes_raw]
-        
-        parsed_recipe_data = recipe_parser.get_recipe_data()
 
         recipes = []
 
         for recipe in recipes_raw:
             recipes.append(utility.get_recipe(recipe))
+            if recipe == "KitchenTools":
+                print(utility.get_recipe(recipe))
 
         
         recipes_output = "<br>".join(recipes)
@@ -175,23 +167,23 @@ def get_recipes(item_data):
 def get_skills(item_id, item_data):
     SKILL_MAP = {
         "Armor": None,
-        "BagSeed": "Farming",
+        "BagSeed": "Agriculture",
         "Cooking": "Cooking",
         "Electronics": "Electricity",
         "Engineer": "Electricity",
-        "Farming": "Farming",
+        "Farming": "Agriculture",
         "Fishing": "Fishing",
         "Glassmaking": "Glassmaking",
-        "Hemp": "Farming",
+        "Hemp": "Agriculture",
         "Herbalist": "Foraging",
         "Hunting": "Trapping",
         "Key": None,
         "Knitting": "Tailoring",
         "Mechanic": "Mechanics",
-        "Metalwork": "MetalWelding",
+        "Metalwork": "Welding",
         "PrimitiveTool": None,
         "Radio": "Electricity",
-        "Smithing": "Smithing",
+        "Smithing": "Metalworking",
         "Trick": None,
         "Weapon": None
     }
