@@ -14,7 +14,7 @@ def main():
             continue
         lines = ["{{EvolvedRecipesForItem", f"|id={item_id}"]
 
-        if item_data.get("Spice") == "TRUE":
+        if item_data.get("Spice") == "TRUE" or item_data.get("Spice") == "true":
             lines.append("|spice=true")
 
         for key, value in evolved_recipe.items():
