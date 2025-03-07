@@ -14,12 +14,15 @@ def main():
             continue
         lines = ["{{EvolvedRecipesForItem", f"|id={item_id}"]
 
+        if item_data.get("Spice") == "TRUE" or item_data.get("Spice") == "true":
+            lines.append("|spice=true")
+
         for key, value in evolved_recipe.items():
             if isinstance(value, list):
                 value = '|'.join(value)
             if isinstance(value, str) and value.endswith('|Cooked'):
                 value = value[:-len('|Cooked')]
-            lines.append(f"|{key}={value}")
+            lines.append(f"|{key.lower()}={value}")
 
         lines.append("}}")
         output_content = "\n".join(lines)
