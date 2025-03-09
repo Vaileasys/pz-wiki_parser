@@ -142,14 +142,6 @@ def get_list_type(item_id, item_data, special_data):
 # TODO: Partially incomplete. Waiting for construction recipes.
 def get_recipes(item_data):
 
-    # Get and format the link
-    def get_link_from_id(id, recipe_name):
-        product_name = translate.get_translation(id, "DisplayName")
-        product_page = utility.get_page(id, product_name)
-#        product_link = utility.format_link(product_name, product_page)
-        product_link = f"[[{product_page}|{recipe_name}]]"
-        return product_link
-
     if item_data.get("OnCreate"):
         return "''Randomized''"
     else:
@@ -158,38 +150,13 @@ def get_recipes(item_data):
             return "-"
         elif isinstance(recipes_raw, str):
             recipes_raw = [recipes_raw]
-        
-        parsed_recipe_data = recipe_parser.get_recipe_data()
 
         recipes = []
 
         for recipe in recipes_raw:
-            recipe_name = translate.get_translation(recipe, "")
-            if recipe_name == recipe:
-                recipe_name = translate.get_translation(recipe, "TeachedRecipes")
-            # Check if recipe is in the recipe data. Some won't be in there, such as farming.
-            if recipe.lower() in [rec["name"].lower() for rec in parsed_recipe_data["recipes"]]:
-
-                for rec in parsed_recipe_data["recipes"]:
-                    if rec["name"].lower() == recipe.lower():
-                        # Check if it's a mapping product
-                        if rec.get("outputs", [{}])[0].get("mapper"):
-                            mapper = rec.get("outputs", [{}])[0].get("mapper")
-                            product_link= f'<span title="Recipe mapper: {mapper}">{recipe_name}</span>'
-                            #TODO: decide how to handle recipe product mapping
-#                            product_id = next(iter(rec.get("itemMappers", {}).get(mapper, {}).values()), "")
-#                            product_link = get_link_from_id(product_id, recipe_name)
-                        else:
-                            product_id = rec["outputs"][0]["items"]
-                            if len(product_id) > 1:
-                                print("WARNING: More than 1 product.")
-                            product_link = get_link_from_id(product_id[0], recipe_name)
-
-                        #Add the product to the list if it hasn't already
-                        if product_link not in recipes:
-                            recipes.append(product_link)
-            else:
-                recipes.append(recipe_name)
+            recipes.append(utility.get_recipe(recipe))
+            if recipe == "KitchenTools":
+                print(utility.get_recipe(recipe))
 
         
         recipes_output = "<br>".join(recipes)
@@ -200,23 +167,23 @@ def get_recipes(item_data):
 def get_skills(item_id, item_data):
     SKILL_MAP = {
         "Armor": None,
-        "BagSeed": "Farming",
+        "BagSeed": "Agriculture",
         "Cooking": "Cooking",
         "Electronics": "Electricity",
         "Engineer": "Electricity",
-        "Farming": "Farming",
+        "Farming": "Agriculture",
         "Fishing": "Fishing",
         "Glassmaking": "Glassmaking",
-        "Hemp": "Farming",
+        "Hemp": "Agriculture",
         "Herbalist": "Foraging",
         "Hunting": "Trapping",
         "Key": None,
         "Knitting": "Tailoring",
         "Mechanic": "Mechanics",
-        "Metalwork": "MetalWelding",
+        "Metalwork": "Welding",
         "PrimitiveTool": None,
         "Radio": "Electricity",
-        "Smithing": "Smithing",
+        "Smithing": "Metalworking",
         "Trick": None,
         "Weapon": None
     }

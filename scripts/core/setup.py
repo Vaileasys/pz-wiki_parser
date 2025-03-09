@@ -149,18 +149,39 @@ def copy_lua_files(media_dir: str) -> None:
     destination_dir = Path(LUA_PATH)
 
     # Copy each file from the lua directory to the destination
-    for root, _, files in os.walk(lua_dir):
+    find_and_copy_files(destination_dir, lua_dir, lua_files_to_copy)
+
+
+def find_and_copy_files(destination_dir, input_dir, files_to_copy, rename_func=None):
+    for root, _, files in os.walk(input_dir):
         for file in files:
-            if file in lua_files_to_copy:
+            if file in files_to_copy:
                 src = Path(root) / file
                 dst = destination_dir
-                folder = lua_files_to_copy[file]
+                folder = files_to_copy[file]
                 if folder:
                     dst = destination_dir / folder
                 dst.mkdir(parents=True, exist_ok=True)
-                dst = dst / file
+                dst_filename = rename_func(Path(root).name) if rename_func else file
+                dst = dst / dst_filename
                 shutil.copy(src, dst)
                 print(f"Copied {file} to {dst}")
+
+
+def rename_spawnpoints(folder_name: str) -> str:
+    return folder_name.replace(", KY", "").replace(" ", "_").lower() + ".lua"
+
+
+def copy_spawnpoint_files(media_dir):
+    spawnpoint_files = {
+        'spawnpoints.lua': 'spawnpoints'
+    }
+    lua_dir = Path(media_dir) / 'maps'
+    if not lua_dir.exists():
+        raise FileNotFoundError(f"Lua directory not found in {lua_dir}.")
+    
+    destination_dir = Path(LUA_PATH)
+    find_and_copy_files(destination_dir, lua_dir, spawnpoint_files, rename_func=rename_spawnpoints)
 
 
 def copy_texture_names(media_dir):
@@ -330,6 +351,7 @@ def main():
         copy_scripts_and_radio(media_dir)
         copy_texture_names(media_dir)
         copy_lua_files(media_dir)
+        copy_spawnpoint_files(media_dir)
         copy_xml_files(media_dir)
         copy_java_files(install_path)
         handle_translations(media_dir)

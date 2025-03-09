@@ -1,5 +1,5 @@
 from pathlib import Path
-from parser import literature_parser
+from scripts.parser import literature_parser
 from scripts.core import translate, utility
 from scripts.parser import item_parser
 
@@ -104,7 +104,9 @@ SCHEMATIC = {
     "OnCreateMeleeWeaponSchematic": ["MeleeWeaponSchematics", 30],
     "OnCreateBSToolsSchematic": ["BSToolsSchematics", 50],
     "OnCreateArmorSchematic": ["ArmorSchematics", 30],
-    "OnCreateCookwareSchematic": ["CookwareSchematic", 40]
+    "OnCreateCookwareSchematic": ["CookwareSchematic", 40],
+    "OnCreateSurvivalSchematic": ["SurvivalSchematics", 40],
+    "OnCreateRecipeClipping": ["FoodRecipes", None] # Special case
 }
 
 SPECIAL = {
@@ -212,6 +214,7 @@ def process_special(item_id, item_data, on_create):
 
 def process_schematic(item_id, item_data, on_create):
     """Process schematic data"""
+
     literature_data = literature_parser.get_literature_data()
     schematic_recipes = []
 
@@ -221,14 +224,17 @@ def process_schematic(item_id, item_data, on_create):
         schematic_recipes = literature_data["SpecialLootSpawns"][literature]
 
         for i, title in enumerate(schematic_recipes):
-            schematic_recipes[i] = translate.get_translation(title, None, "en")
-            if schematic_recipes[i] == title:
-                schematic_recipes[i] = translate.get_translation(title, "TeachedRecipes")
+            schematic_recipes[i] = utility.get_recipe(title)
         
         multiple_chance = SCHEMATIC[on_create][1]
         schematic_recipes.append(multiple_chance)
 
-        write_to_file(item_id, schematic_recipes, "schematic")
+        if not multiple_chance:
+            literature_type = "recipe"
+        else:
+            literature_type = "schematic"
+
+        write_to_file(item_id, schematic_recipes, literature_type)
 
 
 def process_comic(item_id, item_data, on_create):
@@ -421,6 +427,17 @@ def write_to_file(item_id, literature_titles, literature_type):
             for title in sorted(literature_titles[:-1]):
                 file.write(f"* {title}\n")
             file.write('</div>')
+        
+        elif literature_type == "recipe":
+            content = []
+            content.append("A recipe can be read, teaching the player a [[Crafting|cooking]] recipe.\n")
+            content.append("===Learned recipes===")
+            content.append("The following are the recipes that this can include. Only 1 recipe will be included.")
+            content.append('<div class="list-columns" style="column-width:400px; max-width:900px;">')
+            for title in sorted(literature_titles[:-1]):
+                content.append(f"* {title}")
+            content.append("</div>")
+            file.write("\n".join(content))
 
         elif literature_type == "locket":
             file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
@@ -504,7 +521,9 @@ def main():
         if isinstance(on_create, list):
             print(f"Skipping: '{item_id}' as OnCreate is a list.")
             continue
-        on_create.removeprefix("SpecialLootSpawns.")
+        if not on_create.startswith("SpecialLootSpawns."):
+            continue
+        on_create = on_create.removeprefix("SpecialLootSpawns.")
         if on_create in BOOK:
             process_book(item_id, item_data, on_create)
         elif on_create in MAGAZINE:
