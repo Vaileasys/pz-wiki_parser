@@ -470,7 +470,7 @@ def parse_attachedweapons(attached_weapon_path, output_path):
 
     # Function to remove specified prefixes
     def remove_prefixes(name):
-        prefixes = ["Base.", "Radio.", "Farming."]
+        prefixes = "Base."
         for prefix in prefixes:
             if name.startswith(prefix):
                 return name[len(prefix):]
