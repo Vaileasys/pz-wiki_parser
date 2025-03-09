@@ -1,5 +1,5 @@
 from pathlib import Path
-from scripts.core import lua_helper, utility
+from scripts.core import lua_helper, utility, translate
 from scripts.core.constants import LUA_PATH
 
 OUTPUT_DIR = Path("output") / "spawnpoints"
@@ -15,18 +15,43 @@ def format_coordinates(posX, posY):
     return f"{{{{Coordinates|{posX}x{posY}}}}}"
 
 
+def normalise_profession(profession):
+    professions = {
+        "repairman": "Repairman",
+        "doctor": "Doctor",
+        "constructionworker": "constructionworker",
+        "chef": "Chef",
+        "unemployed": "unemployed",
+        "parkranger": "parkranger",
+        "nurse": "Nurse",
+        "policeofficer": "policeoff",
+        "fireofficer": "fireoff",
+        "securityguard": "securityguard"
+    }
+
+    profession = professions.get(profession, profession)
+    profession = "UI_prof_" + profession
+
+    return profession
+
+
 def reorder_spawn_data(normalised_data):
     """Reorder data to be grouped by coordinate instead of profession."""
     coordinate_map = {}
 
     for profession, coords_list in normalised_data.items():
+        profession = normalise_profession(profession)
+        profession = translate.get_translation(profession)
+        profession = f"[[{profession}]]"
+
         for coords in coords_list:
             coord_str = format_coordinates(coords["posX"], coords["posY"])
 
             if coord_str not in coordinate_map:
                 coordinate_map[coord_str] = []
 
-            coordinate_map[coord_str].append(profession)
+            if profession not in coordinate_map[coord_str]:
+                coordinate_map[coord_str].append(profession)
 
     return coordinate_map
 
@@ -89,12 +114,12 @@ def process_lua_file(lua_file):
             normalised_data = normalise_spawn_data(spawnpoints_data)
         else:
             normalised_data = spawnpoints_data
-    #    utility.save_cache(normalised_data, lua_file.stem + "_noramlised.json")
+#        utility.save_cache(normalised_data, lua_file.stem + "_noramlised.json")
 
         reordered_data = reorder_spawn_data(normalised_data)
 
         
-    #    utility.save_cache(reordered_data, lua_file.stem + "_reordered.json")
+#        utility.save_cache(reordered_data, lua_file.stem + "_reordered.json")
 
         write_to_file(reordered_data, f"{lua_file.stem}.txt")
     except KeyError as e:
