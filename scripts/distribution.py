@@ -139,7 +139,6 @@ def process_json(file_paths):
 
 def build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, attached_weapons_data,
                     clothing_data, stories_data):
-
     def get_container_info(item_name):
         containers_info = []
         unique_entries = set()
@@ -166,32 +165,52 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
                         process_nested_object(sub_value, room_name, sub_key)
 
         for proclist, content in procedural_data.items():
+            # Process primary items
             items = content.get("items", [])
             rolls = content.get("rolls", 0)
-            if items:
-                for entry in items:
-                    if entry["name"] == item_name:
-                        chance = entry["chance"]
-                        # Now find it in distribution_data
-                        for room, room_content in distribution_data.items():
-                            for container, container_content in room_content.items():
-                                proc_lists = container_content.get("procList", [])
-                                for proc_entry in proc_lists:
-                                    if proc_entry.get("name") == proclist:
-                                        entry_tuple = (room, container, proclist, chance, rolls)
-                                        if entry_tuple not in unique_entries:
-                                            containers_info.append({
-                                                "Room": room,
-                                                "Container": container,
-                                                "Proclist": proclist,
-                                                "Chance": chance,
-                                                "Rolls": rolls
-                                            })
-                                            unique_entries.add(entry_tuple)
-            else:
-                # Procedural entry with no items, check nested objects
+            for entry in items:
+                if entry["name"] == item_name:
+                    chance = entry["chance"]
+                    for room, room_content in distribution_data.items():
+                        for container, container_content in room_content.items():
+                            proc_lists = container_content.get("procList", [])
+                            for proc_entry in proc_lists:
+                                if proc_entry.get("name") == proclist:
+                                    entry_tuple = (room, container, proclist, chance, rolls)
+                                    if entry_tuple not in unique_entries:
+                                        containers_info.append({
+                                            "Room": room,
+                                            "Container": container,
+                                            "Proclist": proclist,
+                                            "Chance": chance,
+                                            "Rolls": rolls
+                                        })
+                                        unique_entries.add(entry_tuple)
+            # Process junk items
+            junk = content.get("junk", {})
+            junk_items = junk.get("items", [])
+            junk_rolls = junk.get("rolls", 0)
+            for entry in junk_items:
+                if entry["name"] == item_name:
+                    chance = entry["chance"]
+                    for room, room_content in distribution_data.items():
+                        for container, container_content in room_content.items():
+                            proc_lists = container_content.get("procList", [])
+                            for proc_entry in proc_lists:
+                                if proc_entry.get("name") == proclist:
+                                    entry_tuple = (room, container, proclist, chance, junk_rolls)
+                                    if entry_tuple not in unique_entries:
+                                        containers_info.append({
+                                            "Room": room,
+                                            "Container": container,
+                                            "Proclist": proclist,
+                                            "Chance": chance,
+                                            "Rolls": junk_rolls
+                                        })
+                                        unique_entries.add(entry_tuple)
+            # If neither primary items nor junk exist, check nested objects
+            if not items and not junk:
                 process_nested_object(content, room_name=proclist)
-
         return containers_info
 
     def get_vehicle_info(item_name):
