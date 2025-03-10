@@ -60,6 +60,12 @@ BODY_PARTS_DICT = {
     "Shoes": [
         "Foot_L", "Foot_R"
     ],
+    "Foot_L": [
+        "Foot_L"
+    ],
+    "Foot_R": [
+        "Foot_R"
+    ],
     "ArmHand_L": [
         "ForeArm_L", "Hand_L", "UpperArm_L"
     ],
@@ -99,6 +105,9 @@ BODY_PARTS_DICT = {
     "Head": [
         "Head"
     ],
+    "UpperLegs": [
+        "UpperLeg_L", "UpperLeg_R"
+    ],
     "LowerLegs": [
         "LowerLeg_L", "LowerLeg_R"
     ],
@@ -122,6 +131,12 @@ BODY_PARTS_DICT = {
     ],
     "TorsoUpperArms": [
         "Torso_Upper", "UpperArm_L", "UpperArm_R"
+    ],
+    "UpperArms": [
+        "UpperArm_L", "UpperArm_R"
+    ],
+    "LowerArms": [
+        "ForeArm_L", "ForeArm_R"
     ],
     "Torso_Upper": [
         "Torso_Upper"
