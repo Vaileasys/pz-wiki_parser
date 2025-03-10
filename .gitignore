@@ -12,6 +12,7 @@ resources/*
 !resources/item_id_dictionary.csv
 !resources/color_reference.json
 !resources/sprite_list.json
+!resources/blood_location.json
 
 ## Translations
 resources/Translate/*

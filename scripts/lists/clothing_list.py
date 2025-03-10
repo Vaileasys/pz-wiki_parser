@@ -250,66 +250,6 @@ SECTION_DICT = {
     }
 }
 
-# Taken from 'BloodClothingType.class' init() - updated Build 42.0.2
-BODY_PART_DICT = {
-    "Apron": ["Torso_Upper", "Torso_Lower", "UpperLeg_L", "UpperLeg_R"],
-    "ShirtNoSleeves": ["Torso_Upper", "Torso_Lower", "Back"],
-    "JumperNoSleeves": ["Torso_Upper", "Torso_Lower", "Back"],
-    "Shirt": ["Torso_Upper", "Torso_Lower", "Back", "UpperArm_L", "UpperArm_R"],
-    "ShirtLongSleeves": ["Torso_Upper", "Torso_Lower", "Back", "UpperArm_L", "UpperArm_R", "ForeArm_L", "ForeArm_R"],
-    "Jumper": ["Torso_Upper", "Torso_Lower", "Back", "UpperArm_L", "UpperArm_R", "ForeArm_L", "ForeArm_R"],
-    "Jacket": ["Torso_Upper", "Torso_Lower", "Back", "UpperArm_L", "UpperArm_R", "ForeArm_L", "ForeArm_R", "Neck"],
-    "LongJacket": ["Torso_Upper", "Torso_Lower", "Back", "UpperArm_L", "UpperArm_R", "ForeArm_L", "ForeArm_R", "Neck", "Groin", "UpperLeg_L", "UpperLeg_R"],
-    "ShortsShort": ["Groin", "UpperLeg_L", "UpperLeg_R"],
-    "Trousers": ["Groin", "UpperLeg_L", "UpperLeg_R", "LowerLeg_L", "LowerLeg_R"],
-    "Shoes": ["Foot_L", "Foot_R"],
-    "FullHelmet": ["Head"],
-    "Bag": ["Back"],
-    "Hands": ["Hand_L", "Hand_R"],
-    "Hand_L": ["Hand_L"],
-    "Hand_R": ["Hand_R"],
-    "Head": ["Head"],
-    "Neck": ["Neck"],
-    "Groin": ["Groin"],
-    "UpperBody": ["Torso_Upper"],
-    "LowerBody": ["Torso_Lower"],
-    "LowerLegs": ["LowerLeg_L", "LowerLeg_R"],
-    "LowerLeg_L": ["LowerLeg_L"],
-    "LowerLeg_R": ["LowerLeg_R"],
-    "UpperLegs": ["UpperLeg_L", "UpperLeg_R"],
-    "UpperLeg_L": ["UpperLeg_L"],
-    "UpperLeg_R": ["UpperLeg_R"],
-    "UpperArms": ["UpperArm_L", "UpperArm_R"],
-    "UpperArm_L": ["UpperArm_L"],
-    "UpperArm_R": ["UpperArm_R"],
-    "LowerArms": ["ForeArm_L", "ForeArm_R"],
-    "ForeArm_L": ["ForeArm_L"],
-    "ForeArm_R": ["ForeArm_R"],
-}
-
-# Taken from 'BodyPartType.class' getDisplayName() - updated Build 42.0.2
-BODY_PART_TRANSLATIONS = {
-    "Hand_L": "Left_Hand",
-    "Hand_R": "Right_Hand",
-    "ForeArm_L": "Left_Forearm",
-    "ForeArm_R": "Right_Forearm",
-    "UpperArm_L": "Left_Upper_Arm",
-    "UpperArm_R": "Right_Upper_Arm",
-    "Torso_Upper": "Upper_Torso",
-    "Torso_Lower": "Lower_Torso",
-    "Head": "Head",
-    "Neck": "Neck",
-    "Groin": "Groin",
-    "UpperLeg_L": "Left_Thigh",
-    "UpperLeg_R": "Right_Thigh",
-    "LowerLeg_L": "Left_Shin",
-    "LowerLeg_R": "Right_Shin",
-    "Foot_L": "Left_Foot",
-    "Foot_R": "Right_Foot",
-    "Back": "Back",
-    "Unknown": "Unknown_Body_Part"
-}
-
 # Map fabric types to an item id
 FABRIC_TYPE = {
     "Cotton": 'Base.RippedSheets',

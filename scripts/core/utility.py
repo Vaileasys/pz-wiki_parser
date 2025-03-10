@@ -7,7 +7,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 from scripts.parser import item_parser, recipe_parser
 from scripts.core import translate, logger, version, lua_helper
-from scripts.core.constants import DATA_PATH
+from scripts.core.constants import (DATA_PATH, RESOURCE_PATH)
 
 
 parsed_burn_data = {}
@@ -155,66 +155,15 @@ def get_body_parts(item_data, link=True, default=""):
     :returns: Translated body parts.
     :rtype: body_parts (list)
     """
+    JSON_DIR = Path(RESOURCE_PATH)
+    JSON_FILE = "blood_location.json"
 
-    # Taken from 'BloodClothingType.class' init() - updated Build 42.0.2
-    BODY_PART_DICT = {
-        "Apron": ["Torso_Upper", "Torso_Lower", "UpperLeg_L", "UpperLeg_R"],
-        "ShirtNoSleeves": ["Torso_Upper", "Torso_Lower", "Back"],
-        "JumperNoSleeves": ["Torso_Upper", "Torso_Lower", "Back"],
-        "Shirt": ["Torso_Upper", "Torso_Lower", "Back", "UpperArm_L", "UpperArm_R"],
-        "ShirtLongSleeves": ["Torso_Upper", "Torso_Lower", "Back", "UpperArm_L", "UpperArm_R", "ForeArm_L", "ForeArm_R"],
-        "Jumper": ["Torso_Upper", "Torso_Lower", "Back", "UpperArm_L", "UpperArm_R", "ForeArm_L", "ForeArm_R"],
-        "Jacket": ["Torso_Upper", "Torso_Lower", "Back", "UpperArm_L", "UpperArm_R", "ForeArm_L", "ForeArm_R", "Neck"],
-        "LongJacket": ["Torso_Upper", "Torso_Lower", "Back", "UpperArm_L", "UpperArm_R", "ForeArm_L", "ForeArm_R", "Neck", "Groin", "UpperLeg_L", "UpperLeg_R"],
-        "ShortsShort": ["Groin", "UpperLeg_L", "UpperLeg_R"],
-        "Trousers": ["Groin", "UpperLeg_L", "UpperLeg_R", "LowerLeg_L", "LowerLeg_R"],
-        "Shoes": ["Foot_L", "Foot_R"],
-        "FullHelmet": ["Head"],
-        "Bag": ["Back"],
-        "Hands": ["Hand_L", "Hand_R"],
-        "Hand_L": ["Hand_L"],
-        "Hand_R": ["Hand_R"],
-        "Head": ["Head"],
-        "Neck": ["Neck"],
-        "Groin": ["Groin"],
-        "UpperBody": ["Torso_Upper"],
-        "LowerBody": ["Torso_Lower"],
-        "LowerLegs": ["LowerLeg_L", "LowerLeg_R"],
-        "LowerLeg_L": ["LowerLeg_L"],
-        "LowerLeg_R": ["LowerLeg_R"],
-        "UpperLegs": ["UpperLeg_L", "UpperLeg_R"],
-        "UpperLeg_L": ["UpperLeg_L"],
-        "UpperLeg_R": ["UpperLeg_R"],
-        "UpperArms": ["UpperArm_L", "UpperArm_R"],
-        "UpperArm_L": ["UpperArm_L"],
-        "UpperArm_R": ["UpperArm_R"],
-        "LowerArms": ["ForeArm_L", "ForeArm_R"],
-        "ForeArm_L": ["ForeArm_L"],
-        "ForeArm_R": ["ForeArm_R"],
-    }
-
-    # Taken from 'BodyPartType.class' getDisplayName() - updated Build 42.0.2
-    BODY_PART_TRANSLATIONS = {
-        "Hand_L": "Left_Hand",
-        "Hand_R": "Right_Hand",
-        "ForeArm_L": "Left_Forearm",
-        "ForeArm_R": "Right_Forearm",
-        "UpperArm_L": "Left_Upper_Arm",
-        "UpperArm_R": "Right_Upper_Arm",
-        "Torso_Upper": "Upper_Torso",
-        "Torso_Lower": "Lower_Torso",
-        "Head": "Head",
-        "Neck": "Neck",
-        "Groin": "Groin",
-        "UpperLeg_L": "Left_Thigh",
-        "UpperLeg_R": "Right_Thigh",
-        "LowerLeg_L": "Left_Shin",
-        "LowerLeg_R": "Right_Shin",
-        "Foot_L": "Left_Foot",
-        "Foot_R": "Right_Foot",
-        "Back": "Back",
-        "Unknown": "Unknown_Body_Part"
-    }
+    json_path = JSON_DIR / JSON_FILE
+    with open(json_path, 'r', encoding='utf-8') as file:
+        json_data = json.load(file)
+    
+    blood_locations = json_data.get("BloodLocation")
+    body_part_names = json_data.get("DisplayName")
 
     language_code = translate.get_language_code()
     blood_location = item_data.get('BloodLocation', None)
@@ -227,11 +176,13 @@ def get_body_parts(item_data, link=True, default=""):
     body_parts = []
     
     for location in blood_location:
-        if location in BODY_PART_DICT:
-            for part in BODY_PART_DICT[location]:
+        if location in blood_locations:
+            for part in blood_locations[location]:
                 if link:
-                    translation_string = BODY_PART_TRANSLATIONS.get(part, "Unknown_Body_Part")
-                    translated_part = translate.get_translation(translation_string, 'BodyPart')
+                    translation_string = body_part_names.get(part, body_part_names.get("MAX"))
+                    if translation_string is None:
+                        print(f"No translation string found for {part}")
+                    translated_part = translate.get_translation(translation_string)
                 
                     if language_code != 'en':
                         body_parts.append(f"[[Body parts/{language_code}#{translated_part}|{translated_part}]]")
