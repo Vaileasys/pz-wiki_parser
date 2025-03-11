@@ -185,18 +185,18 @@ def get_body_parts(item_data, link=True, default=""):
                     translated_part = translate.get_translation(translation_string)
                 
                     if language_code != 'en':
-                        body_parts.append(f"[[Body parts/{language_code}#{translated_part}|{translated_part}]]")
+                        body_parts.append(f"[[BloodLocation/{language_code}#{part}|{translated_part}]]")
                     else:
-                        body_parts.append(f"[[Body parts#{translated_part}|{translated_part}]]")
+                        body_parts.append(f"[[BloodLocation#{part}|{translated_part}]]")
                 else:
                     body_parts.append(part)
 
         else:
             if link:
                 if language_code != 'en':
-                    body_parts.append(f"[[Body parts#{location}|{location}]]")
+                    body_parts.append(f"[[BloodLocation#{location}|{location}]]")
                 else:
-                    body_parts.append(f"[[Body parts/{language_code}#{location}|{location}]]")
+                    body_parts.append(f"[[BloodLocation/{language_code}#{location}|{location}]]")
             else:
                 body_parts.append(location)
 
