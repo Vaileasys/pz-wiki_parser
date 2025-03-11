@@ -155,9 +155,6 @@ def get_recipes(item_data):
 
         for recipe in recipes_raw:
             recipes.append(utility.get_recipe(recipe))
-            if recipe == "KitchenTools":
-                print(utility.get_recipe(recipe))
-
         
         recipes_output = "<br>".join(recipes)
     return recipes_output

@@ -883,6 +883,10 @@ def get_recipe(recipe_id):
                     mapper = outputs.get("mapper")
                     if mapper is not None:
                         product_id = recipe.get("itemMappers").get(mapper).get("default")
+                    elif outputs.get("displayName") is not None:
+                        # TODO: Check how this gets translated - this is for building. e.g. 'Metal_Counter_Lvl1'
+                        product = f"[[{outputs.get('displayName')}|{recipe_name}]]"
+                        return product
                 else:
                     product_id = items[0]
                 product_page = get_page(product_id)
