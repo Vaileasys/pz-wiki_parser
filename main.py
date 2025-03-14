@@ -30,7 +30,8 @@ menu_structure = {
             '6': {'module': 'distribution', 'name': 'Distributions', 'description': 'Generate distribution files.'},
             '7': {'module': 'evolvedrecipe', 'name': 'Evolved recipes', 'description': 'Parse evolved recipes.'},
             '8': {'module': 'item_body_part', 'name': 'Body part', 'description': 'Generates body part templates.'},
-            '9': {'module': 'recipe_format', 'name': 'Recipe parser', 'description': 'Create recipe list page.'}
+            '9': {'module': 'recipe_format', 'name': 'Recipe parser', 'description': 'Process recipes.'},
+            '10': {'module': 'researchrecipes', 'name': 'Research recipes', 'description': 'Process research recipes.'}
         },
     },
     '3': {
