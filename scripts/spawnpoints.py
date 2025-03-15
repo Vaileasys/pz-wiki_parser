@@ -1,6 +1,6 @@
 from pathlib import Path
 from scripts.core import lua_helper, utility, translate
-from scripts.core.constants import LUA_PATH
+from scripts.core.constants import (LUA_PATH, DATA_PATH)
 
 OUTPUT_DIR = Path("output") / "spawnpoints"
 LUA_DIR = Path(LUA_PATH) / "spawnpoints"
@@ -101,7 +101,7 @@ def process_lua_file(lua_file):
 
         # Remove 'spawnpoints' key
         spawnpoints_data = next(iter(parsed_data.values()), {})
-#        utility.save_cache(spawnpoints_data, lua_file.stem + "_raw.json")
+#        utility.save_cache(spawnpoints_data, lua_file.stem + "_raw.json", f"{DATA_PATH}/spawnpoints")
 
         # Check if coordinates use old cell coordinates (300x300)
         is_worldcoord = False
@@ -114,12 +114,12 @@ def process_lua_file(lua_file):
             normalised_data = normalise_spawn_data(spawnpoints_data)
         else:
             normalised_data = spawnpoints_data
-#        utility.save_cache(normalised_data, lua_file.stem + "_noramlised.json")
+        utility.save_cache(normalised_data, lua_file.stem + "_noramlised.json", f"{DATA_PATH}/spawnpoints")
 
         reordered_data = reorder_spawn_data(normalised_data)
 
         
-#        utility.save_cache(reordered_data, lua_file.stem + "_reordered.json")
+#        utility.save_cache(reordered_data, lua_file.stem + "_reordered.json", f"{DATA_PATH}/spawnpoints")
 
         write_to_file(reordered_data, f"{lua_file.stem}.txt")
     except KeyError as e:
