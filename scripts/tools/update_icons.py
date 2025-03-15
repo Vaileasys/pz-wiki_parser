@@ -1,64 +1,142 @@
-# Tool used to update/create the 'sprite_list.json' file
+# Tool used to update/create the 'texture_names.json' file
 
 import shutil
 from pathlib import Path
-from scripts.core import utility
+from scripts.core import utility, config_manager
 from scripts.core.constants import RESOURCE_PATH
 
 RESOURCES_DIR = Path(RESOURCE_PATH)
 ICON_DIR = RESOURCES_DIR / "icons"
-NEW_ICON_DIR = ICON_DIR / "new_textures"
-ICON_FILE = "sprite_list.json"
-SPRITE_LIST_FILE = RESOURCES_DIR / ICON_FILE
+TEXTURES_JSON = "texture_names.json"
+TEXTURES_JSON_PATH = RESOURCES_DIR / TEXTURES_JSON
 
+new_textures = {}
+textures_data = {}
 
 def load_existing_textures():
-    if SPRITE_LIST_FILE.exists():
-        return utility.load_cache(SPRITE_LIST_FILE)
+    if TEXTURES_JSON_PATH.exists():
+        return utility.load_cache(TEXTURES_JSON_PATH, suppress=True)
     return {}
 
-def update_textures_list():
-    RESOURCES_DIR.mkdir(parents=True, exist_ok=True)
-    
-    existing_textures = load_existing_textures()
-    
-    png_dict = {}
-    new_textures = {}
-    
-    for file in ICON_DIR.glob('*.png'):
+
+def get_texture_names(textures_dir: Path, folder_key: str = None, prefix_blacklist: list = [], prefix_whitelist: list = []):
+    """
+    Extracts all texture names from the directory, categorised by prefix.
+    Returns a dictionary of all textures, grouped by prefix or folder key.
+    """
+    global new_textures
+    global textures_data
+    texture_dict = {}
+
+    for file in textures_dir.glob('*.png'):
         filename = file.name
-        
+
+        # Extract prefix and name
         if "_" in filename:
             prefix, name = filename.split("_", 1)
+            if prefix != "Item":
+                name = filename
         else:
-            prefix, name = "Other", filename
-        
-        if prefix not in png_dict:
-            png_dict[prefix] = []
-        
-        if name not in png_dict[prefix]:
-            png_dict[prefix].append(name)
-        
-        # Check if the icon is new
-        if prefix not in existing_textures or name not in existing_textures.get(prefix, []):
-            if prefix not in new_textures:
-                new_textures[prefix] = []
-            new_textures[prefix].append(name)
-        
-            # Copy new icon to new_textures folder
-            prefix_dir = NEW_ICON_DIR / prefix
-            prefix_dir.mkdir(parents=True, exist_ok=True)
-            shutil.copy(file, prefix_dir / name)
-    
-    for prefix, files in png_dict.items():
-        print(f"{prefix}: {len(files)} files")
-    
-    utility.save_cache(png_dict, ICON_FILE, RESOURCES_DIR)
-    
+            prefix, name = "Other", filename  # Default case
+
+        # If prefix is blacklisted, skip it
+        if prefix in prefix_blacklist:
+            continue
+
+        # If a whitelist exists, ensure prefix is included
+        if prefix_whitelist and prefix not in prefix_whitelist:
+            continue
+
+        # Determine the assigned key
+        assigned_key = folder_key if folder_key else prefix
+
+        # Add texture to the dictionary
+        texture_dict.setdefault(assigned_key, []).append(name)
+
+    for key, texture_list in texture_dict.items():
+        # Ensure key exists in the existing dictionary
+        if key not in textures_data:
+            textures_data[key] = []
+
+        new_entries = []
+        for name in texture_list:
+            if name not in textures_data[key]:  # Use name directly
+                textures_data[key].append(name)
+                new_entries.append(name)
+
+        if new_entries:
+            new_textures.setdefault(key, []).extend(new_entries)
+
+
+def copy_new_textures(texture_dir):
     if new_textures:
+        for folder_key, files in new_textures.items():
+            prefix_dir = texture_dir / "new_textures" / folder_key
+            prefix_dir.mkdir(parents=True, exist_ok=True)
+
+            for filename in files:
+                if folder_key == "Item":
+                    filename = f"Item_{filename}"
+                texture_path = texture_dir / filename
+                if texture_path.exists():
+                    shutil.copy(texture_path, prefix_dir / filename)
+
+            print(f"New textures copied to '{prefix_dir}'")
+
+
+def save_new_texture_data():
+    # Save only if there are new textures
+    if new_textures:
+        for key, files in new_textures.items():
+            print(f"{key}: {len(files)} new textures found")
+
         utility.save_cache(new_textures, "new_textures.json")
-        for prefix, files in new_textures.items():
-            print(f"{prefix}: {len(files)} new textures found")
+    else:
+        print("No new textures found.")
+
+
+def main():
+    global textures_data
+    textures_data = load_existing_textures()
+    get_texture_names(ICON_DIR)
+    copy_new_textures(ICON_DIR)
+
+    # Prefixes to be skipped
+    prefix_blacklist = ["Item", "Build", "Zombie", "Male", "Male", "Puddles", "Bob", "BobZ", "BobZ2", "BobZ3", "F", "Hair"]
+    
+    # Texture folders to be copied
+    texture_folders = [
+        ".",
+#        "Clothes",
+#        "weapons",
+#        "WorldItems"
+    ]
+    textures_dir = Path(config_manager.get_config("game_directory")) / "media" / "textures"
+
+    for folder_name in texture_folders:
+        source_folder = textures_dir / folder_name if folder_name != "." else textures_dir
+        if source_folder.exists():
+            if folder_name == ".":
+                # Non-recursive for root folder
+                get_texture_names(textures_dir, prefix_whitelist=["Item", "Build"])
+#                get_texture_names(textures_dir, prefix_blacklist=prefix_blacklist, folder_key="textures")
+                
+            else:
+                # Recursive for other folders
+                get_texture_names(source_folder, folder_key=folder_name)
+                for subfolder in source_folder.glob("**/*"):
+                    if subfolder.is_dir():
+                        get_texture_names(subfolder, folder_key=folder_name)
+        else:
+            print(f"Source folder {source_folder} does not exist, skipping...")
+
+    save_new_texture_data()
+    if new_textures:
+        for key in textures_data:
+            textures_data[key].sort(key=str.lower)
+
+        utility.save_cache(textures_data, TEXTURES_JSON, RESOURCES_DIR)
+
 
 if __name__ == "__main__":
-    update_textures_list()
+    main()
