@@ -107,6 +107,7 @@ To make changes to the `config.ini` file, open the file and adjust the values yo
 * `first_time_run`: This is an automatic flag that designates whether to show the first time setup.
 * `default_language`: The default language the parser should use, you can still specify other languages when running modules.
 * `version`: The version of your project zomboid installation, or resource files.
+* `game_directory`: The root directory where the game is installed. This path should point to the folder containing the game executable.
 
 
 # Usage
