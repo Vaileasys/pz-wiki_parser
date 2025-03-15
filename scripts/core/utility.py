@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from scripts.parser import item_parser, recipe_parser
-from scripts.core import translate, logger, version, lua_helper
+from scripts.core import translate, logger, version, lua_helper, config_manager
 from scripts.core.constants import (DATA_PATH, RESOURCE_PATH)
 
 
@@ -91,39 +91,39 @@ def get_clothing_xml_value(item_data, xml_value):
 
 # gets model for item_data as PNG
 def get_model(item_data):
-    texture_names_path = Path("resources") / "texture_names.json"
+    textures_dir = Path(config_manager.get_config("game_directory")) / "media" / "textures"
     model = None
 
     if 'ClothingItem' in item_data:
-        model = get_clothing_xml_value(item_data, "textureChoices")
-        if model is None:
-            model = get_clothing_xml_value(item_data, "m_BaseTextures")
+        model_path = get_clothing_xml_value(item_data, "textureChoices")
+        if model_path is None:
+            model_path = get_clothing_xml_value(item_data, "m_BaseTextures")
         
         # Remove filepath and capitalize
-        if model is not None:
-            if isinstance(model, list):
-                model = [value.split("\\")[-1].capitalize() for value in model]
-            else:
-                model = model.split("\\")[-1].capitalize()
+        if model_path is not None:
+            if isinstance(model_path, str):
+                model_path = [model_path]
 
-            with open(texture_names_path, 'r') as file:
-                texture_data = json.load(file)
-
-            if isinstance(model, str):
-                model = [model]
+            model = []
             
-            # Check the json file and get the correct capitalisation for the model texture
-            for i, model_value in enumerate(model):
-                for values in texture_data.values():
-                    for value in values:
-                        
-                        if value.lower() == model_value.lower():
-                            model[i] = value
+            # Check the file path and get the correct capitalisation for the model texture
+            for model_value in model_path:
+                model_value = model_value.replace("\\", "/")
+                full_path = textures_dir / f"{model_value}.png"
+
+                parent_dir = full_path.parent
+                filename_lower = full_path.name.lower()
+
+                if parent_dir.exists():
+                    for file in parent_dir.iterdir():
+                        if file.is_file() and file.name.lower() == filename_lower:
+                            file_match = file.stem
                             break
 
-                    else:
-                        continue
-                    break
+                if file_match:
+                    model.append(file_match)
+                else:
+                    model.append(model_value)
 
     elif 'WorldStaticModelsByIndex' in item_data:
         model = item_data['WorldStaticModelsByIndex']
@@ -653,11 +653,10 @@ def find_icon(item_id, all_icons=False):
     :return: The icon (or list of icons) associated with the item_id. Returns the default icon ("Question_On") if no specific icon is found.
     :rtype: icon (list[str])
     """
-    icon_dir = os.path.join('resources', 'icons')
     icon_default = "Question_On"
     icon = icon_default
-    icon_cache = load_cache("resources/sprite_list.json", "sprite cache", suppress=True)
-    icon_cache_files = icon_cache.get("Item", [])
+    texture_cache = load_cache(f"{RESOURCE_PATH}/texture_names.json", "texture cache", suppress=True)
+    icon_cache_files = texture_cache.get("Item", [])
 
     def check_icon_exists(icon_name, icon_cache_files):
 
