@@ -1,6 +1,5 @@
 from pathlib import Path
-from tqdm import tqdm
-from scripts.core import lua_helper, utility, translate
+from scripts.core import lua_helper, utility, translate, version
 from scripts.parser import item_parser
 from scripts.core.constants import OUTPUT_PATH
 
@@ -11,10 +10,11 @@ hotbar_data = {}
 # All items from item_parser
 all_item_data = {}
 # Cache items
-items_data = {
+attachment_items_def = {
     "AttachmentsProvided": {},
     "AttachmentType": {}
 }
+attachment_items = {}
 # Items that use a slot
 attached_item_data = {}
 # Items that provide a slot
@@ -49,21 +49,21 @@ def get_attachment_types(suppress=None):
     return attachment_types
 
 
-def get_items_data(suppress=None):
+def get_attachment_items(suppress=None):
     global _suppress
     if suppress is None:
         suppress = False
     suppress = _suppress
 
-    if not items_data:
+    if not attachment_items:
         generate_data()
-    return items_data
+    return attachment_items
 
 
 def generate_hotbar_slots():
     global hotbar_slots
     global attachment_types
-    global items_data
+    global attachment_items
     hotbar_slots = hotbar_data
     for slot, slot_data in hotbar_data.items():
         slot_name = hotbar_slots[slot].get("name")
@@ -77,7 +77,7 @@ def generate_hotbar_slots():
             if slot in item_data["AttachmentsProvided"]:
                 hotbar_slots[slot]["items"].append(item_id)
                 # Get and store item data
-                if item_id not in items_data["AttachmentsProvided"]:
+                if item_id not in attachment_items["AttachmentsProvided"]:
                     name = utility.get_name(item_id, item_data)
                     page = utility.get_page(item_id, name)
                     icon = utility.get_icon(item_id, True, True, True)
@@ -86,9 +86,9 @@ def generate_hotbar_slots():
                         "page": page,
                         "icon": icon,
                     }
-                    items_data["AttachmentsProvided"][item_id] = new_item_data
+                    attachment_items["AttachmentsProvided"][item_id] = new_item_data
         # Sort items by 'name'
-        items_data["AttachmentsProvided"] = dict(sorted(items_data["AttachmentsProvided"].items(), key=lambda item: item[1]["name"]))
+        attachment_items["AttachmentsProvided"] = dict(sorted(attachment_items["AttachmentsProvided"].items(), key=lambda item: item[1]["name"]))
         
         for attachment, attachment_name in slot_data.get("attachments", {}).items():
             if attachment not in attachment_types:
@@ -99,7 +99,7 @@ def generate_hotbar_slots():
                     if attachment in item_data.get("AttachmentType"):
                         attachment_types[attachment]["items"].append(item_id)
                         # Get and store item data
-                        if item_id not in items_data["AttachmentType"]:
+                        if item_id not in attachment_items["AttachmentType"]:
                             name = utility.get_name(item_id, item_data)
                             page = utility.get_page(item_id, name)
                             icon = utility.get_icon(item_id, True, True, True)
@@ -108,15 +108,16 @@ def generate_hotbar_slots():
                                 "page": page,
                                 "icon": icon,
                             }
-                            items_data["AttachmentType"][item_id] = new_item_data
+                            attachment_items["AttachmentType"][item_id] = new_item_data
         # Sort items by 'name'
-        items_data["AttachmentType"] = dict(sorted(items_data["AttachmentType"].items(), key=lambda item: item[1]["name"]))
+        attachment_items["AttachmentType"] = dict(sorted(attachment_items["AttachmentType"].items(), key=lambda item: item[1]["name"]))
         # Sort attachment types by key
         attachment_types = {key: attachment_types[key] for key in sorted(attachment_types)}
 
     # Sort slots by 'name'
     hotbar_slots = dict(sorted(hotbar_slots.items(), key=lambda item: item[1]["name"]))
 
+    utility.save_cache(attachment_items, "attachment_items.json", suppress=_suppress)
     utility.save_cache(hotbar_slots, "hotbar_slots.json", suppress=_suppress)
     utility.save_cache(attachment_types, "attachment_types.json", suppress=_suppress)
 
@@ -181,8 +182,8 @@ def write_attachment_table():
         items = []
         if slot_items_list:
             for item_id in slot_items_list:
-                item_name = items_data["AttachmentType"][item_id]["name"]
-                item_page = items_data["AttachmentType"][item_id]["page"]
+                item_name = attachment_items["AttachmentType"][item_id]["name"]
+                item_page = attachment_items["AttachmentType"][item_id]["page"]
                 item_link = utility.format_link(item_name, item_page)
 
                 items.append(item_link)
@@ -258,10 +259,10 @@ def write_hotbar_table():
         items = []
         if slot_items_list:
             for item_id in slot_items_list:
-                item_name = items_data["AttachmentsProvided"][item_id]["name"]
-                item_page = items_data["AttachmentsProvided"][item_id]["page"]
+                item_name = attachment_items["AttachmentsProvided"][item_id]["name"]
+                item_page = attachment_items["AttachmentsProvided"][item_id]["page"]
                 item_link = utility.format_link(item_name, item_page)
-                item_icon = items_data["AttachmentsProvided"][item_id]["icon"]
+                item_icon = attachment_items["AttachmentsProvided"][item_id]["icon"]
 
                 items.append(f"{item_icon} {item_link}")
             items = '| style="white-space:nowrap;" | ' + "<br>".join(items)
@@ -355,10 +356,31 @@ def parse_data():
 def generate_data():
     """Generates data by parsing data and modifying it."""
     # Separated from main() so we can get data without generating an output
-    parse_data()
-    get_items()
-    generate_hotbar_slots()
+    global hotbar_slots
+    global attachment_types
+    global attachment_items
+
+    game_version = version.get_version()
     
+    hotbar_slots, hotbar_slots_version = utility.load_cache("hotbar_slots.json", "hotbar slots", get_version=True)
+    attachment_types, attachment_types_version = utility.load_cache("attachment_types.json", "attachment types", get_version=True)
+    attachment_items, attachment_items_version = utility.load_cache("attachment_items.json", "attachment types", get_version=True)
+
+    if (hotbar_slots_version != game_version or 
+        attachment_types_version != game_version or 
+        attachment_items_version != game_version or
+        hotbar_slots_version == {} or 
+        attachment_types_version == {} or 
+        attachment_items_version == {}):
+
+        hotbar_slots = {}
+        attachment_types = {}
+        attachment_items = attachment_items_def
+
+        parse_data()
+        get_items()
+        generate_hotbar_slots()
+
 
 def main():
     generate_data()
