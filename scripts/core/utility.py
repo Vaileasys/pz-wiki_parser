@@ -11,6 +11,7 @@ from scripts.core.constants import (DATA_PATH, RESOURCE_PATH)
 
 
 parsed_burn_data = {}
+item_id_dict_data = {}
 
 # gets 'Tags' for item_data
 def get_tags(item_data):
@@ -627,15 +628,55 @@ def get_name(item_id, item_data=None, language=None):
     return item_name
 
 
+def get_item_id_data(suppress=False):
+    """
+    Loads item_id_dictionary.csv into memory, mapping each page name to a list of item IDs found in its infobox.
+
+    :param suppress (bool, optional): Suppress print statements. Defaults to False.
+
+    :return: Returns all page names and the item IDs in the page's infobox.
+    :rtype: item_id_dict_data (dict)
+    """
+    global item_id_dict_data
+    dict_csv = f'{RESOURCE_PATH}/item_id_dictionary.csv'
+
+    if not item_id_dict_data:
+        cache_file = "item_id_dictionary.json"
+        cache_version, cache_data = load_cache(cache_file, 'Item ID dictionary', get_version=True, suppress=suppress)
+
+        if cache_version != version.get_version():
+            data = {}
+
+            with open(dict_csv, mode='r', encoding='utf-8') as csv_file:
+                reader = csv.reader(csv_file)
+
+                next(reader, None)
+
+                for row in reader:
+                    if not row:
+                        continue
+
+                    key = row[0]
+                    values = list(filter(lambda x: x.strip(), row[1:]))
+
+                    data[key] = values
+            
+            item_id_dict_data = data
+            save_cache(item_id_dict_data, cache_file, suppress=suppress)
+        
+        else:
+            item_id_dict_data = cache_data
+    
+    return item_id_dict_data
+
+
 # get page name based on item_id using 'item_id_dictionary.csv'
 def get_page(item_id, name="Unknown"):
-    dict_csv = 'resources/item_id_dictionary.csv'
-    
-    with open(dict_csv, mode='r', newline='') as csv_file:
-        reader = csv.reader(csv_file)
-        for row in reader:
-            if item_id in row[1:]:
-                return row[0]
+    item_id_data = get_item_id_data(True)
+
+    for page_name, item_ids in item_id_data.items():
+        if item_id in item_ids:
+            return page_name
 
 #    print(f"Couldn't find a page for '{item_id}'")
     logger.write(f"Couldn't find a page for '{item_id}'")
