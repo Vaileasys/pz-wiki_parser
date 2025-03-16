@@ -2,26 +2,23 @@ import os
 import shutil
 from tqdm import tqdm
 from scripts.parser import item_parser
-from scripts.core import translate, utility, logger, version
+from scripts.core import translate, utility, logger, version, lua_helper
 from scripts.lists import hotbar_slots
 from scripts.core.constants import PBAR_FORMAT
 
-# Values located in forageSystem.lua line 102 'clothingPenalties' (Build 42.0.2)
-CLOTHING_PENALTIES = {
-    "FullSuitHead": '75',
-    "FullHat": '75',
-    "MaskFull": '50',
-    "SCBA": '50',
-    "SCBAnotank": '50',
-    "MaskEyes": '20',
-    "Mask": '20',
-    "Eyes": '2.5',
-    "LeftEye": '2.5',
-    "RightEye": '2.5',
-}
+# clothing vision penalties (percents)
+clothing_penalties = {}
 
 hotbar_slot_data = {}
 
+
+def generate_clothing_penalties():
+    """Extracts clothing penalties from 'forageSystem.lua' and stores in memory as 'clothing_penalties'."""
+    global clothing_penalties
+    lua_runtime = lua_helper.load_lua_file("forageSystem.lua", inject_lua=lua_helper.LUA_EVENTS)
+    parsed_data = lua_helper.parse_lua_tables(lua_runtime, tables=["forageSystem.clothingPenalties"])
+    clothing_penalties = parsed_data.get("forageSystem.clothingPenalties", {})
+#    utility.save_cache(clothing_penalties, "clothingPenalties.json")
 
 def get_item():
     while True:
@@ -166,8 +163,8 @@ def write_to_output(item_data, item_id, output_dir):
             
             foraging = ''
             body_location = item_data.get('BodyLocation', '')
-            if body_location in CLOTHING_PENALTIES:
-                foraging = f"-{CLOTHING_PENALTIES[body_location]}%"
+            if body_location in clothing_penalties:
+                foraging = f"-{clothing_penalties[body_location]}%"
 
             evolved_recipe = item_data.get('EvolvedRecipeName', '')
             if evolved_recipe:
@@ -342,6 +339,7 @@ def automatic_extraction(output_dir):
 def main():
     global hotbar_slot_data
     language_code = translate.get_language_code()
+    generate_clothing_penalties()
     output_dir = f'output/{language_code}/infoboxes'
 
     hotbar_slot_data = hotbar_slots.get_hotbar_slots()
