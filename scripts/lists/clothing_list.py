@@ -3,21 +3,22 @@ from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.core import utility, translate
 from scripts.core.constants import PBAR_FORMAT
+from scripts.lists import hotbar_slots
 
 # Used for getting table values
 TABLE_DICT = {
     "generic": ('icon', 'name', 'weight', 'body_location', 'item_id'),
-    "normal": ('icon', 'name', 'weight', 'body_location', 'body_part', 'have_holes', 'fabric', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
-    "armor": ('icon', 'name', 'weight', 'body_location', 'body_part', 'have_holes', 'condition_max', 'condition_lower_chance', 'condition_loss', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
-    "back": ('icon', 'name', 'weight', 'body_location', 'body_part', 'extra_slots', 'fabric', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
-    "torso": ('icon', 'name', 'weight', 'body_location', 'body_part', 'have_holes', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
-    "legs": ('icon', 'name', 'weight', 'body_location', 'body_part', 'have_holes', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
-    "eyes": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fall_chance', 'scratch_def', 'item_id',),
-    "head": ('icon', 'name', 'weight', 'body_location', 'body_part', 'fall_chance', 'have_holes', 'fabric', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
-    "shoes": ('icon', 'name', 'weight', 'body_location', 'body_part', 'stomp_power', 'condition_max', 'condition_lower_chance', 'move_speed', 'bite_def', 'scratch_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
-    "belt": ('icon', 'name', 'weight', 'body_location', 'body_part', 'extra_slots', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
+    "normal": ('icon', 'name', 'weight', 'body_location', 'attack_speed', 'body_part', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'fabric', 'have_holes', 'item_id',),
+    "armor": ('icon', 'name', 'weight', 'body_location', 'move_speed', 'attack_speed', 'body_part', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'have_holes', 'condition_max', 'condition_lower_chance', 'condition_loss', 'item_id',),
+    "back": ('icon', 'name', 'weight', 'body_location', 'extra_slots', 'attack_speed', 'body_part', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'fabric', 'item_id',),
+    "torso": ('icon', 'name', 'weight', 'body_location', 'move_speed', 'attack_speed', 'body_part', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'fabric', 'have_holes', 'item_id',),
+    "legs": ('icon', 'name', 'weight', 'body_location', 'move_speed', 'attack_speed', 'body_part', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'fabric', 'have_holes', 'item_id',),
+    "eyes": ('icon', 'name', 'weight', 'body_location', 'fall_chance', 'body_part', 'scratch_def', 'item_id',),
+    "head": ('icon', 'name', 'weight', 'body_location', 'fall_chance', 'attack_speed', 'body_part', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'fabric', 'have_holes', 'item_id',),
+    "shoes": ('icon', 'name', 'weight', 'body_location', 'stomp_power', 'move_speed', 'body_part', 'bite_def', 'scratch_def', 'insulation', 'wind_def', 'water_def', 'condition_max', 'condition_lower_chance', 'item_id',),
+    "belt": ('icon', 'name', 'weight', 'body_location', 'extra_slots', 'move_speed', 'attack_speed', 'body_part', 'bite_def', 'scratch_def', 'bullet_def', 'insulation', 'wind_def', 'water_def', 'fabric', 'item_id',),
     "wrist": ('icon', 'name', 'weight', 'body_location', 'display_time', 'sound_radius', 'item_id'),
-    "all": ('icon', 'name', 'weight', 'body_location', 'body_part', 'display_time', 'sound_radius', 'extra_slots', 'fall_chance', 'stomp_power', 'have_holes', 'fabric', 'move_speed', 'attack_speed', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'item_id',),
+    "all": ('icon', 'name', 'weight', 'body_location', 'display_time', 'sound_radius', 'extra_slots', 'fall_chance', 'stomp_power', 'move_speed', 'attack_speed', 'body_part', 'bite_def', 'scratch_def', 'bullet_def', 'neck_def', 'insulation', 'wind_def', 'water_def', 'fabric', 'have_holes', 'condition_max', 'condition_lower_chance', 'condition_loss', 'item_id',),
 }
 
 # Map table values with their headings
@@ -26,28 +27,28 @@ COLUMNS_DICT = {
     "name": "! Name",
     "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
     "body_location": "! [[File:UI_BodyLocation.png|32px|link=|Body location]]",
-    "body_part": "! [[File:UI_BodyPart.png|32px|link=|Body part(s)]]",
     "display_time": "! [[File:AlarmClock.png|28px|link=|Displays time]]",
     "sound_radius": "! [[File:UI_Noise.png|28px|link=|Sound radius]]",
+#    "extra_slots": "! [[File:Image.png|32px|link=|Hotbar slots]]",
     "extra_slots": "! Hotbar slots",
 #    "fall_chance": "! [[File:Image.png|32px|link=|Fall chance]]",
     "fall_chance": "! Fall chance",
-#    "have_holes": "! [[File:Image.png|32px|link=|Can get holes]]",
-    "have_holes": "! Gets holes",
-    "condition_max": "! [[File:UI_Condition_Max.png|link=|Max condition]]",
-    "condition_lower_chance": "! [[File:UI_Condition_Chance.png|link=|Condition lower chance]]",
-    "condition_loss": "! Condition loss",
-    "fabric": "! [[File:SewingBox.png|link=|Fabric type]]",
     "stomp_power": "! [[File:UI_Stomp.png|32px|link=|Stomp power]]",
     "move_speed": "! [[File:UI_Speed.png|link=|Movement speed]]",
     "attack_speed": "! [[File:UI_AttackSpeed.png|link=|Attack speed]]",
+    "body_part": "! [[File:UI_BodyPart.png|32px|link=|Body parts protected]]",
     "bite_def": "! [[File:UI_Protection_Bite.png|link=|Bite defense]]",
     "scratch_def": "! [[File:UI_Protection_Scratch.png|link=|Scratch defense]]",
     "bullet_def": "! [[File:UI_Protection_Bullet.png|link=|Bullet defense]]",
-    "neck_def": "! [[File:UI_Protection_Neck.png|32px|link=|Neck protection modifier]]",
+    "neck_def": "! [[File:UI_Protection_Neck.png|32px|link=|Neck protection]]",
     "insulation": "! [[File:UI_Protection_Heat.png|link=|Insulation]]",
     "wind_def": "! [[File:UI_Protection_Wind.png|link=|Wind resistance]]",
     "water_def": "! [[File:UI_Protection_Wet.png|link=|Water resistance]]",
+    "fabric": "! [[File:SewingBox.png|link=|Fabric type]]",
+    "have_holes": "! [[File:UI_Holes.png|link=|Can get holes]]",
+    "condition_max": "! [[File:UI_Condition_Max.png|link=|Max condition]]",
+    "condition_lower_chance": "! [[File:UI_Condition_Chance.png|link=|Condition lower chance]]",
+    "condition_loss": "! [[File:UI_Condition_Sub.png|link=|Condition loss]]",
     "item_id": "! Item ID",
 }
 
@@ -263,6 +264,7 @@ FABRIC_TYPE = {
 
 TABLE_HEADER ='{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"'
 
+hotbar_slot_data = {}
 
 # Combines txt files based on their position in SECTION_DICT
 def combine_clothing_files():
@@ -353,10 +355,6 @@ def process_item(item_data, item_id):
         else:
             item["body_location"] = f"[[BodyLocation/{language_code}#{body_location}|{body_location}]]"
 
-    body_parts_list = utility.get_body_parts(item_data, True, "-")
-    if "body_part" in columns:
-        item["body_part"] = '<br>'.join(body_parts_list)
-
     if "display_time" in columns:
         if item_data.get("Type") == 'AlarmClockClothing':
             item["display_time"] = 'True'
@@ -367,12 +365,20 @@ def process_item(item_data, item_id):
         item["sound_radius"] = item_data.get("SoundRadius", '-')
 
     if "extra_slots" in columns:
-        extra_slots = item_data.get("AttachmentsProvided", ['-'])
-        if isinstance(extra_slots, list):
-            extra_slots = "<br>".join(extra_slots)
+        attachments_provided = item_data.get('AttachmentsProvided')
+        if attachments_provided:
+            if isinstance(attachments_provided, str):
+                attachments_provided = [attachments_provided]
+            hotbar_attachments = []
+
+            for slot in attachments_provided:
+                slot_name = hotbar_slot_data[slot].get("name")
+                slot_link = f"[[AttachmentsProvided#{slot}|{slot_name}]]"
+                hotbar_attachments.append(slot_link)
+            attachments_provided = "<br>".join(hotbar_attachments)
         else:
-            extra_slots = str(extra_slots)
-        item["extra_slots"] = extra_slots
+            attachments_provided = '-'
+        item["extra_slots"] = attachments_provided
 
     if "fall_chance" in columns:
         item["fall_chance"] = utility.convert_to_percentage(item_data.get("ChanceToFall", '-'), True, True)
@@ -380,12 +386,40 @@ def process_item(item_data, item_id):
     if "stomp_power" in columns:
         item["stomp_power"] = utility.convert_to_percentage(item_data.get("StompPower", '-'), True)
 
-    if "have_holes" in columns:
-        if item_data.get("BloodLocation") is not None:
-            if can_have_holes:
-                item["have_holes"] = "[[File:UI_Tick.png|link=|Can get holes]]"
-            else:
-                item["have_holes"] = "[[File:UI_Cross.png|link=|Cannot get holes]]"
+    if "move_speed" in columns:
+        item["move_speed"] = utility.convert_to_percentage(item_data.get("RunSpeedModifier", '-'), False)
+
+    if "attack_speed" in columns:
+        item["attack_speed"] = utility.convert_to_percentage(item_data.get("CombatSpeedModifier", '-'), False)
+
+    body_parts_list = utility.get_body_parts(item_data, True, "-")
+    if "body_part" in columns:
+        item["body_part"] = '<br>'.join(body_parts_list)
+
+    if "bite_def" in columns:
+        item["bite_def"] = utility.convert_to_percentage(item_data.get("BiteDefense", '-'), True, True)
+
+    if "scratch_def" in columns:
+        item["scratch_def"] = utility.convert_to_percentage(item_data.get("ScratchDefense", '-'), True, True)
+
+    if "bullet_def" in columns:
+        item["bullet_def"] = utility.convert_to_percentage(item_data.get("BulletDefense", '-'), True, True)
+
+    if "neck_def" in columns:
+        neck_protection = "-"
+        if "Neck" in utility.get_body_parts(item_data, False):
+            neck_protection = 1.0 - float(item_data.get("NeckProtectionModifier", 0))
+            neck_protection = utility.convert_to_percentage(neck_protection, True)
+        item["neck_def"] = neck_protection
+
+    if "insulation" in columns:
+        item["insulation"] = utility.convert_to_percentage(item_data.get("Insulation", '-'), True)
+
+    if "wind_def" in columns:
+        item["wind_def"] = utility.convert_to_percentage(item_data.get("WindResistance", '-'), True)
+
+    if "water_def" in columns:
+        item["water_def"] = utility.convert_to_percentage(item_data.get("WaterResistance", '-'), True)
     
     if "fabric" in columns:
         fabric_id = FABRIC_TYPE.get(item_data.get("FabricType"))
@@ -394,6 +428,12 @@ def process_item(item_data, item_id):
         else:
             fabric = utility.get_icon(fabric_id, True)
         item["fabric"] = fabric
+
+    if "have_holes" in columns:
+        if not can_have_holes:
+            item["have_holes"] = "[[File:UI_Cross.png|link=|Cannot get holes]]"
+        else:
+            item["have_holes"] = "[[File:UI_Tick.png|link=|Can get holes]]"
 
     if "condition_max" in columns:
         item["condition_max"] = item_data.get("ConditionMax", '-')
@@ -413,39 +453,12 @@ def process_item(item_data, item_id):
         condition_max = item_data.get("ConditionMax")
         if condition_max is not None:
             if can_have_holes:
-                condition_loss = str(int(max(1, int(condition_max) / len(body_parts_list))))
+                condition_loss = "-" + str(int(max(1, int(condition_max) / len(body_parts_list))))
             else:
-                condition_loss = "1"
+                condition_loss = "-1"
         else:
             condition_loss = "-"
         item["condition_loss"] = condition_loss
-
-    if "move_speed" in columns:
-        item["move_speed"] = utility.convert_to_percentage(item_data.get("RunSpeedModifier", '-'), False)
-
-    if "attack_speed" in columns:
-        item["attack_speed"] = utility.convert_to_percentage(item_data.get("CombatSpeedModifier", '-'), False)
-
-    if "bite_def" in columns:
-        item["bite_def"] = utility.convert_to_percentage(item_data.get("BiteDefense", '-'), True, True)
-
-    if "scratch_def" in columns:
-        item["scratch_def"] = utility.convert_to_percentage(item_data.get("ScratchDefense", '-'), True, True)
-
-    if "bullet_def" in columns:
-        item["bullet_def"] = utility.convert_to_percentage(item_data.get("BulletDefense", '-'), True, True)
-
-    if "neck_def" in columns:
-        item["neck_def"] = utility.convert_to_percentage(item_data.get("NeckProtectionModifier", '-'), True)
-
-    if "insulation" in columns:
-        item["insulation"] = utility.convert_to_percentage(item_data.get("Insulation", '-'), True)
-
-    if "wind_def" in columns:
-        item["wind_def"] = utility.convert_to_percentage(item_data.get("WindResistance", '-'), True)
-
-    if "water_def" in columns:
-        item["water_def"] = utility.convert_to_percentage(item_data.get("WaterResistance", '-'), True)
 
     if "item_id" in columns:
         item["item_id"] = f"{{{{ID|{item_id}}}}}"
@@ -514,6 +527,8 @@ def write_items_to_file(clothing_dict):
 
 
 def main():
+    global hotbar_slot_data
+    hotbar_slot_data = hotbar_slots.get_hotbar_slots()
     get_items()
     while True:
         user_input = input("Want to merge list files? (Y/N)\n> ").lower()
