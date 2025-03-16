@@ -24,8 +24,7 @@ def get_tags(item_data):
 def get_item_data_from_id(item_id):
     item_id = fix_item_id(item_id)
     all_item_data = item_parser.get_item_data()
-    item_data = all_item_data[item_id]
-    return item_data
+    return all_item_data.get(item_id)
 
 
 def fix_item_id(item_id):
