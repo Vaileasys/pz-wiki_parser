@@ -1,4 +1,5 @@
 import os
+from tqdm import tqdm
 
 is_first_log = True
 
@@ -22,7 +23,10 @@ def write(message, print_bool="False", file_name="log.txt"):
         is_first_log = False
 
     if print_bool is True:
-        print(message)
+        if tqdm._instances:
+            tqdm.write(message)
+        else:
+            print(message)
 
     with open(file_name, 'a') as file:
         file.write(f"{message}\n")
