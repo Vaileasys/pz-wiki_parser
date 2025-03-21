@@ -1,4 +1,5 @@
 import os
+import re
 import json
 from collections import defaultdict
 from scripts import item_tags, recipe_format
@@ -871,6 +872,68 @@ def output(processed_recipes):
         combined_file.write("\n".join(combined_content_construction))
 
 
+def output_skill_usage(recipes_data):
+    """
+    For each recipe, checks both the xp field and the 'skillrequired' entries.
+    Certain skills are remapped for simplicity
+    """
+    skills_output_dir = 'output/recipes/skills/'
+    os.makedirs(skills_output_dir, exist_ok=True)
+
+    # Mapping for specific skills
+    skill_mapping = {
+        "Woodwork": "Carpentry",
+        "MetalWelding": "Welding",
+        "FlintKnapping": "Knapping",
+        "Blacksmith": "Metalworking",
+    }
+
+    crafting_skill_map = defaultdict(set)
+    building_skill_map = defaultdict(set)
+
+    for recipe_name, recipe in recipes_data.items():
+        is_building = recipe.get("construction", False)
+
+        xp_val = recipe.get("xp", "0")
+        if xp_val != "0" and xp_val:
+            # Extract skills inside double square brackets
+            skills_in_xp = re.findall(r'\[\[(.*?)\]\]', xp_val)
+            for skill in skills_in_xp:
+                final_skill = skill_mapping.get(skill, skill)
+                if is_building:
+                    building_skill_map[final_skill].add(recipe_name)
+                else:
+                    crafting_skill_map[final_skill].add(recipe_name)
+
+        skill_required = recipe.get("requirements", {}).get("skillrequired", {})
+        for skill in skill_required.keys():
+            final_skill = skill_mapping.get(skill, skill)
+            if is_building:
+                building_skill_map[final_skill].add(recipe_name)
+            else:
+                crafting_skill_map[final_skill].add(recipe_name)
+
+    # Output files for crafting recipes using the {{Crafting/sandbox template
+    for skill, recipes in crafting_skill_map.items():
+        filename = os.path.join(skills_output_dir, f"{skill}_crafting.txt")
+        template_lines = [f"{{{{Crafting/sandbox|ID={skill}_crafting"]
+        for recipe in sorted(recipes):
+            template_lines.append(f"|{recipe}")
+        template_lines.append("}}")
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write("\n".join(template_lines))
+
+    # Output files for building recipes using the {{Building template
+    for skill, recipes in building_skill_map.items():
+        filename = os.path.join(skills_output_dir, f"{skill}_building.txt")
+        template_lines = [f"{{{{Building|ID={skill}_building"]
+        for recipe in sorted(recipes):
+            template_lines.append(f"|{recipe}")
+        template_lines.append("}}")
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write("\n".join(template_lines))
+
+
 def main(recipes_data=None):
     print("Processing recipe output...")
 
@@ -908,6 +971,8 @@ def main(recipes_data=None):
     normal_item_input_map, normal_item_output_map, construction_item_input_map, construction_item_output_map = gather_item_usage(recipes_data, tags_data)
 
     output_item_usage(normal_item_input_map, normal_item_output_map, construction_item_input_map, construction_item_output_map)
+
+    output_skill_usage(recipes_data)
 
 
 if __name__ == "__main__":
