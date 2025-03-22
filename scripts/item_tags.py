@@ -85,7 +85,7 @@ def write_tag_list():
             output_file = os.path.join(output_dir, f'{tag}.txt')
             with open(output_file, 'w', encoding='utf-8') as file:
                 file.write(
-                    '{| class="wikitable theme-blue sortable" style="text-align:center;"\n! Icon !! name !! Item ID\n')
+                    '{| class="wikitable theme-blue sortable" style="text-align: center;"\n! Icon !! Name !! Item ID\n')
                 for item in tag_data:
                     item_id = item['item_id']
                     icon = item['icon']
