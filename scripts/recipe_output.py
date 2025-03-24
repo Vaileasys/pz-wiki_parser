@@ -771,7 +771,7 @@ def output(processed_recipes):
     limited_recipe_names_crafting = recipe_names_crafting[:150]
     recipe_list_crafting = "\n".join([f"|{name}" for name in limited_recipe_names_crafting])
     combined_header_crafting = (
-        "<noinclude>[[Category:Crafting templates]]\n{{wip}}\n"
+        "<noinclude>[[Category:Crafting_templates]]\n{{wip}}\n"
         "{{Documentation|doc=\n"
         "{{Crafting/sandbox\n"
         f"{recipe_list_crafting}\n"
@@ -824,7 +824,7 @@ def output(processed_recipes):
     limited_recipe_names_construction = recipe_names_construction[:150]
     recipe_list_construction = "\n".join([f"|{name}" for name in limited_recipe_names_construction])
     combined_header_construction = (
-        "<noinclude>[[Category:Construction templates]]\n{{wip}}\n"
+        "<noinclude>[[Category:Crafting_templates]]\n{{wip}}\n"
         "{{Documentation|doc=\n"
         "{{Building\n"
         f"{recipe_list_construction}\n"
