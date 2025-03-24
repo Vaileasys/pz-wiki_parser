@@ -687,6 +687,7 @@ def find_most_relevant_items(current_item, all_items_infoboxes, item_id_dict):
 
     return relevant_english_names
 
+"""
 see_also_cache = {}
 
 def generate_see_also(language_code, current_item, infobox_data_list, item_id_dict):
@@ -720,7 +721,7 @@ def generate_see_also(language_code, current_item, infobox_data_list, item_id_di
 
     # Return the formatted 'See also' section along with the Navbox template
     return f"{see_also_list}\n\n{navbox}"
-
+"""
 
 def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox, consumables_dir,
                   infobox_data_list, item_id_dict, fixing_dir, code_dir, distribution_dir, history_dir, crafting_dir,
@@ -764,14 +765,14 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
         "Crafting": generate_crafting(item_id, crafting_dir, language_code),
         headers['Location']: generate_location(original_filename, infobox_name, item_id, distribution_dir),
         "History": generate_history(item_id, history_dir, language_code),
-        headers['Code']: generate_code(item_id, code_dir),
-        headers['See also']: generate_see_also(language_code, {
-            'name': name,
-            'category': category,
-            'skill_type': skill_type,
-            'tags': re.findall(r'\|tag\d?\s*=\s*(.+)', infobox),
-            'item_id': item_id
-        }, infobox_data_list, item_id_dict)
+        headers['Code']: generate_code(item_id, code_dir) + "\n\n{{Navbox items}}",
+        # COMMENTED OUT FOR EFFICIENCY # headers['See also']: generate_see_also(language_code, {
+#            'name': name,
+#            'category': category,
+#            'skill_type': skill_type,
+#            'tags': re.findall(r'\|tag\d?\s*=\s*(.+)', infobox),
+#            'item_id': item_id
+#        }, infobox_data_list, item_id_dict)
     }
 
     for section, content in sections.items():
