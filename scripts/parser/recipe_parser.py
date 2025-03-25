@@ -16,26 +16,26 @@ def remove_comments(text):
     Supports nested comments.
     """
     result = []
-    i = 0
-    n = len(text)
-    while i < n:
+    current_line = 0
+    length = len(text)
+    while current_line < length:
         # If we find a comment start, enter comment mode
-        if text[i:i+2] == "/*":
-            i += 2
+        if text[current_line:current_line+2] == "/*":
+            current_line += 2
             nest = 1
             # Skip characters until we find the matching closing comment
-            while i < n and nest > 0:
-                if text[i:i+2] == "/*":
+            while current_line < length and nest > 0:
+                if text[current_line:current_line+2] == "/*":
                     nest += 1
-                    i += 2
-                elif text[i:i+2] == "*/":
+                    current_line += 2
+                elif text[current_line:current_line+2] == "*/":
                     nest -= 1
-                    i += 2
+                    current_line += 2
                 else:
-                    i += 1
+                    current_line += 1
         else:
-            result.append(text[i])
-            i += 1
+            result.append(text[current_line])
+            current_line += 1
     return "".join(result)
 
 
