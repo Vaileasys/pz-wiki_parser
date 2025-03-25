@@ -1,15 +1,22 @@
 import os
 import shutil
+import json
+import re
 from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.core import translate, utility, logger, version, lua_helper
 from scripts.lists import hotbar_slots
-from scripts.core.constants import PBAR_FORMAT
+from scripts.core.constants import PBAR_FORMAT, RESOURCE_PATH
 
-# clothing vision penalties (percents)
+language_code = ""
+lcs = ""
+# Clothing vision penalties (percents)
 clothing_penalties = {}
-
 hotbar_slot_data = {}
+# Descriptors for item IDs
+all_descriptors = {}
+processed_item_ids = []
+item_ids_already_processed = []
 
 
 def generate_clothing_penalties():
@@ -29,297 +36,452 @@ def get_item():
         print(f"No item found for '{query_item_id}', please try again.")
 
 
-def add_parameters_with_key(base_dict, key, items):
-    if len(items) == 1:
-        base_dict[key] = items[0]
-    else:
-        base_dict[key] = items[0]
-        for index, item in enumerate(items[1:], start=2):
-            base_dict[f'{key}{index}'] = item
-
-
-# inserts new parameters into the parameters dictionary, after a defined parameter
-def insert_parameters_after(parameters, new_parameters_dict):
-    """
-    Inserts new parameters into the parameters dictionary, after a defined parameter.
-
-    Args:
-        parameters (dict): the base parameters dictionary
-        new_parameters_dict (dict): a dictionary with the new parameters to add.
-            The keys of this dictionary are the parameter names to insert after.
-            The values are dictionaries with the new parameters to add.
-            The keys of these dictionaries are the parameter names, and the values
-            can be either a single value, or a list of values.
-
-    Returns:
-        dict: a new parameters dictionary with the new parameters inserted
-    """
-    combined_parameters = {}
-    insertion_points = {key: False for key in new_parameters_dict.keys()}
-
-    # insert new parameters after the specified keys
-    for key, value in parameters.items():
-        combined_parameters[key] = value
-        
-        if key in new_parameters_dict:
-            insertion_points[key] = True
-            new_params = new_parameters_dict[key]
-            for new_key, new_value in new_params.items():
-                if isinstance(new_value, list):
-                    add_parameters_with_key(combined_parameters, new_key, new_value)
-                else:
-                    combined_parameters[new_key] = new_value
+def get_item_ids(item_id):
+    item_id_data = utility.get_item_id_data(True)
     
-    # add new parameters at the end if insertion point wasn't found
-    for insert_after_key, was_inserted in insertion_points.items():
-        if not was_inserted:
-            new_params = new_parameters_dict[insert_after_key]
-            for new_key, new_value in new_params.items():
-                if isinstance(new_value, list):
-                    add_parameters_with_key(combined_parameters, new_key, new_value)
-                else:
-                    combined_parameters[new_key] = new_value
+    all_item_ids = []
 
-    return combined_parameters
+    for key, values in item_id_data.items():
+        if item_id in values:
+            all_item_ids.extend(values)
+
+    if not all_item_ids:
+        return [item_id]
+
+    return all_item_ids
 
 
-def write_to_output(item_data, item_id, output_dir):
+def get_descriptor(item_ids: list):
+    global all_descriptors
+    if not item_ids:
+        return []
+    
+    if not all_descriptors:
+        with open(f"{RESOURCE_PATH}\\item_descriptors.json", "r") as file:
+            all_descriptors = json.load(file)
+    
+    descriptors = []
+    for item in item_ids:
+        descriptor = None
+        item = item.split(".")[1] if len(item.split(".")) > 1 else item
+
+        for key, value in all_descriptors.items():
+            position = value["position"]
+            name = value["name"]
+
+            if position == "start" and item.startswith(key):
+                descriptor = name
+                break
+            elif position == "end" and item.endswith(key):
+                descriptor = name
+                break
+            elif position == "both" and key in item:
+                descriptor = name
+                break
+
+        descriptors.append(descriptor)
+    
+    return descriptors
+
+
+def enumerate_params(parameters):
+    new_parameters = {}
+    for key, value in parameters.items():
+        # Remove key-value pairs if they have no value
+        if not value:
+            continue
+        if isinstance(value, list):
+            new_parameters[key] = value[0]
+            for i, v in enumerate(value[1:], start=2):
+                new_parameters[f"{key}{i}"] = v
+        else:
+            new_parameters[key] = value
+    return new_parameters
+
+
+def capitalize(value):
+    """
+    Safely perform the capitalize method if a value is not a string. Lists will also be capitalized, provided their values are strings.
+
+    :param value: The string or list of strings to capitalize.
+    :type value: str
+    :return: Capitalized values if a string or list, otherwise None.
+    :rtype: str | list | None
+    """
+#    print(value)
+    if isinstance(value, str):
+        value = [value]
+        is_string = True
+    elif isinstance(value, list):
+        is_string = False
+    else:
+        return None
+
+    rvalue = []
+    
+    for v in value:
+        if isinstance(v, str):
+            v = v.capitalize()
+        else:
+            v = None
+
+        rvalue.append(v)
+
+    if is_string:
+        return rvalue[0]
+    
+    return rvalue
+
+
+def remove_descriptor(value: str) -> str:
+    """Removes the descriptor from the end of string."""
+    if value is None:
+        return None
+    return re.sub(r'\s*<small>\(.*?\)</small>$', '', value).strip()
+
+
+def get_any_property(items: dict, script_param: bool|str|int|float|list, default=None) -> str:
+    """
+    Gets the first property value that isn't None and returns it.
+    
+    Used for items with multiple variants.
+    """
+    #TODO: check for differences instead of only getting one. This may need to wait until template rewrite with LUA.
+    for item_id, item_data in items.items():
+        script_value = item_data.get(script_param)
+        if script_value is not None:
+            break
+        else:
+            continue
+    
+    if script_value is None:
+        script_value = default
+
+    return script_value
+
+
+def get_param_values(items: dict, script_param: str, rstring:bool = False, default:str = None) -> list|str:
+    """
+    Gets the script parameter values for a list of items.
+
+    :param items: dict - A dictionary where keys are item IDs and values are item data dictionaries.
+    :param script_param: str - The key for the script parameter to retrieve values from each item.
+    :param rstring: bool, optional - If True, returns a string with values joined by "<br>", otherwise returns a list. Default is False.
+    :param default: str, optional - The default value to use if the script parameter is not found in an item. Default is None.
+    :return: list or str - A list of unique parameter values or a string if rstring is True.
+    """
+    values = []
+    for item_id, item_data in items.items():
+        script_value = item_data.get(script_param, default)
+        if script_value is not None and script_value not in values:
+            descriptor = item_data.get("DescriptorFormatted")
+
+            new_value = str(script_value) + descriptor
+
+            if new_value is not None and new_value not in values:
+                values.append(new_value)
+
+    if rstring:
+        return "<br>".join(values)
+    
+    return values
+
+
+def generate_infobox(item_id, item_data):
+    global processed_item_ids
     try:
-        os.makedirs(output_dir, exist_ok=True)
-        output_file = os.path.join(output_dir, f'{item_id}.txt')
-        with open(output_file, 'w', encoding='utf-8') as file:
-            file.write("{{Infobox item")
+        if item_id in processed_item_ids:
+            global item_ids_already_processed
+            item_ids_already_processed.append(item_id)
+            return None
 
-            name = utility.get_name(item_id, item_data)
+        # Get all items their data and store as 'all_items'
+        all_item_ids = get_item_ids(item_id)
+        all_items = {}
+        if len(all_item_ids) > 1:
+            descriptors = get_descriptor(all_item_ids)
+            for i, id in enumerate(all_item_ids):
+                id_data = utility.get_item_data_from_id(id)
+                if not id_data:
+                    logger.write(f"Missing item_id for '{id}' when getting item data from item id.")
+                    continue
+                descriptor = descriptors[i]
+                if descriptor is not None:
+                    descriptor_formatted = f" <small>({descriptor})</small>"
+                else:
+                    descriptor_formatted = ""
+                    descriptor = ""
+                id_data["Descriptor"] = descriptor
+                id_data["DescriptorFormatted"] = descriptor_formatted
+                all_items[id] = id_data
 
-            icons = utility.find_icon(item_id, True)
+        else:
+            all_items[item_id] = item_data
+            all_items[item_id]["Descriptor"] = ""
+            all_items[item_id]["DescriptorFormatted"] = ""
+        
+        # Update the item_id and item_data to be the primary item's
+        item_id = list(all_items.keys())[0]
+        item_data = list(all_items.values())[0]
 
-            model = utility.get_model(item_data)
+        # Add item ids to the processed list, so we don't create infoboxes unecessarily
+        processed_item_ids.extend(all_item_ids)
 
-            category = 'DisplayCategory'
-            category = translate.get_translation(item_data.get(category, 'Item'), category)
+        name = utility.get_name(item_id, item_data)
 
-            fluid_capacity_ml = float(item_data.get('capacity', 0)) * 1000
-            fluid_capacity = ''
-            if fluid_capacity_ml != 0.0:
-                fluid_capacity = f"{str(int(fluid_capacity_ml))}"
+        icons = utility.find_icon(item_id, True)
 
-            attachment_type = item_data.get("AttachmentType"),
+        model = utility.get_model(item_data)
+
+        fluid_capacity_ml = float(get_any_property(all_items, 'capacity', 0)) * 1000
+        fluid_capacity = None
+        if fluid_capacity_ml != 0.0:
+            fluid_capacity = f"{str(int(fluid_capacity_ml))}"
+
+        attachment_type = get_any_property(all_items, "AttachmentType"),
+        hotbar_attachments = []
+        if attachment_type is not None:
+            for attachment in attachment_type:
+                for slot, slot_data in hotbar_slot_data.items():
+                    slot_attachments = slot_data.get("attachments", {})
+                    if attachment in slot_attachments:
+                        slot_name = slot_data.get("name")
+                        slot_link = f"[[AttachmentsProvided#{slot}|{slot_name}]]"
+                        hotbar_attachments.append(slot_link)
+            attachment_type = "<br>".join(hotbar_attachments) if hotbar_attachments else None
+        else:
+            attachment_type = None
+        
+        attachments_provided = get_any_property(all_items, 'AttachmentsProvided')
+        if attachments_provided:
+            if isinstance(attachments_provided, str):
+                attachments_provided = [attachments_provided]
             hotbar_attachments = []
-            if attachment_type:
-                for attachment in attachment_type:
-                    for slot, slot_data in hotbar_slot_data.items():
-                        slot_attachments = slot_data.get("attachments", {})
-                        if attachment in slot_attachments:
-                            slot_name = slot_data.get("name")
-                            slot_link = f"[[AttachmentsProvided#{slot}|{slot_name}]]"
-                            hotbar_attachments.append(slot_link)
-                attachment_type = "<br>".join(hotbar_attachments)
-            else:
-                attachment_type = ''
-            
-            attachments_provided = item_data.get('AttachmentsProvided')
-            if attachments_provided:
-                if isinstance(attachments_provided, str):
-                    attachments_provided = [attachments_provided]
-                hotbar_attachments = []
 
-                for slot in attachments_provided:
-                    slot_name = hotbar_slot_data[slot].get("name")
-                    slot_link = f"[[AttachmentsProvided#{slot}|{slot_name}]]"
-                    hotbar_attachments.append(slot_link)
-                attachments_provided = "<br>".join(hotbar_attachments)
-            else:
-                attachments_provided = ''
+            for slot in attachments_provided:
+                slot_name = hotbar_slot_data[slot].get("name")
+                slot_link = f"[[AttachmentsProvided#{slot}|{slot_name}]]"
+                hotbar_attachments.append(slot_link)
+            attachments_provided = "<br>".join(hotbar_attachments)
+        else:
+            attachments_provided = None
 
-            material = item_data.get('FabricType', '')
-            material_value = item_data.get('MetalValue', '')
-            if not material and material_value:
-                material = 'metal'
-            material = material.capitalize()
-            
-            recipes = item_data.get('TeachedRecipes', '')
-            if recipes != '':
-                if isinstance(recipes, str):
-                    recipes = [recipes]
-                for i in range(len(recipes)):
-                    recipes[i] = recipes[i].replace(" ", "_")
-                    recipes[i] = translate.get_translation(recipes[i], 'TeachedRecipes')
-                recipes = utility.format_br(recipes)
+        material = get_any_property(all_items, 'FabricType')
+        material_value = get_any_property(all_items, 'MetalValue')
+        if not material and material_value:
+            material = 'metal'
+        material = capitalize(material)
+        
+        recipes = get_any_property(all_items, 'TeachedRecipes')
+        if recipes is not None:
+            if isinstance(recipes, str):
+                recipes = [recipes]
+            for i in range(len(recipes)):
+                recipes[i] = recipes[i].replace(" ", "_")
+                recipes[i] = translate.get_translation(recipes[i], 'TeachedRecipes')
+            recipes = utility.format_br(recipes)
 
-            # (Attachments) Get weapons that it's used for.
-            weapon = ''
-            weapons = item_data.get('MountOn')
-            if weapons:
-                if isinstance(weapons, str):
-                    weapons = [weapons]
-                weapon_list = []
-                for weapon_id in weapons:
-                    weapon_icon = utility.get_icon(weapon_id, True, True, False)
-                    weapon_list.append(weapon_icon)
-                weapon = ''.join(weapon_list)
+        # (Attachments) Get weapons that it's used for.
+        weapon = None
+        weapons = get_any_property(all_items, 'MountOn')
+        if weapons:
+            if isinstance(weapons, str):
+                weapons = [weapons]
+            weapon_list = []
+            for weapon_id in weapons:
+                weapon_icon = utility.get_icon(weapon_id, True, True, False)
+                weapon_list.append(weapon_icon)
+            weapon = ''.join(weapon_list)
 
-            burn_time = utility.get_burn_time(item_id, item_data)
-            
-            foraging = ''
-            body_location = item_data.get('BodyLocation', '')
-            if body_location in clothing_penalties:
-                foraging = f"-{clothing_penalties[body_location]}%"
+        burn_time = utility.get_burn_time(item_id, item_data)
+        
+        # TODO: fix/finish
+        category = []
+        foraging = []
+        body_location = []
+        guid = []
 
-            evolved_recipe = item_data.get('EvolvedRecipeName', '')
-            if evolved_recipe:
-                evolved_recipe_translated = translate.get_translation(item_id, 'EvolvedRecipeName')
-                if evolved_recipe_translated:
-                    evolved_recipe = evolved_recipe_translated
-            
-            tags = utility.get_tags(item_data)
-            
-            guid = utility.get_guid(item_data)
-            
-            parameters = {
-                "name": name,
-                # "model": (added with 'insert_parameters_after')
-                # "icon":  (added with 'insert_parameters_after')
-                "icon_name": name,
-                "category": category,
-                "weight": item_data.get('Weight', 1),
-                "capacity": item_data.get('Capacity', ''),
-                "container_name": translate.get_translation(item_data.get('ContainerName', ''), 'ContainerName'),
-                "weight_reduction": item_data.get('WeightReduction', ''),
-                "max_units": item_data.get('UseDelta', ''),
-                "fluid_capacity": fluid_capacity,
-                "equipped": item_data.get('CanBeEquipped', ''),
-                "body_location": item_data.get('BodyLocation', ''),
-                "attachment_type": attachment_type,
-                "attachments_provided": attachments_provided,
-                "function": '',
-                "weapon": weapon,
-                "part_type": translate.get_translation(item_data.get('PartType', ''), 'PartType'),
-                "skill_type": utility.get_skill_type_mapping(item_data, item_id),
-                "ammo_type": utility.get_icon(item_data.get('AmmoType', ''), True, True, False),
-                "clip_size": item_data.get('MaxAmmo', ''),
-                "material": material,
-                "material_value": material_value,
-                "can_boil_water": item_data.get('CanBoilWater', '').capitalize(),
-                "writable": item_data.get('CanBeWrite', '').capitalize(),
-                "recipes": recipes,
-                "skill_trained": translate.get_translation(item_data.get('SkillTrained', ''), 'SkillTrained'),
-                "foraging_change": foraging,
-                "page_number": item_data.get('NumberOfPages') or item_data.get('PageToWrite', ''),
-                "packaged": item_data.get('Packaged', '').capitalize(),
-                "rain_factor": item_data.get('RainFactor', ''),
-                "days_fresh": item_data.get('DaysFresh', ''),
-                "days_rotten": item_data.get('DaysTotallyRotten', ''),
-                "cant_be_frozen": item_data.get('CantBeFrozen', '').capitalize(),
-                "feed_type": item_data.get('AnimalFeedType', ''),
-                "condition_max": item_data.get('ConditionMax', ''),
-                "condition_lower_chance": item_data.get('ConditionLowerChanceOneIn', ''),
-                "run_speed": item_data.get('RunSpeedModifier', ''),
-                "stomp_power": item_data.get('StompPower', ''),
-                "combat_speed": item_data.get('CombatSpeedModifier', ''),
-                "scratch_defense": item_data.get('ScratchDefense', ''),
-                "bite_defense": item_data.get('BiteDefense', ''),
-                "bullet_defense": item_data.get('BulletDefense', ''),
-                "neck_protection": item_data.get('NeckProtectionModifier', ''),
-                "insulation": item_data.get('Insulation', ''),
-                "wind_resistance": item_data.get('WindResistance', ''),
-                "water_resistance": item_data.get('WaterResistance', ''),
-                "light_distance": item_data.get('LightDistance', ''),
-                "light_strength": item_data.get('LightStrength', ''),
-                "torch_cone": item_data.get('TorchCone', ''),
-                "wet_cooldown": item_data.get('WetCooldown', ''),
-                "burn_time": burn_time,
-                "sensor_range": item_data.get('SensorRange') or item_data.get('RemoteRange', ''),
-                "two_way": item_data.get('TwoWay', ''),
-                "mic_range": item_data.get('MicRange', ''),
-                "transmit_range": item_data.get('TransmitRange', ''),
-                "min_channel": item_data.get('MinChannel', ''),
-                "max_channel": item_data.get('MaxChannel', ''),
-                "damage_type": '',
-                "min_damage": item_data.get('MinDamage', ''),
-                "max_damage": item_data.get('MaxDamage', ''),
-                "door_damage": item_data.get('DoorDamage', ''),
-                "tree_damage": item_data.get('TreeDamage', ''),
-                "sharpness": item_data.get('Sharpness', ''),
-                "min_range": item_data.get('MinRange', ''),
-                "max_range": item_data.get('MaxRange', ''),
-                "min_range_mod": item_data.get('MinRangeModifier', ''),
-                "max_range_mod": item_data.get('MaxRangeModifier', ''),
-                "recoil_delay": item_data.get('RecoilDelay') or item_data.get('RecoilDelayModifier', ''),
-                "sound_radius": item_data.get('SoundRadius', ''),
-                "base_speed": item_data.get('BaseSpeed', ''),
-                "push_back": item_data.get('PushBackMod', ''),
-                "aiming_time": item_data.get('AimingTime', ''),
-                "reload_time": item_data.get('ReloadTime', ''),
-                "crit_chance": item_data.get('CriticalChance', ''),
-                "crit_multiplier": item_data.get('CritDmgMultiplier', ''),
-                "angle_mod": item_data.get('AngleModifier', ''),
-                "kill_move": item_data.get('CloseKillMove', '').replace('_', ' ').capitalize() if item_data.get(
-                    'CloseKillMove') else '',
-                "weight_mod": item_data.get('WeightModifier', ''),
-                "effect_power": item_data.get('ExplosionPower') or item_data.get('FirePower', ''),
-                "effect_range": item_data.get('ExplosionRange') or item_data.get('FireRange') or item_data.get(
-                    'SmokeRange') or item_data.get('NoiseRange', ''),
-                "effect_duration": item_data.get('NoiseDuration', ''),
-                "effect_timer": item_data.get('ExplosionTimer', ''),
-                "hunger_change": item_data.get('HungerChange', ''),
-                "thirst_change": item_data.get('ThirstChange', ''),
-                "calories": item_data.get('Calories', ''),
-                "carbohydrates": item_data.get('Carbohydrates', ''),
-                "proteins": item_data.get('Proteins', ''),
-                "lipids": item_data.get('Lipids', ''),
-                "unhappy_change": item_data.get('UnhappyChange', ''),
-                "boredom_change": item_data.get('BoredomChange', ''),
-                "stress_change": item_data.get('StressChange', ''),
-                "fatigue_change": item_data.get('FatigueChange', ''),
-                "endurance_change": item_data.get('EnduranceChange', ''),
-                "flu_change": item_data.get('FluReduction', ''),
-                "pain_change": item_data.get('PainReduction', ''),
-                "sick_change": item_data.get('ReduceFoodSickness', ''),
-                "alcoholic": item_data.get('Alcoholic', '').capitalize(),
-                "alcohol_power": item_data.get('AlcoholPower', ''),
-                "reduce_infection_power": item_data.get('ReduceInfectionPower', ''),
-                "bandage_power": item_data.get('BandagePower', ''),
-                "poison_power": item_data.get('PoisonPower', ''),
-                "cook_minutes": item_data.get('MinutesToCook', ''),
-                "burn_minutes": item_data.get('MinutesToBurn', ''),
-                "dangerous_uncooked": item_data.get('DangerousUncooked', '').capitalize(),
-                "bad_microwaved": item_data.get('BadInMicrowave', '').capitalize(),
-                "good_hot": item_data.get('GoodHot', '').capitalize(),
-                "bad_cold": item_data.get('BadCold', '').capitalize(),
-                "spice": item_data.get('Spice', '').capitalize(),
-                "evolved_recipe": evolved_recipe,
-                # "tag": (added with 'insert_parameters_after')
-                "guid": guid,
-                "clothing_item": item_data.get('ClothingItem', ''),
-                "item_id": item_id,
-                "infobox_version": version.get_version()
-            }
+        for id, id_data in all_items.items():
+            descriptor = id_data.get("DescriptorFormatted")
+            display_category = 'DisplayCategory'
+            display_category = translate.get_translation(id_data.get(display_category, 'Item'), display_category)
+            display_category = display_category + descriptor
+            if not any(x in category for x in (display_category, remove_descriptor(display_category))):
+                category.append(display_category)
 
-            # new parameters to be added and parameter keys go here
-            icon_model_parameters = {'model': model, 'icon': icons}
-            tag_parameters = {'tag': tags}
+            bl = id_data.get('BodyLocation', item_data.get('CanBeEquipped'))
+            if bl is not None:
+                bl = f"[[BodyLocation{lcs}#{bl}|{bl}]]"
+                if not any(x in body_location for x in (bl, remove_descriptor(bl))):
+                    body_location.append(bl + descriptor)
+                if bl in clothing_penalties:
+                    id_clothing_penalty = f"-{clothing_penalties[bl]}%"
+                    if id_clothing_penalty not in foraging:
+                        foraging.append(id_clothing_penalty + descriptor)
 
-            # These parameters will be added afterwards. For parameters that need to be defined, e.g. icon2, icon3, etc.
-            # 'after_param': param_key,
-            new_parameters_dict = {
-                'name': icon_model_parameters,
-                'evolved_recipe': tag_parameters
-            }
+            id_guid = utility.get_guid(id_data)
+            if id_guid is not None and id_guid not in guid:
+                guid.append(id_guid)
 
-            parameters = insert_parameters_after(parameters, new_parameters_dict)
+        category = "<br>".join(category) if category else None
+        body_location = "<br>".join(body_location) if body_location else None
+        foraging = "<br>".join(foraging) if foraging else None
 
-            for key, value in parameters.items():
-                if value:
-                    file.write(f"\n|{key}={value}")
+        equipped = get_any_property(all_items, 'CanBeEquipped') if not body_location else None
 
-            file.write("\n}}")
+        evolved_recipe = get_any_property(all_items, 'EvolvedRecipeName')
+        if evolved_recipe:
+            evolved_recipe_translated = translate.get_translation(item_id, 'EvolvedRecipeName')
+            if evolved_recipe_translated:
+                evolved_recipe = evolved_recipe_translated
+        
+        tags = utility.get_tags(item_data)
+        
+        parameters = {
+            "name": name,
+            "model": model,
+            "icon":  icons,
+            "icon_name": name,
+            "category": category,
+            "weight": get_param_values(all_items, 'Weight', True, default=1),
+            "capacity": get_any_property(all_items, 'Capacity'),
+            "container_name": translate.get_translation(get_any_property(all_items, 'ContainerName'), 'ContainerName'),
+            "weight_reduction": get_any_property(all_items, 'WeightReduction'),
+            "max_units": get_any_property(all_items, 'UseDelta'),
+            "fluid_capacity": fluid_capacity,
+            "equipped": equipped,
+            "body_location": body_location,
+            "attachment_type": attachment_type,
+            "attachments_provided": attachments_provided,
+            "function": None,
+            "weapon": weapon,
+            "part_type": translate.get_translation(get_any_property(all_items, 'PartType'), 'PartType'),
+            "skill_type": utility.get_skill_type_mapping(item_data, item_id),
+            "ammo_type": utility.get_icon(get_any_property(all_items, 'AmmoType'), True, True, False),
+            "clip_size": get_any_property(all_items, 'MaxAmmo', None),
+            "material": material,
+            "material_value": material_value,
+            "can_boil_water": capitalize(get_any_property(all_items, 'CanBoilWater')),
+            "writable": capitalize(get_any_property(all_items, 'CanBeWrite')),
+            "recipes": recipes,
+            "skill_trained": translate.get_translation(get_any_property(all_items, 'SkillTrained'), 'SkillTrained'),
+            "foraging_change": foraging,
+            "page_number": get_any_property(all_items, 'NumberOfPages') or get_any_property(all_items, 'PageToWrite'),
+            "packaged": capitalize(get_any_property(all_items, 'Packaged')),
+            "rain_factor": get_any_property(all_items, 'RainFactor'),
+            "days_fresh": get_any_property(all_items, 'DaysFresh'),
+            "days_rotten": get_any_property(all_items, 'DaysTotallyRotten'),
+            "cant_be_frozen": capitalize(get_any_property(all_items, 'CantBeFrozen')),
+            "feed_type": get_any_property(all_items, 'AnimalFeedType'),
+            "condition_max": get_any_property(all_items, 'ConditionMax'),
+            "condition_lower_chance": get_any_property(all_items, 'ConditionLowerChanceOneIn'),
+            "run_speed": get_any_property(all_items, 'RunSpeedModifier'),
+            "stomp_power": get_any_property(all_items, 'StompPower'),
+            "combat_speed": get_any_property(all_items, 'CombatSpeedModifier'),
+            "scratch_defense": get_any_property(all_items, 'ScratchDefense'),
+            "bite_defense": get_any_property(all_items, 'BiteDefense'),
+            "bullet_defense": get_any_property(all_items, 'BulletDefense'),
+            "neck_protection": get_any_property(all_items, 'NeckProtectionModifier'),
+            "insulation": get_any_property(all_items, 'Insulation'),
+            "wind_resistance": get_any_property(all_items, 'WindResistance'),
+            "water_resistance": get_any_property(all_items, 'WaterResistance'),
+            "light_distance": get_any_property(all_items, 'LightDistance'),
+            "light_strength": get_any_property(all_items, 'LightStrength'),
+            "torch_cone": get_any_property(all_items, 'TorchCone'),
+            "wet_cooldown": get_any_property(all_items, 'WetCooldown'),
+            "burn_time": burn_time,
+            "sensor_range": get_any_property(all_items, 'SensorRange') or get_any_property(all_items, 'RemoteRange'),
+            "two_way": get_any_property(all_items, 'TwoWay'),
+            "mic_range": get_any_property(all_items, 'MicRange'),
+            "transmit_range": get_any_property(all_items, 'TransmitRange'),
+            "min_channel": get_any_property(all_items, 'MinChannel'),
+            "max_channel": get_any_property(all_items, 'MaxChannel'),
+            "damage_type": None,
+            "min_damage": get_any_property(all_items, 'MinDamage'),
+            "max_damage": get_any_property(all_items, 'MaxDamage'),
+            "door_damage": get_any_property(all_items, 'DoorDamage'),
+            "tree_damage": get_any_property(all_items, 'TreeDamage'),
+            "sharpness": get_any_property(all_items, 'Sharpness'),
+            "min_range": get_any_property(all_items, 'MinRange'),
+            "max_range": get_any_property(all_items, 'MaxRange'),
+            "min_range_mod": get_any_property(all_items, 'MinRangeModifier'),
+            "max_range_mod": get_any_property(all_items, 'MaxRangeModifier'),
+            "recoil_delay": get_any_property(all_items, 'RecoilDelay') or get_any_property(all_items, 'RecoilDelayModifier'),
+            "sound_radius": get_any_property(all_items, 'SoundRadius'),
+            "base_speed": get_any_property(all_items, 'BaseSpeed'),
+            "push_back": get_any_property(all_items, 'PushBackMod'),
+            "aiming_time": get_any_property(all_items, 'AimingTime'),
+            "reload_time": get_any_property(all_items, 'ReloadTime'),
+            "crit_chance": get_any_property(all_items, 'CriticalChance'),
+            "crit_multiplier": get_any_property(all_items, 'CritDmgMultiplier'),
+            "angle_mod": get_any_property(all_items, 'AngleModifier'),
+            "kill_move": capitalize(get_any_property(all_items, 'CloseKillMove').replace('_', ' ')) if get_any_property(all_items, 'CloseKillMove') else None,
+            "weight_mod": get_any_property(all_items, 'WeightModifier'),
+            "effect_power": get_any_property(all_items, 'ExplosionPower') or get_any_property(all_items, 'FirePower'),
+            "effect_range": get_any_property(all_items, 'ExplosionRange') or get_any_property(all_items, 'FireRange') or get_any_property(all_items, 'SmokeRange') or get_any_property(all_items, 'NoiseRange'),
+            "effect_duration": get_any_property(all_items, 'NoiseDuration'),
+            "effect_timer": get_any_property(all_items, 'ExplosionTimer'),
+            "hunger_change": get_any_property(all_items, 'HungerChange'),
+            "thirst_change": get_any_property(all_items, 'ThirstChange'),
+            "calories": get_any_property(all_items, 'Calories'),
+            "carbohydrates": get_any_property(all_items, 'Carbohydrates'),
+            "proteins": get_any_property(all_items, 'Proteins'),
+            "lipids": get_any_property(all_items, 'Lipids'),
+            "unhappy_change": get_any_property(all_items, 'UnhappyChange'),
+            "boredom_change": get_any_property(all_items, 'BoredomChange'),
+            "stress_change": get_any_property(all_items, 'StressChange'),
+            "fatigue_change": get_any_property(all_items, 'FatigueChange'),
+            "endurance_change": get_any_property(all_items, 'EnduranceChange'),
+            "flu_change": get_any_property(all_items, 'FluReduction'),
+            "pain_change": get_any_property(all_items, 'PainReduction'),
+            "sick_change": get_any_property(all_items, 'ReduceFoodSickness'),
+            "alcoholic": capitalize(get_param_values(all_items, 'Alcoholic', True)),
+            "alcohol_power": get_any_property(all_items, 'AlcoholPower'),
+            "reduce_infection_power": get_any_property(all_items, 'ReduceInfectionPower'),
+            "bandage_power": get_param_values(all_items, 'BandagePower', True),
+            "poison_power": get_any_property(all_items, 'PoisonPower'),
+            "cook_minutes": get_any_property(all_items, 'MinutesToCook'),
+            "burn_minutes": get_any_property(all_items, 'MinutesToBurn'),
+            "dangerous_uncooked": capitalize(get_any_property(all_items, 'DangerousUncooked')),
+            "bad_microwaved": capitalize(get_any_property(all_items, 'BadInMicrowave')),
+            "good_hot": capitalize(get_any_property(all_items, 'GoodHot')),
+            "bad_cold": capitalize(get_any_property(all_items, 'BadCold')),
+            "spice": capitalize(get_any_property(all_items, 'Spice')),
+            "evolved_recipe": evolved_recipe,
+            "tag": tags,
+            "guid": guid,
+            "clothing_item": get_param_values(all_items, 'ClothingItem'),
+            "item_id": all_item_ids,
+        }
+
+        parameters = enumerate_params(parameters)
+        parameters["infobox_version"] = version.get_version()
+
+        return parameters
     except Exception as e:
-        logger.write(f"Error writing file {item_id}.txt: {e}", True)
+        logger.write(f"Error generating data for {item_id}", True, exception=e)
+
+
+def write_to_output(parameters, output_dir):
+    os.makedirs(output_dir, exist_ok=True)
+    item_id = parameters.get("item_id")
+    output_file = os.path.join(output_dir, f'{item_id}.txt')
+    content = []
+    content.append("{{Infobox item")
+
+    for key, value in parameters.items():
+        content.append(f"|{key}={value}")
+    
+    content.append("}}")
+
+    with open(output_file, 'w', encoding='utf-8') as file:
+        file.write("\n".join(content))
 
 
 def process_item(item_data, item_id, output_dir):
-    write_to_output(item_data, item_id, output_dir)
+    parameters = generate_infobox(item_id, item_data)
+    if parameters is not None:
+        write_to_output(parameters, output_dir)
 
 
 def automatic_extraction(output_dir):
@@ -333,14 +495,19 @@ def automatic_extraction(output_dir):
             pbar.set_postfix_str(f'Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})')
             process_item(item_data, item_id, output_dir)
             pbar.update(1)
-        pbar.bar_format = f"Finished processing items."
+        elapsed_time = pbar.format_dict["elapsed"]
+        pbar.bar_format = f"Finished processing items after {elapsed_time:.2f} seconds."
 
 
 def main():
     global hotbar_slot_data
+    global language_code
+    global lcs
     language_code = translate.get_language_code()
+    if language_code != "en":
+        lcs = f"/{language_code}"
     generate_clothing_penalties()
-    output_dir = f'output/{language_code}/infoboxes'
+    output_dir = f'output\\{language_code}\\infoboxes'
 
     hotbar_slot_data = hotbar_slots.get_hotbar_slots()
 
@@ -348,17 +515,24 @@ def main():
         choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
         if choice == '1':
             automatic_extraction(output_dir)
-            print(f"Extraction complete, the files can be found in {output_dir}.")
+            utility.save_cache({"data": item_ids_already_processed}, "item_ids_already_processed.json")
+            print(f"Extraction complete, the files can be found in '{output_dir}'.")
             return
         elif choice == '2':
             item_data, item_id = get_item()
-            write_to_output(item_data, item_id, output_dir)
-            print(f"Extraction complete, the file can be found in {output_dir}.")
+            parameters = generate_infobox(item_id, item_data)
+            if parameters is not None:
+                write_to_output(parameters, output_dir)
+                output_path = os.path.join(output_dir, item_id + ".txt")
+                print(f"Extraction complete, the file can be found in '{output_path}'.")
+            else:
+                print(f"Error writing file. Refer to log: {logger.get_log_path()}")
             return
         elif choice == 'q':
             return
         else:
             print("Invalid choice.")
+    
 
 
 if __name__ == "__main__":
