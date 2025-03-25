@@ -324,7 +324,6 @@ def generate_infobox(item_id, item_data):
                 guid.append(id_guid)
 
         category = "<br>".join(category) if category else None
-        body_location = "<br>".join(body_location) if body_location else None
         foraging = "<br>".join(foraging) if foraging else None
 
         equipped = get_any_property(all_items, 'CanBeEquipped') if not body_location else None
