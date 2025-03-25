@@ -287,6 +287,7 @@ def parse_foraging(forage_definitions_path, output_path):
                     update = function() end
                 }
             ''')
+            lua.execute('forageSystem.addForageDef = function(itemName, itemDef) forageDefs[itemName] = itemDef end')
 
             # Execute the Lua script
             lua.execute(lua_code)
