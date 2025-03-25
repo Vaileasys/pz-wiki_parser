@@ -1,0 +1,117 @@
+{
+    "Left": {
+        "position": "both",
+        "name": "left",
+        "priority": 1
+    },
+    "Right": {
+        "position": "both",
+        "name": "right",
+        "priority": 2
+    },
+    "_L": {
+        "position": "end",
+        "name": "left",
+        "priority": 1
+    },
+    "_R": {
+        "position": "end",
+        "name": "right",
+        "priority": 2
+    },
+    "_L_": {
+        "position": "both",
+        "name": "left",
+        "priority": 1
+    },
+    "_R_": {
+        "position": "both",
+        "name": "right",
+        "priority": 2
+    },
+    "_Left_RingFinger_": {
+        "position": "both",
+        "name": "left ring finger",
+        "priority": 1
+    },
+    "_Left_MiddleFinger_": {
+        "position": "both",
+        "name": "left middle finger",
+        "priority": 2
+    },
+    "_Right_RingFinger_": {
+        "position": "both",
+        "name": "right ring finger",
+        "priority": 3
+    },
+    "_Right_MiddleFinger_": {
+        "position": "both",
+        "name": "right middle finger",
+        "priority": 4
+    },
+    "Reverse": {
+        "position": "end",
+        "name": "reversed",
+        "priority": 1
+    },
+    "DOWN": {
+        "position": "end",
+        "name": "down",
+        "priority": 1
+    },
+    "UP": {
+        "position": "end",
+        "name": "up",
+        "priority": 2
+    },
+    "Top": {
+        "position": "end",
+        "name": "top",
+        "priority": 1
+    },
+    "OnTop": {
+        "position": "end",
+        "name": "on-top",
+        "priority": 1
+    },
+    "Front": {
+        "position": "end",
+        "name": "front",
+        "priority": 1
+    },
+    "Back": {
+        "position": "end",
+        "name": "back",
+        "priority": 2
+    },
+    "Wet": {
+        "position": "end",
+        "name": "wet",
+        "priority": 1
+    },
+    "Closed": {
+        "position": "start",
+        "name": "closed",
+        "priority": 1
+    },
+    "Open": {
+        "position": "end",
+        "name": "open",
+        "priority": 2
+    },
+    "Dirty": {
+        "position": "end",
+        "name": "dirty",
+        "priority": 1
+    },
+    "Alcohol": {
+        "position": "start",
+        "name": "sterlized",
+        "priority": 2
+    },
+    "Break": {
+        "position": "end",
+        "name": "broken",
+        "priority": 1
+    }
+}

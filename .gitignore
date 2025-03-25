@@ -13,6 +13,7 @@ resources/*
 !resources/color_reference.json
 !resources/texture_names.json
 !resources/blood_location.json
+!resources/item_descriptors.json
 
 ## Translations
 resources/Translate/*
