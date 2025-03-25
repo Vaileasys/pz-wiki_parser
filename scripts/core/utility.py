@@ -888,7 +888,7 @@ def get_guid(item_data):
 
     if isinstance(guid, list):
         print("Multiple GUIDs found:", guid)
-        return ''
+        return None
     
     return guid
 
