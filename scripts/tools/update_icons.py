@@ -120,6 +120,7 @@ def main():
             if folder_name == ".":
                 # Non-recursive for root folder
                 get_texture_names(textures_dir, prefix_whitelist=["Item", "Build"])
+                copy_new_textures(textures_dir)
 #                get_texture_names(textures_dir, prefix_blacklist=prefix_blacklist, folder_key="textures")
                 
             else:
