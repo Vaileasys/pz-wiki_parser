@@ -79,7 +79,8 @@ def copy_new_textures(texture_dir):
                     filename = f"Item_{filename}"
                 texture_path = texture_dir / filename
                 if texture_path.exists():
-                    shutil.copy(texture_path, prefix_dir / filename)
+                    new_filename = filename if folder_key != "Item" else filename
+                    shutil.copy(texture_path, prefix_dir / new_filename)
 
             print(f"New textures copied to '{prefix_dir}'")
 
