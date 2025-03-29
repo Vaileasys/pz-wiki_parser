@@ -1,7 +1,8 @@
 import os
 from tqdm import tqdm
+from scripts.utils import list_util
 from scripts.parser import item_parser
-from scripts.core import utility, translate
+from scripts.core import translate
 from scripts.core.constants import PBAR_FORMAT
 from scripts.lists import hotbar_slots
 from scripts.utils import utility

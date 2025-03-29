@@ -5,7 +5,7 @@ import struct
 import lupa
 from lupa import LuaRuntime
 import xml.etree.ElementTree as ET
-from scripts.core import utility
+from scripts.utils import utility
 from scripts.core.constants import DATA_PATH
 
 
