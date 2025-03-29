@@ -9,13 +9,30 @@ OUTPUT_DIR = Path(OUTPUT_PATH) / translate.get_language_code() / "item_list"
 DEF_TABLE_HEADER = '{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"'
 
 
-def get_table_data(path:str):
+def get_table_data(path:str, extra_keys:str|list=None):
     """
     Get table data from a json file.
     """
     data = load_json(path)
     map = data.get("map")
     headings = data.get("headings")
+
+    if extra_keys:
+        is_list = True
+        if isinstance(extra_keys, str):
+            is_list = False
+            extra_keys = [extra_keys]
+        else:
+            extra_data = {}
+        for key in extra_keys:
+            value = data.get(key)
+            if is_list:
+                extra_data[key] = value
+            else:
+                extra_data = value
+                break
+        return map, headings, extra_data
+
     return map, headings
 
 
