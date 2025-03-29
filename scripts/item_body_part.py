@@ -1,7 +1,8 @@
 import os
 from tqdm import tqdm
 from scripts.parser import item_parser
-from scripts.core import utility, translate
+from scripts.core import translate
+from scripts.utils import utility
 
 # Dictionary for body part combinations. This is used in 'Template:Body_part' to display the image and body parts.
 BODY_PARTS_DICT = {

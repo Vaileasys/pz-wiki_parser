@@ -1,7 +1,8 @@
 from pathlib import Path
 from scripts.parser import literature_parser
-from scripts.core import translate, utility
+from scripts.core import translate
 from scripts.parser import item_parser
+from scripts.utils import utility
 
 # TODO: parse this dynamically from SpecialLootSpawns.lua
 BOOK = {

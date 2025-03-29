@@ -1,7 +1,9 @@
 import os
 import re
-from scripts.core import translate, utility, version
+from scripts.core import translate, version
 from scripts.core.constants import DATA_PATH
+from scripts.utils.util import echo
+from scripts.utils import utility
 
 RESOURCE_PATH = 'resources/scripts/'
 CACHE_JSON = 'item_data.json'

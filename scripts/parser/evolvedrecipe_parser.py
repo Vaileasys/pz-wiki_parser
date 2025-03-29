@@ -1,6 +1,7 @@
 import re
 from pathlib import Path
-from scripts.core import utility, config_manager, version
+from scripts.core import config_manager, version
+from scripts.utils import utility
 
 CACHE_FILE = "evolvedrecipe_data.json"
 

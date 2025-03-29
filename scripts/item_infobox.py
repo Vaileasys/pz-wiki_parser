@@ -4,9 +4,10 @@ import json
 import re
 from tqdm import tqdm
 from scripts.parser import item_parser
-from scripts.core import translate, utility, logger, version, lua_helper
+from scripts.core import translate, logger, version
 from scripts.lists import hotbar_slots
 from scripts.core.constants import PBAR_FORMAT, RESOURCE_PATH
+from scripts.utils import utility, lua_helper
 
 language_code = ""
 lcs = ""

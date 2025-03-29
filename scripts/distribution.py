@@ -4,7 +4,7 @@ import re
 import math
 import tqdm
 import scripts.parser.distribution_parser as distribution_parser
-import scripts.core.utility as utility
+import utils.utility as utility
 from scripts.core.constants import DATA_PATH
 
 cache_path = os.path.join(DATA_PATH, "distributions")

@@ -1,8 +1,9 @@
 from tqdm import tqdm
 import os
 from scripts.parser import item_parser
-from scripts.core import translate, utility, logger
+from scripts.core import translate, logger
 from scripts.core.constants import (PBAR_FORMAT, OUTPUT_PATH)
+from scripts.utils import utility
 
 filters = {
 #    'ExampleItemPrefix': (True,),

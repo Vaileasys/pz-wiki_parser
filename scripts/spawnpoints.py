@@ -1,6 +1,7 @@
 from pathlib import Path
-from scripts.core import lua_helper, utility, translate
+from scripts.core import translate
 from scripts.core.constants import (LUA_PATH, DATA_PATH)
+from scripts.utils import utility, lua_helper
 
 OUTPUT_DIR = Path("output") / "spawnpoints"
 LUA_DIR = Path(LUA_PATH) / "spawnpoints"

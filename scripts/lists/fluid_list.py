@@ -1,7 +1,8 @@
 import os
 import json
-from scripts.core import translate, utility
+from scripts.core import translate
 from scripts.parser import fluid_parser
+from scripts.utils import utility
 
 #TODO: add translations
 

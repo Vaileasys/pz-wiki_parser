@@ -1,7 +1,8 @@
 import os
 from lupa import LuaRuntime
-from scripts.core import utility, version
+from scripts.core import version
 from scripts.core.constants import DATA_PATH
+from scripts.utils import utility
 
 STASH_DIRECTORY = "resources/lua/stashes"
 CACHE_JSON = "stash_data.json"

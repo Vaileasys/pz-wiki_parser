@@ -1,6 +1,6 @@
 import os
 from lupa import LuaRuntime, LuaError
-from scripts.core import utility
+from scripts.utils import utility
 from scripts.core.constants import LUA_PATH
 
 def load_lua_file(lua_files: list[str], lua_runtime: LuaRuntime=None, dependencies: list[str]=None, inject_lua: str=None) -> LuaRuntime:

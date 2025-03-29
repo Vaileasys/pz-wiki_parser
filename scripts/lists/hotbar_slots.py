@@ -1,7 +1,8 @@
 from pathlib import Path
-from scripts.core import lua_helper, utility, translate, version
+from scripts.core import translate, version
 from scripts.parser import item_parser
 from scripts.core.constants import OUTPUT_PATH
+from scripts.utils import utility, lua_helper
 
 language_code = translate.get_language_code()
 output_dir = Path(OUTPUT_PATH) / language_code.lower()

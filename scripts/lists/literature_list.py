@@ -1,8 +1,9 @@
 import os
 from tqdm import tqdm
 from scripts.parser import item_parser, recipe_parser, stash_parser
-from scripts.core import translate, utility
+from scripts.core import translate
 from scripts.core.constants import PBAR_FORMAT
+from scripts.utils import utility
 
 language_code = "en"
 

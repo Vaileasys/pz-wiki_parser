@@ -4,9 +4,10 @@ import os
 import random
 from tqdm import tqdm
 from scripts.parser import item_parser
-from scripts.core import translate, utility, version
+from scripts.core import translate, version
 from scripts.lists import hotbar_slots
 from scripts.core.constants import PBAR_FORMAT
+from scripts.utils import utility
 
 hotbar_data = {}
 

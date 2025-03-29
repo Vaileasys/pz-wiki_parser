@@ -1,8 +1,9 @@
 from pathlib import Path
 from tqdm import tqdm
 from scripts.parser import item_parser, distribution_container_parser
-from scripts.core import utility, translate
+from scripts.core import translate
 from scripts.core.constants import (PBAR_FORMAT, OUTPUT_PATH)
+from scripts.utils import utility
 
 TABLE_HEADER = (
     '{{| class="wikitable theme-red sortable mw-collapsible{wiki_class}" id="contents-{item_id}"',

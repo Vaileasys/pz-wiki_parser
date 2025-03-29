@@ -3,8 +3,9 @@ import json
 import chardet
 import re
 from scripts.parser import item_parser
-from scripts.core import logger, config_manager, utility, version
+from scripts.core import logger, config_manager, version
 from scripts.core.constants import DATA_PATH
+from scripts.utils import utility
 
 language_code = None
 default_language = None

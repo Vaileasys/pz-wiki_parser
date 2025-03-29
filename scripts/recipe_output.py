@@ -4,7 +4,8 @@ import json
 from collections import defaultdict
 from scripts import item_tags, recipe_format
 from scripts.parser import fluid_parser
-from scripts.core import translate, utility
+from scripts.core import translate
+from scripts.utils import utility
 
 
 def process_ingredients(data):

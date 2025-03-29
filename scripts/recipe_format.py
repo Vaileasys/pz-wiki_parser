@@ -3,9 +3,10 @@ import re
 import json
 from tqdm import tqdm
 from scripts.parser import recipe_parser, literature_parser, item_parser
-from scripts.core import version, translate, utility
+from scripts.core import version, translate
 import recipe_output, item_tags
 from scripts.core.constants import (PBAR_FORMAT, DATA_PATH)
+from scripts.utils import utility
 
 processed_recipes = {}
 

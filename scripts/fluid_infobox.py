@@ -2,7 +2,8 @@ import os
 import shutil
 import json
 from scripts.parser import fluid_parser
-from scripts.core import translate, logger, version, utility
+from scripts.core import translate, logger, version
+from scripts.utils import utility
 print(f"Current Working Directory: {os.getcwd()}")
 
 

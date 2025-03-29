@@ -6,8 +6,10 @@ import re
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from scripts.parser import item_parser, recipe_parser
-from scripts.core import translate, logger, version, lua_helper, config_manager
+from scripts.core import translate, logger, version, config_manager
 from scripts.core.constants import (DATA_PATH, RESOURCE_PATH)
+from scripts.utils.util import echo, save_json, load_json
+from scripts.utils import lua_helper
 
 
 parsed_burn_data = {}
@@ -399,11 +401,11 @@ def save_cache(data: dict, data_file: str, data_dir=DATA_PATH, suppress=False):
     data_copy = data.copy() # Copy so we don't modify the existing usable data.
     # Add version number to data. Version can be checked to save time parsing.
     data_copy["version"] = version.get_version()
-    with open(data_file_path, 'w', encoding='utf-8') as json_file:
-        json.dump(data_copy, json_file, ensure_ascii=False, indent=4)
+    
+    save_json(data_file_path, data_copy)
     
     if not suppress:
-        print(f"{cache_name.capitalize()} saved to '{data_file_path}'")
+        echo(f"{cache_name.capitalize()} saved to '{data_file_path}'")
 
 
 def load_cache(cache_file, cache_name="data", get_version=False, backup_old=False, suppress=False):
@@ -432,24 +434,23 @@ def load_cache(cache_file, cache_name="data", get_version=False, backup_old=Fals
 
     try:
         if os.path.exists(cache_file):
-            with open(cache_file, 'r', encoding='utf-8') as file:
-                json_cache = json.load(file)
+            json_cache = load_json(cache_file)
             
             cache_version = json_cache.get("version")
             # Remove 'version' key before returning.
             json_cache.pop("version", None)
 
             if not suppress:
-                print(f"{cache_name.capitalize()} loaded from cache: '{cache_file}' ({cache_version})")
+                echo(f"{cache_name.capitalize()} loaded from cache: '{cache_file}' ({cache_version})")
 
             if backup_old and cache_version != version.get_version():
                 shutil.copy(cache_file, cache_file.replace(".json", "_old.json"))
 
     except json.JSONDecodeError as e:
-        print(f"Error decoding JSON file 'cache_file': {e}")
+        echo(f"Error decoding JSON file 'cache_file': {e}")
 
     except Exception as e:
-        print(f"Error getting {cache_name.lower()} '{cache_file}': {e}")
+        echo(f"Error getting {cache_name.lower()} '{cache_file}': {e}")
 
     if get_version:
         return json_cache, cache_version
@@ -481,9 +482,9 @@ def clear_cache(cache_path=DATA_PATH, cache_name=None, suppress=False):
                 os.remove(cache_path)  # Delete file
 
         if not suppress:
-            print(f"{cache_name.capitalize()} cleared.")
+            echo(f"{cache_name.capitalize()} cleared.")
     except Exception as e:
-        print(f"Error clearing {cache_name.lower()} '{cache_path}': {e}")
+        echo(f"Error clearing {cache_name.lower()} '{cache_path}': {e}")
 
 
 

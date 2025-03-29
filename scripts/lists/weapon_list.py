@@ -1,7 +1,8 @@
 import os
 from tqdm import tqdm
 from scripts.parser import item_parser, script_parser
-from scripts.core import translate, utility
+from scripts.core import translate
+from scripts.utils import utility
 
 pbar_format = "{l_bar}{bar:30}{r_bar}"
 

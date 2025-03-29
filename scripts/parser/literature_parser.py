@@ -1,8 +1,9 @@
 # Parses literature lua files
 
 import os
-from scripts.core import utility, version, lua_helper
+from scripts.core import version
 from scripts.core.constants import DATA_PATH
+from scripts.utils import utility, lua_helper
 
 CACHE_JSON = "literature_data.json"
 

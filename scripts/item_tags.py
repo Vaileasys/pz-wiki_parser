@@ -3,8 +3,9 @@ import json
 from difflib import SequenceMatcher
 from tqdm import tqdm
 from scripts.parser import item_parser
-from scripts.core import utility, translate, version
+from scripts.core import translate, version
 from scripts.core.constants import (OUTPUT_PATH, PBAR_FORMAT, DATA_PATH)
+from scripts.utils import utility
 
 CACHE_JSON = "tags_data.json"
 is_run_locally = False

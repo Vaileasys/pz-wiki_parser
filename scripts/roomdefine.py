@@ -3,8 +3,9 @@ from pathlib import Path
 from tqdm import tqdm
 import concurrent.futures
 import scripts.parser.distribution_parser as distribution_parser
-from scripts.core import version, translate, utility
+from scripts.core import version, translate
 from scripts.core.constants import DATA_PATH
+from scripts.utils import utility
 
 
 def main():

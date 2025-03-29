@@ -5,8 +5,9 @@ This will be fleshed out more with translations and the new list system once com
 
 import os
 import json
-from scripts.core import translate, utility
+from scripts.core import translate
 from scripts.parser import item_parser, fluid_parser
+from scripts.utils import utility
 
 HEADER = """{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"
 ! Icon

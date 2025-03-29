@@ -1,7 +1,8 @@
 import os
 import re
-from scripts.core import logger, utility, version
+from scripts.core import logger, version
 from scripts.core.constants import DATA_PATH
+from scripts.utils import utility
 
 CACHE_JSON = 'fixing_data.json'
 SCRIPTS_DIR = "resources/scripts"

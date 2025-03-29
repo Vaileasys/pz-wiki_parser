@@ -1,6 +1,7 @@
 import os, re
-from scripts.core import utility, version
+from scripts.core import version
 from scripts.core.constants import DATA_PATH
+from scripts.utils import utility
 
 RECIPES_DIR = "resources/scripts"
 CACHE_JSON = "recipes_data.json"

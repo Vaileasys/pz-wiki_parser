@@ -2,8 +2,9 @@
 
 import shutil
 from pathlib import Path
-from scripts.core import utility, config_manager
+from scripts.core import config_manager
 from scripts.core.constants import RESOURCE_PATH
+from scripts.utils import utility
 
 RESOURCES_DIR = Path(RESOURCE_PATH)
 ICON_DIR = RESOURCES_DIR / "icons"

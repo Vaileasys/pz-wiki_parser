@@ -1,6 +1,6 @@
 import re
 import os
-from scripts.core import utility
+from scripts.utils import utility
 
 RESOURCE_PATH = "resources/scripts/"
 DATA_FILE = "fluid_data.json"

@@ -1,7 +1,8 @@
 import os
 import shutil
 from scripts.parser import item_parser
-from scripts.core import logger, translate, utility
+from scripts.core import logger, translate
+from scripts.utils import utility
 
 
 def get_item():

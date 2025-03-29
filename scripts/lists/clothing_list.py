@@ -4,6 +4,7 @@ from scripts.parser import item_parser
 from scripts.core import utility, translate
 from scripts.core.constants import PBAR_FORMAT
 from scripts.lists import hotbar_slots
+from scripts.utils import utility
 
 # Used for getting table values
 TABLE_DICT = {

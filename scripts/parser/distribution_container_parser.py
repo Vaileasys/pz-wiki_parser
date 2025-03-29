@@ -1,5 +1,6 @@
 from lupa import LuaRuntime
-from scripts.core import utility, version, lua_helper
+from scripts.core import version
+from scripts.utils import utility, lua_helper
 
 # TODO: merge with distribution_parser.py
 
