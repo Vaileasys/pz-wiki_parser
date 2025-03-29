@@ -1,25 +1,27 @@
 import os
-from tqdm import tqdm
 import traceback
 from scripts.core.constants import OUTPUT_PATH
+from scripts.utils.util import echo
 
 LOG_PATH = f"{OUTPUT_PATH}\\logging"
 DEF_FILE = "log.txt"
 is_first_log = True
 
+
 def get_log_path(file_name=DEF_FILE):
     return os.path.join(LOG_PATH, file_name)
 
-# Initialise log file erasing existing contents
+
 def init_log_file(file_name="log.txt"):
+    """Initialise log file erasing existing contents"""
     os.makedirs(os.path.dirname(file_name), exist_ok=True)
 
     with open(file_name, 'w') as file:
         file.write("")
 
 
-# Used to log important info to a log file
 def write(message, print_bool=False, file_name=DEF_FILE, exception=None):
+    """Used to log important info to a log file"""
     global is_first_log
     file_name = get_log_path(file_name)
 
@@ -46,13 +48,10 @@ def write(message, print_bool=False, file_name=DEF_FILE, exception=None):
         post_message = f": {exception} (File {rel_path}, line {lineno}, in {func})"
     else:
         post_message = ""
-        
+
 
     if print_bool:
-        if tqdm._instances:
-            tqdm.write(f"{message}{post_message}")
-        else:
-            print(f"{message}{post_message}")
+        echo(f"{message}{post_message}")
 
     with open(file_name, 'a') as file:
         file.write(f"{message}{post_message}\n")
