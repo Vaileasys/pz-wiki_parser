@@ -4,6 +4,8 @@ from scripts.utils import utility, util, table_helper
 from scripts.parser import item_parser, recipe_parser, script_parser
 from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
 
+language_code = "en"
+lcs = ""
 TABLE_PATH = f"{RESOURCE_PATH}/tables/weapon_table.json"
 
 box_types = {}
@@ -15,10 +17,6 @@ def check_fixing(item_id):
     """ Check if it can be fixed """
     module, item_name = item_id.split('.')
     parsed_fixing_data = script_parser.get_fixing_data(True)
-    language_code = translate.get_language_code()
-    lcs = ""
-    if language_code != "en":
-        lcs = f"/{language_code}"
     for fixing, fixing_data in parsed_fixing_data[module].items():
         if isinstance(fixing_data, dict) and 'Require' in fixing_data:
             if item_name in fixing_data['Require']:
@@ -118,7 +116,7 @@ def generate_data(item_id, item_data):
 
     if table_type in ("round", "box", "carton"):
         item_data = generate_ammo_data(item_id, item_data)
-    
+
     item = {}
 
     item["icon"] = item_data.get("IconFormatted") if "icon" in columns else None
@@ -153,7 +151,15 @@ def generate_data(item_id, item_data):
         item["crit_multiplier"] = item_data.get("CritDmgMultiplier") + "×" if item_data.get("CritDmgMultiplier") is not None else "-"
     if "crit_chance_mod" in columns:
         item["crit_chance_mod"] = "+" + item_data.get("AimingPerkCritModifier") + "%" if item_data.get("AimingPerkCritModifier") is not None else "-"
-    item["sound_radius"] = item_data.get('SoundRadius', '-') if "sound_radius" in columns else None
+    if "sound_radius" in columns:
+        sound_radius = item_data.get('SoundRadius', item_data.get('NoiseRange'))
+        sound_radius_int = int(sound_radius) if sound_radius is not None else 0
+        if sound_radius_int <= 0 and item_data.get("ExplosionSound") is not None:
+            sound_radius = "50" # Defined in IsoTrap.class.triggerExplosion() (find: getExplosionSound)
+        if sound_radius is not None:
+            item["sound_radius"] = sound_radius
+        else:
+            item["sound_radius"] = "-"
     item["knockback"] = item_data.get('PushBackMod', '-') if "knockback" in columns else None
     if "condition_max" in columns or "condition_lower_chance" in columns:
         condition_max = item_data.get("ConditionMax", '0')
@@ -177,6 +183,24 @@ def generate_data(item_id, item_data):
     item["rounds"] = utility.get_icon(item_data.get("AmmoType"), True, True, True) + f" ({item_data.get('AmmoTypeQuantity')})" if "rounds" in columns else None
     item["box"] = utility.get_icon(item_data.get("AmmoBox"), True, True, True) + f" ({item_data.get('AmmoBoxQuantity')})" if "box" in columns else None
     item["carton"] = utility.get_icon(item_data.get("AmmoCarton"), True, True, True) + f" ({item_data.get('AmmoCartonQuantity')})" if "carton" in columns else None
+    if "effect" in columns:
+        effects = {
+            "Smoke": {"property": "SmokeRange", "string": "Smoke"}, # Priority 1
+            "Noise": {"property": "NoiseDuration", "string": "[[Noise{lcs}|Noise]]"}, # Priority 2
+            "Fire": {"property": "FirePower", "string": "[[Fire{lcs}|Fire]]"}, # Priority 3
+            "Explosion": {"property": "ExplosionPower", "string": "[[Fire{lcs}|Explosion]]"}, # Priority 4
+        }
+        for key, value in effects.items():
+            if item_data.get(value["property"]):
+                effect = key
+                item["effect"] = value["string"].format(lcs=lcs)
+                break
+            else:
+                item["effect"] = "-"
+    item["effect_power"] = item_data.get(f'{effect}Range', '-') if "effect_power" in columns else None
+    item["effect_range"] = item_data.get(f'{effect}Range', '-') if "effect_range" in columns else None
+    item["effect_timer"] = item_data.get(f'{effect}Range', '-') if "effect_timer" in columns else None
+    item["sensor_range"] = item_data.get('SensorRange', '-') if "sensor_range" in columns else None
     item["item_id"] = item_id if "item_id" in columns else None
 
     # Remove any values that are None
@@ -214,6 +238,8 @@ def find_table_type(item_id, item_data):
                 table_type = "rifle"
                 if int(item_data.get("ProjectileCount")) > 1:
                     table_type = "shotgun"
+        elif item_data.get("DisplayCategory") == "Explosives":
+            table_type = "explosive"
     elif item_id in box_types:
         # Ammo (box & carton)
         table_type = box_types[item_id].get("type")
@@ -283,9 +309,13 @@ def find_boxes():
 
 
 def main():
+    global language_code
+    global lcs
     global table_map
     global all_items
     global table_type_map
+    language_code = translate.get_language_code()
+    lcs = f"/{language_code}" if language_code != "en" else ""
     table_map, column_headings, table_type_map = table_helper.get_table_data(TABLE_PATH, "type_map")
     find_boxes()
 
@@ -300,7 +330,6 @@ def main():
         for item_id, item_data in all_items.items():
             table_type = item_data.get("TableType")
             pbar.set_postfix_str(f'Generating: {table_type} ({item_id[:30]})')
-
             if table_type is not None:
                 new_item = generate_data(item_id, item_data)
 
