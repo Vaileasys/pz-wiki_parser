@@ -3,7 +3,7 @@ from tqdm import tqdm
 from scripts.parser import item_parser, evolvedrecipe_parser, recipe_parser
 from scripts.core import translate
 from scripts.core.constants import OUTPUT_PATH, RESOURCE_PATH, PBAR_FORMAT
-from scripts.utils import list_util, utility, lua_helper
+from scripts.utils import utility, lua_helper, table_helper
 
 language_code = "en"
 OUTPUT_DIR = f'{OUTPUT_PATH}/{language_code}/item_list/food/'
@@ -251,7 +251,7 @@ def main():
     language_code = translate.get_language_code()
     evolvedrecipe_data = evolvedrecipe_parser.get_evolvedrecipe_data()
     recipes_data = recipe_parser.get_recipe_data()["recipes"]
-    table_map, column_headings = list_util.get_table_data(TABLE_PATH)
+    table_map, column_headings = table_helper.get_table_data(TABLE_PATH)
     parse_foraging()
 
     cooking_recipe_data = {}
@@ -274,8 +274,8 @@ def main():
 
         i += 1
     
-    utility.save_cache(cooking_recipe_data, "cooking_recipe_data")
-    utility.save_cache({"recipes": recipe_products}, "recipe_products_data")
+    utility.save_cache(cooking_recipe_data, "cooking_recipe_data.json")
+    utility.save_cache({"recipes": recipe_products}, "recipe_products_data.json")
 
 
     # Store all evolvedrecipe products in a list for determining section
@@ -314,7 +314,7 @@ def main():
             pbar.update(1)
 
         pbar.set_postfix_str("Creating tables...")
-        list_util.create_tables("food", all_food_data, table_map=table_map, columns=column_headings)
+        table_helper.create_tables("food", all_food_data, table_map=table_map, columns=column_headings)
 
 
 if __name__ == "__main__":

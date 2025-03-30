@@ -1,10 +1,9 @@
 from tqdm import tqdm
-from scripts.utils import list_util
 from scripts.parser import item_parser
 from scripts.core import translate
 from scripts.core.constants import PBAR_FORMAT, RESOURCE_PATH
 from scripts.lists import hotbar_slots
-from scripts.utils import utility
+from scripts.utils import utility, table_helper
 
 TABLE_PATH = f"{RESOURCE_PATH}/tables/clothing_table.json"
 
@@ -66,7 +65,7 @@ def generate_data(item_data, item_id):
             item["display_time"] = 'True'
         else:
             item["display_time"] = '-'
-    
+
     item["sound_radius"] = item_data.get("SoundRadius", '-') if "sound_radius" in columns else None
 
     if "extra_slots" in columns:
@@ -188,7 +187,7 @@ def main():
     global hotbar_slot_data
     global table_types
     global body_location_map
-    table_types, column_headings, body_location_map = list_util.get_table_data(TABLE_PATH, "body_locations")
+    table_types, column_headings, body_location_map = table_helper.get_table_data(TABLE_PATH, "body_locations")
     
     hotbar_slot_data = hotbar_slots.get_hotbar_slots()
     clothing_items = find_items()
@@ -198,7 +197,7 @@ def main():
         key: table_types[value["table"]]
         for key, value in body_location_map.items()
     }
-    list_util.create_tables("clothing", clothing_items, columns=column_headings, table_map=table_map)
+    table_helper.create_tables("clothing", clothing_items, columns=column_headings, table_map=table_map)
 
 
 if __name__ == "__main__":
