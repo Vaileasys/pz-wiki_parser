@@ -32,3 +32,37 @@ def save_json(path:str, data:dict) -> bool:
     except OSError as e:
         echo(f"Error: Could not write to {path} – {e}")
         return False
+
+
+def capitalize(value):
+    """
+    Safely perform the capitalize method if a value is not a string. Lists will also be capitalized, provided their values are strings.
+
+    :param value: The string or list of strings to capitalize.
+    :type value: str
+    :return: Capitalized values if a string or list, otherwise None.
+    :rtype: str | list | None
+    """
+#    print(value)
+    if isinstance(value, str):
+        value = [value]
+        is_string = True
+    elif isinstance(value, list):
+        is_string = False
+    else:
+        return None
+
+    rvalue = []
+    
+    for v in value:
+        if isinstance(v, str):
+            v = v.capitalize()
+        else:
+            v = None
+
+        rvalue.append(v)
+
+    if is_string:
+        return rvalue[0]
+    
+    return rvalue

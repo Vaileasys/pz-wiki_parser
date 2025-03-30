@@ -8,6 +8,8 @@ from scripts.core import translate, logger, version
 from scripts.lists import hotbar_slots
 from scripts.core.constants import PBAR_FORMAT, RESOURCE_PATH
 from scripts.utils import utility, lua_helper
+from scripts.utils.util import capitalize
+
 
 language_code = ""
 lcs = ""
@@ -98,40 +100,6 @@ def enumerate_params(parameters):
         else:
             new_parameters[key] = value
     return new_parameters
-
-
-def capitalize(value):
-    """
-    Safely perform the capitalize method if a value is not a string. Lists will also be capitalized, provided their values are strings.
-
-    :param value: The string or list of strings to capitalize.
-    :type value: str
-    :return: Capitalized values if a string or list, otherwise None.
-    :rtype: str | list | None
-    """
-#    print(value)
-    if isinstance(value, str):
-        value = [value]
-        is_string = True
-    elif isinstance(value, list):
-        is_string = False
-    else:
-        return None
-
-    rvalue = []
-    
-    for v in value:
-        if isinstance(v, str):
-            v = v.capitalize()
-        else:
-            v = None
-
-        rvalue.append(v)
-
-    if is_string:
-        return rvalue[0]
-    
-    return rvalue
 
 
 def remove_descriptor(value: str) -> str:
