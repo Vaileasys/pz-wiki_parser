@@ -2,10 +2,8 @@ from tqdm import tqdm
 from scripts.core import translate
 from scripts.utils import utility, util, table_helper
 from scripts.parser import item_parser, recipe_parser, script_parser
-from scripts.core.constants import OUTPUT_PATH, RESOURCE_PATH, PBAR_FORMAT
+from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
 
-language_code = "en"
-OUTPUT_DIR = f'{OUTPUT_PATH}/{language_code}/item_list/ammo/'
 TABLE_PATH = f"{RESOURCE_PATH}/tables/weapon_table.json"
 
 box_types = {}
@@ -103,8 +101,6 @@ def generate_ammo_data(item_id, item_data):
     if magazine:
         item_data["Magazine"] = magazine
 
-#    utility.save_cache(item_data, f"{item_id}_data.json")
-
     return item_data
 
 
@@ -185,9 +181,6 @@ def generate_data(item_id, item_data):
 
     # Remove any values that are None
     item = {k: v for k, v in item.items() if v is not None}
-    # temp for testing
-#    for key in item:
-#        item[key] = f"{key}: {item[key]}"
 
     # Ensure column order is correct
     item = {key: item[key] for key in columns if key in item}
@@ -287,16 +280,12 @@ def find_boxes():
                     "contents": items[0],
                     "quantity": quantity
                 }
-    
-#    utility.save_cache(box_types, "box_types.json")
 
 
 def main():
-    global language_code
     global table_map
     global all_items
     global table_type_map
-    language_code = translate.get_language_code()
     table_map, column_headings, table_type_map = table_helper.get_table_data(TABLE_PATH, "type_map")
     find_boxes()
 

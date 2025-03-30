@@ -2,11 +2,9 @@ import os
 from tqdm import tqdm
 from scripts.parser import item_parser, evolvedrecipe_parser, recipe_parser
 from scripts.core import translate
-from scripts.core.constants import OUTPUT_PATH, RESOURCE_PATH, PBAR_FORMAT
+from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
 from scripts.utils import utility, lua_helper, table_helper
 
-language_code = "en"
-OUTPUT_DIR = f'{OUTPUT_PATH}/{language_code}/item_list/food/'
 TABLE_PATH = f"{RESOURCE_PATH}/tables/food_table.json"
 
 evolvedrecipe_products = []
@@ -125,16 +123,6 @@ def find_table_type(item_id, item_data):
     item_data["TableType"] = table_type
 
     return table_type, item_data
-
-
-def write_to_file(content, file_name):
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    output_path = os.path.join(OUTPUT_DIR, file_name)
-
-    with open(output_path, 'w', encoding='utf-8') as file:
-        file.write("\n".join(content))
-    
-    print(f"File saved to '{output_path}'")
 
 
 def parse_foraging():

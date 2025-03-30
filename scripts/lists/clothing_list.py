@@ -192,7 +192,6 @@ def main():
     hotbar_slot_data = hotbar_slots.get_hotbar_slots()
     clothing_items = find_items()
 
-#    utility.save_cache(clothing_items, "clothing_data.json")
     table_map = {
         key: table_types[value["table"]]
         for key, value in body_location_map.items()
