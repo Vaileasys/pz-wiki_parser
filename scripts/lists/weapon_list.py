@@ -1,108 +1,20 @@
-import os
 from tqdm import tqdm
-from scripts.parser import item_parser, script_parser
 from scripts.core import translate
-from scripts.utils import utility
+from scripts.utils import utility, util, table_helper
+from scripts.parser import item_parser, recipe_parser, script_parser
+from scripts.core.constants import OUTPUT_PATH, RESOURCE_PATH, PBAR_FORMAT
 
-pbar_format = "{l_bar}{bar:30}{r_bar}"
+language_code = "en"
+OUTPUT_DIR = f'{OUTPUT_PATH}/{language_code}/item_list/ammo/'
+TABLE_PATH = f"{RESOURCE_PATH}/tables/weapon_table.json"
 
-# table header for melee weapons
-melee_header = """<div style="overflow: auto; white-space: nowrap;">
-{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"
-! rowspan=2 | <<icon>>
-! rowspan=2 | <<name>>
-! rowspan=2 | [[File:Status_HeavyLoad_32.png|link=|<<weight>>]]
-! rowspan=2 | [[File:UI_Hand.png|32px|link=|<<equipped>>]]
-! colspan=4 | <<damage>>
-! colspan=2 | <<range>>
-! rowspan=2 | [[File:UI_AttackSpeed.png|32px|link=|<<attack_speed>>]]
-! rowspan=2 | [[File:UI_Critical_Chance.png|32px|link=|<<crit_chance>>]]
-! rowspan=2 | [[File:UI_Critical_Multiply.png|32px|link=|<<crit_multiplier>>]]
-! rowspan=2 | [[File:UI_Knockback.png|32px|link=|<<knockback>>]]
-! rowspan=2 | [[File:UI_Condition_Max.png|32px|link=|<<max_condition>>]]
-! rowspan=2 | [[File:UI_Condition_Chance.png|32px|<<condition_lower_chance>>]]
-! rowspan=2 | [[File:UI_Condition_Average.png|32px|link=|<<average_condition>>]]
-! rowspan=2 | <<item_id>>
-|-
-! [[File:UI_Damage_Min.png|32px|link=|<<min_damage>>]]
-! [[File:UI_Damage_Max.png|32px|link=|<<max_damage>>]]
-! [[File:Door.png|32px|link=|<<door_damage>>]]
-! rowspan=2 | [[File:Container_Plant.png|32px|link=|<<tree_damage>>]]
-! [[File:UI_Range_Min.png|32px|link=|<<min_range>>]]
-! style="border-right: var(--border-mw);" | [[File:UI_Range_Max.png|32px|link=|<<max_range>>]]\n"""
+box_types = {}
+all_items = {}
+table_map = {}
+table_type_map = {}
 
-# TODO: re-add this line after fixing repairing - goes before item_id
-# ! rowspan=2 | [[File:UI_Condition.png|32px|link=|<<repairable>>]]
-
-# table header for firearms
-firearm_header = """<div style="overflow: auto; white-space: nowrap;">
-{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"
-! rowspan=2 | <<icon>>
-! rowspan=2 | <<name>>
-! rowspan=2 | [[File:Status_HeavyLoad_32.png|link=|<<weight>>]]
-! rowspan=2 | [[File:UI_Hand.png|32px|link=|<<equipped>>]]
-! rowspan=2 | [[File:PistolAmmo.png|link=|<<ammo>>]]
-! rowspan=2 | [[File:BerettaClip.png|link=|<<mag_capacity>>]]
-! colspan=2 | <<damage>>
-! colspan=2 | <<range>>
-! rowspan=2 | [[File:UI_Accuracy.png|32px|link=|<<accuracy>>]]
-! rowspan=2 | [[File:UI_Accuracy_Add.png|32px|link=|<<accuracy_add>>]]
-! rowspan=2 | [[File:UI_Critical_Chance.png|32px|link=|<<crit_chance>>]]
-! rowspan=2 | [[File:UI_Critical_Add.png|32px|link=|<<crit_chance_add>>]]
-! rowspan=2 | [[File:UI_Noise.png|32px|link=|<<noise_radius>>]]
-! rowspan=2 | [[File:UI_Knockback.png|32px|link=|<<knockback>>]]
-! rowspan=2 | <<item_id>>
-|-
-! [[File:UI_Damage_Min.png|32px|link=|<<min_damage>>]]
-! [[File:UI_Damage_Max.png|32px|link=|<<max_damage>>]]
-! [[File:UI_Range_Min.png|32px|link=|<<min_range>>]]
-! style="border-right: var(--border-mw);" | [[File:UI_Range_Max.png|32px|link=|<<max_range>>]]\n"""
-
-# TODO: re-add this line after fixing repairing - goes before item_id
-# ! rowspan=2 | [[File:UI_Condition.png|32px|link=|<<repairable>>]]
-
-# store translated skills
-skills = {}
-
-
-def combine_weapon_files(folder="melee"):
-    """
-    Combines all .txt files from the weapon directory into a single file.
-    """
-    lc = translate.get_language_code()
-    weapon_dir = f'output/{lc}/item_list/weapons/{folder}'
-    output_file = f'output/{lc}/item_list/weapons/{folder}_list.txt'
-
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-
-    # Open the output file to write
-    with open(output_file, 'w', encoding='utf-8') as outfile:
-        for filename in sorted(os.listdir(weapon_dir)):
-            if filename.endswith('.txt'):
-                file_path = os.path.join(weapon_dir, filename)
-                with open(file_path, 'r', encoding='utf-8') as infile:
-                    outfile.write(infile.read())
-                    outfile.write('\n\n')
-
-    print(f"Combined '{folder}' files written to {output_file}")
-
-
-# function to be efficient with translating skills
-def translate_skill(skill, property="Categories"):
-    if skill not in skills:
-        try:
-            skill_translated = translate.get_translation(skill, property, 'en')
-            skills[skill] = skill_translated
-        except Exception as e:
-            print(f"Error translating skill '{skill}': {e}")
-            skill_translated = skill
-    else:
-        skill_translated = skills[skill]
-    return skill_translated
-
-
-# Check if it can be fixed
 def check_fixing(item_id):
+    """ Check if it can be fixed """
     module, item_name = item_id.split('.')
     parsed_fixing_data = script_parser.get_fixing_data(True)
     language_code = translate.get_language_code()
@@ -116,223 +28,317 @@ def check_fixing(item_id):
     return f'[[File:UI Cross.png|link=Condition{lcs}#<<repairing>>|<<not_repairable>>]]'
 
 
-# get values for each firearm
-def process_item_firearm(item_data, item_id):
+def generate_ammo_data(item_id, item_data):
+    table_type = item_data.get("TableType")
+    box_data = box_types.get(item_id, {})
+    round_id = None
+    box_id = None
+    carton_id = None
+    magazine = None
+    weapons = []
+
+    if table_type == "carton":
+        # Get carton
+        carton_id = item_id
+        carton_q = 1
+        # Get box
+        box_id = box_data.get("contents")
+        box_q = box_data.get("quantity")
+        # Get round
+        round_id = box_types.get(box_id, {}).get("contents")
+        round_q = box_types.get(box_id, {}).get("quantity") * box_q
+    elif table_type == "box":
+        # Get box
+        box_id = item_id
+        box_q = 1
+        # Get round
+        round_id = box_data.get("contents")
+        round_q = box_data.get("quantity")
+        # Get carton
+        for key, value in box_types.items():
+            if value.get("contents") == box_id:
+                carton_id = key
+                carton_q = value.get("quantity") * box_q
+                break
+    elif table_type == "round":
+        # Get round
+        round_id = item_id
+        round_q = 1
+        # Get box
+        for key, value in box_types.items():
+            if value.get("contents") == item_id:
+                box_id = key
+                box_q = value.get("quantity")
+                break
+        # Get carton
+        for key, value in box_types.items():
+            if value.get("contents") == box_id:
+                carton_id = key
+                carton_q = value.get("quantity") * box_q
+                break
+    
+    
+    for key, value in all_items.items():
+        # Get firearms
+        if value.get("TableType") in table_type_map.get("firearm") and value.get("AmmoType") == round_id:
+            weapons.append(key)
+            continue
+        
+        # Get magazine
+        if value.get("TableType") == "magazine" and value.get("AmmoType") == round_id:
+            magazine = key
+
+    # Add data to dict
+    if carton_id and carton_id != item_id:
+        item_data["AmmoCarton"] = carton_id
+        item_data["AmmoCartonQuantity"] = carton_q
+    if box_id and box_id != item_id:
+        item_data["AmmoBox"] = box_id
+        item_data["AmmoBoxQuantity"] = box_q
+    if round_id and round_id != item_id:
+        item_data["AmmoType"] = round_id
+        item_data["AmmoTypeQuantity"] = round_q
+    if weapons:
+        item_data["Weapons"] = weapons
+    if magazine:
+        item_data["Magazine"] = magazine
+
+#    utility.save_cache(item_data, f"{item_id}_data.json")
+
+    return item_data
+
+
+def generate_data(item_id, item_data):
+    notes = None
+    table_type = item_data.get("TableType")
+    for key, value in table_type_map.items():
+        if table_type in value:
+            columns = table_map.get(key)
+            break
+        else:
+            columns = table_map.get("default")
+
+    item_name = utility.get_name(item_id, item_data)
+
+    if table_type in ("round", "box", "carton"):
+        item_data = generate_ammo_data(item_id, item_data)
+    
+    item = {}
+
+    item["icon"] = item_data.get("IconFormatted") if "icon" in columns else None
+    item["name"] = utility.format_link(item_name, utility.get_page(item_id, item_name)) if "name" in columns else None
+    item["weight"] = item_data.get("Weight", "1") if "weight" in columns else None
+    if "equipped" in columns:
+        equipped = "<<1h>>"
+        if item_data.get("RequiresEquippedBothHands", "false").lower() == "true":
+            equipped = "<<2h>>"
+        elif item_data.get("TwoHandWeapon", "false").lower() == "true":
+            equipped = "{{Tooltip|<<2h>>*|<<limited_impact_desc>>}}"
+            notes = "<nowiki>*</nowiki><<limited_impact_desc>>"
+        if item_data.get("CloseKillMove") == "Jaw_Stab":
+            equipped = "{{Tooltip|<<1h>>*|<<jaw_stab_desc>>}}"
+            notes = "<nowiki>*</nowiki><<jaw_stab_desc>>"
+        item["equipped"] = translate.get_wiki_translation(equipped)
+    if "ammo" in columns:
+        item["ammo"] = utility.get_icon(item_data.get("AmmoType"), True, True, True) if item_data.get("AmmoType") is not None else "-"
+    item["capacity"] = item_data.get('MaxAmmo', item_data.get('ClipSize', '-')) if "capacity" in columns else None
+    item["min_damage"] = item_data.get('MinDamage', '-') if "min_damage" in columns else None
+    item["max_damage"] = item_data.get('MaxDamage', '-') if "max_damage" in columns else None
+    item["door_damage"] = item_data.get('DoorDamage', '-') if "door_damage" in columns else None
+    item["tree_damage"] = item_data.get('TreeDamage', '-') if "tree_damage" in columns else None
+    item["min_range"] = item_data.get('MinRange', '-') if "min_range" in columns else None
+    item["max_range"] = item_data.get('MaxRange', '-') if "max_range" in columns else None
+    item["attack_speed"] = item_data.get('BaseSpeed', '1') if "attack_speed" in columns else None
+    item["hit_chance"] = item_data.get('HitChance', '-') + '%' if "hit_chance" in columns else None
+    item["hit_chance_mod"] = '+' + item_data.get('AimingPerkHitChanceModifier', '-') + '%' if "hit_chance_mod" in columns else None
+    if "crit_chance" in columns:
+        item["crit_chance"] = item_data.get("CriticalChance") + "%" if item_data.get("CriticalChance") is not None else "-"
+    if "crit_multiplier" in columns:
+        item["crit_multiplier"] = item_data.get("CritDmgMultiplier") + "×" if item_data.get("CritDmgMultiplier") is not None else "-"
+    if "crit_chance_mod" in columns:
+        item["crit_chance_mod"] = "+" + item_data.get("AimingPerkCritModifier") + "%" if item_data.get("AimingPerkCritModifier") is not None else "-"
+    item["sound_radius"] = item_data.get('SoundRadius', '-') if "sound_radius" in columns else None
+    item["knockback"] = item_data.get('PushBackMod', '-') if "knockback" in columns else None
+    if "condition_max" in columns or "condition_lower_chance" in columns:
+        condition_max = item_data.get("ConditionMax", '0')
+        condition_lower_chance = item_data.get("ConditionLowerChanceOneIn", '0')
+        item["condition_max"] = condition_max if "condition_max" in columns else None
+        item["condition_lower_chance"] = condition_lower_chance if "condition_max" in columns else None
+        item["condition_average"] = str(int(condition_max) * int(condition_lower_chance)) if "condition_max" in columns and "condition_lower_chance" in columns else None
+    item["repairable"] = translate.get_wiki_translation(check_fixing(item_id)) if "repairable" in columns else None
+    if "magazine" in columns:
+        item["magazine"] = utility.get_icon(item_data.get("Magazine"), True, True, True) if item_data.get("Magazine") else "-"
+    if "weapon" in columns:
+        if table_type == "magazine":
+            item["weapon"] = utility.get_icon(item_data.get("GunType"), True, True, True) if item_data.get("GunType") is not None else "-"
+        elif item_data.get("Weapons"):
+            weapons = []
+            for weapon in item_data.get("Weapons"):
+                weapons.append(all_items.get(weapon).get("IconFormatted"))
+            item["weapon"] = "".join(weapons)
+        else:
+            item["weapon"] = "-"
+    item["rounds"] = utility.get_icon(item_data.get("AmmoType"), True, True, True) + f" ({item_data.get('AmmoTypeQuantity')})" if "rounds" in columns else None
+    item["box"] = utility.get_icon(item_data.get("AmmoBox"), True, True, True) + f" ({item_data.get('AmmoBoxQuantity')})" if "box" in columns else None
+    item["carton"] = utility.get_icon(item_data.get("AmmoCarton"), True, True, True) + f" ({item_data.get('AmmoCartonQuantity')})" if "carton" in columns else None
+    item["item_id"] = item_id if "item_id" in columns else None
+
+    # Remove any values that are None
+    item = {k: v for k, v in item.items() if v is not None}
+    # temp for testing
+#    for key in item:
+#        item[key] = f"{key}: {item[key]}"
+
+    # Ensure column order is correct
+    item = {key: item[key] for key in columns if key in item}
+
+    # Add item_name for sorting
+    item["item_name"] = item_name
+    item["notes"] = notes if notes else None
+
+    return item
+
+
+def find_table_type(item_id, item_data):
+    table_type = None
+    tags = item_data.get("Tags")
+
+    if item_data.get("Type") == "Weapon":
+        skill = item_data.get("Categories")
+        if skill:
+            # Melee
+            skill = [skill] if isinstance(skill, str) else skill
+            # Remove "Improvised" from list if more than 1
+            if "Improvised" in skill and len(skill) > 1:
+                skill = [cat for cat in skill if cat != "Improvised"]
+                if len(skill) > 1:
+                    util.echo(f"WARNING: More than 1 skill ({','.join(skill)})")
+            table_type = skill[0]
+        elif item_data.get("SubCategory") == "Firearm":
+            # Firearm
+            table_type = "handgun"
+            if item_data.get("RequiresEquippedBothHands", "").lower() == "true":
+                table_type = "rifle"
+                if int(item_data.get("ProjectileCount")) > 1:
+                    table_type = "shotgun"
+    elif item_id in box_types:
+        # Ammo (box & carton)
+        table_type = box_types[item_id].get("type")
+    elif item_data.get("Tags") is not None:
+        tags = item_data.get("Tags")
+        tags = [tags] if isinstance(tags, str) else tags
+        # Ammo (rounds)
+        if any(tag.lower() == "ammo" for tag in tags):
+            table_type = "round"
+        elif any(tag.lower() in {"pistolmagazine", "riflemagazine"} for tag in tags):
+            # Magazine
+            table_type = "magazine"
+
+    item_data["TableType"] = table_type
+
+    return item_data
+
+
+def find_items():
+    items = {}
     all_item_data = item_parser.get_item_data()
-    language_code = translate.get_language_code()
-    if language_code == 'en':
-        lcs = ""
-    else:
-        lcs = f"/{language_code}"
-    skill = "Handgun"
-    equipped = "<<1h>>"
-    if item_data.get("RequiresEquippedBothHands", '').lower() == "true":
-        skill = "Rifle"
-        equipped = "<<2h>>"
-        if int(item_data.get("ProjectileCount")) > 1:
-            skill = "Shotgun"
-    equipped = translate.get_wiki_translation(equipped)
+    for item_id, item_data in all_item_data.items():
+        item_data = find_table_type(item_id, item_data)
+        if item_data.get("TableType"):
+            item_data["IconFormatted"] = utility.get_icon(item_id, True, True, True)
+            items[item_id] = item_data
     
-    name = utility.get_name(item_id, item_data, language="en")
-    page_name = utility.get_page(item_id)
-    name = utility.get_name(item_id, item_data)
-    link = utility.format_link(name, page_name)
-    icon = utility.get_icon(item_id, True, True, True)
-    
-    ammo = "-"
-    ammo_id = item_data.get('AmmoType', '')
-    if ammo_id:
-        ammo = utility.get_icon(ammo_id, True, True, True)
+    return items
 
-    condition_max = item_data.get("ConditionMax", '0')
-    condition_chance = item_data.get("ConditionLowerChanceOneIn", '0')
-    condition_average = str(int(condition_max) * int(condition_chance))
-    repairable = check_fixing(item_id)
-    repairable = translate.get_wiki_translation(repairable)
 
-    item = {
-        "name": name,
-        "icon": icon,
-        "name_link": link,
-        "weight": item_data.get('Weight', '1'),
-        "equipped": equipped,
-        "ammo": ammo,
-        "clip_size": item_data.get('MaxAmmo', item_data.get('ClipSize', '')),
-        "damage_min": item_data.get('MinDamage', '-'),
-        "damage_max": item_data.get('MaxDamage', '-'),
-        "min_range": item_data.get('MinRange', '-'),
-        "max_range": item_data.get('MaxRange', '-'),
-        "hit_chance": item_data.get('HitChance', '-') + '%',
-        "hit_chance_mod": '+' + item_data.get('AimingPerkHitChanceModifier', '-') + '%',
-        "crit_chance": item_data.get('CriticalChance', '-') + '%',
-        "crit_chance_mod": '+' + item_data.get('AimingPerkCritModifier', '-') + '%',
-        "sound_radius": item_data.get('SoundRadius', '-'),
-        "knockback": item_data.get('PushBackMod', '-'),
-#        "condition_max": condition_max,
-#        "condition_chance": condition_chance,
-#        "condition_average": condition_average,
-#        "repairable": repairable, # TODO: re-add after fixing repairing
-        "item_id": f'{{{{ID|{item_id}}}}}',
+def find_boxes():
+    global box_types
+
+    ammo_recipes = {
+        "OpenBoxOfShotgunShells": "box",
+        "OpenBoxOfBullets50": "box",
+        "OpenBoxOfBullets20": "box",
+        "OpenCartonOfBullets": "carton"
     }
 
-    return skill, item
+    recipes_data = recipe_parser.get_recipe_data()["recipes"]
+    for recipe in recipes_data:
+        name = recipe.get("name")
+        if name in ammo_recipes:
+            outputs = recipe.get("outputs", [])
+            
+            for output in outputs:
+                mapper = output.get("mapper")
+                quantity = output.get("index")
+                items = output.get("items")
 
-
-# get values for each melee waepon
-def process_item_melee(item_data, item_id):
-    language_code = translate.get_language_code()
-    if language_code == 'en':
-        lcs = ""
-    else:
-        lcs = f"/{language_code}"
+            if mapper == "ammoTypes":
+                item_mappers = recipe.get("itemMappers", {}).get(mapper)
+                for key, value in item_mappers.items():
+                    box_types[value] = {
+                        "type": ammo_recipes.get(name),
+                        "contents": key,
+                        "quantity": quantity
+                    }
+            
+            elif items is not None:
+                box_types[recipe.get("inputs")[0].get("items")[0]] = {
+                    "type": ammo_recipes.get(name),
+                    "contents": items[0],
+                    "quantity": quantity
+                }
     
-    skill = item_data.get("Categories", '')
-    if isinstance(skill, str):
-        skill = [skill]
-    # Remove "Improvised" from list if more than 1
-    if "Improvised" in skill and len(skill) > 1:
-        skill = [cat for cat in skill if cat != "Improvised"]
-
-    skill = " and ".join(skill)
-    skill_translated = translate_skill(skill, "Categories")
-    if skill_translated is not None:
-        skill = skill_translated
-    #FIXME: translate skill just before writing, so we can name files in English.
-#    if skill == "Improvised":
-#        skill = "<<improvised>>"
-#        skill = translate.get_wiki_translation(skill)
-    
-    
-    name = utility.get_name(item_id, item_data, language="en")
-    page_name = utility.get_page(item_id, name)
-    name = utility.get_name(item_id, item_data)
-    link = utility.format_link(name, page_name)
-    icon = utility.get_icon(item_id, True, True, True)
-
-    equipped = "<<1h>>"
-    if item_data.get("RequiresEquippedBothHands", "FALSE").lower() == "true":
-        equipped = "<<2h>>"
-    elif item_data.get("TwoHandWeapon", "FALSE").lower() == "true":
-        equipped = "{{Tooltip|<<2h>>*|<<limited_impact_desc>>}}"
-    if item_data.get("CloseKillMove") == "Jaw_Stab":
-        equipped = "{{Tooltip|<<1h>>*|<<jaw_stab_desc>>}}"
-    equipped = translate.get_wiki_translation(equipped)
-
-    crit_chance = item_data.get("CriticalChance", "-")
-    if crit_chance != "-":
-        crit_chance = f"{crit_chance}%"
-    crit_multiplier = item_data.get("CritDmgMultiplier", "-")
-    if crit_multiplier != "-":
-        crit_multiplier = f"{crit_multiplier}×"
-
-    condition_max = item_data.get("ConditionMax", '0')
-    condition_chance = item_data.get("ConditionLowerChanceOneIn", '0')
-    condition_average = str(int(condition_max) * int(condition_chance))
-    repairable = check_fixing(item_id)
-    repairable = translate.get_wiki_translation(repairable)
-
-    item = {
-        "name": name,
-        "icon": icon,
-        "name_link": link,
-        "weight": item_data.get('Weight', '1'),
-        "equipped": equipped,
-        "damage_min": item_data.get('MinDamage', '-'),
-        "damage_max": item_data.get('MaxDamage', '-'),
-        "damage_door": item_data.get('DoorDamage', '-'),
-        "damage_tree": item_data.get('TreeDamage', '-'),
-        "min_range": item_data.get('MinRange', '-'),
-        "max_range": item_data.get('MaxRange', '-'),
-        "base_speed": item_data.get('BaseSpeed', '1'),
-        "crit_chance": crit_chance,
-        "crit_multiplier": crit_multiplier,
-        "knockback": item_data.get('PushBackMod', '-'),
-        "condition_max": condition_max,
-        "condition_chance": condition_chance,
-        "condition_average": condition_average,
-#        "repairable": repairable, # TODO: re-add after fixing repairing
-        "item_id": f"{{{{ID|{item_id}}}}}",
-    }
-
-    return skill, item
-
-
-# write to file
-def write_items_to_file(skills, header, category):
-    language_code = translate.get_language_code()
-    output_dir = f'output/{language_code}/item_list/weapons/{category}/'
-    os.makedirs(output_dir, exist_ok=True)
-    
-    for skill, items in skills.items():
-        output_path = f"{output_dir}{skill}.txt"
-        with open(output_path, 'w', encoding='utf-8') as file:
-            file.write(f"<!--BOT FLAG-start-{skill}. DO NOT REMOVE-->")
-            header = translate.get_wiki_translation(header)
-            file.write(f"{header}")
-            sorted_items = sorted(items, key=lambda x: x['name'])
-
-            for item in sorted_items:
-                # remove 'name' before writing
-                item = [value for key, value in item.items() if key != 'name']
-                item = '\n| '.join(item)
-                file.write(f"|-\n| {item}\n")
-            caption = ""
-            if skill in ('Axe', 'Long Blunt', 'Short Blunt', 'Long Blade', 'Spear'):
-                caption = '|-\n|+ style="caption-side:bottom; font-weight:normal;" | <nowiki>*</nowiki><<limited_impact_desc>>\n'
-            elif skill == ('Short Blade'):
-                caption = '|-\n|+ style="caption-side:bottom; font-weight:normal;" | <nowiki>*</nowiki><<jaw_stab_desc>>\n'
-            caption = translate.get_wiki_translation(caption)
-            file.write(caption)
-            file.write("|}</div>")
-            file.write(f'<!--BOT_FLAG-end-{skill.replace(" ", "_")}. DO NOT REMOVE-->')
-    
-    print(f"{category.title()} tables completed. Files can be found in '{output_dir}'")
-
-
-def get_items():
-    melee_skills = {}
-    firearm_skills = {}
-    parsed_item_data = item_parser.get_item_data()
-
-    with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=pbar_format, unit=" items") as pbar:
-        for item_id, item_data in parsed_item_data.items():
-            pbar.set_postfix_str(f"Processing: {item_id[:15]}")
-            if item_data.get("Type") == "Weapon":
-
-                if item_data.get("Categories"):
-                    skill, item = process_item_melee(item_data, item_id)
-
-                    if skill not in melee_skills:
-                        melee_skills[skill] = []
-                    melee_skills[skill].append(item)
-
-                elif item_data.get("SubCategory") == "Firearm":
-                    skill, item = process_item_firearm(item_data, item_id)
-
-                    if skill not in firearm_skills:
-                        firearm_skills[skill] = []
-                    firearm_skills[skill].append(item)
-
-                # TODO: add explosives
-
-            pbar.update(1)
-        pbar.bar_format = f"Items processed."
-
-    write_items_to_file(melee_skills, melee_header, 'melee')
-    write_items_to_file(firearm_skills, firearm_header, 'firearm')
+#    utility.save_cache(box_types, "box_types.json")
 
 
 def main():
-    get_items()
-    while True:
-        user_input = input("Want to merge list files? (Y/N)\n> ").lower()
-        
-        if user_input == "n":
-            break
-        elif user_input == "y":
-            combine_weapon_files("melee")
-            combine_weapon_files("firearm")
-            break
+    global language_code
+    global table_map
+    global all_items
+    global table_type_map
+    language_code = translate.get_language_code()
+    table_map, column_headings, table_type_map = table_helper.get_table_data(TABLE_PATH, "type_map")
+    find_boxes()
+
+    with tqdm(total=0, desc="Preparing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+        all_items = find_items()
+
+        pbar.total = len(all_items)
+        pbar.refresh()
+
+        generated_data = {}
+
+        for item_id, item_data in all_items.items():
+            table_type = item_data.get("TableType")
+            pbar.set_postfix_str(f'Generating: {table_type} ({item_id[:30]})')
+
+            if table_type is not None:
+                new_item = generate_data(item_id, item_data)
+
+                note = new_item.pop("notes", None)
+
+                if table_type not in generated_data:
+                    generated_data[table_type] = [{"notes": [note]}] if note else [{"notes": []}]
+                else:
+                    if note:
+                        if generated_data[table_type] and "notes" in generated_data[table_type][0]:
+                            if note not in generated_data[table_type][0]["notes"]:
+                                generated_data[table_type][0]["notes"].append(note)
+                        else:
+                            generated_data[table_type].insert(0, {"notes": [note]})
+                
+                generated_data[table_type].append(new_item)
+
+            pbar.update(1)
+
+        mapped_table = {
+            item_type: table_map[key]
+            for key, value_list in table_type_map.items()
+            for item_type in value_list
+        }
+
+        pbar.set_postfix_str("Creating tables...")
+        table_helper.create_tables("weapon", generated_data, columns=column_headings, table_map=mapped_table, combine_tables=False, suppress=True)
 
 
 if __name__ == "__main__":

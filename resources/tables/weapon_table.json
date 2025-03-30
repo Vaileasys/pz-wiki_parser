@@ -1,0 +1,160 @@
+{
+    "map": {
+        "melee": {
+            "icon": {"rowspan": 2},
+            "name": {"rowspan": 2},
+            "weight": {"rowspan": 2},
+            "equipped": {"rowspan": 2},
+            "damage": {"colspan": 4, "children": ["min_damage", "max_damage", "door_damage", "tree_damage"]},
+            "min_damage": {"colspan": 2, "parent": "damage"},
+            "max_damage": {"colspan": 2, "parent": "damage"},
+            "door_damage": {"colspan": 2, "parent": "damage"},
+            "tree_damage": {"colspan": 2, "parent": "damage"},
+            "range": {"colspan": 2, "children": ["min_range", "max_range"]},
+            "min_range": {"parent": "range"},
+            "max_range": {"parent": "range", "style": "border-right: var(--border-mw);"},
+            "attack_speed": {"rowspan": 2},
+            "crit_chance": {"rowspan": 2},
+            "crit_multiplier": {"rowspan": 2},
+            "knockback": {"rowspan": 2},
+            "condition_max": {"rowspan": 2},
+            "condition_lower_chance": {"rowspan": 2},
+            "condition_average": {"rowspan": 2},
+            "item_id": {"rowspan": 2}
+        },
+        "firearm": {
+            "icon": {"rowspan": 2},
+            "name": {"rowspan": 2},
+            "weight": {"rowspan": 2},
+            "equipped": {"rowspan": 2},
+            "ammo": {"rowspan": 2},
+            "capacity": {"rowspan": 2},
+            "damage": {"colspan": 2, "children": ["min_damage", "max_damage"]},
+            "min_damage": {"colspan": 2, "parent": "damage"},
+            "max_damage": {"colspan": 2, "parent": "damage"},
+            "range": {"colspan": 2, "children": ["min_range", "max_range"]},
+            "min_range": {"parent": "range"},
+            "max_range": {"parent": "range", "style": "border-right: var(--border-mw);"},
+            "hit_chance": {"rowspan": 2},
+            "hit_chance_mod": {"rowspan": 2},
+            "crit_chance": {"rowspan": 2},
+            "crit_chance_mod": {"rowspan": 2},
+            "sound_radius": {"rowspan": 2},
+            "knockback": {"rowspan": 2},
+            "repairable": {"rowspan": 2},
+            "item_id": {"rowspan": 2}
+        },
+        "round": [
+            "icon",
+            "name",
+            "weight",
+            "magazine",
+            "weapon",
+            "box",
+            "carton",
+            "item_id"
+        ],
+        "box": [
+            "icon",
+            "name",
+            "weight",
+            "magazine",
+            "weapon",
+            "rounds",
+            "carton",
+            "item_id"
+        ],
+        "carton": [
+            "icon",
+            "name",
+            "weight",
+            "magazine",
+            "weapon",
+            "rounds",
+            "box",
+            "item_id"
+        ],
+        "magazine": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "ammo",
+            "capacity",
+            "item_id"
+        ],
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|link=|Encumbrance]]",
+        "equipped": "! [[File:UI_Hand.png|32px|link=|<<equipped>>]]",
+        "ammo": "! [[File:PistolAmmo.png|link=|<<ammo>>]]",
+        "capacity": "! [[File:BerettaClip.png|link=|<<mag_capacity>>]]",
+        "damage": "! <<damage>>",
+        "min_damage": "! [[File:UI_Damage_Min.png|32px|link=|<<min_damage>>]]",
+        "max_damage": "! [[File:UI_Damage_Max.png|32px|link=|<<max_damage>>]]",
+        "door_damage": "! [[File:Door.png|32px|link=|<<door_damage>>]]",
+        "tree_damage": "! [[File:Container_Plant.png|32px|link=|<<tree_damage>>]]",
+        "range": "! <<range>>",
+        "min_range": "! [[File:UI_Range_Min.png|32px|link=|<<min_range>>]]",
+        "max_range": "! [[File:UI_Range_Max.png|32px|link=|<<max_range>>]]",
+        "attack_speed": "! [[File:UI_AttackSpeed.png|32px|link=|<<attack_speed>>]]",
+        "hit_chance": "! [[File:UI_Accuracy.png|32px|link=|<<accuracy>>]]",
+        "hit_chance_mod": "! [[File:UI_Accuracy_Add.png|32px|link=|<<accuracy_add>>]]",
+        "crit_chance": "! [[File:UI_Critical_Chance.png|32px|link=|<<crit_chance>>]]",
+        "crit_multiplier": "! [[File:UI_Critical_Multiply.png|32px|link=|<<crit_multiplier>>]]",
+        "crit_chance_mod": "! [[File:UI_Critical_Add.png|32px|link=|<<crit_chance_add>>]]",
+        "sound_radius": "! [[File:UI_Noise.png|32px|link=|<<noise_radius>>]]",
+        "knockback": "! [[File:UI_Knockback.png|32px|link=|<<knockback>>]]",
+        "condition_max": "! [[File:UI_Condition_Max.png|32px|link=|<<max_condition>>]]",
+        "condition_lower_chance": "! [[File:UI_Condition_Chance.png|32px|<<condition_lower_chance>>]]",
+        "condition_average": "! [[File:UI_Condition_Average.png|32px|link=|<<average_condition>>]]",
+        "repairable": "! [[File:UI_Condition.png|32px|link=|<<repairable>>]]",
+        "magazine": "! Magazine",
+        "weapon": "! Weapons",
+        "rounds": "! Rounds (quantity)",
+        "contents": "! Contents (quantity)",
+        "box": "! Box (quantity)",
+        "carton": "! Carton (quantity)",
+        "item_id": "! Item ID"
+    },
+    "type_map": {
+        "melee": [
+            "Axe",
+            "Blunt",
+            "SmallBlunt",
+            "LongBlade",
+            "SmallBlade",
+            "Spear",
+            "Improvised",
+            "Unarmed"
+        ],
+        "firearm": [
+            "handgun",
+            "shotgun",
+            "rifle"
+        ],
+        "round": [
+            "round"
+        ],
+        "box": [
+            "box"
+        ],
+        "carton": [
+            "carton"
+        ],
+        "magazine": [
+            "magazine"
+        ],
+        "default": [
+            "explosive"
+        ]
+    }
+}
