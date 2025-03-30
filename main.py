@@ -44,7 +44,7 @@ menu_structure = {
             '3': {'module': 'lists.item_list', 'name': 'Item list', 'description': 'Returns all items in a list organised by DisplayCategory.'},
             '4': {'module': 'lists.weapon_list', 'name': 'Weapon list', 'description': 'Return all weapons in a list with stats organised by their skill.'},
             '5': {'module': 'lists.clothing_list', 'name': 'Clothing list', 'description': 'Return all clothing in a list with stats organised by body location.'},
-            '6': {'module': 'lists.nutrition', 'name': 'nutrition', 'description': 'Generate nutrition page.'},
+            '6': {'module': 'lists.food_list', 'name': 'Food list', 'description': 'Generate food and nutrition pages.'},
             '7': {'module': 'scripts.parser.radio_parser', 'name': 'Radio transcripts', 'description': 'Generate radio transcripts.'},
             '8': {'module': 'scripts.parser.outfit_parser', 'name': 'Outfit parser', 'description': 'Parse outfit xml files.'},
             '9': {'module': 'roomdefine', 'name': 'Room definitions', 'description': 'Create roomdef item page.'},
