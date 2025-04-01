@@ -96,6 +96,17 @@
             "sensor_range",
             "item_id"
         ],
+        "weapon_part": [
+            "icon",
+            "name",
+            "weight",
+            "weight_mod",
+            "aiming_time",
+            "weapon",
+            "part_type",
+            "function",
+            "item_id"
+        ],
         "default": [
             "icon",
             "name",
@@ -141,6 +152,10 @@
         "effect_range": "! Effect range",
         "effect_timer": "! [[File:TimerCrafted.png|28px|link=|Timer]]",
         "sensor_range": "! [[File:Wireless_icon.png|28px|link=|Sensor range]]",
+        "part_type": "! Part",
+        "weight_mod": "! [[File:UI_Weight_Add.png|32px|link=Weight mod.]]",
+        "aiming_time": "! [[File:UI_Accuracy.png|32px|link=|Aiming time mod.]]",
+        "function": "! Function",
         "item_id": "! Item ID"
     },
     "type_map": {
@@ -163,6 +178,7 @@
         "box": ["box"],
         "carton": ["carton"],
         "magazine": ["magazine"],
-        "explosive": ["explosive"]
+        "explosive": ["explosive"],
+        "weapon_part": ["weapon_part"]
     }
 }

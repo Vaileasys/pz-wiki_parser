@@ -102,6 +102,89 @@ def generate_ammo_data(item_id, item_data):
     return item_data
 
 
+def get_function(item_id, item_data):
+    strings = {
+        "reload_time": {
+            "value": "{desc1} reload time by {var1}.",
+            "var": ["ReloadTimeModifier"],
+            "desc": ["ReloadTimeModifier"]
+        },
+        "light": {
+            "value": "Adds a toggleable light with distance {var1} and strength {var2}.",
+            "var": ["LightDistance", "LightStrength"]
+        },
+        "spread": {
+            "value": "{desc1} the spread by {var1}.",
+            "var": ["ProjectileSpreadModifier"],
+            "desc": ["ProjectileSpreadModifier"]
+        },
+        "max_range": {
+            "value": "{desc1} maximum range by {var1}.",
+            "var": ["MaxRangeModifier"],
+            "desc": ["MaxRangeModifier"]
+        },
+        "recoil": {
+            "value": "{desc1} recoil by {var1}.",
+            "var": ["RecoilDelayModifier"],
+            "desc": ["RecoilDelayModifier"]
+        },
+        "sight_range": {
+            "value": "Sight range changed to {var1}–{var2}.",
+            "var": ["MinSightRange", "MaxSightRange"]
+        },
+        "low_light": {
+            "value": "{desc1} low-light penalty when aiming by {var1}.",
+            "var": ["AimingLowLightModifier"],
+            "desc": ["AimingLowLightModifier"]
+        },
+        "hit_chance": {
+            "value": "{desc1} accuracy by {var1}.",
+            "var": ["HitChanceModifier"],
+            "desc": ["HitChanceModifier"]
+        }
+    }
+
+    string_list = []
+
+    for entry in strings.values():
+        if not isinstance(entry, dict) or "value" not in entry:
+            continue
+
+        template = entry["value"]
+        var_names = entry.get("var", [])
+        desc_names = entry.get("desc", [])
+
+        var_values = []
+        desc_values = []
+
+        for var in var_names:
+            value = item_data.get(var)
+            if value is None:
+                break
+            var_values.append(value)
+        else:
+            for desc_var in desc_names:
+                try:
+                    val = float(item_data.get(desc_var, 0))
+                except (TypeError, ValueError):
+                    val = 0
+                desc = "increases" if val > 0 else "decreases"
+                desc_values.append(desc)
+
+            format_map = {f"var{i+1}": val for i, val in enumerate(var_values)}
+            for i, desc in enumerate(desc_values):
+                placeholder = f"{{desc{i+1}}}"
+                if template.startswith(placeholder):
+                    desc = desc.capitalize()
+                format_map[f"desc{i+1}"] = desc
+
+            string_list.append(template.format(**format_map))
+
+    return "style=\"text-align:left;\" | "+ "<br>".join(string_list) if string_list else "-"
+
+
+
+
 def generate_data(item_id, item_data):
     notes = None
     table_type = item_data.get("TableType")
@@ -173,6 +256,13 @@ def generate_data(item_id, item_data):
     if "weapon" in columns:
         if table_type == "magazine":
             item["weapon"] = utility.get_icon(item_data.get("GunType"), True, True, True) if item_data.get("GunType") is not None else "-"
+        elif item_data.get("MountOn"):
+            weapons_list = []
+            weapons = item_data.get("MountOn") if isinstance(item_data.get("MountOn"), list) else [item_data.get("MountOn")]
+            for weapon in weapons:
+                weapon  = "Base." + weapon if not weapon.startswith("Base.") else weapon
+                weapons_list.append(utility.get_icon(weapon, True, True, True))
+            item["weapon"] = "".join(weapons_list)
         elif item_data.get("Weapons"):
             weapons = []
             for weapon in item_data.get("Weapons"):
@@ -201,6 +291,10 @@ def generate_data(item_id, item_data):
     item["effect_range"] = item_data.get(f'{effect}Range', '-') if "effect_range" in columns else None
     item["effect_timer"] = item_data.get(f'{effect}Range', '-') if "effect_timer" in columns else None
     item["sensor_range"] = item_data.get('SensorRange', '-') if "sensor_range" in columns else None
+    item["part_type"] = translate.get_translation("Tooltip_weapon_" + item_data.get("PartType", "-")) if "part_type" in columns else None
+    item["weight_mod"] = item_data.get('WeightModifier', '-') if "weight_mod" in columns else None
+    item["aiming_time"] = item_data.get('AimingTimeModifier', '-') if "aiming_time" in columns else None
+    item["function"] = get_function(item_id, item_data) if "function" in columns else None
     item["item_id"] = item_id if "item_id" in columns else None
 
     # Remove any values that are None
@@ -239,7 +333,11 @@ def find_table_type(item_id, item_data):
                 if int(item_data.get("ProjectileCount")) > 1:
                     table_type = "shotgun"
         elif item_data.get("DisplayCategory") == "Explosives":
+            # Explosives
             table_type = "explosive"
+    elif item_data.get("Type").lower() == "WeaponPart".lower():
+        # Weapon parts
+        table_type = "weapon_part"
     elif item_id in box_types:
         # Ammo (box & carton)
         table_type = box_types[item_id].get("type")
