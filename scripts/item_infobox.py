@@ -45,7 +45,7 @@ def get_item_ids(item_id):
     all_item_ids = []
 
     for key, values in item_id_data.items():
-        if item_id in values:
+        if item_id in values and item_id not in all_item_ids:
             all_item_ids.extend(values)
 
     if not all_item_ids:
