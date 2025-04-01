@@ -54,7 +54,7 @@ def get_column_headings(table_type:str, table_map:dict, columns:dict):
     column_def = table_map.get(table_type) or table_map.get("default")
 
     if column_def is None:
-        print(f"Error: No mapping for table type: '{table_type}'")
+        echo(f"Warning: No mapping for table type: '{table_type}'")
         return []
 
     if isinstance(column_def, list):
@@ -62,7 +62,7 @@ def get_column_headings(table_type:str, table_map:dict, columns:dict):
     elif isinstance(column_def, dict):
         return generate_column_headings(column_def, columns)
     else:
-        print(f"Error: Invalid column definition type for '{table_type}'")
+        echo(f"Warning: Invalid column definition type for '{table_type}'")
         return []
 
 
@@ -174,7 +174,7 @@ def write_to_file(content:list, rel_path="list.txt", suppress=False):
             echo(f"File saved to '{_output_path}'")
         
     else:
-        echo(f"Warning: No file written. '{_output_path}' appears to be a directory.")
+        echo(f"Error: No file written. '{_output_path}' appears to be a directory.")
     
     return _output_dir
 
