@@ -345,18 +345,23 @@ def get_burn_time(item_id, item_data):
     return burn_time
 
 
-# format a link
-def format_link(name, page=None):
-    langauge_code = translate.get_language_code()
-    if langauge_code != "en":
-        link = f"[[{page}/{langauge_code}|{name}]]"
-    else:
-        if page is None or page == name:
-            link = f"[[{page}]]"
-        else:
-            link = f"[[{page}|{name}]]"
+def format_link(name:str, page:str=None) -> str:
+    """
+    Returns a wiki link in the format [[Page|Name]], including a language suffix for non-English languages.
 
-    return link
+    :param name: The display text of the link.
+    :param page: The target page (optional). Defaults to `name`.
+    :return: The formatted wiki link.
+    """
+    language_code = translate.get_language_code()
+    
+    if language_code != "en":
+        return f"[[{page or name}/{language_code}|{name}]]"
+    
+    if page is None or page == name:
+        return f"[[{name}]]"
+    else:
+        return f"[[{page}|{name}]]"
 
 
 # TODO: Unused. Can it be removed? We should instead have a for loop using format_link()
