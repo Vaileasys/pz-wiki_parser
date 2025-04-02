@@ -66,3 +66,20 @@ def capitalize(value):
         return rvalue[0]
     
     return rvalue
+
+
+def format_positive(value):
+    """
+    Formats a number with '+' if positive, trimming trailing zeros. Returns original value as string if invalid.
+    
+    :param value: The value to format.
+    :type value: float | int | str | any
+    :return: Formatted string with '+' prefix if positive, or original value as a string if invalid.
+    :rtype: str
+    """
+    try:
+        value = float(value)
+        text = f"{value:.10f}".rstrip("0").rstrip(".")
+        return f"+{text}" if value > 0 else text
+    except (ValueError, TypeError):
+        return str(value)

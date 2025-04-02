@@ -81,6 +81,7 @@ FILE_WHITELIST = (
     "UI_",
     "Print_Text_",
     "Print_Media_",
+    "Recorded_Media_",
     "Stash_"
 )
 

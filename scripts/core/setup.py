@@ -123,6 +123,7 @@ def copy_lua_files(media_dir: str) -> None:
         'MainCreationMethods.lua': None,
         'ISHotbarAttachDefinition.lua': None,
         'AttachedLocations.lua': None,
+        'recorded_media.lua': None,
         # stashes
         'BrandenburgStashDesc.lua': 'stashes',
         'EkronStashDesc.lua': 'stashes',

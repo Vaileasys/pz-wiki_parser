@@ -1,0 +1,70 @@
+{
+    "map": {
+        "default": [
+            "title",
+            "subtitle",
+            "lines",
+            "effect",
+            "boredom",
+            "stress",
+            "fatigue",
+            "panic",
+            "skill",
+            "recipe",
+            "author",
+            "production",
+            "cover",
+            "rm_guid",
+            "item_id"
+        ],
+        "cd": [
+            "title",
+            "lines",
+            "boredom",
+            "author",
+            "production"
+        ],
+        "vhs_home": [
+            "title",
+            "lines",
+            "boredom",
+            "stress",
+            "recipe",
+            "skill"
+        ],
+        "vhs_show": [
+            "title",
+            "lines",
+            "boredom",
+            "skill",
+            "recipe"
+        ],
+        "vhs_movie": [
+            "title",
+            "lines",
+            "boredom",
+            "stress",
+            "fatigue",
+            "panic",
+            "skill",
+            "cover"
+        ]
+    },
+    "headings": {
+        "title": "! Title",
+        "subtitle": "! Subtitle",
+        "lines": "! Lines",
+        "boredom": "! [[File:Mood_Bored_32.png|link=|Boredom]]",
+        "stress": "! [[File:Mood_Stressed_32.png|link=|Stress]]",
+        "fatigue": "! [[File:Mood_Sleepy_32.png|link=|Fatigue]]",
+        "panic": "! [[File:Mood_Panicked_32.png|link=|Panic]]",
+        "effect": "! Effect",
+        "skill": "! Skill",
+        "recipe": "! Recipe",
+        "author": "! Author",
+        "production": "! Extra details",
+        "cover": "! Back cover",
+        "rm_guid": "! GUID",
+        "item_id": "! Item ID"
+    }
+}
