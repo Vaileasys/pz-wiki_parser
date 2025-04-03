@@ -7,7 +7,7 @@ import os
 import json
 from scripts.core import translate
 from scripts.parser import item_parser, fluid_parser
-from scripts.utils import utility
+from scripts.utils import utility, util
 
 HEADER = """{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"
 ! Icon
@@ -53,7 +53,7 @@ def get_items():
         if 'capacity' in item_data:
             display_name = translate.get_translation(item_id, 'DisplayName')
             page_name = utility.get_page(item_id, display_name)
-            item_link = utility.format_link(display_name, page_name)
+            item_link = util.format_link(display_name, page_name)
             icon = utility.get_icon(item_id, True, True, True)
             container_name = item_data.get('ContainerName', '-')
             container_name = translate.get_translation(container_name, 'ContainerName')

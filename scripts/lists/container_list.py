@@ -7,7 +7,7 @@ from scripts.parser import item_parser
 from scripts.core import translate, version
 from scripts.lists import hotbar_slots
 from scripts.core.constants import PBAR_FORMAT
-from scripts.utils import utility
+from scripts.utils import utility, util
 
 hotbar_data = {}
 
@@ -309,7 +309,7 @@ def process_item(item_id, item_data, pbar):
             if slot != "-":
                 slot_name = hotbar_data.get(slot, {}).get("name")
                 slot_page = f"AttachmentsProvided#{slot}"
-                slot = utility.format_link(name=slot_name, page=slot_page)
+                slot = util.format_link(name=slot_name, page=slot_page)
             slots_list.append(slot)
         item["extra_slots"] = "<br>".join(slots_list)
 

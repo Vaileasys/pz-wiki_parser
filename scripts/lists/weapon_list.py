@@ -203,7 +203,7 @@ def generate_data(item_id, item_data):
     item = {}
 
     item["icon"] = item_data.get("IconFormatted") if "icon" in columns else None
-    item["name"] = utility.format_link(item_name, utility.get_page(item_id, item_name)) if "name" in columns else None
+    item["name"] = util.format_link(item_name, utility.get_page(item_id, item_name)) if "name" in columns else None
     item["weight"] = item_data.get("Weight", "1") if "weight" in columns else None
     if "equipped" in columns:
         equipped = "<<1h>>"

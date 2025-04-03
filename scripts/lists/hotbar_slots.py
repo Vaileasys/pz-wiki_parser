@@ -2,7 +2,7 @@ from pathlib import Path
 from scripts.core import translate, version
 from scripts.parser import item_parser
 from scripts.core.constants import OUTPUT_PATH
-from scripts.utils import utility, lua_helper
+from scripts.utils import utility, lua_helper, util
 
 language_code = translate.get_language_code()
 output_dir = Path(OUTPUT_PATH) / language_code.lower()
@@ -185,7 +185,7 @@ def write_attachment_table():
             for item_id in slot_items_list:
                 item_name = attachment_items["AttachmentType"][item_id]["name"]
                 item_page = attachment_items["AttachmentType"][item_id]["page"]
-                item_link = utility.format_link(item_name, item_page)
+                item_link = util.format_link(item_name, item_page)
 
                 items.append(item_link)
 
@@ -262,7 +262,7 @@ def write_hotbar_table():
             for item_id in slot_items_list:
                 item_name = attachment_items["AttachmentsProvided"][item_id]["name"]
                 item_page = attachment_items["AttachmentsProvided"][item_id]["page"]
-                item_link = utility.format_link(item_name, item_page)
+                item_link = util.format_link(item_name, item_page)
                 item_icon = attachment_items["AttachmentsProvided"][item_id]["icon"]
 
                 items.append(f"{item_icon} {item_link}")

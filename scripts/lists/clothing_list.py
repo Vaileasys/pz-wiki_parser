@@ -3,7 +3,7 @@ from scripts.parser import item_parser
 from scripts.core import translate
 from scripts.core.constants import PBAR_FORMAT, RESOURCE_PATH
 from scripts.lists import hotbar_slots
-from scripts.utils import utility, table_helper
+from scripts.utils import utility, table_helper, util
 
 TABLE_PATH = f"{RESOURCE_PATH}/tables/clothing_table.json"
 
@@ -42,7 +42,7 @@ def generate_data(item_data, item_id):
 
     item_name = item_data.get("DisplayName", 'Unknown')
     page_name = utility.get_page(item_id, item_name)
-    link = utility.format_link(item_name, page_name)
+    link = util.format_link(item_name, page_name)
     icon = utility.get_icon(item_id, True, True, True)
     can_have_holes = item_data.get("CanHaveHoles", "true").lower() == "true"
     body_parts_list = utility.get_body_parts(item_data, True, "-")

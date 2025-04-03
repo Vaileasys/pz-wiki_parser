@@ -5,7 +5,7 @@ from collections import defaultdict
 from scripts import item_tags, recipe_format
 from scripts.parser import fluid_parser
 from scripts.core import translate
-from scripts.utils import utility
+from scripts.utils import utility, util
 
 
 def process_ingredients(data):
@@ -59,7 +59,7 @@ def process_ingredients(data):
                 item_id = item.get("raw_name", "Unknown Item")
                 name = utility.get_name(item_id)
                 page = utility.get_page(item_id, name)
-                link = utility.format_link(name, page)
+                link = util.format_link(name, page)
                 if item_id != "Any fluid container":
                     try:
                         icon = utility.get_icon(item_id) if item_id else "Question On.png"
@@ -87,7 +87,7 @@ def process_ingredients(data):
                 item_id = item.get("raw_name", "Unknown Item")
                 name = utility.get_name(item_id)
                 page = utility.get_page(item_id, name)
-                link = utility.format_link(name, page)
+                link = util.format_link(name, page)
                 if item_id != "Any fluid container":
                     try:
                         icon = utility.get_icon(item_id) if item_id else "Question On.png"
@@ -167,7 +167,7 @@ def process_tools(data):
                     name = utility.get_name(item_id)
 
                 page = utility.get_page(item_id, name)
-                link = utility.format_link(name, page)
+                link = util.format_link(name, page)
                 try:
                     icon = utility.get_icon(item_id) if item_id else "Question On.png"
                     if isinstance(icon, list):
@@ -364,7 +364,7 @@ def process_products(data):
             item_id = output_info.get("raw_product")
             name = utility.get_name(item_id)
             page = utility.get_page(item_id, name)
-            link = utility.format_link(name, page)
+            link = util.format_link(name, page)
 
             products_number = output_info.get("products_number", 1)
             if item_id:
@@ -398,7 +398,7 @@ def process_products(data):
                         item_id = raw_output
                         name = utility.get_name(item_id)
                         page = utility.get_page(item_id, name)
-                        link = utility.format_link(name, page)
+                        link = util.format_link(name, page)
                         try:
                             icon = utility.get_icon(raw_output) if raw_output else "Question On.png"
                             if isinstance(icon, list):

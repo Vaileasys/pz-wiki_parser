@@ -15,12 +15,6 @@ from scripts.utils import lua_helper
 parsed_burn_data = {}
 item_id_dict_data = {}
 
-# gets 'Tags' for item_data
-def get_tags(item_data):
-    tags = []
-    tags = item_data.get('Tags', '')
-    return tags
-
 
 # Gets parsed item data for an item id
 def get_item_data_from_id(item_id):
@@ -343,46 +337,6 @@ def get_burn_time(item_id, item_data):
         burn_time = ""
     
     return burn_time
-
-
-def format_link(name:str, page:str=None) -> str:
-    """
-    Returns a wiki link in the format [[Page|Name]], including a language suffix for non-English languages.
-
-    :param name: The display text of the link.
-    :param page: The target page (optional). Defaults to `name`.
-    :return: The formatted wiki link.
-    """
-    language_code = translate.get_language_code()
-    
-    if language_code != "en":
-        return f"[[{page or name}/{language_code}|{name}]]"
-    
-    if page is None or page == name:
-        return f"[[{name}]]"
-    else:
-        return f"[[{page}|{name}]]"
-
-
-# TODO: Unused. Can it be removed? We should instead have a for loop using format_link()
-# formats values to be links (list)
-def format_links(values):
-    if not values:
-        return ''
-    if not isinstance(values, list):
-        values = [values]
-    values = [f"[[{v.strip()}]]" for v in values]
-    values = format_br(values)
-    return values
-
-
-# formats values separated by <br> (list)
-def format_br(values):
-    if not values:
-        return ''
-    if not isinstance(values, list):
-        values = [values]
-    return "<br>".join(values)
 
 
 # Save parsed data to json file

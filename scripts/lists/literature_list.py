@@ -3,7 +3,7 @@ from tqdm import tqdm
 from scripts.parser import item_parser, recipe_parser, stash_parser
 from scripts.core import translate
 from scripts.core.constants import PBAR_FORMAT
-from scripts.utils import utility
+from scripts.utils import utility, util
 
 language_code = "en"
 
@@ -203,7 +203,7 @@ def get_skills(item_id, item_data):
             skill_translated = translate.get_translation(skill, "SkillTrained")
         else:
             skill_translated = skill_en
-        return utility.format_link(skill_translated, skill_en)
+        return util.format_link(skill_translated, skill_en)
     
     return "-"
 

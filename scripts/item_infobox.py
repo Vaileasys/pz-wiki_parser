@@ -30,6 +30,7 @@ def generate_clothing_penalties():
     clothing_penalties = parsed_data.get("forageSystem.clothingPenalties", {})
 #    utility.save_cache(clothing_penalties, "clothingPenalties.json")
 
+
 def get_item():
     while True:
         query_item_id = input("Enter an item id\n> ")
@@ -248,7 +249,7 @@ def generate_infobox(item_id, item_data):
             for i in range(len(recipes)):
                 recipes[i] = recipes[i].replace(" ", "_")
                 recipes[i] = translate.get_translation(recipes[i], 'TeachedRecipes')
-            recipes = utility.format_br(recipes)
+            recipes = "<br>".join(recipes)
 
         # (Attachments) Get weapons that it's used for.
         weapon = None
@@ -303,7 +304,7 @@ def generate_infobox(item_id, item_data):
             if evolved_recipe_translated:
                 evolved_recipe = evolved_recipe_translated
         
-        tags = utility.get_tags(item_data)
+        tags = item_data.get("Tags")
         
         parameters = {
             "name": name,

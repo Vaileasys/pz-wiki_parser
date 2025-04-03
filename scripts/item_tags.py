@@ -5,7 +5,7 @@ from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.core import translate, version
 from scripts.core.constants import (OUTPUT_PATH, PBAR_FORMAT, DATA_PATH)
-from scripts.utils import utility
+from scripts.utils import utility, util
 
 CACHE_JSON = "tags_data.json"
 is_run_locally = False
@@ -62,7 +62,7 @@ def write_tag_table():
 
                 # Generate link for each item
                 tag_items = ', '.join(
-                    utility.format_link(item['name'], item['page'])
+                    util.format_link(item['name'], item['page'])
                     for item in tag_data
                 )
 
@@ -92,7 +92,7 @@ def write_tag_list():
                     icon = item['icon']
                     name = item['name']
                     page = item['page']
-                    link = utility.format_link(name, page)
+                    link = util.format_link(name, page)
                     file.write(f"|-\n| [[File:{icon}|32x32px]] || {link} || {item_id}\n")
                 file.write('|}')
             pbar.update(1)

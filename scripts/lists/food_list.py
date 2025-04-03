@@ -3,7 +3,7 @@ from tqdm import tqdm
 from scripts.parser import item_parser, evolvedrecipe_parser, recipe_parser
 from scripts.core import translate
 from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
-from scripts.utils import utility, lua_helper, table_helper
+from scripts.utils import utility, lua_helper, table_helper, util
 
 TABLE_PATH = f"{RESOURCE_PATH}/tables/food_table.json"
 
@@ -22,7 +22,7 @@ def generate_data(item_id, item_data):
     item_name = utility.get_name(item_id, item_data)
 
     item["icon"] = utility.get_icon(item_id, True, True, True) if "icon" in columns else None
-    item["name"] = utility.format_link(item_name, utility.get_page(item_id, item_name)) if "name" in columns else None
+    item["name"] = util.format_link(item_name, utility.get_page(item_id, item_name)) if "name" in columns else None
     item["weight"] = item_data.get("Weight", "1") if "weight" in columns else None
     item["hunger"] = item_data.get("HungerChange", "-") if "hunger" in columns else None
     item["thirst"] = item_data.get("ThirstChange", "-") if "thirst" in columns else None

@@ -1,6 +1,7 @@
 from tqdm import tqdm
 import json
 import os
+from scripts.core import translate
 
 
 def echo(message):
@@ -83,3 +84,22 @@ def format_positive(value):
         return f"+{text}" if value > 0 else text
     except (ValueError, TypeError):
         return str(value)
+
+
+def format_link(name:str, page:str=None) -> str:
+    """
+    Returns a wiki link in the format [[Page|Name]], including a language suffix for non-English languages.
+
+    :param name: The display text of the link.
+    :param page: The target page (optional). Defaults to `name`.
+    :return: The formatted wiki link.
+    """
+    language_code = translate.get_language_code()
+    
+    if language_code != "en":
+        return f"[[{page or name}/{language_code}|{name}]]"
+    
+    if page is None or page == name:
+        return f"[[{name}]]"
+    else:
+        return f"[[{page}|{name}]]"
