@@ -32,7 +32,8 @@ menu_structure = {
             '7': {'module': 'evolvedrecipe', 'name': 'Evolved recipes', 'description': 'Parse evolved recipes.'},
             '8': {'module': 'item_body_part', 'name': 'Body part', 'description': 'Generates body part templates.'},
             '9': {'module': 'recipe_format', 'name': 'Recipe parser', 'description': 'Process recipes.'},
-            '10': {'module': 'researchrecipes', 'name': 'Research recipes', 'description': 'Process research recipes.'}
+            '10': {'module': 'researchrecipes', 'name': 'Research recipes', 'description': 'Process research recipes.'},
+            '11': {'module': 'teached_recipes', 'name': 'Teached recipes', 'description': 'Process teached recipes.'}
         },
     },
     '3': {
