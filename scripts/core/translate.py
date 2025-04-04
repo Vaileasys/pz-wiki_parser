@@ -85,7 +85,6 @@ FILE_WHITELIST = (
     "Stash_"
 )
 
-
 def get_wiki_translation(value):
     """
     Gets the translations for a value within `<< >>` delimiters for defining the string to translate.
