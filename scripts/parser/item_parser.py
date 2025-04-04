@@ -2,7 +2,7 @@ import os
 import re
 from scripts.core import translate, version
 from scripts.core.constants import DATA_PATH
-from scripts.utils.util import echo
+from scripts.utils import util
 from scripts.utils import utility
 
 RESOURCE_PATH = 'resources/scripts/'
@@ -160,7 +160,7 @@ def parse_item(lines, start_index, module_name):
                 item_name = parts[1]
                 item_id = f"{module_name}.{item_name}"
             else:
-                echo(f"Warning: Couldn't parse item line: {line}")
+                util.echo(f"Warning: Couldn't parse item line: {line}")
                 i += 1
                 continue
         
@@ -189,7 +189,7 @@ def parse_item(lines, start_index, module_name):
                             for k, v in [pair.split(':', 1)]
                         }
                     except ValueError:
-                        echo(f"Warning: Skipping invalid key-value pair in line: {line}")
+                        util.echo(f"Warning: Skipping invalid key-value pair in line: {line}")
 
             # Handle multiple values (separated by ';')
             elif ';' in property_value:
@@ -218,7 +218,7 @@ def parse_module(lines):
             if len(parts) >= 2:
                 module_name = parts[1]
             else:
-                echo(f"Warning: Couldn't parse module line: {line}")
+                util.echo(f"Warning: Couldn't parse module line: {line}")
         
         # Detect the start of an item block
         elif re.match(r'^item(\s)', line): # regex to return 'item' and not any suffixes
@@ -317,7 +317,7 @@ def init():
         utility.save_cache(modified_items, CACHE_JSON.replace(".json", "") + "_changes.json")
 
     item_count = len(parsed_data)
-    echo(f"Number of items found: {item_count}")
+    util.echo(f"Number of items found: {item_count}")
 
 if __name__ == "__main__":
     init()
