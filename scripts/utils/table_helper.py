@@ -229,7 +229,7 @@ def create_tables(item_type:str, all_data:dict, columns:dict, table_map:dict={},
         output_dir = write_to_file(content, rel_path, suppress=suppress)
 
         if combine_tables:
-            all_tables.extend([f"=={table_type.replace("_", " ").capitalize()}=="])
+            all_tables.extend([f'=={table_type.replace("_", " ").capitalize()}=='])
             all_tables.extend(content)
 
     if combine_tables:
