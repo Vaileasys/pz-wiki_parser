@@ -15,6 +15,7 @@
     "Wiki_min_range": "Asgari menzil",
     "Wiki_max_range": "Azami menzil",
     "Wiki_attack_speed": "Saldırı hızı",
+    "Wiki_endurance_mod": "Endurance modifier",
     "Wiki_crit_chance": "Kritik şans",
     "Wiki_crit_chance_add": "Nişan alma seviyesine göre artan kritik vuruş ihtimali",
     "Wiki_crit_multiplier": "Kritik hasar çarpanı",

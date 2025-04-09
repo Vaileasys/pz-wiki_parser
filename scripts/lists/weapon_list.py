@@ -183,8 +183,6 @@ def get_function(item_id, item_data):
     return "style=\"text-align:left;\" | "+ "<br>".join(string_list) if string_list else "-"
 
 
-
-
 def generate_data(item_id, item_data):
     notes = None
     table_type = item_data.get("TableType")
@@ -226,6 +224,9 @@ def generate_data(item_id, item_data):
     item["min_range"] = item_data.get('MinRange', '-') if "min_range" in columns else None
     item["max_range"] = item_data.get('MaxRange', '-') if "max_range" in columns else None
     item["attack_speed"] = item_data.get('BaseSpeed', '1') if "attack_speed" in columns else None
+    if "endurance_mod" in columns:
+        endurance_mod = util.format_positive(float(item_data.get('EnduranceMod', 1)) - 1)
+        item["endurance_mod"] = "-" if endurance_mod == "0" else endurance_mod
     item["hit_chance"] = item_data.get('HitChance', '-') + '%' if "hit_chance" in columns else None
     item["hit_chance_mod"] = '+' + item_data.get('AimingPerkHitChanceModifier', '-') + '%' if "hit_chance_mod" in columns else None
     if "crit_chance" in columns:

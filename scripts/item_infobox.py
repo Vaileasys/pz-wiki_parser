@@ -7,7 +7,7 @@ from scripts.parser import item_parser
 from scripts.core import translate, logger, version
 from scripts.lists import hotbar_slots
 from scripts.core.constants import PBAR_FORMAT, RESOURCE_PATH
-from scripts.utils import utility, lua_helper
+from scripts.utils import utility, lua_helper, util
 from scripts.utils.util import capitalize
 
 
@@ -262,6 +262,9 @@ def generate_infobox(item_id, item_data):
                 weapon_icon = utility.get_icon(weapon_id, True, True, False)
                 weapon_list.append(weapon_icon)
             weapon = ''.join(weapon_list)
+        
+        endurance_mod = util.format_positive(float(item_data.get('EnduranceMod', 1)) - 1)
+        endurance_mod = None if endurance_mod == "0" else endurance_mod
 
         burn_time = utility.get_burn_time(item_id, item_data)
         
@@ -355,7 +358,7 @@ def generate_infobox(item_id, item_data):
             "wind_resistance": get_any_property(all_items, 'WindResistance'),
             "water_resistance": get_any_property(all_items, 'WaterResistance'),
             "discomfort_mod": get_any_property(all_items, 'DiscomfortModifier'),
-            "endurance_mod": get_any_property(all_items, 'EnduranceMod'),
+            "endurance_mod": endurance_mod,
             "light_distance": get_any_property(all_items, 'LightDistance'),
             "light_strength": get_any_property(all_items, 'LightStrength'),
             "torch_cone": get_any_property(all_items, 'TorchCone'),
