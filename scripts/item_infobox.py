@@ -354,6 +354,8 @@ def generate_infobox(item_id, item_data):
             "insulation": get_any_property(all_items, 'Insulation'),
             "wind_resistance": get_any_property(all_items, 'WindResistance'),
             "water_resistance": get_any_property(all_items, 'WaterResistance'),
+            "discomfort_mod": get_any_property(all_items, 'DiscomfortModifier'),
+            "endurance_mod": get_any_property(all_items, 'EnduranceMod'),
             "light_distance": get_any_property(all_items, 'LightDistance'),
             "light_strength": get_any_property(all_items, 'LightStrength'),
             "torch_cone": get_any_property(all_items, 'TorchCone'),
