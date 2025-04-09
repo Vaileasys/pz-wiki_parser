@@ -26,7 +26,10 @@ def process_ingredients(data):
             amount = ingredient_info.get("amount", 1)
             tag_strings = []
             for tag in tag_list:
-                tag_strings.append(f"{{{{Tag_{tag}}}}} [[{tag} (tag)]] <small>×{amount}</small>")
+                tag_file = f"output/en/tags/cycle-img/{tag}.txt"
+                with open (tag_file, "r") as file:
+                    tag_span = file.read()
+                tag_strings.append(f"{tag_span} [[{tag} (tag)]] <small>×{amount}</small>")
             final_tag_str = "<br>".join(tag_strings)
             parsed_ingredients.append(("tag", final_tag_str, "Each of"))
 
@@ -183,7 +186,10 @@ def process_tools(data):
             tool_flags = tools_data.get(f"{key[:-5]}_flags", [])
             list_parts = []
             for tag in value:
-                tag_entry = f"{{{{Tag_{tag}}}}} [[{tag} (tag)]]"
+                tag_file = f"output/en/tags/cycle-img/{tag}.txt"
+                with open(tag_file, "r") as file:
+                    tag_span = file.read()
+                tag_entry = f"{tag_span} [[{tag} (tag)]]"
                 if tool_flags:
                     flag_desc = [flag_mapping.get(flag, flag) for flag in tool_flags if flag in flag_mapping]
                     if flag_desc:
@@ -724,155 +730,6 @@ def output_item_usage(normal_item_input_map, normal_item_output_map, constructio
                 craft_file.write("\n".join(crafting_template))
 
 
-def output(processed_recipes):
-    """
-    Outputs the processed recipes to individual files and two combined files in the specified format,
-    ensuring all files are encoded in UTF-8.
-    """
-    # Output individual recipe files separated by type
-    for raw_name, recipe_data in processed_recipes.items():
-        if recipe_data.get("construction", False):
-            output_dir = 'output/recipes/construction_recipes_seperate/'
-        else:
-            output_dir = 'output/recipes/recipes_seperate/'
-        os.makedirs(output_dir, exist_ok=True)
-
-        ingredients = recipe_data["ingredients"]
-        tools = recipe_data["tools"]
-        recipes = recipe_data["recipes"]
-        skills = recipe_data["skills"]
-        workstation = recipe_data["workstation"]
-        products = recipe_data["products"]
-        xp = recipe_data["xp"]
-
-        output_file = os.path.join(output_dir, f'{raw_name}.txt')
-        with open(output_file, 'w', encoding='utf-8') as out_file:
-            out_file.write(f"|{raw_name.lower()}= \n")
-            out_file.write("    {{Recipe/sandbox\n")
-            out_file.write(f"        |{ingredients}\n")
-            out_file.write(f"        |{tools}\n")
-            out_file.write(f"        |{recipes}\n")
-            out_file.write(f"        |{skills}\n")
-            out_file.write(f"        |{workstation}\n")
-            out_file.write(f"        |{xp}\n")
-            out_file.write(f"        |{products}\n")
-            out_file.write("    }}")
-
-    # Separate recipes based on construction flag for combined templates
-    crafting_recipes = {}
-    construction_recipes = {}
-    for raw_name, recipe_data in processed_recipes.items():
-        if recipe_data.get("construction", False):
-            construction_recipes[raw_name] = recipe_data
-        else:
-            crafting_recipes[raw_name] = recipe_data
-
-    # Crafting Template for non-construction recipes
-    recipe_names_crafting = [raw_name.lower() for raw_name in crafting_recipes.keys()]
-    limited_recipe_names_crafting = recipe_names_crafting[:150]
-    recipe_list_crafting = "\n".join([f"|{name}" for name in limited_recipe_names_crafting])
-    combined_header_crafting = (
-        "<noinclude>[[Category:Crafting_templates]]\n{{wip}}\n"
-        "{{Documentation|doc=\n"
-        "{{Crafting/sandbox\n"
-        f"{recipe_list_crafting}\n"
-        "}}\n"
-        "}}\n"
-        "</noinclude><includeonly><!--\n\n"
-        "#############################################\n"
-        "###           START OF RECIPES            ###\n"
-        "#############################################\n\n"
-        "-->\n"
-        "{{#switch: {{{1|}}}\n"
-        "|#default=\n"
-        "  {{!}}-\n"
-        "  {{!}} N/A\n"
-        "  {{!}}{{!}} This index number contains no data\n"
-    )
-    combined_content_crafting = [combined_header_crafting]
-
-    for raw_name, recipe_data in crafting_recipes.items():
-        ingredients = recipe_data["ingredients"]
-        tools = recipe_data["tools"]
-        recipes = recipe_data["recipes"]
-        skills = recipe_data["skills"]
-        workstation = recipe_data["workstation"]
-        products = recipe_data["products"]
-        xp = recipe_data["xp"]
-
-        combined_content_crafting.append(
-            f"    |{raw_name.lower()}=\n"
-            f"        {{{{Recipe/sandbox\n"
-            f"            |{ingredients}\n"
-            f"            |{tools}\n"
-            f"            |{recipes}\n"
-            f"            |{skills}\n"
-            f"            |{workstation}\n"
-            f"            |{xp}\n"
-            f"            |{products}\n"
-            f"        }}}}"
-        )
-
-    combined_footer = "}}</includeonly>"
-    combined_content_crafting.append(combined_footer)
-
-    combined_output_file_crafting = 'output/recipes/recipe list.txt'
-    with open(combined_output_file_crafting, 'w', encoding='utf-8') as combined_file:
-        combined_file.write("\n".join(combined_content_crafting))
-
-    # Construction Template for construction recipes
-    recipe_names_construction = [raw_name.lower() for raw_name in construction_recipes.keys()]
-    limited_recipe_names_construction = recipe_names_construction[:150]
-    recipe_list_construction = "\n".join([f"|{name}" for name in limited_recipe_names_construction])
-    combined_header_construction = (
-        "<noinclude>[[Category:Crafting_templates]]\n{{wip}}\n"
-        "{{Documentation|doc=\n"
-        "{{Building\n"
-        f"{recipe_list_construction}\n"
-        "}}\n"
-        "}}\n"
-        "</noinclude><includeonly><!--\n\n"
-        "#############################################\n"
-        "###           START OF RECIPES            ###\n"
-        "#############################################\n\n"
-        "-->\n"
-        "{{#switch: {{{1|}}}\n"
-        "|#default=\n"
-        "  {{!}}-\n"
-        "  {{!}} N/A\n"
-        "  {{!}}{{!}} This index number contains no data\n"
-    )
-    combined_content_construction = [combined_header_construction]
-
-    for raw_name, recipe_data in construction_recipes.items():
-        ingredients = recipe_data["ingredients"]
-        tools = recipe_data["tools"]
-        recipes = recipe_data["recipes"]
-        skills = recipe_data["skills"]
-        workstation = recipe_data["workstation"]
-        products = recipe_data["products"]
-        xp = recipe_data["xp"]
-
-        combined_content_construction.append(
-            f"    |{raw_name.lower()}=\n"
-            f"        {{{{Recipe/sandbox\n"
-            f"            |{ingredients}\n"
-            f"            |{tools}\n"
-            f"            |{recipes}\n"
-            f"            |{skills}\n"
-            f"            |{workstation}\n"
-            f"            |{xp}\n"
-            f"            |{products}\n"
-            f"        }}}}"
-        )
-
-    combined_content_construction.append(combined_footer)
-
-    combined_output_file_construction = 'output/recipes/building_list.txt'
-    with open(combined_output_file_construction, 'w', encoding='utf-8') as combined_file:
-        combined_file.write("\n".join(combined_content_construction))
-
-
 def output_skill_usage(recipes_data):
     """
     For each recipe, checks both the xp field and the 'skillrequired' entries.
@@ -935,15 +792,120 @@ def output_skill_usage(recipes_data):
             f.write("\n".join(template_lines))
 
 
+def strip_prefix(text, prefix):
+    if text.startswith(prefix):
+        return text[len(prefix):]
+    return text
+
+
+def output_lua_tables(processed_recipes):
+    output_dir = 'output/recipes'
+    os.makedirs(output_dir, exist_ok=True)
+    os.makedirs("output/recipes/data_files", exist_ok=True)
+
+    # Separate recipes into crafting and building recipes.
+    crafting_recipes = {}
+    building_recipes = {}
+    for raw_name, recipe_data in processed_recipes.items():
+        if recipe_data.get("construction", False):
+            building_recipes[raw_name] = recipe_data
+        else:
+            crafting_recipes[raw_name] = recipe_data
+
+    # Group crafting recipes by their category (from JSON)
+    crafting_by_category = {}
+    for raw_name, recipe_data in crafting_recipes.items():
+        json_category = recipe_data.get("category")
+        if not json_category:
+            json_category = "Other"
+        category_key = json_category.lower()
+        if category_key not in crafting_by_category:
+            crafting_by_category[category_key] = {}
+        crafting_by_category[category_key][raw_name] = recipe_data
+
+    # Write each category's crafting recipes to its own file.
+    for category_key, recipes in crafting_by_category.items():
+        file_name = f"{output_dir}/data_files/{category_key}_data.lua"
+        with open(file_name, 'w', encoding='utf-8') as f:
+            f.write(f"-- Module:Crafting/{category_key}_data\n\n")
+            f.write(f"local {category_key} = {{\n")
+            for raw_name, recipe_data in recipes.items():
+                key = raw_name.lower()
+                ingredients = strip_prefix(recipe_data["ingredients"], "ingredients=")
+                tools = strip_prefix(recipe_data["tools"], "tools=")
+                recipes_str = strip_prefix(recipe_data["recipes"], "recipes=")
+                skills = strip_prefix(recipe_data["skills"], "skills=")
+                workstation = strip_prefix(recipe_data["workstation"], "workstation=")
+                xp = strip_prefix(recipe_data["xp"], "xp=")
+                product = strip_prefix(recipe_data["products"], "products=")
+
+                recipe_block = (
+                    f"  {key} = {{\n"
+                    f"    ingredients = [=[{ingredients}]=],\n"
+                    f"    tools       = [=[{tools}]=],\n"
+                    f"    recipes     = [=[{recipes_str}]=],\n"
+                    f"    skills      = [=[{skills}]=],\n"
+                    f"    workstation = [=[{workstation}]=],\n"
+                    f"    xp          = [=[{xp}]=],\n"
+                    f"    product     = [=[{product}]=]\n"
+                    f"  }},\n"
+                )
+                f.write(recipe_block)
+            f.write("}\n\n")
+            f.write(f"return {category_key}\n")
+
+    # Write the building recipes to a single file.
+    building_output_file = f"{output_dir}/data_files/building_data.lua"
+    with open(building_output_file, 'w', encoding='utf-8') as f:
+        f.write("-- Module:Crafting/building_data\n\n")
+        f.write("local buildingList = {\n")
+        for raw_name, recipe_data in building_recipes.items():
+            key = raw_name.lower()
+            ingredients = strip_prefix(recipe_data["ingredients"], "ingredients=")
+            tools = strip_prefix(recipe_data["tools"], "tools=")
+            recipes_str = strip_prefix(recipe_data["recipes"], "recipes=")
+            skills = strip_prefix(recipe_data["skills"], "skills=")
+            workstation = strip_prefix(recipe_data["workstation"], "workstation=")
+            xp = strip_prefix(recipe_data["xp"], "xp=")
+            product = strip_prefix(recipe_data["products"], "products=")
+
+            recipe_block = (
+                f"  {key} = {{\n"
+                f"    ingredients = [=[{ingredients}]=],\n"
+                f"    tools       = [=[{tools}]=],\n"
+                f"    recipes     = [=[{recipes_str}]=],\n"
+                f"    skills      = [=[{skills}]=],\n"
+                f"    workstation = [=[{workstation}]=],\n"
+                f"    xp          = [=[{xp}]=],\n"
+                f"    product     = [=[{product}]=]\n"
+                f"  }},\n"
+            )
+            f.write(recipe_block)
+        f.write("}\n\n")
+        f.write("return buildingList\n")
+
+    # Build the index table mapping table names to the recipes they contain.
+    index_table = {}
+    for category_key, recipes in crafting_by_category.items():
+        index_table[category_key] = sorted(recipes.keys())
+    index_table["building"] = sorted(building_recipes.keys())
+
+    # Write the index table to a Lua file.
+    index_file = f"{output_dir}/index.lua"
+    with open(index_file, 'w', encoding='utf-8') as f:
+        f.write("local index = {\n")
+        for table_name, recipe_list in index_table.items():
+            recipes_str = ", ".join(f'"{r}"' for r in recipe_list)
+            f.write(f"  {table_name} = {{ {recipes_str} }},\n")
+        f.write("}\n\n")
+        f.write("return index\n")
+
 def main(recipes_data=None):
     print("Processing recipe output...")
-
-    # Load the recipe data
-    if not recipes_data:  # Avoid circular imports if running from recipe_format.py
+    if not recipes_data:
         recipes_data = recipe_format.get_processed_recipes()
-
-    # Load the tags data
     tags_data = item_tags.get_tag_data()
+    item_tags.write_tag_image()
 
     processed_recipes = {}
     for raw_name, recipe in recipes_data.items():
@@ -964,16 +926,16 @@ def main(recipes_data=None):
             "workstation": workstation,
             "products": products,
             "xp": xp,
-            "construction": construction_flag
+            "construction": construction_flag,
+            "category": recipe.get("category", "Other")
         }
 
-    output(processed_recipes)
-
-    normal_item_input_map, normal_item_output_map, construction_item_input_map, construction_item_output_map = gather_item_usage(recipes_data, tags_data)
-
-    output_item_usage(normal_item_input_map, normal_item_output_map, construction_item_input_map, construction_item_output_map)
-
+    normal_item_input_map, normal_item_output_map, construction_item_input_map, construction_item_output_map = gather_item_usage(
+        recipes_data, tags_data)
+    output_item_usage(normal_item_input_map, normal_item_output_map, construction_item_input_map,
+                      construction_item_output_map)
     output_skill_usage(recipes_data)
+    output_lua_tables(processed_recipes)
 
 
 if __name__ == "__main__":

@@ -156,17 +156,19 @@ def parse_recipe_block(recipe_name, recipe_text):
         if ln and not ln.startswith('//'):
             leftover.append(ln)
 
-    # Handle leftover key-value pairs
-    pair_pattern = re.compile(r'^\s*(\w+)\s*=\s*(.*?)\s*$', re.IGNORECASE)
-    for ln in leftover:
-        m2 = pair_pattern.match(ln)
-        if not m2:
-            continue
-        k, v = m2.group(1), m2.group(2)
-        if ";" in v:
-            recipe_dict[k] = [x.strip() for x in v.split(";") if x.strip()]
-        else:
-            recipe_dict[k] = v
+        # Handle leftover key-value pairs
+        pair_pattern = re.compile(r'^\s*(\w+)\s*=\s*(.*?)\s*$', re.IGNORECASE)
+        for ln in leftover:
+            m2 = pair_pattern.match(ln)
+            if not m2:
+                continue
+            k, v = m2.group(1), m2.group(2)
+            if k.lower() == "category":
+                recipe_dict["category"] = v.rstrip(',').strip()
+            elif ";" in v:
+                recipe_dict[k] = [x.strip() for x in v.split(";") if x.strip()]
+            else:
+                recipe_dict[k] = v
 
     return recipe_dict
 

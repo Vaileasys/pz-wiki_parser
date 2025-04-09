@@ -43,8 +43,13 @@ def process_recipe(recipe, parsed_item_data):
     processed_data["workstation"] = process_workstation(recipe)
     processed_data["xp"] = process_xp(recipe)
     processed_data["construction"] = recipe.get("construction", False)
-    return processed_data
 
+    if "category" in recipe:
+        processed_data["category"] = recipe["category"]
+    else:
+        processed_data["category"] = "Other"
+
+    return processed_data
 
 def process_name(recipe):
     """
