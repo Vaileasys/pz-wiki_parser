@@ -6,10 +6,12 @@ import re
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from scripts.parser import item_parser, recipe_parser
-from scripts.core import translate, logger, version, config_manager
+from scripts.core import logger, config_manager
+from scripts.core.version import Version
+from scripts.core.language import Language, Translate
 from scripts.core.constants import (DATA_PATH, RESOURCE_PATH)
-from scripts.utils import util
 from scripts.utils import lua_helper
+from scripts.utils.util import echo, save_json, load_json
 
 
 parsed_burn_data = {}
@@ -161,7 +163,7 @@ def get_body_parts(item_data, link=True, default=""):
     blood_locations = json_data.get("BloodLocation")
     body_part_names = json_data.get("DisplayName")
 
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     blood_location = item_data.get('BloodLocation', None)
     if blood_location is None:
         return default
@@ -178,7 +180,7 @@ def get_body_parts(item_data, link=True, default=""):
                     translation_string = body_part_names.get(part, body_part_names.get("MAX"))
                     if translation_string is None:
                         print(f"No translation string found for {part}")
-                    translated_part = translate.get_translation(translation_string)
+                    translated_part = Translate.get(translation_string)
                 
                     if language_code != 'en':
                         body_parts.append(f"[[BloodLocation/{language_code}#{part}|{translated_part}]]")
@@ -224,8 +226,8 @@ def get_skill_type_mapping(item_data, item_id):
             if skill == "Firearm":
                 skill = "Aiming"
 
-            skill_translation = translate.get_translation(skill, "Categories")
-            language_code = translate.get_language_code()
+            skill_translation = Translate.get(skill, "Categories")
+            language_code = Language.get()
             if language_code == "en":
                 skill_page = skill_mapping.get(skill, skill_translation)
                 link = f"[[{skill_page}]]"
@@ -257,7 +259,7 @@ def get_burn_data():
     if not parsed_burn_data:
         parsed_burn_data, cache_version = load_cache(CACHE_FILE, "burn", True, suppress=True)
 
-        if cache_version != version.get_version():
+        if cache_version != Version.get():
             lua_runtime = lua_helper.load_lua_file("camping_fuel.lua")
             parsed_burn_data = lua_helper.parse_lua_tables(lua_runtime, TABLES)
 
@@ -314,10 +316,10 @@ def get_burn_time(item_id, item_data):
         minutes = (value - hours) * 60
 
         # Translate 'hour' and 'minute' then determine if should be plural
-        hours_unit = translate.get_translation("IGUI_Gametime_hour", None)
-        minutes_unit = translate.get_translation("IGUI_Gametime_minute", None)
-        if hours != 1: hours_unit = translate.get_translation("IGUI_Gametime_hours", None)
-        if minutes != 1: minutes_unit = translate.get_translation("IGUI_Gametime_minutes", None)
+        hours_unit = Translate.get("IGUI_Gametime_hour", None)
+        minutes_unit = Translate.get("IGUI_Gametime_minute", None)
+        if hours != 1: hours_unit = Translate.get("IGUI_Gametime_hours", None)
+        if minutes != 1: minutes_unit = Translate.get("IGUI_Gametime_minutes", None)
 
         # Remove decimal where appropriate
         if minutes % 1 == 0:
@@ -359,12 +361,12 @@ def save_cache(data: dict, data_file: str, data_dir=DATA_PATH, suppress=False):
 
     data_copy = data.copy() # Copy so we don't modify the existing usable data.
     # Add version number to data. Version can be checked to save time parsing.
-    data_copy["version"] = version.get_version()
+    data_copy["version"] = Version.get()
     
-    util.save_json(data_file_path, data_copy)
+    save_json(data_file_path, data_copy)
     
     if not suppress:
-        util.echo(f"{cache_name.capitalize()} saved to '{data_file_path}'")
+        echo(f"{cache_name.capitalize()} saved to '{data_file_path}'")
 
 
 def load_cache(cache_file, cache_name="data", get_version=False, backup_old=False, suppress=False):
@@ -393,23 +395,23 @@ def load_cache(cache_file, cache_name="data", get_version=False, backup_old=Fals
 
     try:
         if os.path.exists(cache_file):
-            json_cache = util.load_json(cache_file)
+            json_cache = load_json(cache_file)
             
             cache_version = json_cache.get("version")
             # Remove 'version' key before returning.
             json_cache.pop("version", None)
 
             if not suppress:
-                util.echo(f"{cache_name.capitalize()} loaded from cache: '{cache_file}' ({cache_version})")
+                echo(f"{cache_name.capitalize()} loaded from cache: '{cache_file}' ({cache_version})")
 
-            if backup_old and cache_version != version.get_version():
+            if backup_old and cache_version != Version.get():
                 shutil.copy(cache_file, cache_file.replace(".json", "_old.json"))
 
     except json.JSONDecodeError as e:
-        util.echo(f"Error decoding JSON file 'cache_file': {e}")
+        echo(f"Error decoding JSON file 'cache_file': {e}")
 
     except Exception as e:
-        util.echo(f"Error getting {cache_name.lower()} '{cache_file}': {e}")
+        echo(f"Error getting {cache_name.lower()} '{cache_file}': {e}")
 
     if get_version:
         return json_cache, cache_version
@@ -441,9 +443,9 @@ def clear_cache(cache_path=DATA_PATH, cache_name=None, suppress=False):
                 os.remove(cache_path)  # Delete file
 
         if not suppress:
-            util.echo(f"{cache_name.capitalize()} cleared.")
+            echo(f"{cache_name.capitalize()} cleared.")
     except Exception as e:
-        util.echo(f"Error clearing {cache_name.lower()} '{cache_path}': {e}")
+        echo(f"Error clearing {cache_name.lower()} '{cache_path}': {e}")
 
 
 
@@ -508,7 +510,7 @@ def get_name(item_id, item_data=None, language=None):
     Returns:
         str: The items name as it is displayed in-game.
     """
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     # The following keys are used to construct the name:
     # item_id: The item ID this special case is applicable to.
     # prefix: The text to appear at the beginning of the string.
@@ -518,31 +520,31 @@ def get_name(item_id, item_data=None, language=None):
     ITEM_NAMES = {
         "bible": {
             "item_id": ["Base.Book_Bible", "Base.BookFancy_Bible", "Base.Paperback_Bible"],
-            "suffix": f': {translate.get_translation("TheBible", "BookTitle", language if language == "en" else language_code)}'
+            "suffix": f': {Translate.get("TheBible", "BookTitle", language if language == "en" else language_code)}'
         },
         "Newspaper_Dispatch_New": {
             "item_id": ["Base.Newspaper_Dispatch_New"],
-            "suffix": f': {translate.get_translation("NationalDispatch", "NewspaperTitle", language if language == "en" else language_code)}'
+            "suffix": f': {Translate.get("NationalDispatch", "NewspaperTitle", language if language == "en" else language_code)}'
         },
         "Newspaper_Herald_New": {
             "item_id": ["Base.Newspaper_Herald_New"],
-            "suffix": f': {translate.get_translation("KentuckyHerald", "NewspaperTitle", language if language == "en" else language_code)}'
+            "suffix": f': {Translate.get("KentuckyHerald", "NewspaperTitle", language if language == "en" else language_code)}'
         },
         "Newspaper_Knews_New": {
             "item_id": ["Base.Newspaper_Knews_New"],
-            "suffix": f': {translate.get_translation("KnoxKnews", "NewspaperTitle", language if language == "en" else language_code)}'
+            "suffix": f': {Translate.get("KnoxKnews", "NewspaperTitle", language if language == "en" else language_code)}'
         },
         "Newspaper_Times_New": {
             "item_id": ["Base.Newspaper_Times_New"],
-            "suffix": f': {translate.get_translation("LouisvilleSunTimes", "NewspaperTitle", language if language == "en" else language_code)}'
+            "suffix": f': {Translate.get("LouisvilleSunTimes", "NewspaperTitle", language if language == "en" else language_code)}'
         },
         "BusinessCard_Nolans": {
             "item_id": ["Base.BusinessCard_Nolans"],
-            "suffix": f': {translate.get_translation("NolansUsedCars", "IGUI", language if language == "en" else language_code)}'
+            "suffix": f': {Translate.get("NolansUsedCars", "IGUI", language if language == "en" else language_code)}'
         },
         "Flier_Nolans": {
             "item_id": ["Base.Flier_Nolans"],
-            "suffix": f': {translate.get_translation("NolansUsedCars_title", "PrintMedia", language if language == "en" else language_code)}'
+            "suffix": f': {Translate.get("NolansUsedCars_title", "PrintMedia", language if language == "en" else language_code)}'
         }
     }
 
@@ -560,7 +562,7 @@ def get_name(item_id, item_data=None, language=None):
             if not item_data:
                 item_data = get_item_data_from_id(item_id)
             return item_data.get("DisplayName", item_id)
-        translated_name = translate.get_translation(item_id, "DisplayName")
+        translated_name = Translate.get(item_id, "DisplayName")
         if translated_name == item_id:
             translated_name = item_data.get("DisplayName", item_id)
         return translated_name
@@ -578,9 +580,9 @@ def get_name(item_id, item_data=None, language=None):
     # infix should always be present, and defaults to DisplayName
     if infix == "":
         if language == "en":
-            infix = translate.get_translation(item_id, "DisplayName", "en")
+            infix = Translate.get(item_id, "DisplayName", "en")
         else:
-            infix = translate.get_translation(item_id, "DisplayName")
+            infix = Translate.get(item_id, "DisplayName")
 
     item_name = prefix + infix + suffix
 
@@ -603,7 +605,7 @@ def get_item_id_data(suppress=False):
         cache_file = "item_id_dictionary.json"
         cache_version, cache_data = load_cache(cache_file, 'Item ID dictionary', get_version=True, suppress=suppress)
 
-        if cache_version != version.get_version():
+        if cache_version != Version.get():
             data = {}
 
             with open(dict_csv, mode='r', encoding='utf-8') as csv_file:
@@ -806,7 +808,7 @@ def get_icon(item_id, format=False, all_icons=False, cycling=False, custom_name=
         # Format icons
         if format:
             
-            language_code = translate.get_language_code()
+            language_code = Language.get()
             lcs = ""
             if language_code != "en":
                 lcs = f"/{language_code}"
@@ -860,16 +862,16 @@ def get_fluid_name(fluid_data, lang=None):
         display_name = display_name[len(display_name_prefix):]
 
     if lang is None:
-        name = translate.get_translation(display_name, 'FluidID')
+        name = Translate.get(display_name, 'FluidID')
     else:
-        name = translate.get_translation(display_name, 'FluidID', lang)
+        name = Translate.get(display_name, 'FluidID', lang)
     return name
 
 # TODO: this is a WIP
 def get_recipe(recipe_id):
-    recipe_name = translate.get_translation(recipe_id, None, "en")
+    recipe_name = Translate.get(recipe_id, None, "en")
     if recipe_name == recipe_id:
-        recipe_name = translate.get_translation(recipe_id, "TeachedRecipes")
+        recipe_name = Translate.get(recipe_id, "TeachedRecipes")
     
     try:
         parsed_recipe_data = recipe_parser.get_recipe_data()
