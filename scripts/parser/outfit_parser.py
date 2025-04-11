@@ -3,7 +3,7 @@ import json
 import xml.etree.ElementTree as ET
 import re
 from difflib import SequenceMatcher
-import scripts.core.version
+from scripts.core.version import Version
 
 def translate_outfit_name(outfit_label):
     # Add spaces before capital letters, but skip if preceded by "KY"
@@ -81,7 +81,7 @@ def get_outfits(xml_file, guid_mapping):
 
 
 def generate_articles(outfits_json, output_dir, translated_names):
-    version_number = scripts.core.version.get_version()
+    version_number = Version.get()
     def generate_intro():
         return "{{Header|Project Zomboid|World|Lore|Outfits}}\n" \
                f"{{{{Page version|{version_number}}}}}\n" \
@@ -148,7 +148,7 @@ def generate_articles(outfits_json, output_dir, translated_names):
     def generate_code(outfit_name, outfit_details):
         translated_name = translated_names[outfit_name]
         json_object = json.dumps({translated_name: outfit_details}, indent=4)
-        version_number = scripts.core.version.get_version()
+        version_number = Version.get()
         return (
             "\n==Code==\n"
             "{{CodeBox|\n"

@@ -1,7 +1,8 @@
 import os
 import shutil
 from scripts.parser import item_parser
-from scripts.core import logger, translate
+from scripts.core import logger
+from scripts.core.language import Language, Translate
 from scripts.utils import utility
 
 
@@ -71,7 +72,7 @@ def write_to_output(item_data, item_id, output_dir):
                     perishable = "true"
 
                 parameters = {
-                    "name": translate.get_translation(item_id, "DisplayName"),
+                    "name": Translate.get(item_id, "DisplayName"),
                     "image": get_icon_variant(item_id),
                     "cooked_image": get_icon_variant(item_id, "cooked"),
                     "rotten_image": get_icon_variant(item_id, "rotten"),
@@ -110,7 +111,7 @@ def automatic_extraction(output_dir):
 
 
 def main():
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     output_dir = f'output/{language_code}/consumables'
 
     while True:

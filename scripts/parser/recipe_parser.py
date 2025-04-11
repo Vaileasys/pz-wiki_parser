@@ -1,5 +1,5 @@
 import os, re
-from scripts.core import version
+from scripts.core.version import Version
 from scripts.core.constants import DATA_PATH
 from scripts.utils import utility
 
@@ -559,7 +559,7 @@ def main():
     parsed_data, cache_version = utility.load_cache(cache_file, get_version=True)
 
     # Parse recipes if there is no cache, or it's outdated.
-    if cache_version != version.get_version():
+    if cache_version != Version.get():
         # Gather raw lines and join into one text block.
         lines = gather_recipe_lines(RECIPES_DIR)
         file_text = "".join(lines)

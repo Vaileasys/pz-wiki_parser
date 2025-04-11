@@ -1,6 +1,6 @@
 from tqdm import tqdm
 from scripts.parser import item_parser
-from scripts.core import translate
+from scripts.core.language import Language
 from scripts.core.constants import PBAR_FORMAT, RESOURCE_PATH
 from scripts.lists import hotbar_slots
 from scripts.utils import utility, table_helper, util
@@ -38,7 +38,7 @@ def generate_data(item_data, item_id):
     body_location = item_data.get("BodyLocation", item_data.get("CanBeEquipped", 'Unknown'))
     heading, table_key = get_body_location(body_location)
     columns = table_types.get(table_key, table_types["generic"])
-    language_code = translate.get_language_code()
+    language_code = Language.get()
 
     item_name = item_data.get("DisplayName", 'Unknown')
     page_name = utility.get_page(item_id, item_name)

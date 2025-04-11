@@ -2,10 +2,10 @@
 
 from pathlib import Path
 import json
-from scripts.core import translate
+from scripts.core.language import Language, Translate
 from scripts.core.constants import (RESOURCE_PATH, OUTPUT_PATH)
 
-language_code = translate.get_language_code()
+language_code = Language.get()
 
 JSON_DIR = Path(RESOURCE_PATH)
 JSON_FILE = "blood_location.json"
@@ -74,7 +74,7 @@ def generate_content():
         body_parts_new = []
         for body_part in body_parts:
             display_name = get_display_name(body_part)
-            name = translate.get_translation(display_name)
+            name = Translate.get(display_name)
             link = f"[[#{body_part}|{name}]]"
             body_parts_new.append(link)
         content.append("| " + "<br>".join(body_parts_new))

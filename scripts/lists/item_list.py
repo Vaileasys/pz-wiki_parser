@@ -1,7 +1,8 @@
 from tqdm import tqdm
 import os
 from scripts.parser import item_parser
-from scripts.core import translate, logger
+from scripts.core import logger
+from scripts.core.language import Language, Translate
 from scripts.core.constants import (PBAR_FORMAT, OUTPUT_PATH)
 from scripts.utils import utility
 
@@ -19,7 +20,7 @@ HEADER = "! <<icon>> !! <<name>> !! <<item_id>>"
 def translate_category(category, property="DisplayCategory"):
     if category not in categories:
         try:
-            cat_translated = translate.get_translation(category, property)
+            cat_translated = Translate.get(category, property)
             categories[category] = cat_translated
         except Exception as e:
             logger.write(f"Error translating category '{category}': {e}")
@@ -30,7 +31,7 @@ def translate_category(category, property="DisplayCategory"):
 
 
 def write_to_output(items_data):
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     output_dir = f'{OUTPUT_PATH}/{language_code}/item_list/'
     output_file = f'item_list.txt'
     os.makedirs(output_dir, exist_ok=True)
@@ -43,7 +44,7 @@ def write_to_output(items_data):
         lc_subpage = f"/{language_code}"
 
     for display_category in sorted(items_data.keys()):
-        translated_header = translate.get_wiki_translation(HEADER)
+        translated_header = Translate.get_wiki(HEADER)
         content.append(f"=={display_category}==")
         content.append('{| class="wikitable theme-blue"')
         content.append(f"{translated_header}")
@@ -100,7 +101,7 @@ def generate_item_list():
                 else:
                     id_rec = True
 
-                if translate.get_language_code() != 'en':
+                if Language.get() != 'en':
                     translated_item_name = utility.get_name(item_id, item_data)
                 
                 skip_item = False

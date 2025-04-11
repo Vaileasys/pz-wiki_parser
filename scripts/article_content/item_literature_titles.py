@@ -1,6 +1,6 @@
 from pathlib import Path
 from scripts.parser import literature_parser
-from scripts.core import translate
+from scripts.core.language import Language, Translate
 from scripts.parser import item_parser
 from scripts.utils import utility
 
@@ -159,9 +159,9 @@ def process_location_literature(item_id, item_data, on_create):
             y_center = int((y1 + y2) / 2)
 
             business_string = business + "_title"
-            business_name = translate.get_translation(business + "_title", "PrintMedia")
+            business_name = Translate.get(business + "_title", "PrintMedia")
             if business_name == business_string:
-                business_name = translate.get_translation(business + "_title", "PrintText")
+                business_name = Translate.get(business + "_title", "PrintText")
 
             business_titles.append({
                 "name": business_name,
@@ -188,7 +188,7 @@ def process_generic(item_id, item_data, on_create):
         translation_str = GENERIC_LITERATURE[on_create][1]
 
         for i, title in enumerate(literature_titles):
-            literature_titles[i] = translate.get_translation(title, translation_str)
+            literature_titles[i] = Translate.get(title, translation_str)
 
         write_to_file(item_id, literature_titles, "generic")
 
@@ -253,7 +253,7 @@ def process_comic(item_id, item_data, on_create):
         if on_create == "OnCreateComicBookRetail" and not nested_data["inPrint"]:
             continue
 
-        translated_title = translate.get_translation(title, "ComicTitle")
+        translated_title = Translate.get(title, "ComicTitle")
         updated_values[translated_title] = nested_data
 
         comic_titles = updated_values
@@ -289,7 +289,7 @@ def process_magazine(item_id, item_data, on_create):
             if "New" in item_tags:
                 nested_data["firstYear"] = "1993"
 
-            translated_title = translate.get_translation(title, "MagazineTitle")
+            translated_title = Translate.get(title, "MagazineTitle")
             updated_values[translated_title] = nested_data
 
         magazine_titles[key] = updated_values
@@ -345,7 +345,7 @@ def process_book(item_id, item_data, on_create):
             cover = details.get("cover", "both")
 
             if cover == "both" or (cover == "hardcover" and hardcover) or (cover == "softcover" and paperback):
-                filtered_titles.append(translate.get_translation(title, "BookTitle"))
+                filtered_titles.append(Translate.get(title, "BookTitle"))
 
         book_titles[subject] = filtered_titles
 
@@ -353,7 +353,7 @@ def process_book(item_id, item_data, on_create):
 
 
 def write_to_file(item_id, literature_titles, literature_type):
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     output_dir = Path("output") / language_code / "literature_lists" / f"{literature_type}_titles"
     output_path = Path(output_dir) / f"{item_id}.txt"
 
@@ -442,20 +442,20 @@ def write_to_file(item_id, literature_titles, literature_type):
 
         elif literature_type == "locket":
             file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
-            name = translate.get_translation(item_id, "DisplayName")
-            locket_text = translate.get_translation("IGUI_LocketText", "IGUI_LocketText")
+            name = Translate.get(item_id, "DisplayName")
+            locket_text = Translate.get("IGUI_LocketText", "IGUI_LocketText")
             for title in sorted(literature_titles):
-                photo = translate.get_translation(title, "Photo")
+                photo = Translate.get(title, "Photo")
                 full_name = f"{name} {locket_text} {photo}"
                 file.write(f"* {full_name}\n")
             file.write('</div>')
 
         elif literature_type == "doodlekids":
             file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
-            name = translate.get_translation(item_id, "DisplayName")
-            photo_text = translate.get_translation("IGUI_PhotoOf", "IGUI_PhotoOf")
+            name = Translate.get(item_id, "DisplayName")
+            photo_text = Translate.get("IGUI_PhotoOf", "IGUI_PhotoOf")
             for title in sorted(literature_titles):
-                photo = translate.get_translation(title, "Doodle")
+                photo = Translate.get(title, "Doodle")
                 full_name = f"{name} {photo_text} {photo}"
                 file.write(f"* {full_name}\n")
             file.write('</div>')
@@ -463,10 +463,10 @@ def write_to_file(item_id, literature_titles, literature_type):
         # postcards, doodles and photos are generated the same
         elif literature_type in ["postcards", "doodle", "photo"]:
             file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
-            name = translate.get_translation(item_id, "DisplayName")
-            photo_text = translate.get_translation("IGUI_PhotoOf", "IGUI_PhotoOf")
+            name = Translate.get(item_id, "DisplayName")
+            photo_text = Translate.get("IGUI_PhotoOf", "IGUI_PhotoOf")
             for title in sorted(literature_titles):
-                photo = translate.get_translation(title, "Photo")
+                photo = Translate.get(title, "Photo")
                 full_name = f"{name} {photo_text} {photo}"
                 file.write(f"* {full_name}\n")
             file.write('</div>')
@@ -474,7 +474,7 @@ def write_to_file(item_id, literature_titles, literature_type):
         elif literature_type in ["businesscards", "jobtitles"]:
             file.write('<div class="list-columns" style="column-width:300px; max-width:1300px;">\n')
             for title in sorted(literature_titles):
-                file.write(f'* {translate.get_translation(title, "IGUI")}\n')
+                file.write(f'* {Translate.get(title, "IGUI")}\n')
             file.write('</div>')
 
         elif literature_type == "flier":
@@ -495,7 +495,7 @@ def write_to_file(item_id, literature_titles, literature_type):
 
 
 def combine_txt_files(type):
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     source_dir = Path("output") / language_code / "literature_lists"
     source_path = Path(source_dir) / f"{type}_titles"
     combined_file_path = Path(source_dir) / f"combined_{type}_list.txt"

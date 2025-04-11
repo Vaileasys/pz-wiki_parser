@@ -2,7 +2,9 @@ import os
 import shutil
 import json
 from scripts.parser import fluid_parser
-from scripts.core import translate, logger, version
+from scripts.core import logger
+from scripts.core.version import Version
+from scripts.core.language import Language, Translate
 from scripts.utils import utility
 print(f"Current Working Directory: {os.getcwd()}")
 
@@ -33,7 +35,7 @@ def write_to_output(fluid_data, fluid_id, output_dir):
             # Special case for TaintedWater
             if fluid_id == "TaintedWater":
                 # Get translation for tainted water string
-                tainted_water = translate.get_translation("ItemNameTaintedWater", 'IGUI')
+                tainted_water = Translate.get("ItemNameTaintedWater", 'IGUI')
                 name = tainted_water.replace("%1", name)
 
             color = fluid_data.get('ColorReference', fluid_data.get('Color', [0.0, 0.0, 0.0])),
@@ -101,7 +103,7 @@ def write_to_output(fluid_data, fluid_id, output_dir):
                 "fluid_color": fluid_color,
                 "fluid_color_ref": fluid_data.get('ColorReference', ''),
                 "fluid_id": f"Base.{fluid_id}",
-                "infobox_version": version.get_version()
+                "infobox_version": Version.get()
             }
 
             for key, value in parameters.items():
@@ -128,7 +130,7 @@ def automatic_extraction(output_dir):
 
 
 def main():
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     output_dir = f'output/{language_code}/fluid_infoboxes'
 
     while True:

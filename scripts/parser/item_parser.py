@@ -1,9 +1,9 @@
 import os
 import re
-from scripts.core import translate, version
+from scripts.core.language import Language, Translate
+from scripts.core.version import Version
 from scripts.core.constants import DATA_PATH
-from scripts.utils import util
-from scripts.utils import utility
+from scripts.utils.util import echo, save_cache, load_cache
 
 RESOURCE_PATH = 'resources/scripts/'
 CACHE_JSON = 'item_data.json'
@@ -160,7 +160,7 @@ def parse_item(lines, start_index, module_name):
                 item_name = parts[1]
                 item_id = f"{module_name}.{item_name}"
             else:
-                util.echo(f"Warning: Couldn't parse item line: {line}")
+                echo(f"Warning: Couldn't parse item line: {line}")
                 i += 1
                 continue
         
@@ -189,7 +189,7 @@ def parse_item(lines, start_index, module_name):
                             for k, v in [pair.split(':', 1)]
                         }
                     except ValueError:
-                        util.echo(f"Warning: Skipping invalid key-value pair in line: {line}")
+                        echo(f"Warning: Skipping invalid key-value pair in line: {line}")
 
             # Handle multiple values (separated by ';')
             elif ';' in property_value:
@@ -218,7 +218,7 @@ def parse_module(lines):
             if len(parts) >= 2:
                 module_name = parts[1]
             else:
-                util.echo(f"Warning: Couldn't parse module line: {line}")
+                echo(f"Warning: Couldn't parse module line: {line}")
         
         # Detect the start of an item block
         elif re.match(r'^item(\s)', line): # regex to return 'item' and not any suffixes
@@ -258,12 +258,12 @@ def parse_files(directory):
         # Fix for DisplayName having ';' in its value
         if isinstance(display_name, list):
             display_name = ", ".join(display_name)
-        display_name = translate.get_translation(item_id, "DisplayName", "en", display_name)
+        display_name = Translate.get(item_id, "DisplayName", "en", display_name)
         parsed_data[item_id]["DisplayName"] = display_name
 
     parsed_data = dict(sorted(parsed_data.items(), key=lambda x: x[1]["Type"]))
 
-    utility.save_cache(parsed_data, CACHE_JSON)
+    save_cache(parsed_data, CACHE_JSON)
     
     return parsed_data
 
@@ -297,12 +297,12 @@ def get_new_items(old_dict, new_dict):
 # Initialise parser
 def init():
     global parsed_data
-    translate.get_language_code() # Initialise so we don't interrupt progress bars
+    Language.get() # Initialise so we don't interrupt progress bars
 
     cache_file = os.path.join(DATA_PATH, CACHE_JSON)
     # Try to get cache from json file
-    cached_data, cache_version = utility.load_cache(cache_file, "item", get_version=True, backup_old=True)
-    game_version = version.get_version()
+    cached_data, cache_version = load_cache(cache_file, "item", get_version=True, backup_old=True)
+    game_version = Version.get()
 
     # Parse items if there is no cache, or it's outdated.
     if cache_version != game_version:
@@ -313,11 +313,11 @@ def init():
     # Compare parsed_data with cached data.
     if cached_data and cached_data != parsed_data and cache_version != game_version:
         new_items, modified_items = get_new_items(cached_data, parsed_data)
-        utility.save_cache(new_items, CACHE_JSON.replace(".json", "") + "_new.json")
-        utility.save_cache(modified_items, CACHE_JSON.replace(".json", "") + "_changes.json")
+        save_cache(new_items, CACHE_JSON.replace(".json", "") + "_new.json")
+        save_cache(modified_items, CACHE_JSON.replace(".json", "") + "_changes.json")
 
     item_count = len(parsed_data)
-    util.echo(f"Number of items found: {item_count}")
+    echo(f"Number of items found: {item_count}")
 
 if __name__ == "__main__":
     init()

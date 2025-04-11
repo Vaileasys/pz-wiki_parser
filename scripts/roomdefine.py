@@ -3,7 +3,8 @@ from pathlib import Path
 from tqdm import tqdm
 import concurrent.futures
 import scripts.parser.distribution_parser as distribution_parser
-from scripts.core import version, translate
+from scripts.core.version import Version
+from scripts.core.language import Language, Translate
 from scripts.core.constants import DATA_PATH
 from scripts.utils import utility
 
@@ -67,8 +68,8 @@ def process_single_room(room_name: str, data: dict) -> dict:
 
 
 def generate_per_letter_files(room_to_containers: dict):
-    game_version = version.get_version()
-    language_code = translate.get_language_code()
+    game_version = Version.get()
+    language_code = Language.get()
 
     rooms_by_letter = {}
     for room_name in room_to_containers:
@@ -126,7 +127,7 @@ def generate_per_letter_files(room_to_containers: dict):
                     items = sorted(room_to_containers[room_name][container_name])
                     translated_items = []
                     for item in items:
-                        translated = translate.get_translation("Base." + item, property_key="DisplayName",
+                        translated = Translate.get("Base." + item, property_key="DisplayName",
                                                                lang_code=language_code)
                         translated_items.append(f"[[{translated}]]")
                         pbar.update(1)
@@ -145,7 +146,7 @@ def generate_per_letter_files(room_to_containers: dict):
 
 
 def generate_main_page(room_to_containers: dict):
-    game_version = version.get_version()
+    game_version = Version.get()
 
     output_file = Path("output/distributions/room_definitions_main.txt")
     output_file.parent.mkdir(parents=True, exist_ok=True)

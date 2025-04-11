@@ -1,5 +1,5 @@
 from pathlib import Path
-from scripts.core import translate
+from scripts.core.language import Translate
 from scripts.core.constants import (LUA_PATH, DATA_PATH)
 from scripts.utils import utility, lua_helper
 
@@ -42,7 +42,7 @@ def reorder_spawn_data(normalised_data):
 
     for profession, coords_list in normalised_data.items():
         profession = normalise_profession(profession)
-        profession = translate.get_translation(profession)
+        profession = Translate.get(profession)
         profession = f"[[{profession}]]"
 
         for coords in coords_list:

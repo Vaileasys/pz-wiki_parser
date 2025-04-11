@@ -1,7 +1,7 @@
 from pathlib import Path
 from tqdm import tqdm
 from scripts.parser import item_parser, distribution_container_parser
-from scripts.core import translate
+from scripts.core.language import Language
 from scripts.core.constants import (PBAR_FORMAT, OUTPUT_PATH)
 from scripts.utils import utility
 
@@ -16,7 +16,7 @@ TABLE_CAPTION = '|+ style="white-space:nowrap; border:none; font-weight:normal; 
 TABLE_FOOTER = "|}"
 
 distribution_data = distribution_container_parser.get_distribution_data()
-language_code = translate.get_language_code()
+language_code = Language.get()
 output_dir = Path(OUTPUT_PATH) / language_code.lower() / "container_contents"
 
 

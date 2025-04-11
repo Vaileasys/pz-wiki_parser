@@ -1,10 +1,11 @@
 import os
 import shutil
 from scripts.parser import script_parser
-from scripts.core import logger, translate
+from scripts.core import logger
+from scripts.core.language import Language, Translate
 from scripts.utils import utility
 
-language_code = translate.get_language_code()
+language_code = Language.get()
 
 def get_fixing():
     while True:
@@ -72,7 +73,7 @@ def get_require(module, fixing_data):
         if isinstance(item_fixed, list):
             for item in item_fixed:
                 item_id_new = f"{module}.{item}"
-                translated_name = translate.get_translation(item_id_new, "DisplayName")
+                translated_name = Translate.get(item_id_new, "DisplayName")
 
                 if translated_name not in name:
                     if name:
@@ -83,7 +84,7 @@ def get_require(module, fixing_data):
                 item_id += item_id_new
         else:
             item_id = f"{module}.{item_fixed}"
-            name = translate.get_translation(item_id, "DisplayName")
+            name = Translate.get(item_id, "DisplayName")
     return item_id, name
 
 
@@ -93,8 +94,8 @@ def format_fixers(module, fixers):
 
     for fixer in fixers:
         fixer_id = f"{module}.{fixer}"
-        translated_name = translate.get_translation(fixer_id, "DisplayName")
-        english_name = translate.get_translation(fixer_id, "DisplayName", lang_code='en')
+        translated_name = Translate.get(fixer_id, "DisplayName")
+        english_name = Translate.get(fixer_id, "DisplayName", lang_code='en')
 
         if language_code == 'en':
             fixer_name = english_name
@@ -118,8 +119,8 @@ def format_skills(skills, skill_values):
 
     formatted_skills = []
     for skill, value in zip(skills, skill_values):
-        translated_skill = translate.get_translation(skill, "Categories")
-        english_skill_name = translate.get_translation(skill, "Categories", lang_code='en')
+        translated_skill = Translate.get(skill, "Categories")
+        english_skill_name = Translate.get(skill, "Categories", lang_code='en')
 
         if not value:
             value = "0"
@@ -160,7 +161,7 @@ def write_to_output(module, fixing_id, fixing_data, output_dir):
             if global_item_dict:
                 global_item, global_item_value = next(iter(global_item_dict.items()))
                 global_item_id = f"{module}.{global_item}"
-                global_item = f'[[{translate.get_translation(global_item_id, "DisplayName")}]]'
+                global_item = f'[[{Translate.get(global_item_id, "DisplayName")}]]'
                 global_item_icon = utility.get_icon(global_item_id, True)
                 global_item = f"{global_item_icon} {global_item}"
 

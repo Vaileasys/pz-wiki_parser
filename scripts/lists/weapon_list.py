@@ -1,11 +1,10 @@
 from tqdm import tqdm
-from scripts.core import translate
-from scripts.utils import utility, util, table_helper
+from scripts.core.language import Language, Translate
+from scripts.utils import utility, table_helper
+from scripts.utils.util import echo, format_link, format_positive
 from scripts.parser import item_parser, recipe_parser, script_parser
 from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
 
-language_code = "en"
-lcs = ""
 TABLE_PATH = f"{RESOURCE_PATH}/tables/weapon_table.json"
 
 box_types = {}
@@ -20,8 +19,8 @@ def check_fixing(item_id):
     for fixing, fixing_data in parsed_fixing_data[module].items():
         if isinstance(fixing_data, dict) and 'Require' in fixing_data:
             if item_name in fixing_data['Require']:
-                return f'[[File:UI Tick.png|link=Condition{lcs}#<<repairing>>|<<repairable>>]]'
-    return f'[[File:UI Cross.png|link=Condition{lcs}#<<repairing>>|<<not_repairable>>]]'
+                return f'[[File:UI Tick.png|link=Condition{Language.get_subpage()}#<<repairing>>|<<repairable>>]]'
+    return f'[[File:UI Cross.png|link=Condition{Language.get_subpage()}#<<repairing>>|<<not_repairable>>]]'
 
 
 def generate_ammo_data(item_id, item_data):
@@ -201,7 +200,7 @@ def generate_data(item_id, item_data):
     item = {}
 
     item["icon"] = item_data.get("IconFormatted") if "icon" in columns else None
-    item["name"] = util.format_link(item_name, utility.get_page(item_id, item_name)) if "name" in columns else None
+    item["name"] = format_link(item_name, utility.get_page(item_id, item_name)) if "name" in columns else None
     item["weight"] = item_data.get("Weight", "1") if "weight" in columns else None
     if "equipped" in columns:
         equipped = "<<1h>>"
@@ -213,7 +212,7 @@ def generate_data(item_id, item_data):
         if item_data.get("CloseKillMove") == "Jaw_Stab":
             equipped = "{{Tooltip|<<1h>>*|<<jaw_stab_desc>>}}"
             notes = "<nowiki>*</nowiki><<jaw_stab_desc>>"
-        item["equipped"] = translate.get_wiki_translation(equipped)
+        item["equipped"] = Translate.get_wiki(equipped)
     if "ammo" in columns:
         item["ammo"] = utility.get_icon(item_data.get("AmmoType"), True, True, True) if item_data.get("AmmoType") is not None else "-"
     item["capacity"] = item_data.get('MaxAmmo', item_data.get('ClipSize', '-')) if "capacity" in columns else None
@@ -225,7 +224,7 @@ def generate_data(item_id, item_data):
     item["max_range"] = item_data.get('MaxRange', '-') if "max_range" in columns else None
     item["attack_speed"] = item_data.get('BaseSpeed', '1') if "attack_speed" in columns else None
     if "endurance_mod" in columns:
-        endurance_mod = util.format_positive(float(item_data.get('EnduranceMod', 1)) - 1)
+        endurance_mod = format_positive(float(item_data.get('EnduranceMod', 1)) - 1)
         item["endurance_mod"] = "-" if endurance_mod == "0" else endurance_mod
     item["hit_chance"] = item_data.get('HitChance', '-') + '%' if "hit_chance" in columns else None
     item["hit_chance_mod"] = '+' + item_data.get('AimingPerkHitChanceModifier', '-') + '%' if "hit_chance_mod" in columns else None
@@ -251,7 +250,7 @@ def generate_data(item_id, item_data):
         item["condition_max"] = condition_max if "condition_max" in columns else None
         item["condition_lower_chance"] = condition_lower_chance if "condition_max" in columns else None
         item["condition_average"] = str(int(condition_max) * int(condition_lower_chance)) if "condition_max" in columns and "condition_lower_chance" in columns else None
-    item["repairable"] = translate.get_wiki_translation(check_fixing(item_id)) if "repairable" in columns else None
+    item["repairable"] = Translate.get_wiki(check_fixing(item_id)) if "repairable" in columns else None
     if "magazine" in columns:
         item["magazine"] = utility.get_icon(item_data.get("Magazine"), True, True, True) if item_data.get("Magazine") else "-"
     if "weapon" in columns:
@@ -284,7 +283,7 @@ def generate_data(item_id, item_data):
         for key, value in effects.items():
             if item_data.get(value["property"]):
                 effect = key
-                item["effect"] = value["string"].format(lcs=lcs)
+                item["effect"] = value["string"].format(lcs=Language.get_subpage())
                 break
             else:
                 item["effect"] = "-"
@@ -292,7 +291,7 @@ def generate_data(item_id, item_data):
     item["effect_range"] = item_data.get(f'{effect}Range', '-') if "effect_range" in columns else None
     item["effect_timer"] = item_data.get(f'{effect}Range', '-') if "effect_timer" in columns else None
     item["sensor_range"] = item_data.get('SensorRange', '-') if "sensor_range" in columns else None
-    item["part_type"] = translate.get_translation("Tooltip_weapon_" + item_data.get("PartType", "-")) if "part_type" in columns else None
+    item["part_type"] = Translate.get("Tooltip_weapon_" + item_data.get("PartType", "-")) if "part_type" in columns else None
     item["weight_mod"] = item_data.get('WeightModifier', '-') if "weight_mod" in columns else None
     item["aiming_time"] = item_data.get('AimingTimeModifier', '-') if "aiming_time" in columns else None
     item["function"] = get_function(item_id, item_data) if "function" in columns else None
@@ -324,7 +323,7 @@ def find_table_type(item_id, item_data):
             if "Improvised" in skill and len(skill) > 1:
                 skill = [cat for cat in skill if cat != "Improvised"]
                 if len(skill) > 1:
-                    util.echo(f"WARNING: More than 1 skill ({','.join(skill)})")
+                    echo(f"WARNING: More than 1 skill ({','.join(skill)})")
             table_type = skill[0]
         elif item_data.get("SubCategory") == "Firearm":
             # Firearm
@@ -408,13 +407,9 @@ def find_boxes():
 
 
 def main():
-    global language_code
-    global lcs
     global table_map
     global all_items
     global table_type_map
-    language_code = translate.get_language_code()
-    lcs = f"/{language_code}" if language_code != "en" else ""
     table_map, column_headings, table_type_map = table_helper.get_table_data(TABLE_PATH, "type_map")
     find_boxes()
 

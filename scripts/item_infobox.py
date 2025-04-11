@@ -4,7 +4,9 @@ import json
 import re
 from tqdm import tqdm
 from scripts.parser import item_parser
-from scripts.core import translate, logger, version
+from scripts.core import logger
+from scripts.core.version import Version
+from scripts.core.language import Language, Translate
 from scripts.lists import hotbar_slots
 from scripts.core.constants import PBAR_FORMAT, RESOURCE_PATH
 from scripts.utils import utility, lua_helper, util
@@ -248,7 +250,7 @@ def generate_infobox(item_id, item_data):
                 recipes = [recipes]
             for i in range(len(recipes)):
                 recipes[i] = recipes[i].replace(" ", "_")
-                recipes[i] = translate.get_translation(recipes[i], 'TeachedRecipes')
+                recipes[i] = Translate.get(recipes[i], 'TeachedRecipes')
             recipes = "<br>".join(recipes)
 
         # (Attachments) Get weapons that it's used for.
@@ -277,7 +279,7 @@ def generate_infobox(item_id, item_data):
         for id, id_data in all_items.items():
             descriptor = id_data.get("DescriptorFormatted")
             display_category = 'DisplayCategory'
-            display_category = translate.get_translation(id_data.get(display_category, 'Item'), display_category)
+            display_category = Translate.get(id_data.get(display_category, 'Item'), display_category)
             display_category = display_category + descriptor
             if not any(x in category for x in (display_category, remove_descriptor(display_category))):
                 category.append(display_category)
@@ -303,7 +305,7 @@ def generate_infobox(item_id, item_data):
 
         evolved_recipe = get_any_property(all_items, 'EvolvedRecipeName')
         if evolved_recipe:
-            evolved_recipe_translated = translate.get_translation(item_id, 'EvolvedRecipeName')
+            evolved_recipe_translated = Translate.get(item_id, 'EvolvedRecipeName')
             if evolved_recipe_translated:
                 evolved_recipe = evolved_recipe_translated
         
@@ -317,7 +319,7 @@ def generate_infobox(item_id, item_data):
             "category": category,
             "weight": get_param_values(all_items, 'Weight', True, default=1),
             "capacity": get_any_property(all_items, 'Capacity'),
-            "container_name": translate.get_translation(get_any_property(all_items, 'ContainerName'), 'ContainerName'),
+            "container_name": Translate.get(get_any_property(all_items, 'ContainerName'), 'ContainerName'),
             "weight_reduction": get_any_property(all_items, 'WeightReduction'),
             "max_units": get_any_property(all_items, 'UseDelta'),
             "fluid_capacity": fluid_capacity,
@@ -327,7 +329,7 @@ def generate_infobox(item_id, item_data):
             "attachments_provided": attachments_provided,
             "function": None,
             "weapon": weapon,
-            "part_type": translate.get_translation(get_any_property(all_items, 'PartType'), 'PartType'),
+            "part_type": Translate.get(get_any_property(all_items, 'PartType'), 'PartType'),
             "skill_type": utility.get_skill_type_mapping(item_data, item_id),
             "ammo_type": utility.get_icon(get_any_property(all_items, 'AmmoType'), True, True, False),
             "clip_size": get_any_property(all_items, 'MaxAmmo', None),
@@ -336,7 +338,7 @@ def generate_infobox(item_id, item_data):
             "can_boil_water": capitalize(get_any_property(all_items, 'CanBoilWater')),
             "writable": capitalize(get_any_property(all_items, 'CanBeWrite')),
             "recipes": recipes,
-            "skill_trained": translate.get_translation(get_any_property(all_items, 'SkillTrained'), 'SkillTrained'),
+            "skill_trained": Translate.get(get_any_property(all_items, 'SkillTrained'), 'SkillTrained'),
             "foraging_change": foraging,
             "page_number": get_any_property(all_items, 'NumberOfPages') or get_any_property(all_items, 'PageToWrite'),
             "packaged": capitalize(get_any_property(all_items, 'Packaged')),
@@ -429,7 +431,7 @@ def generate_infobox(item_id, item_data):
         }
 
         parameters = enumerate_params(parameters)
-        parameters["infobox_version"] = version.get_version()
+        parameters["infobox_version"] = Version.get()
 
         return parameters
     except Exception as e:
@@ -477,7 +479,7 @@ def main():
     global hotbar_slot_data
     global language_code
     global lcs
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     if language_code != "en":
         lcs = f"/{language_code}"
     generate_clothing_penalties()

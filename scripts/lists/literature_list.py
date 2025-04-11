@@ -1,11 +1,9 @@
 import os
 from tqdm import tqdm
 from scripts.parser import item_parser, recipe_parser, stash_parser
-from scripts.core import translate
+from scripts.core.language import Language, Translate
 from scripts.core.constants import PBAR_FORMAT
 from scripts.utils import utility, util
-
-language_code = "en"
 
 # Used for getting table values
 TABLE_DICT = {
@@ -198,9 +196,9 @@ def get_skills(item_id, item_data):
     if skill is not None:
         if skill == "FirstAid":
             skill = "Doctor" # So it can be translating correctly
-        skill_en = translate.get_translation(skill, "SkillTrained", "en")
-        if language_code != "en":
-            skill_translated = translate.get_translation(skill, "SkillTrained")
+        skill_en = Translate.get(skill, "SkillTrained", "en")
+        if Language.get() != "en":
+            skill_translated = Translate.get(skill, "SkillTrained")
         else:
             skill_translated = skill_en
         return util.format_link(skill_translated, skill_en)
@@ -235,7 +233,7 @@ def get_region(region_key):
 def process_item(item_id, item_data, special_data={}):
     heading = get_list_type(item_id, item_data, special_data)
     columns = TABLE_DICT.get(TABLE_MAPPING[heading], TABLE_DICT["generic"])
-    language_code = translate.get_default_language()
+    language_code = Language.get()
     map_data = {}
     map_id = special_data.get("map_id", "")
     custom_Name = None
@@ -244,7 +242,7 @@ def process_item(item_id, item_data, special_data={}):
         custom_Name = map_data.get("customName", "Stash_AnnotedMap")
         region = get_region(map_id)
 
-        item_name = translate.get_translation(custom_Name, "") # set item name
+        item_name = Translate.get(custom_Name, "") # set item name
         name_ref = map_id # set name ref (used for sorting)
         page_name =  f"{item_name} ({region})" # set page name
     else:
@@ -454,7 +452,7 @@ def get_items():
 # Write to txt files. Separate file for each heading.
 def write_to_output(literature_dict):
     # write to output.txt
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     output_dir = os.path.join('output', language_code, 'item_list', 'literature')
 
     os.makedirs(output_dir, exist_ok=True)
@@ -489,8 +487,6 @@ def write_to_output(literature_dict):
 
 
 def main():
-    global language_code
-    language_code = language_code = translate.get_language_code()
     items = get_items()
     write_to_output(items)
                 

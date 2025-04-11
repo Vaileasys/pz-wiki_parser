@@ -1,6 +1,7 @@
 import os
 import re
-from scripts.core import logger, version
+from scripts.core import logger
+from scripts.core.version import Version
 from scripts.core.constants import DATA_PATH
 from scripts.utils import utility
 
@@ -166,7 +167,7 @@ def init(suppress=False):
     parsed_fixing_data, cache_version = utility.load_cache(cache_file, get_version=True, suppress=suppress)
 
     # Parse items if there is no cache, or it's outdated.
-    if cache_version != version.get_version():
+    if cache_version != Version.get():
         parsed_fixing_data = parse_files_in_folder()
         utility.save_cache(parsed_fixing_data, CACHE_JSON)
 

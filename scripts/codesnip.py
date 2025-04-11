@@ -1,6 +1,6 @@
 import os
 from concurrent.futures import ThreadPoolExecutor
-from scripts.core import version
+from scripts.core.version import Version
 
 
 def extract_code_snippet(line_number, lines):
@@ -57,7 +57,7 @@ def process_file(file_path, version, output_dir):
 
 
 def main():
-    game_version = version.get_version()
+    game_version = Version.get()
     output_dir = 'output/codesnips'
     resources_dir = 'resources/scripts'
 

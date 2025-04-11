@@ -4,7 +4,8 @@ import os
 import random
 from tqdm import tqdm
 from scripts.parser import item_parser
-from scripts.core import translate, version
+from scripts.core.version import Version
+from scripts.core.language import Language, Translate
 from scripts.lists import hotbar_slots
 from scripts.core.constants import PBAR_FORMAT
 from scripts.utils import utility, util
@@ -121,7 +122,7 @@ def get_accept_item(item_data: dict):
     if not accept_item:
         return "-"
     accept_item = accept_item.replace("AcceptItemFunction.", "")
-    language_code = translate.get_language_code()
+    language_code = Language.get()
 
     accepted_items = []
 
@@ -201,7 +202,7 @@ def get_accept_item(item_data: dict):
 def get_cached_types():
     """Returns cached item 'Type', storing them in cache for faster operations"""
     global category_cache
-    cache_version = version.get_version()
+    cache_version = Version.get()
     CACHE_FILE = "item_type_data.json"
 
     # Load cache if data dict is empty
@@ -209,7 +210,7 @@ def get_cached_types():
         category_cache, cache_version = utility.load_cache(CACHE_FILE, get_version=True, suppress=True)
 
     # Generate data if data dict is empty or cache is old
-    if not category_cache or cache_version != version.get_version():
+    if not category_cache or cache_version != Version.get():
         parsed_item_data = item_parser.get_item_data()
         with tqdm(total=len(parsed_item_data), desc="Preparing items based on 'Type'", bar_format=PBAR_FORMAT, unit=" items") as pbar:
             for cat_item_id, cat_item_data in parsed_item_data.items():
@@ -242,7 +243,7 @@ def get_list_type(item_id, item_data):
         heading = item_data.get('AcceptItemFunction').replace("AcceptItemFunction.", "")
         # Try to get a name for the heading
         heading_item = "Base." + heading
-        heading_translated = translate.get_translation(heading_item, "DisplayName")
+        heading_translated = Translate.get(heading_item, "DisplayName")
         if heading_translated != heading_item:
             heading = heading_translated
         return heading.capitalize()
@@ -252,7 +253,7 @@ def get_list_type(item_id, item_data):
 
 # Process items, returning the heading and row data.
 def process_item(item_id, item_data, pbar):
-    language_code = translate.get_default_language()
+    language_code = Language.get()
 
     heading = get_list_type(item_id, item_data)
     if heading not in TABLE_MAPPING:
@@ -340,7 +341,7 @@ def process_item(item_id, item_data, pbar):
 # Write to txt files. Separate file for each heading.
 def write_to_output(container_dict):
     # write to output.txt
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     output_dir = os.path.join('output', language_code, 'item_list', 'container')
 
     os.makedirs(output_dir, exist_ok=True)
@@ -403,7 +404,7 @@ def get_items():
 
 # Combines txt files based on their position in SECTION_DICT
 def combine_files():
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     clothing_dir = f'output/{language_code}/item_list/container/'
     output_file = f'output/{language_code}/item_list/container_list.txt'
 
@@ -447,7 +448,7 @@ def combine_files():
 def main():
     global language_code
     global hotbar_data
-    language_code = language_code = translate.get_language_code()
+    language_code = language_code = Language.get()
     hotbar_data = hotbar_slots.get_hotbar_slots(suppress=True)
     items = get_items()
     write_to_output(items)

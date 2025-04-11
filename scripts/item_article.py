@@ -4,7 +4,7 @@ import sys
 import csv
 from difflib import SequenceMatcher
 from tqdm import tqdm
-from scripts.core import translate
+from scripts.core.language import Language
 from scripts.core.constants import (PBAR_FORMAT, DATA_PATH)
 from scripts.utils import utility
 
@@ -792,8 +792,8 @@ def main(run_directly=False):
     # 'run_directly' is used to determine if the script was run directly, or called from another module, such as main.py.
     if not run_directly:
         # Only change the language if the script wasn't run directly - this is already done by get_language_code() if it's undefined.
-        translate.change_language()
-    language_code = translate.get_language_code()
+        Language.init()
+    language_code = Language.get()
 
     global see_also_cache
     CACHE_FILE = "item_see_also_data.json"

@@ -1,5 +1,4 @@
-from lupa import LuaRuntime
-from scripts.core import version
+from scripts.core.version import Version
 from scripts.utils import utility, lua_helper
 
 # TODO: merge with distribution_parser.py
@@ -91,7 +90,7 @@ def init():
         cached_data, cache_version = utility.load_cache(CACHE_JSON, get_version=True)
 
         # Check if cache is outdated
-        if cache_version != version.get_version():
+        if cache_version != Version.get():
             CLUTTER_FILES = [
                 "Distribution_BagsAndContainers.lua",
                 "Distribution_BinJunk.lua",

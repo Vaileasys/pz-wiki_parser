@@ -1,7 +1,6 @@
 import os
-from tqdm import tqdm
 from scripts.parser import item_parser
-from scripts.core import translate
+from scripts.core.language import Language
 from scripts.utils import utility
 
 # Dictionary for body part combinations. This is used in 'Template:Body_part' to display the image and body parts.
@@ -194,7 +193,7 @@ def get_item(item_id):
 # Builds 'Template:Body_part' and writes it to a separate txt file for each item ID
 def write_to_file(data):
     i = 0
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     output_dir = f'output/{language_code}/body_parts'
     os.makedirs(output_dir, exist_ok=True)
 

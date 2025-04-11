@@ -1,11 +1,10 @@
 from pathlib import Path
-from scripts.core import translate
+from scripts.core.language import Language, Translate
 from scripts.core.constants import OUTPUT_PATH
-from scripts.utils.util import echo, load_json
-from scripts.utils.utility import save_cache
+from scripts.utils.util import load_json, echo
 
 
-OUTPUT_DIR = Path(OUTPUT_PATH) / translate.get_language_code() / "item_list"
+OUTPUT_DIR = Path(OUTPUT_PATH) / Language.get() / "item_list"
 
 DEF_TABLE_HEADER = '{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"'
 DEF_TABLE_FOOTER = '|}'
@@ -149,7 +148,7 @@ def generate_table(table_type:str, data:dict, column_headings:list, table_header
     content.append(table_footer + table_after + f'<!--BOT_FLAG-end-{table_type.replace(" ", "_")}. DO NOT REMOVE-->')
 
     # Get translations
-    content = [translate.get_wiki_translation(value) for value in content]
+    content = [Translate.get_wiki(value) for value in content]
 
     return content
 

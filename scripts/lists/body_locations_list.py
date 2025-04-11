@@ -1,6 +1,6 @@
 import os
 import re
-from scripts.core import translate
+from scripts.core.language import Language
 
 # Regex patterns for function calls
 set_exclusive_pattern = re.compile(r'setExclusive\s*\(\s*"([^"]+)"\s*,\s*"([^"]+)"\s*\)')
@@ -99,7 +99,7 @@ def build_table(lua_file_path, output_file_path):
 
 def main():
     global output_file_path
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     output_file_path = output_file_path.format(language_code=language_code)
     build_table(LUA_FILE_PATH, output_file_path)
     print(f"Output saved to '{output_file_path}'")

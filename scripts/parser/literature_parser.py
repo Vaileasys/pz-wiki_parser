@@ -1,7 +1,7 @@
 # Parses literature lua files
 
 import os
-from scripts.core import version
+from scripts.core.version import Version
 from scripts.core.constants import DATA_PATH
 from scripts.utils import utility, lua_helper
 
@@ -45,7 +45,7 @@ def init():
     parsed_data, cache_version = utility.load_cache(cache_file, "literature", get_version=True)
 
     # Parse items if there is no cache, or it's outdated.
-    if cache_version != version.get_version():
+    if cache_version != Version.get():
         parsed_data = parse_lua_files()
         utility.save_cache(parsed_data, CACHE_JSON)
 

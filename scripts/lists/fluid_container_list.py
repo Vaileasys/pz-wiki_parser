@@ -5,7 +5,7 @@ This will be fleshed out more with translations and the new list system once com
 
 import os
 import json
-from scripts.core import translate
+from scripts.core.language import Language, Translate
 from scripts.parser import item_parser, fluid_parser
 from scripts.utils import utility, util
 
@@ -21,7 +21,7 @@ HEADER = """{| class="wikitable theme-red sortable sticky-column" style="text-al
 |-"""
 
 def write_items_to_file(items, file_name):
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     output_dir = os.path.join("output", language_code, "item_list")
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -51,12 +51,12 @@ def get_items():
 
     for item_id, item_data in item_parser.get_item_data().items():
         if 'capacity' in item_data:
-            display_name = translate.get_translation(item_id, 'DisplayName')
+            display_name = Translate.get(item_id, 'DisplayName')
             page_name = utility.get_page(item_id, display_name)
             item_link = util.format_link(display_name, page_name)
             icon = utility.get_icon(item_id, True, True, True)
             container_name = item_data.get('ContainerName', '-')
-            container_name = translate.get_translation(container_name, 'ContainerName')
+            container_name = Translate.get(container_name, 'ContainerName')
 
             fluid_capacity_ml = float(item_data.get('capacity', 0)) * 1000
             fluid_capacity = int(fluid_capacity_ml)
@@ -80,8 +80,8 @@ def get_items():
                     if fluid_id is not None:
                         fluid_name = utility.get_fluid_name(fluid_data)
                         fluid_name_en = utility.get_fluid_name(fluid_data, 'en')
-                        if translate.language_code != "en":
-                            fluid_name = f"[[{fluid_name_en} (fluid)/{translate.language_code}|{fluid_name}]]"
+                        if Language.get() != "en":
+                            fluid_name = f"[[{fluid_name_en} (fluid)/{Language.get()}|{fluid_name}]]"
                         else:
                             fluid_name = f"[[{fluid_name_en} (fluid)|{fluid_name}]]"
                     else:

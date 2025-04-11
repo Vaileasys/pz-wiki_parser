@@ -4,7 +4,7 @@ import shutil
 from pathlib import Path
 from scripts.core import config_manager
 from scripts.core.constants import RESOURCE_PATH
-from scripts.utils import utility
+from scripts.utils.util import load_cache, save_cache
 
 RESOURCES_DIR = Path(RESOURCE_PATH)
 ICON_DIR = RESOURCES_DIR / "icons"
@@ -16,7 +16,7 @@ textures_data = {}
 
 def load_existing_textures():
     if TEXTURES_JSON_PATH.exists():
-        return utility.load_cache(TEXTURES_JSON_PATH, suppress=True)
+        return load_cache(TEXTURES_JSON_PATH, suppress=True)
     return {}
 
 
@@ -92,7 +92,7 @@ def save_new_texture_data():
         for key, files in new_textures.items():
             print(f"{key}: {len(files)} new textures found")
 
-        utility.save_cache(new_textures, "new_textures.json")
+        save_cache(new_textures, "new_textures.json")
     else:
         print("No new textures found.")
 
@@ -138,7 +138,7 @@ def main():
         for key in textures_data:
             textures_data[key].sort(key=str.lower)
 
-        utility.save_cache(textures_data, TEXTURES_JSON, RESOURCES_DIR)
+        save_cache(textures_data, TEXTURES_JSON, RESOURCES_DIR)
 
 
 if __name__ == "__main__":

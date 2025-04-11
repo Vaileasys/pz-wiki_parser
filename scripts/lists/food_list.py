@@ -1,7 +1,7 @@
 import os
 from tqdm import tqdm
 from scripts.parser import item_parser, evolvedrecipe_parser, recipe_parser
-from scripts.core import translate
+from scripts.core.language import Language
 from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
 from scripts.utils import utility, lua_helper, table_helper, util
 
@@ -236,7 +236,7 @@ def main():
     global evolvedrecipe_products
     global recipe_products
     global table_map
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     evolvedrecipe_data = evolvedrecipe_parser.get_evolvedrecipe_data()
     recipes_data = recipe_parser.get_recipe_data()["recipes"]
     table_map, column_headings = table_helper.get_table_data(TABLE_PATH)

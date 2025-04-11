@@ -4,7 +4,7 @@ import json
 from collections import defaultdict
 from scripts import item_tags, recipe_format
 from scripts.parser import fluid_parser
-from scripts.core import translate
+from scripts.core.language import Translate
 from scripts.utils import utility, util
 
 
@@ -281,7 +281,7 @@ def process_recipes(data):
         for i, (key, value) in enumerate(autolearn.items()):
             if i > 0:
                 recipe_parts.append("<br><small>and</small><br>")
-            translated_key = translate.get_translation(key, "Perk")
+            translated_key = Translate.get(key, "Perk")
             recipe_parts.append(f"[[{translated_key}]] {value}")
 
     return "".join(recipe_parts)
@@ -303,7 +303,7 @@ def process_skills(data):
 
     skills_list = []
     for skill, level in skills_data.items():
-        skill = translate.get_translation(skill, "Perk")
+        skill = Translate.get(skill, "Perk")
         skills_list.append(f"[[{skill}]] {level}")
 
     skills_str = "<br><small>and</small><br>".join(skills_list)
@@ -493,7 +493,7 @@ def fluid_rgb(fluid_id):
         name = utility.get_fluid_name(fluid_data)
 
         if fluid_id == "TaintedWater":
-            tainted_water = translate.get_translation("ItemNameTaintedWater", 'IGUI')
+            tainted_water = Translate.get("ItemNameTaintedWater", 'IGUI')
             name = tainted_water.replace("%1", name)
 
         color_ref = fluid_data.get('ColorReference')

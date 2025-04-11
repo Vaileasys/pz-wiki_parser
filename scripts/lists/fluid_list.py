@@ -1,6 +1,6 @@
 import os
 import json
-from scripts.core import translate
+from scripts.core.language import Language, Translate
 from scripts.parser import fluid_parser
 from scripts.utils import utility
 
@@ -26,14 +26,14 @@ HEADER = """{| class="wikitable theme-red sortable sticky-column" style="text-al
 
 # Write fluid data to file
 def write_fluids_to_file(items, file_name):
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     output_dir = os.path.join("output", language_code, "item_list")
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
     output_file = os.path.join(output_dir, f"{file_name}.txt")
     with open(output_file, "w", encoding="utf-8") as file:
-        translated_header = translate.get_wiki_translation(HEADER)
+        translated_header = Translate.get_wiki(HEADER)
         bot_flag_start = f'<!--BOT_FLAG-start-{file_name.replace(" ", "_")}. DO NOT REMOVE-->'
         bot_flag_end = f'<!--BOT_FLAG-end-{file_name.replace(" ", "_")}. DO NOT REMOVE-->'
         file.write(bot_flag_start + translated_header)
@@ -60,9 +60,9 @@ def get_fluids():
         fluid_id = f"Base.{fluid_id}" # Assume fluid ID is in the 'Base' module
 
         name = utility.get_fluid_name(fluid_data)
-        if translate.language_code != "en":
+        if Language.get() != "en":
             name_en = utility.get_fluid_name(fluid_data, "en")
-            name = f"[[{name_en} (fluid)/{translate.language_code}|{name}]]"
+            name = f"[[{name_en} (fluid)/{Language.get()}|{name}]]"
         else:
             name = f"[[{name} (fluid)|{name}]]"
 

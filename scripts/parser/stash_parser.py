@@ -1,6 +1,6 @@
 import os
 from lupa import LuaRuntime
-from scripts.core import version
+from scripts.core.version import Version
 from scripts.core.constants import DATA_PATH
 from scripts.utils import utility
 
@@ -106,7 +106,7 @@ def parse_all_stash_files(directory):
     stash_data, cache_version = utility.load_cache(cache_file, "stash", get_version=True)
 
     # Parse stash if there is no cache, or it's outdated.
-    if cache_version != version.get_version():
+    if cache_version != Version.get():
         for filename in os.listdir(directory):
             if filename.endswith(".lua"):
                 file_path = os.path.join(directory, filename)

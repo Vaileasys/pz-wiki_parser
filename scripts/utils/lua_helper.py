@@ -1,6 +1,6 @@
 import os
 from lupa import LuaRuntime, LuaError
-from scripts.utils import utility
+from scripts.utils.util import save_cache
 from scripts.core.constants import LUA_PATH
 
 def load_lua_file(lua_files: list[str], lua_runtime: LuaRuntime=None, dependencies: list[str]=None, inject_lua: str=None) -> LuaRuntime:
@@ -215,25 +215,25 @@ LUA_EVENTS = ("""
 if __name__ == "__main__":
     lua_runtime = load_lua_file("forageSystem.lua", inject_lua=LUA_EVENTS)
     parsed_data = parse_lua_tables(lua_runtime)
-    utility.save_cache(parsed_data, "foraging_2.json")
+    save_cache(parsed_data, "foraging_2.json")
 
 # Basic usage: Recorded media
 if __name__ == "__main__":
     lua_runtime = load_lua_file("recorded_media.lua")
     parsed_data = parse_lua_tables(lua_runtime)
-    utility.save_cache(parsed_data, "recorded_media.json")
+    save_cache(parsed_data, "recorded_media.json")
 
 # Basic usage: Burn time
 if __name__ == "__main__":
     lua_runtime = load_lua_file("camping_fuel.lua")
     parsed_data = parse_lua_tables(lua_runtime)
-    utility.save_cache(parsed_data, "camping_fuel.json")
+    save_cache(parsed_data, "camping_fuel.json")
 
 # Basic usage: Attached weapon definitions
 if __name__ == "__main__":
     lua_runtime = load_lua_file("AttachedWeaponDefinitions.lua")
     parsed_data = parse_lua_tables(lua_runtime)
-    utility.save_cache(parsed_data, "attached_weapon_definitions.json")
+    save_cache(parsed_data, "attached_weapon_definitions.json")
 
 # Inject lua and multiple files: All distributions - initialises ClutterTables and BagsAndContainers tables
 DISTRIBUTION_LUA_FILES = [
@@ -250,7 +250,7 @@ DISTRIBUTION_LUA_FILES = [
 if __name__ == "__main__":
     lua_runtime = load_lua_file(DISTRIBUTION_LUA_FILES) # Initialise and load lua files into lua environment
     parsed_data = parse_lua_tables(lua_runtime) # Get all the tables and convert to python data
-    utility.save_cache(parsed_data, "distributions_all.json") # Save to json file
+    save_cache(parsed_data, "distributions_all.json") # Save to json file
 
 LUA_COPY_TABLE = ("""
     function copyTable(tbl)
@@ -268,7 +268,7 @@ LUA_COPY_TABLE = ("""
 if __name__ == "__main__":
     lua_runtime = load_lua_file("animal", inject_lua=LUA_COPY_TABLE)
     parsed_data = parse_lua_tables(lua_runtime, tables=["AnimalDefinitions"])
-    utility.save_cache(parsed_data, "animal_definitions.json")
+    save_cache(parsed_data, "animal_definitions.json")
 
 # Loads lua files, inject multiple strings and define a specific table (this one is a local table, so we get the index with [1])
 # Load order matters. We can either modify the order of the list, or use 'dependencies'
@@ -282,7 +282,7 @@ if __name__ == "__main__":
     lua_runtime = load_lua_file(VEHICLE_DIST_FILES, inject_lua=[LUA_EVENTS, LUA_CLUTTER_TABLES])
     parsed_data = parse_lua_tables(lua_runtime, tables=["VehicleDistributions[1]"])
     parsed_data = dict(sorted(parsed_data["VehicleDistributions[1]"].items()))
-    utility.save_cache(parsed_data, "vehicles.json")
+    save_cache(parsed_data, "vehicles.json")
 
 # Table: Parse a specific table
 TABLES = ["PrintMediaDefinitions"]
@@ -297,4 +297,4 @@ FILES_LIST = [
 if __name__ == "__main__":
     lua_runtime = load_lua_file(FILES_LIST) # Initialise and load lua files into lua environment
     parsed_data = parse_lua_tables(lua_runtime, tables=TABLES) # Get only the defined tables and convert to python data
-    utility.save_cache(parsed_data, "literature2.json") # Save to json file
+    save_cache(parsed_data, "literature2.json") # Save to json file

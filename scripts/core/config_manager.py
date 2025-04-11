@@ -1,6 +1,6 @@
 import configparser
 import os
-from scripts.core import logger, translate, version
+from scripts.core import logger
 
 config_file = 'config.ini'
 config_data = {}
@@ -138,9 +138,13 @@ def get_config(key, section='Settings'):
 
 
 def main():
+     # lazy imports to stop import loops
+    from scripts.core.language import Language
+    from scripts.core.version import Version
+
     # Reset the config file
     setup_config()
-    translate.update_default_language()
-    version.update_version()
+    Language.update_default()
+    Version.update()
     print("Config file reset.")
     

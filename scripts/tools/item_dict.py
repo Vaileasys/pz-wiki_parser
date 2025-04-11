@@ -7,7 +7,8 @@ New items will be added to a new 'Compared' CSV file and 'new items' wikitable.
 import os
 import csv
 from scripts.parser import item_parser
-from scripts.core import translate, version
+from scripts.core.version import Version
+from scripts.core.language import Language
 
 def generate_csv(data, file, output_dir):
     os.makedirs(output_dir, exist_ok=True)
@@ -46,7 +47,7 @@ def compare_csv(file1, file2, output_file, wiki_output_file):
     print(f"Wiki list has been written to {wiki_output_file}")
 
 def main():
-    language_code = translate.get_language_code()
+    language_code = Language.get()
     output_dir = f'output/{language_code}/items_version'
 
     data = []
@@ -54,7 +55,7 @@ def main():
         name = item_data.get('DisplayName', 'Unknown')
         data.append([item_id, name])
 
-    game_version = version.get_version()
+    game_version = Version.get()
     output_file = f'items_{game_version}.csv'
     generate_csv(data, output_file, output_dir)
     output_file = os.path.join(output_dir, output_file)

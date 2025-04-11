@@ -1,34 +1,38 @@
 from scripts.core import config_manager, logger
 
-# Version is stored in config.ini. This will update when changed in the script.
-version_number = None
+class Version:
+    # Version is stored in config.ini. This will update when changed in the script.
+    _version = None
 
-def get_version():
-    global version_number
-    # If version_number isn't defined, we update it
-    if version_number is None:
-        update_version()
-    return version_number
+    @classmethod
+    def get(cls):
+        """Returns the current version. If unset, pulls from config."""
+        # If version_number isn't defined, we update it
+        if cls._version is None:
+            cls.update()
+        return cls._version
 
+    @classmethod
+    def set(cls, new_version: str):
+        cls._version = new_version
 
-def set_version(new_version):
-    global version_number
-    version_number = new_version
+    @classmethod
+    def update(cls):
+        """Loads version from config."""
+        cls.set(config_manager.get_config('version'))
 
+    @classmethod
+    def change(cls):
+        """Prompts the user for a new version number and updates it."""
+        new_version = input("Enter the new version number:\n> ").strip()
+        config_manager.set_config('version', new_version)
+        cls.update()
+        logger.write(f"Version number updated to {new_version}.", True)
 
-def update_version():
-    """Update version to latest config entry"""
-    set_version(config_manager.get_config('version'))
+    @classmethod
+    def main(cls):
+        cls.change()
 
-
-def change_version():
-    new_version = input("Enter the new version number:\n> ").strip()
-    config_manager.set_config('version', new_version)
-    update_version()
-    logger.write(f"Version number updated to {new_version}.", True)
-
-def main():
-    change_version()
 
 if __name__ == "__main__":
-    main()
+    Version.main()

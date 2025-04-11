@@ -1,6 +1,7 @@
 import re
 from pathlib import Path
-from scripts.core import config_manager, version
+from scripts.core import config_manager
+from scripts.core.version import Version
 from scripts.utils import utility
 
 CACHE_FILE = "evolvedrecipe_data.json"
@@ -24,7 +25,7 @@ def remove_comments(content):
 def parse_evolved_recipes():
     global evolvedrecipe_data
 
-    game_version = version.get_version()
+    game_version = Version.get()
     cache_data, cache_version = utility.load_cache(CACHE_FILE, "evolvedrecipe", True)
 
     # Check if cache is old and should be updated

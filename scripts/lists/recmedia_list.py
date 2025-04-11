@@ -1,6 +1,6 @@
 from scripts.utils import lua_helper, table_helper
 from scripts.parser import item_parser
-from scripts.core import translate
+from scripts.core.language import Translate
 from scripts.utils.util import echo, format_positive, format_link
 from scripts.core.constants import RESOURCE_PATH
 from scripts.utils.media_helper import CODES, parse_code_effects
@@ -53,7 +53,7 @@ def generate_data(guid, rm_data):
         if code_id is None:
             echo(f"Warning: code_id for '{code}' doesn't exist.")
             continue
-        code_title = translate.get_translation(CODES.get(code, {}).get("title", code))
+        code_title = Translate.get(CODES.get(code, {}).get("title", code))
         code_type = CODES.get(code, {}).get("type", "moodle")
         if code_type == "skill":
             skills.append(f"{format_link(code_title)}: {format_positive(value)}")
@@ -166,7 +166,7 @@ def translate_rm_strings(data):
     elif isinstance(data, list):
         return [translate_rm_strings(item) for item in data]
     elif isinstance(data, str) and data.startswith("RM_"):
-        return translate.get_translation(data).replace('[img=music]', '♪')
+        return Translate.get(data).replace('[img=music]', '♪')
     else:
         return data
 

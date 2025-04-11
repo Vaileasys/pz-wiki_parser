@@ -1,7 +1,6 @@
 import os
 import traceback
 from scripts.core.constants import OUTPUT_PATH
-from scripts.utils.util import echo
 
 LOG_PATH = f"{OUTPUT_PATH}\\logging"
 DEF_FILE = "log.txt"
@@ -22,6 +21,7 @@ def init_log_file(file_name="log.txt"):
 
 def write(message, print_bool=False, file_name=DEF_FILE, exception=None):
     """Used to log important info to a log file"""
+    from scripts.utils.util import echo # lazy import to avoid import loop
     global is_first_log
     file_name = get_log_path(file_name)
 

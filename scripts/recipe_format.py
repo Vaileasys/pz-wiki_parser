@@ -3,7 +3,8 @@ import re
 import json
 from tqdm import tqdm
 from scripts.parser import recipe_parser, literature_parser, item_parser
-from scripts.core import version, translate
+from scripts.core.version import Version
+from scripts.core.language import Language, Translate
 import recipe_output, item_tags
 from scripts.core.constants import (PBAR_FORMAT, DATA_PATH)
 from scripts.utils import utility
@@ -66,7 +67,7 @@ def process_name(recipe):
         return None, None
 
     raw_name = recipe["name"]
-    translated_name = translate.get_translation(raw_name, property_key="TeachedRecipes")
+    translated_name = Translate.get(raw_name, property_key="TeachedRecipes")
 
     return raw_name, translated_name
 
@@ -322,7 +323,7 @@ def construction_output(outputs, recipe):
         for output in outputs:
             new_output = {}
             if "displayName" in output:
-                translated = translate.get_translation(output["displayName"])
+                translated = Translate.get(output["displayName"])
                 new_output["translated_product"] = translated
             if "icon" in output:
                 new_output["icon"] = output["icon"]
@@ -335,7 +336,7 @@ def construction_output(outputs, recipe):
             output_index += 1
     else:
         if "name" in recipe:
-            translated_name = translate.get_translation(recipe["name"], property_key="TeachedRecipes")
+            translated_name = Translate.get(recipe["name"], property_key="TeachedRecipes")
         else:
             translated_name = ""
         new_output = {"translated_product": translated_name}
@@ -510,7 +511,7 @@ def process_requirements(recipe, parsed_item_data):
     # Check for "name" to process books, schematics, and traits
     if "name" in recipe:
         raw_name = recipe["name"]
-        translated_name = translate.get_translation(raw_name, property_key="TeachedRecipes")
+        translated_name = Translate.get(raw_name, property_key="TeachedRecipes")
 
         # Add to skillbooks based on teached recipes
         for item_name, item_details in parsed_item_data.items():
@@ -554,7 +555,7 @@ def process_requirements(recipe, parsed_item_data):
                                     text_key = match.group(1)
                                     if text_key.startswith("UI_trait_"):
                                         translation_key = text_key.replace("UI_trait_", "")
-                                        translated_trait = translate.get_translation(
+                                        translated_trait = Translate.get(
                                             translation_key, property_key="Trait"
                                         )
                                         if translated_trait not in requirements["traits"]:  # Avoid duplicates
@@ -665,7 +666,7 @@ def process_xp(recipe):
         string_part, value = xp_award.split(":", 1)
         if string_part == "WoodWork":
             string_part = string_part.capitalize()
-        translated_string = translate.get_translation(string_part.strip(), "Perk")
+        translated_string = Translate.get(string_part.strip(), "Perk")
         return f"[[{translated_string}]] {value.strip()}"
 
     elif isinstance(xp_award, list):
@@ -673,7 +674,7 @@ def process_xp(recipe):
         for entry in xp_award:
             if ":" in entry:
                 string_part, value = entry.split(":", 1)
-                translated_string = translate.get_translation(string_part.strip(), "Perk")
+                translated_string = Translate.get(string_part.strip(), "Perk")
                 formatted_xp.append(f"[[{translated_string}]] {value.strip()}")
         return "<br>".join(formatted_xp)
 
@@ -682,8 +683,8 @@ def process_xp(recipe):
 
 def main():
     global processed_recipes
-    language_code = translate.get_language_code()
-    game_version = version.get_version()
+    language_code = Language.get()
+    game_version = Version.get()
 
     #pre-load data
     try:

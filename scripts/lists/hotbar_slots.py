@@ -1,10 +1,11 @@
 from pathlib import Path
-from scripts.core import translate, version
+from scripts.core.version import Version
+from scripts.core.language import Language, Translate
 from scripts.parser import item_parser
 from scripts.core.constants import OUTPUT_PATH
 from scripts.utils import utility, lua_helper, util
 
-language_code = translate.get_language_code()
+language_code = Language.get()
 output_dir = Path(OUTPUT_PATH) / language_code.lower()
 
 hotbar_data = {}
@@ -69,7 +70,7 @@ def generate_hotbar_slots():
     for slot, slot_data in hotbar_data.items():
         slot_name = hotbar_slots[slot].get("name")
         if slot_name:
-            slot_name = translate.get_translation("IGUI_HotbarAttachment_" + slot, "")
+            slot_name = Translate.get("IGUI_HotbarAttachment_" + slot, "")
             hotbar_slots[slot]["name"] = slot_name
         hotbar_slots[slot]["items"] = []
         for item_id, item_data in attachment_item_data.items():
@@ -361,7 +362,7 @@ def generate_data():
     global attachment_types
     global attachment_items
 
-    game_version = version.get_version()
+    game_version = Version.get()
     
     hotbar_slots, hotbar_slots_version = utility.load_cache("hotbar_slots.json", "hotbar slots", get_version=True)
     attachment_types, attachment_types_version = utility.load_cache("attachment_types.json", "attachment types", get_version=True)
