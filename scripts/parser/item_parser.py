@@ -3,7 +3,9 @@ import re
 from scripts.core.language import Language, Translate
 from scripts.core.version import Version
 from scripts.core.constants import DATA_PATH
-from scripts.utils.util import echo, save_cache, load_cache
+from scripts.utils.echo import echo_info, echo_warning
+from scripts.core.cache import save_cache, load_cache
+from scripts.core.file_loading import get_script_files
 
 RESOURCE_PATH = 'resources/scripts/'
 CACHE_JSON = 'item_data.json'
@@ -25,8 +27,8 @@ def get_item_data():
     return parsed_data
 
 
-# Check if item is blacklisted
 def is_blacklisted(item_name, item_data):
+    """Check if item is blacklisted"""
     # Check if item name has a blacklisted prefix
     if any(item_name.startswith(prefix) for prefix in blacklist_prefix):
         return True
@@ -42,8 +44,8 @@ def is_blacklisted(item_name, item_data):
     return False
 
 
-# Parse fluid container
 def parse_fluid_container(lines, start_index):
+    """Parse fluid container"""
     properties = {}
     fluid_list = []
     block_level = 1  # Entering FluidContainer block
@@ -114,8 +116,8 @@ def parse_fluid_container(lines, start_index):
     return properties, i
 
 
-# Parse an item and its properties
 def parse_item(lines, start_index, module_name):
+    """Parse an item and its properties"""
     item_dict = {}
     item_name = None
     i = start_index
@@ -160,7 +162,7 @@ def parse_item(lines, start_index, module_name):
                 item_name = parts[1]
                 item_id = f"{module_name}.{item_name}"
             else:
-                echo(f"Warning: Couldn't parse item line: {line}")
+                echo_warning(f"Couldn't parse item line: {line}")
                 i += 1
                 continue
         
@@ -189,7 +191,7 @@ def parse_item(lines, start_index, module_name):
                             for k, v in [pair.split(':', 1)]
                         }
                     except ValueError:
-                        echo(f"Warning: Skipping invalid key-value pair in line: {line}")
+                        echo_warning(f"Skipping invalid key-value pair in line: {line}")
 
             # Handle multiple values (separated by ';')
             elif ';' in property_value:
@@ -203,8 +205,8 @@ def parse_item(lines, start_index, module_name):
     return None, None, i
 
 
-# Parse the module and its items
 def parse_module(lines):
+    """Parse the module and its items"""
     combined_dict = {}
     module_name = None
 
@@ -218,7 +220,7 @@ def parse_module(lines):
             if len(parts) >= 2:
                 module_name = parts[1]
             else:
-                echo(f"Warning: Couldn't parse module line: {line}")
+                echo_warning(f"Couldn't parse module line: {line}")
         
         # Detect the start of an item block
         elif re.match(r'^item(\s)', line): # regex to return 'item' and not any suffixes
@@ -233,38 +235,46 @@ def parse_module(lines):
                 i = end_index
                 
 #            else:
-#                swrite(f"Warning: Skipping item line: {line}")
+#                echo_warning(f"Skipping item line: {line}")
         i += 1
 
     return combined_dict
 
 
-# Parse all files in a folder
-def parse_files(directory):
+def parse_files(file_paths: list[str]) -> dict:
+    """
+    Parses a list of .txt files and updates the global parsed_data.
+
+    Args:
+        file_paths (list[str]): List of absolute file paths to parse.
+
+    Returns:
+        dict: Parsed item data.
+    """
     global parsed_data
 
-    # Traverse the directory and subdirectories
-    for root, dirs, files in os.walk(directory):
-        for file in files:
-            if file.endswith('.txt'):
-                file_path = os.path.join(root, file)
-                with open(file_path, 'r') as f:
-                    lines = f.readlines()
-                    parsed_data.update(parse_module(lines))
-    
+    for file_path in file_paths:
+        if file_path.endswith('.txt') and os.path.isfile(file_path):
+            with open(file_path, 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+                parsed_data.update(parse_module(lines))
+
+    # Update DisplayName with translated values
     for item_id, item_data in parsed_data.items():
-        # Replace DisplayName with en translation
         display_name = item_data.get("DisplayName")
-        # Fix for DisplayName having ';' in its value
+
+        # Fix for DisplayName being a list (e.g., multiple DisplayName lines)
         if isinstance(display_name, list):
             display_name = ", ".join(display_name)
+
         display_name = Translate.get(item_id, "DisplayName", "en", display_name)
         parsed_data[item_id]["DisplayName"] = display_name
 
+    # Sort parsed data by Type
     parsed_data = dict(sorted(parsed_data.items(), key=lambda x: x[1]["Type"]))
 
     save_cache(parsed_data, CACHE_JSON)
-    
+
     return parsed_data
 
 
@@ -294,8 +304,8 @@ def get_new_items(old_dict, new_dict):
     return new_keys_dict, changed_values_dict
 
 
-# Initialise parser
 def init():
+    """Initialise parser"""
     global parsed_data
     Language.get() # Initialise so we don't interrupt progress bars
 
@@ -306,7 +316,8 @@ def init():
 
     # Parse items if there is no cache, or it's outdated.
     if cache_version != game_version:
-        parsed_data = parse_files(RESOURCE_PATH)
+        script_files = get_script_files("items")
+        parsed_data = parse_files(script_files)
     else:
         parsed_data = cached_data.copy()
 
@@ -316,8 +327,7 @@ def init():
         save_cache(new_items, CACHE_JSON.replace(".json", "") + "_new.json")
         save_cache(modified_items, CACHE_JSON.replace(".json", "") + "_changes.json")
 
-    item_count = len(parsed_data)
-    echo(f"Number of items found: {item_count}")
+    echo_info(f"Number of items found: {len(parsed_data)}")
 
 if __name__ == "__main__":
     init()

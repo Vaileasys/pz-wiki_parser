@@ -1,10 +1,12 @@
 from pathlib import Path
 from scripts.core.language import Translate
-from scripts.core.constants import (LUA_PATH, DATA_PATH)
-from scripts.utils import utility, lua_helper
+from scripts.core.constants import DATA_PATH
+from scripts.utils import lua_helper
+from scripts.core.cache import save_cache
+from scripts.core.file_loading import get_game_file_map
+from scripts.utils.echo import echo_success, echo_warning
 
 OUTPUT_DIR = Path("output") / "spawnpoints"
-LUA_DIR = Path(LUA_PATH) / "spawnpoints"
 
 TABLE_HEADER = '''{| class="wikitable theme-red sortable"
 ! Building
@@ -90,19 +92,23 @@ def write_to_file(coord_data, output_file):
     output_path = OUTPUT_DIR / output_file
     with open(output_path, "w") as file:
         file.write("\n".join(content))
-    print(f"File written to '{output_path}'")
+    echo_success(f"File written to '{output_path}'")
 
 
 def process_lua_file(lua_file):
     """Processes spawnpoints lua file."""
     try:
-        lua_runtime = lua_helper.load_lua_file(str(lua_file.relative_to(LUA_DIR.parent)))
-        lua_runtime.execute("spawnpoints = SpawnPoints()")
-        parsed_data = lua_helper.parse_lua_tables(lua_runtime)
+        filename = Path(lua_file).name
+        prefer = Path(lua_file).parent.name
+        lua_runtime = lua_helper.load_lua_file(filename, prefer=prefer, media_type="maps")
+        lua_runtime.execute("SpawnPoints = SpawnPoints()")
+        parsed_data = lua_helper.parse_lua_tables(lua_runtime, tables=["SpawnPoints"])
+        lua_path = Path(lua_file)
+        output_name = lua_path.parent.name.replace(", KY", "").lower().replace(" ", "_")
 
         # Remove 'spawnpoints' key
         spawnpoints_data = next(iter(parsed_data.values()), {})
-#        utility.save_cache(spawnpoints_data, lua_file.stem + "_raw.json", f"{DATA_PATH}/spawnpoints")
+#        save_cache(spawnpoints_data, f"{output_name}_raw.json", f"{DATA_PATH}/spawnpoints")
 
         # Check if coordinates use old cell coordinates (300x300)
         is_worldcoord = False
@@ -115,26 +121,32 @@ def process_lua_file(lua_file):
             normalised_data = normalise_spawn_data(spawnpoints_data)
         else:
             normalised_data = spawnpoints_data
-        utility.save_cache(normalised_data, lua_file.stem + "_noramlised.json", f"{DATA_PATH}/spawnpoints")
+#        save_cache(normalised_data, f"{output_name}_normalised.json", f"{DATA_PATH}/spawnpoints")
 
         reordered_data = reorder_spawn_data(normalised_data)
 
         
-#        utility.save_cache(reordered_data, lua_file.stem + "_reordered.json", f"{DATA_PATH}/spawnpoints")
+#        save_cache(reordered_data, f"{output_name}_reordered.json", f"{DATA_PATH}/spawnpoints")
 
-        write_to_file(reordered_data, f"{lua_file.stem}.txt")
+        
+        write_to_file(reordered_data, f"{output_name}.txt")
     except KeyError as e:
-        print(f"KeyError: '{lua_file}' has no {e} key")
+        echo_warning(f"'{lua_file}' has no {e} key. Skipping.")
 
 
 def main():
-    LUA_DIR.mkdir(parents=True, exist_ok=True)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    lua_files = list(LUA_DIR.glob("*.lua"))
+    lua_files = []
+    game_map = get_game_file_map().get("maps", {})
+
+    for paths in game_map.values():
+        for path in paths:
+            if path.endswith("spawnpoints.lua"):
+                lua_files.append(path)
 
     if not lua_files:
-        print("No Lua files found in the spawnpoints directory. Try running setup again.")
+        echo_warning("No Lua files found in the spawnpoints directory. Try running setup again.")
         return
 
     for lua_file in lua_files:

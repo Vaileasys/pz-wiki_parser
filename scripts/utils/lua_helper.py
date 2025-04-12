@@ -1,83 +1,46 @@
-import os
 from lupa import LuaRuntime, LuaError
-from scripts.utils.util import save_cache
-from scripts.core.constants import LUA_PATH
+from scripts.core.file_loading import get_lua_files, read_file, get_lua_dir
+from scripts.core.cache import save_cache
+from scripts.utils.echo import echo_error, echo_warning
 
-def load_lua_file(lua_files: list[str], lua_runtime: LuaRuntime=None, dependencies: list[str]=None, inject_lua: str=None) -> LuaRuntime:
+def load_lua_file(lua_files: str | list[str], lua_runtime: LuaRuntime = None, dependencies: list[str] = None, inject_lua: str = None, prefer: str = None, media_type: str = "lua") -> LuaRuntime:
     """
-    Loads and executes a Lua file in the given Lua runtime.
+    Loads and executes Lua files in the given Lua runtime.
 
-    :param lua_files (str or list[str]): List of Lua file paths to load and execute. A single file path can also be provided as a string.
-    :param lua_runtime (LuaRuntime, optional): An existing Lua runtime instance. If not provided, a new Lua runtime will be initialised.
-    :param dependencies (list[str], optional): List of additional Lua dependency files to load before the main files (LUA_PATH is already included).
-    :param inject_lua (str, optional): Lua code to inject directly into the runtime before executing any files. Useful for adding stubs or fallbacks.
-    :return (LuaRuntime): The Lua runtime after executing the files.
+    :param lua_files: Lua file names or paths (single or list).
+    :param lua_runtime: Existing runtime or None to create one.
+    :param dependencies: Lua dependencies to load first.
+    :param inject_lua: Optional code to run before loading any files.
+    :param prefer: Optional keyword to prioritise among duplicate file paths.
+    :param media_type: The section of the game file map to search.
+    :return: Lua runtime.
     """
-
-    def get_lua_files(paths):
-        """Returns a list of Lua files from given paths, including subdirectories if paths are directories.
-
-        :param paths (str or list[str]): The path to get all files from.
-        :return (list[str]): List of lua file paths.
-        """
-        files_list = []
-
-        # Ensure paths is a list
-        if isinstance(paths, str):
-            paths = [paths]
-
-        for path in paths:
-            path = os.path.join(LUA_PATH, path)
-            try:
-                # Is directory
-                if os.path.isdir(path):
-                    for root, dirs, files in os.walk(path):
-                        for file in files:
-                            if file.endswith('.lua'):
-                                full_path = os.path.join(root, file)
-                                files_list.append(full_path)
-                # Is lua file
-                elif os.path.isfile(path) and path.endswith('.lua'):
-                    files_list.append(path)
-                else:
-                    print(f"Warning: {path} is not a valid lua file or directory.")
-            except (PermissionError, FileNotFoundError) as e:
-                print(f"Error accessing {path}: {e}")
-
-        return files_list
-
-    # Initialise new Lua runtime environment if one wasn't provided
     if not lua_runtime:
         lua_runtime = LuaRuntime(unpack_returned_tuples=True)
+        lua_path = get_lua_dir().replace("\\", "/")
+        lua_runtime.execute(f"package.path = package.path .. ';{lua_path}/?.lua;{lua_path}/?/init.lua'")
 
-    # Inject Lua into the runtime environemnt. Can be used for fallbacks, such as creating stubs.
     if inject_lua:
-        if isinstance(inject_lua, list):
-            inject_lua = "\n\n".join(inject_lua)
-        lua_runtime.execute(inject_lua)
+        lua_runtime.execute("\n\n".join(inject_lua) if isinstance(inject_lua, list) else inject_lua)
 
     try:
         # Load dependencies
         if dependencies:
-            dependency_files = get_lua_files(dependencies)
-            for dependency_path in dependency_files:
-                with open(dependency_path, 'r', encoding='utf-8') as f:
-                    try:
-                        lua_runtime.execute(f.read())
-                    except LuaError as e:
-                        raise LuaError(f"Error executing dependency '{dependency_path}': {e}")
-        
-        # Load main lua files
-        lua_files_list = get_lua_files(lua_files)
-        for lua_file_path in lua_files_list:
-            with open(lua_file_path, 'r', encoding='utf-8') as lua_file:
+            for dep_path in get_lua_files(dependencies, media_type=media_type):
                 try:
-                    lua_runtime.execute(lua_file.read())
+                    lua_runtime.execute(read_file(dep_path))
                 except LuaError as e:
-                    raise LuaError(f"Error executing main Lua file '{lua_file_path}': {e}")
+                    raise LuaError(f"Error executing dependency '{dep_path}': {e}")
+
+        # Load main files
+        for lua_path in get_lua_files(lua_files, prefer=prefer, media_type=media_type):
+            try:
+                lua_runtime.execute(read_file(lua_path))
+            except LuaError as e:
+                raise LuaError(f"Error executing main Lua file '{lua_path}': {e}")
 
     except (FileNotFoundError, IOError, LuaError) as e:
-        print(f"Error: {e}")
+        echo_error(str(e))
         raise
 
     return lua_runtime
@@ -154,7 +117,7 @@ def parse_lua_tables(lua_runtime: LuaRuntime, tables: list[str] = None) -> dict:
                 lua_table = lua_runtime.eval(table_name)
                 parsed_data[table_name] = lua_to_python(lua_table)
             except LuaError:
-                print(f"Warning: Table '{table_name}' not found.")
+                echo_warning(f"Table '{table_name}' not found.")
     else:
         for key, value in globals_dict.items():
             if key not in STANDARD_LUA_LIBS and type(value).__name__ == '_LuaTable':
@@ -265,8 +228,20 @@ LUA_COPY_TABLE = ("""
         return copy
     end
 """)
+ANIMAL_FILES = [
+    'ChickenDefinitions.lua',
+    'CowDefinitions.lua',
+    'DeerDefinitions.lua',
+    'MouseDefinitions.lua',
+    'PigDefinitions.lua',
+    'RabbitDefinitions.lua',
+    'RaccoonDefinitions.lua',
+    'RatDefinitions.lua',
+    'SheepDefinitions.lua',
+    'TurkeyDefinitions.lua',
+]
 if __name__ == "__main__":
-    lua_runtime = load_lua_file("animal", inject_lua=LUA_COPY_TABLE)
+    lua_runtime = load_lua_file(ANIMAL_FILES, inject_lua=LUA_COPY_TABLE)
     parsed_data = parse_lua_tables(lua_runtime, tables=["AnimalDefinitions"])
     save_cache(parsed_data, "animal_definitions.json")
 
