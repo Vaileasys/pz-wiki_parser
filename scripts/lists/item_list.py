@@ -5,6 +5,7 @@ from scripts.core import logger
 from scripts.core.language import Language, Translate
 from scripts.core.constants import (PBAR_FORMAT, OUTPUT_PATH)
 from scripts.utils import utility
+from scripts.utils.echo import echo_success, echo_warning
 
 filters = {
 #    'ExampleItemPrefix': (True,),
@@ -74,7 +75,7 @@ def write_to_output(items_data):
     with open(output_path, 'w', encoding='utf-8') as file:
         file.write("\n".join(content))
 
-    print(f"Output saved to {output_path}")
+    echo_success(f"Output saved to {output_path}")
 
 
 def generate_item_list():
@@ -174,7 +175,7 @@ def filters_tree():
         elif filter_input == "done":
             return
         else:
-            print("Invalid filter name. Please try again.")
+            echo_warning("Invalid filter name. Please try again.")
 
 
 def main():

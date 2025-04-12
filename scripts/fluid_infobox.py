@@ -6,8 +6,7 @@ from scripts.core import logger
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.utils import utility
-print(f"Current Working Directory: {os.getcwd()}")
-
+from scripts.utils.echo import echo_warning, echo_success
 
 # Get a fluid's data
 def get_fluid():
@@ -16,7 +15,7 @@ def get_fluid():
         for fluid_id, fluid_data in fluid_parser.get_fluid_data().items():
             if fluid_id == query_fluid_id:
                 return fluid_data, fluid_id
-        print(f"No fluid found for '{query_fluid_id}', please try again.")
+        echo_warning(f"No fluid found for '{query_fluid_id}', please try again.")
 
 
 # Get a fluid's infobox parameters and write to the output file
@@ -137,17 +136,17 @@ def main():
         choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
         if choice == '1':
             automatic_extraction(output_dir)
-            print(f"Extraction complete, the files can be found in {output_dir}.")
+            echo_success(f"Extraction complete, the files can be found in {output_dir}.")
             return
         elif choice == '2':
             fluid_data, fluid_id = get_fluid()
             process_fluid(fluid_data, fluid_id, output_dir)
-            print(f"Extraction complete, the file can be found in {output_dir}.")
+            echo_success(f"Extraction complete, the file can be found in {output_dir}.")
             return
         elif choice == 'q':
             return
         else:
-            print("Invalid choice.")
+            echo_warning("Invalid choice.")
 
 
 if __name__ == "__main__":

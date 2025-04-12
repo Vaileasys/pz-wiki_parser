@@ -4,8 +4,8 @@ import re
 import math
 import tqdm
 import scripts.parser.distribution_parser as distribution_parser
-import utils.utility as utility
 from scripts.core.constants import DATA_PATH
+from scripts.core.cache import save_cache, load_cache
 
 cache_path = os.path.join(DATA_PATH, "distributions")
 
@@ -59,7 +59,7 @@ def process_json(file_paths):
     item_counts = {}
 
     for file_key, fp in file_paths.items():
-        data = utility.load_cache(fp, suppress=False)
+        data = load_cache(fp, suppress=False)
         count = 0
 
         if file_key == "proceduraldistributions":
@@ -132,7 +132,7 @@ def process_json(file_paths):
         for item in sorted(item_list):
             output_file.write(item + "\n")
 
-    utility.save_cache(item_name_changes, "item_name_changes.json", cache_path)
+    save_cache(item_name_changes, "item_name_changes.json", cache_path)
 
     return item_list
 
@@ -369,12 +369,12 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
             "Stories": get_story_info(item_name)
         }
 
-    utility.save_cache(all_items, "all_items.json", cache_path)
+    save_cache(all_items, "all_items.json", cache_path)
 
 
 def build_tables():
     json_path = os.path.join(DATA_PATH, "distributions", "all_items.json")
-    all_items = utility.load_cache(json_path)
+    all_items = load_cache(json_path)
 
     output_dir = "output/distributions/complete"
     os.makedirs(output_dir, exist_ok=True)
@@ -579,19 +579,19 @@ def main():
     distribution_parser.main()
     item_list = process_json(file_paths)
 
-    procedural_data = utility.load_cache(file_paths["proceduraldistributions"])
+    procedural_data = load_cache(file_paths["proceduraldistributions"])
 
-    distribution_data = utility.load_cache(file_paths["distributions"])
+    distribution_data = load_cache(file_paths["distributions"])
 
-    vehicle_data = utility.load_cache(file_paths["vehicle_distributions"])
+    vehicle_data = load_cache(file_paths["vehicle_distributions"])
 
-    foraging_data = utility.load_cache(file_paths["foraging"])
+    foraging_data = load_cache(file_paths["foraging"])
 
-    attached_weapons_data = utility.load_cache(file_paths["attached_weapons"])
+    attached_weapons_data = load_cache(file_paths["attached_weapons"])
 
-    clothing_data = utility.load_cache(file_paths["clothing"])
+    clothing_data = load_cache(file_paths["clothing"])
 
-    stories_data = utility.load_cache(file_paths["stories"])
+    stories_data = load_cache(file_paths["stories"])
 
     build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, attached_weapons_data, clothing_data, stories_data)
     build_tables()

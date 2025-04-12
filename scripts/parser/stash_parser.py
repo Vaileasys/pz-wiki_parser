@@ -2,7 +2,7 @@ import os
 from lupa import LuaRuntime
 from scripts.core.version import Version
 from scripts.core.constants import DATA_PATH
-from scripts.utils import utility
+from scripts.core.cache import save_cache, load_cache
 
 STASH_DIRECTORY = "resources/lua/stashes"
 CACHE_JSON = "stash_data.json"
@@ -103,7 +103,7 @@ def parse_all_stash_files(directory):
 
     cache_file = os.path.join(DATA_PATH, CACHE_JSON)
     # Try to get cache from json file
-    stash_data, cache_version = utility.load_cache(cache_file, "stash", get_version=True)
+    stash_data, cache_version = load_cache(cache_file, "stash", get_version=True)
 
     # Parse stash if there is no cache, or it's outdated.
     if cache_version != Version.get():
@@ -114,7 +114,7 @@ def parse_all_stash_files(directory):
                 stashes = parse_lua_stash(file_path)
                 stash_data[file_key] = stashes
 
-        utility.save_cache(stash_data, CACHE_JSON)
+        save_cache(stash_data, CACHE_JSON)
 
 
 def init():

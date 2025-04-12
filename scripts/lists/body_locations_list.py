@@ -1,6 +1,7 @@
 import os
 import re
 from scripts.core.language import Language
+from scripts.utils.echo import echo_success
 
 # Regex patterns for function calls
 set_exclusive_pattern = re.compile(r'setExclusive\s*\(\s*"([^"]+)"\s*,\s*"([^"]+)"\s*\)')
@@ -102,7 +103,7 @@ def main():
     language_code = Language.get()
     output_file_path = output_file_path.format(language_code=language_code)
     build_table(LUA_FILE_PATH, output_file_path)
-    print(f"Output saved to '{output_file_path}'")
+    echo_success(f"Output saved to '{output_file_path}'")
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@ from scripts.parser import fluid_parser
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts import fluid_infobox
+from scripts.utils.echo import echo_info, echo_success, echo_error, echo_warning
 
 header = f"""
 {{{{Header|Project Zomboid|Fluids}}}}
@@ -48,7 +49,7 @@ def check_name(fluid_id, name, method):
         elif method == 'capitalize':
             return name.capitalize()
     except Exception:
-        print(f"Error: '{method}' is an unknown method")
+        echo_error(f"'{method}' is an unknown method")
         return name
 
 
@@ -195,10 +196,10 @@ def generate_article(infobox_dir, output_dir):
                 with open(infobox_file_path, 'r', encoding='utf-8') as file:
                     infobox_content = file.read()
             else:
-                print(f"File not found for '{fluid_id}'. Try generating infoboxes again.")
+                echo_warning(f"File not found for '{fluid_id}'. Try generating infoboxes again.")
                 infobox_content = f"{{{{Infobox fluid\n|name=\n|categories=\n|fluid_color=0, 0, 0\n|fluid_id=Base.{fluid_id}\n|infobox_version={Version.get()}\n}}}}"
         except Exception as e:
-            print(f"Error reading infobox file '{infobox_file_path}': {e}")
+            echo_error(f"Failed reading infobox file '{infobox_file_path}': {e}")
 
         # Process fluid data
         try:
@@ -216,7 +217,7 @@ def generate_article(infobox_dir, output_dir):
                 debug_fluid = True
 
         except Exception as e:
-            print(f"Error processing fluid data for '{fluid_id}': {e}")
+            echo_error(f"Failed processing fluid data for '{fluid_id}': {e}")
 
         # Write txt article file
         try:
@@ -279,7 +280,7 @@ def generate_article(infobox_dir, output_dir):
                 file.write("\n*" + "\n*".join(calculate_similar_fluids(fluid_id, fluid_data)))
 
         except Exception as e:
-            print(f"Error writing article file '{output_file_path}': {e}")        
+            echo_error(f"Failed writing article file '{output_file_path}': {e}")        
 
 
 def main():
@@ -289,28 +290,28 @@ def main():
     output_dir = f"output/{language_code}/fluid_articles"
     if not os.path.exists(infobox_dir):
         while True:
-            print(f"The infobox '{infobox_dir}' does not exist.")
+            echo_warning(f"The infobox '{infobox_dir}' does not exist.")
             user_input = input("Want to generate fluid infoboxes? (Y/N)\n> ").strip().lower()
 
             if user_input == "y":
-                print("Running 'fluid_infobox.py'...")
+                echo_info("Running 'fluid_infobox.py'...")
                 fluid_infobox.main()
                 break
             elif user_input == "n":
-                print("Exiting script...")
+                echo_info("Exiting script...")
                 sys.exit(1)
             else:
-                print("Invalid input.")
+                echo_warning("Invalid input.")
                 continue
     
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
-    print("Generating articles...")
+    echo_info("Generating articles...")
 
     generate_article(infobox_dir, output_dir)
 
-    print(f"Fluid articles generated and saved to '{output_dir}'")
+    echo_success(f"Fluid articles generated and saved to '{output_dir}'")
 
 if __name__ == "__main__":
     main()

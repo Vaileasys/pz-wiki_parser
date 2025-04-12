@@ -2,7 +2,7 @@ import re
 from pathlib import Path
 from scripts.core import config_manager
 from scripts.core.version import Version
-from scripts.utils import utility
+from scripts.core.cache import save_cache, load_cache
 
 CACHE_FILE = "evolvedrecipe_data.json"
 
@@ -26,7 +26,7 @@ def parse_evolved_recipes():
     global evolvedrecipe_data
 
     game_version = Version.get()
-    cache_data, cache_version = utility.load_cache(CACHE_FILE, "evolvedrecipe", True)
+    cache_data, cache_version = load_cache(CACHE_FILE, "evolvedrecipe", True)
 
     # Check if cache is old and should be updated
     if cache_version != game_version:
@@ -56,7 +56,7 @@ def parse_evolved_recipes():
 
             evolvedrecipe_data[name] = prop_dict
         
-        utility.save_cache(evolvedrecipe_data, CACHE_FILE)
+        save_cache(evolvedrecipe_data, CACHE_FILE)
 
     else:
         evolvedrecipe_data = cache_data

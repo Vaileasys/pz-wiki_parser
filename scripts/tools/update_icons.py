@@ -4,7 +4,7 @@ import shutil
 from pathlib import Path
 from scripts.core import config_manager
 from scripts.core.constants import RESOURCE_PATH
-from scripts.utils.util import load_cache, save_cache
+from scripts.core.cache import save_cache, load_cache
 
 RESOURCES_DIR = Path(RESOURCE_PATH)
 ICON_DIR = RESOURCES_DIR / "icons"

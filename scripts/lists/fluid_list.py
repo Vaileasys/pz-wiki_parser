@@ -3,6 +3,7 @@ import json
 from scripts.core.language import Language, Translate
 from scripts.parser import fluid_parser
 from scripts.utils import utility
+from scripts.utils.echo import echo_success
 
 #TODO: add translations
 
@@ -45,7 +46,7 @@ def write_fluids_to_file(items, file_name):
             file.write(f"\n|-")
         file.write("\n|}" + bot_flag_end)
 
-    print(f"Fluids written to: {output_file}")
+    echo_success(f"Fluids written to: {output_file}")
 
 
 # Get fluid data for table

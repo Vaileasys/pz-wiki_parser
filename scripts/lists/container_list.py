@@ -9,6 +9,8 @@ from scripts.core.language import Language, Translate
 from scripts.lists import hotbar_slots
 from scripts.core.constants import PBAR_FORMAT
 from scripts.utils import utility, util
+from scripts.core.cache import save_cache, load_cache
+from scripts.utils.echo import echo_warning, echo_success
 
 hotbar_data = {}
 
@@ -207,7 +209,7 @@ def get_cached_types():
 
     # Load cache if data dict is empty
     if not category_cache:
-        category_cache, cache_version = utility.load_cache(CACHE_FILE, get_version=True, suppress=True)
+        category_cache, cache_version = load_cache(CACHE_FILE, get_version=True, suppress=True)
 
     # Generate data if data dict is empty or cache is old
     if not category_cache or cache_version != Version.get():
@@ -226,7 +228,7 @@ def get_cached_types():
                 pbar.update(1)
             pbar.bar_format = f"Items organised."
 
-        utility.save_cache(category_cache, CACHE_FILE)
+        save_cache(category_cache, CACHE_FILE)
     
     return category_cache
 
@@ -372,7 +374,7 @@ def write_to_output(container_dict):
             file.write("|}")
             file.write(f'<!--BOT_FLAG-end-{heading.replace(" ", "_")}. DO NOT REMOVE-->')
 
-    print(f"Output saved to {output_dir}")
+    echo_success(f"Output saved to {output_dir}")
 
 
 # Get necessary literature items and process them
@@ -397,7 +399,7 @@ def get_items():
 
             pbar.update(1)
 
-        pbar.bar_format = f"Items processed."
+        pbar.bar_format = "Items processed."
            
     return container_dict
 
@@ -433,16 +435,16 @@ def combine_files():
                         output_f.write(f"===={subkey}====\n")
                         output_f.write(f"{content}\n\n")
                     else:
-                        print(f"Skipping '{subkey}': No content found.")
+                        echo_warning(f"Skipping '{subkey}': No content found.")
             else:
                 content = file_dict.get(section, None)
                 if content is not None:
                     output_f.write(f"==={section}===\n")
                     output_f.write(f"{content}\n\n")
                 else:
-                    print(f"Skipping '{section}': No content found.")
+                    echo_warning(f"Skipping '{section}': No content found.")
 
-    print(f"Combined files written to {output_file}")
+    echo_success(f"Combined files written to {output_file}")
 
 
 def main():

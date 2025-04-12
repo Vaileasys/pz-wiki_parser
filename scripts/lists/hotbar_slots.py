@@ -4,6 +4,8 @@ from scripts.core.language import Language, Translate
 from scripts.parser import item_parser
 from scripts.core.constants import OUTPUT_PATH
 from scripts.utils import utility, lua_helper, util
+from scripts.core.cache import save_cache, load_cache
+from scripts.utils.echo import echo
 
 language_code = Language.get()
 output_dir = Path(OUTPUT_PATH) / language_code.lower()
@@ -119,9 +121,9 @@ def generate_hotbar_slots():
     # Sort slots by 'name'
     hotbar_slots = dict(sorted(hotbar_slots.items(), key=lambda item: item[1]["name"]))
 
-    utility.save_cache(attachment_items, "attachment_items.json", suppress=_suppress)
-    utility.save_cache(hotbar_slots, "hotbar_slots.json", suppress=_suppress)
-    utility.save_cache(attachment_types, "attachment_types.json", suppress=_suppress)
+    save_cache(attachment_items, "attachment_items.json", suppress=_suppress)
+    save_cache(hotbar_slots, "hotbar_slots.json", suppress=_suppress)
+    save_cache(attachment_types, "attachment_types.json", suppress=_suppress)
 
 
 def clean_hotbar_data():
@@ -221,7 +223,7 @@ def write_attachment_table():
     with open(output_path, 'w', encoding='utf-8') as file:
         file.write("\n".join(table))
     if not _suppress:
-        print(f"File saved to {output_path}")
+        echo(f"File saved to {output_path}")
 
 
 def write_hotbar_table():
@@ -291,7 +293,7 @@ def write_hotbar_table():
     with open(output_path, 'w', encoding='utf-8') as file:
         file.write("\n".join(table))
     if not _suppress:
-        print(f"File saved to {output_path}")
+        echo(f"File saved to {output_path}")
 
 
 def clean_attached_locations_data(data):
@@ -352,7 +354,7 @@ def parse_data():
 #    lua_runtime = lua_helper.load_lua_file("AttachedLocations.lua", inject_lua=LUA_ATTACHED_LOCATIONS)
 #    attached_locations_data = lua_helper.parse_lua_tables(lua_runtime)
 #    clean_attached_locations_data(attached_locations_data)
-#    utility.save_cache(attached_locations_data, "attached_locations.json", suppress=_suppress)
+#    save_cache(attached_locations_data, "attached_locations.json", suppress=_suppress)
 
 
 def generate_data():
@@ -364,9 +366,9 @@ def generate_data():
 
     game_version = Version.get()
     
-    hotbar_slots, hotbar_slots_version = utility.load_cache("hotbar_slots.json", "hotbar slots", get_version=True)
-    attachment_types, attachment_types_version = utility.load_cache("attachment_types.json", "attachment types", get_version=True)
-    attachment_items, attachment_items_version = utility.load_cache("attachment_items.json", "attachment types", get_version=True)
+    hotbar_slots, hotbar_slots_version = load_cache("hotbar_slots.json", "hotbar slots", get_version=True)
+    attachment_types, attachment_types_version = load_cache("attachment_types.json", "attachment types", get_version=True)
+    attachment_items, attachment_items_version = load_cache("attachment_items.json", "attachment types", get_version=True)
 
     if (hotbar_slots_version != game_version or 
         attachment_types_version != game_version or 

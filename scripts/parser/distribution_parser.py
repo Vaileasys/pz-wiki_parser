@@ -5,8 +5,8 @@ import struct
 import lupa
 from lupa import LuaRuntime
 import xml.etree.ElementTree as ET
-from scripts.utils import utility
 from scripts.core.constants import DATA_PATH
+from scripts.core.cache import save_cache
 
 
 cache_path = os.path.join(DATA_PATH, "distributions")
@@ -226,10 +226,10 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
 
         procedural_memory = {}
         room_data = distributions_parser(lua_code_distributions, procedural_memory)
-        utility.save_cache(room_data, 'distributions.json', output_path)
+        save_cache(room_data, 'distributions.json', output_path)
 
         procedural_data = procedural_distributions_parser(lua_code_procedural, procedural_memory)
-        utility.save_cache(procedural_data, 'proceduraldistributions.json', output_path)
+        save_cache(procedural_data, 'proceduraldistributions.json', output_path)
 
     main()
 
@@ -341,7 +341,7 @@ def parse_foraging(forage_definitions_path, output_path):
 
 
     # Save the combined data to a JSON file
-    utility.save_cache(forage_data, 'foraging.json', output_path)
+    save_cache(forage_data, 'foraging.json', output_path)
 
 
 def parse_vehicles(vehicle_distributions_path, output_path):
@@ -420,7 +420,7 @@ def parse_vehicles(vehicle_distributions_path, output_path):
         print(f"Error parsing Lua content: {e}")
         return
     
-    utility.save_cache(vehicle_distributions, 'vehicle_distributions.json', output_path)
+    save_cache(vehicle_distributions, 'vehicle_distributions.json', output_path)
 
 
 def parse_attachedweapons(attached_weapon_path, output_path):
@@ -493,7 +493,7 @@ def parse_attachedweapons(attached_weapon_path, output_path):
             weapon_definitions[cleaned_key] = value
 
     # Write the weapon definitions to the JSON file
-    utility.save_cache(weapon_definitions, 'attached_weapons.json', output_path)
+    save_cache(weapon_definitions, 'attached_weapons.json', output_path)
 
 
 def parse_clothing(clothing_file_path, guid_table_path, output_file):
@@ -565,7 +565,7 @@ def parse_clothing(clothing_file_path, guid_table_path, output_file):
     guid_mapping = guid_item_mapping(guid_table_path)
     outfits_data = get_outfits(clothing_file_path, guid_mapping)
 
-    utility.save_cache(outfits_data, output_file, cache_path)
+    save_cache(outfits_data, output_file, cache_path)
 
 
 def parse_stories(class_files_directory, output_file):
@@ -675,7 +675,7 @@ def parse_stories(class_files_directory, output_file):
 
     # Execute the process
     constants_by_file = process_class_files(class_files_directory)
-    utility.save_cache(constants_by_file, output_file, cache_path)
+    save_cache(constants_by_file, output_file, cache_path)
 
 
 def main():

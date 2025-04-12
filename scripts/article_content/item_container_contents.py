@@ -4,6 +4,7 @@ from scripts.parser import item_parser, distribution_container_parser
 from scripts.core.language import Language
 from scripts.core.constants import (PBAR_FORMAT, OUTPUT_PATH)
 from scripts.utils import utility
+from scripts.core.cache import save_cache
 
 TABLE_HEADER = (
     '{{| class="wikitable theme-red sortable mw-collapsible{wiki_class}" id="contents-{item_id}"',
@@ -222,7 +223,7 @@ def main():
     
     items = get_items()
     write_to_file(items)
-    utility.save_cache(items, "container_contents.json")
+    save_cache(items, "container_contents.json")
 
 
 

@@ -7,6 +7,7 @@ from scripts.core.version import Version
 from scripts.core.language import Language
 from scripts.core.constants import (OUTPUT_PATH, PBAR_FORMAT, DATA_PATH)
 from scripts.utils import utility, util
+from scripts.core.cache import save_cache, load_cache
 
 CACHE_JSON = "tags_data.json"
 is_run_locally = False
@@ -260,7 +261,7 @@ def generate_tags_dict():
     tags_dict = {}
 
     cache_file = os.path.join(DATA_PATH, CACHE_JSON)
-    tags_dict, cache_version = utility.load_cache(cache_file, "tags", get_version=True)
+    tags_dict, cache_version = load_cache(cache_file, "tags", get_version=True)
     game_version = Version.get()
 
     # If cache version is old, we generate new data
@@ -284,7 +285,7 @@ def generate_tags_dict():
                 pbar.update(1)
             pbar.bar_format = f"Tag data generated."
             
-        utility.save_cache(tags_dict, CACHE_JSON)
+        save_cache(tags_dict, CACHE_JSON)
     return tags_dict
 
 

@@ -3,7 +3,8 @@
 import os
 from scripts.core.version import Version
 from scripts.core.constants import DATA_PATH
-from scripts.utils import utility, lua_helper
+from scripts.utils import lua_helper
+from scripts.core.cache import save_cache, load_cache
 
 CACHE_JSON = "literature_data.json"
 
@@ -42,12 +43,12 @@ def init():
 
     cache_file = os.path.join(DATA_PATH, CACHE_JSON)
     # Try to get cache from json file
-    parsed_data, cache_version = utility.load_cache(cache_file, "literature", get_version=True)
+    parsed_data, cache_version = load_cache(cache_file, "literature", get_version=True)
 
     # Parse items if there is no cache, or it's outdated.
     if cache_version != Version.get():
         parsed_data = parse_lua_files()
-        utility.save_cache(parsed_data, CACHE_JSON)
+        save_cache(parsed_data, CACHE_JSON)
 
 
 if __name__ == "__main__":

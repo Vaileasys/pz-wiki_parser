@@ -1,7 +1,8 @@
 from pathlib import Path
 from scripts.core.language import Language, Translate
 from scripts.core.constants import OUTPUT_PATH
-from scripts.utils.util import load_json, echo
+from scripts.core.cache import load_json
+from scripts.utils.echo import echo_success, echo_info, echo_warning, echo_error
 
 
 OUTPUT_DIR = Path(OUTPUT_PATH) / Language.get() / "item_list"
@@ -53,7 +54,7 @@ def get_column_headings(table_type:str, table_map:dict, columns:dict):
     column_def = table_map.get(table_type) or table_map.get("default")
 
     if column_def is None:
-        echo(f"Warning: No mapping for table type: '{table_type}'")
+        echo_warning(f"No mapping for table type: '{table_type}'")
         return []
 
     if isinstance(column_def, list):
@@ -61,7 +62,7 @@ def get_column_headings(table_type:str, table_map:dict, columns:dict):
     elif isinstance(column_def, dict):
         return generate_column_headings(column_def, columns)
     else:
-        echo(f"Warning: Invalid column definition type for '{table_type}'")
+        echo_warning(f"Invalid column definition type for '{table_type}'")
         return []
 
 
@@ -170,10 +171,10 @@ def write_to_file(content:list, rel_path="list.txt", suppress=False):
             file.write("\n".join(content))
 
         if not suppress:
-            echo(f"File saved to '{_output_path}'")
+            echo_info(f"File saved to '{_output_path}'")
         
     else:
-        echo(f"Error: No file written. '{_output_path}' appears to be a directory.")
+        echo_error(f"No file written. '{_output_path}' appears to be a directory.")
     
     return _output_dir
 
@@ -234,4 +235,4 @@ def create_tables(item_type:str, all_data:dict, columns:dict, table_map:dict={},
     if combine_tables:
         write_to_file(all_tables, f"{item_type}/all_tables.txt", suppress=suppress)
 
-    echo(f"Tables written to {output_dir}")
+    echo_success(f"Tables written to {output_dir}")

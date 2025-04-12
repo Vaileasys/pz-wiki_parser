@@ -4,6 +4,7 @@ from scripts.parser import item_parser
 from scripts.core import logger
 from scripts.core.language import Language, Translate
 from scripts.utils import utility
+from scripts.utils.echo import echo_success, echo_warning
 
 
 def get_item():
@@ -12,7 +13,7 @@ def get_item():
         for item_id, item_data in item_parser.get_item_data().items():
             if item_id == query_item_id:
                 return item_data, query_item_id
-        print(f"No item found for '{query_item_id}', please try again.")
+        echo_warning(f"No item found for '{query_item_id}', please try again.")
 
 
 def get_icon_variant(item_id, variant=None):
@@ -43,7 +44,7 @@ def get_icon_variant(item_id, variant=None):
                         return icon
             return icons[0]
         else:
-            print(f"Unknown variant: {variant}, using default icon.")
+            echo_warning(f"Unknown variant: {variant}, using default icon.")
             return icons[0]
     else:
         return icons[0]
@@ -118,17 +119,17 @@ def main():
         choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
         if choice == '1':
             automatic_extraction(output_dir)
-            print(f"Extraction complete, the files can be found in {output_dir}.")
+            echo_success(f"Extraction complete, the files can be found in {output_dir}.")
             return
         elif choice == '2':
             item_data, item_id = get_item()
             write_to_output(item_data, item_id, output_dir)
-            print(f"Extraction complete, the file can be found in {output_dir}.")
+            echo_success(f"Extraction complete, the file can be found in {output_dir}.")
             return
         elif choice.lower() == 'q':
             return
         else:
-            print("Invalid choice.")
+            echo_warning("Invalid choice.")
 
 
 if __name__ == "__main__":

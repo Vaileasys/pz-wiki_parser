@@ -1,5 +1,6 @@
 from scripts.core.version import Version
-from scripts.utils import utility, lua_helper
+from scripts.utils import lua_helper
+from scripts.core.cache import save_cache, load_cache
 
 # TODO: merge with distribution_parser.py
 
@@ -87,7 +88,7 @@ def init():
 
     # Update parsed data if it's empty
     if not parsed_data:
-        cached_data, cache_version = utility.load_cache(CACHE_JSON, get_version=True)
+        cached_data, cache_version = load_cache(CACHE_JSON, get_version=True)
 
         # Check if cache is outdated
         if cache_version != Version.get():
@@ -106,7 +107,7 @@ def init():
             parsed_data = lua_helper.parse_lua_tables(lua_runtime)
 #            parsed_data = convert_list_to_dict(parsed_data)
             parsed_data = sort_keys(parsed_data, is_top_level=True) # Sort keys for readability in json file
-            utility.save_cache(parsed_data, CACHE_JSON)
+            save_cache(parsed_data, CACHE_JSON)
         else:
             parsed_data = cached_data
 

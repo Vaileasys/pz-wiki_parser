@@ -4,6 +4,7 @@ from scripts.parser import item_parser, recipe_parser, stash_parser
 from scripts.core.language import Language, Translate
 from scripts.core.constants import PBAR_FORMAT
 from scripts.utils import utility, util
+from scripts.utils.echo import echo_success
 
 # Used for getting table values
 TABLE_DICT = {
@@ -483,7 +484,7 @@ def write_to_output(literature_dict):
             file.write("|}")
             file.write(f'<!--BOT_FLAG-end-{heading.replace(" ", "_")}. DO NOT REMOVE-->')
 
-    print(f"Output saved to {output_dir}")
+    echo_success(f"Output saved to {output_dir}")
 
 
 def main():

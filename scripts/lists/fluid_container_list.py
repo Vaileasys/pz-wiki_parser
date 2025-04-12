@@ -8,6 +8,7 @@ import json
 from scripts.core.language import Language, Translate
 from scripts.parser import item_parser, fluid_parser
 from scripts.utils import utility, util
+from scripts.utils.echo import echo_success, echo_info
 
 HEADER = """{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"
 ! Icon
@@ -38,7 +39,7 @@ def write_items_to_file(items, file_name):
             file.write(f"\n|-")
         file.write("\n|}" + bot_flag_end)
 
-    print(f"Item names written to {output_file}")
+    echo_success(f"Item names written to {output_file}")
 
 def get_items():
     fluid_containers = []
@@ -141,8 +142,8 @@ def get_items():
     # Sort by the item_name
     fluid_containers.sort(key=lambda e: e['item_name'])
 
-    print(f"Found {i} items that are a fluid container")
-    print(f"Found {j} items with a fluid")
+    echo_info(f"Found {i} items that are a fluid container")
+    echo_info(f"Found {j} items with a fluid")
     write_items_to_file(fluid_containers, 'fluid_container')
         
 

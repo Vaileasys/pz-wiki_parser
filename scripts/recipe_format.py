@@ -8,6 +8,7 @@ from scripts.core.language import Language, Translate
 import recipe_output, item_tags
 from scripts.core.constants import (PBAR_FORMAT, DATA_PATH)
 from scripts.utils import utility
+from scripts.core.cache import save_cache, load_cache
 
 processed_recipes = {}
 
@@ -702,7 +703,7 @@ def main():
     cache_file = os.path.join(DATA_PATH, CACHE_FILE)
 
     # Try to load data from cache
-    processed_recipes, cache_version = utility.load_cache(cache_file, "processed recipe", get_version=True)
+    processed_recipes, cache_version = load_cache(cache_file, "processed recipe", get_version=True)
 
     # If cache version is old, we generate new data
     if cache_version != game_version:
@@ -727,7 +728,7 @@ def main():
             
             pbar.bar_format = f"Recipes processed."
 
-        utility.save_cache(processed_recipes, CACHE_FILE)
+        save_cache(processed_recipes, CACHE_FILE)
 
     recipe_output.main(processed_recipes)
 

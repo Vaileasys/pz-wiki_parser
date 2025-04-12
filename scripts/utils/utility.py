@@ -1,17 +1,16 @@
 import os
-import shutil
 import csv
 import json
-import re
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from scripts.parser import item_parser, recipe_parser
-from scripts.core import logger, config_manager
+from scripts.core import logger, config_manager, cache
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.core.constants import (DATA_PATH, RESOURCE_PATH)
 from scripts.utils import lua_helper
-from scripts.utils.util import echo, save_json, load_json
+from scripts.utils.echo import echo, echo_error, echo_warning
+import warnings
 
 
 parsed_burn_data = {}
@@ -73,17 +72,17 @@ def get_clothing_xml_value(item_data, xml_value):
                 # If there's only one element, return it as a string
                 if len(elements) == 1:
                     value = elements[0].text
-#                    print(f"Single value found for '{xml_value}': {value}")
+#                    echo(f"Single value found for '{xml_value}': {value}")
                     return value
                 # If there are multiple elements, return a list of strings
                 values = [element.text for element in elements if element.text]
-#                print(f"Multiple values found for '{xml_value}': {values}")
+#                echo(f"Multiple values found for '{xml_value}': {values}")
                 return values
             else:
-#                print(f"'{xml_value}' not found for '{clothing_item}'")
+#                echo(f"'{xml_value}' not found for '{clothing_item}'")
                 return None
         except ET.ParseError as e:
-            print(f"Error parsing XML file: {file_path}\n{e}")
+            echo_error(f"Failed parsing XML file: {file_path}\n{e}")
             return None
         
 
@@ -179,7 +178,7 @@ def get_body_parts(item_data, link=True, default=""):
                 if link:
                     translation_string = body_part_names.get(part, body_part_names.get("MAX"))
                     if translation_string is None:
-                        print(f"No translation string found for {part}")
+                        echo_warning(f"No translation string found for {part}")
                     translated_part = Translate.get(translation_string)
                 
                     if language_code != 'en':
@@ -220,7 +219,7 @@ def get_skill_type_mapping(item_data, item_id):
         if skill:
             if len(skill) > 1:
                 skill = "<br>".join(skill)
-                print(f"More than one skill value found for {item_id} with a value of: {skill}")
+                echo_warning(f"More than one skill value found for {item_id} with a value of: {skill}")
                 return skill
             skill = skill[0]
             if skill == "Firearm":
@@ -343,110 +342,34 @@ def get_burn_time(item_id, item_data):
 
 # Save parsed data to json file
 def save_cache(data: dict, data_file: str, data_dir=DATA_PATH, suppress=False):
-    """Caches data by saving it to a json file.
-
-    Args:
-        data (dict): Data to be cached, by storing it in a json file.
-        data_file (str): Name of the JSON file to be saved as. Including the file extension is optional.
-        data_dir (_type_, optional): Custom directory for the JSON file. Defaults to value of 'scripts.core.constants.DATA_PATH'.
-        suppress (bool, optional): Suppress displaying warnings/print statements. Defaults to False.
-    """
-    if not data_file.endswith(".json"):
-        data_file + ".json"
-    data_file_path = os.path.join(data_dir, data_file)
-    os.makedirs(os.path.dirname(data_file_path), exist_ok=True)
-
-    # Adds space between words for CamelCase strings and cleans string
-    cache_name = re.sub(r'(?<=[a-z])([A-Z])', r' \1', data_file.replace(".json", "")).replace("_", " ").strip().lower()
-
-    data_copy = data.copy() # Copy so we don't modify the existing usable data.
-    # Add version number to data. Version can be checked to save time parsing.
-    data_copy["version"] = Version.get()
-    
-    save_json(data_file_path, data_copy)
-    
-    if not suppress:
-        echo(f"{cache_name.capitalize()} saved to '{data_file_path}'")
+    warnings.warn(
+        "'utility.save_cache()' is deprecated and will be removed. Use 'storage.save_cache()' instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
+    cache.save_cache(data=data, data_file=data_file, data_dir=data_dir, suppress=suppress)
 
 
 def load_cache(cache_file, cache_name="data", get_version=False, backup_old=False, suppress=False):
-    """Loads the cache from a json file with the option to return the version of it, and back it up if it's old.
-
-    Args:
-        cache_file (str): Path to the cache file.
-        cache_name (str, optional): String to be used in prints. Should be a name for the type of cache, e.g. 'item'. Defaults to None.
-        get_version (bool, optional): If True, returns the version of the cached data. Defaults to False.
-        backup_old (bool, optional): If True, backs up the cache, only if it's an old version. Defaults to False.
-        suppress (bool, optional): Suppress displaying print statements (errors still displayed). Defaults to False.
-
-    Returns:
-        dict: Cached data if valid, otherwise an empty dictionary.
-        str: Version of the cached data, if 'get_version' is True.
-    """
-    cache_version = None
-    json_cache = {}
-
-    # Check if cache_file includes a directory path
-    if not os.path.dirname(cache_file):
-        cache_file = os.path.join(DATA_PATH, cache_file)
-
-    if cache_name.strip().lower() != "data":
-        cache_name = cache_name.strip() + " data"
-
-    try:
-        if os.path.exists(cache_file):
-            json_cache = load_json(cache_file)
-            
-            cache_version = json_cache.get("version")
-            # Remove 'version' key before returning.
-            json_cache.pop("version", None)
-
-            if not suppress:
-                echo(f"{cache_name.capitalize()} loaded from cache: '{cache_file}' ({cache_version})")
-
-            if backup_old and cache_version != Version.get():
-                shutil.copy(cache_file, cache_file.replace(".json", "_old.json"))
-
-    except json.JSONDecodeError as e:
-        echo(f"Error decoding JSON file 'cache_file': {e}")
-
-    except Exception as e:
-        echo(f"Error getting {cache_name.lower()} '{cache_file}': {e}")
-
+    warnings.warn(
+        "'utility.load_cache()' is deprecated and will be removed. Use 'storage.load_cache()' instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
     if get_version:
+        json_cache, cache_version = cache.load_cache(cache_file=cache_file, cache_name=cache_name, get_version=get_version, backup_old=backup_old, suppress=suppress)
         return json_cache, cache_version
+    json_cache = cache.load_cache(cache_file=cache_file, cache_name=cache_name, get_version=get_version, backup_old=backup_old, suppress=suppress)
     return json_cache
 
 
 def clear_cache(cache_path=DATA_PATH, cache_name=None, suppress=False):
-    """Clears the cache at a specified file path.
-
-    Args:
-        cache_path (str): File path of the cache to be deleted. Can be a single file, or entire folder. Must be a file or folder in 'scripts.core.constants.DATA_PATH'.
-        cache_name (str, optional): String to be used in print statements. Should be a name for the type of cache, e.g. 'item'. Defaults to None.
-        suppress (bool, optional): Suppress displaying print statements (errors still displayed). Defaults to False.
-    """
-    if cache_name:
-        cache_name = cache_name + " cache"
-    else:
-        cache_name = "cache"
-    try:
-        if cache_path != DATA_PATH:
-            cache_path = os.path.join(DATA_PATH, cache_path)
-
-        # Check if it's a file or directory
-        if os.path.exists(cache_path):
-            if os.path.isdir(cache_path):
-                shutil.rmtree(cache_path)  # Delete directory
-                os.makedirs(cache_path)  # Recreate directory
-            else:
-                os.remove(cache_path)  # Delete file
-
-        if not suppress:
-            echo(f"{cache_name.capitalize()} cleared.")
-    except Exception as e:
-        echo(f"Error clearing {cache_name.lower()} '{cache_path}': {e}")
-
+    warnings.warn(
+        "'utility.clear_cache()' is deprecated and will be removed. Use 'storage.clear_cache()' instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
+    cache.clear_cache(cache_path=cache_path, cache_name=cache_name, suppress=suppress)
 
 
 # Converts a value to a percentage str
@@ -639,7 +562,7 @@ def get_page(item_id, name="Unknown"):
         if item_id in item_ids:
             return page_name
 
-#    print(f"Couldn't find a page for '{item_id}'")
+#    echo(f"Couldn't find a page for '{item_id}'")
     logger.write(f"Couldn't find a page for '{item_id}'")
     return name
 
@@ -694,7 +617,7 @@ def find_icon(item_id, all_icons=False):
                             return icon
                         return icon[0]
         else:
-            print(f"File '{icons_csv}' does not exist. Getting icon from item properties.")
+            echo_warning(f"File '{icons_csv}' does not exist. Getting icon from item properties.")
 
         # Try get icon from item properties
         parsed_item_data = item_parser.get_item_data()
@@ -738,7 +661,7 @@ def find_icon(item_id, all_icons=False):
 
 
         else:
-            print(f"'{item_id}' could not be found while getting icon.")
+            echo_warning(f"'{item_id}' could not be found while getting icon.")
             icon = icon_default
     
     else:
@@ -840,7 +763,7 @@ def get_icon(item_id, format=False, all_icons=False, cycling=False, custom_name=
         else:
             icon_result = icons
     else:
-        print(f"Item ID '{item_id}' doesn't exist")
+        echo_warning(f"Item ID '{item_id}' doesn't exist")
 
     return icon_result
 
@@ -849,7 +772,7 @@ def get_guid(item_data):
     guid = get_clothing_xml_value(item_data, 'm_GUID')
 
     if isinstance(guid, list):
-        print("Multiple GUIDs found:", guid)
+        echo_warning("Multiple GUIDs found:", guid)
         return None
     
     return guid
@@ -877,7 +800,7 @@ def get_recipe(recipe_id):
         parsed_recipe_data = recipe_parser.get_recipe_data()
         for recipe in parsed_recipe_data["recipes"]:
             if recipe.get("name") == recipe_id:
-    #                print(recipe_name)
+    #                echo(recipe_name)
                 outputs = recipe.get("outputs")[0]
                 items = outputs.get("items") #FIXME: traps are not currently listed in the item_id_dictionary, as they use infobox_tile.
                 if items is None:
@@ -892,17 +815,17 @@ def get_recipe(recipe_id):
                     product_id = items[0]
                 product_page = get_page(product_id)
 #                if product_page == "Unknown" and product_id is not None:
-#                    print(f"Couldn't find page: {product_id}")
+#                    echo(f"Couldn't find page: {product_id}")
                 if product_page != "Unknown":
                     product = f"[[{product_page}|{recipe_name}]]"
                     return product
     #                if "[" not in recipe_name:
-    #                    print(f"No link for: {recipe_name}")
+    #                    echo(f"No link for: {recipe_name}")
 
                 return recipe_name
     #        if "[" not in recipe_name:
-    #            print(f"No link for: {recipe_name}")
+    #            echo(f"No link for: {recipe_name}")
     except:
-        print(f"Error getting recipe for {recipe_id}")
+        echo_error(f"Failed getting recipe for {recipe_id}")
 
     return recipe_name

@@ -4,6 +4,7 @@ from scripts.parser import item_parser, evolvedrecipe_parser, recipe_parser
 from scripts.core.language import Language
 from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
 from scripts.utils import utility, lua_helper, table_helper, util
+from scripts.core.cache import save_cache
 
 TABLE_PATH = f"{RESOURCE_PATH}/tables/food_table.json"
 
@@ -196,7 +197,7 @@ def parse_foraging():
     lua_runtime = lua_helper.load_lua_file(lua_files, inject_lua=LUA_EVENTS)
     parsed_data = lua_helper.parse_lua_tables(lua_runtime)
     all_forage_data = parsed_data["forageDefs"]
-    utility.save_cache(all_forage_data, "foraging_2.json")
+    save_cache(all_forage_data, "foraging_2.json")
 
     global forage_categories
     forage_items = {}
@@ -211,8 +212,8 @@ def parse_foraging():
                 forage_categories[category] = []
             forage_categories[category].append(item_id)
     
-    utility.save_cache(forage_items, "forage_items.json")
-    utility.save_cache(forage_categories, "forage_categories.json")
+    save_cache(forage_items, "forage_items.json")
+    save_cache(forage_categories, "forage_categories.json")
 
 
 def find_items():
@@ -262,8 +263,8 @@ def main():
 
         i += 1
     
-    utility.save_cache(cooking_recipe_data, "cooking_recipe_data.json")
-    utility.save_cache({"recipes": recipe_products}, "recipe_products_data.json")
+    save_cache(cooking_recipe_data, "cooking_recipe_data.json")
+    save_cache({"recipes": recipe_products}, "recipe_products_data.json")
 
 
     # Store all evolvedrecipe products in a list for determining section

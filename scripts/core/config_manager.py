@@ -1,6 +1,7 @@
 import configparser
 import os
 from scripts.core import logger
+from scripts.utils.echo import echo_info, echo_error, echo
 
 config_file = 'config.ini'
 config_data = {}
@@ -27,7 +28,7 @@ def setup_config():
     with open(config_file, 'w') as file:
         config.write(file)
     
-    print(f"Configuration file '{config_file}' created.")
+    echo_info(f"Configuration file '{config_file}' created.")
 
 
 def update_missing_entries(config=None):
@@ -67,7 +68,7 @@ def open_config():
     config = configparser.ConfigParser()
 
     if not os.path.exists(config_file):
-        print(f"Config file '{config_file}' not found. Creating it.")
+        echo_info(f"Config file '{config_file}' not found. Creating it.")
         setup_config()
     
     config.read(config_file)
@@ -127,11 +128,11 @@ def get_config(key, section='Settings'):
         config_data = load_config()
 
     if section not in config_data:
-        print(f"Section '{section} does not exist in {config_file}")
+        echo_error(f"Section '{section} does not exist in {config_file}")
         return None
     
     if key not in config_data[section]:
-        print(f"Key '{key} does not exist in section {section} in {config_file}")
+        echo_error(f"Key '{key} does not exist in section {section} in {config_file}")
         return None
 
     return config_data[section][key]
@@ -146,5 +147,5 @@ def main():
     setup_config()
     Language.update_default()
     Version.update()
-    print("Config file reset.")
+    echo("Config file reset.")
     

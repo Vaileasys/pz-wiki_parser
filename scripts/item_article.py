@@ -6,7 +6,8 @@ from difflib import SequenceMatcher
 from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.core.constants import (PBAR_FORMAT, DATA_PATH)
-from scripts.utils import utility
+from scripts.core.cache import save_cache, load_cache
+from scripts.utils.echo import echo, echo_info, echo_warning, echo_error
 
 # Language dictionary
 LANGUAGE_DATA = {
@@ -225,7 +226,7 @@ def load_item_id_dictionary(dictionary_dir):
                         item_id_dict[item_id] = article_name
 
     except Exception as e:
-        print(f"Error reading {dictionary_dir}: {e}")
+        echo_error(f"Error reading {dictionary_dir}: {e}")
 
     return item_id_dict
 
@@ -279,18 +280,18 @@ def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item
         with open(file_path, 'r', encoding='utf-8') as file:
             content = file.read()
     except Exception as e:
-        print(f"Error reading {file_path}: {e}")
+        echo_error(f"Error reading {file_path}: {e}")
         return
 
     infobox_match = re.search(r'(\{\{Infobox item.*?\}\})', content, re.DOTALL)
     if not infobox_match:
-        print(f"Infobox not found in {file_path}")
+        echo_warning(f"Infobox not found in {file_path}")
         return
     infobox = infobox_match.group(1)
 
     item_id_match = re.search(r'\|item_id\s*=\s*(.+)', infobox)
     if not item_id_match:
-        print(f"Item ID not found in {file_path}")
+        echo_warning(f"Item ID not found in {file_path}")
         return
 
     item_id = item_id_match.group(1).strip()
@@ -300,13 +301,13 @@ def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item
 
     version_match = re.search(r'\|infobox_version\s*=\s*([\d\.]+)', infobox)
     if not version_match:
-        print(f"Infobox version not found in {file_path}")
+        echo_warning(f"Infobox version not found in {file_path}")
         return
     infobox_version = version_match.group(1)
 
     name_match = re.search(r'\|name\s*=\s*(.+)', infobox)
     if not name_match:
-        print(f"Name not found in {file_path}")
+        echo_warning(f"Name not found in {file_path}")
         return
 
     name = name_match.group(1).strip()
@@ -340,7 +341,7 @@ def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item
         with open(new_file_path, 'w', encoding='utf-8') as new_file:
             new_file.write(new_content.strip())
     except Exception as e:
-        print(f"Error writing to {new_file_path}: {e}")
+        echo_error(f"Error writing to {new_file_path}: {e}")
 
 
 def generate_header(category, skill_type, infobox_version, language_code, name):
@@ -441,7 +442,7 @@ def generate_consumable_properties(item_id, consumables_dir):
             with open(file_path, 'r', encoding='utf-8') as file:
                 return file.read().strip()
         except Exception as e:
-            print(f"Error reading {file_path}: {e}")
+            echo_error(f"Error reading {file_path}: {e}")
 
     return ""
 
@@ -509,7 +510,7 @@ def generate_condition(name, category, skill_type, infobox, fixing_dir, language
                                 condition_text += f"\n\n==={repairing_header}===\n{fixing_content}"
                                 break
                     except Exception as e:
-                        print(f"Error reading {file_path}: {e}")
+                        echo_error(f"Error reading {file_path}: {e}")
 
     return condition_text
 
@@ -529,7 +530,7 @@ def generate_crafting(item_id, crafting_dir, language_code):
             with open(file_path, 'r', encoding='utf-8') as file:
                 return file.read().strip()
         except Exception as e:
-            print(f"Error reading {file_path}: {e}")
+            echo_error(f"Error reading {file_path}: {e}")
 
     return ""
 
@@ -552,7 +553,7 @@ def generate_location(original_filename, infobox_name, item_id, distribution_dir
                 with open(file_path, 'r', encoding='utf-8') as file:
                     return file.read().strip()
             except Exception as e:
-                print(f"Error reading {file_path}: {e}")
+                echo_error(f"Error reading {file_path}: {e}")
     return ""
 
 
@@ -569,7 +570,7 @@ def generate_history(item_id, history_dir, language_code):
                 contents = file.read().strip()
                 content = f"{contents}"
         except Exception as e:
-            print(f"Error reading {history_file_path}: {e}")
+            echo_error(f"Error reading {history_file_path}: {e}")
             content = f"{{{{HistoryTable|\n|item_id={item_id}\n}}}}"
         return content
 
@@ -590,7 +591,7 @@ def generate_code(item_id, code_dir):
 {contents}
 }}}}"""
         except Exception as e:
-            print(f"Error reading {file_path}: {e}")
+            echo_error(f"Error reading {file_path}: {e}")
 
     return ""
 
@@ -621,7 +622,7 @@ def load_infoboxes(infobox_dir):
             with open(file_path, 'r', encoding='utf-8') as file:
                 content = file.read()
         except Exception as e:
-            print(f"Error reading {file_path}: {e}")
+            echo_error(f"Error reading {file_path}: {e}")
             continue
 
         infobox_data = {
@@ -778,7 +779,7 @@ def assemble_body(name, original_filename, infobox_name, item_id, category, skil
 
     for section, content in sections.items():
         if content is None:
-            pbar.write(f"{item_id} has no content for '{section}'")
+            echo_warning(f"{item_id} has no content for '{section}'")
             continue
         if content.strip():
             body_content += f"\n=={section}==\n{content}\n"
@@ -798,7 +799,7 @@ def main(run_directly=False):
     global see_also_cache
     CACHE_FILE = "item_see_also_data.json"
     see_also_cache_file = os.path.join(DATA_PATH, CACHE_FILE)
-    see_also_cache = utility.load_cache(see_also_cache_file, "see also")
+    see_also_cache = load_cache(see_also_cache_file, "see also")
 
     infobox_dir = f'output/{language_code}/infoboxes'
     output_dir = f'output/{language_code}/articles'
@@ -813,16 +814,16 @@ def main(run_directly=False):
     warnings = []
 
     if not os.path.exists(infobox_dir):
-        print("Infoboxes directory not found")
+        echo_warning("Infoboxes directory not found")
         sys.exit(1)
 
     text_files = [f for f in os.listdir(infobox_dir) if f.endswith('.txt')]
 
     if not text_files:
-        print("Infoboxes not found")
+        echo_warning("Infoboxes not found")
         sys.exit(1)
 
-    print(f"{len(text_files)} files found")
+    echo_info(f"{len(text_files)} files found")
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -834,7 +835,7 @@ def main(run_directly=False):
             return
         if user_choice in ['1', '2']:
             break
-        print("Invalid input. Please enter 1 or 2.")
+        echo("Invalid input. Please enter 1 or 2.")
     generate_all = user_choice == '1'
 
     infobox_data_list = load_infoboxes(infobox_dir)
@@ -851,9 +852,9 @@ def main(run_directly=False):
         pbar.bar_format = f"Item articles written to '{output_dir}'."
 
     if warnings:
-        print("\n".join(warnings))
+        echo_warning("\n".join(warnings))
     
-    utility.save_cache(see_also_cache, CACHE_FILE, suppress=True)
+    save_cache(see_also_cache, CACHE_FILE, suppress=True)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 import os, re
 from scripts.core.version import Version
 from scripts.core.constants import DATA_PATH
-from scripts.utils import utility
+from scripts.core.cache import save_cache, load_cache
 
 RECIPES_DIR = "resources/scripts"
 CACHE_JSON = "recipes_data.json"
@@ -556,7 +556,7 @@ def main():
 
     cache_file = os.path.join(DATA_PATH, CACHE_JSON)
     # Try to get cache from json file
-    parsed_data, cache_version = utility.load_cache(cache_file, get_version=True)
+    parsed_data, cache_version = load_cache(cache_file, get_version=True)
 
     # Parse recipes if there is no cache, or it's outdated.
     if cache_version != Version.get():
@@ -581,7 +581,7 @@ def main():
             recipes.extend(construction_recipes)
 
         parsed_data = {"recipes": recipes}
-        utility.save_cache(parsed_data, CACHE_JSON)
+        save_cache(parsed_data, CACHE_JSON)
 
     print(f'Number of recipes found: {len(parsed_data["recipes"])}')
 

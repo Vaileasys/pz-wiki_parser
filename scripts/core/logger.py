@@ -1,6 +1,7 @@
 import os
 import traceback
 from scripts.core.constants import OUTPUT_PATH
+from scripts.utils.echo import echo, echo_error, echo_warning, echo_info, echo_success
 
 LOG_PATH = f"{OUTPUT_PATH}\\logging"
 DEF_FILE = "log.txt"
@@ -19,9 +20,8 @@ def init_log_file(file_name="log.txt"):
         file.write("")
 
 
-def write(message, print_bool=False, file_name=DEF_FILE, exception=None):
+def write(message, print_bool=False, file_name=DEF_FILE, exception=None, category=None):
     """Used to log important info to a log file"""
-    from scripts.utils.util import echo # lazy import to avoid import loop
     global is_first_log
     file_name = get_log_path(file_name)
 
@@ -51,7 +51,17 @@ def write(message, print_bool=False, file_name=DEF_FILE, exception=None):
 
 
     if print_bool:
-        echo(f"{message}{post_message}")
+        echo_functions = {
+            "error": echo_error,
+            "warning": echo_warning,
+            "info": echo_info,
+            "success": echo_success
+        }
+
+        if category in echo_functions:
+            echo_functions[category](f"{message}{post_message}")
+        else:
+            echo(f"{message}{post_message}")
 
     with open(file_name, 'a') as file:
         file.write(f"{message}{post_message}\n")

@@ -4,6 +4,7 @@ from scripts.parser import script_parser
 from scripts.core import logger
 from scripts.core.language import Language, Translate
 from scripts.utils import utility
+from scripts.utils.echo import echo_success, echo_warning
 
 language_code = Language.get()
 
@@ -15,7 +16,7 @@ def get_fixing():
                 fixing_id = f"{module}.{fixing}"
                 fixing_id = fixing_id.replace(" ", "_")
                 return module, fixing_id, fixing_data
-        print(f"No item found for '{fixing_id}', please try again.")
+        echo_warning(f"No item found for '{fixing_id}', please try again.")
 
 
 # get fixer(s)
@@ -59,7 +60,7 @@ def get_fixer(fixing_id, index=""):
             skills = skills[index]
             skill_values = skill_values[index]
         else:
-            print(f"Index {index} is out of range.")
+            echo_warning(f"Index {index} is out of range.")
             return None, None, None, None
 
     return items, item_values, skills, skill_values
@@ -155,7 +156,7 @@ def write_to_output(module, fixing_id, fixing_data, output_dir):
 
             # Debug: Check if global_item_dict is a dict
             if not isinstance(global_item_dict, dict):
-                print(f"Expected 'GlobalItem1' to be a dict but got {type(global_item_dict)} in {fixing_id}")
+                echo_warning(f"Expected 'GlobalItem1' to be a dict but got {type(global_item_dict)} in {fixing_id}")
                 return  # Skip processing this item
 
             if global_item_dict:
@@ -231,17 +232,17 @@ def main():
         choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
         if choice == '1':
             automatic_extraction(output_dir)
-            print(f"Extraction complete, the files can be found in {output_dir}.")
+            echo_success(f"Extraction complete, the files can be found in {output_dir}.")
             return
         elif choice == '2':
             module, fixing_id, fixing_data = get_fixing()
             write_to_output(module, fixing_id, fixing_data, output_dir)
-            print(f"Extraction complete, the file can be found in {output_dir}.")
+            echo_success(f"Extraction complete, the file can be found in {output_dir}.")
             return
         elif choice == 'q':
             return
         else:
-            print("Invalid choice.")
+            echo_warning("Invalid choice.")
 
 
 if __name__ == "__main__":

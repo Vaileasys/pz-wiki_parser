@@ -11,6 +11,8 @@ from scripts.lists import hotbar_slots
 from scripts.core.constants import PBAR_FORMAT, RESOURCE_PATH
 from scripts.utils import utility, lua_helper, util
 from scripts.utils.util import capitalize
+from scripts.core.cache import save_cache
+from scripts.utils.echo import echo, echo_success, echo_error
 
 
 language_code = ""
@@ -30,7 +32,7 @@ def generate_clothing_penalties():
     lua_runtime = lua_helper.load_lua_file("forageSystem.lua", inject_lua=lua_helper.LUA_EVENTS)
     parsed_data = lua_helper.parse_lua_tables(lua_runtime, tables=["forageSystem.clothingPenalties"])
     clothing_penalties = parsed_data.get("forageSystem.clothingPenalties", {})
-#    utility.save_cache(clothing_penalties, "clothingPenalties.json")
+#    save_cache(clothing_penalties, "clothingPenalties.json")
 
 
 def get_item():
@@ -39,7 +41,7 @@ def get_item():
         for item_id, item_data in item_parser.get_item_data().items():
             if item_id == query_item_id:
                 return item_data, item_id
-        print(f"No item found for '{query_item_id}', please try again.")
+        echo(f"No item found for '{query_item_id}', please try again.")
 
 
 def get_item_ids(item_id):
@@ -435,7 +437,7 @@ def generate_infobox(item_id, item_data):
 
         return parameters
     except Exception as e:
-        logger.write(f"Error generating data for {item_id}", True, exception=e)
+        logger.write(f"Error generating data for {item_id}", True, exception=e, category="error")
 
 
 def write_to_output(parameters, output_dir):
@@ -466,13 +468,13 @@ def automatic_extraction(output_dir):
     os.makedirs(output_dir)
 
     parsed_item_data = item_parser.get_item_data()
-    with tqdm(total=len(parsed_item_data), desc="Processing items", unit=" items", bar_format=PBAR_FORMAT, unit_scale=True) as pbar:
+    with tqdm(total=len(parsed_item_data), desc="Processing items", unit=" items", bar_format=PBAR_FORMAT, unit_scale=True, leave=False) as pbar:
         for item_id, item_data in parsed_item_data.items():
             pbar.set_postfix_str(f'Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})')
             process_item(item_data, item_id, output_dir)
             pbar.update(1)
         elapsed_time = pbar.format_dict["elapsed"]
-        pbar.bar_format = f"Finished processing items after {elapsed_time:.2f} seconds."
+    echo_success(f"Finished processing items after {elapsed_time:.2f} seconds.")
 
 
 def main():
@@ -491,8 +493,8 @@ def main():
         choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
         if choice == '1':
             automatic_extraction(output_dir)
-            utility.save_cache({"data": item_ids_already_processed}, "item_ids_already_processed.json")
-            print(f"Extraction complete, the files can be found in '{output_dir}'.")
+            save_cache({"data": item_ids_already_processed}, "item_ids_already_processed.json")
+            echo_success(f"Extraction complete, the files can be found in '{output_dir}'.")
             return
         elif choice == '2':
             item_data, item_id = get_item()
@@ -500,14 +502,14 @@ def main():
             if parameters is not None:
                 write_to_output(parameters, output_dir)
                 output_path = os.path.join(output_dir, item_id + ".txt")
-                print(f"Extraction complete, the file can be found in '{output_path}'.")
+                echo_success(f"Extraction complete, the file can be found in '{output_path}'.")
             else:
-                print(f"Error writing file. Refer to log: {logger.get_log_path()}")
+                echo_error(f"Error writing file. Refer to log: {logger.get_log_path()}")
             return
         elif choice == 'q':
             return
         else:
-            print("Invalid choice.")
+            echo("Invalid choice.")
     
 
 
