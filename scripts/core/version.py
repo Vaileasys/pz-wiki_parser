@@ -34,5 +34,8 @@ class Version:
         cls.change()
 
 
+def main():
+    Version.main()
+
 if __name__ == "__main__":
     Version.main()
