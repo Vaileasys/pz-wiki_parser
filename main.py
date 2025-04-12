@@ -1,8 +1,8 @@
 import importlib
 import sys
 import os
-from scripts.core import version, config_manager, setup, logger
-from scripts.utils import utility
+from scripts.core import config_manager, setup, logger, cache
+from scripts.core.version import Version
 
 menu_structure = {
     '0': {
@@ -85,11 +85,12 @@ settings_structure = {
     },
 }
 
-def display_menu(menu, is_root=False):
-    if is_root:
-        version_number = version.get_version()
-        print("Game version:", version_number)
-
+def display_menu(menu, is_root=False, title=None):
+    if title:
+        print("\033[94m" + "=" * 50)
+        print(f"{title.center(50)}")
+        print("=" * 50 + "\033[0m")
+        
     for key, value in menu.items():
         print(f"{key}: {value['name']} - {value['description']}")
 
@@ -114,9 +115,12 @@ def handle_module(module_name, user_input=None):
         print(f"An error occurred while running {module_name}: {e}")
 
 
-def navigate_menu(menu, is_root=False):
+def navigate_menu(menu, is_root=False, title=None):
     while True:
-        display_menu(menu, is_root)
+        if is_root:
+            version_number = Version.get()
+            title = f"Main Menu (Game version: {version_number})"
+        display_menu(menu, is_root, title)
         user_input = input("> ").strip().upper()
 
         if is_root and user_input == "Q" or not is_root and user_input == "B":
@@ -124,12 +128,16 @@ def navigate_menu(menu, is_root=False):
 
         if user_input in menu:
             selected_option = menu[user_input]
+            if not selected_option.get("sub_options"):
+                print("\033[94m" + "=" * 50)
+                print(f"{selected_option['name'].center(50)}")
+                print("=" * 50 + "\033[0m")
 
             # Check if it's the settings menu and link to settings_structure
             if selected_option['name'] == 'Settings' and selected_option['sub_options'] is None:
                 navigate_menu(settings_structure)
             elif selected_option['name'] == 'Clear cache':
-                utility.clear_cache()
+                cache.clear_cache()
                 print("\nReturning to the menu...\n")
             elif selected_option['name'] == 'Run First Time Setup':
                 handle_module('scripts.core.setup')
@@ -141,7 +149,7 @@ def navigate_menu(menu, is_root=False):
                 handle_module(selected_option['module'])
                 print("\nReturning to the menu...\n")
             elif 'sub_options' in selected_option:
-                navigate_menu(selected_option['sub_options'])
+                navigate_menu(selected_option['sub_options'], title=selected_option['name'])
         else:
             print("Invalid input. Please try again.")
 
