@@ -11,15 +11,6 @@ menu_structure = {
         'sub_options': None
     },
     '1': {
-        'name': 'Properties',
-        'description': 'Work with item properties.',
-        'sub_options': {
-            '1': {'module': 'property_list', 'name': 'Property list', 'description': 'Return all values of a specific property.'},
-            '2': {'module': 'get_property_value', 'name': 'Property value', 'description': 'Returns the value of a property for a specific item.'},
-            '3': {'module': 'sort_by_property', 'name': 'Sort by property', 'description': 'Sort all parsed data and organise for a user defined property.'},
-        },
-    },
-    '2': {
         'name': 'Data generation',
         'description': 'Generate working data.',
         'sub_options': {
@@ -36,7 +27,7 @@ menu_structure = {
             '11': {'module': 'teached_recipes', 'name': 'Teached recipes', 'description': 'Process teached recipes.'}
         },
     },
-    '3': {
+    '2': {
         'name': 'Page generation',
         'description': 'Generate pages or lists.',
         'sub_options': {
@@ -51,26 +42,19 @@ menu_structure = {
             '9': {'module': 'roomdefine', 'name': 'Room definitions', 'description': 'Create roomdef item page.'},
         },
     },
-    '4': {
+    '3': {
         'name': 'Tags',
         'description': 'Manage and generate tags.',
         'sub_options': None # Handled by item_tags.py
     },
-    '5': {
+    '4': {
         'name': 'Tools',
         'description': 'Data analysis and generate reports.',
         'sub_options': {
             '1': {'module': 'tools.item_dict', 'name': 'Item dictionary', 'description': 'Generate a list of items with their item ID and compare with another version.'},
             '2': {'module': 'tools.compare_item_lists', 'name': 'Compare item lists', 'description': "Generates a list of unique items comparing 'PZwiki:Item_list' versions."}
         },
-    },
-    '6': {
-        'name': 'Dev',
-        'description': 'Module testing.',
-        'sub_options': {
-            '1': {'module': 'placeholder', 'name': 'placeholder', 'description': 'placeholder.'},
-        },
-    },
+    }
 }
 
 settings_structure = {
