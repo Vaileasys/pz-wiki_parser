@@ -115,38 +115,6 @@ def display_menu(menu, is_root=False):
         print("Q: Quit")
 
 
-def change_version():
-    # Specify the path to the version.py file
-    version_file_path = os.path.join(os.path.dirname(__file__), 'scripts', 'core', 'version.py')
-
-    new_version = input("Enter the new version number: ").strip()
-
-    # Read the existing content of version.py
-    with open(version_file_path, 'r') as file:
-        lines = file.readlines()
-
-    # Replace the version number in the correct line
-    with open(version_file_path, 'w') as file:
-        for line in lines:
-            if 'version_number =' in line:
-                line = f'    version_number = "{new_version}"\n'
-            file.write(line)
-
-    print(f"Version number updated to {new_version} in {version_file_path}")
-
-    # Reload the version module to reflect changes immediately
-    try:
-        importlib.reload(version)
-        # Print the new version to confirm
-        updated_version = version.get_version()
-        if updated_version:
-            print("New game version:", updated_version)
-        else:
-            print("Error: Version number is None after update.")
-    except Exception as e:
-        print(f"Error reloading version module: {e}")
-
-
 def handle_module(module_name, user_input=None):
     try:
         module = importlib.import_module(module_name)
