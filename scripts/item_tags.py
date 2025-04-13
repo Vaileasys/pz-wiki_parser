@@ -1,13 +1,13 @@
 import os
-import json
 from difflib import SequenceMatcher
 from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.core.version import Version
 from scripts.core.language import Language
-from scripts.core.constants import (OUTPUT_PATH, PBAR_FORMAT, DATA_PATH)
+from scripts.core.constants import OUTPUT_PATH, PBAR_FORMAT, DATA_PATH
 from scripts.utils import utility, util
 from scripts.core.cache import save_cache, load_cache
+from scripts.utils.echo import echo_success, echo_warning, echo_error
 
 CACHE_JSON = "tags_data.json"
 is_run_locally = False
@@ -26,7 +26,7 @@ def write_tag_image():
     output_dir = os.path.join(output_tags_dir, "cycle-img")
     os.makedirs(output_dir, exist_ok=True)
 
-    with tqdm(total=len(tags_dict), desc="Generating tag images", bar_format=PBAR_FORMAT, unit=" tags") as pbar:
+    with tqdm(total=len(tags_dict), desc="Generating tag images", bar_format=PBAR_FORMAT, unit=" tags", leave=False) as pbar:
         for tag, tag_data in tags_dict.items():
             # Change the string at the end of the progress bar
             pbar.set_postfix_str(f"Processing: {tag[:30]}")
@@ -43,7 +43,7 @@ def write_tag_image():
                 tag_string = "".join(output_list)
                 file.write(f'<span class="cycle-img">{tag_string}</span>')
             pbar.update(1)
-        pbar.bar_format = f"Tag images completed. Files can be found in '{output_dir}'"
+    echo_success(f"Tag images completed. Files can be found in '{output_dir}'")
 
 
 def write_tag_table():
@@ -53,7 +53,7 @@ def write_tag_table():
     os.makedirs(output_dir, exist_ok=True)
     output_file = os.path.join(output_dir, 'tags_table.txt')
 
-    with tqdm(total=len(tags_dict), desc="Generating tags table", bar_format=PBAR_FORMAT, unit=" tags") as pbar:
+    with tqdm(total=len(tags_dict), desc="Generating tags table", bar_format=PBAR_FORMAT, unit=" tags", leave=False) as pbar:
         with open(output_file, 'w', encoding='utf-8') as file:
             file.write('{| class="wikitable theme-blue"\n|-\n! Tag !! Items\n')
             for tag in sorted(tags_dict.keys()):
@@ -71,7 +71,7 @@ def write_tag_table():
                 file.write(f'|- id="tag-{tag}"\n| [[{tag} (tag)|{tag}]] || {tag_items}\n')
                 pbar.update(1)
             file.write('|}')
-        pbar.bar_format = f"Tags table completed. File can be found in '{output_file}'"
+    echo_success(f"Tags table completed. File can be found in '{output_file}'")
 
 
 def write_tag_list():
@@ -80,7 +80,7 @@ def write_tag_list():
     output_dir = os.path.join(output_tags_dir, "item_list")
     os.makedirs(output_dir, exist_ok=True)
 
-    with tqdm(total=len(tags_dict), desc="Generating tag item list", bar_format=PBAR_FORMAT, unit=" tags") as pbar:
+    with tqdm(total=len(tags_dict), desc="Generating tag item list", bar_format=PBAR_FORMAT, unit=" tags", leave=False) as pbar:
         for tag, tag_data in tags_dict.items():
             # Change the string at the end of the progress bar
             pbar.set_postfix_str(f"Processing: {tag[:30]}")
@@ -98,7 +98,7 @@ def write_tag_list():
                     file.write(f"|-\n| [[File:{icon}|32x32px]] || {link} || {item_id}\n")
                 file.write('|}')
             pbar.update(1)
-        pbar.bar_format = f"Tags list completed. Files can be found in '{output_dir}'"
+    echo_success(f"Tags list completed. Files can be found in '{output_dir}'")
 
 
 ## -------------------- ARTICLES -------------------- ##
@@ -108,7 +108,7 @@ def get_see_also(all_filenames, reference_filename):
     """Get 3 similarly named filenames and include in 'see also'"""
 
     if len(all_filenames) < 3:
-        print("Not enough files to select 3 similar filenames.")
+        echo_warning("Not enough files to select 3 similar filenames.")
         return []
 
     reference_name = os.path.splitext(reference_filename)[0]
@@ -169,7 +169,7 @@ def write_article(tag, item_content, see_also_list, dest_dir):
 
 def get_item_list(source_dir):
     if not os.path.exists(source_dir):
-        print(f"The source directory {source_dir} does not exist. Make sure to run 'item_tags.py (Tag images)' first")
+        echo_error(f"The source directory {source_dir} does not exist. Make sure to run 'item_tags.py (Tag images)' first")
         return []
 
     item_list = []
@@ -192,14 +192,14 @@ def get_item_list(source_dir):
 def generate_article_modding():
     source_dir = os.path.join(output_tags_dir, "item_list")
     if not os.path.exists(source_dir):
-        print(f"'source_dir' doesn't exist, running 'Tag item list'")
+        echo_warning(f"'source_dir' doesn't exist, running 'Tag item list'")
         write_tag_list()
     dest_dir = os.path.join(output_tags_dir, "articles", "modding")
     item_list = get_item_list(source_dir)
     if item_list:
         all_tags = [tag for _, tag in item_list]
 
-        with tqdm(total=len(item_list), desc="Generating modding articles", bar_format=PBAR_FORMAT, unit=" tags") as pbar:
+        with tqdm(total=len(item_list), desc="Generating modding articles", bar_format=PBAR_FORMAT, unit=" tags", leave=False) as pbar:
             for content, tag in item_list:
                 # Change the string at the end of the progress bar
                 pbar.set_postfix_str(f"Processing: {tag[:30]}")
@@ -209,7 +209,7 @@ def generate_article_modding():
 
                 pbar.update(1)
 
-            pbar.bar_format = (f"Modding articles completed. Files can be found in '{dest_dir}'")
+        echo_success(f"Modding articles completed. Files can be found in '{dest_dir}'")
 
 
 ## -------------------- TEMPLATE ARTICLE -------------------- ##
@@ -217,14 +217,14 @@ def generate_article_modding():
 def generate_article_templates():
     source_dir = os.path.join(output_tags_dir, "cycle-img")
     if not os.path.exists(source_dir):
-        print(f"'source_dir' doesn't exist, running 'Tag item list'")
+        echo_warning(f"'source_dir' doesn't exist, running 'Tag item list'")
         write_tag_image()
     dest_dir = os.path.join(output_tags_dir, "articles", "templates")
     item_list = get_item_list(source_dir)
     if item_list:
         all_tags = [tag for _, tag in item_list]
 
-        with tqdm(total=len(item_list), desc="Generating template articles", bar_format=PBAR_FORMAT, unit=" tags") as pbar:
+        with tqdm(total=len(item_list), desc="Generating template articles", bar_format=PBAR_FORMAT, unit=" tags", leave=False) as pbar:
             for content, tag in item_list:
                 # Change the string at the end of the progress bar
                 pbar.set_postfix_str(f"Processing: {tag[:30]}")
@@ -234,7 +234,7 @@ def generate_article_templates():
 
                 pbar.update(1)
 
-            pbar.bar_format = (f"Template articles completed. Files can be found in '{dest_dir}'")
+        echo_success(f"Template articles completed. Files can be found in '{dest_dir}'")
 
 
 ## -------------------- TAG DATA -------------------- ##
