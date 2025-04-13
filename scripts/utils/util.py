@@ -68,3 +68,51 @@ def format_link(name:str, page:str=None) -> str:
         return f"[[{name}]]"
     else:
         return f"[[{page}|{name}]]"
+
+
+def convert_percentage(value: str | int | float, start_zero=True, percentage=False) -> str:
+    """Converts a numeric value to a percentage string.
+
+    Args:
+        value (str, int, float): The value to be converted to a percentage. Can be a number or a string representation of a number.
+        start_zero (bool, optional): If True, treats the value as a fraction (e.g., 0.5 -> 50%).
+                                     If False, assumes the value starts from 100% (e.g., 1.5 -> 150%). Defaults to True.
+        percentage (bool, optional): If True, the value is already a percentage and will not be scaled. Defaults to False.
+
+    Returns:
+        str: The formatted percentage as a string with a '%' sign.
+             Returns '-' for invalid inputs.
+    """
+    if not value or value == '-':
+        return '-'
+    
+    try:
+        value = float(value)
+    except ValueError:
+        return '-'
+    
+    if not percentage:
+        if not start_zero:
+            value -= 1
+        value *= 100
+
+    value = int(round(value))
+    
+    return f"{value}%"
+
+
+def convert_int(value: int | float) -> int | float:
+    """Converts a value to an integer if it has no decimal (isn't float-like)."""
+
+    # Try to convert string to a float.
+    if isinstance(value, str):
+        try:
+            value = float(value)
+        except ValueError:
+            return str(value)
+
+    # Convert to an int if it's not float-like.
+    if isinstance(value, (int, float)) and value == int(value):
+        return str(int(value))
+
+    return str(value)

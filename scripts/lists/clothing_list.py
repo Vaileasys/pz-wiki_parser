@@ -84,25 +84,25 @@ def generate_data(item_data, item_id):
             attachments_provided = '-'
         item["extra_slots"] = attachments_provided
     
-    item["fall_chance"] = utility.convert_to_percentage(item_data.get("ChanceToFall", '-'), True, True) if "fall_chance" in columns else None
-    item["stomp_power"] = utility.convert_to_percentage(item_data.get("StompPower", '-'), True) if "stomp_power" in columns else None
-    item["move_speed"] = utility.convert_to_percentage(item_data.get("RunSpeedModifier", '-'), False) if "move_speed" in columns else None
-    item["attack_speed"] = utility.convert_to_percentage(item_data.get("CombatSpeedModifier", '-'), False) if "attack_speed" in columns else None
+    item["fall_chance"] = util.convert_percentage(item_data.get("ChanceToFall", '-'), True, True) if "fall_chance" in columns else None
+    item["stomp_power"] = util.convert_percentage(item_data.get("StompPower", '-'), True) if "stomp_power" in columns else None
+    item["move_speed"] = util.convert_percentage(item_data.get("RunSpeedModifier", '-'), False) if "move_speed" in columns else None
+    item["attack_speed"] = util.convert_percentage(item_data.get("CombatSpeedModifier", '-'), False) if "attack_speed" in columns else None
     item["body_part"] = '<br>'.join(body_parts_list) if "body_part" in columns else None
-    item["bite_def"] = utility.convert_to_percentage(item_data.get("BiteDefense", '-'), True, True) if "bite_def" in columns else None
-    item["scratch_def"] = utility.convert_to_percentage(item_data.get("ScratchDefense", '-'), True, True) if "scratch_def" in columns else None
-    item["bullet_def"] = utility.convert_to_percentage(item_data.get("BulletDefense", '-'), True, True) if "bullet_def" in columns else None
+    item["bite_def"] = util.convert_percentage(item_data.get("BiteDefense", '-'), True, True) if "bite_def" in columns else None
+    item["scratch_def"] = util.convert_percentage(item_data.get("ScratchDefense", '-'), True, True) if "scratch_def" in columns else None
+    item["bullet_def"] = util.convert_percentage(item_data.get("BulletDefense", '-'), True, True) if "bullet_def" in columns else None
 
     if "neck_def" in columns:
         neck_protection = "-"
         if "Neck" in utility.get_body_parts(item_data, False):
             neck_protection = 1.0 - float(item_data.get("NeckProtectionModifier", 0))
-            neck_protection = utility.convert_to_percentage(neck_protection, True)
+            neck_protection = util.convert_percentage(neck_protection, True)
         item["neck_def"] = neck_protection
 
-    item["insulation"] = utility.convert_to_percentage(item_data.get("Insulation", '-'), True) if "insulation" in columns else None
-    item["wind_def"] = utility.convert_to_percentage(item_data.get("WindResistance", '-'), True) if "wind_def" in columns else None
-    item["water_def"] = utility.convert_to_percentage(item_data.get("WaterResistance", '-'), True) if "water_def" in columns else None
+    item["insulation"] = util.convert_percentage(item_data.get("Insulation", '-'), True) if "insulation" in columns else None
+    item["wind_def"] = util.convert_percentage(item_data.get("WindResistance", '-'), True) if "wind_def" in columns else None
+    item["water_def"] = util.convert_percentage(item_data.get("WaterResistance", '-'), True) if "water_def" in columns else None
     
     if "fabric" in columns:
         fabric_id = FABRIC_TYPE.get(item_data.get("FabricType"))
@@ -127,7 +127,7 @@ def generate_data(item_data, item_id):
             if can_have_holes:
                 lower_chance = "-"
         if lower_chance != "-":
-            lower_chance = utility.convert_to_percentage(1 / int(lower_chance), True)
+            lower_chance = util.convert_percentage(1 / int(lower_chance), True)
 
         item["condition_lower_chance"] = lower_chance
 

@@ -286,22 +286,22 @@ def process_item(item_id, item_data, pbar):
         item["capacity"] = item_data.get('Capacity', '-')
 
     if "weight_reduction" in columns:
-        item["weight_reduction"] = utility.convert_to_percentage(item_data.get('WeightReduction', '-'), True, True)
+        item["weight_reduction"] = util.convert_percentage(item_data.get('WeightReduction', '-'), True, True)
 
     if "weight_full" in columns:
-        weight_full = utility.convert_int(calculate_weight(item_data))
+        weight_full = util.convert_int(calculate_weight(item_data))
         item["weight_full"] = str(weight_full)
 
     if "weight_full_organized" in columns:
-        weight_full_organized = utility.convert_int(calculate_weight(item_data, "organized"))
+        weight_full_organized = util.convert_int(calculate_weight(item_data, "organized"))
         item["weight_full_organized"] = str(weight_full_organized)
 
     if "weight_full_disorganized" in columns:
-        weight_full_disorganized = utility.convert_int(calculate_weight(item_data, "disorganized"))
+        weight_full_disorganized = util.convert_int(calculate_weight(item_data, "disorganized"))
         item["weight_full_disorganized"] = str(weight_full_disorganized)
 
     if "move_speed" in columns:
-        item["move_speed"] = utility.convert_to_percentage(item_data.get("RunSpeedModifier", '-'), False)
+        item["move_speed"] = util.convert_percentage(item_data.get("RunSpeedModifier", '-'), False)
 
     if "extra_slots" in columns:
         slots_list = []
@@ -330,7 +330,7 @@ def process_item(item_id, item_data, pbar):
         item["accept_item"] = get_accept_item(item_data)
 
     if "max_item_size" in columns:
-        item["max_item_size"] = utility.convert_int(item_data.get('MaxItemSize', '-'))
+        item["max_item_size"] = util.convert_int(item_data.get('MaxItemSize', '-'))
 
     if "item_id" in columns:
         item["item_id"] = f"{{{{ID|{item_id}}}}}"
