@@ -2,87 +2,14 @@ import os
 from tqdm import tqdm
 from scripts.parser import item_parser, recipe_parser, stash_parser
 from scripts.core.language import Language, Translate
-from scripts.core.constants import PBAR_FORMAT
-from scripts.utils import utility, util
+from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
+from scripts.utils import utility, util, table_helper
 from scripts.utils.echo import echo_success
 
-# Used for getting table values
-TABLE_DICT = {
-    "generic": ['icon', 'name', 'weight', 'item_id'],
-    "leisure": ['icon', 'name', 'weight', 'unhappy', 'stress', 'boredom', 'item_id'],
-    "recipe": ['icon', 'name', 'weight', 'recipes', 'skill', 'item_id'],
-    "skill": ['icon', 'name', 'weight', 'pages', 'multiplier', 'skill', 'levels', 'item_id'],
-    "writable": ['icon', 'name', 'weight', 'pages', 'item_id'],
-    "annotated_map": ['icon', 'name', 'map_id', 'weight', 'region', 'coords', 'container', 'container_coords', 'loot_table', 'item_id'],
-    "map": ['icon', 'name', 'weight', 'region', 'item_id']
-}
+TABLE_PATH = f"{RESOURCE_PATH}/tables/literature_table.json"
 
-# Map table values with their headings
-COLUMNS_DICT = {
-    "icon": "! Icon",
-    "name": "! Name",
-    "map_id": "! Map ID",
-    "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=Heavy load|Encumbrance]]",
-    "unhappy": "! [[File:Mood_Sad_32.png|32px|link=Unhappy]]",
-    "stress": "! [[File:Mood_Stressed_32.png|32px|link=Stressed]]",
-    "boredom": "! [[File:Mood_Bored_32.png|32px|link=Bored]]",
-    "pages": "! Pages",
-    "multiplier": "! Multiplier",
-    "recipes": "! Recipes",
-    "skill": "! Skill",
-    "levels": "! Levels",
-    "region": "! Region",
-    "coords": "! Coordinates",
-    "container": "! Container",
-    "container_coords": "! Container coordinates",
-    "loot_table": "! Loot table",
-    "item_id": "! Item ID",
-}
-
-# Map the headings to their table_key (TABLE_DICT key)
-TABLE_MAPPING = {
-    "Maps": "map",
-    "Annotated maps": "annotated_map",
-    "Writable": "writable",
-    "Recipe magazines": "recipe",
-    "Schematics": "recipe",
-    "Skill books": "skill",
-    "Seed packets": "recipe",
-    "Hollow books": "leisure",
-    "Hardcover books": "leisure",
-    "Leatherbound books": "leisure",
-    "Paperback books": "leisure",
-    "Magazines": "leisure",
-    "Newspapers": "leisure",
-    "Miscellaneous": "leisure",
-    "Other": "generic",
-}
-
-# Map sections to the correct position
-# TODO: not currently used. Intended to be used as part of a merge_txt_files function.
-SECTION_DICT = {
-    'Skill books': [],
-    'Recipe': [
-        'Recipe magazines',
-        'Schematics'
-    ],
-    'Leisure': [
-        'Hollow books',
-        'Hardcover books',
-        'Leatherbound books',
-        'Paperback books',
-        'Magazines',
-        'Newspapers',
-        'Miscellaneous'
-    ],
-    'Cartography': [
-        'Maps',
-        'Annotated maps'
-    ],
-    'Writable': [],
-}
-
-TABLE_HEADER ='{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"'
+table_map = None
+table_type_map = None
 
 # Get the list type, for mapping the section/table
 def get_list_type(item_id, item_data, special_data):
@@ -139,7 +66,6 @@ def get_list_type(item_id, item_data, special_data):
 
 
 # Get list of recipes an item teaches.
-# TODO: Partially incomplete. Waiting for construction recipes.
 def get_recipes(item_data):
 
     if item_data.get("OnCreate"):
@@ -233,7 +159,7 @@ def get_region(region_key):
 # Process items, returning the heading and row data.
 def process_item(item_id, item_data, special_data={}):
     heading = get_list_type(item_id, item_data, special_data)
-    columns = TABLE_DICT.get(TABLE_MAPPING[heading], TABLE_DICT["generic"])
+    columns = table_map.get(table_type_map[heading], table_map["generic"])
     language_code = Language.get()
     map_data = {}
     map_id = special_data.get("map_id", "")
@@ -387,6 +313,13 @@ def process_item(item_id, item_data, special_data={}):
     if "item_id" in columns:
         item["item_id"] = f"{{{{ID|{item_id}}}}}"
     
+    # Remove any values that are None
+    item = {k: v for k, v in item.items() if v is not None}
+
+    # Ensure column order is correct
+    item = {key: item[key] for key in columns if key in item}
+
+    # Add item_name for sorting
     item["item_name"] = name_ref
 
     return heading, item
@@ -450,46 +383,19 @@ def get_items():
     return literature_dict
 
 
-# Write to txt files. Separate file for each heading.
-def write_to_output(literature_dict):
-    # write to output.txt
-    language_code = Language.get()
-    output_dir = os.path.join('output', language_code, 'item_list', 'literature')
-
-    os.makedirs(output_dir, exist_ok=True)
-
-    for heading, items in literature_dict.items():
-        columns = TABLE_DICT.get(TABLE_MAPPING[heading], TABLE_DICT["generic"])
-
-        # Build the table heading based on values
-        table_headings = []
-        for col in columns:
-            mapped_headings = COLUMNS_DICT.get(col, col)
-            table_headings.append(mapped_headings)
-        table_headings = "\n".join(table_headings)
-
-        output_path = os.path.join(output_dir, f"{heading}.txt")
-        with open(output_path, "w", encoding="utf-8") as file:
-            file.write(f'<!--BOT_FLAG-start-{heading.replace(" ", "_")}. DO NOT REMOVE-->')
-            file.write(f"{TABLE_HEADER}\n")
-            file.write(f"{table_headings}\n")
-
-            items = sorted(items, key=lambda x: x['item_name'])
-            for item in items:
-                # Remove 'item_name' from the dict, so it doesn't get added to the table.
-                item.pop("item_name", None)
-                row = "\n| ".join([value for key, value in item.items()])
-                file.write(f"|-\n| {row}\n")
-
-            file.write("|}")
-            file.write(f'<!--BOT_FLAG-end-{heading.replace(" ", "_")}. DO NOT REMOVE-->')
-
-    echo_success(f"Output saved to {output_dir}")
-
-
 def main():
+    global table_map
+    global table_type_map
+    table_map, column_headings, table_type_map = table_helper.get_table_data(TABLE_PATH, "type_map")
+
     items = get_items()
-    write_to_output(items)
+
+    mapped_table = {
+        item_type: table_map[table_type]
+        for item_type, table_type in table_type_map.items()
+    }
+
+    table_helper.create_tables("literature", items, columns=column_headings, table_map=mapped_table)
                 
 
 if __name__ == "__main__":

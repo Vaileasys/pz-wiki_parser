@@ -1,0 +1,100 @@
+{
+    "map": {
+        "generic": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ],
+        "leisure": [
+            "icon",
+            "name",
+            "weight",
+            "unhappy",
+            "stress",
+            "boredom",
+            "item_id"
+        ],
+        "recipe": [
+            "icon",
+            "name",
+            "weight",
+            "recipes",
+            "skill",
+            "item_id"
+        ],
+        "skill": [
+            "icon",
+            "name",
+            "weight",
+            "pages",
+            "multiplier",
+            "skill",
+            "levels",
+            "item_id"
+        ],
+        "writable": [
+            "icon",
+            "name",
+            "weight",
+            "pages",
+            "item_id"
+        ],
+        "annotated_map": [
+            "icon",
+            "name",
+            "map_id",
+            "weight",
+            "region",
+            "coords",
+            "container",
+            "container_coords",
+            "loot_table",
+            "item_id"
+        ],
+        "map": [
+            "icon",
+            "name",
+            "weight",
+            "region",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "map_id": "! Map ID",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=Heavy load|Encumbrance]]",
+        "unhappy": "! [[File:Mood_Sad_32.png|32px|link=Unhappy]]",
+        "stress": "! [[File:Mood_Stressed_32.png|32px|link=Stressed]]",
+        "boredom": "! [[File:Mood_Bored_32.png|32px|link=Bored]]",
+        "pages": "! Pages",
+        "multiplier": "! Multiplier",
+        "recipes": "! Recipes",
+        "skill": "! Skill",
+        "levels": "! Levels",
+        "region": "! Region",
+        "coords": "! Coordinates",
+        "container": "! Container",
+        "container_coords": "! Container coordinates",
+        "loot_table": "! Loot table",
+        "item_id": "! Item ID"
+    },
+    "type_map": {
+        "Maps": "map",
+        "Annotated maps": "annotated_map",
+        "Writable": "writable",
+        "Recipe magazines": "recipe",
+        "Schematics": "recipe",
+        "Skill books": "skill",
+        "Seed packets": "recipe",
+        "Hollow books": "leisure",
+        "Hardcover books": "leisure",
+        "Leatherbound books": "leisure",
+        "Paperback books": "leisure",
+        "Magazines": "leisure",
+        "Newspapers": "leisure",
+        "Miscellaneous": "leisure",
+        "Other": "generic"
+    }
+}
