@@ -212,12 +212,12 @@ def get_lua_files(filenames: str | list[str], prefer: str = None, media_type: st
     return paths
 
 
-def get_script_files(prefix: str = "items") -> list[str]:
+def get_script_files(prefix: str = None) -> list[str]:
     """
     Retrieves a list of script .txt files from the game scripts folder, optionally filtering by prefix.
 
     Args:
-        prefix (str): Only files starting with this prefix will be included.
+        prefix (str | None): Only files starting with this prefix will be included. If None, all .txt files are included.
 
     Returns:
         list[str]: List of absolute file paths.
@@ -225,7 +225,7 @@ def get_script_files(prefix: str = "items") -> list[str]:
     script_files = []
     for root, _, files in os.walk(get_scripts_dir()):
         for file in files:
-            if file.endswith(".txt") and file.startswith(prefix):
+            if file.endswith(".txt") and (prefix is None or file.startswith(prefix)):
                 script_files.append(os.path.join(root, file))
     return sorted(script_files)
 
