@@ -3,7 +3,7 @@ from tqdm import tqdm
 from scripts.parser import item_parser, distribution_container_parser
 from scripts.core.language import Language
 from scripts.core.constants import (PBAR_FORMAT, OUTPUT_PATH)
-from scripts.utils import utility
+from scripts.utils import utility, util
 from scripts.core.cache import save_cache
 
 TABLE_HEADER = (
@@ -176,7 +176,7 @@ def write_to_file(data):
                 if chance < 0.01:
                     chance = "<0.01"
                 else:
-                    chance = utility.convert_int(chance)
+                    chance = util.convert_int(chance)
                 
                 # Check the cached items first, if it exists, we use that data instead of processing again
                 if content_item_cache.get(item):

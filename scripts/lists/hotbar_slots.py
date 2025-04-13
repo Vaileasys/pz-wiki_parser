@@ -368,7 +368,7 @@ def generate_data():
     
     hotbar_slots, hotbar_slots_version = load_cache("hotbar_slots.json", "hotbar slots", get_version=True)
     attachment_types, attachment_types_version = load_cache("attachment_types.json", "attachment types", get_version=True)
-    attachment_items, attachment_items_version = load_cache("attachment_items.json", "attachment types", get_version=True)
+    attachment_items, attachment_items_version = load_cache("attachment_items.json", "attachment items", get_version=True)
 
     if (hotbar_slots_version != game_version or 
         attachment_types_version != game_version or 
