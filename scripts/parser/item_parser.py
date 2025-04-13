@@ -316,7 +316,7 @@ def init():
 
     # Parse items if there is no cache, or it's outdated.
     if cache_version != game_version:
-        script_files = get_script_files("items")
+        script_files = get_script_files()
         parsed_data = parse_files(script_files)
     else:
         parsed_data = cached_data.copy()
