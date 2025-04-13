@@ -1,70 +1,22 @@
 # List for item containers (bags, etc.)
 
-import os
 import random
 from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.lists import hotbar_slots
-from scripts.core.constants import PBAR_FORMAT
-from scripts.utils import utility, util
+from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
+from scripts.utils import utility, util, table_helper
 from scripts.core.cache import save_cache, load_cache
-from scripts.utils.echo import echo_warning, echo_success
+from scripts.utils.echo import echo_info
 
-hotbar_data = {}
+TABLE_PATH = f"{RESOURCE_PATH}/tables/container_table.json"
 
-# Used for getting table values
-TABLE_DICT = {
-    "generic": ['icon', 'name', 'weight', 'item_id'],
-    "container": ['icon', 'name', 'weight', 'capacity', 'weight_reduction', 'weight_full', 'weight_full_organized', 'weight_full_disorganized', 'move_speed', 'accept_item', 'max_item_size', 'item_id'],
-    "accept_item": ['icon', 'name', 'weight', 'capacity', 'weight_reduction', 'weight_full', 'weight_full_organized', 'weight_full_disorganized', 'accept_item', 'max_item_size', 'item_id'],
-    "wearable": ['icon', 'name', 'weight', 'capacity', 'weight_reduction', 'weight_full', 'weight_full_organized', 'weight_full_disorganized', 'move_speed', 'extra_slots', 'body_location', 'accept_item', 'max_item_size', 'item_id'],
-}
-
-# Map table values with their headings
-COLUMNS_DICT = {
-    "icon": "! Icon",
-    "name": "! Name",
-    "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=Heavy load|Encumbrance]]",
-    "capacity": "! [[File:UI_Weight_Max.png|32px|link=|Capacity]]",
-    "weight_reduction": "! [[File:UI_Weight_Decrease.png|32px|link=|Encumbrance reduced]]",
-    "weight_full": "! [[File:Status_HeavyLoad_32.png|32px|link=Heavy load|Full encumbrance]] {{Tooltip|(full)|Full encumbrance}}",
-    "weight_full_organized": "! [[File:Trait_organized.png|18px|link=Organized|Full encumbrance with organized]] {{Tooltip|(full)|Full encumbrance with organized}}",
-    "weight_full_disorganized": "! [[File:Trait_disorganized.png|18px|link=Disorganized|Full encumbrance with disorganized]] {{Tooltip|(full)|Full encumbrance with disorganized}}",
-    "move_speed": "! [[File:UI_Speed.png|link=|Movement speed]]",
-    "extra_slots": "! Hotbar slots",
-    "body_location": "! [[File:UI_BodyPart.png|32px|link=|Body location]]",
-    "accept_item": "! Valid items",
-    "max_item_size": "! [[File:UI_Weight_Max.png|32px|link=Heavy load|Maximum content encumbrance]] {{Tooltip|(item)|Maximum content encumbrance}}",
-    "item_id": "! Item ID",
-}
-
-# Map the headings to their table_key (TABLE_DICT key)
-TABLE_MAPPING = {
-    "Back": "wearable",
-    "Torso": "wearable",
-    "Key ring": "accept_item",
-    "Wallet": "accept_item",
-    "Containers": "container",
-    "Other": "generic",
-}
-
-# Map sections to the correct position
-# TODO: not currently used. Intended to be used as part of a merge_txt_files function.
-SECTION_DICT = {
-    'Wearable': [
-        'Back',
-        'Torso'
-    ],
-    'Containers': None,
-    'Key ring': None,
-    'Wallet': None,
-}
-
-TABLE_HEADER ='{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"'
-
-category_cache = {}
+table_map = None
+table_type_map = None
+hotbar_data = None
+category_cache = None
 
 
 def calculate_weight(item_data, trait=None):
@@ -96,7 +48,7 @@ def get_accept_item(item_data: dict):
     Returns:
         str: A formatted string with item links, images, or text. Returns "-" if no accepted items are found.
     """
-    # From AcceptItemFunction.lua (42.2.0)
+    # From AcceptItemFunction.lua (42.7.0)
     ITEM_MAP = {
         "AmmoStrap_Bullets": {
             "Ammo": {"page": "Ammo (tag)", "text": "Ammo", "image": "{{Tag Ammo}}"}, # tag
@@ -137,9 +89,7 @@ def get_accept_item(item_data: dict):
                 if image:
                     link = ""
                     if page:
-                        link = f"|link={page}"
-                        if language_code != "en":
-                            link = f"|link={page}/{language_code}"
+                        link = f"|link={page}{Language.get_subpage}"
 
                     # Build image
                     if image.lower().startswith("file:"):
@@ -214,7 +164,7 @@ def get_cached_types():
     # Generate data if data dict is empty or cache is old
     if not category_cache or cache_version != Version.get():
         parsed_item_data = item_parser.get_item_data()
-        with tqdm(total=len(parsed_item_data), desc="Preparing items based on 'Type'", bar_format=PBAR_FORMAT, unit=" items") as pbar:
+        with tqdm(total=len(parsed_item_data), desc="Preparing items based on 'Type'", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
             for cat_item_id, cat_item_data in parsed_item_data.items():
                 cat_type = cat_item_data.get("Type", "Normal")
                 pbar.set_postfix_str(f"Processing: {cat_type[:20]} ({cat_item_id[:20]})")
@@ -226,7 +176,7 @@ def get_cached_types():
 
                 category_cache[cat_type][cat_item_id] = {"name": name, "icon": icon, "page": page}
                 pbar.update(1)
-            pbar.bar_format = f"Items organised."
+        echo_info("Items organised by type and cached.")
 
         save_cache(category_cache, CACHE_FILE)
     
@@ -234,7 +184,7 @@ def get_cached_types():
 
 
 # Get the list type, for mapping the section/table
-def get_list_type(item_id, item_data):
+def find_table_type(item_data):
     body_location = item_data.get("CanBeEquipped")
     if body_location:
         if body_location == "Back":
@@ -257,15 +207,14 @@ def get_list_type(item_id, item_data):
 def process_item(item_id, item_data, pbar):
     language_code = Language.get()
 
-    heading = get_list_type(item_id, item_data)
-    if heading not in TABLE_MAPPING:
+    heading = find_table_type(item_data)
+    if heading not in table_type_map:
         pbar.write(f"Warning: '{heading}' could not be found in table map.")
         heading = "Containers"
-    columns = TABLE_DICT.get(TABLE_MAPPING[heading], TABLE_DICT["generic"])
+    columns = table_map.get(table_type_map[heading], table_map["generic"])
 
     item_name = utility.get_name(item_id, item_data) # set item name
     page_name = utility.get_page(item_id, item_name) # set page name
-    name_ref = page_name # set item ref (used for sorting)
 
     item = {}
 
@@ -335,57 +284,28 @@ def process_item(item_id, item_data, pbar):
     if "item_id" in columns:
         item["item_id"] = f"{{{{ID|{item_id}}}}}"
     
-    item["item_ref"] = name_ref
+    # Remove any values that are None
+    item = {k: v for k, v in item.items() if v is not None}
+
+    # Ensure column order is correct
+    item = {key: item[key] for key in columns if key in item}
+
+    # Add item_name for sorting
+    item["item_name"] = item_name
 
     return heading, item
 
 
-# Write to txt files. Separate file for each heading.
-def write_to_output(container_dict):
-    # write to output.txt
-    language_code = Language.get()
-    output_dir = os.path.join('output', language_code, 'item_list', 'container')
-
-    os.makedirs(output_dir, exist_ok=True)
-
-    for heading, items in container_dict.items():
-        columns = TABLE_DICT.get(TABLE_MAPPING[heading], TABLE_DICT["generic"])
-
-        # Build the table heading based on values
-        table_headings = []
-        for col in columns:
-            mapped_headings = COLUMNS_DICT.get(col, col)
-            table_headings.append(mapped_headings)
-        table_headings = "\n".join(table_headings)
-
-        output_path = os.path.join(output_dir, f"{heading}.txt")
-        with open(output_path, "w", encoding="utf-8") as file:
-            file.write(f'<!--BOT_FLAG-start-{heading.replace(" ", "_")}. DO NOT REMOVE-->')
-            file.write(f"{TABLE_HEADER}\n")
-            file.write(f"{table_headings}\n")
-
-            items = sorted(items, key=lambda x: x['item_ref'])
-            for item in items:
-                # Remove 'item_ref' from the dict, so it doesn't get added to the table.
-                item.pop("item_ref", None)
-                row = "\n| ".join([value for key, value in item.items()])
-                file.write(f"|-\n| {row}\n")
-
-            file.write("|}")
-            file.write(f'<!--BOT_FLAG-end-{heading.replace(" ", "_")}. DO NOT REMOVE-->')
-
-    echo_success(f"Output saved to {output_dir}")
-
-
 # Get necessary literature items and process them
-def get_items():
+def find_items():
     container_dict = {}
     parsed_item_data = item_parser.get_item_data()
+    item_count = 0
 
     get_cached_types()
 
     # Get items
-    with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items") as pbar:
+    with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
         for item_id, item_data in parsed_item_data.items():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
             if item_data.get("Type") == "Container":
@@ -397,64 +317,29 @@ def get_items():
 
                 container_dict[heading].append(item)
 
+                item_count += 1
+
             pbar.update(1)
 
-        pbar.bar_format = "Items processed."
+    echo_info(f"Finished processing {item_count} items for {len(container_dict)} tables.")
            
     return container_dict
 
 
-# Combines txt files based on their position in SECTION_DICT
-def combine_files():
-    language_code = Language.get()
-    clothing_dir = f'output/{language_code}/item_list/container/'
-    output_file = f'output/{language_code}/item_list/container_list.txt'
-
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-
-    file_dict = {}
-
-    # Get the file name and its contents
-    for file in os.listdir(clothing_dir):
-        if file.endswith('.txt'):
-            file_name = file[:-4]
-            file_path = os.path.join(clothing_dir, file)
-            with open(file_path, 'r', encoding='utf-8') as f:
-                file_dict[file_name] = f.read()
-
-    # Lookup a the file name in SECTION_DICT and write the section and its contents
-    with open(output_file, 'w', encoding='utf-8') as output_f:
-        output_f.write("{{Legend container}}\n")
-        for section, items in SECTION_DICT.items():
-            # Nested sections
-            if isinstance(items, list):
-                output_f.write(f"==={section}===\n")
-                for subkey in items:
-                    content = file_dict.get(subkey, None)
-                    if content is not None:
-                        output_f.write(f"===={subkey}====\n")
-                        output_f.write(f"{content}\n\n")
-                    else:
-                        echo_warning(f"Skipping '{subkey}': No content found.")
-            else:
-                content = file_dict.get(section, None)
-                if content is not None:
-                    output_f.write(f"==={section}===\n")
-                    output_f.write(f"{content}\n\n")
-                else:
-                    echo_warning(f"Skipping '{section}': No content found.")
-
-    echo_success(f"Combined files written to {output_file}")
-
-
 def main():
-    global language_code
     global hotbar_data
-    language_code = language_code = Language.get()
+    global table_map
+    global table_type_map
+    table_map, column_headings, table_type_map = table_helper.get_table_data(TABLE_PATH, "type_map")
     hotbar_data = hotbar_slots.get_hotbar_slots(suppress=True)
-    items = get_items()
-    write_to_output(items)
-    combine_files()
+    items = find_items()
+
+    mapped_table = {
+        item_type: table_map[table_type]
+        for item_type, table_type in table_type_map.items()
+    }
+    
+    table_helper.create_tables("container", items, columns=column_headings, table_map=mapped_table)
                 
 
 if __name__ == "__main__":

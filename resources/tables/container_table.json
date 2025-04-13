@@ -1,0 +1,77 @@
+{
+    "map": {
+        "generic": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ],
+        "container": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "weight_reduction",
+            "weight_full",
+            "weight_full_organized",
+            "weight_full_disorganized",
+            "move_speed",
+            "accept_item",
+            "max_item_size",
+            "item_id"
+        ],
+        "accept_item": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "weight_reduction",
+            "weight_full",
+            "weight_full_organized",
+            "weight_full_disorganized",
+            "accept_item",
+            "max_item_size",
+            "item_id"
+        ],
+        "wearable": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "weight_reduction",
+            "weight_full",
+            "weight_full_organized",
+            "weight_full_disorganized",
+            "move_speed",
+            "extra_slots",
+            "body_location",
+            "accept_item",
+            "max_item_size",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=Heavy load|Encumbrance]]",
+        "capacity": "! [[File:UI_Weight_Max.png|32px|link=|Capacity]]",
+        "weight_reduction": "! [[File:UI_Weight_Decrease.png|32px|link=|Encumbrance reduced]]",
+        "weight_full": "! [[File:Status_HeavyLoad_32.png|32px|link=Heavy load|Full encumbrance]] {{Tooltip|(full)|Full encumbrance}}",
+        "weight_full_organized": "! [[File:Trait_organized.png|18px|link=Organized|Full encumbrance with organized]] {{Tooltip|(full)|Full encumbrance with organized}}",
+        "weight_full_disorganized": "! [[File:Trait_disorganized.png|18px|link=Disorganized|Full encumbrance with disorganized]] {{Tooltip|(full)|Full encumbrance with disorganized}}",
+        "move_speed": "! [[File:UI_Speed.png|link=|Movement speed]]",
+        "extra_slots": "! Hotbar slots",
+        "body_location": "! [[File:UI_BodyPart.png|32px|link=|Body location]]",
+        "accept_item": "! Valid items",
+        "max_item_size": "! [[File:UI_Weight_Max.png|32px|link=Heavy load|Maximum content encumbrance]] {{Tooltip|(item)|Maximum content encumbrance}}",
+        "item_id": "! Item ID"
+    },
+    "type_map": {
+        "Back": "wearable",
+        "Torso": "wearable",
+        "Key ring": "accept_item",
+        "Wallet": "accept_item",
+        "Containers": "container",
+        "Other": "generic"
+    }
+}
