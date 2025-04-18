@@ -55,7 +55,7 @@
         "name": "! Name",
         "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=Heavy load|Encumbrance]]",
         "capacity": "! [[File:UI_Weight_Max.png|32px|link=|Capacity]]",
-        "weight_reduction": "! [[File:UI_Weight_Decrease.png|32px|link=|Encumbrance reduced]]",
+        "weight_reduction": "! [[File:UI_Weight_Min.png|32px|link=|Encumbrance reduced]]",
         "weight_full": "! [[File:Status_HeavyLoad_32.png|32px|link=Heavy load|Full encumbrance]] {{Tooltip|(full)|Full encumbrance}}",
         "weight_full_organized": "! [[File:Trait_organized.png|18px|link=Organized|Full encumbrance with organized]] {{Tooltip|(full)|Full encumbrance with organized}}",
         "weight_full_disorganized": "! [[File:Trait_disorganized.png|18px|link=Disorganized|Full encumbrance with disorganized]] {{Tooltip|(full)|Full encumbrance with disorganized}}",
