@@ -1,6 +1,6 @@
 import os
 import shutil
-from scripts.parser import script_parser
+from scripts.parser import fixing_parser
 from scripts.core import logger
 from scripts.core.language import Language, Translate
 from scripts.utils import utility
@@ -11,7 +11,7 @@ language_code = Language.get()
 def get_fixing():
     while True:
         fixing_id = input("Enter an item id\n> ")
-        for module, module_data in script_parser.parsed_fixing_data.items():
+        for module, module_data in fixing_parser.parsed_fixing_data.items():
             for fixing, fixing_data in module_data.items():
                 fixing_id = f"{module}.{fixing}"
                 fixing_id = fixing_id.replace(" ", "_")
@@ -28,7 +28,7 @@ def get_fixer(fixing_id, index=""):
     module, fixing = fixing_id.split(".")
     fixing = fixing.replace("_", " ")
 
-    for parsed_module, module_data in script_parser.parsed_fixing_data.items():
+    for parsed_module, module_data in fixing_parser.parsed_fixing_data.items():
         if parsed_module == module:
             for parsed_fixing, fixing_data in module_data.items():
                 if parsed_fixing == fixing:
@@ -217,7 +217,7 @@ def automatic_extraction(output_dir):
         shutil.rmtree(output_dir)
     os.makedirs(output_dir)
 
-    for module, module_data in script_parser.parsed_fixing_data.items():
+    for module, module_data in fixing_parser.parsed_fixing_data.items():
         for fixing, fixing_data in module_data.items():
             fixing_id = f"{module}.{fixing}"
             fixing_id = fixing_id.replace(" ", "_")
@@ -225,7 +225,7 @@ def automatic_extraction(output_dir):
 
 
 def main():
-    script_parser.init()
+    fixing_parser.init()
     output_dir = f'output/{language_code}/fixing'
 
     while True:
