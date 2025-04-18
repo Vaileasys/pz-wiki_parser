@@ -230,6 +230,71 @@ def get_script_files(prefix: str = None) -> list[str]:
     return sorted(script_files)
 
 
+def get_script_relpath(name: str, prefer: str = None) -> str | None:
+    """
+    Retrieves the relative path to a script (.txt) file by name, as stored in the file map.
+
+    Args:
+        name (str): The filename without extension (e.g., "AssaultRifle").
+        prefer (str, optional): Keyword to prioritise among duplicates (e.g., "weapons").
+
+    Returns:
+        str | None: The relative file path (e.g., "weapons/AssaultRifle.txt") if found, else None.
+    """
+    file_map = get_game_file_map().get("scripts", {})
+    rel_paths = get_file_paths(file_map, name, prefer=prefer)
+    return rel_paths[0].replace("/", "\\") if rel_paths else None
+
+
+def get_lua_relpath(name: str, prefer: str = None) -> str | None:
+    """
+    Retrieves the relative path to a Lua (.lua) file by name, as stored in the file map.
+
+    Args:
+        name (str): The filename without extension (e.g., "ISInventoryPage").
+        prefer (str, optional): Keyword to prioritise among duplicates (e.g., "client").
+
+    Returns:
+        str | None: The relative file path (e.g., "client/ISInventoryPage.lua") if found, else None.
+    """
+    file_map = get_game_file_map().get("lua", {})
+    rel_paths = get_file_paths(file_map, name, prefer=prefer)
+    return rel_paths[0].replace("\\", "/") if rel_paths else None
+
+
+def get_script_path(name: str, prefer: str = None) -> str | None:
+    """
+    Retrieves the absolute path to a script (.txt) file by name.
+
+    Args:
+        name (str): The filename without extension (e.g., "AssaultRifle").
+        prefer (str, optional): Keyword to prioritise among duplicates (e.g., "weapons").
+
+    Returns:
+        str | None: The absolute file path if found, otherwise None.
+    """
+    rel_path = get_script_relpath(name, prefer=prefer)
+    if rel_path:
+        return os.path.join(get_scripts_dir(), rel_path.replace("/", "\\"))
+    return None
+
+def get_lua_path(name: str, prefer: str = None) -> str | None:
+    """
+    Retrieves the absolute path to a Lua (.lua) file by name.
+
+    Args:
+        name (str): The filename without extension (e.g., "ISInventoryPage").
+        prefer (str, optional): Keyword to prioritise among duplicates (e.g., "client").
+
+    Returns:
+        str | None: The absolute file path if found, otherwise None.
+    """
+    rel_path = get_lua_relpath(name, prefer=prefer)
+    if rel_path:
+        return os.path.join(get_lua_dir(), rel_path.replace("/", "\\"))
+    return None
+
+
 def read_file(path: str) -> str:
     """
     Reads the contents of a file as a string.
