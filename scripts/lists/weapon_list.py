@@ -3,7 +3,7 @@ from scripts.core.language import Language, Translate
 from scripts.utils import utility, table_helper
 from scripts.utils.util import format_link, format_positive
 from scripts.utils.echo import echo
-from scripts.parser import item_parser, script_parser
+from scripts.parser import item_parser, fixing_parser
 from scripts.recipes import recipe_parser
 from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
 
@@ -17,7 +17,7 @@ table_type_map = {}
 def check_fixing(item_id):
     """ Check if it can be fixed """
     module, item_name = item_id.split('.')
-    parsed_fixing_data = script_parser.get_fixing_data(True)
+    parsed_fixing_data = fixing_parser.get_fixing_data(True)
     for fixing, fixing_data in parsed_fixing_data[module].items():
         if isinstance(fixing_data, dict) and 'Require' in fixing_data:
             if item_name in fixing_data['Require']:
