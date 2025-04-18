@@ -2,11 +2,12 @@ import os
 import re
 import json
 from tqdm import tqdm
-from scripts.parser import recipe_parser, literature_parser, item_parser
+from scripts.parser import literature_parser, item_parser
+from scripts.recipes import recipe_parser
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
-import recipe_output, item_tags
 from scripts.core.constants import (PBAR_FORMAT, DATA_PATH)
+from scripts.recipes import recipe_output
 from scripts.utils import utility
 from scripts.core.cache import save_cache, load_cache
 

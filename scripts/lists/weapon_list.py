@@ -3,7 +3,8 @@ from scripts.core.language import Language, Translate
 from scripts.utils import utility, table_helper
 from scripts.utils.util import format_link, format_positive
 from scripts.utils.echo import echo
-from scripts.parser import item_parser, recipe_parser, script_parser
+from scripts.parser import item_parser, script_parser
+from scripts.recipes import recipe_parser
 from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
 
 TABLE_PATH = f"{RESOURCE_PATH}/tables/weapon_table.json"

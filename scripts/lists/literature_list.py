@@ -1,10 +1,9 @@
-import os
 from tqdm import tqdm
-from scripts.parser import item_parser, recipe_parser, stash_parser
+from scripts.parser import item_parser, stash_parser
+from scripts.recipes import recipe_parser
 from scripts.core.language import Language, Translate
 from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
 from scripts.utils import utility, util, table_helper
-from scripts.utils.echo import echo_success
 
 TABLE_PATH = f"{RESOURCE_PATH}/tables/literature_table.json"
 

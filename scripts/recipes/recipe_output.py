@@ -2,7 +2,8 @@ import os
 import re
 import json
 from collections import defaultdict
-from scripts import item_tags, recipe_format
+from scripts import item_tags
+from scripts.recipes import recipe_format
 from scripts.parser import fluid_parser
 from scripts.core.language import Translate
 from scripts.utils import utility, util
@@ -141,7 +142,7 @@ def process_tools(data):
     Returns:
         str: A formatted string representing the tools and their conditions.
     """
-    tools_data = data.get("inputs", {}).get("tools", {})
+    tools_data = data.get("inputs", {}).get("../tools", {})
     if not tools_data:
         return "tools=''none''"
 

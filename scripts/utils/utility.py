@@ -3,13 +3,14 @@ import csv
 import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
-from scripts.parser import item_parser, recipe_parser
+from scripts.parser import item_parser
+from scripts.recipes import recipe_parser
 from scripts.core import logger, config_manager, cache
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.core.constants import (DATA_PATH, RESOURCE_PATH)
 from scripts.utils import lua_helper
-from scripts.utils.echo import echo, echo_error, echo_warning
+from scripts.utils.echo import echo_error, echo_warning
 import warnings
 
 

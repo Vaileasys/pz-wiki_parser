@@ -1,6 +1,6 @@
-import os
 from tqdm import tqdm
-from scripts.parser import item_parser, evolvedrecipe_parser, recipe_parser
+from scripts.parser import item_parser, evolvedrecipe_parser
+from scripts.recipes import recipe_parser
 from scripts.core.language import Language
 from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
 from scripts.utils import utility, lua_helper, table_helper, util

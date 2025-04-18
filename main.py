@@ -22,9 +22,6 @@ menu_structure = {
             '6': {'module': 'distribution', 'name': 'Distributions', 'description': 'Generate distribution files.'},
             '7': {'module': 'evolvedrecipe', 'name': 'Evolved recipes', 'description': 'Parse evolved recipes.'},
             '8': {'module': 'item_body_part', 'name': 'Body part', 'description': 'Generates body part templates.'},
-            '9': {'module': 'recipe_format', 'name': 'Recipe parser', 'description': 'Process recipes.'},
-            '10': {'module': 'researchrecipes', 'name': 'Research recipes', 'description': 'Process research recipes.'},
-            '11': {'module': 'teached_recipes', 'name': 'Teached recipes', 'description': 'Process teached recipes.'}
         },
     },
     '2': {
@@ -43,11 +40,21 @@ menu_structure = {
         },
     },
     '3': {
+        'name': 'Recipes',
+        'description': 'Manage and generate tags.',
+        'sub_options': {
+            '1': {'module': 'scripts.recipes.recipe_format', 'name': 'Recipe parser', 'description': 'Process recipes.'},
+            '2': {'module': 'scripts.recipes.researchrecipes', 'name': 'Research recipes', 'description': 'Process research recipes.'},
+            '3': {'module': 'scripts.recipes.teached_recipes', 'name': 'Teached recipes', 'description': 'Process teached recipes.'},
+            '4': {'module': 'scripts.recipes.evolvedrecipe', 'name': 'Evolved recipes', 'description': 'Process evolved recipes.'},
+        }
+    },
+    '4': {
         'name': 'Tags',
         'description': 'Manage and generate tags.',
         'sub_options': None # Handled by item_tags.py
     },
-    '4': {
+    '5': {
         'name': 'Tools',
         'description': 'Data analysis and generate reports.',
         'sub_options': {
