@@ -40,6 +40,7 @@ SCRIPT_CONFIGS = {
         "list_keys_space": ["offset", "rotate", "extents", "extentsOffset", "centerOfMassOffset", "shadowExtents", "shadowOffset", "physicsChassisShape", "xywh"]
     },
     "template": {
+        "list_keys": ["template"],
         "list_keys_semicolon": ["requireInstalled", "leftCol", "rightCol", "itemType"],
         "list_keys_space": ["offset", "rotate", "extents", "centerOfMassOffset", "shadowOffset", "physicsChassisShape", "xywh"],
         "dict_keys_colon": ["skills"],
@@ -79,6 +80,52 @@ SCRIPT_CONFIGS = {
     }
 }
 
+## ------------------------- Post Processing ------------------------- ##
+
+def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -> dict:
+    """Injects and merges template! entries into each script definition, recursively injecting child templates."""
+    def merge_template(script_data: dict, template_name: str, script_id: str, script_type: str, template_dict: dict) -> dict:
+        """Merges a template! into the data"""
+        module = script_id.split(".", 1)[0]
+        template_id = f"{module}.{script_type}{template_name}"
+        template = template_dict.get(template_id)
+
+        if not template:
+            echo_warning(f"[{script_id}] template! '{template_id}' not found for '{template_name}'.")
+            return script_data
+
+        template = dict(template)
+
+        # Inject child template
+        child_template = template.get("template!")
+        if child_template:
+            template = merge_template(template, child_template, template_id, script_type, template_dict)
+
+        # Merge template into script data and remove template!
+        merged = dict(template)
+        merged.update(script_data)
+        merged.pop("template!", None)
+        return merged
+
+    updated_dict = {}
+
+    for script_id, script_data in script_dict.items():
+        # Inject and merge template! into vehicle data
+        template_name = script_data.get("template!")
+        if template_name:
+            script_data = merge_template(script_data, template_name, script_id, script_type, template_dict)
+        updated_dict[script_id] = script_data
+
+    return updated_dict
+
+def post_process(script_dict: dict, script_type: str):
+    """Applies post-processing logic based on script type."""
+    # Inject template! into data
+    if script_type == "vehicle":
+        template_dict = extract_script_data("template")
+        script_dict = inject_templates(script_dict, script_type, template_dict)
+
+    return script_dict
 
 ## ------------------------- Split Handlers ------------------------- ##
 def split_pipe_list(value: str) -> list:
@@ -406,7 +453,7 @@ def remove_comments(lines: list[str]) -> list[str]:
             clean_lines.append(line)
 
     return clean_lines
-        
+
 
 def parse_key_value_line(line: str, data: dict, block_id: str = "Unknown", script_type: str = "") -> None:
     """
@@ -537,7 +584,7 @@ def parse_block(lines: list[str], block_id: str = "Unknown", script_type: str = 
     return data
 
 
-def extract_script_data(script_type: str) -> dict[str, dict]:
+def extract_script_data(script_type: str, do_post_processing: bool = True, cache_result: bool = True) -> dict[str, dict]:
     """
     Parses all script files of a given script type, extracting blocks into dictionaries keyed by FullType (i.e. [Module].[Type])
 
@@ -600,7 +647,6 @@ def extract_script_data(script_type: str) -> dict[str, dict]:
                 blacklist = PREFIX_BLACKLIST.get(script_type, [])
                 if block_type == script_type and module and not any(block_name.startswith(prefix) for prefix in blacklist):
                     current_id = f"{module}.{block_name}"
-#                    echo_info(f"Parsing {script_type}: {current_id}")
 
                     if script_type == "craftRecipe":
                         current_id = block_name
@@ -626,7 +672,6 @@ def extract_script_data(script_type: str) -> dict[str, dict]:
                     else:
                         block_data = parse_block(cleaned, current_id, script_type)
 
-                    #                    block_data = post_process_data(block_data, script_type)
                     block_data["ScriptType"] = script_type
                     block_data["SourceFile"] = Path(filepath).stem
                     script_dict[current_id] = block_data
@@ -642,13 +687,18 @@ def extract_script_data(script_type: str) -> dict[str, dict]:
                 continue
 
             i += 1
+    
+    if do_post_processing:
+        script_dict = post_process(script_dict, script_type)
 
     if not script_dict:
         echo_warning("No valid script entries were found.")
     else:
         echo_success(f"Parsed {len(script_dict)} {script_type} entries.")
 
-    save_cache(script_dict, f"parsed_{script_type}_data.json")
+    if cache_result:
+        save_cache(script_dict, f"parsed_{script_type}_data.json")
+
     return dict(sorted(script_dict.items()))
 
 
