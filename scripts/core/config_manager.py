@@ -11,7 +11,7 @@ config_default = {
     "Settings": {
         "first_time_run": '0',
         "default_language": 'en',
-        "version": '42.5.1',
+        "version": '42.7.0',
         "game_directory": 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\ProjectZomboid',
     }
 }
