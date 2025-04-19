@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from scripts.parser import item_parser
-from scripts.recipes import recipe_parser
+from scripts.recipes import legacy_recipe_parser
 from scripts.core import logger, config_manager, cache
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
@@ -749,7 +749,7 @@ def get_recipe(recipe_id):
         recipe_name = Translate.get(recipe_id, "TeachedRecipes")
     
     try:
-        parsed_recipe_data = recipe_parser.get_recipe_data()
+        parsed_recipe_data = legacy_recipe_parser.get_recipe_data()
         for recipe in parsed_recipe_data["recipes"]:
             if recipe.get("name") == recipe_id:
     #                echo(recipe_name)

@@ -43,10 +43,11 @@ menu_structure = {
         'name': 'Recipes',
         'description': 'Manage and generate tags.',
         'sub_options': {
-            '1': {'module': 'scripts.recipes.recipe_format', 'name': 'Recipe parser', 'description': 'Process recipes.'},
+            '1': {'module': 'scripts.recipes.craft_recipes', 'name': 'CraftRecipe parser', 'description': 'Process recipes.'},
             '2': {'module': 'scripts.recipes.researchrecipes', 'name': 'Research recipes', 'description': 'Process research recipes.'},
             '3': {'module': 'scripts.recipes.teached_recipes', 'name': 'Teached recipes', 'description': 'Process teached recipes.'},
             '4': {'module': 'scripts.recipes.evolvedrecipe', 'name': 'Evolved recipes', 'description': 'Process evolved recipes.'},
+            '5': {'module': 'scripts.recipes.legacy_recipe_format', 'name': 'Legacy recipe parser', 'description': 'Process recipes.'}, # TODO Remove after implementation
         }
     },
     '4': {
