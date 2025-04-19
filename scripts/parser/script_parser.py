@@ -422,7 +422,7 @@ def parse_key_value_line(line: str, data: dict, block_id: str = "Unknown", scrip
     Returns:
         None
     """
-    match = re.match(r'^(\w+)\s*[:=]\s*(.+)', line)
+    match = re.match(r'^([^\s:=]+)\s*[:=]\s*(.+)', line)
     if not match:
         return
 
