@@ -1,6 +1,6 @@
 from tqdm import tqdm
 from scripts.parser import item_parser, evolvedrecipe_parser
-from scripts.recipes import recipe_parser
+from scripts.recipes import legacy_recipe_parser
 from scripts.core.language import Language
 from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
 from scripts.utils import utility, lua_helper, table_helper, util
@@ -239,7 +239,7 @@ def main():
     global table_map
     language_code = Language.get()
     evolvedrecipe_data = evolvedrecipe_parser.get_evolvedrecipe_data()
-    recipes_data = recipe_parser.get_recipe_data()["recipes"]
+    recipes_data = legacy_recipe_parser.get_recipe_data()["recipes"]
     table_map, column_headings = table_helper.get_table_data(TABLE_PATH)
     parse_foraging()
 

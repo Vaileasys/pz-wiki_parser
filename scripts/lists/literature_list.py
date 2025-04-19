@@ -1,6 +1,6 @@
 from tqdm import tqdm
 from scripts.parser import item_parser, stash_parser
-from scripts.recipes import recipe_parser
+from scripts.recipes import legacy_recipe_parser
 from scripts.core.language import Language, Translate
 from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
 from scripts.utils import utility, util, table_helper
@@ -341,7 +341,7 @@ def process_map(map_region, map_id, map_data):
 def get_items():
     literature_dict = {}
     parsed_item_data = item_parser.get_item_data()
-    recipe_parser.get_recipe_data() # Call early so print doesn't interrupt progress bars
+    legacy_recipe_parser.get_recipe_data() # Call early so print doesn't interrupt progress bars
     parsed_stash_data = stash_parser.get_stash_data()
 
     # Get items

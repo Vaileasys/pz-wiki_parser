@@ -1,9 +1,10 @@
 import re
 from pathlib import Path
-from core.file_loading import get_script_files, read_file
+from scripts.core.file_loading import get_script_files, read_file
 from scripts.core.language import Translate
 from scripts.core.cache import save_cache
 from scripts.utils.echo import echo, echo_info, echo_warning, echo_error, echo_success
+from scripts.parser.recipe_parser import parse_recipe_block, parse_construction_recipe
 
 PREFIX_BLACKLIST = {
     "item": ["MakeUp_", "ZedDmg_", "Wound_", "Bandage_", "F_Hair_", "M_Hair_", "M_Beard_"]
@@ -43,12 +44,6 @@ SCRIPT_CONFIGS = {
         "list_keys_space": ["offset", "rotate", "extents", "centerOfMassOffset", "shadowOffset", "physicsChassisShape", "xywh"],
         "dict_keys_colon": ["skills"],
     },
-    "entity": {
-        # Not fully supported
-        "list_keys": ["row"],
-        "list_keys_space": ["row"],
-        "dict_keys_colon": ["SkillRequired", "xpAward"],
-    },
     "model": {
         "list_keys": [],
         "list_keys_space": ["offset", "rotate"]
@@ -58,9 +53,10 @@ SCRIPT_CONFIGS = {
         "dict_keys_equal": ["GlobalItem"],
     },
     "craftRecipe": {
-        # Not fully supported
-        "dict_keys_colon": ["AutoLearnAll", "AutoLearnAny", "xpAward", "SkillRequired"],
-        "list_keys_semicolon": ["tags", "Tags", "AutoLearnAll", "AutoLearnAny"]
+        # Handled through recipe_parser
+    },
+    "entity": {
+        # Handled through recipe_parser
     },
     "uniquerecipe": {
         "dict_keys": ["Item"],
@@ -551,7 +547,19 @@ def extract_script_data(script_type: str) -> dict[str, dict]:
         if not content:
             echo_warning(f"File is empty or unreadable: {filepath}")
             continue
-        
+
+        if script_type == "entity":
+            # feed the whole text to construction parser
+            recipes = parse_construction_recipe(content)
+            for recipe in recipes:
+                name = recipe.get("name")
+                if not name:
+                    continue
+                recipe["ScriptType"] = script_type
+                recipe["SourceFile"] = Path(filepath).stem
+                script_dict[name] = recipe
+            continue
+
         # Clean up comments and prep for parsing
         lines = remove_comments(content.splitlines())
         module = None
@@ -562,7 +570,7 @@ def extract_script_data(script_type: str) -> dict[str, dict]:
             if not line:
                 i += 1
                 continue
-            
+
             # Get the module name (e.g., 'module Base')
             if match := re.match(r'^module\s+(\w+)', line):
                 module = match.group(1)
@@ -582,6 +590,9 @@ def extract_script_data(script_type: str) -> dict[str, dict]:
                     current_id = f"{module}.{block_name}"
 #                    echo_info(f"Parsing {script_type}: {current_id}")
 
+                    if script_type == "craftRecipe":
+                        current_id = block_name
+
                     # Extract lines inside this block, between curly brackets
                     i += 2
                     block_lines = []
@@ -595,10 +606,15 @@ def extract_script_data(script_type: str) -> dict[str, dict]:
                         i += 1
                         if block_depth <= 0:
                             break
-                    
-                    # Recursively parse the block and attach data
-                    block_data = parse_block(remove_comments(block_lines), current_id, script_type)
-#                    block_data = post_process_data(block_data, script_type)
+
+                    # Recursively parse the block and attach data, handle custom if required
+                    cleaned = remove_comments(block_lines)
+                    if script_type == "craftRecipe" or script_type:
+                        block_data = parse_recipe_block(cleaned, current_id)
+                    else:
+                        block_data = parse_block(cleaned, current_id, script_type)
+
+                    #                    block_data = post_process_data(block_data, script_type)
                     block_data["ScriptType"] = script_type
                     block_data["SourceFile"] = Path(filepath).stem
                     script_dict[current_id] = block_data
@@ -632,8 +648,8 @@ def main():
         "4": {"script_type": "template", "desc": "Vehicles and their properties."},
         "5": {"script_type": "evolvedrecipe", "desc": "Recipes that enhance food items with optional ingredients."},
         "6": {"script_type": "uniquerecipe", "desc": "Special one-off recipes with fixed inputs and results."},
-        "7": {"script_type": "craftRecipe", "desc": "Standard crafting recipes for items and upgrades. [not fully supported]"},
-        "8": {"script_type": "entity", "desc": "World objects with buildable or interactive components. [not fully supported]"},
+        "7": {"script_type": "craftRecipe", "desc": "Standard crafting recipes for items and upgrades. [uses recipe_parser]"},
+        "8": {"script_type": "entity", "desc": "World objects with buildable or interactive components. [uses recipe_parser]"},
         "9": {"script_type": "energy", "desc": "Energy effects like visual charges or particle trails."},
         "10": {"script_type": "multistagebuild", "desc": "Construction stages for buildable structures."},
         "11": {"script_type": "model", "desc": "3D model definitions for in-game rendering."},
@@ -659,7 +675,7 @@ def main():
         else:
             script_type = option
 
-        print(f"Processing '{script_type}'...")
+        echo_info(f"Processing '{script_type}'...")
 
         extract_script_data(script_type)
 
