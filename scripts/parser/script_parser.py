@@ -609,7 +609,7 @@ def extract_script_data(script_type: str) -> dict[str, dict]:
 
                     # Recursively parse the block and attach data, handle custom if required
                     cleaned = remove_comments(block_lines)
-                    if script_type == "craftRecipe" or script_type:
+                    if script_type == "craftRecipe":
                         block_data = parse_recipe_block(cleaned, current_id)
                     else:
                         block_data = parse_block(cleaned, current_id, script_type)
