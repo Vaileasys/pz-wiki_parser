@@ -310,6 +310,18 @@ def process_value(key: str, value: str, block_id: str = "Unknown", script_type: 
             count_dict[entry] = count_dict.get(entry, 0) + 1
         return count_dict
 
+    # Ensure we return as a list when required
+    list_keys_combined = (
+        list_keys
+        | list_keys_semicolon
+        | list_keys_pipe
+        | list_keys_space
+        | list_keys_slash
+        | list_keys_colon
+    )
+    if key_lower in list_keys_combined:
+        return parts
+
     # Fallback
     return parts[0] if len(parts) == 1 else parts
 
