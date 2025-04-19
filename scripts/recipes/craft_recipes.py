@@ -9,5 +9,5 @@ def main():
         extract_script_data("entity")
         echo_success("Recipes extracted")
     except Exception:
-        echo_error("An error occured while extracting recipes")
+        echo_error("An error occurred while extracting recipes")
 
