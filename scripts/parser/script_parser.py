@@ -620,7 +620,7 @@ def extract_script_data(script_type: str) -> dict[str, dict]:
     else:
         echo_success(f"Parsed {len(script_dict)} {script_type} entries.")
 
-    save_cache(script_dict, f"{script_type}_data.json")
+    save_cache(script_dict, f"parsed_{script_type}_data.json")
     return dict(sorted(script_dict.items()))
 
 
@@ -629,20 +629,21 @@ def main():
         "1": {"script_type": "item", "desc": "Game items like tools, food, and materials."},
         "2": {"script_type": "fluid", "desc": "Liquids, like water or fuel."},
         "3": {"script_type": "vehicle", "desc": "Vehicles and their properties."},
-        "4": {"script_type": "evolvedrecipe", "desc": "Recipes that enhance food items with optional ingredients."},
-        "5": {"script_type": "uniquerecipe", "desc": "Special one-off recipes with fixed inputs and results."},
-        "6": {"script_type": "craftRecipe", "desc": "Standard crafting recipes for items and upgrades. [not fully supported]"},
-        "7": {"script_type": "entity", "desc": "World objects with buildable or interactive components. [not fully supported]"},
-        "8": {"script_type": "energy", "desc": "Energy effects like visual charges or particle trails."},
-        "9": {"script_type": "multistagebuild", "desc": "Construction stages for buildable structures."},
-        "10": {"script_type": "model", "desc": "3D model definitions for in-game rendering."},
-        "11": {"script_type": "animation", "desc": "Animation sequences and frame data for characters or items."},
-        "12": {"script_type": "animationsMesh", "desc": "Mesh overlays tied to animations, such as effects or shadows."},
-        "13": {"script_type": "mannequin", "desc": "Definitions for mannequin poses and appearances."},
-        "14": {"script_type": "timedAction", "desc": "Timed gameplay actions like crafting or using items."},
-        "15": {"script_type": "physicsHitReaction", "desc": "Physical reactions to hits."},
-        "16": {"script_type": "ragdoll", "desc": "Physics constraints for ragdoll body parts."},
-        "17": {"script_type": "sound", "desc": "Sound event triggers and configurations."},
+        "4": {"script_type": "template", "desc": "Vehicles and their properties."},
+        "5": {"script_type": "evolvedrecipe", "desc": "Recipes that enhance food items with optional ingredients."},
+        "6": {"script_type": "uniquerecipe", "desc": "Special one-off recipes with fixed inputs and results."},
+        "7": {"script_type": "craftRecipe", "desc": "Standard crafting recipes for items and upgrades. [not fully supported]"},
+        "8": {"script_type": "entity", "desc": "World objects with buildable or interactive components. [not fully supported]"},
+        "9": {"script_type": "energy", "desc": "Energy effects like visual charges or particle trails."},
+        "10": {"script_type": "multistagebuild", "desc": "Construction stages for buildable structures."},
+        "11": {"script_type": "model", "desc": "3D model definitions for in-game rendering."},
+        "12": {"script_type": "animation", "desc": "Animation sequences and frame data for characters or items."},
+        "13": {"script_type": "animationsMesh", "desc": "Mesh overlays tied to animations, such as effects or shadows."},
+        "14": {"script_type": "mannequin", "desc": "Definitions for mannequin poses and appearances."},
+        "15": {"script_type": "timedAction", "desc": "Timed gameplay actions like crafting or using items."},
+        "16": {"script_type": "physicsHitReaction", "desc": "Physical reactions to hits."},
+        "17": {"script_type": "ragdoll", "desc": "Physics constraints for ragdoll body parts."},
+        "18": {"script_type": "sound", "desc": "Sound event triggers and configurations."},
     }
 
     while True:
