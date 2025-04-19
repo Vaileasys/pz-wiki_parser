@@ -62,6 +62,11 @@ menu_structure = {
             '1': {'module': 'tools.item_dict', 'name': 'Item dictionary', 'description': 'Generate a list of items with their item ID and compare with another version.'},
             '2': {'module': 'tools.compare_item_lists', 'name': 'Compare item lists', 'description': "Generates a list of unique items comparing 'PZwiki:Item_list' versions."}
         },
+    },
+    '6': {
+        'name': 'Script parser',
+        'description': 'Manual script parser, mostly for testing.',
+        'sub_options': None
     }
 }
 
@@ -152,6 +157,8 @@ def navigate_menu(menu, is_root=False, title=None):
                 print("\nReturning to the menu...\n")
             elif selected_option['name'] == 'Tags':
                 handle_module('scripts.item_tags')
+            elif selected_option['name'] == 'Script parser':
+                handle_module('scripts.parser.script_parser')
                 print("\nReturning to the menu...\n")
             elif 'module' in selected_option:
                 handle_module(selected_option['module'])
