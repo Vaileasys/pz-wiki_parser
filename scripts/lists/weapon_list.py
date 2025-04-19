@@ -4,7 +4,7 @@ from scripts.utils import utility, table_helper
 from scripts.utils.util import format_link, format_positive
 from scripts.utils.echo import echo
 from scripts.parser import item_parser, fixing_parser
-from scripts.recipes import legacy_recipe_parser
+from scripts.recipes import recipe_parser
 from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
 
 TABLE_PATH = f"{RESOURCE_PATH}/tables/weapon_table.json"
@@ -380,7 +380,7 @@ def find_boxes():
         "OpenCartonOfBullets": "carton"
     }
 
-    recipes_data = legacy_recipe_parser.get_recipe_data()["recipes"]
+    recipes_data = recipe_parser.get_recipe_data()["recipes"]
     for recipe in recipes_data:
         name = recipe.get("name")
         if name in ammo_recipes:

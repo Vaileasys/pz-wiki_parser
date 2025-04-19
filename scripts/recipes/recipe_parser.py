@@ -362,7 +362,6 @@ def parse_item_line(line):
 
     return result
 
-
 def extract_block(text, start_index):
     """
     Given a text and an index of an opening '{', this function returns the block text (including the braces)

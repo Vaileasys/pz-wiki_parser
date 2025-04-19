@@ -3,7 +3,7 @@ import re
 import json
 from collections import defaultdict
 from scripts import item_tags
-from scripts.recipes import legacy_recipe_format
+from scripts.recipes import recipe_format
 from scripts.parser import fluid_parser
 from scripts.core.language import Translate
 from scripts.utils import utility, util

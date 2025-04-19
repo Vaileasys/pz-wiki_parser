@@ -3,11 +3,11 @@ import re
 import json
 from tqdm import tqdm
 from scripts.parser import literature_parser, item_parser
-from scripts.recipes import legacy_recipe_parser
+from scripts.recipes import recipe_parser
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.core.constants import (PBAR_FORMAT, DATA_PATH)
-from scripts.recipes import legacy_recipe_output
+from scripts.recipes import recipe_output
 from scripts.utils import utility
 from scripts.core.cache import save_cache, load_cache
 
@@ -708,7 +708,7 @@ def main():
 
     # If cache version is old, we generate new data
     if cache_version != game_version:
-        data = legacy_recipe_parser.get_recipe_data()
+        data = recipe_parser.get_recipe_data()
 
         if "recipes" not in data or not isinstance(data["recipes"], list):
             print("Unexpected JSON structure: 'recipes' key not found or not a list.")
@@ -731,7 +731,7 @@ def main():
 
         save_cache(processed_recipes, CACHE_FILE)
 
-    legacy_recipe_output.main(processed_recipes)
+    recipe_output.main(processed_recipes)
 
 
 if __name__ == "__main__":
