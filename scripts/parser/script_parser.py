@@ -95,7 +95,7 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
     def merge_template(script_data: dict, template_name: str, script_id: str, script_type: str, template_dict: dict) -> dict:
         """Merges a template! into the data"""
         module = script_id.split(".", 1)[0]
-        template_id = f"{module}.{script_type}{template_name}"
+        template_id = f"{module}.{script_type}_{template_name}"
         template = template_dict.get(template_id)
 
         if not template:
