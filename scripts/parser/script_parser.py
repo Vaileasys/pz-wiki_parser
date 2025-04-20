@@ -57,9 +57,15 @@ SCRIPT_CONFIGS = {
     },
     "craftRecipe": {
         # Handled through recipe_parser
+        "list_keys": ["inputs"],
+        "dict_keys_colon": ["AutoLearnAll", "AutoLearnAny", "xpAward", "SkillRequired"],
+        "list_keys_semicolon": ["tags", "Tags", "AutoLearnAll", "AutoLearnAny"]
     },
     "entity": {
         # Handled through recipe_parser
+        "list_keys": ["row"],
+        "list_keys_space": ["row"],
+        "dict_keys_colon": ["SkillRequired", "xpAward"],
     },
     "uniquerecipe": {
         "dict_keys": ["Item"],
@@ -601,6 +607,7 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
         dict[str, dict]: A dictionary of parsed script blocks keyed by full ID (FullType).
     """
     script_dict = {}
+    entity_dict = {} # special case for entity
     script_files = get_script_files()
 
     if not script_files:
@@ -621,8 +628,8 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
                     continue
                 recipe["ScriptType"] = script_type
                 recipe["SourceFile"] = Path(filepath).stem
-                script_dict[name] = recipe
-            continue
+                entity_dict[name] = recipe
+#            continue
 
         # Clean up comments and prep for parsing
         lines = remove_comments(content.splitlines())
@@ -702,7 +709,12 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
         echo_success(f"Parsed {len(script_dict)} {script_type} entries.")
 
     if cache_result:
-        save_cache(script_dict, f"parsed_{script_type}_data.json")
+        # Special case for storing both types of entity data
+        if script_type == "entity":
+            save_cache(entity_dict, f"parsed_{script_type}_data.json")
+            save_cache(script_dict, f"parsed_{script_type}_old_data.json")
+        else:
+            save_cache(script_dict, f"parsed_{script_type}_data.json")
 
     return dict(sorted(script_dict.items()))
 
