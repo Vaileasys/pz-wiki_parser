@@ -10,6 +10,8 @@ PREFIX_BLACKLIST = {
     "item": ["MakeUp_", "ZedDmg_", "Wound_", "Bandage_", "F_Hair_", "M_Hair_", "M_Beard_"]
 }
 
+COLON_SEPARATOR = ["fixing", "evolvedrecipe"]
+
 # Available configs:
 # list_keys              = Store multiple identical keys as a list. Always treated as a list.
 # list_keys_semicolon    = Split the value by semicolons (;) into a list. Always treated as a list.
@@ -564,11 +566,14 @@ def parse_block(lines: list[str], block_id: str = "Unknown", script_type: str = 
 
             has_nested_block = is_nested_block_start(stripped_block_lines)
 
+            # Assign a separator based on the script type
+            separator = r':' if script_type in COLON_SEPARATOR else r'='
+
             # Special case for 'itemMapper' block type
             if block_type == "itemMapper":
                 block_data = parse_item_mapper(stripped_block_lines, block_id)
             # Determine whether to parse this block recursively (nested structure or key-value pairs)
-            elif has_nested_block or any(re.search(r'[:=]', ln) for ln in stripped_block_lines):
+            elif has_nested_block or any(re.search(separator, ln) for ln in stripped_block_lines):
                 block_data = parse_block(stripped_block_lines, block_id, script_type)
             else:
                 block_data = [normalise(ln) for ln in stripped_block_lines if ln != "}"]
