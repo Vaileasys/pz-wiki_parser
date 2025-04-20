@@ -66,17 +66,17 @@ def process_ingredients(data):
                 link = util.format_link(name, page)
                 if item_id != "Any fluid container":
                     try:
-                        icon = utility.get_icon(item_id) if item_id else "Question On.png"
+                        icon = utility.get_icon(item_id) if item_id else "Question_On.png"
                         if isinstance(icon, list):
-                            icon = icon[0] if icon else "Question On.png"
+                            icon = icon[0] if icon else "Question_On.png"
                     except Exception as e:
                         print(f"Error fetching icon for raw_name '{item_id}': {e}")
-                        icon = "Question On.png"
+                        icon = "Question_On.png"
                 else:
-                    icon = "Question On.png"
+                    icon = "Question_On.png"
 
                 numbered_strings.append(
-                    f"[[file:{icon}|32x32px|class=pixelart]] {link} <small>×{amount}</small>"
+                    f"[[File:{icon}|32x32px|class=pixelart]] {link} <small>×{amount}</small>"
                 )
             final_numbered_str = "<br>".join(numbered_strings)
             parsed_ingredients.append(("item", final_numbered_str, "One of"))
@@ -94,16 +94,16 @@ def process_ingredients(data):
                 link = util.format_link(name, page)
                 if item_id != "Any fluid container":
                     try:
-                        icon = utility.get_icon(item_id) if item_id else "Question On.png"
+                        icon = utility.get_icon(item_id) if item_id else "Question_On.png"
                         if isinstance(icon, list):
-                            icon = icon[0] if icon else "Question On.png"
+                            icon = icon[0] if icon else "Question_On.png"
                     except Exception as e:
                         print(f"Error fetching icon for raw_name '{item_id}': {e}")
-                        icon = "Question On.png"
+                        icon = "Question_On.png"
                 else:
-                    icon = "Question On.png"
+                    icon = "Question_On.png"
 
-                item_strings.append(f"[[file:{icon}|32x32px|class=pixelart]] {link} <small>×{amount}</small>")
+                item_strings.append(f"[[File:{icon}|32x32px|class=pixelart]] {link} <small>×{amount}</small>")
             final_item_str = "<br>".join(item_strings)
             descriptor = "One of" if len(item_list) > 1 else "Each of"
             parsed_ingredients.append(("item", final_item_str, descriptor))
@@ -173,14 +173,14 @@ def process_tools(data):
                 page = utility.get_page(item_id, name)
                 link = util.format_link(name, page)
                 try:
-                    icon = utility.get_icon(item_id) if item_id else "Question On.png"
+                    icon = utility.get_icon(item_id) if item_id else "Question_On.png"
                     if isinstance(icon, list):
-                        icon = icon[0] if icon else "Question On.png"
+                        icon = icon[0] if icon else "Question_On.png"
                 except Exception as e:
                     print(f"Error fetching icon for raw_name '{item_id}': {e}")
-                    icon = "Question On.png"
+                    icon = "Question_On.png"
 
-                tool_entry = f"[[file:{icon}|32x32px|class=pixelart]] {link}"
+                tool_entry = f"[[File:{icon}|32x32px|class=pixelart]] {link}"
                 each_of_parts.append(tool_entry + "<br>")
         elif key.endswith("_tags"):
             # Handle tagged groups
@@ -363,7 +363,7 @@ def process_products(data):
                 size = "64x128px"
 
             items_section.append(
-                f"[[file:{icon}.png|{size}|class=pixelart]]<br>[[{translated_product}]] ×{products_number}"
+                f"[[File:{icon}.png|{size}|class=pixelart]]<br>[[{translated_product}]] ×{products_number}"
             )
 
         # Standard
@@ -376,20 +376,20 @@ def process_products(data):
             products_number = output_info.get("products_number", 1)
             if item_id:
                 try:
-                    icon = utility.get_icon(item_id) if item_id else "Question On.png"
+                    icon = utility.get_icon(item_id) if item_id else "Question_On.png"
                     if isinstance(icon, list):
-                        icon = icon[0] if icon else "Question On.png"
+                        icon = icon[0] if icon else "Question_On.png"
                 except Exception as e:
                     print(f"Error fetching icon for ID '{item_id}': {e}")
-                    icon = "Question On.png"
+                    icon = "Question_On.png"
             else:
                 try:
-                    icon = output_info.get("icon", "Question On.png")
+                    icon = output_info.get("icon", "Question_On.png")
                 except Exception as e:
                     print(f"Error fetching icon for product: {e}")
-                    icon = "Question On.png"
+                    icon = "Question_On.png"
             items_section.append(
-                f"[[file:{icon}|64x64px|class=pixelart]]<br>{link} ×{products_number}"
+                f"[[File:{icon}|64x64px|class=pixelart]]<br>{link} ×{products_number}"
             )
 
         elif output_info.get("mapper"):
@@ -407,26 +407,26 @@ def process_products(data):
                         page = utility.get_page(item_id, name)
                         link = util.format_link(name, page)
                         try:
-                            icon = utility.get_icon(raw_output) if raw_output else "Question On.png"
+                            icon = utility.get_icon(raw_output) if raw_output else "Question_On.png"
                             if isinstance(icon, list):
-                                icon = icon[0] if icon else "Question On.png"
+                                icon = icon[0] if icon else "Question_On.png"
                         except Exception as e:
                             print(f"Error fetching icon for mapper product '{raw_output}': {e}")
-                            icon = "Question On.png"
+                            icon = "Question_On.png"
 
                         mapper_lines.append(
-                            f"[[file:{icon}|64x64px|class=pixelart]]<br>{link} ×{amount}"
+                            f"[[File:{icon}|64x64px|class=pixelart]]<br>{link} ×{amount}"
                         )
                 else:
                     try:
-                        icon = utility.get_icon(raw_output_group) if raw_output_group else "Question On.png"
+                        icon = utility.get_icon(raw_output_group) if raw_output_group else "Question_On.png"
                         if isinstance(icon, list):
-                            icon = icon[0] if icon else "Question On.png"
+                            icon = icon[0] if icon else "Question_On.png"
                     except Exception as e:
                         print(f"Error fetching icon for mapper product '{raw_output_group}': {e}")
-                        icon = "Question On.png"
+                        icon = "Question_On.png"
                     mapper_lines.append(
-                        f"[[file:{icon}|64x64px|class=pixelart]]<br>[[{translated_output_group}]] ×{amount}"
+                        f"[[File:{icon}|64x64px|class=pixelart]]<br>[[{translated_output_group}]] ×{amount}"
                     )
 
             mapper_str = "<br>".join(mapper_lines)
