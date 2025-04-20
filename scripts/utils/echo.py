@@ -40,3 +40,6 @@ def echo_error(message):
 
 def echo_success(message):
     _echo_colour(message, "[Success]", "92")
+
+def echo_debug(message):
+    _echo_colour(message, "[Debug]", "95")
