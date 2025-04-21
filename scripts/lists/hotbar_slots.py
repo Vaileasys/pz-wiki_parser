@@ -171,10 +171,10 @@ def write_attachment_table():
     # Intialise table and add headings
     table = [
         '{| class="wikitable theme-blue sortable"',
-        '! style="white-space:nowrap;" | AttachmentType',
-        '! style="white-space:nowrap;" | AttachedLocation group',
-        '! style="white-space:nowrap;" | Hotbar slots',
-        '! style="white-space:nowrap;" | Items',
+        '! style="white-space: nowrap;" | AttachmentType',
+        '! style="white-space: nowrap;" | AttachedLocation group',
+        '! style="white-space: nowrap;" | Hotbar slots',
+        '! style="white-space: nowrap;" | Items',
     ]
 
     for attachment, attachment_data in attachment_types.items():
@@ -194,7 +194,7 @@ def write_attachment_table():
 
             items = '| ' + " &bull; ".join(items)
         else:
-            items = '| style="text-align:center;" | -'
+            items = '| style="text-align: center;" | -'
         
         slots = []
         for slot, slot_data in hotbar_slots.items():
@@ -207,7 +207,7 @@ def write_attachment_table():
         slot_row = [
             f'|- id="{attachment}"',
             '| ' + attachment,
-            '| style="white-space:nowrap;" | ' + group,
+            '| style="white-space: nowrap;" | ' + group,
             '| ' + slots,
             items
         ]
@@ -230,11 +230,11 @@ def write_hotbar_table():
     # Intialise table and add headings
     table = [
         '{| class="wikitable theme-blue sortable"',
-        '! style="white-space:nowrap;" | type',
-        '! style="white-space:nowrap;" | name',
-        '! style="white-space:nowrap;" | animset',
-        '! style="white-space:nowrap;" | attachments',
-        '! style="white-space:nowrap;" | Items',
+        '! style="white-space: nowrap;" | type',
+        '! style="white-space: nowrap;" | name',
+        '! style="white-space: nowrap;" | animset',
+        '! style="white-space: nowrap;" | attachments',
+        '! style="white-space: nowrap;" | Items',
     ]
 
     for slot, slot_data in hotbar_slots.items():
@@ -256,7 +256,7 @@ def write_hotbar_table():
         if new_attachments_list:
             attachments = '| ' + "<br>".join(new_attachments_list)
         else:
-            attachments = '| style="text-align:center;" | -'
+            attachments = '| style="text-align: center;" | -'
         
         # Items with slot
         slot_items_list = slot_data.get("items")
@@ -269,9 +269,9 @@ def write_hotbar_table():
                 item_icon = attachment_items["AttachmentsProvided"][item_id]["icon"]
 
                 items.append(f"{item_icon} {item_link}")
-            items = '| style="white-space:nowrap;" | ' + "<br>".join(items)
+            items = '| style="white-space: nowrap;" | ' + "<br>".join(items)
         else:
-            items = '| style="text-align:center;" | -'
+            items = '| style="text-align: center;" | -'
 
         slot_row = [
             f'|- id="{slot}"',
