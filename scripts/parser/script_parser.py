@@ -62,6 +62,7 @@ SCRIPT_CONFIGS = {
         "list_keys_semicolon": ["tags", "Tags", "AutoLearnAll", "AutoLearnAny"]
     },
     "entity": {
+        "file_blacklist": ["dbg_entity_test_new_components"],
         # Handled through recipe_parser
         "list_keys": ["row"],
         "list_keys_space": ["row"],
@@ -614,6 +615,12 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
         echo_warning("No script files found.")
 
     for filepath in script_files:
+        
+        # Skip files in the 'file_blacklist' for this script_type
+        if Path(filepath).stem in SCRIPT_CONFIGS.get(script_type, {}).get("file_blacklist", []):
+            echo_info(f"Skipping blacklisted file path: '{Path(filepath).stem}'")
+            continue
+
         content = read_file(filepath)
         if not content:
             echo_warning(f"File is empty or unreadable: {filepath}")
