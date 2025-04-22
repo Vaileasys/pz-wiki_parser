@@ -59,8 +59,9 @@ menu_structure = {
         'name': 'Tools',
         'description': 'Data analysis and generate reports.',
         'sub_options': {
-            '1': {'module': 'tools.item_dict', 'name': 'Item dictionary', 'description': 'Generate a list of items with their item ID and compare with another version.'},
-            '2': {'module': 'tools.compare_item_lists', 'name': 'Compare item lists', 'description': "Generates a list of unique items comparing 'PZwiki:Item_list' versions."}
+            '1': {'module': 'tools.vehicel_render_data', 'Vehicle render data': 'Generate a JSON file with vehicle mesh and texture data, which can be used in blender.'},
+            '2': {'module': 'tools.item_dict', 'name': 'Item dictionary', 'description': 'Generate a list of items with their item ID and compare with another version.'},
+            '3': {'module': 'tools.compare_item_lists', 'name': 'Compare item lists', 'description': "Generates a list of unique items comparing 'PZwiki:Item_list' versions."}
         },
     },
     '6': {
