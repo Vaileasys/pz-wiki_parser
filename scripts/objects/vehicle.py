@@ -4,6 +4,7 @@ from scripts.core.file_loading import get_script_path
 from scripts.core import logger
 from scripts.core.language import Translate
 from scripts.utils.echo import echo_warning
+from scripts.core.cache import save_json
 
 class Vehicle:
     _vehicles = None # Shared cache for all vehicles
@@ -50,15 +51,16 @@ class Vehicle:
 
         self.name = None # English name
         self.page = None # Wiki page
-        self.type = None
+        self.model = self.id_type + "_Model.png"
 
-        self.model_id = None
-        self.model_path = None
+        self.mesh_id = None
+        self.mesh_path = None
 
         self.parent_id = None # inferred by the game
         self.full_parent_id = None # lore based (external assumption)
         self.is_parent = None
         self.is_full_parent = None
+        self.is_trailer = None # assigned during setup
         self.variants = None
         self.manufacturer = None
         self.lore_model = None
@@ -165,7 +167,7 @@ class Vehicle:
         cls._vehicle_models = {}
         for model_id, model_data in all_models.items():
             id_type = model_id.split(".", 1)[1]
-            if id_type.startswith("Vehicles_"):
+            if id_type.startswith("Vehicles_") or id_type.startswith("Vehicle_"):
                 cls._vehicle_models[id_type] = model_data
 
 
@@ -175,6 +177,8 @@ class Vehicle:
             self.find_parent()
         if self.full_parent_id is None:
             self.find_full_parent()
+        if self.is_trailer is None:
+            self.find_is_trailer()
 
     ## ------------------------- Dict-like Methods ------------------------- ##
 
@@ -214,17 +218,12 @@ class Vehicle:
             name = burnt_template.replace("%1", name)
         self.name = name
 
-    def get_type(self) -> str:
-        """Return the general type: 'vehicle' or 'trailer'."""
-        if self.type is None:
-            self.find_type()
-        return self.type
-
-    def find_type(self) -> None:
+    def find_is_trailer(self) -> None:
+        """Determine whether the vehicle is a trailer"""
         if self.id_type.startswith("Trailer"):
-            self.type = "trailer"
+            self.is_trailer = True
         else:
-            self.type = "vehicle"
+            self.is_trailer = False
 
     def get_parent(self) -> "Vehicle" | None:
         """Return the parent as a Vehicle object, or None if this is the root or unknown."""
@@ -246,7 +245,7 @@ class Vehicle:
             "Ambulance": "VanAmbulance",
         }
         self.is_parent = False
-        self.parent_id = self.get_model_id()
+        self.parent_id = self.get_mesh_id()
 
         # Remove prefixes/suffixes
         TOKENS = ["Vehicle_", "Vehicles_", "_NoRandom", "_Burnt", "Burnt", "Front", "Rear", "Right", "Left", "Smashed", "Lights"]
@@ -370,8 +369,6 @@ class Vehicle:
 
     def get_mechanic_type(self) -> int:
         """Return the mechanic type ID for this vehicle."""
-        if self.get("mechanicType") is None:
-            echo_warning(f"[{self.vehicle_id}] No 'mechanicType' property.")
         return int(self.get("mechanicType", 0))
     
     def get_vehicle_type(self) -> str:
@@ -386,20 +383,24 @@ class Vehicle:
 
     ## ------------------------- Texture & Model ------------------------- ##
 
-    def get_model_id(self) -> str:
-        """Return the internal model ID."""
-        if self.model_id is None:
-            self.model_id = self.get("model", {}).get("file")
-        return self.model_id
-    
-    def get_model_path(self) -> str:
-        """Return the file path to the vehicle mesh."""
-        if self.model_path is None:
-            self.find_model_path()
-        return self.model_path
+    def get_model(self) -> str:
+        """Return the rendered 3D model wiki file name as PNG."""
+        return self.model
 
-    def find_model_path(self) -> None:
-        self.model_path = Vehicle.get_model_data(self.get_model_id()).get("mesh")
+    def get_mesh_id(self) -> str:
+        """Return the internal model ID."""
+        if self.mesh_id is None:
+            self.mesh_id = self.get("model", {}).get("file")
+        return self.mesh_id
+    
+    def get_mesh_path(self) -> str:
+        """Return the file path to the vehicle mesh."""
+        if self.mesh_path is None:
+            self.find_mesh_path()
+        return self.mesh_path
+
+    def find_mesh_path(self) -> None:
+        self.mesh_path = Vehicle.get_model_data(self.get_mesh_id()).get("mesh")
 
     def get_texture_path(self) -> str:
         """Return the texture path for the vehicle skin."""
@@ -634,12 +635,11 @@ class Vehicle:
 
 if __name__ == "__main__":
     vehicles = Vehicle.all()
+    vehicle_mesh_data = {}
     for vehicle, vehicle_data in vehicles.items():
-        parent = Vehicle(vehicle).get_parent()
-#        print(f"[{vehicle}] " + Vehicle(vehicle).get_parent())
-        if vehicle == "Base.VanAmbulance":
-            print(f"[{vehicle}] " + str(Vehicle(vehicle).get_parent().vehicle_id))
-#        print(f"[{vehicle}] " + Vehicle(vehicle).get_full_parent())
-#    for vehicle in Vehicle("Base.Van").get_variants():
-#        print(f"[{vehicle}] {Vehicle(vehicle).get_name()}")
-#    print(Vehicle("VanRadio").get_model_name())
+        vehicle_mesh_data[vehicle] = {}
+        vehicle_mesh_data[vehicle]["mesh"] = Vehicle(vehicle).get_mesh_path()
+        vehicle_mesh_data[vehicle]["texture"] = Vehicle(vehicle).get_texture_path()
+    path = "output/output.json"
+    save_json(path, vehicle_mesh_data)
+    print(f"JSON file saved to '{path}'")
