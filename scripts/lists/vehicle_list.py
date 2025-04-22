@@ -4,7 +4,7 @@ from scripts.utils.util import format_link
 
 def generate_table(data):
     content = []
-    content.append('{| class="wikitable theme-red sortable" style="text-align:center;"')
+    content.append('{| class="wikitable theme-red sortable" style="text-align: center;"')
 #    content.append("! Name\n! Variants\n!Type\n!Mass\n!Engine force\n!Engine loudness\n!Max speed\n!Braking force\n! Vehicle ID")
     content.append("! Name")
     content.append("! Type")

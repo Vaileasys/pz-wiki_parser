@@ -81,7 +81,7 @@ def generate_content():
         content.append("| " + "<br>".join(body_parts_new))
 
         location_image = get_image(blood_location)
-        content.append(f'| style="text-align:center;" | {location_image}')
+        content.append(f'| style="text-align: center;" | {location_image}')
 
     content.append("|}")
 

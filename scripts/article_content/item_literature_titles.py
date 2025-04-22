@@ -364,7 +364,7 @@ def write_to_file(item_id, literature_titles, literature_type):
         if literature_type == "book":
             # No subjects
             if len(literature_titles) == 1 and "Default" in literature_titles:
-                file.write('<div class="list-columns" style="column-width:450px; max-width:1500px;">\n')
+                file.write('<div class="list-columns" style="column-width: 450px; max-width: 1500px;">\n')
                 for title in sorted(literature_titles["Default"]):
                     file.write(f"* {title}\n")
                 file.write('</div>\n')
@@ -373,7 +373,7 @@ def write_to_file(item_id, literature_titles, literature_type):
                 for subject in sorted(literature_titles):
                     titles = sorted(literature_titles[subject])
                     file.write(f"==={subject}===\n")
-                    file.write('<div class="list-columns" style="column-width:450px; max-width:1500px;">\n')
+                    file.write('<div class="list-columns" style="column-width: 450px; max-width: 1500px;">\n')
                     for title in titles:
                         file.write(f"* {title}\n")
                     file.write('</div>\n\n')
@@ -382,7 +382,7 @@ def write_to_file(item_id, literature_titles, literature_type):
             # Determine if the format has multiple dictionaries
             if len(literature_titles) == 1 and "Default" in literature_titles:
                 # No subjects
-                file.write('{| class="wikitable theme-red mw-collapsible sortable" style="text-align:center;"\n')
+                file.write('{| class="wikitable theme-red mw-collapsible sortable" style="text-align: center;"\n')
                 file.write('|+ style="min-width: 300px;" | List of magazine variants\n')
                 file.write('! Title !! Earliest year\n')
                 for title in sorted(literature_titles["Default"]):
@@ -397,13 +397,13 @@ def write_to_file(item_id, literature_titles, literature_type):
                 for subject in sorted(literature_titles):
                     titles = sorted(literature_titles[subject])
                     file.write(f"==={subject}===\n")
-                    file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
+                    file.write('<div class="list-columns" style="column-width: 400px; max-width: 900px;">\n')
                     for title in titles:
                         file.write(f"* {title}\n")
                     file.write('</div>\n\n')
 
         elif literature_type == "comic":
-            file.write('{| class="wikitable theme-red mw-collapsible mw-collapsed sortable" style="text-align:center;"\n')
+            file.write('{| class="wikitable theme-red mw-collapsible mw-collapsed sortable" style="text-align: center;"\n')
             file.write('|+ style="min-width: 300px;" | List of comic book variants\n')
             file.write('! Title !! First available !! Total issues\n')
             for title in sorted(literature_titles):
@@ -424,7 +424,7 @@ def write_to_file(item_id, literature_titles, literature_type):
                 f"The following are the recipes this schematic can include. Each schematic can contain up to 5 recipes, "
                 f"with a {100 - multiple_chance}% chance of having only 1. Each additional recipe beyond the first has an equal probability.\n"
             )
-            file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
+            file.write('<div class="list-columns" style="column-width: 400px; max-width: 900px;">\n')
             for title in sorted(literature_titles[:-1]):
                 file.write(f"* {title}\n")
             file.write('</div>')
@@ -434,14 +434,14 @@ def write_to_file(item_id, literature_titles, literature_type):
             content.append("A recipe can be read, teaching the player a [[Crafting|cooking]] recipe.\n")
             content.append("===Learned recipes===")
             content.append("The following are the recipes that this can include. Only 1 recipe will be included.")
-            content.append('<div class="list-columns" style="column-width:400px; max-width:900px;">')
+            content.append('<div class="list-columns" style="column-width: 400px; max-width: 900px;">')
             for title in sorted(literature_titles[:-1]):
                 content.append(f"* {title}")
             content.append("</div>")
             file.write("\n".join(content))
 
         elif literature_type == "locket":
-            file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
+            file.write('<div class="list-columns" style="column-width: 400px; max-width: 900px;">\n')
             name = Translate.get(item_id, "DisplayName")
             locket_text = Translate.get("IGUI_LocketText", "IGUI_LocketText")
             for title in sorted(literature_titles):
@@ -451,7 +451,7 @@ def write_to_file(item_id, literature_titles, literature_type):
             file.write('</div>')
 
         elif literature_type == "doodlekids":
-            file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
+            file.write('<div class="list-columns" style="column-width: 400px; max-width: 900px;">\n')
             name = Translate.get(item_id, "DisplayName")
             photo_text = Translate.get("IGUI_PhotoOf", "IGUI_PhotoOf")
             for title in sorted(literature_titles):
@@ -462,7 +462,7 @@ def write_to_file(item_id, literature_titles, literature_type):
 
         # postcards, doodles and photos are generated the same
         elif literature_type in ["postcards", "doodle", "photo"]:
-            file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
+            file.write('<div class="list-columns" style="column-width: 400px; max-width: 900px;">\n')
             name = Translate.get(item_id, "DisplayName")
             photo_text = Translate.get("IGUI_PhotoOf", "IGUI_PhotoOf")
             for title in sorted(literature_titles):
@@ -488,7 +488,7 @@ def write_to_file(item_id, literature_titles, literature_type):
             file.write('|}')
 
         else:
-            file.write('<div class="list-columns" style="column-width:400px; max-width:900px;">\n')
+            file.write('<div class="list-columns" style="column-width: 400px; max-width: 900px;">\n')
             for title in sorted(literature_titles):
                 file.write(f"* {title}\n")
             file.write('</div>')
