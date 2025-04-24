@@ -1,27 +1,52 @@
 import os
 import json
 import shutil
+import platform
 import subprocess
 from pathlib import Path
 from scripts.core import config_manager
 from scripts.core.constants import LUA_PATH
 
 def get_install_path():
+    EXISTS_TAG = "\033[92m[exists]\033[0m"
+    PLATFORM_PATHS = {
+        "Windows": [
+            Path("C:/Program Files (x86)/Steam/steamapps/common/ProjectZomboid"),
+            Path("C:/Program Files/Steam/steamapps/common/ProjectZomboid")
+        ],
+        "Linux": [
+            Path.home() / ".steam/steam/steamapps/common/ProjectZomboid",
+            Path.home() / ".local/share/Steam/steamapps/common/ProjectZomboid"
+        ]
+    }
+    paths_list = PLATFORM_PATHS.get(platform.system(), [])
+    count = len(paths_list)
+
     print("Please select your install location:")
-    print("1: C:\\Program Files (x86)\\Steam\\steamapps\\common\\ProjectZomboid")
-    print("2: C:\\Program Files\\Steam\\steamapps\\common\\ProjectZomboid")
-    print("3: Other")
+    for i, path in enumerate(paths_list, start=1):
+        status = EXISTS_TAG if path.exists() else ""
+        print(f"{i}: {str(path)} {status}")
+    print(f"{count+1}: Other")
 
-    choice = input("> ").strip()
-
-    if choice == '1':
-        return r"C:\Program Files (x86)\Steam\steamapps\common\ProjectZomboid"
-    elif choice == '2':
-        return r"C:\Program Files\Steam\steamapps\common\ProjectZomboid"
-    elif choice == '3':
-        install_path = input("Please enter the install location: ").strip()
-        return install_path.replace('/', '\\')
-    else:
+    try: #TODO: consider returning Path object.
+        choice = int(input("> ").strip())
+        if 0 < choice < count+1:
+            selected_path = paths_list[choice-1]
+            if selected_path.exists():
+                return selected_path
+            else:
+                print("That path doesn't exist on your system.")
+                return get_install_path()
+        elif choice == count+1:
+            manual_path = Path(input("Please enter the install location: ").strip())
+            if manual_path.exists():
+                return manual_path
+            else:
+                print("That path doesn't exist.")
+                return get_install_path()
+        else:
+            raise ValueError
+    except ValueError:
         print("Invalid choice, please try again.")
         return get_install_path()
 
