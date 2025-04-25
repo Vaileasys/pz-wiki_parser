@@ -1,412 +1,510 @@
 import re
 from typing import List, Dict, Any, Tuple
 
-def parse_recipe_block(lines: List[str], block_id: str = "Unknown") -> Dict[str, Any]:
+def parse_recipe_block(recipe_lines: List[str], block_id: str = "Unknown") -> Dict[str, Any]:
     """
-    Parses a CraftRecipe block given as lines of text.
-    Returns a dict with:
-      - name: block_id
-      - inputs: list
-      - outputs: list
-      - timedAction, time, category, tags (as list), ToolTip
-      - SkillRequired, xpAward, AutoLearnAll as lists of { skill: level }
+    Parse a CraftRecipe block and return a structured dictionary.
     """
-    recipe: Dict[str, Any] = {"name": block_id, "inputs": [], "outputs": []}
-    text = "\n".join(lines)
+    recipe_dict: Dict[str, Any] = {"name": block_id, "inputs": [], "outputs": []}
+    block_text: str = "\n".join(recipe_lines)
 
-    # item mappers
-    mapper_pat = re.compile(r'itemMapper\s+(\S+)\s*\{(.*?)\}', re.DOTALL | re.IGNORECASE)
-    mappers: Dict[str, Dict[str, str]] = {}
-    def _map_replace(m: re.Match) -> str:
-        nm = m.group(1).strip()
-        body = m.group(2)
-        d: Dict[str, str] = {}
-        for ln in body.splitlines():
-            ln = re.sub(r'/\*.*?\*/', '', ln).strip().rstrip(',')
-            if not ln or ln.startswith('//'):
+    item_mapper_pattern = re.compile(
+        r"itemMapper\s+(\S+)\s*\{(.*?)\}", re.DOTALL | re.IGNORECASE
+    )
+    item_mappers: Dict[str, Dict[str, str]] = {}
+
+    def replace_mapper(match_obj: re.Match) -> str:
+        mapper_name: str = match_obj.group(1).strip()
+        mapper_body: str = match_obj.group(2)
+        mapper_dict: Dict[str, str] = {}
+
+        for mapper_body_line in mapper_body.splitlines():
+            cleaned_line: str = re.sub(r"/\*.*?\*/", "", mapper_body_line).strip().rstrip(
+                ","
+            )
+            if not cleaned_line or cleaned_line.startswith("//"):
                 continue
-            if '=' in ln:
-                left, right = ln.split('=', 1)
-                d[left.strip()] = right.strip().rstrip(',')
-        mappers[nm] = d
+            if "=" in cleaned_line:
+                left_part, right_part = cleaned_line.split("=", 1)
+                mapper_dict[left_part.strip()] = right_part.strip().rstrip(",")
+
+        item_mappers[mapper_name] = mapper_dict
         return ""
-    text = mapper_pat.sub(_map_replace, text)
-    if mappers:
-        recipe["itemMappers"] = mappers
 
-    # inputs and outputs
-    inp_pat = re.compile(r'inputs\s*\{(.*?)\}', re.DOTALL | re.IGNORECASE)
-    out_pat = re.compile(r'outputs\s*\{(.*?)\}', re.DOTALL | re.IGNORECASE)
+    block_text = item_mapper_pattern.sub(replace_mapper, block_text)
+    if item_mappers:
+        recipe_dict["itemMappers"] = item_mappers
 
-    m = inp_pat.search(text)
-    if m:
-        recipe["inputs"] = parse_items_block(m.group(1), is_output=False, recipe_dict=recipe)
-        text = text[:m.start()] + text[m.end():]
+    # Inputs / outputs
+    inputs_pattern = re.compile(r"inputs\s*\{(.*?)\}", re.DOTALL | re.IGNORECASE)
+    outputs_pattern = re.compile(r"outputs\s*\{(.*?)\}", re.DOTALL | re.IGNORECASE)
 
-    m = out_pat.search(text)
-    if m:
-        recipe["outputs"] = parse_items_block(m.group(1), is_output=True, recipe_dict=recipe)
-        text = text[:m.start()] + text[m.end():]
+    input_match = inputs_pattern.search(block_text)
+    if input_match:
+        recipe_dict["inputs"] = parse_items_block(
+            input_match.group(1), is_output=False, recipe_dict=recipe_dict
+        )
+        block_text = block_text[: input_match.start()] + block_text[input_match.end() :]
 
-    # leftover key value pairs
-    pair_re = re.compile(r'^\s*(\w+)\s*=\s*(.*?)\s*$', re.IGNORECASE)
-    for raw in text.splitlines():
-        ln = re.sub(r'/\*.*?\*/', '', raw).strip().rstrip(',')
-        if not ln or ln.startswith('//'):
+    output_match = outputs_pattern.search(block_text)
+    if output_match:
+        recipe_dict["outputs"] = parse_items_block(
+            output_match.group(1), is_output=True, recipe_dict=recipe_dict
+        )
+        block_text = (
+            block_text[: output_match.start()] + block_text[output_match.end() :]
+        )
+
+    # key/value lines
+    key_value_pattern = re.compile(r"^\s*(\w+)\s*=\s*(.*?)\s*$", re.IGNORECASE)
+    for raw_line in block_text.splitlines():
+        cleaned_line: str = re.sub(r"/\*.*?\*/", "", raw_line).strip().rstrip(",")
+        if not cleaned_line or cleaned_line.startswith("//"):
             continue
-        m2 = pair_re.match(ln)
-        if not m2:
-            continue
-        k, v = m2.group(1), m2.group(2).strip()
-        kl = k.lower()
 
-        if kl == "category":
-            recipe["category"] = v
-        elif kl in ("time", "timedaction"):
-            recipe[k] = v
-        elif kl == "tags":
-            recipe["tags"] = [x.strip() for x in v.split(";") if x.strip()]
-        elif kl in ("skillrequired", "xpaward", "autolearnall"):
-            parts = [e.strip() for e in v.split(";") if e.strip()]
-            lst: List[Dict[str, Any]] = []
-            for e in parts:
-                if ":" in e:
-                    sk, lvl = e.split(":", 1)
+        pair_match = key_value_pattern.match(cleaned_line)
+        if not pair_match:
+            continue
+
+        key: str = pair_match.group(1)
+        value: str = pair_match.group(2).strip()
+        key_lowercase: str = key.lower()
+
+        # skills / XP / autolearn lists
+        if key_lowercase in ("skillrequired", "xpaward", "autolearnall"):
+            # fix malformed colon-only separators
+            if value.count(":") >= 3 and ";" not in value:
+                colon_indices = [idx for idx, ch in enumerate(value) if ch == ":"]
+                middle_colon_index = colon_indices[1]
+                value = value[:middle_colon_index] + ";" + value[middle_colon_index + 1 :]
+
+            parts: List[str] = [part.strip() for part in value.split(";") if part.strip()]
+            skill_entries: List[Dict[str, Any]] = []
+            for part in parts:
+                if ":" in part:
+                    skill_name, skill_level_str = part.split(":", 1)
                     try:
-                        lvl_val = int(lvl)
+                        skill_level: Any = int(skill_level_str)
                     except ValueError:
-                        lvl_val = lvl
-                    lst.append({sk: lvl_val})
-            recipe[k] = lst
-        elif ";" in v:
-            recipe[k] = [x.strip() for x in v.split(";") if x.strip()]
+                        skill_level = skill_level_str
+                    skill_entries.append({skill_name: skill_level})
+            recipe_dict[key] = skill_entries
+            continue
+
+        # simple scalar / list values
+        if key_lowercase == "category":
+            recipe_dict["category"] = value
+        elif key_lowercase in ("time", "timedaction"):
+            recipe_dict[key] = value
+        elif key_lowercase == "tags":
+            recipe_dict["tags"] = [tag.strip() for tag in value.split(";") if tag.strip()]
+        elif ";" in value:
+            recipe_dict[key] = [
+                element.strip() for element in value.split(";") if element.strip()
+            ]
         else:
-            recipe[k] = v
+            recipe_dict[key] = value
 
-    return recipe
-
-
-def parse_items_block(
-    block_text: str,
-    is_output: bool = False,
-    recipe_dict: Dict[str, Any] = None
-) -> List[Dict[str, Any]]:
-
-    results: List[Dict[str, Any]] = []
-    lines = re.split(r'[\r\n]+', block_text)
-    last_item: Dict[str, Any] = {}
-
-    for raw in lines:
-        ln = re.sub(r'/\*.*?\*/', '', raw).strip().rstrip(',')
-        if not ln or ln.startswith('//'):
-            continue
-        low = ln.lower()
-
-        # fluid modifier
-        if low.startswith('-fluid') or low.startswith('+fluid'):
-            fl = parse_fluid_line(ln)
-            if not fl:
-                continue
-            if fl["sign"] == '-':
-                if last_item and is_any_fluid_container(last_item):
-                    last_item["items"] = ["Any fluid container"]
-                last_item["fluidModifier"] = {"fluidType": fl["items"], "amount": fl["amount"]}
-            else:
-                copy_item = dict(last_item)
-                copy_item["fluidModifier"] = {"fluidType": fl["items"], "amount": fl["amount"]}
-                if is_output:
-                    results.append(copy_item)
-                else:
-                    recipe_dict.setdefault("outputs", []).append(copy_item)
-            continue
-
-        # energy line
-        if low.startswith('energy'):
-            ei = parse_energy_line(ln)
-            if ei:
-                results.append(ei)
-                last_item = {}
-            continue
-
-        # item line
-        if low.startswith('item'):
-            it = parse_item_line(ln)
-            if it:
-                results.append(it)
-                last_item = it
-            continue
-
-    return results
+    return recipe_dict
 
 
-def is_any_fluid_container(item_obj: Dict[str, Any]) -> bool:
+def is_any_fluid_container(item_object: Dict[str, Any]) -> bool:
+    """
+    Detect the legacy “any fluid container” wildcard:  item 1 [*]
+    """
     return (
-        item_obj.get("count") == 1 and
-        isinstance(item_obj.get("items"), list) and
-        len(item_obj["items"]) == 1 and
-        item_obj["items"][0] == "Base.*"
+        item_object.get("index") == 1
+        and isinstance(item_object.get("items"), list)
+        and len(item_object["items"]) == 1
+        and item_object["items"][0] == "Base.*"
     )
 
 
+def parse_items_block(block_text: str, is_output: bool = False, recipe_dict: Dict[str, Any] = None,) -> List[Dict[str, Any]]:
+    """
+    Parse an inputs/outputs block, preserving legacy behaviour.
+    """
+    if recipe_dict is None:
+        recipe_dict = {}
+
+    parsed_items: List[Dict[str, Any]] = []
+    block_lines: List[str] = re.split(r"[\r\n]+", block_text)
+    last_parsed_item: Dict[str, Any] = None
+
+    for raw_line in block_lines:
+        stripped_line: str = re.sub(r"/\*.*?\*/", "", raw_line).strip().rstrip(",")
+        if not stripped_line or stripped_line.startswith("//"):
+            continue
+        line_lowercase: str = stripped_line.lower()
+
+        # fluid modifiers
+        if line_lowercase.startswith("-fluid") or line_lowercase.startswith("+fluid"):
+            fluid_info = parse_fluid_line(stripped_line)
+            if not fluid_info:
+                continue
+
+            if fluid_info["sign"] == "-":
+                # attach to previous item
+                if last_parsed_item:
+                    if is_any_fluid_container(last_parsed_item):
+                        last_parsed_item["items"] = ["Any fluid container"]
+                    last_parsed_item["fluidModifier"] = {
+                        "fluidType": fluid_info["items"],
+                        "amount": fluid_info["amount"],
+                    }
+                else:
+                    parsed_items.append(
+                        {
+                            "fluid": True,
+                            "amount": fluid_info["amount"],
+                            "items": fluid_info["items"],
+                        }
+                    )
+            else:  # '+fluid'
+                if last_parsed_item:
+                    copied_item: Dict[str, Any] = dict(last_parsed_item)
+                    copied_item["fluidModifier"] = {
+                        "fluidType": fluid_info["items"],
+                        "amount": fluid_info["amount"],
+                    }
+                    if is_output:
+                        parsed_items.append(copied_item)
+                    else:
+                        recipe_dict.setdefault("outputs", []).append(copied_item)
+            continue
+
+        # energy
+        if line_lowercase.startswith("energy"):
+            energy_info = parse_energy_line(stripped_line)
+            if energy_info:
+                parsed_items.append(energy_info)
+                last_parsed_item = None
+            continue
+
+        # items
+        if line_lowercase.startswith("item"):
+            item_entry = parse_item_line(stripped_line)
+            if not item_entry:
+                continue
+
+            item_entry["count"] = item_entry.pop("count", 0)
+
+            # numbered list handling
+            if "items" in item_entry and isinstance(item_entry["items"], list):
+                if all(":" in element for element in item_entry["items"]):
+                    numbered_entries: List[Dict[str, Any]] = []
+                    for entry_str in item_entry["items"]:
+                        quantity_str, raw_item_id = entry_str.split(":", 1)
+                        try:
+                            quantity_value = int(quantity_str.split(".")[-1])
+                        except ValueError:
+                            try:
+                                quantity_value = int(float(quantity_str))
+                            except ValueError:
+                                quantity_value = 1
+                        raw_item_id = raw_item_id.strip()
+                        if not raw_item_id.startswith("Base."):
+                            raw_item_id = f"Base.{raw_item_id}"
+                        numbered_entries.append(
+                            {"raw_name": raw_item_id, "amount": quantity_value}
+                        )
+                    item_entry["numbered_list"] = True
+                    item_entry["items"] = numbered_entries
+                else:
+                    normalized_items: List[str] = []
+                    for item_identifier in item_entry["items"]:
+                        raw_item_id = item_identifier.split(":", 1)[-1].strip()
+                        if not raw_item_id.startswith("Base."):
+                            raw_item_id = f"Base.{raw_item_id}"
+                        normalized_items.append(raw_item_id)
+                    item_entry["items"] = normalized_items
+
+            parsed_items.append(item_entry)
+            last_parsed_item = item_entry
+            continue
+
+    return parsed_items
+
+
 def parse_fluid_line(line: str) -> Dict[str, Any]:
-    pat = re.compile(r'^([+-])fluid\s+([\d\.]+)\s+(?:\[(.*?)\]|(\S+))', re.IGNORECASE)
-    m = pat.match(line)
-    if not m:
+    pattern = re.compile(r"^([+-])fluid\s+([\d\.]+)\s+(?:\[(.*?)\]|(\S+))", re.IGNORECASE)
+    match = pattern.match(line)
+    if not match:
         return None
-    sign, amt, bracket, single = m.group(1), float(m.group(2)), m.group(3), m.group(4)
-    items = bracket and [x.strip() for x in re.split(r'[;,]', bracket) if x.strip()] or ([single.strip()] if single else [])
-    return {"sign": sign, "amount": amt, "items": items}
+    sign: str = match.group(1)
+    amount: float = float(match.group(2))
+    bracket_content: str = match.group(3)
+    single_identifier: str = match.group(4)
+    items_list: List[str] = (
+        [element.strip() for element in re.split(r"[;,]", bracket_content) if element.strip()]
+        if bracket_content
+        else ([single_identifier.strip()] if single_identifier else [])
+    )
+    return {"sign": sign, "amount": amount, "items": items_list}
 
 
 def parse_energy_line(line: str) -> Dict[str, Any]:
-    pat = re.compile(r'^energy\s+([\d\.]+)\s+(\S+)\s*(.*)$', re.IGNORECASE)
-    m = pat.match(line)
-    if not m:
+    pattern = re.compile(r"^energy\s+([\d\.]+)\s+(\S+)\s*(.*)$", re.IGNORECASE)
+    match = pattern.match(line)
+    if not match:
         return None
-    amt = float(m.group(1))
-    etype = m.group(2)
-    mod = m.group(3).strip() or None
-    entry = {"energy": True, "amount": amt, "type": etype}
-    if mod:
-        entry["modifiers"] = mod
-    return entry
+    amount: float = float(match.group(1))
+    energy_type: str = match.group(2)
+    modifiers: str = match.group(3).strip() or None
+    energy_entry: Dict[str, Any] = {"energy": True, "amount": amount, "type": energy_type}
+    if modifiers:
+        energy_entry["modifiers"] = modifiers
+    return energy_entry
 
 
 def parse_item_line(line: str) -> Dict[str, Any]:
-    pat = re.compile(r'^item\s+(\d+)\s+(.*)$', re.IGNORECASE)
-    m = pat.match(line)
-    if not m:
+    pattern = re.compile(r"^item\s+(\d+)\s+(.*)$", re.IGNORECASE)
+    match = pattern.match(line)
+    if not match:
         return None
-    count = int(m.group(1))
-    rest = re.sub(r'/\*.*?\*/', '', m.group(2), flags=re.DOTALL).strip()
-    entry: Dict[str, Any] = {"count": count}
+    count_value: int = int(match.group(1))
+    remaining_text: str = re.sub(r"/\*.*?\*/", "", match.group(2), flags=re.DOTALL).strip()
+    entry_dict: Dict[str, Any] = {"count": count_value}
 
-    rest = re.sub(r'mappers?\[.*?\]', '', rest, flags=re.IGNORECASE).strip()
+    remaining_text = re.sub(r"mappers?\[.*?\]", "", remaining_text, flags=re.IGNORECASE).strip()
 
-    mp = re.search(r'mapper\s*:\s*(\S+)', rest, re.IGNORECASE)
-    if mp:
-        entry["mapper"] = mp.group(1)
-        rest = rest[:mp.start()] + rest[mp.end():]
+    mapper_search = re.search(r"mapper\s*:\s*(\S+)", remaining_text, re.IGNORECASE)
+    if mapper_search:
+        entry_dict["mapper"] = mapper_search.group(1)
+        remaining_text = remaining_text[: mapper_search.start()] + remaining_text[mapper_search.end() :]
 
-    mo = re.search(r'mode\s*:\s*(\S+)', rest, re.IGNORECASE)
-    if mo:
-        entry["mode"] = mo.group(1).capitalize()
-        rest = rest[:mo.start()] + rest[mo.end():]
+    mode_search = re.search(r"mode\s*:\s*(\S+)", remaining_text, re.IGNORECASE)
+    if mode_search:
+        entry_dict["mode"] = mode_search.group(1).capitalize()
+        remaining_text = remaining_text[: mode_search.start()] + remaining_text[mode_search.end() :]
 
-    tg = re.search(r'tags\[(.*?)\]', rest, re.IGNORECASE)
-    if tg:
-        entry["tags"] = [x.strip() for x in re.split(r'[;,]', tg.group(1)) if x.strip()]
-        rest = rest[:tg.start()] + rest[tg.end():]
+    tags_search = re.search(r"tags\[(.*?)\]", remaining_text, re.IGNORECASE)
+    if tags_search:
+        entry_dict["tags"] = [
+            tag.strip() for tag in re.split(r"[;,]", tags_search.group(1)) if tag.strip()
+        ]
+        remaining_text = remaining_text[: tags_search.start()] + remaining_text[tags_search.end() :]
 
-    flags = []
+    flag_list: List[str] = []
     while True:
-        fl = re.search(r'flags\[(.*?)\]', rest, re.IGNORECASE)
-        if not fl:
+        flags_search = re.search(r"flags\[(.*?)\]", remaining_text, re.IGNORECASE)
+        if not flags_search:
             break
-        flags.extend([x.strip() for x in re.split(r'[;,]', fl.group(1)) if x.strip()])
-        rest = rest[:fl.start()] + rest[fl.end():]
-    if flags:
-        entry["flags"] = flags
+        flag_list.extend(
+            [flag.strip() for flag in re.split(r"[;,]", flags_search.group(1)) if flag.strip()]
+        )
+        remaining_text = remaining_text[: flags_search.start()] + remaining_text[flags_search.end() :]
+    if flag_list:
+        entry_dict["flags"] = flag_list
 
-    if re.search(r'\bitemcount\b', rest, re.IGNORECASE):
-        entry.setdefault("flags", []).append("itemcount")
-        rest = re.sub(r'(?i)\bitemcount\b', '', rest).strip()
+    if re.search(r"\bitemcount\b", remaining_text, re.IGNORECASE):
+        entry_dict.setdefault("flags", []).append("itemcount")
+        remaining_text = re.sub(r"(?i)\bitemcount\b", "", remaining_text).strip()
 
-    items = []
+    item_identifiers: List[str] = []
     while True:
-        br = re.search(r'\[(.*?)\]', rest)
-        if not br:
+        bracket_search = re.search(r"\[(.*?)\]", remaining_text)
+        if not bracket_search:
             break
-        for x in re.split(r'[;,]', br.group(1)):
-            x = x.strip()
-            if x:
-                items.append(x if x.startswith("Base.") else f"Base.{x}")
-        rest = rest[:br.start()] + rest[br.end():]
-    if items:
-        entry["items"] = items
+        for item_identifier in re.split(r"[;,]", bracket_search.group(1)):
+            item_identifier = item_identifier.strip()
+            if item_identifier:
+                item_identifiers.append(
+                    item_identifier if item_identifier.startswith("Base.") else f"Base.{item_identifier}"
+                )
+        remaining_text = (
+            remaining_text[: bracket_search.start()] + remaining_text[bracket_search.end() :]
+        )
+
+    if item_identifiers:
+        entry_dict["items"] = item_identifiers
     else:
-        fb = rest.strip()
-        if fb:
-            entry["items"] = [
+        fallback_items = remaining_text.strip()
+        if fallback_items:
+            entry_dict["items"] = [
                 itm if itm.startswith("Base.") else f"Base.{itm}"
-                for itm in re.split(r'[;,]', fb) if itm.strip()
+                for itm in re.split(r"[;,]", fallback_items)
+                if itm.strip()
             ]
 
-    return entry
+    return entry_dict
 
 
-def extract_block(text: str, start: int) -> Tuple[str, int]:
-    bracket = 0
-    idx = start
-    while idx < len(text):
-        if text[idx] == "{":
-            bracket += 1
-        elif text[idx] == "}":
-            bracket -= 1
-            if bracket == 0:
-                return text[start:idx+1], idx+1
-        idx += 1
-    return text[start:], idx
+def extract_block(text: str, start_index: int) -> Tuple[str, int]:
+    bracket_count: int = 0
+    current_index: int = start_index
+    while current_index < len(text):
+        if text[current_index] == "{":
+            bracket_count += 1
+        elif text[current_index] == "}":
+            bracket_count -= 1
+            if bracket_count == 0:
+                return text[start_index : current_index + 1], current_index + 1
+        current_index += 1
+    return text[start_index:], current_index
 
 
-def parse_module_block(text: str) -> List[Dict[str, str]]:
-    modules: List[Dict[str, str]] = []
-    pat = re.compile(r'module\s+(\w+)\s*\{', re.IGNORECASE)
-    pos = 0
+def parse_module_block(full_text: str) -> List[Dict[str, str]]:
+    module_entries: List[Dict[str, str]] = []
+    module_pattern = re.compile(r"module\s+(\w+)\s*\{", re.IGNORECASE)
+    search_position: int = 0
     while True:
-        m = pat.search(text, pos)
-        if not m:
+        module_match = module_pattern.search(full_text, search_position)
+        if not module_match:
             break
-        blk, np = extract_block(text, m.end()-1)
-        modules.append({"name": m.group(1), "block": blk})
-        pos = np
-    return modules
+        block_content, next_position = extract_block(full_text, module_match.end() - 1)
+        module_entries.append({"name": module_match.group(1), "block": block_content})
+        search_position = next_position
+    return module_entries
 
 
 def parse_module_skin_mapping(module_block: str) -> Dict[str, Dict[str, Dict[str, str]]]:
-    """
-    Extracts xuiSkin blocks,
-    returns mapping of skinName -> { entityStyle -> {DisplayName, Icon}, … }
-    """
-    mapping: Dict[str, Dict[str, Dict[str, str]]] = {}
-    skin_pat = re.compile(r'xuiSkin\s+(\w+)\s*\{', re.IGNORECASE)
-    pos = 0
+    skin_mapping: Dict[str, Dict[str, Dict[str, str]]] = {}
+    skin_pattern = re.compile(r"xuiSkin\s+(\w+)\s*\{", re.IGNORECASE)
+    pattern_position: int = 0
     while True:
-        m = skin_pat.search(module_block, pos)
-        if not m:
+        skin_match = skin_pattern.search(module_block, pattern_position)
+        if not skin_match:
             break
-        skin_name = m.group(1)
-        blk, np = extract_block(module_block, m.end()-1)
-        ent_pat = re.compile(r'entity\s+(\S+)\s*\{', re.IGNORECASE)
-        spos = 0
-        entries: Dict[str, Dict[str, str]] = {}
+        skin_name: str = skin_match.group(1)
+        skin_block, next_position = extract_block(module_block, skin_match.end() - 1)
+
+        entity_pattern = re.compile(r"entity\s+(\S+)\s*\{", re.IGNORECASE)
+        entity_position: int = 0
+        entity_entries: Dict[str, Dict[str, str]] = {}
         while True:
-            me = ent_pat.search(blk, spos)
-            if not me:
+            entity_match = entity_pattern.search(skin_block, entity_position)
+            if not entity_match:
                 break
-            style = me.group(1)
-            eb, enp = extract_block(blk, me.end()-1)
-            dn = re.search(r'DisplayName\s*=\s*([^,\n]+)', eb, re.IGNORECASE)
-            ic = re.search(r'Icon\s*=\s*([^,\n]+)', eb, re.IGNORECASE)
-            entries[style] = {
-                "DisplayName": dn.group(1).strip() if dn else None,
-                "Icon": ic.group(1).strip() if ic else None
+            entity_style: str = entity_match.group(1)
+            entity_block, entity_next_position = extract_block(skin_block, entity_match.end() - 1)
+
+            display_name_match = re.search(r"DisplayName\s*=\s*([^,\n]+)", entity_block, re.IGNORECASE)
+            icon_match = re.search(r"Icon\s*=\s*([^,\n]+)", entity_block, re.IGNORECASE)
+            entity_entries[entity_style] = {
+                "DisplayName": display_name_match.group(1).strip() if display_name_match else None,
+                "Icon": icon_match.group(1).strip() if icon_match else None,
             }
-            spos = enp
-        mapping[skin_name] = entries
-        pos = np
-    return mapping
+            entity_position = entity_next_position
+
+        skin_mapping[skin_name] = entity_entries
+        pattern_position = next_position
+
+    return skin_mapping
 
 
 def parse_entity_blocks(module_block: str) -> List[Dict[str, Any]]:
-    """
-    Extracts each entity block along with its components,
-    captures name and entityStyle from UiConfig.
-    """
-    entities: List[Dict[str, Any]] = []
-    ent_pat = re.compile(r'entity\s+(\S+)\s*\{', re.IGNORECASE)
-    pos = 0
+    entity_list: List[Dict[str, Any]] = []
+    entity_pattern = re.compile(r"entity\s+(\S+)\s*\{", re.IGNORECASE)
+    search_position: int = 0
     while True:
-        m = ent_pat.search(module_block, pos)
-        if not m:
+        entity_match = entity_pattern.search(module_block, search_position)
+        if not entity_match:
             break
-        name = m.group(1)
-        blk, np = extract_block(module_block, m.end()-1)
+        entity_name: str = entity_match.group(1)
+        entity_block, next_position = extract_block(module_block, entity_match.end() - 1)
 
-        comp_pat = re.compile(r'component\s+(\S+)\s*\{', re.IGNORECASE)
-        cpos = 0
-        comps: Dict[str, str] = {}
+        component_pattern = re.compile(r"component\s+(\S+)\s*\{", re.IGNORECASE)
+        component_position: int = 0
+        component_blocks: Dict[str, str] = {}
         while True:
-            cm = comp_pat.search(blk, cpos)
-            if not cm:
+            component_match = component_pattern.search(entity_block, component_position)
+            if not component_match:
                 break
-            cblk, cnp = extract_block(blk, cm.end()-1)
-            comps[cm.group(1)] = cblk
-            cpos = cnp
+            component_block, component_next_position = extract_block(
+                entity_block, component_match.end() - 1
+            )
+            component_blocks[component_match.group(1)] = component_block
+            component_position = component_next_position
 
-        ui = comps.get("UiConfig", "")
-        m_skin = re.search(r'xuiSkin\s*=\s*(\S+)', ui, re.IGNORECASE)
-        skin_name = m_skin.group(1).rstrip(',') if m_skin else None
+        ui_config_block: str = component_blocks.get("UiConfig", "")
+        skin_name_match = re.search(r"xuiSkin\s*=\s*(\S+)", ui_config_block, re.IGNORECASE)
+        skin_name: str = skin_name_match.group(1).rstrip(",") if skin_name_match else None
 
-        m_es = re.search(r'entityStyle\s*=\s*(\S+)', ui, re.IGNORECASE)
-        style = m_es.group(1).rstrip(',') if m_es else None
+        entity_style_match = re.search(r"entityStyle\s*=\s*(\S+)", ui_config_block, re.IGNORECASE)
+        entity_style: str = entity_style_match.group(1).rstrip(",") if entity_style_match else None
 
-        entities.append({
-            "name": name,
-            "components": comps,
-            "skinName": skin_name,
-            "entityStyle": style
-        })
-        pos = np
+        entity_list.append(
+            {
+                "name": entity_name,
+                "components": component_blocks,
+                "skinName": skin_name,
+                "entityStyle": entity_style,
+            }
+        )
+        search_position = next_position
 
-    return entities
+    return entity_list
 
 
 def parse_sprite_config(block_text: str) -> Tuple[Dict[str, List[str]], float]:
-    sprites: Dict[str, List[str]] = {}
-    health: float = None
-    mh = re.search(r'skillBaseHealth\s*=\s*([\d\.]+)', block_text, re.IGNORECASE)
-    if mh:
+    sprite_mapping: Dict[str, List[str]] = {}
+    base_health: float = None
+
+    base_health_match = re.search(r"skillBaseHealth\s*=\s*([\d\.]+)", block_text, re.IGNORECASE)
+    if base_health_match:
         try:
-            health = float(mh.group(1))
+            base_health = float(base_health_match.group(1))
         except ValueError:
             pass
 
-    face_pat = re.compile(r'face\s+(\S+)\s*\{', re.IGNORECASE)
-    pos = 0
+    face_pattern = re.compile(r"face\s+(\S+)\s*\{", re.IGNORECASE)
+    search_position: int = 0
     while True:
-        mf = face_pat.search(block_text, pos)
-        if not mf:
+        face_match = face_pattern.search(block_text, search_position)
+        if not face_match:
             break
-        fb, np = extract_block(block_text, mf.end()-1)
-        rows = re.findall(r'row\s*=\s*([^,}\n]+)', fb, re.IGNORECASE)
-        entries: List[str] = []
-        for r in rows:
-            entries.extend(e.strip() for e in r.split() if e.strip())
-        sprites[mf.group(1)] = entries
-        pos = np
+        face_block, next_position = extract_block(block_text, face_match.end() - 1)
 
-    return sprites, health
+        row_matches: List[str] = re.findall(r"row\s*=\s*([^,}\n]+)", face_block, re.IGNORECASE)
+        row_entries: List[str] = []
+        for row_entry in row_matches:
+            row_entries.extend(item.strip() for item in row_entry.split() if item.strip())
+
+        sprite_mapping[face_match.group(1)] = row_entries
+        search_position = next_position
+
+    return sprite_mapping, base_health
 
 
-def parse_construction_recipe(text: str) -> List[Dict[str, Any]]:
-    """
-    Parses the entire module text for construction‑style recipes:
-    - reads xuiSkin blocks
-    - enumerates entities + UiConfig + SpriteConfig
-    - for each CraftRecipe sub‑block, calls parse_recipe_block
-    - then replaces outputs[] with the correct DisplayName/Icon
-    """
-    results: List[Dict[str, Any]] = []
-    modules = parse_module_block(text)
-    for mod in modules:
-        skin_map_all = parse_module_skin_mapping(mod["block"])
-        entities = parse_entity_blocks(mod["block"])
-        for ent in entities:
-            name = ent["name"]
-            cr_blk = ent["components"].get("CraftRecipe")
-            if not cr_blk:
+def parse_construction_recipe(full_text: str) -> List[Dict[str, Any]]:
+    construction_recipes: List[Dict[str, Any]] = []
+    module_blocks = parse_module_block(full_text)
+
+    for module_entry in module_blocks:
+        skin_mapping_all = parse_module_skin_mapping(module_entry["block"])
+        entity_blocks = parse_entity_blocks(module_entry["block"])
+
+        for entity_entry in entity_blocks:
+            entity_name: str = entity_entry["name"]
+            craft_recipe_block = entity_entry["components"].get("CraftRecipe")
+            if not craft_recipe_block:
                 continue
 
-            parsed = parse_recipe_block(cr_blk.splitlines(), name)
-            recipe: Dict[str, Any] = {"name": name}
-            recipe.update(parsed)
+            parsed_recipe_block = parse_recipe_block(craft_recipe_block.splitlines(), entity_name)
+            recipe_output: Dict[str, Any] = {"name": entity_name}
+            recipe_output.update(parsed_recipe_block)
 
-            skin_name = ent.get("skinName", "")
-            style_map = skin_map_all.get(skin_name, {})
-            style = ent.get("entityStyle")
-            if style and style in style_map:
-                skin_entry = style_map[style]
-                recipe["outputs"] = [{
-                    "displayName": skin_entry.get("DisplayName"),
-                    "icon": skin_entry.get("Icon")
-                }]
+            skin_name: str = entity_entry.get("skinName", "")
+            style_mapping = skin_mapping_all.get(skin_name, {})
+            entity_style: str = entity_entry.get("entityStyle")
 
-            sp, hp = parse_sprite_config(ent["components"].get("SpriteConfig", ""))
-            recipe["spriteOutputs"] = sp
-            if hp is not None:
-                recipe["skillBaseHealth"] = hp
+            if entity_style and entity_style in style_mapping:
+                skin_entry_mapping = style_mapping[entity_style]
+                recipe_output["outputs"] = [
+                    {
+                        "displayName": skin_entry_mapping.get("DisplayName"),
+                        "icon": skin_entry_mapping.get("Icon"),
+                    }
+                ]
 
-            results.append(recipe)
+            sprite_outputs, base_health = parse_sprite_config(
+                entity_entry["components"].get("SpriteConfig", "")
+            )
+            recipe_output["spriteOutputs"] = sprite_outputs
+            if base_health is not None:
+                recipe_output["skillBaseHealth"] = base_health
 
-    return results
+            construction_recipes.append(recipe_output)
+
+    return construction_recipes

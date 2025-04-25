@@ -3,6 +3,7 @@ import sys
 import os
 from scripts.core import config_manager, setup, logger, cache
 from scripts.core.version import Version
+from scripts.utils.echo import echo_info, echo_error
 
 menu_structure = {
     '0': {
@@ -20,8 +21,7 @@ menu_structure = {
             '4': {'module': 'consumables', 'name': 'Consumables', 'description': 'Generate consumables tables.'},
             '5': {'module': 'codesnip', 'name': 'Codesnips', 'description': 'Generate codesnip files.'},
             '6': {'module': 'distribution', 'name': 'Distributions', 'description': 'Generate distribution files.'},
-            '7': {'module': 'evolvedrecipe', 'name': 'Evolved recipes', 'description': 'Parse evolved recipes.'},
-            '8': {'module': 'item_body_part', 'name': 'Body part', 'description': 'Generates body part templates.'},
+            '7': {'module': 'item_body_part', 'name': 'Body part', 'description': 'Generates body part templates.'},
         },
     },
     '2': {
@@ -47,7 +47,7 @@ menu_structure = {
             '2': {'module': 'scripts.recipes.researchrecipes', 'name': 'Research recipes', 'description': 'Process research recipes.'},
             '3': {'module': 'scripts.recipes.teached_recipes', 'name': 'Teached recipes', 'description': 'Process teached recipes.'},
             '4': {'module': 'scripts.recipes.evolvedrecipe', 'name': 'Evolved recipes', 'description': 'Process evolved recipes.'},
-            '5': {'module': 'scripts.recipes.legacy_recipe_format', 'name': 'Legacy recipe parser', 'description': 'Process recipes.'}, # TODO Remove after implementation
+            '5': {'module': 'scripts.recipes.legacy_recipe_output', 'name': 'Legacy recipe parser', 'description': 'Process recipes.'}, # TODO Remove after implementation
         }
     },
     '4': {
@@ -122,11 +122,11 @@ def handle_module(module_name, user_input=None):
         else:
             module.main()
     except ImportError as e:
-        print(f"Error importing module {module_name}: {e}")
+        echo_error(f"Error importing module {module_name}: {e}")
     except AttributeError as e:
-        print(f"Module {module_name} does not have a main() function: {e}")
+        echo_error(f"Module {module_name} does not have a main() function: {e}")
     except Exception as e:
-        print(f"An error occurred while running {module_name}: {e}")
+        echo_error(f"An error occurred while running {module_name}: {e}")
 
 
 def navigate_menu(menu, is_root=False, title=None):
@@ -152,22 +152,18 @@ def navigate_menu(menu, is_root=False, title=None):
                 navigate_menu(settings_structure)
             elif selected_option['name'] == 'Clear cache':
                 cache.clear_cache()
-                print("\nReturning to the menu...\n")
             elif selected_option['name'] == 'Run First Time Setup':
                 handle_module('scripts.core.setup')
-                print("\nReturning to the menu...\n")
             elif selected_option['name'] == 'Tags':
                 handle_module('scripts.item_tags')
             elif selected_option['name'] == 'Script parser':
                 handle_module('scripts.parser.script_parser')
-                print("\nReturning to the menu...\n")
             elif 'module' in selected_option:
                 handle_module(selected_option['module'])
-                print("\nReturning to the menu...\n")
             elif 'sub_options' in selected_option:
                 navigate_menu(selected_option['sub_options'], title=selected_option['name'])
         else:
-            print("Invalid input. Please try again.")
+            echo_error("Invalid input. Please try again.")
 
 
 def check_first_run():

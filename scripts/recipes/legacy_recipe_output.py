@@ -901,10 +901,17 @@ def output_lua_tables(processed_recipes):
         f.write("}\n\n")
         f.write("return index\n")
 
+
+def strip_prefix(text, prefix):
+    if text.startswith(prefix):
+        return text[len(prefix):]
+    return text
+
+
 def main(recipes_data=None):
     print("Processing recipe output...")
     if not recipes_data:
-        recipes_data = recipe_format.get_processed_recipes()
+        recipes_data = legacy_recipe_format.get_processed_recipes()
     tags_data = item_tags.get_tag_data()
     item_tags.write_tag_image()
 
