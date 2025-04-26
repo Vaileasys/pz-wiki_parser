@@ -44,7 +44,7 @@ SCRIPT_CONFIGS = {
     "template": {
         "list_keys": ["template"],
         "list_keys_semicolon": ["requireInstalled", "leftCol", "rightCol", "itemType"],
-        "list_keys_space": ["offset", "rotate", "extents", "centerOfMassOffset", "shadowOffset", "physicsChassisShape", "xywh"],
+        "list_keys_space": ["offset", "rotate", "extents", "extentsOffset", "centerOfMassOffset", "shadowOffset", "physicsChassisShape", "xywh"],
         "dict_keys_colon": ["skills"],
     },
     "model": {
