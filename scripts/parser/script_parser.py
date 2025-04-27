@@ -89,6 +89,9 @@ SCRIPT_CONFIGS = {
     }
 }
 
+# Cached scripts
+script_cache = {}
+
 ## ------------------------- Post Processing ------------------------- ##
 
 def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -> dict:
@@ -607,6 +610,12 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
     Returns:
         dict[str, dict]: A dictionary of parsed script blocks keyed by full ID (FullType).
     """
+    global script_cache
+
+    # If script_type from cache if it's already been parsed.
+    if script_type in script_cache:
+        return script_cache[script_type]
+
     script_dict = {}
     entity_dict = {} # special case for entity
     script_files = get_script_files()
@@ -716,6 +725,9 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
         echo_success(f"Parsed {len(script_dict)} {script_type} entries.")
 
     if cache_result:
+        # Cache dict in memory
+        script_cache[script_type] = script_dict
+
         # Special case for storing both types of entity data
         if script_type == "entity":
             save_cache(entity_dict, f"parsed_{script_type}_data.json")
