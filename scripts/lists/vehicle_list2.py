@@ -19,7 +19,7 @@ def generate_data(vehicle_id, table_type):
     page = vehicle.get_page()
     link = format_link(name, page)
 
-    vehicle_data["model"] = f"[[File:{vehicle.get_model()}|128x128px]]" if "model" in columns else None
+    vehicle_data["model"] = vehicle.get_model(is_single=False, do_format=True) if "model" in columns else None
     vehicle_data["name"] = link if "name" in columns else None
     vehicle_data["type"] = vehicle.get_vehicle_type() if "type" in columns else None
     vehicle_data["mass"] = convert_int(vehicle.get_mass()) if "mass" in columns else None
