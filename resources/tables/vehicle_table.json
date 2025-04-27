@@ -17,6 +17,23 @@
             "trunk_capacity",
             "vehicle_id"
         ],
+        "vehicle": [
+            "model",
+            "name",
+            "type",
+            "mass",
+            "engine_force",
+            "engine_quality",
+            "engine_loudness",
+            "max_speed",
+            "suspension_stiffness",
+            "front_health",
+            "rear_health",
+            "seats",
+            "protection",
+            "trunk_capacity",
+            "vehicle_id"
+        ],
         "wrecked": [
             "model",
             "name",

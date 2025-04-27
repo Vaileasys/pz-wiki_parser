@@ -4,6 +4,7 @@ from scripts.utils.util import format_link, convert_int
 from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
 
 TABLE_PATH = f"{RESOURCE_PATH}/tables/vehicle_table.json"
+VEHICLE_BLACKLIST = ["Base.SportsCar_ez", "Base.ModernCar_Martin"]
 
 table_map = {}
 
@@ -57,12 +58,12 @@ def generate_data(vehicle_id, table_type):
 def find_table_type(vehicle: Vehicle):
     if vehicle.is_trailer:
         table_type = "trailer"
-    elif vehicle.is_burnt:
-        table_type = "burnt"
-    elif vehicle.is_wreck:
-        table_type = "wrecked"
+#    elif vehicle.is_burnt:
+#        table_type = "burnt"
+#    elif vehicle.is_wreck:
+#        table_type = "wrecked"
     else:
-        table_type = vehicle.get_full_parent().get_name()
+        table_type = "vehicle"
 
     return table_type
 
@@ -72,7 +73,16 @@ def find_vehicles():
     vehicles = Vehicle.all()
 
     for vehicle_id in vehicles:
+        # Skip blacklisted vehicles
+        if vehicle_id in VEHICLE_BLACKLIST:
+            continue
+        
         vehicle = Vehicle(vehicle_id)
+
+        # Skip vehicles that aren't parents
+        if not vehicle.is_parent:
+            continue
+
         table_type = find_table_type(vehicle)
         vehicle_data = generate_data(vehicle_id, table_type)
 
