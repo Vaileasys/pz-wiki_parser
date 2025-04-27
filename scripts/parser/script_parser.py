@@ -37,14 +37,14 @@ SCRIPT_CONFIGS = {
     },
     "vehicle": {
         "list_keys": ["template"],
-        "list_keys_semicolon": ["specialKeyRing", "leftCol", "rightCol", "zombieType"],
+        "list_keys_semicolon": ["specialKeyRing", "leftCol", "rightCol", "zombieType", "itemType"],
         "dict_keys_colon": ["skills"],
         "list_keys_space": ["offset", "rotate", "extents", "extentsOffset", "centerOfMassOffset", "shadowExtents", "shadowOffset", "physicsChassisShape", "xywh"]
     },
     "template": {
         "list_keys": ["template"],
         "list_keys_semicolon": ["requireInstalled", "leftCol", "rightCol", "itemType"],
-        "list_keys_space": ["offset", "rotate", "extents", "extentsOffset", "centerOfMassOffset", "shadowOffset", "physicsChassisShape", "xywh"],
+        "list_keys_space": ["offset", "rotate", "extents", "extentsOffset", "centerOfMassOffset", "shadowOffset", "physicsChassisShape", "xywh", "angle"],
         "dict_keys_colon": ["skills"],
     },
     "model": {
@@ -140,58 +140,61 @@ def post_process(script_dict: dict, script_type: str):
     return script_dict
 
 ## ------------------------- Split Handlers ------------------------- ##
+def split_list(value: str, character: str) -> list:
+    """Splits by a specific character and normalises as a list"""
+    return [normalise(v) for v in value.strip().split(character) if v.strip()]
+
+def split_dict(value: list[str], character: str) -> dict:
+    """Splits at a specific character and normalises as a dict."""
+    result = {}
+    for entry in value:
+        entry = entry.strip()
+        if not entry:
+            continue
+        if ':' in entry:
+            key, val = entry.split(':', 1)
+            key = normalise(key)
+            if key == "":
+                continue
+            result[key] = normalise(val)
+        else:
+            key = normalise(entry)
+            if key == "":
+                continue
+            result[key] = True
+    return result
+
 def split_pipe_list(value: str) -> list:
     """Splits at pipes '|' and normalises as a list."""
-    return [normalise(v) for v in value.split('|') if v.strip()]
+    return split_list(value, "|")
 
 def split_slash_list(value: str) -> list:
     """Splits at slashes '/' and normalises as a list."""
-    return [normalise(v) for v in value.split('/') if v.strip()]
+    return split_list(value, "/")
 
 def split_space_list(value: str) -> list:
     """Splits at spaces ' ' and normalises as a list."""
-    return [normalise(v) for v in value.strip().split() if v.strip()]
+    return split_list(value, " ")
 
 def split_semicolon_list(value: str) -> list:
     """Splits at semicolons ';' and normalises as a list."""
-    return [normalise(v) for v in value.split(';') if v.strip()]
+    return split_list(value, ";")
 
 def split_colon_list(value: str) -> list:
     """Splits at colons ':' and normalises as a list."""
-    return [normalise(v) for v in value.split(':') if v.strip()]
+    return split_list(value, ":")
 
 def split_colon_dict(value: list[str]) -> dict:
     """Splits at colons ':' and normalises as a dict."""
-    result = {}
-    for entry in value:
-        if ':' in entry:
-            key, val = entry.split(':', 1)
-            result[normalise(key)] = normalise(val)
-        else:
-            result[normalise(entry)] = True
-    return result
+    return split_dict(value, ":")
 
 def split_equal_dict(value: list[str]) -> dict:
     """Splits at equals '=' and normalises as a dict."""
-    result = {}
-    for entry in value:
-        if '=' in entry:
-            key, val = entry.split('=', 1)
-            result[normalise(key)] = normalise(val)
-        else:
-            result[normalise(entry)] = True
-    return result
+    return split_dict(value, "=")
 
 def split_space_dict(value: list[str]) -> dict:
     """Splits at spaces ' ' and normalises as a dict."""
-    result = {}
-    for entry in value:
-        if ' ' in entry:
-            key, val = entry.split(' ', 1)
-            result[normalise(key)] = normalise(val)
-        else:
-            result[normalise(entry)] = True
-    return result
+    return split_dict(value, " ")
 
 
 ## ------------------------- Special Cases ------------------------- ##
