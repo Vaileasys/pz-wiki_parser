@@ -3,6 +3,7 @@ from scripts.parser import script_parser
 from scripts.core.file_loading import get_script_path
 from scripts.core import logger
 from scripts.core.language import Translate
+from scripts.objects.item import Item
 from scripts.utils.echo import echo_warning
 from scripts.core.cache import save_json
 
@@ -66,10 +67,11 @@ class Vehicle:
         self.lore_model = None
         self.page = None
         self.is_burnt = True if "Burnt" in self.vehicle_id else False
-        self.is_smashed = True if "Smashed" in self.vehicle_id else False
+        self.is_wreck = True if "Smashed" in self.vehicle_id else False
         self.vehicle_type = None
         self.has_siren = None
         self.recipes = None
+        self.trunk_capacity = None
 
         self.setup_vehicle()
     
@@ -159,7 +161,6 @@ class Vehicle:
         """Load vehicle data only once and store in class-level cache."""
         cls._vehicles = script_parser.extract_script_data("vehicle")
 
-
     @classmethod
     def _load_models(cls):
         """Load vehicle models and store them in a class-level cache."""
@@ -169,7 +170,6 @@ class Vehicle:
             id_type = model_id.split(".", 1)[1]
             if id_type.startswith("Vehicles_") or id_type.startswith("Vehicle_"):
                 cls._vehicle_models[id_type] = model_data
-
 
     def setup_vehicle(self):
         """Initialise vehicle values."""
@@ -242,7 +242,7 @@ class Vehicle:
             "CarSmall": "SmallCar",
             "NormalCarPolice": "CarNormal",
             "PickUp": "PickUpTruck",
-            "Ambulance": "VanAmbulance",
+            "Ambulance": "VanAmbulance"
         }
         self.is_parent = False
         self.parent_id = self.get_mesh_id()
@@ -631,15 +631,48 @@ class Vehicle:
                 recipes_set.add(recipe_uninstall)
 
         self.recipes = list(recipes_set) if len(recipes_set) == 1 else []
+    
+    def get_trunk_capacity(self) -> None:
+        if self.trunk_capacity is None:
+            self.find_trunk_capacity()
+        return self.trunk_capacity
+
+    def find_trunk_capacity(self) -> None:
+        def get_capacity(trunk_name: str, part_dict: dict) -> int:
+            """Determine trunk capacity from part container or fallback itemType."""
+            container = part_dict.get("container")
+            if container and container.get("capacity") is not None:
+                return container["capacity"]
+
+            # Fallback to itemType lookup
+            trunk_item = part_dict.get("itemType", [None])[0]
+            if trunk_item:
+                trunk_item = trunk_item + str(self.get_mechanic_type())
+                return Item(trunk_item).get("MaxCapacity")
+            
+            echo_warning(f"[{self.vehicle_id}] Couldn't find trunk capacity for '{trunk_name}'.")
+            return 0
+
+        self.trunk_capacity = {}
+
+        TRUNKS = ("TruckBed", "TruckBedOpen", "TrailerTrunk", "TrailerAnimalFood", "TrailerAnimalEggs")
+        available_parts = self.get_parts()
+
+        for part_name in TRUNKS:
+            if part_name in available_parts:
+                part_data = self.get("part", {}).get(part_name)
+                capacity = get_capacity(part_name, part_data)
+                self.trunk_capacity[part_name] = capacity
+
+        if not self.trunk_capacity:
+            echo_warning(f"[{self.vehicle_id}] No trunk capacities found.")
+
+
 
 
 if __name__ == "__main__":
     vehicles = Vehicle.all()
-    vehicle_mesh_data = {}
-    for vehicle, vehicle_data in vehicles.items():
-        vehicle_mesh_data[vehicle] = {}
-        vehicle_mesh_data[vehicle]["mesh"] = Vehicle(vehicle).get_mesh_path()
-        vehicle_mesh_data[vehicle]["texture"] = Vehicle(vehicle).get_texture_path()
-    path = "output/output.json"
-    save_json(path, vehicle_mesh_data)
-    print(f"JSON file saved to '{path}'")
+#    template_data = Vehicle.get_template_part("Trunk/part/TrailerTrunk")
+#    print(template_data.get("container").get("capacity"))
+    vehicle = Vehicle("Base.Trailer_Horsebox")
+    print(vehicle.get_trunk_capacity())
