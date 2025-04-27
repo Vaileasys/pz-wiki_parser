@@ -27,7 +27,7 @@ def generate_data(vehicle_id, table_type):
     vehicle_data["engine_quality"] = vehicle.get_engine_quality() if "engine_quality" in columns else None
     vehicle_data["engine_loudness"] = vehicle.get_engine_loudness() if "engine_loudness" in columns else None
     vehicle_data["max_speed"] = convert_int(vehicle.get_max_speed()) if "max_speed" in columns else None
-    vehicle_data["suspension_stiffness"] = vehicle.get_suspension_stiffness() if "suspension_stiffness" in columns else None
+    vehicle_data["suspension_stiffness"] = convert_int(vehicle.get_suspension_stiffness()) if "suspension_stiffness" in columns else None
     vehicle_data["front_health"] = vehicle.get_front_end_health() if "front_health" in columns else None
     vehicle_data["rear_health"] = vehicle.get_rear_end_health() if "rear_health" in columns else None
     vehicle_data["seats"] = vehicle.get_seats() if "seats" in columns else None
