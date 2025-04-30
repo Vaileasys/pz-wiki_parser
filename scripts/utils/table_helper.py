@@ -9,6 +9,8 @@ OUTPUT_DIR = Path(OUTPUT_PATH) / Language.get() / "item_list"
 
 DEF_TABLE_HEADER = '{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"'
 DEF_TABLE_FOOTER = '|}'
+TABLE_WRAP_BEFORE = '<div class="scroll-x">\n'
+TABLE_WRAP_AFTER = '\n</div>'
 
 
 def get_table_data(path:str, extra_keys:str|list=None):
@@ -109,7 +111,18 @@ def generate_column_headings(column_def: dict, headings: dict) -> list:
     return result
 
 
-def generate_table(table_type:str, data:dict, column_headings:list, table_header:str=DEF_TABLE_HEADER, table_footer:str=DEF_TABLE_FOOTER, caption_top:str=None, caption_bottom:str=None, table_before:str=None, table_after:str=None) -> list:
+def generate_table(
+        table_type: str,
+        data: dict,
+        column_headings: list,
+        table_header: str = DEF_TABLE_HEADER,
+        table_footer: str = DEF_TABLE_FOOTER,
+        caption_top: str = None,
+        caption_bottom: str = None,
+        table_before: str = None,
+        table_after: str = None,
+        do_horizontal_scroll: bool = True
+        ) -> list:
     """
     Generates a wiki-formatted table from data and headings.
 
@@ -120,15 +133,19 @@ def generate_table(table_type:str, data:dict, column_headings:list, table_header
     :param str table_footer: The closing wiki table footer. Defaults to DEF_TABLE_FOOTER.
     :param str table_before: A string to be added before the table. Defaults to empty string.
     :param str table_after: A string to be added after the table. Defaults to empty string.
+    :param bool do_horizontal_scroll: Determines whether to add the horizontal scrolling wrapper. Defaults to True.
     :return list: A list of strings forming the complete table content.
     """
     
     content = []
 
+    table_wrap_before = TABLE_WRAP_BEFORE if do_horizontal_scroll else ""
+    table_after_after = TABLE_WRAP_AFTER if do_horizontal_scroll else ""
+
     table_before = "" if table_before is None else table_before
     table_after = "" if table_after is None else table_after
 
-    content.append(f'<!--BOT_FLAG-start-{table_type.replace(" ", "_")}. DO NOT REMOVE-->' + table_before + table_header)
+    content.append(f'<!--BOT_FLAG-start-{table_type.replace(" ", "_")}. DO NOT REMOVE-->' + table_wrap_before + table_before + table_header)
 
     if caption_top:
         content.append(f'|+ style="caption-side:top; font-weight:normal; | {caption_top}', '|-')
@@ -146,7 +163,7 @@ def generate_table(table_type:str, data:dict, column_headings:list, table_header
     if caption_bottom and not caption_top:
         content.extend(['|-', f'|+ style="caption-side:bottom; font-weight:normal; border: none;" | {caption_bottom}'])
     
-    content.append(table_footer + table_after + f'<!--BOT_FLAG-end-{table_type.replace(" ", "_")}. DO NOT REMOVE-->')
+    content.append(table_footer + table_after + table_after_after + f'<!--BOT_FLAG-end-{table_type.replace(" ", "_")}. DO NOT REMOVE-->')
 
     # Get translations
     content = [Translate.get_wiki(value) for value in content]
