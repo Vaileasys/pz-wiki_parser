@@ -74,6 +74,9 @@ class Vehicle:
         self.has_siren = None
         self.recipes = None
         self.trunk_capacity = None
+        self.glove_box_capacity = None
+        self.seat_capacity = None
+        self.total_capacity = None
 
         self.setup_vehicle()
     
@@ -704,28 +707,41 @@ class Vehicle:
                 recipes_set.add(recipe_uninstall)
 
         self.recipes = list(recipes_set) if len(recipes_set) == 1 else []
+
+    def find_part_capacity(self, part_data: dict, part: str = None) -> int:
+        """Determine trunk capacity from part container or fallback itemType."""
+        container = part_data.get("container")
+        if container and container.get("capacity") is not None:
+            return container["capacity"]
+
+        # Fallback to itemType lookup
+        trunk_item = part_data.get("itemType", [None])[0]
+        if trunk_item:
+            trunk_item = trunk_item + str(self.get_mechanic_type())
+            return Item(trunk_item).get("MaxCapacity")
+        
+        echo_warning(f"[{self.vehicle_id}] Couldn't find trunk capacity for '{part or 'part'}'.")
+        return 0
+
+    def get_glove_box_capacity(self) -> int:
+        if self.glove_box_capacity is None:
+            self.find_glove_box_capacity()
+        return self.glove_box_capacity
+
+    def find_glove_box_capacity(self) -> None:
+        glove_box = self.get_part("GloveBox")
+        if glove_box is not None:
+            capacity = int(self.find_part_capacity(glove_box, "GloveBox"))
+            self.glove_box_capacity = max(capacity, 5)
+        else:
+            self.glove_box_capacity = 0
     
-    def get_trunk_capacity(self) -> None:
+    def get_trunk_capacity(self) -> dict:
         if self.trunk_capacity is None:
             self.find_trunk_capacity()
         return self.trunk_capacity
 
     def find_trunk_capacity(self) -> None:
-        def get_capacity(trunk_name: str, part_dict: dict) -> int:
-            """Determine trunk capacity from part container or fallback itemType."""
-            container = part_dict.get("container")
-            if container and container.get("capacity") is not None:
-                return container["capacity"]
-
-            # Fallback to itemType lookup
-            trunk_item = part_dict.get("itemType", [None])[0]
-            if trunk_item:
-                trunk_item = trunk_item + str(self.get_mechanic_type())
-                return Item(trunk_item).get("MaxCapacity")
-            
-            echo_warning(f"[{self.vehicle_id}] Couldn't find trunk capacity for '{trunk_name}'.")
-            return 0
-
         self.trunk_capacity = {}
 
         TRUNKS = ("TruckBed", "TruckBedOpen", "TrailerTrunk", "TrailerAnimalFood", "TrailerAnimalEggs")
@@ -734,16 +750,41 @@ class Vehicle:
         for part_name in TRUNKS:
             if part_name in available_parts:
                 part_data = self.get("part", {}).get(part_name)
-                capacity = get_capacity(part_name, part_data)
+                capacity = self.find_part_capacity(part_data, part_name)
                 self.trunk_capacity[part_name] = capacity
 
         if not self.trunk_capacity:
             echo_warning(f"[{self.vehicle_id}] No trunk capacities found.")
+    
+    def get_seat_capacity(self) -> int:
+        if self.seat_capacity is None:
+            self.find_seat_capacity()
+        return self.seat_capacity
 
+    def find_seat_capacity(self) -> None:
+        #seat = self.get_part("Seat*")
+        seat = {"itemType": ["Base.NormalCarSeat"]}
+        if seat is not None:
+            capacity = int(self.find_part_capacity(seat, "Seat"))
+            self.seat_capacity = max(capacity, 5)
+        else:
+            self.seat_capacity = 0
+    
+    def get_total_capacity(self) -> int:
+        if self.total_capacity is None:
+            self.calculate_total_capacity()
+        return self.total_capacity
 
+    def calculate_total_capacity(self) -> int:
+        seat_count = self.get_seats()
+        seat = self.get_seat_capacity() if not self.is_trailer else 0
+        glove_box = self.get_glove_box_capacity()
+        trunk_list = self.get_trunk_capacity().values()
+        self.total_capacity = seat_count * seat + glove_box + sum(trunk_list)
+        if self.vehicle_id == "Base.Trailer_Horsebox":
+            print(self.is_trailer)
 
 
 if __name__ == "__main__":
-    vehicle = Vehicle("Base.Van")
-    print(vehicle.get_children())
-    print(vehicle.get_model(is_single=False, do_format=True))
+    vehicle = Vehicle("Base.SmallCar")
+    print(vehicle.is_trunk_accessible_from_seat())

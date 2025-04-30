@@ -32,12 +32,18 @@ def generate_data(vehicle_id, table_type):
     vehicle_data["rear_health"] = vehicle.get_rear_end_health() if "rear_health" in columns else None
     vehicle_data["seats"] = vehicle.get_seats() if "seats" in columns else None
     vehicle_data["protection"] = convert_int(vehicle.get_player_damage_protection()) if "protection" in columns else None
+    vehicle_data["glove_box_capacity"] = convert_int(vehicle.get_glove_box_capacity()) if "glove_box_capacity" in columns else None
     if "trunk_capacity" in columns:
         trunk_capacities = list(vehicle.get_trunk_capacity().values())
         trunk_capacities = [str(capacity) for capacity in trunk_capacities]
         if not trunk_capacities:
             trunk_capacities = ["-"]
         vehicle_data["trunk_capacity"] = " / ".join(trunk_capacities)
+    if "total_capacity" in columns:
+        capacity = vehicle.get_total_capacity()
+        vehicle_data["total_capacity"] = "-" if capacity == 0 else int(capacity)
+    else:
+        vehicle_data["total_capacity"] = None
     if "animal_trailer_size" in columns:
         animal_trailer_size = convert_int(vehicle.get_animal_trailer_size()) if vehicle.get_animal_trailer_size() > 0 else "-"
         vehicle_data["animal_trailer_size"] = animal_trailer_size
