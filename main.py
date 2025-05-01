@@ -19,7 +19,7 @@ menu_structure = {
             '2': {'module': 'scripts.fluids.fluid_infobox', 'name': 'Fluid infobox', 'description': 'Generates fluid infoboxes.'},
             '3': {'module': 'fixing', 'name': 'Fixing', 'description': 'Generates fixing recipes.'},
             '4': {'module': 'consumables', 'name': 'Consumables', 'description': 'Generate consumables tables.'},
-            '5': {'module': 'scripts.items.item_codesnip', 'name': 'Codesnips', 'description': 'Generate codesnip files.'},
+            '5': {'module': 'scripts.items.item_codesnip', 'name': 'Item codesnips', 'description': 'Generate codesnip files.'},
             '6': {'module': 'distribution', 'name': 'Distributions', 'description': 'Generate distribution files.'},
             '7': {'module': 'scripts.items.item_body_part', 'name': 'Body part', 'description': 'Generates body part templates.'},
             '8': {'module': 'scripts.parser.tiles_parser', 'name': 'Tile parser', 'description': 'DEV TILE PARSER.'},
