@@ -37,14 +37,14 @@ SCRIPT_CONFIGS = {
     },
     "vehicle": {
         "list_keys": ["template"],
-        "list_keys_semicolon": ["specialKeyRing", "leftCol", "rightCol", "zombieType"],
+        "list_keys_semicolon": ["specialKeyRing", "leftCol", "rightCol", "zombieType", "itemType"],
         "dict_keys_colon": ["skills"],
         "list_keys_space": ["offset", "rotate", "extents", "extentsOffset", "centerOfMassOffset", "shadowExtents", "shadowOffset", "physicsChassisShape", "xywh"]
     },
     "template": {
         "list_keys": ["template"],
         "list_keys_semicolon": ["requireInstalled", "leftCol", "rightCol", "itemType"],
-        "list_keys_space": ["offset", "rotate", "extents", "centerOfMassOffset", "shadowOffset", "physicsChassisShape", "xywh"],
+        "list_keys_space": ["offset", "rotate", "extents", "extentsOffset", "centerOfMassOffset", "shadowOffset", "physicsChassisShape", "xywh", "angle"],
         "dict_keys_colon": ["skills"],
     },
     "model": {
@@ -89,32 +89,83 @@ SCRIPT_CONFIGS = {
     }
 }
 
+# Cached scripts
+script_cache = {}
+
 ## ------------------------- Post Processing ------------------------- ##
 
 def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -> dict:
-    """Injects and merges template! entries into each script definition, recursively injecting child templates."""
-    def merge_template(script_data: dict, template_name: str, script_id: str, script_type: str, template_dict: dict) -> dict:
-        """Merges a template! into the data"""
+    """Injects and merges template! and template entries into each script definition."""
+    def merge_template(script_data: dict, template_path: str, script_id: str, script_type: str, template_dict: dict) -> dict:
+        """Merges a template into the script data."""
         module = script_id.split(".", 1)[0]
-        template_id = f"{module}.{script_type}_{template_name}"
-        template = template_dict.get(template_id)
 
-        if not template:
-            echo_warning(f"[{script_id}] template! '{template_id}' not found for '{template_name}'.")
-            return script_data
+        # Handle nested paths
+        if "/" in template_path:
+            parts = template_path.split("/")
+            base_template_id = f"{module}.{script_type}_{parts[0]}"
+            base_template = template_dict.get(base_template_id)
+            if not base_template:
+                echo_warning(f"[{script_id}] base template '{base_template_id}' not found.")
+                return script_data
 
-        template = dict(template)
+            # Walk through nested templates
+            current_template = base_template
+            for key in parts[1:]:
+                if current_template is None:
+                    echo_warning(f"[{script_id}] template path '{template_path}' is incomplete at '{key}'.")
+                    return script_data
+                current_template = current_template.get(key)
 
-        # Inject child template
-        child_template = template.get("template!")
-        if child_template:
-            template = merge_template(template, child_template, template_id, script_type, template_dict)
+            if current_template is None:
+                echo_warning(f"[{script_id}] could not fully walk path '{template_path}'.")
+                return script_data
 
-        # Merge template into script data and remove template!
-        merged = dict(template)
-        merged.update(script_data)
-        merged.pop("template!", None)
-        return merged
+            # Build path inside script_data
+            dest = script_data
+            for key in parts[1:-1]:
+                if key not in dest:
+                    dest[key] = {}
+                elif not isinstance(dest[key], dict):
+                    echo_warning(f"[{script_id}] expected dict at '{key}' but found {type(dest[key])}.")
+                    return script_data
+                dest = dest[key]
+
+            # Add or merge final key
+            final_key = parts[-1]
+            if final_key not in dest:
+                dest[final_key] = current_template
+            else:
+                if isinstance(dest[final_key], dict) and isinstance(current_template, dict):
+                    dest[final_key].update(current_template)
+
+        else:
+            # Merge full template
+            template_id = f"{module}.{script_type}_{template_path}"
+            template = template_dict.get(template_id)
+            if not template:
+                echo_warning(f"[{script_id}] template '{template_id}' not found.")
+                return script_data
+
+            # Merge fields into script_data
+            for key, value in template.items():
+                if key in ("ScriptType", "SourceFile"):
+                    continue
+                if key not in script_data:
+                    script_data[key] = value
+                else:
+                    if isinstance(script_data[key], list) and isinstance(value, list):
+                        script_data[key] = list(dict.fromkeys(script_data[key] + value))
+                    elif isinstance(script_data[key], dict) and isinstance(value, dict):
+                        script_data[key].update(value)
+
+            # Merge sub-templates recursively
+            sub_template_list = template.get("template")
+            if sub_template_list:
+                for sub_temp in sub_template_list:
+                    script_data = merge_template(script_data, sub_temp, script_id, script_type, template_dict)
+
+        return script_data
 
     updated_dict = {}
 
@@ -123,6 +174,17 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
         template_name = script_data.get("template!")
         if template_name:
             script_data = merge_template(script_data, template_name, script_id, script_type, template_dict)
+
+        # Inject and merge 'template'
+        template_list = script_data.get("template")
+        if template_list:
+            for temp in template_list:
+                script_data = merge_template(script_data, temp, script_id, script_type, template_dict)
+
+        # Remove templates
+        script_data.pop("template!", None)
+        script_data.pop("template", None)
+
         updated_dict[script_id] = script_data
 
     return updated_dict
@@ -137,58 +199,61 @@ def post_process(script_dict: dict, script_type: str):
     return script_dict
 
 ## ------------------------- Split Handlers ------------------------- ##
+def split_list(value: str, character: str) -> list:
+    """Splits by a specific character and normalises as a list"""
+    return [normalise(v) for v in value.strip().split(character) if v.strip()]
+
+def split_dict(value: list[str], character: str) -> dict:
+    """Splits at a specific character and normalises as a dict."""
+    result = {}
+    for entry in value:
+        entry = entry.strip()
+        if not entry:
+            continue
+        if ':' in entry:
+            key, val = entry.split(':', 1)
+            key = normalise(key)
+            if key == "":
+                continue
+            result[key] = normalise(val)
+        else:
+            key = normalise(entry)
+            if key == "":
+                continue
+            result[key] = True
+    return result
+
 def split_pipe_list(value: str) -> list:
     """Splits at pipes '|' and normalises as a list."""
-    return [normalise(v) for v in value.split('|') if v.strip()]
+    return split_list(value, "|")
 
 def split_slash_list(value: str) -> list:
     """Splits at slashes '/' and normalises as a list."""
-    return [normalise(v) for v in value.split('/') if v.strip()]
+    return split_list(value, "/")
 
 def split_space_list(value: str) -> list:
     """Splits at spaces ' ' and normalises as a list."""
-    return [normalise(v) for v in value.strip().split() if v.strip()]
+    return split_list(value, " ")
 
 def split_semicolon_list(value: str) -> list:
     """Splits at semicolons ';' and normalises as a list."""
-    return [normalise(v) for v in value.split(';') if v.strip()]
+    return split_list(value, ";")
 
 def split_colon_list(value: str) -> list:
     """Splits at colons ':' and normalises as a list."""
-    return [normalise(v) for v in value.split(':') if v.strip()]
+    return split_list(value, ":")
 
 def split_colon_dict(value: list[str]) -> dict:
     """Splits at colons ':' and normalises as a dict."""
-    result = {}
-    for entry in value:
-        if ':' in entry:
-            key, val = entry.split(':', 1)
-            result[normalise(key)] = normalise(val)
-        else:
-            result[normalise(entry)] = True
-    return result
+    return split_dict(value, ":")
 
 def split_equal_dict(value: list[str]) -> dict:
     """Splits at equals '=' and normalises as a dict."""
-    result = {}
-    for entry in value:
-        if '=' in entry:
-            key, val = entry.split('=', 1)
-            result[normalise(key)] = normalise(val)
-        else:
-            result[normalise(entry)] = True
-    return result
+    return split_dict(value, "=")
 
 def split_space_dict(value: list[str]) -> dict:
     """Splits at spaces ' ' and normalises as a dict."""
-    result = {}
-    for entry in value:
-        if ' ' in entry:
-            key, val = entry.split(' ', 1)
-            result[normalise(key)] = normalise(val)
-        else:
-            result[normalise(entry)] = True
-    return result
+    return split_dict(value, " ")
 
 
 ## ------------------------- Special Cases ------------------------- ##
@@ -607,6 +672,12 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
     Returns:
         dict[str, dict]: A dictionary of parsed script blocks keyed by full ID (FullType).
     """
+    global script_cache
+
+    # If script_type from cache if it's already been parsed.
+    if script_type in script_cache:
+        return script_cache[script_type]
+
     script_dict = {}
     entity_dict = {} # special case for entity
     script_files = get_script_files()
@@ -716,6 +787,9 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
         echo_success(f"Parsed {len(script_dict)} {script_type} entries.")
 
     if cache_result:
+        # Cache dict in memory
+        script_cache[script_type] = script_dict
+
         # Special case for storing both types of entity data
         if script_type == "entity":
             save_cache(entity_dict, f"parsed_{script_type}_data.json")

@@ -3,6 +3,7 @@ from scripts.parser import script_parser
 from scripts.core.file_loading import get_script_path
 from scripts.core import logger
 from scripts.core.language import Translate
+from scripts.objects.item import Item
 from scripts.utils.echo import echo_warning
 from scripts.core.cache import save_json
 
@@ -52,6 +53,7 @@ class Vehicle:
         self.name = None # English name
         self.page = None # Wiki page
         self.model = self.id_type + "_Model.png"
+        self.models_all = None
 
         self.mesh_id = None
         self.mesh_path = None
@@ -60,16 +62,21 @@ class Vehicle:
         self.full_parent_id = None # lore based (external assumption)
         self.is_parent = None
         self.is_full_parent = None
+        self.children = None
         self.is_trailer = None # assigned during setup
         self.variants = None
         self.manufacturer = None
         self.lore_model = None
         self.page = None
         self.is_burnt = True if "Burnt" in self.vehicle_id else False
-        self.is_smashed = True if "Smashed" in self.vehicle_id else False
+        self.is_wreck = True if "Smashed" in self.vehicle_id else False
         self.vehicle_type = None
         self.has_siren = None
         self.recipes = None
+        self.trunk_capacity = None
+        self.glove_box_capacity = None
+        self.seat_capacity = None
+        self.total_capacity = None
 
         self.setup_vehicle()
     
@@ -159,7 +166,6 @@ class Vehicle:
         """Load vehicle data only once and store in class-level cache."""
         cls._vehicles = script_parser.extract_script_data("vehicle")
 
-
     @classmethod
     def _load_models(cls):
         """Load vehicle models and store them in a class-level cache."""
@@ -169,7 +175,6 @@ class Vehicle:
             id_type = model_id.split(".", 1)[1]
             if id_type.startswith("Vehicles_") or id_type.startswith("Vehicle_"):
                 cls._vehicle_models[id_type] = model_data
-
 
     def setup_vehicle(self):
         """Initialise vehicle values."""
@@ -185,10 +190,6 @@ class Vehicle:
     def get(self, key: str, default=None):
         """Safely get a value from vehicle data with an optional default."""
         return self.data.get(key, default)
-
-    def keys(self):
-        """Return all data keys for this vehicle."""
-        return self.data.keys()
     
     ## ------------------------- Core Properties ------------------------- ##
     
@@ -242,13 +243,13 @@ class Vehicle:
             "CarSmall": "SmallCar",
             "NormalCarPolice": "CarNormal",
             "PickUp": "PickUpTruck",
-            "Ambulance": "VanAmbulance",
+            "Ambulance": "VanAmbulance"
         }
         self.is_parent = False
         self.parent_id = self.get_mesh_id()
 
         # Remove prefixes/suffixes
-        TOKENS = ["Vehicle_", "Vehicles_", "_NoRandom", "_Burnt", "Burnt", "Front", "Rear", "Right", "Left", "Smashed", "Lights"]
+        TOKENS = ["Vehicle_", "Vehicles_", "_NoRandom", "_Burnt", "Burnt", "Front", "Rear", "Right", "Left", "Smashed", "Lights", "Taxi"]
         for token in TOKENS:
             self.parent_id = self.parent_id.replace(token, "")
 
@@ -282,7 +283,7 @@ class Vehicle:
 
     def find_full_parent(self) -> None:
         """Finds the vehicle type, the parent make/model."""
-        TYPE_MAP = {
+        FULL_PARENTS = {
 #            "": "Base.CarLuxury", # Mercia Lang 4000
             "Base.CarTaxi": "Base.CarNormal", # Chevalier Nyala
 #            "": "Base.CarStationWagon", # Chevalier Cerise Wagon
@@ -306,10 +307,28 @@ class Vehicle:
         }
         self.is_full_parent = False
         parent = self.parent_id
-        self.full_parent_id = parent if parent not in TYPE_MAP else TYPE_MAP.get(parent)
+        self.full_parent_id = parent if parent not in FULL_PARENTS else FULL_PARENTS.get(parent)
         
         if self.full_parent_id == self.vehicle_id:
             self.is_full_parent = True
+
+    def get_children(self) -> list[str]:
+        if self.children is None:
+            self.find_children()
+        return self.children
+
+    def find_children(self) -> None:
+        if not self.is_parent:
+            return []
+        children = []
+        for child_id in Vehicle.keys():
+            if child_id == self.vehicle_id:
+                continue
+            vehicle = Vehicle(child_id)
+            if vehicle.get_parent().vehicle_id == self.vehicle_id:
+                children.append(child_id)
+        
+        self.children = children
 
     def get_page(self) -> str:
         """Return the wiki page for this vehicle."""
@@ -318,9 +337,13 @@ class Vehicle:
         return self.page
 
     def find_page(self) -> None:
-        parent_id = self.parent_id
-        if parent_id is None:
-            self.page = self.get_name()
+        PAGE_FIX = {
+            "Base.VanSeats": "Franklin Valuline (6-seater)",
+            "Base.VanRadio": "Radio Van"
+        }
+        parent_id = self.vehicle_id if self.parent_id is None else self.parent_id
+        if parent_id in PAGE_FIX:
+            self.page = PAGE_FIX[parent_id]
         else:
             self.page = Vehicle(parent_id).get_name()
 
@@ -383,9 +406,58 @@ class Vehicle:
 
     ## ------------------------- Texture & Model ------------------------- ##
 
-    def get_model(self) -> str:
+    def get_model(self,*, is_single=True, do_format=False) -> str:
         """Return the rendered 3D model wiki file name as PNG."""
-        return self.model
+        if is_single:
+            model = self.model
+        else:
+            if self.models_all is None:
+                self.find_all_models()
+            model = self.models_all
+        
+        if do_format:
+            if is_single:
+                return self.format_model(single=model, page=self.get_page())
+            else:
+                return self.format_model(multi=model, page=self.get_page())
+
+        return model    
+
+    def find_all_models(self) -> None:
+        """Return all the rendered 3D models including that of all children."""
+        # TODO: add special case for advert trailer, getting all textures
+        if not self.is_parent:
+            self.models_all = self.model
+            return 
+        
+        models = []
+        models.append(self.model)
+        if self.children is None:
+            self.find_children()
+        for child_id in self.children:
+            child = Vehicle(child_id)
+            if child.is_burnt or child.is_wreck:
+                continue
+            model = child.get_model()
+            models.append(model)
+        self.models_all = models
+
+    @classmethod
+    def format_model(self, *, single: str = None, multi: list[str] = None, page: str = None) -> str:
+        if multi and len(multi) == 1:
+            single = multi[0]
+        models = [single] if single else multi
+        images = []
+        for model in models:
+            link = "|link=" + page if page is not None else ""
+            image = f"[[File:{model}|128x128px{link}]]"
+            images.append(image)
+        
+        final_image = "".join(images)
+        if len(images) > 1:
+            final_image = f'<span class="cycle-img">{final_image}</span>'
+        
+        return final_image
 
     def get_mesh_id(self) -> str:
         """Return the internal model ID."""
@@ -455,10 +527,12 @@ class Vehicle:
     
     def get_wheel_friction(self) -> float:
         """Return the vehicle's wheel friction value."""
+        # NOTE: Overwritten by item
         return float(self.get("wheelFriction", 800.0))
     
     def get_braking_force(self) -> int | None:
         """Return the vehicle's braking force."""
+        # NOTE: Overwritten by item
         return float(self.get("brakingForce", 0.0))
     
     def get_max_speed(self) -> float:
@@ -545,10 +619,12 @@ class Vehicle:
     
     def get_suspension_compression(self) -> float:
         """Return the suspension compression rate."""
+        # NOTE: Overwritten by item
         return float(self.get("suspensionCompression", 4.4))
     
     def get_suspension_damping(self) -> float:
         """Return the suspension damping rate."""
+        # NOTE: Overwritten by item
         return float(self.get("suspensionDamping", 2.3))
     
     def get_max_suspension_travel_cm(self) -> int:
@@ -632,14 +708,83 @@ class Vehicle:
 
         self.recipes = list(recipes_set) if len(recipes_set) == 1 else []
 
+    def find_part_capacity(self, part_data: dict, part: str = None) -> int:
+        """Determine trunk capacity from part container or fallback itemType."""
+        container = part_data.get("container")
+        if container and container.get("capacity") is not None:
+            return container["capacity"]
+
+        # Fallback to itemType lookup
+        trunk_item = part_data.get("itemType", [None])[0]
+        if trunk_item:
+            trunk_item = trunk_item + str(self.get_mechanic_type())
+            return Item(trunk_item).get("MaxCapacity")
+        
+        echo_warning(f"[{self.vehicle_id}] Couldn't find trunk capacity for '{part or 'part'}'.")
+        return 0
+
+    def get_glove_box_capacity(self) -> int:
+        if self.glove_box_capacity is None:
+            self.find_glove_box_capacity()
+        return self.glove_box_capacity
+
+    def find_glove_box_capacity(self) -> None:
+        glove_box = self.get_part("GloveBox")
+        if glove_box is not None:
+            capacity = int(self.find_part_capacity(glove_box, "GloveBox"))
+            self.glove_box_capacity = max(capacity, 5)
+        else:
+            self.glove_box_capacity = 0
+    
+    def get_trunk_capacity(self) -> dict:
+        if self.trunk_capacity is None:
+            self.find_trunk_capacity()
+        return self.trunk_capacity
+
+    def find_trunk_capacity(self) -> None:
+        self.trunk_capacity = {}
+
+        TRUNKS = ("TruckBed", "TruckBedOpen", "TrailerTrunk", "TrailerAnimalFood", "TrailerAnimalEggs")
+        available_parts = self.get_parts()
+
+        for part_name in TRUNKS:
+            if part_name in available_parts:
+                part_data = self.get("part", {}).get(part_name)
+                capacity = self.find_part_capacity(part_data, part_name)
+                self.trunk_capacity[part_name] = capacity
+
+        if not self.trunk_capacity:
+            echo_warning(f"[{self.vehicle_id}] No trunk capacities found.")
+    
+    def get_seat_capacity(self) -> int:
+        if self.seat_capacity is None:
+            self.find_seat_capacity()
+        return self.seat_capacity
+
+    def find_seat_capacity(self) -> None:
+        #seat = self.get_part("Seat*")
+        seat = {"itemType": ["Base.NormalCarSeat"]}
+        if seat is not None:
+            capacity = int(self.find_part_capacity(seat, "Seat"))
+            self.seat_capacity = max(capacity, 5)
+        else:
+            self.seat_capacity = 0
+    
+    def get_total_capacity(self) -> int:
+        if self.total_capacity is None:
+            self.calculate_total_capacity()
+        return self.total_capacity
+
+    def calculate_total_capacity(self) -> int:
+        seat_count = self.get_seats()
+        seat = self.get_seat_capacity() if not self.is_trailer else 0
+        glove_box = self.get_glove_box_capacity()
+        trunk_list = self.get_trunk_capacity().values()
+        self.total_capacity = seat_count * seat + glove_box + sum(trunk_list)
+        if self.vehicle_id == "Base.Trailer_Horsebox":
+            print(self.is_trailer)
+
 
 if __name__ == "__main__":
-    vehicles = Vehicle.all()
-    vehicle_mesh_data = {}
-    for vehicle, vehicle_data in vehicles.items():
-        vehicle_mesh_data[vehicle] = {}
-        vehicle_mesh_data[vehicle]["mesh"] = Vehicle(vehicle).get_mesh_path()
-        vehicle_mesh_data[vehicle]["texture"] = Vehicle(vehicle).get_texture_path()
-    path = "output/output.json"
-    save_json(path, vehicle_mesh_data)
-    print(f"JSON file saved to '{path}'")
+    vehicle = Vehicle("Base.SmallCar")
+    print(vehicle.is_trunk_accessible_from_seat())

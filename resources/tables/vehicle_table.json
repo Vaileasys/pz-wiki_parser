@@ -1,0 +1,91 @@
+{
+    "map": {
+        "default": [
+            "model",
+            "name",
+            "type",
+            "mass",
+            "engine_force",
+            "engine_quality",
+            "engine_loudness",
+            "max_speed",
+            "suspension_stiffness",
+            "front_health",
+            "rear_health",
+            "protection",
+            "seats",
+            "glove_box_capacity",
+            "trunk_capacity",
+            "total_capacity",
+            "vehicle_id"
+        ],
+        "vehicle": [
+            "model",
+            "name",
+            "type",
+            "mass",
+            "engine_force",
+            "engine_quality",
+            "engine_loudness",
+            "max_speed",
+            "suspension_stiffness",
+            "front_health",
+            "rear_health",
+            "protection",
+            "seats",
+            "glove_box_capacity",
+            "trunk_capacity",
+            "total_capacity",
+            "vehicle_id"
+        ],
+        "wrecked": [
+            "model",
+            "name",
+            "type",
+            "mass",
+            "seats",
+            "trunk_capacity",
+            "vehicle_id"
+        ],
+        "burnt": [
+            "model",
+            "name",
+            "type",
+            "vehicle_id"
+        ],
+        "trailer": [
+            "model",
+            "name",
+            "type",
+            "mass",
+            "suspension_stiffness",
+            "front_health",
+            "rear_health",
+            "protection",
+            "trunk_capacity",
+            "total_capacity",
+            "animal_trailer_size",
+            "vehicle_id"
+        ]
+    },
+    "headings": {
+        "model": "! Model",
+        "name": "! Name",
+        "type": "! Type",
+        "mass": "! [[File:Status_HeavyLoad_32.png|32px|link=|Weight]]",
+        "engine_force": "! [[File:UI_Range.png|32px|link=|Engine force]]",
+        "engine_quality": "! [[File:UI_Condition.png|32px|link=|Engine quality]]",
+        "engine_loudness": "! [[File:UI_Noise.png|32px|link=|Engine loudness]]",
+        "max_speed": "! [[File:Speedregulator_light.png|28px|link=|Top speed]]",
+        "suspension_stiffness": "! [[File:CarSuspension.png|32px|link=|Suspension stiffness]]",
+        "front_health": "! [[File:UI_Condition_Right.png|32px|link=|Front durability]]",
+        "rear_health": "! [[File:UI_Condition_Left.png|32px|link=|Rear durability]]",
+        "protection": "! [[File:Heart_On_64.png|32px|link=|Occupant protection]]",
+        "seats": "! [[File:CarSeat.png|32px|link=|Seats]]",
+        "glove_box_capacity": "! [[File:GloveBox.png|32px|link=|Glove box capacity]]",
+        "trunk_capacity": "! [[File:CarTrunk.png|32px|link=|Trunk capacity]]",
+        "total_capacity": "! [[File:Icon_InventoryBasic.png|31px|link=|Total storage]]",
+        "animal_trailer_size": "! [[File:SheepWhite_Lamb.png|32px|link=|Animal size]]",
+        "vehicle_id": "! Vehicle ID"
+    }
+}
