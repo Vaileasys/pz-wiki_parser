@@ -1,11 +1,11 @@
 import os
-import json
 import shutil
 import platform
-import subprocess
 from pathlib import Path
 from scripts.core import config_manager
 from scripts.core.constants import LUA_PATH
+from scripts.utils.echo import echo, echo_warning, echo_success, echo_error, ignore_warnings, echo_info
+
 
 def get_install_path():
     EXISTS_TAG = "\033[92m[exists]\033[0m"
@@ -38,19 +38,19 @@ def get_install_path():
             if selected_path.exists():
                 return selected_path
             else:
-                print("That path doesn't exist on your system.")
+                echo_error("That path doesn't exist on your system.")
                 return get_install_path()
         elif choice == count+1:
             manual_path = Path(input("Please enter the install location: ").strip())
             if manual_path.exists():
                 return manual_path
             else:
-                print("That path doesn't exist.")
+                echo_error("That path doesn't exist.")
                 return get_install_path()
         else:
             raise ValueError
     except ValueError:
-        print("Invalid choice, please try again.")
+        echo_error("Invalid choice, please try again.")
         return get_install_path()
 
 
@@ -78,7 +78,7 @@ def copy_scripts_and_radio(media_dir):
         shutil.rmtree(scripts_destination)
 
     shutil.copytree(scripts_dir, scripts_destination)
-    print(f"Copied {scripts_dir} to {scripts_destination}")
+    echo_info(f"Copied {scripts_dir} to {scripts_destination}")
 
     # Check and copy radio folder
     if not os.path.exists(radio_dir):
@@ -88,7 +88,7 @@ def copy_scripts_and_radio(media_dir):
         shutil.rmtree(radio_destination)
 
     shutil.copytree(radio_dir, radio_destination)
-    print(f"Copied {radio_dir} to {radio_destination}")
+    echo_info(f"Copied {radio_dir} to {radio_destination}")
 
 
 def copy_lua_files(media_dir: str) -> None:
@@ -152,6 +152,7 @@ def copy_lua_files(media_dir: str) -> None:
         'ISHotbarAttachDefinition.lua': None,
         'AttachedLocations.lua': None,
         'recorded_media.lua': None,
+        'ISMoveableDefinitions.lua': None,
         # stashes
         'BrandenburgStashDesc.lua': 'stashes',
         'EkronStashDesc.lua': 'stashes',
@@ -195,7 +196,7 @@ def find_and_copy_files(destination_dir, input_dir, files_to_copy, rename_func=N
                 dst_filename = rename_func(Path(root).name) if rename_func else file
                 dst = dst / dst_filename
                 shutil.copy(src, dst)
-                print(f"Copied {file} to {dst}")
+                echo_info(f"Copied {file} to {dst}")
 
 
 def rename_spawnpoints(folder_name: str) -> str:
@@ -209,9 +210,21 @@ def copy_spawnpoint_files(media_dir):
     lua_dir = Path(media_dir) / 'maps'
     if not lua_dir.exists():
         raise FileNotFoundError(f"Lua directory not found in {lua_dir}.")
-    
+
     destination_dir = Path(LUA_PATH)
     find_and_copy_files(destination_dir, lua_dir, spawnpoint_files, rename_func=rename_spawnpoints)
+
+
+def copy_tile_definitions(media_dir):
+    """Copy newtiledefinitions.tiles from media_dir to resources/tiles."""
+    src = os.path.join(media_dir, 'newtiledefinitions.tiles')
+    dst_dir = os.path.join('resources', 'tiles')
+    os.makedirs(dst_dir, exist_ok=True)
+    if os.path.exists(src):
+        shutil.copy(src, dst_dir)
+        echo_info(f"Copied newtiledefinitions.tiles to {dst_dir}")
+    else:
+        echo_warning(f"newtiledefinitions.tiles not found at {src}, skipping.")
 
 
 def copy_xml_files(media_dir):
@@ -234,9 +247,9 @@ def copy_xml_files(media_dir):
         dst_path = os.path.join(destination_dir, file_name)
         if os.path.exists(src_path):
             shutil.copy(src_path, dst_path)
-            print(f"Copied {file_name} to {dst_path}")
+            echo_info(f"Copied {file_name} to {dst_path}")
         else:
-            print(f"{file_name} not found in {src_path}, skipping.")
+            echo_warning(f"{file_name} not found in {src_path}, skipping.")
 
     # Copy contents of the clothing folder
     if os.path.exists(source_clothing_dir):
@@ -247,9 +260,9 @@ def copy_xml_files(media_dir):
                 shutil.copytree(src_path, dst_path, dirs_exist_ok=True)
             else:
                 shutil.copy2(src_path, dst_path)
-            print(f"Copied {item} to {dst_path}")
+            echo_info(f"Copied {item} to {dst_path}")
     else:
-        print(f"Clothing folder not found at {source_clothing_dir}, skipping.")
+        echo_warning(f"Clothing folder not found at {source_clothing_dir}, skipping.")
 
 
 def copy_java_files(install_path):
@@ -277,44 +290,21 @@ def copy_java_files(install_path):
                 src = os.path.join(root, file)
                 dst = os.path.join(destination_dir, file)
                 shutil.copy(src, dst)
-                print(f"Copied {file} to {dst}")
+                echo_info(f"Copied {file} to {dst}")
 
 
 def handle_translations(media_dir):
+    translation_dir = os.path.join(media_dir, 'lua', 'shared', 'Translate')
+    destination_dir = os.path.join('resources', 'Translate')
 
-    print("Would you like to use:")
-    print("1: Local translation")
-    print("2: Latest on GitHub (requires git)")
+    if not os.path.exists(destination_dir):
+        os.makedirs(destination_dir)
 
-    choice = input("> ").strip()
-
-    if choice == '1':
-        translation_dir = os.path.join(media_dir, 'lua', 'shared', 'Translate')
-        destination_dir = os.path.join('resources', 'Translate')
-
-        if not os.path.exists(destination_dir):
-            os.makedirs(destination_dir)
-
-        if os.path.exists(translation_dir):
-            shutil.copytree(translation_dir, destination_dir, dirs_exist_ok=True)
-            print(f"Copied local translation to {destination_dir}")
-        else:
-            print(f"Translation directory not found in {translation_dir}")
-    elif choice == '2':
-        repo_url = "https://github.com/TheIndieStone/ProjectZomboidTranslations/"
-        translate_dir = os.path.join("resources", "Translate")
-        # Clear directory
-        if os.path.exists(translate_dir):
-            shutil.rmtree(translate_dir)
-
-        try:
-            subprocess.run(["git", "clone", repo_url, translate_dir], check=True)
-            print(f"Successfully cloned the repository into {translate_dir}.")
-        except subprocess.CalledProcessError as e:
-            print(f"Failed to clone the repository: {e}")
+    if os.path.exists(translation_dir):
+        shutil.copytree(translation_dir, destination_dir, dirs_exist_ok=True)
+        echo_info(f"Copied local translation to {destination_dir}")
     else:
-        print("Invalid choice, please try again.")
-        handle_translations(media_dir)
+        echo_error(f"Translation directory not found in {translation_dir}")
 
 
 def main():
@@ -324,18 +314,21 @@ def main():
     try:
         media_dir = verify_media_directory(install_path)
     except FileNotFoundError as e:
-        print(e)
+        echo_error(e)
         return
 
     try:
         copy_scripts_and_radio(media_dir)
         copy_lua_files(media_dir)
         copy_spawnpoint_files(media_dir)
+        copy_tile_definitions(media_dir)
         copy_xml_files(media_dir)
         copy_java_files(install_path)
         handle_translations(media_dir)
     except FileNotFoundError as e:
-        print(e)
+        echo_error(e)
+    else:
+        echo_success(f"Setup complete")
 
 
 if __name__ == "__main__":
