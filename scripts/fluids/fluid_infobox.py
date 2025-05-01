@@ -22,7 +22,7 @@ def get_fluid():
 def write_to_output(fluid_data, fluid_id, output_dir):
     try:
         # Load color_reference.json to get rgb values
-        with open("resources/color_reference.json", "r") as f:
+        with open(os.path.join("resources", "color_reference.json"), "r") as f:
             color_reference = json.load(f)
 
         os.makedirs(output_dir, exist_ok=True)
@@ -130,7 +130,7 @@ def automatic_extraction(output_dir):
 
 def main():
     language_code = Language.get()
-    output_dir = f'output/{language_code}/fluid_infoboxes'
+    output_dir = os.path.join("output", language_code, "fluid_infoboxes")
 
     while True:
         choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()

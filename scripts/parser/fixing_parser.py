@@ -6,7 +6,7 @@ from scripts.core.constants import DATA_PATH
 from scripts.core.cache import save_cache, load_cache
 
 CACHE_JSON = 'fixing_data.json'
-SCRIPTS_DIR = "resources/scripts"
+SCRIPTS_DIR = os.path.join("resources", "scripts")
 
 parsed_fixing_data = {}
 

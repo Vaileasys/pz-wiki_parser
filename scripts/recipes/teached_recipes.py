@@ -5,8 +5,7 @@ from scripts.utils.utility import get_recipe
 
 def main():
     parsed_item_data = item_parser.get_item_data()
-
-    teached_dir = 'output/recipes/teachedrecipes'
+    teached_dir = os.path.join("output", "recipes", "teachedrecipes")
     os.makedirs(teached_dir, exist_ok=True)
 
     for item_id, item_data in tqdm(parsed_item_data.items(), desc="Processing Items"):

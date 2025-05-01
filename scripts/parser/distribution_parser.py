@@ -680,14 +680,14 @@ def parse_stories(class_files_directory, output_file):
 
 def main():
     # File paths
-    attached_weapon_path = "resources/lua/AttachedWeaponDefinitions.lua"
-    distributions_lua_path = "resources/lua/Distributions.lua"
-    forage_definitions_path = "resources/lua/forageDefinitions.lua"
-    procedural_distributions_path = "resources/lua/ProceduralDistributions.lua"
-    vehicle_distributions_path = "resources/lua/VehicleDistributions.lua"
-    clothing_file_path = "resources/clothing/clothing.xml"
-    guid_table_path = "resources/fileGuidTable.xml"
-    class_files_directory = "resources/Java"
+    attached_weapon_path = os.path.join("resources", "lua", "AttachedWeaponDefinitions.lua")
+    distributions_lua_path = os.path.join("resources", "lua", "Distributions.lua")
+    forage_definitions_path = os.path.join("resources", "lua", "forageDefinitions.lua")
+    procedural_distributions_path = os.path.join("resources", "lua", "ProceduralDistributions.lua")
+    vehicle_distributions_path = os.path.join("resources", "lua", "VehicleDistributions.lua")
+    clothing_file_path = os.path.join("resources", "clothing", "clothing.xml")
+    guid_table_path = os.path.join("resources", "fileGuidTable.xml")
+    class_files_directory = os.path.join("resources", "Java")
 
     # Call the init function to check if all files exist
     init(attached_weapon_path, distributions_lua_path, forage_definitions_path,

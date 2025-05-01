@@ -54,7 +54,7 @@ def get_fluids():
     fluids = []
 
     # Load color_reference.json to get rgb values
-    with open("resources/color_reference.json", "r") as f:
+    with open(os.path.join("resources", "color_reference.json"), "r") as f:
         color_reference = json.load(f)
 
     for fluid_id, fluid_data in fluid_parser.get_fluid_data().items():

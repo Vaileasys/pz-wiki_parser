@@ -803,15 +803,15 @@ def main(run_directly=False):
     see_also_cache_file = os.path.join(DATA_PATH, CACHE_FILE)
     see_also_cache = load_cache(see_also_cache_file, "see also")
 
-    infobox_dir = f'output/{language_code}/infoboxes'
-    output_dir = f'output/{language_code}/articles'
-    consumables_dir = f'output/{language_code}/consumables'
-    fixing_dir = f'output/{language_code}/fixing'
-    dictionary_dir = 'resources/item_id_dictionary.csv'
-    distribution_dir = 'output/distributions/complete'
-    history_dir = 'resources/history'
-    code_dir = 'output/codesnips'
-    crafting_dir = 'output/recipes/crafting_combined'
+    infobox_dir = os.path.join("output", language_code, "infoboxes")
+    output_dir = os.path.join("output", language_code, "articles")
+    consumables_dir = os.path.join("output", language_code, "consumables")
+    fixing_dir = os.path.join("output", language_code, "fixing")
+    dictionary_dir = os.path.join("resources", "item_id_dictionary.csv")
+    distribution_dir = os.path.join("output", "distributions", "complete")
+    history_dir = os.path.join("resources", "history")
+    code_dir = os.path.join("output", "codesnips")
+    crafting_dir = os.path.join("output", "recipes", "crafting_combined")
 
     warnings = []
 

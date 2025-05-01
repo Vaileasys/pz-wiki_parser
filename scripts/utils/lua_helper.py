@@ -1,3 +1,4 @@
+import os
 from lupa import LuaRuntime, LuaError
 from scripts.core.file_loading import get_lua_files, read_file, get_lua_dir
 from scripts.core.cache import save_cache
@@ -17,7 +18,7 @@ def load_lua_file(lua_files: str | list[str], lua_runtime: LuaRuntime = None, de
     """
     if not lua_runtime:
         lua_runtime = LuaRuntime(unpack_returned_tuples=True)
-        lua_path = get_lua_dir().replace("\\", "/")
+        lua_path = os.path.normpath(get_lua_dir()).replace(os.sep, "/")
         lua_runtime.execute(f"package.path = package.path .. ';{lua_path}/?.lua;{lua_path}/?/init.lua'")
 
     if inject_lua:

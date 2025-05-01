@@ -17,6 +17,9 @@ def get_install_path():
         "Linux": [
             Path.home() / ".steam/steam/steamapps/common/ProjectZomboid",
             Path.home() / ".local/share/Steam/steamapps/common/ProjectZomboid"
+        ],
+        "Darwin": [
+            Path.home() / "Library/Application Support/Steam/steamapps/common/ProjectZomboid"
         ]
     }
     paths_list = PLATFORM_PATHS.get(platform.system(), [])
@@ -299,7 +302,7 @@ def handle_translations(media_dir):
             print(f"Translation directory not found in {translation_dir}")
     elif choice == '2':
         repo_url = "https://github.com/TheIndieStone/ProjectZomboidTranslations/"
-        translate_dir = 'resources/Translate'
+        translate_dir = os.path.join("resources", "Translate")
         # Clear directory
         if os.path.exists(translate_dir):
             shutil.rmtree(translate_dir)

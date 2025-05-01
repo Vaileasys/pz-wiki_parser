@@ -5,9 +5,9 @@ The txt files should be in the format of the 'PZwiki:Item_list' article (item_li
 import os
 import re
 
-INPUT1_PATH = "resources/PZwiki_Item_list_1.txt"
-INPUT2_PATH = "resources/PZwiki_Item_list_2.txt"
-OUTPUT_DIR = "output/compared_items"
+INPUT1_PATH = os.path.join("resources", "PZwiki_Item_list_1.txt")
+INPUT2_PATH = os.path.join("resources", "PZwiki_Item_list_2.txt")
+OUTPUT_DIR = os.path.join("output", "compared_items")
 
 
 def extract_item_ids(file_path):

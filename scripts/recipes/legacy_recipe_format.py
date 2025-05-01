@@ -538,7 +538,7 @@ def process_requirements(recipe, parsed_item_data):
 
         # Add to traits based on MainCreationMethods.lua
         try:
-            with open("resources/lua/MainCreationMethods.lua", "r", encoding="utf-8") as file:
+            with open(os.path.join("resources", "lua", "MainCreationMethods.lua"), "r", encoding="utf-8") as file:
                 lua_lines = file.readlines()
 
             for line in lua_lines:
@@ -565,7 +565,7 @@ def process_requirements(recipe, parsed_item_data):
                                 break
 
         except FileNotFoundError:
-            print("File not found: resources/lua/MainCreationMethods.lua")
+            print("File not found:", os.path.join("resources", "lua", "MainCreationMethods.lua"))
         except Exception as e:
             print(f"Error processing MainCreationMethods.lua: {e}")
 

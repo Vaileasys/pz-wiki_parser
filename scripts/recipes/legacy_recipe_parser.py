@@ -3,7 +3,7 @@ from scripts.core.version import Version
 from scripts.core.constants import DATA_PATH
 from scripts.core.cache import save_cache, load_cache
 
-RECIPES_DIR = "resources/scripts"
+RECIPES_DIR = os.path.join("resources", "scripts")
 CACHE_JSON = "recipes_data.json"
 
 # Global dictionary to store the parsed recipe data

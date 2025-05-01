@@ -65,7 +65,7 @@ def get_descriptor(item_ids: list):
         return []
     
     if not all_descriptors:
-        with open(f"{RESOURCE_PATH}\\item_descriptors.json", "r") as file:
+        with open(os.path.join(RESOURCE_PATH, "item_descriptors.json"), "r") as file:
             all_descriptors = json.load(file)
     
     descriptors = []
@@ -485,7 +485,7 @@ def main():
     if language_code != "en":
         lcs = f"/{language_code}"
     generate_clothing_penalties()
-    output_dir = f'output\\{language_code}\\infoboxes'
+    output_dir = os.path.join("output", language_code, "infoboxes")
 
     hotbar_slot_data = hotbar_slots.get_hotbar_slots()
 

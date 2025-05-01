@@ -82,7 +82,7 @@ def generate_per_letter_files(room_to_containers: dict):
 
     for letter in sorted_letters:
         rooms_in_letter = sorted(rooms_by_letter[letter])
-        output_dir = Path("output/distributions/roomdef/")
+        output_dir = Path(os.path.join("output", "distributions", "roomdef"))
         output_dir.mkdir(parents=True, exist_ok=True)
         output_file = output_dir / f"{letter}.txt"
 
@@ -148,7 +148,7 @@ def generate_per_letter_files(room_to_containers: dict):
 def generate_main_page(room_to_containers: dict):
     game_version = Version.get()
 
-    output_file = Path("output/distributions/room_definitions_main.txt")
+    output_file = Path(os.path.join("output", "distributions", "room_definitions_main.txt"))
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
     header_text = (

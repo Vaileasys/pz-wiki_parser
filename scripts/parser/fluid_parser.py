@@ -3,7 +3,7 @@ import os
 from scripts.core.cache import save_cache
 from scripts.utils.echo import echo_info
 
-RESOURCE_PATH = "resources/scripts/"
+RESOURCE_PATH = os.path.join("resources", "scripts")
 DATA_FILE = "fluid_data.json"
 
 fluid_counter = 0

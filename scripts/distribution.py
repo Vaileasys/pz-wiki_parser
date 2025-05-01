@@ -15,7 +15,7 @@ item_name_changes = {}
 
 def load_item_dictionary(item_name):
     """Load and search for a modified item name based on a dictionary in itemname_en.txt."""
-    file_path = "resources/itemname_en.txt"  # Assuming the file path
+    file_path = os.path.join("resources", "itemname_en.txt")
 
     if not os.path.exists(file_path):
         return item_name  # If the file doesn't exist, return the original item name
@@ -127,8 +127,8 @@ def process_json(file_paths):
     for file_key, count in item_counts.items():
         print(f"Total items found in {file_key}: {count}")
 
-    os.makedirs("output/distributions", exist_ok=True)
-    with open("output/distributions/Item_list.txt", "w") as output_file:
+    os.makedirs(os.path.join("output", "distributions"), exist_ok=True)
+    with open(os.path.join("output", "distributions", "Item_list.txt"), "w") as output_file:
         for item in sorted(item_list):
             output_file.write(item + "\n")
 
@@ -376,7 +376,7 @@ def build_tables():
     json_path = os.path.join(DATA_PATH, "distributions", "all_items.json")
     all_items = load_cache(json_path)
 
-    output_dir = "output/distributions/complete"
+    output_dir = os.path.join("output", "distributions", "complete")
     os.makedirs(output_dir, exist_ok=True)
 
     def process_containers(containers_list):
@@ -596,9 +596,9 @@ def main():
     build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, attached_weapons_data, clothing_data, stories_data)
     build_tables()
 
-    itemname_path = "resources/Translate/EN/ItemName_EN.txt"
-    itemlist_path = "output/distributions/Item_list.txt"
-    missing_items_path = "output/distributions/missing_items.txt"
+    itemname_path = os.path.join("resources", "Translate", "EN", "ItemName_EN.txt")
+    itemlist_path = os.path.join("output", "distributions", "Item_list.txt")
+    missing_items_path = os.path.join("output", "distributions", "missing_items.txt")
 
     calculate_missing_items(itemname_path, itemlist_path, missing_items_path)
     print("Script completed successfully.")

@@ -5,7 +5,7 @@ from scripts.parser import item_parser
 
 def main():
     parsed_item_data = item_parser.get_item_data()
-    output_dir = 'output/evolved_recipes'
+    output_dir = os.path.join("output", "evolved_recipes")
     os.makedirs(output_dir, exist_ok=True)
 
     for item_id, item_data in tqdm(parsed_item_data.items(), desc="Processing Items"):

@@ -27,7 +27,7 @@ def process_ingredients(data):
             amount = ingredient_info.get("amount", 1)
             tag_strings = []
             for tag in tag_list:
-                tag_file = f"output/en/tags/cycle-img/{tag}.txt"
+                tag_file = os.path.join("output", "en", "tags", "cycle-img", f"{tag}.txt")
                 with open (tag_file, "r") as file:
                     tag_span = file.read()
                 tag_strings.append(f"{tag_span} [[{tag} (tag)]] <small>×{amount}</small>")
@@ -187,7 +187,7 @@ def process_tools(data):
             tool_flags = tools_data.get(f"{key[:-5]}_flags", [])
             list_parts = []
             for tag in value:
-                tag_file = f"output/en/tags/cycle-img/{tag}.txt"
+                tag_file = os.path.join("output", "en", "tags", "cycle-img", f"{tag}.txt")
                 with open(tag_file, "r") as file:
                     tag_span = file.read()
                 tag_entry = f"{tag_span} [[{tag} (tag)]]"
@@ -488,7 +488,7 @@ def fluid_rgb(fluid_id):
         if not fluid_data:
             raise ValueError(f"No fluid found for ID: {fluid_id}")
 
-        with open("resources/color_reference.json", "r") as f:
+        with open(os.path.join("resources", "color_reference.json"), "r") as f:
             color_reference = json.load(f)
 
         name = utility.get_fluid_name(fluid_data)
@@ -657,8 +657,8 @@ def output_item_usage(normal_item_input_map, normal_item_output_map, constructio
     - Construction individual recipe files are saved in output/recipes/construction_crafting/.
     """
     # Process non-construction items
-    combined_output_dir_normal = 'output/recipes/crafting_combined/'
-    individual_dir_normal = 'output/recipes/crafting/'
+    combined_output_dir_normal = os.path.join("output", "recipes", "crafting_combined")
+    individual_dir_normal = os.path.join("output", "recipes", "crafting")
     os.makedirs(combined_output_dir_normal, exist_ok=True)
     os.makedirs(individual_dir_normal, exist_ok=True)
 
@@ -694,8 +694,8 @@ def output_item_usage(normal_item_input_map, normal_item_output_map, constructio
                 craft_file.write("\n".join(crafting_template))
 
     # Process construction items
-    combined_output_dir_construction = 'output/recipes/construction_crafting_combined/'
-    individual_dir_construction = 'output/recipes/construction_crafting/'
+    combined_output_dir_construction = os.path.join("output", "recipes", "construction_crafting_combined")
+    individual_dir_construction = os.path.join("output", "recipes", "construction_crafting")
     os.makedirs(combined_output_dir_construction, exist_ok=True)
     os.makedirs(individual_dir_construction, exist_ok=True)
 
@@ -736,7 +736,7 @@ def output_skill_usage(recipes_data):
     For each recipe, checks both the xp field and the 'skillrequired' entries.
     Certain skills are remapped for simplicity
     """
-    skills_output_dir = 'output/recipes/skills/'
+    skills_output_dir = os.path.join("output", "recipes", "skills")
     os.makedirs(skills_output_dir, exist_ok=True)
 
     # Mapping for specific skills
@@ -800,9 +800,9 @@ def strip_prefix(text, prefix):
 
 
 def output_lua_tables(processed_recipes):
-    output_dir = 'output/recipes'
+    output_dir = os.path.join("output", "recipes")
     os.makedirs(output_dir, exist_ok=True)
-    os.makedirs("output/recipes/data_files", exist_ok=True)
+    os.makedirs(os.path.join("output", "recipes", "data_files"), exist_ok=True)
 
     # Separate recipes into crafting and building recipes.
     crafting_recipes = {}

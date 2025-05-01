@@ -22,7 +22,7 @@ def fluid_rgb(fluid_id):
         if not fluid_metadata:
             raise ValueError(f"No fluid found for ID: {fluid_id}")
 
-        with open("resources/color_reference.json", "r") as color_reference_file:
+        with open(os.path.join("resources", "color_reference.json"), "r") as color_reference_file:
             color_reference_data = json.load(color_reference_file)
 
         fluid_name = utility.get_fluid_name(fluid_metadata)
@@ -179,7 +179,7 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
             lines = []
             qty = data.get("amount", 1)
             for tag in data["tags"]:
-                span = open(f"output/en/tags/cycle-img/{tag}.txt", "r").read()
+                span = open(os.path.join("output", "en", "tags", "cycle-img", f"{tag}.txt"), "r").read()
                 lines.append(f"{span} [[{tag} (tag)]] <small>×{qty}</small>")
             formatted.append(("tag", "<br>".join(lines), "Each of"))
 
@@ -272,7 +272,7 @@ def process_tools(recipe: dict, build_data: dict) -> str:
         # Tags
         if "tags" in inp:
             for tag in inp["tags"]:
-                span = open(f"output/en/tags/cycle-img/{tag}.txt", encoding="utf-8").read()
+                span = open(os.path.join("output", "en", "tags", "cycle-img", f"{tag}.txt"), encoding="utf-8").read()
                 lines.append(f"{span} [[{tag} (tag)]]")
 
         # Items
@@ -684,7 +684,7 @@ def process_requirements(recipe: dict, parsed_item_metadata: dict, literature_da
 
     # Traits parsed from Lua
     try:
-        lua_lines = open("resources/lua/MainCreationMethods.lua", encoding="utf-8").read().splitlines()
+        lua_lines = open(os.path.join("resources", "lua", "MainCreationMethods.lua"), encoding="utf-8").read().splitlines()
         translated_recipe_name = Translate.get(raw_recipe_name, property_key="TeachedRecipes")
         for lua_line in lua_lines:
             stripped_line = lua_line.strip()
@@ -848,24 +848,23 @@ def output_item_article_lists(crafting_recipe_map: dict[str, dict], building_rec
     # whatitcrafts
     for iid, names in usage_by_crafting.items():
         tid = f"{iid}_whatitcrafts"
-        write_file(f"output/recipes/crafting/{tid}.txt",
+        write_file(os.path.join("output", "recipes", "crafting", f"{tid}.txt"),
                    render_template(tid, names))
 
     # howtocraft
     for iid, names in production_by_item.items():
         tid = f"{iid}_howtocraft"
-        write_file(f"output/recipes/crafting/{tid}.txt",
-                    render_template(tid, names))
+        write_file(os.path.join("output", "recipes", "crafting", f"{tid}.txt"),
+                   render_template(tid, names))
 
     # building
     for iid, names in usage_by_building.items():
         tid = f"{iid}_constructionwhatitcrafts"
-        write_file(f"output/recipes/building/{tid}.txt",
+        write_file(os.path.join("output", "recipes", "building", f"{tid}.txt"),
                    render_template(tid, names))
 
-
     # Combine crafting
-    os.makedirs("output/recipes/crafting_combined", exist_ok=True)
+    os.makedirs(os.path.join("output", "recipes", "crafting_combined"), exist_ok=True)
     all_items = set(usage_by_crafting) | set(production_by_item)
     for iid in all_items:
         sections: list[str] = []
@@ -877,7 +876,7 @@ def output_item_article_lists(crafting_recipe_map: dict[str, dict], building_rec
             sections.append("===What it makes===")
             sections.append(render_template(f"{iid}_whatitcrafts", usage_by_crafting[iid]))
 
-        write_file(f"output/recipes/crafting_combined/{iid}.txt",
+        write_file(os.path.join("output", "recipes", "crafting_combined", f"{iid}.txt"),
                    "\n".join(sections))
 
 
@@ -885,7 +884,7 @@ def output_skill_usage(recipe_data_map: dict[str, dict]) -> None:
     """
     For each skill, lists which recipes grant XP or require it.
     """
-    os.makedirs("output/recipes/skills/", exist_ok=True)
+    os.makedirs(os.path.join("output", "recipes", "skills"), exist_ok=True)
     skill_name_mapping = {
         "Woodwork": "Carpentry",
         "MetalWelding": "Welding",
@@ -915,11 +914,11 @@ def output_skill_usage(recipe_data_map: dict[str, dict]) -> None:
     # write out templates
     for skill, recipes in crafting_skill_usage.items():
         lines = ["{{Crafting/sandbox|ID=" + skill + "_crafting"] + [f"|{r}" for r in sorted(recipes)] + ["}}"]
-        with open(f"output/recipes/skills/{skill}_crafting.txt", "w", encoding="utf-8") as file_handle:
+        with open(os.path.join("output", "recipes", "skills", f"{skill}_crafting.txt"), "w", encoding="utf-8") as file_handle:
             file_handle.write("\n".join(lines))
     for skill, recipes in building_skill_usage.items():
         lines = ["{{Building|ID=" + skill + "_building"] + [f"|{r}" for r in sorted(recipes)] + ["}}"]
-        with open(f"output/recipes/skills/{skill}_building.txt", "w", encoding="utf-8") as file_handle:
+        with open(os.path.join("output", "recipes", "skills", f"{skill}_building.txt"), "w", encoding="utf-8") as file_handle:
             file_handle.write("\n".join(lines))
 
 
@@ -927,7 +926,7 @@ def output_lua_tables(recipe_data_map: dict[str, dict]) -> None:
     """
     Emit Lua data files for crafting categories, building recipes, and an index.
     """
-    base_directory = "output/recipes"
+    base_directory = os.path.join("output", "recipes")
     data_directory = os.path.join(base_directory, "data_files")
     os.makedirs(data_directory, exist_ok=True)
 

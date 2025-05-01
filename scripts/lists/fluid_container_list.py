@@ -47,7 +47,7 @@ def get_items():
     i = 0 # fluid containers
     j = 0 # fluid containers with a fluid
 
-    with open("resources/color_reference.json", "r") as f:
+    with open(os.path.join("resources", "color_reference.json"), "r") as f:
         color_reference = json.load(f)
 
     for item_id, item_data in item_parser.get_item_data().items():

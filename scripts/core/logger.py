@@ -3,7 +3,7 @@ import traceback
 from scripts.core.constants import OUTPUT_PATH
 from scripts.utils.echo import echo, echo_error, echo_warning, echo_info, echo_success
 
-LOG_PATH = f"{OUTPUT_PATH}\\logging"
+LOG_PATH = os.path.join(OUTPUT_PATH, "logging")
 DEF_FILE = "log.txt"
 is_first_log = True
 

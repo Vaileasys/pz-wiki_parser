@@ -4,7 +4,7 @@ from scripts.core.version import Version
 from scripts.core.constants import DATA_PATH
 from scripts.core.cache import save_cache, load_cache
 
-STASH_DIRECTORY = "resources/lua/stashes"
+STASH_DIRECTORY = os.path.join("resources", "lua", "stashes")
 CACHE_JSON = "stash_data.json"
 
 stash_data = {}

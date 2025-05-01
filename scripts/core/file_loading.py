@@ -17,16 +17,16 @@ def get_game_dir():
     return config_manager.get_config("game_directory")
 
 def get_media_dir():
-    return f"{get_game_dir()}\\media"
+    return os.path.join(get_game_dir(), "media")
 
 def get_lua_dir():
-    return f"{get_media_dir()}\\lua"
+    return os.path.join(get_media_dir(), "lua")
 
 def get_scripts_dir():
-    return f"{get_media_dir()}\\scripts"
+    return os.path.join(get_media_dir(), "scripts")
 
 def get_maps_dir():
-    return f"{get_media_dir()}\\maps"
+    return os.path.join(get_media_dir(), "maps")
 
 
 def map_dir(base_dir, extension=None, media_type="scripts", suppress=False, exclude_ext=None):
@@ -77,7 +77,7 @@ def map_dir(base_dir, extension=None, media_type="scripts", suppress=False, excl
                 if not entry["folder"] and (entry["type"] == media_type or entry["type"] == "all"):
                     continue
 
-            rel_path = os.path.relpath(os.path.join(root, file), base_dir).replace("\\", "/")
+            rel_path = os.path.relpath(os.path.join(root, file), base_dir).replace(os.path.sep, "/")
 
             if name in mapping:
                 mapping[name].append(rel_path)

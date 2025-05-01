@@ -226,7 +226,7 @@ def automatic_extraction(output_dir):
 
 def main():
     fixing_parser.init()
-    output_dir = f'output/{language_code}/fixing'
+    output_dir = os.path.join("output", language_code, "fixing")
 
     while True:
         choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()

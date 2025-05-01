@@ -106,7 +106,7 @@ def get_model(item_data):
             
             # Check the file path and get the correct capitalisation for the model texture
             for model_value in model_path:
-                model_value = model_value.replace("\\", "/")
+                model_value = os.path.normpath(model_value).replace(os.sep, "/")
                 full_path = textures_dir / f"{model_value}.png"
 
                 parent_dir = full_path.parent

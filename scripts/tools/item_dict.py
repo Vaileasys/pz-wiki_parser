@@ -48,7 +48,7 @@ def compare_csv(file1, file2, output_file, wiki_output_file):
 
 def main():
     language_code = Language.get()
-    output_dir = f'output/{language_code}/items_version'
+    output_dir = os.path.join("output", language_code, "items_version")
 
     data = []
     for item_id, item_data in item_parser.get_item_data().items():

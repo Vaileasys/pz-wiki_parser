@@ -9,8 +9,8 @@ get_location_pattern  = re.compile(r'getOrCreateLocation\s*\(\s*"([^"]+)"\s*\)')
 set_multi_pattern     = re.compile(r'setMultiItem\s*\(\s*"([^"]+)"\s*,\s*(true|false)\s*\)', re.IGNORECASE)
 set_hide_model_pattern = re.compile(r'setHideModel\s*\(\s*"([^"]+)"\s*,\s*"([^"]+)"\s*\)')
 
-LUA_FILE_PATH = "resources/lua/BodyLocations.lua"
-output_file_path = "output/{language_code}/bodylocations_exclusives.txt"
+LUA_FILE_PATH = os.path.join("resources", "lua", "BodyLocations.lua")
+output_file_path = os.path.join("output", "{language_code}", "bodylocations_exclusives.txt")
 
 
 # Parses BodyLocations.lua to get body locations and exclusive locations

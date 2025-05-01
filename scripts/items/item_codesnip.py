@@ -58,8 +58,8 @@ def process_file(file_path, version, output_dir):
 
 def main():
     game_version = Version.get()
-    output_dir = 'output/codesnips'
-    resources_dir = 'resources/scripts'
+    output_dir = os.path.join("output", "codesnips")
+    resources_dir = os.path.join("resources", "scripts")
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -68,7 +68,7 @@ def main():
     EXCLUDED_PREFIXES = ("recipes", "entity_", "xs_", "craftrecipe", "template_", "vehicle_", "dbg_")
 
     files = [
-        os.path.join(root, file)
+        os.path.normpath(os.path.join(root, file)).replace(os.sep, "/")
         for root, _, files in os.walk(resources_dir)
         for file in files
         if not file.startswith(EXCLUDED_PREFIXES)

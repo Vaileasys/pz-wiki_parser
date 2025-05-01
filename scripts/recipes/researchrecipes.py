@@ -6,8 +6,8 @@ from scripts.parser import item_parser
 def main():
     parsed_item_data = item_parser.get_item_data()
 
-    research_dir = 'output/recipes/researchrecipes'
-    crafting_dir = 'output/recipes/crafting'
+    research_dir = os.path.join("output", "recipes", "researchrecipes")
+    crafting_dir = os.path.join("output", "recipes", "crafting")
     os.makedirs(research_dir, exist_ok=True)
     os.makedirs(crafting_dir, exist_ok=True)
 

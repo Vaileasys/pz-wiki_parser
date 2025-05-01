@@ -286,8 +286,8 @@ def generate_article(infobox_dir, output_dir):
 def main():
     language_code = Language.get()
     # Check if fluid infoboxes have been generated
-    infobox_dir = f"output/{language_code}/fluid_infoboxes/"
-    output_dir = f"output/{language_code}/fluid_articles"
+    infobox_dir = os.path.join("output", language_code, "fluid_infoboxes")
+    output_dir = os.path.join("output", language_code, "fluid_articles")
     if not os.path.exists(infobox_dir):
         while True:
             echo_warning(f"The infobox '{infobox_dir}' does not exist.")
