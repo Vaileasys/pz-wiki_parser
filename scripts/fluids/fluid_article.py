@@ -3,7 +3,7 @@ import sys
 from scripts.parser import fluid_parser
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
-from scripts import fluid_infobox
+from scripts.fluids import fluid_infobox
 from scripts.utils.echo import echo_info, echo_success, echo_error, echo_warning
 
 header = f"""

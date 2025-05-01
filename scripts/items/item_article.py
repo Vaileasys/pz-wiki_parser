@@ -453,64 +453,66 @@ def generate_condition(name, category, skill_type, infobox, fixing_dir, language
 
     Args:
         name (str): The name of the item.
-        category (str): The category of the item.
+        category (str): The category of the item.  # (no longer used for condition logic)
         skill_type (str): The skill type of the item.
         infobox (str): The contents of the item's infobox.
         fixing_dir (str): The directory containing the fixing files.
         language_code (str): The language code to use for the condition text.
 
     Returns:
-        str: The condition section for the item page.
+        str: The condition section for the item page, or empty string if
+             either condition_max or condition_lower_chance is missing.
     """
     language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
 
-    # Check if the category requires a condition section
-    if category not in language_data["condition_categories"]:
-        return ""
-
-    # Extract condition_max and condition_lower_chance
+    # Look for both fields in the infobox
     condition_max_match = re.search(r'\|condition_max\s*=\s*(\d+)', infobox)
     condition_lower_chance_match = re.search(r'\|condition_lower_chance\s*=\s*(\d+)', infobox)
 
+    # If either is missing, skip the section entirely
     if not condition_max_match or not condition_lower_chance_match:
         return ""
 
     condition_max = condition_max_match.group(1)
     condition_lower_chance = condition_lower_chance_match.group(1)
 
+    # Format the skill_type_lower for insertion
+    if '|' in skill_type:
+        part0, part1 = skill_type.split('|', 1)
+        skill_type_lower = f"{part0}|{part1.lower()}"
+    else:
+        skill_type_lower = skill_type.lower()
+
+    # Build the condition text from the template
     condition_text = language_data["condition_text"].format(
         name=name,
         condition_max=condition_max,
         skill_type=skill_type,
-        skill_type_lower=skill_type.split('|')[0] + '|' + skill_type.split('|')[1].lower() if '|' in skill_type else skill_type,
+        skill_type_lower=skill_type_lower,
         condition_lower_chance=condition_lower_chance
     )
 
-    # Capitalize the first letter of the condition text
+    # Capitalize first letter
     condition_text = condition_text[0].upper() + condition_text[1:]
 
+    # Append a Repairing subsection if there's a matching fixing file
     repairing_header = language_data["headers"]["Repairing"]
-
-    if os.path.exists(fixing_dir):
-        fixing_files = os.listdir(fixing_dir)
-
+    if os.path.isdir(fixing_dir):
         item_id_match = re.search(r'\|item_id\s*=\s*(.+)', infobox)
         if item_id_match:
             item_id = item_id_match.group(1).strip()
-            item_id_search = f"|item_id={item_id}"
-
-            if fixing_files:
-                for file_name in fixing_files:
-                    file_path = os.path.join(fixing_dir, file_name)
-                    try:
-                        with open(file_path, 'r', encoding='utf-8') as file:
-                            file_content = file.read()
-                            if item_id_search in file_content:
-                                fixing_content = file_content.strip()
-                                condition_text += f"\n\n==={repairing_header}===\n{fixing_content}"
-                                break
-                    except Exception as e:
-                        echo_error(f"Error reading {file_path}: {e}")
+            token = f"|item_id={item_id}"
+            for fname in os.listdir(fixing_dir):
+                path = os.path.join(fixing_dir, fname)
+                try:
+                    with open(path, 'r', encoding='utf-8') as fh:
+                        content = fh.read()
+                        if token in content:
+                            fixing_content = content.strip()
+                            condition_text += f"\n\n==={repairing_header}===\n{fixing_content}"
+                            break
+                except Exception as e:
+                    echo_error(f"Error reading {path}: {e}")
 
     return condition_text
 

@@ -1,9 +1,9 @@
-import importlib
-import sys
-import os
+#!/usr/bin/env python3
+
+import importlib, sys, os
 from scripts.core import config_manager, setup, logger, cache
 from scripts.core.version import Version
-from scripts.utils.echo import echo_info, echo_error
+from scripts.utils.echo import echo_error
 
 menu_structure = {
     '0': {
@@ -15,21 +15,22 @@ menu_structure = {
         'name': 'Data generation',
         'description': 'Generate working data.',
         'sub_options': {
-            '1': {'module': 'item_infobox', 'name': 'Item infobox', 'description': 'Generates item infoboxes.'},
-            '2': {'module': 'fluid_infobox', 'name': 'Fluid infobox', 'description': 'Generates fluid infoboxes.'},
+            '1': {'module': 'scripts.items.item_infobox', 'name': 'Item infobox', 'description': 'Generates item infoboxes.'},
+            '2': {'module': 'scripts.fluids.fluid_infobox', 'name': 'Fluid infobox', 'description': 'Generates fluid infoboxes.'},
             '3': {'module': 'fixing', 'name': 'Fixing', 'description': 'Generates fixing recipes.'},
             '4': {'module': 'consumables', 'name': 'Consumables', 'description': 'Generate consumables tables.'},
-            '5': {'module': 'codesnip', 'name': 'Codesnips', 'description': 'Generate codesnip files.'},
+            '5': {'module': 'scripts.items.item_codesnip', 'name': 'Codesnips', 'description': 'Generate codesnip files.'},
             '6': {'module': 'distribution', 'name': 'Distributions', 'description': 'Generate distribution files.'},
-            '7': {'module': 'item_body_part', 'name': 'Body part', 'description': 'Generates body part templates.'},
+            '7': {'module': 'scripts.items.item_body_part', 'name': 'Body part', 'description': 'Generates body part templates.'},
+            '8': {'module': 'scripts.parser.tiles_parser', 'name': 'Tile parser', 'description': 'DEV TILE PARSER.'},
         },
     },
     '2': {
         'name': 'Page generation',
         'description': 'Generate pages or lists.',
         'sub_options': {
-            '1': {'module': 'item_article', 'name': 'Item article', 'description': 'Generate articles for items.'},
-            '2': {'module': 'fluid_article', 'name': 'Fluid article', 'description': 'Generate articles for fluids.'},
+            '1': {'module': 'scripts.items.item_article', 'name': 'Item article', 'description': 'Generate articles for items.'},
+            '2': {'module': 'scripts.fluids.fluid_article', 'name': 'Fluid article', 'description': 'Generate articles for fluids.'},
             '3': {'module': 'lists.item_list', 'name': 'Item list', 'description': 'Returns all items in a list organised by DisplayCategory.'},
             '4': {'module': 'lists.weapon_list', 'name': 'Weapon list', 'description': 'Return all weapons in a list with stats organised by their skill.'},
             '5': {'module': 'lists.clothing_list', 'name': 'Clothing list', 'description': 'Return all clothing in a list with stats organised by body location.'},
@@ -59,7 +60,7 @@ menu_structure = {
         'name': 'Tools',
         'description': 'Data analysis and generate reports.',
         'sub_options': {
-            '1': {'module': 'tools.vehicel_render_data', 'Vehicle render data': 'Generate a JSON file with vehicle mesh and texture data, which can be used in blender.'},
+            '1': {'module': 'tools.vehicle_render_data', 'name': 'Vehicle render data', 'description': 'Generate a JSON file with vehicle mesh and texture data, which can be used in blender.'},
             '2': {'module': 'tools.item_dict', 'name': 'Item dictionary', 'description': 'Generate a list of items with their item ID and compare with another version.'},
             '3': {'module': 'tools.compare_item_lists', 'name': 'Compare item lists', 'description': "Generates a list of unique items comparing 'PZwiki:Item_list' versions."}
         },
@@ -104,7 +105,7 @@ def display_menu(menu, is_root=False, title=None):
         print("\033[94m" + "=" * 50)
         print(f"{title.center(50)}")
         print("=" * 50 + "\033[0m")
-        
+
     for key, value in menu.items():
         print(f"{key}: {value['name']} - {value['description']}")
 
@@ -155,7 +156,7 @@ def navigate_menu(menu, is_root=False, title=None):
             elif selected_option['name'] == 'Run First Time Setup':
                 handle_module('scripts.core.setup')
             elif selected_option['name'] == 'Tags':
-                handle_module('scripts.item_tags')
+                handle_module('scripts.items.item_tags')
             elif selected_option['name'] == 'Script parser':
                 handle_module('scripts.parser.script_parser')
             elif 'module' in selected_option:

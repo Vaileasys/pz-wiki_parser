@@ -10,7 +10,8 @@ from scripts.parser import literature_parser, fluid_parser
 from scripts.parser.item_parser import get_item_data
 from scripts.utils import utility, util
 from scripts.utils.echo import echo_success, echo_warning, echo_info, echo_error
-from scripts import item_tags
+from scripts.items import item_tags
+
 
 def fluid_rgb(fluid_id):
     """
