@@ -1044,49 +1044,47 @@ def main():
         else:
             echo_success("Item tags built successfully")
 
+        # Craft cache
         try:
-            echo_info("Attempting to load craft cache")
+            echo_info("Loading craft cache")
             parsed_craft_data, craft_cache_version = load_cache(
                 craft_cache_path, "Craft", get_version=True
             )
-        except Exception as exc:
-            echo_error(f"Error while loading craft cache: {exc}")
-            parsed_craft_data, craft_cache_version = {}, None
-        else:
-            echo_success("Craft cache loaded successfully")
 
-        try:
             if craft_cache_version != game_version:
-                echo_info("Generating craft cache")
-                parsed_craft_data = extract_script_data("craftRecipe")
-            craft_data = parsed_craft_data
-        except Exception as exc:
-            echo_error(f"Error while generating craft cache: {exc}")
-            craft_data = {}
-        else:
-            echo_success("Craft cache ready")
+                raise ValueError("Craft cache version mismatch")
 
+        except Exception as exc:
+            echo_info(f"{exc}; regenerating")
+
+            extract_script_data("craftRecipe")
+
+            parsed_craft_data, craft_cache_version = load_cache(
+                craft_cache_path, "Craft", get_version=True
+            )
+        craft_data = parsed_craft_data
+        echo_success("Craft cache ready")
+
+        # Build cache
         try:
-            echo_info("Attempting to load build cache")
+            echo_info("Loading build cache")
             parsed_build_data, build_cache_version = load_cache(
                 build_cache_path, "Build", get_version=True
             )
-        except Exception as exc:
-            echo_error(f"Error while loading build cache: {exc}")
-            parsed_build_data, build_cache_version = {}, None
-        else:
-            echo_success("Build cache loaded successfully")
 
-        try:
             if build_cache_version != game_version:
-                echo_info("Generating build cache")
-                parsed_build_data = extract_script_data("entity")
-            build_data = parsed_build_data
+                raise ValueError("Build cache version mismatch")
+
         except Exception as exc:
-            echo_error(f"Error while generating build cache: {exc}")
-            build_data = {}
-        else:
-            echo_success("Build cache ready")
+            echo_info(f"{exc}; regenerating")
+            extract_script_data("entity")
+
+            parsed_build_data, build_cache_version = load_cache(
+                build_cache_path, "Build", get_version=True
+            )
+        build_data = parsed_build_data
+        echo_success("Build cache ready")
+        ''
     except Exception as exc:
         echo_error(f"Error while gathering cache: {exc}")
     else:
