@@ -6,11 +6,14 @@ from scripts.core.language import Translate
 from scripts.objects.item import Item
 from scripts.utils.echo import echo_warning
 from scripts.core.cache import save_json
+from scripts.utils.lua_helper import load_lua_file, parse_lua_tables
+from scripts.core.cache import save_cache
 
 class Vehicle:
     _vehicles = None # Shared cache for all vehicles
     _instances = {}
     _vehicle_models = None
+    _mechanics_overlay = None
     MANUFACTURERS = (
             "Chevalier",
             "Dash",
@@ -71,7 +74,12 @@ class Vehicle:
         self.is_burnt = True if "Burnt" in self.vehicle_id else False
         self.is_wreck = True if "Smashed" in self.vehicle_id else False
         self.vehicle_type = None
+
+        self.doors = None
+        self.wheels = None
+        self.has_lightbar = None
         self.has_siren = None
+        self.has_reverse_beeper = None
         self.recipes = None
         self.trunk_capacity = None
         self.glove_box_capacity = None
@@ -175,6 +183,14 @@ class Vehicle:
             id_type = model_id.split(".", 1)[1]
             if id_type.startswith("Vehicles_") or id_type.startswith("Vehicle_"):
                 cls._vehicle_models[id_type] = model_data
+    
+    @classmethod
+    def _load_mechanics_overlay(cls):
+        """Load mechanics overlay from LUA table."""
+        lua_runtime = load_lua_file("ISCarMechanicsOverlay.lua")
+        parsed_data = parse_lua_tables(lua_runtime)
+        cls._mechanics_overlay = parsed_data.get("ISCarMechanicsOverlay")
+        save_cache(cls._mechanics_overlay, "mechanics_overlay.json")
 
     def setup_vehicle(self):
         """Initialise vehicle values."""
@@ -521,8 +537,27 @@ class Vehicle:
         """Return the player damage protection value."""
         return float(self.get("playerDamageProtection", 0.0))
     
+    def get_wheels(self) -> list[str]:
+        """Return the wheels in the vehicle."""
+        if self.wheels is None:
+            self.wheels = self.get("wheel", {})
+        return self.wheels
+    
+    def get_doors(self) -> list[str]:
+        """Return the doors in the vehicle."""
+        if self.doors is None:
+            parts = self.get_parts()
+            doors = []
+            for part in parts:
+                if part.lower().startswith("door") and "*" not in part:
+                    doors.append(part)
+            self.doors = doors
+        return self.doors
+    
     def get_seats(self) -> int:
         """Return the number of seats in the vehicle."""
+        if self.is_trailer or self.is_burnt:
+            return int(0)
         return int(self.get("seats", 2))
     
     def get_wheel_friction(self) -> float:
@@ -561,21 +596,32 @@ class Vehicle:
     
     def get_offroad_efficiency(self) -> float:
         """Return the offroad driving efficiency."""
-        return float(self.get("offroadEfficiency", 1.0))
+        return float(self.get("offRoadEfficiency", 1.0))
+    
+    def get_has_lightbar(self) -> bool:
+        """Return whether the vehicle has a lightbar."""
+        if self.has_lightbar is None:
+            self.find_lightbar()
+        return self.has_lightbar
     
     def get_has_siren(self) -> bool:
         """Return whether the vehicle has a siren."""
         if self.has_siren is None:
-            self.find_has_siren()
+            self.find_lightbar()
         return self.has_siren
 
-    def find_has_siren(self) -> bool:
+    def find_lightbar(self) -> None:
         """Detect if the vehicle has a lightbar siren."""
-        has_siren = self.get("lightbar", {}).get("soundSiren")
-        if has_siren:
-            self.has_siren = True
-        else:
-            self.has_siren = False
+        lightbar = self.get("lightbar", {})
+        siren = lightbar.get("soundSiren")
+        self.has_lightbar = True if lightbar else False
+        self.has_siren = True if siren else False
+
+    def get_has_reverse_beeper(self):
+        """Return whether the vehicle has a reverse beeper."""
+        if self.has_reverse_beeper is None:
+            self.has_reverse_beeper = True if self.get("sound", {}).get("backSignal") else False
+        return self.has_reverse_beeper
     
     # ---- Health ---- #
     def get_front_end_health(self) -> int:
@@ -590,6 +636,10 @@ class Vehicle:
     def get_engine_force(self) -> float:
         """Return the engine force."""
         return float(self.get("engineForce", 3000.0))
+    
+    def get_engine_power(self) -> float:
+        """Returns the engine power in horsepower (hp)."""
+        return int(self.get_engine_force() / 10)
     
     def get_engine_quality(self) -> int:
         """Return the engine quality."""
@@ -637,8 +687,36 @@ class Vehicle:
 
     # ---- Parts ---- #
     def get_parts_data(self) -> dict:
-        """Return the raw parts data dictionary."""
-        return self.get("part", {})
+        """Return parts data with wildcard templates merged into specific parts."""
+        def merge(base: dict, override: dict) -> dict:
+            """Recursively merge base into override without overwriting existing keys."""
+            result = base.copy()
+            for key, val in override.items():
+                if key in result and isinstance(result[key], dict) and isinstance(val, dict):
+                    result[key] = merge(result[key], val)
+                else:
+                    result[key] = val
+            return result
+
+        raw_parts = self.get("part", {})
+        parts = {}
+        wildcard_templates = {}
+
+        # Separate wildcard templates and specific parts
+        for name, data in raw_parts.items():
+            if name.endswith("*"):
+                wildcard_templates[name.rstrip("*")] = data
+            else:
+                parts[name] = data
+
+        # Apply wildcard templates to matching specific parts
+        for name, data in parts.items():
+            for prefix, template in wildcard_templates.items():
+                if name.startswith(prefix):
+                    # Merge template into part, preserving specific overrides
+                    parts[name] = merge(template, data)
+
+        return parts
 
     def get_parts(self) -> list[str]:
         """Return a list of part names."""
@@ -709,18 +787,21 @@ class Vehicle:
         self.recipes = list(recipes_set) if len(recipes_set) == 1 else []
 
     def find_part_capacity(self, part_data: dict, part: str = None) -> int:
-        """Determine trunk capacity from part container or fallback itemType."""
+        """Determine part capacity from part container or fallback itemType."""
+        if self.is_burnt:
+            return 0
+        
         container = part_data.get("container")
         if container and container.get("capacity") is not None:
             return container["capacity"]
 
         # Fallback to itemType lookup
-        trunk_item = part_data.get("itemType", [None])[0]
-        if trunk_item:
-            trunk_item = trunk_item + str(self.get_mechanic_type())
-            return Item(trunk_item).get("MaxCapacity")
+        part_item = part_data.get("itemType", [None])[0]
+        if part_item:
+            part_item = part_item + str(self.get_mechanic_type())
+            return Item(part_item).get("MaxCapacity")
         
-        echo_warning(f"[{self.vehicle_id}] Couldn't find trunk capacity for '{part or 'part'}'.")
+        echo_warning(f"[{self.vehicle_id}] Couldn't find capacity for '{part or 'part'}'.")
         return 0
 
     def get_glove_box_capacity(self) -> int:
@@ -744,6 +825,9 @@ class Vehicle:
     def find_trunk_capacity(self) -> None:
         self.trunk_capacity = {}
 
+        if self.is_burnt:
+            return
+
         TRUNKS = ("TruckBed", "TruckBedOpen", "TrailerTrunk", "TrailerAnimalFood", "TrailerAnimalEggs")
         available_parts = self.get_parts()
 
@@ -764,8 +848,9 @@ class Vehicle:
     def find_seat_capacity(self) -> None:
         #seat = self.get_part("Seat*")
         seat = {"itemType": ["Base.NormalCarSeat"]}
-        if seat is not None:
-            capacity = int(self.find_part_capacity(seat, "Seat"))
+        if seat is not None and not self.is_burnt:
+            capacity = self.find_part_capacity(seat, "Seat")
+            capacity = int(capacity)
             self.seat_capacity = max(capacity, 5)
         else:
             self.seat_capacity = 0
@@ -781,10 +866,14 @@ class Vehicle:
         glove_box = self.get_glove_box_capacity()
         trunk_list = self.get_trunk_capacity().values()
         self.total_capacity = seat_count * seat + glove_box + sum(trunk_list)
-        if self.vehicle_id == "Base.Trailer_Horsebox":
-            print(self.is_trailer)
+
+    def get_mechanics_overlay(self):
+        """Return mechanics overlay."""
+        if Vehicle._mechanics_overlay is None:
+            Vehicle._load_mechanics_overlay()
+        return Vehicle._mechanics_overlay.get("CarList").get(self.vehicle_id, {}).get("imgPrefix")
 
 
 if __name__ == "__main__":
-    vehicle = Vehicle("Base.SmallCar")
-    print(vehicle.is_trunk_accessible_from_seat())
+    vehicle = Vehicle.get_mechanics_overlay()
+#    print(vehicle.get_recipes())
