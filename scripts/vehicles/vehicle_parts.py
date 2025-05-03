@@ -1,13 +1,17 @@
 import os
+from tqdm import tqdm
 from scripts.objects.vehicle import Vehicle
 from scripts.objects.item import Item
 from scripts.core.file_loading import write_file
 from scripts.utils.util import format_link
-from scripts.core.language import Translate
+from scripts.utils.echo import echo_success
+from scripts.core.language import Translate, Language
+from scripts.core.constants import PBAR_FORMAT
 
 TABLE_HEADER = '{| class="wikitable theme-red"'
 TABLE_HEADINGS = (
     '! Part',
+    '! Category',
     '! Knowledge',
     '! Skill',
     '! Tools',
@@ -17,12 +21,8 @@ REL_DIR = os.path.join("vehicle", "maintenance")
 
 def process_vehicle(vehicle_id):
     vehicle = Vehicle(vehicle_id)
-    content = []
-    mechanic_overlay = vehicle.get_mechanics_overlay()
-    if mechanic_overlay:
-        content.append(f"[[File:{mechanic_overlay}base.png|thumb|Vehicle mechanics UI for the {vehicle.get_name()}.]]")
-    content.append(TABLE_HEADER)
-    content.extend(TABLE_HEADINGS)
+
+    rows = []
     for part, part_data in vehicle.get_parts_data().items():
         if "*" in part or part_data.get("category") == "nodisplay":
             continue
@@ -84,21 +84,53 @@ def process_vehicle(vehicle_id):
         if not items:
             items.append('style="text-align:center;"| -')
 
-        content.append(f'|-')
-        content.append(f'| {Translate.get("IGUI_VehiclePart" + part)}')
-        content.append(f'| {knowledge}') # knowledge
-        content.append(f'| {"<br>".join(skill_list)}') # skill
-        content.append(f'| {tools}') # tools
-        content.append(f'| {"<br>".join(items)}') # items
-    content.append('|}')
+        row = (
+            Translate.get("IGUI_VehiclePart" + part),                                   # Part
+            Translate.get("IGUI_VehiclePartCat" + part_data.get("category", "Other")),  # Category
+            knowledge,                                                                  # Knowledge
+            "<br>".join(skill_list),                                                    # Skill
+            tools,                                                                      # Tools
+            "<br>".join(items)                                                          # Items
+        )
+        rows.append(row)
 
+    return rows
+
+
+def generate_table(vehicle_id, rows):
+    vehicle = Vehicle(vehicle_id)
+    content = []
+    mechanic_overlay = vehicle.get_mechanics_overlay()
+    if mechanic_overlay:
+        content.append(f"[[File:{mechanic_overlay}base.png|thumb|Vehicle mechanics UI for the {vehicle.get_name()}.]]")
+    content.append(TABLE_HEADER)
+    content.extend(TABLE_HEADINGS)
+
+    rows.sort(key=lambda x: x[1]) # Sort by 'Category' (index 1)
+    for row in rows:
+        content.append('|-')
+        for cell in row:
+            content.append(f'| {cell}')
+    
+    content.append('|}')
     return content
 
+
+
 def main():
-    for vehicle_id in Vehicle.keys():
-        content = process_vehicle(vehicle_id)
-        rel_path = os.path.join(REL_DIR, vehicle_id)
-        write_file(content, rel_path)
+    Language.get()
+    with tqdm(total=Vehicle.count(), desc="Processing vehicles", bar_format=PBAR_FORMAT, unit=" vehicles", leave=False) as pbar:
+        for vehicle_id in Vehicle.keys():
+            pbar.set_postfix_str(f"Processing: {vehicle_id[:30]}")
+            
+            rows = process_vehicle(vehicle_id)
+            content = generate_table(vehicle_id, rows)
+            rel_path = os.path.join(REL_DIR, vehicle_id)
+            output_dir = write_file(content, rel_path, suppress=True)
+
+            pbar.update(1)
+    
+    echo_success(f"Files saved to '{output_dir}'")
 
 if __name__ == "__main__":
     main()
