@@ -85,7 +85,6 @@ def generate_item_list():
 
     with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
         for item_id, item in items.items():
-            id_rec = False
             pbar.set_postfix_str(f"Processing: {item.get('Type', 'Unknown')} ({item_id[:30]})")
             display_category = item.get('DisplayCategory', 'Other')
             display_category = translate_category(display_category)
@@ -95,10 +94,6 @@ def generate_item_list():
 
             translated_item_name = item.get_name("en")
             page_name = item.get_page()
-            if page_name == 'Unknown':
-                page_name = translated_item_name
-            else:
-                id_rec = True
 
             if Language.get() != 'en':
                 translated_item_name = item.get_name()
@@ -128,7 +123,7 @@ def generate_item_list():
                 "item_name": translated_item_name,
                 "icon": icon,
                 "item_id": item_id,
-                "id_rec": id_rec
+                "id_rec": item.page_exists()
             }
 
             items_data[display_category].append(processed_item)
@@ -141,6 +136,7 @@ def generate_item_list():
 
 
 def main():
+    Language.get()
     generate_item_list()
 
 if __name__ == "__main__":
