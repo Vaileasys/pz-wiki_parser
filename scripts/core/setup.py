@@ -15,8 +15,8 @@ def get_install_path():
             Path("C:/Program Files/Steam/steamapps/common/ProjectZomboid")
         ],
         "Linux": [
-            Path.home() / ".steam/steam/steamapps/common/ProjectZomboid",
-            Path.home() / ".local/share/Steam/steamapps/common/ProjectZomboid"
+            Path.home() / ".steam/steam/steamapps/common/ProjectZomboid/projectzomboid",
+            Path.home() / ".local/share/Steam/steamapps/common/ProjectZomboid/projectzomboid"
         ],
         "Darwin": [
             Path.home() / "Library/Application Support/Steam/steamapps/common/ProjectZomboid"
