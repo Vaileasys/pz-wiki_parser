@@ -1,7 +1,8 @@
+import os
 from scripts.objects.vehicle import Vehicle
 from scripts.utils import table_helper
 from scripts.utils.util import format_link, convert_int
-from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
+from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT, VEHICLE_DIR
 from scripts.core.cache import save_cache
 
 TABLE_PATH = f"{RESOURCE_DIR}/tables/vehicle_table.json"
@@ -114,8 +115,10 @@ def main():
     table_map, column_headings = table_helper.get_table_data(TABLE_PATH)
     all_vehicle_data = find_vehicles("vehicle")
     all_vehicle_data_parent = find_vehicles("parent")
-    table_helper.create_tables("vehicle", all_vehicle_data, table_map=table_map, columns=column_headings)
-    table_helper.create_tables("vehicle_parent", all_vehicle_data_parent, table_map=table_map, columns=column_headings)
+    veh_type = os.path.join("lists", "vehicles_by_type")
+    veh_type_parent = os.path.join("lists", "vehicles_by_model")
+    table_helper.create_tables(veh_type, all_vehicle_data, table_map=table_map, columns=column_headings, root_path=VEHICLE_DIR)
+    table_helper.create_tables(veh_type_parent, all_vehicle_data_parent, table_map=table_map, columns=column_headings, root_path=VEHICLE_DIR)
 
 if __name__ == "__main__":
     main()

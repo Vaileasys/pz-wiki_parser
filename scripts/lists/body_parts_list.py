@@ -11,7 +11,7 @@ language_code = Language.get()
 JSON_DIR = Path(RESOURCE_DIR)
 JSON_FILE = "blood_location.json"
 
-OUTPUT_DIR = Path(OUTPUT_DIR) / language_code.lower()
+OUTPUT_PATH = Path(OUTPUT_DIR) / language_code.lower()
 OUTPUT_FILE = "blood_location_list.txt"
 
 display_name_data = {}
@@ -89,8 +89,8 @@ def generate_content():
 
 
 def write_to_file(content):
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    output_path = OUTPUT_DIR / OUTPUT_FILE
+    OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
+    output_path = OUTPUT_PATH / OUTPUT_FILE
     with open(output_path, "w") as file:
         file.write("\n".join(content))
     echo_success(f"File written to '{output_path}'")

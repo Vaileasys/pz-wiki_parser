@@ -1,8 +1,9 @@
-from objects.vehicle import Vehicle
+from scripts.objects.vehicle import Vehicle
 from scripts.core.file_loading import write_file
 from scripts.utils.util import format_link
+from scripts.core.constants import VEHICLE_DIR
 
-def generate_table(data): 
+def generate_table(data):
     content = []
 
     for vtype in sorted(data.keys()):
@@ -54,7 +55,7 @@ def generate_data():
 def main():
     vehicle_data = generate_data()
     content = generate_table(vehicle_data)
-    write_file(content)
+    write_file(content, rel_path="vehicle_list.txt", root_path=VEHICLE_DIR)
 
 if __name__ == "__main__":
     main()

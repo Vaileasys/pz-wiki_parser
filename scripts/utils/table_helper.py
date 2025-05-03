@@ -1,11 +1,11 @@
+import os
+import warnings
 from pathlib import Path
 from scripts.core.language import Language, Translate
-from scripts.core.constants import OUTPUT_DIR
+from scripts.core.constants import OUTPUT_DIR, ITEM_DIR
 from scripts.core.cache import load_json
 from scripts.utils.echo import echo_success, echo_info, echo_warning, echo_error
-
-
-OUTPUT_DIR = Path(OUTPUT_DIR) / Language.get() / "item_list"
+from scripts.core.file_loading import write_file
 
 DEF_TABLE_HEADER = '{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"'
 DEF_TABLE_FOOTER = '|}'
@@ -179,6 +179,12 @@ def write_to_file(content:list, rel_path="list.txt", suppress=False):
     :param str rel_path: The relative path where the file will be saved. If no file extension is given, the path is treated as a directory.
     :return: The directory the file is saved to.
     """
+    warnings.warn(
+        "write_to_file() is deprecated and will be removed in a future version. Use file_loading.write_file() instead.",
+        category=DeprecationWarning,
+        stacklevel=2
+    )
+
     _output_path = OUTPUT_DIR / rel_path
     _output_dir = _output_path.parent if _output_path.suffix else _output_path
     _output_dir.mkdir(parents=True, exist_ok=True)
@@ -213,7 +219,17 @@ def process_notes(data_list):
     return caption, data
 
 
-def create_tables(item_type:str, all_data:dict, columns:dict, table_map:dict={}, table_header=DEF_TABLE_HEADER, table_footer=DEF_TABLE_FOOTER, combine_tables:bool=True, suppress:bool=False):
+def create_tables(
+        item_type: str,
+        all_data: dict,
+        columns: dict,
+        table_map: dict = {},
+        table_header = DEF_TABLE_HEADER,
+        table_footer = DEF_TABLE_FOOTER,
+        combine_tables: bool = True,
+        root_path: str = os.path.join(ITEM_DIR, "lists"),
+        suppress: bool = False
+        ):
     """
     Creates and writes individual and/or combined item tables for each table type.
 
@@ -242,14 +258,15 @@ def create_tables(item_type:str, all_data:dict, columns:dict, table_map:dict={},
         column_headings = get_column_headings(table_type, table_map, columns)
 
         content.extend(generate_table(table_type, data, column_headings, table_header, table_footer, caption_bottom=caption))
-        rel_path = f"{item_type}/{table_type}.txt"
-        output_dir = write_to_file(content, rel_path, suppress=suppress)
+        rel_path = os.path.join(item_type, table_type + ".txt")
+        output_dir = write_file(content, rel_path=rel_path, root_path=root_path, suppress=suppress)
 
         if combine_tables:
             all_tables.extend([f'=={table_type.replace("_", " ").capitalize()}=='])
             all_tables.extend(content)
 
     if combine_tables:
-        write_to_file(all_tables, f"{item_type}/all_tables.txt", suppress=suppress)
+        rel_path = os.path.join(item_type, "all_tables.txt")
+        write_file(all_tables, rel_path=rel_path, root_path=root_path, suppress=suppress)
 
     echo_success(f"Tables written to {output_dir}")

@@ -12,7 +12,7 @@ from scripts.core.constants import OUTPUT_DIR
 from scripts.utils.util import format_link, convert_int
 
 REL_DIR = os.path.join("vehicle", "infoboxes")
-OUTPUT_DIR = os.path.join(OUTPUT_DIR, Language.get(), REL_DIR)
+OUTPUT_PATH = os.path.join(OUTPUT_DIR, Language.get(), REL_DIR)
 
 
 def get_vehicle():
@@ -121,9 +121,9 @@ def process_vehicle(vehicle_id):
 
 def automatic_extraction():
     # Create 'output_dir'
-    if os.path.exists(OUTPUT_DIR):
-        shutil.rmtree(OUTPUT_DIR)
-    os.makedirs(OUTPUT_DIR)
+    if os.path.exists(OUTPUT_PATH):
+        shutil.rmtree(OUTPUT_PATH)
+    os.makedirs(OUTPUT_PATH)
 
     for vehicle_id in Vehicle.keys():
         process_vehicle(vehicle_id)
@@ -137,12 +137,12 @@ def main():
         choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
         if choice == '1':
             automatic_extraction()
-            echo_success(f"Extraction complete, the files can be found in {OUTPUT_DIR}.")
+            echo_success(f"Extraction complete, the files can be found in {OUTPUT_PATH}.")
             break
         elif choice == '2':
             vehicle_id = get_vehicle()
             process_vehicle(vehicle_id)
-            echo_success(f"Extraction complete, the file can be found in {OUTPUT_DIR}.")
+            echo_success(f"Extraction complete, the file can be found in {OUTPUT_PATH}.")
             break
         elif choice == 'q':
             break
