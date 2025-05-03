@@ -2,34 +2,35 @@ from scripts.objects.vehicle import Vehicle
 from scripts.utils import table_helper
 from scripts.utils.util import format_link, convert_int
 from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
+from scripts.core.cache import save_cache
 
 TABLE_PATH = f"{RESOURCE_PATH}/tables/vehicle_table.json"
 VEHICLE_BLACKLIST = ["Base.SportsCar_ez", "Base.ModernCar_Martin"]
 
 table_map = {}
 
-def generate_data(vehicle_id, table_type):
+def generate_data(vehicle_id, table_type, section_type="vehicle"):
     vehicle = Vehicle(vehicle_id)
     
     columns = table_map.get(table_type) if table_map.get(table_type) is not None else table_map.get("default")
     
     vehicle_data = {}
 
+    model = vehicle.get_model(is_single=False, do_format=True) if section_type == "vehicle" else vehicle.get_model(do_format=True)
+
     name = vehicle.get_name()
     page = vehicle.get_page()
     link = format_link(name, page)
 
-    vehicle_data["model"] = vehicle.get_model(is_single=False, do_format=True) if "model" in columns else None
+    vehicle_data["model"] = model if "model" in columns else None
     vehicle_data["name"] = link if "name" in columns else None
     vehicle_data["type"] = vehicle.get_vehicle_type() if "type" in columns else None
     vehicle_data["mass"] = convert_int(vehicle.get_mass()) if "mass" in columns else None
-    vehicle_data["engine_force"] = convert_int(vehicle.get_engine_force()) if "engine_force" in columns else None
+    vehicle_data["engine_power"] = convert_int(vehicle.get_engine_power()) if "engine_power" in columns else None
     vehicle_data["engine_quality"] = vehicle.get_engine_quality() if "engine_quality" in columns else None
     vehicle_data["engine_loudness"] = vehicle.get_engine_loudness() if "engine_loudness" in columns else None
     vehicle_data["max_speed"] = convert_int(vehicle.get_max_speed()) if "max_speed" in columns else None
     vehicle_data["suspension_stiffness"] = convert_int(vehicle.get_suspension_stiffness()) if "suspension_stiffness" in columns else None
-    vehicle_data["front_health"] = vehicle.get_front_end_health() if "front_health" in columns else None
-    vehicle_data["rear_health"] = vehicle.get_rear_end_health() if "rear_health" in columns else None
     vehicle_data["seats"] = vehicle.get_seats() if "seats" in columns else None
     vehicle_data["protection"] = convert_int(vehicle.get_player_damage_protection()) if "protection" in columns else None
     vehicle_data["glove_box_capacity"] = convert_int(vehicle.get_glove_box_capacity()) if "glove_box_capacity" in columns else None
@@ -47,6 +48,13 @@ def generate_data(vehicle_id, table_type):
     if "animal_trailer_size" in columns:
         animal_trailer_size = convert_int(vehicle.get_animal_trailer_size()) if vehicle.get_animal_trailer_size() > 0 else "-"
         vehicle_data["animal_trailer_size"] = animal_trailer_size
+    if "lightbar" in columns:
+        if vehicle.get_has_lightbar():
+            vehicle_data["lightbar"] = '[[File:UI Tick.png|link=|Has lightbar and siren]]'
+        else:
+            vehicle_data["lightbar"] = '[[File:UI Cross.png|link=|No lightbar and siren]]'
+
+
     vehicle_data["vehicle_id"] = vehicle_id if "vehicle_id" in columns else None
 
     # Remove any values that are None
@@ -61,20 +69,22 @@ def generate_data(vehicle_id, table_type):
     return vehicle_data
 
 
-def find_table_type(vehicle: Vehicle):
-    if vehicle.is_trailer:
-        table_type = "trailer"
-#    elif vehicle.is_burnt:
-#        table_type = "burnt"
-#    elif vehicle.is_wreck:
-#        table_type = "wrecked"
-    else:
-        table_type = "vehicle"
+def find_table_type(vehicle: Vehicle, section_type: str):
+    if section_type == "vehicle":
+        if vehicle.is_trailer:
+            table_type = "trailer"
+        else:
+            table_type = "vehicle"
+    elif section_type == "parent":
+        if vehicle.is_trailer:
+            table_type = "Base.Trailer"
+        else:
+            table_type = vehicle.get_parent().vehicle_id
 
     return table_type
 
 
-def find_vehicles():
+def find_vehicles(section_type: str):
     all_vehicle_data = {}
     vehicles = Vehicle.all()
 
@@ -86,11 +96,11 @@ def find_vehicles():
         vehicle = Vehicle(vehicle_id)
 
         # Skip vehicles that aren't parents
-        if not vehicle.is_parent:
+        if (not vehicle.is_parent and section_type == "vehicle") or vehicle.is_burnt or vehicle.is_wreck:
             continue
 
-        table_type = find_table_type(vehicle)
-        vehicle_data = generate_data(vehicle_id, table_type)
+        table_type = find_table_type(vehicle, section_type)
+        vehicle_data = generate_data(vehicle_id, table_type, section_type)
 
         if table_type not in all_vehicle_data:
             all_vehicle_data[table_type] = []
@@ -102,8 +112,10 @@ def find_vehicles():
 def main():
     global table_map
     table_map, column_headings = table_helper.get_table_data(TABLE_PATH)
-    all_vehicle_data = find_vehicles()
+    all_vehicle_data = find_vehicles("vehicle")
+    all_vehicle_data_parent = find_vehicles("parent")
     table_helper.create_tables("vehicle", all_vehicle_data, table_map=table_map, columns=column_headings)
+    table_helper.create_tables("vehicle_parent", all_vehicle_data_parent, table_map=table_map, columns=column_headings)
 
 if __name__ == "__main__":
     main()
