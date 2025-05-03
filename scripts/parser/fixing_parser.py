@@ -2,7 +2,7 @@ import os
 import re
 from scripts.core import logger
 from scripts.core.version import Version
-from scripts.core.constants import DATA_PATH
+from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache, load_cache
 
 CACHE_JSON = 'fixing_data.json'
@@ -162,7 +162,7 @@ def parse_files_in_folder():
 def init(suppress=False):
     global parsed_fixing_data
 
-    cache_file = os.path.join(DATA_PATH, CACHE_JSON)
+    cache_file = os.path.join(DATA_DIR, CACHE_JSON)
     # Try to get cache from json file
     parsed_fixing_data, cache_version = load_cache(cache_file, get_version=True, suppress=suppress)
 

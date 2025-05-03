@@ -3,15 +3,15 @@
 from pathlib import Path
 import json
 from scripts.core.language import Language, Translate
-from scripts.core.constants import (RESOURCE_PATH, OUTPUT_PATH)
+from scripts.core.constants import (RESOURCE_DIR, OUTPUT_DIR)
 from scripts.utils.echo import echo_warning, echo_success
 
 language_code = Language.get()
 
-JSON_DIR = Path(RESOURCE_PATH)
+JSON_DIR = Path(RESOURCE_DIR)
 JSON_FILE = "blood_location.json"
 
-OUTPUT_DIR = Path(OUTPUT_PATH) / language_code.lower()
+OUTPUT_DIR = Path(OUTPUT_DIR) / language_code.lower()
 OUTPUT_FILE = "blood_location_list.txt"
 
 display_name_data = {}

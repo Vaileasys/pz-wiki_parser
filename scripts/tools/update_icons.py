@@ -3,10 +3,10 @@
 import shutil
 from pathlib import Path
 from scripts.core import config_manager
-from scripts.core.constants import RESOURCE_PATH
+from scripts.core.constants import RESOURCE_DIR
 from scripts.core.cache import save_cache, load_cache
 
-RESOURCES_DIR = Path(RESOURCE_PATH)
+RESOURCES_DIR = Path(RESOURCE_DIR)
 ICON_DIR = RESOURCES_DIR / "icons"
 TEXTURES_JSON = "texture_names.json"
 TEXTURES_JSON_PATH = RESOURCES_DIR / TEXTURES_JSON

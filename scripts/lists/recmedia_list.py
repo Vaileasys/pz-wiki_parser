@@ -3,12 +3,12 @@ from scripts.parser import item_parser
 from scripts.core.language import Translate
 from scripts.utils.util import format_positive, format_link
 from scripts.utils.echo import echo_warning, echo_info
-from scripts.core.constants import RESOURCE_PATH
+from scripts.core.constants import RESOURCE_DIR
 from scripts.utils.media_helper import CODES, parse_code_effects
 from scripts.core.cache import save_cache
 
 TABLE_HEADER = '{| class="wikitable theme-red sortable""'
-TABLE_PATH = f"{RESOURCE_PATH}/tables/recmedia_table.json"
+TABLE_PATH = f"{RESOURCE_DIR}/tables/recmedia_table.json"
 recmedia_data = {}
 table_map = {}
 

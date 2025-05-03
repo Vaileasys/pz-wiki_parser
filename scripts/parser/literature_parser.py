@@ -2,7 +2,7 @@
 
 import os
 from scripts.core.version import Version
-from scripts.core.constants import DATA_PATH
+from scripts.core.constants import DATA_DIR
 from scripts.utils import lua_helper
 from scripts.core.cache import save_cache, load_cache
 
@@ -41,7 +41,7 @@ def parse_lua_files():
 def init():
     global parsed_data
 
-    cache_file = os.path.join(DATA_PATH, CACHE_JSON)
+    cache_file = os.path.join(DATA_DIR, CACHE_JSON)
     # Try to get cache from json file
     parsed_data, cache_version = load_cache(cache_file, "literature", get_version=True)
 

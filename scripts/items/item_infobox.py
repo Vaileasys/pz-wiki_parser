@@ -8,7 +8,7 @@ from scripts.core import logger
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.lists import hotbar_slots
-from scripts.core.constants import PBAR_FORMAT, RESOURCE_PATH
+from scripts.core.constants import PBAR_FORMAT, RESOURCE_DIR
 from scripts.utils import utility, lua_helper, util
 from scripts.utils.util import capitalize
 from scripts.core.cache import save_cache
@@ -65,7 +65,7 @@ def get_descriptor(item_ids: list):
         return []
     
     if not all_descriptors:
-        with open(os.path.join(RESOURCE_PATH, "item_descriptors.json"), "r") as file:
+        with open(os.path.join(RESOURCE_DIR, "item_descriptors.json"), "r") as file:
             all_descriptors = json.load(file)
     
     descriptors = []

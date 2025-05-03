@@ -5,11 +5,11 @@ import struct
 import lupa
 from lupa import LuaRuntime
 import xml.etree.ElementTree as ET
-from scripts.core.constants import DATA_PATH
+from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache
 
 
-cache_path = os.path.join(DATA_PATH, "distributions")
+cache_path = os.path.join(DATA_DIR, "distributions")
 
 
 def parse_container_files(distributions_lua_path, procedural_distributions_path, output_path):

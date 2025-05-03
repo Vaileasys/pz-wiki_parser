@@ -4,10 +4,10 @@ import re
 import math
 import tqdm
 import scripts.parser.distribution_parser as distribution_parser
-from scripts.core.constants import DATA_PATH
+from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache, load_cache
 
-cache_path = os.path.join(DATA_PATH, "distributions")
+cache_path = os.path.join(DATA_DIR, "distributions")
 
 # Dictionary to store changes for reference across the script
 item_name_changes = {}
@@ -373,7 +373,7 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
 
 
 def build_tables():
-    json_path = os.path.join(DATA_PATH, "distributions", "all_items.json")
+    json_path = os.path.join(DATA_DIR, "distributions", "all_items.json")
     all_items = load_cache(json_path)
 
     output_dir = os.path.join("output", "distributions", "complete")
@@ -567,13 +567,13 @@ def calculate_missing_items(itemname_path, itemlist_path, missing_items_path):
 
 def main():
     file_paths = {
-        "proceduraldistributions": DATA_PATH + "/distributions/proceduraldistributions.json",
-        "foraging": DATA_PATH + "/distributions/foraging.json",
-        "vehicle_distributions": DATA_PATH + "/distributions/vehicle_distributions.json",
-        "clothing": DATA_PATH + "/distributions/clothing.json",
-        "attached_weapons": DATA_PATH + "/distributions/attached_weapons.json",
-        "stories": DATA_PATH + "/distributions/stories.json",
-        "distributions": DATA_PATH + "/distributions/distributions.json"
+        "proceduraldistributions": DATA_DIR + "/distributions/proceduraldistributions.json",
+        "foraging": DATA_DIR + "/distributions/foraging.json",
+        "vehicle_distributions": DATA_DIR + "/distributions/vehicle_distributions.json",
+        "clothing": DATA_DIR + "/distributions/clothing.json",
+        "attached_weapons": DATA_DIR + "/distributions/attached_weapons.json",
+        "stories": DATA_DIR + "/distributions/stories.json",
+        "distributions": DATA_DIR + "/distributions/distributions.json"
     }
 
     distribution_parser.main()

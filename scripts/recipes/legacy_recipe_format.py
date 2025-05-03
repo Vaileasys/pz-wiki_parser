@@ -6,7 +6,7 @@ from scripts.parser import literature_parser, item_parser
 from scripts.recipes import legacy_recipe_parser
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
-from scripts.core.constants import (PBAR_FORMAT, DATA_PATH)
+from scripts.core.constants import (PBAR_FORMAT, DATA_DIR)
 from scripts.recipes import legacy_recipe_output
 from scripts.utils import utility
 from scripts.core.cache import save_cache, load_cache
@@ -701,7 +701,7 @@ def main():
     print("Parsers complete, please wait...")
 
     CACHE_FILE = "recipes_processed_data.json"
-    cache_file = os.path.join(DATA_PATH, CACHE_FILE)
+    cache_file = os.path.join(DATA_DIR, CACHE_FILE)
 
     # Try to load data from cache
     processed_recipes, cache_version = load_cache(cache_file, "processed recipe", get_version=True)

@@ -5,7 +5,7 @@ from scripts.core.file_loading import get_script_path
 from scripts.core.language import Language, Translate
 from scripts.utils import utility, lua_helper
 from scripts.core import logger
-from scripts.core.constants import RESOURCE_PATH
+from scripts.core.constants import RESOURCE_DIR
 from scripts.utils.echo import echo_warning
 from scripts.core.cache import load_cache, save_cache
 from scripts.core.version import Version
@@ -133,7 +133,7 @@ class Item:
     @classmethod
     def get_icon_cache(cls):
         if cls._icon_cache_files is None:
-            texture_cache = load_cache(f"{RESOURCE_PATH}/texture_names.json", "texture cache", suppress=True)
+            texture_cache = load_cache(f"{RESOURCE_DIR}/texture_names.json", "texture cache", suppress=True)
             cls._icon_cache_files = texture_cache.get("Item", [])
         return cls._icon_cache_files
     

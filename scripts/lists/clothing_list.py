@@ -1,11 +1,11 @@
 from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.core.language import Language
-from scripts.core.constants import PBAR_FORMAT, RESOURCE_PATH
+from scripts.core.constants import PBAR_FORMAT, RESOURCE_DIR
 from scripts.lists import hotbar_slots
 from scripts.utils import utility, table_helper, util
 
-TABLE_PATH = f"{RESOURCE_PATH}/tables/clothing_table.json"
+TABLE_PATH = f"{RESOURCE_DIR}/tables/clothing_table.json"
 
 hotbar_slot_data = {}
 table_types = {}

@@ -5,9 +5,9 @@ from scripts.utils.util import format_link, format_positive
 from scripts.utils.echo import echo
 from scripts.parser import item_parser, fixing_parser
 from scripts.recipes import legacy_recipe_parser
-from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
+from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
 
-TABLE_PATH = f"{RESOURCE_PATH}/tables/weapon_table.json"
+TABLE_PATH = f"{RESOURCE_DIR}/tables/weapon_table.json"
 
 box_types = {}
 all_items = {}

@@ -3,7 +3,7 @@
 import os
 from pathlib import Path
 from scripts.core import config_manager
-from scripts.core.constants import OUTPUT_PATH
+from scripts.core.constants import OUTPUT_DIR
 from scripts.core.language import Language
 from scripts.core.version import Version
 from scripts.core.cache import save_cache, load_cache
@@ -328,7 +328,7 @@ def write_file(content:list, rel_path="output.txt", suppress=False):
     :param str rel_path: The relative path where the file will be saved. If no file extension is given, the path is treated as a directory.
     :return: The directory the file is saved to.
     """
-    output_path = Path(OUTPUT_PATH) / Language.get() / rel_path
+    output_path = Path(OUTPUT_DIR) / Language.get() / rel_path
     output_dir = output_path.parent if output_path.suffix else output_path
     output_dir.mkdir(parents=True, exist_ok=True)
 

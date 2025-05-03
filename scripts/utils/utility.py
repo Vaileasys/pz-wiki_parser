@@ -8,7 +8,7 @@ from scripts.recipes import legacy_recipe_parser
 from scripts.core import logger, config_manager, cache
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
-from scripts.core.constants import (DATA_PATH, RESOURCE_PATH)
+from scripts.core.constants import (DATA_DIR, RESOURCE_DIR)
 from scripts.utils import lua_helper
 from scripts.utils.echo import echo_error, echo_warning
 import warnings
@@ -153,7 +153,7 @@ def get_body_parts(item_data, link=True, default=""):
     :returns: Translated body parts.
     :rtype: body_parts (list)
     """
-    JSON_DIR = Path(RESOURCE_PATH)
+    JSON_DIR = Path(RESOURCE_DIR)
     JSON_FILE = "blood_location.json"
 
     json_path = JSON_DIR / JSON_FILE
@@ -342,7 +342,7 @@ def get_burn_time(item_id, item_data):
 
 
 # Save parsed data to json file
-def save_cache(data: dict, data_file: str, data_dir=DATA_PATH, suppress=False):
+def save_cache(data: dict, data_file: str, data_dir=DATA_DIR, suppress=False):
     warnings.warn(
         "'utility.save_cache()' is deprecated and will be removed. Use 'storage.save_cache()' instead.",
         DeprecationWarning,
@@ -364,7 +364,7 @@ def load_cache(cache_file, cache_name="data", get_version=False, backup_old=Fals
     return json_cache
 
 
-def clear_cache(cache_path=DATA_PATH, cache_name=None, suppress=False):
+def clear_cache(cache_path=DATA_DIR, cache_name=None, suppress=False):
     warnings.warn(
         "'utility.clear_cache()' is deprecated and will be removed. Use 'storage.clear_cache()' instead.",
         DeprecationWarning,
@@ -474,7 +474,7 @@ def get_item_id_data(suppress=False):
     :rtype: item_id_dict_data (dict)
     """
     global item_id_dict_data
-    dict_csv = f'{RESOURCE_PATH}/item_id_dictionary.csv'
+    dict_csv = f'{RESOURCE_DIR}/item_id_dictionary.csv'
 
     if not item_id_dict_data:
         cache_file = "item_id_dictionary.json"
@@ -532,7 +532,7 @@ def find_icon(item_id, all_icons=False):
     """
     icon_default = "Question_On"
     icon = icon_default
-    texture_cache = load_cache(f"{RESOURCE_PATH}/texture_names.json", "texture cache", suppress=True)
+    texture_cache = load_cache(f"{RESOURCE_DIR}/texture_names.json", "texture cache", suppress=True)
     icon_cache_files = texture_cache.get("Item", [])
 
     def check_icon_exists(icon_name, icon_cache_files):

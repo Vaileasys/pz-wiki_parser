@@ -2,7 +2,7 @@ import os
 import shutil
 import json
 import re
-from scripts.core.constants import DATA_PATH
+from scripts.core.constants import DATA_DIR
 from scripts.core.version import Version
 from scripts.utils.echo import echo_success, echo_error, echo_warning, echo_info
 
@@ -30,7 +30,7 @@ def save_json(path:str, data:dict) -> bool:
         return False
 
 
-def save_cache(data: dict, data_file: str, data_dir=DATA_PATH, suppress=False):
+def save_cache(data: dict, data_file: str, data_dir=DATA_DIR, suppress=False):
     """Caches data by saving it to a json file.
 
     Args:
@@ -76,7 +76,7 @@ def load_cache(cache_file, cache_name="data", get_version=False, backup_old=Fals
 
     # Check if cache_file includes a directory path
     if not os.path.dirname(cache_file):
-        cache_file = os.path.join(DATA_PATH, cache_file)
+        cache_file = os.path.join(DATA_DIR, cache_file)
 
     if cache_name.strip().lower() != "data":
         cache_name = cache_name.strip() + " data"
@@ -106,7 +106,7 @@ def load_cache(cache_file, cache_name="data", get_version=False, backup_old=Fals
     return json_cache
 
 
-def clear_cache(cache_path=DATA_PATH, cache_name=None, suppress=False):
+def clear_cache(cache_path=DATA_DIR, cache_name=None, suppress=False):
     """Clears the cache at a specified file path.
 
     Args:
@@ -119,8 +119,8 @@ def clear_cache(cache_path=DATA_PATH, cache_name=None, suppress=False):
     else:
         cache_name = "cache"
     try:
-        if cache_path != DATA_PATH:
-            cache_path = os.path.join(DATA_PATH, cache_path)
+        if cache_path != DATA_DIR:
+            cache_path = os.path.join(DATA_DIR, cache_path)
 
         # Check if it's a file or directory
         if os.path.exists(cache_path):

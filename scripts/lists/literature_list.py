@@ -2,10 +2,10 @@ from tqdm import tqdm
 from scripts.parser import item_parser, stash_parser
 from scripts.recipes import legacy_recipe_parser
 from scripts.core.language import Language, Translate
-from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
+from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
 from scripts.utils import utility, util, table_helper
 
-TABLE_PATH = f"{RESOURCE_PATH}/tables/literature_table.json"
+TABLE_PATH = f"{RESOURCE_DIR}/tables/literature_table.json"
 
 table_map = None
 table_type_map = None

@@ -4,7 +4,7 @@ import chardet
 import re
 from scripts.parser import item_parser
 from scripts.core import logger, config_manager, version
-from scripts.core.constants import DATA_PATH
+from scripts.core.constants import DATA_DIR
 from scripts.utils import utility
 import warnings
 
@@ -269,7 +269,7 @@ def remove_comments(line: str) -> str:
 
 def cache_translations():
     global translations_data
-    cache_file = os.path.join(DATA_PATH, CACHE_JSON)
+    cache_file = os.path.join(DATA_DIR, CACHE_JSON)
     # Try to get cache from json file
     translations_data, cache_version = utility.load_cache(cache_file, "translation", get_version=True)
 

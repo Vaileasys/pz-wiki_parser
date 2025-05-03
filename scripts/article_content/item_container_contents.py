@@ -2,7 +2,7 @@ from pathlib import Path
 from tqdm import tqdm
 from scripts.parser import item_parser, distribution_container_parser
 from scripts.core.language import Language
-from scripts.core.constants import (PBAR_FORMAT, OUTPUT_PATH)
+from scripts.core.constants import (PBAR_FORMAT, OUTPUT_DIR)
 from scripts.utils import utility, util
 from scripts.core.cache import save_cache
 
@@ -18,7 +18,7 @@ TABLE_FOOTER = "|}"
 
 distribution_data = distribution_container_parser.get_distribution_data()
 language_code = Language.get()
-output_dir = Path(OUTPUT_PATH) / language_code.lower() / "container_contents"
+output_dir = Path(OUTPUT_DIR) / language_code.lower() / "container_contents"
 
 
 def get_probabilities(container_data):

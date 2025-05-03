@@ -2,11 +2,11 @@ from tqdm import tqdm
 from scripts.parser import item_parser, evolvedrecipe_parser
 from scripts.recipes import legacy_recipe_parser
 from scripts.core.language import Language
-from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
+from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
 from scripts.utils import utility, lua_helper, table_helper, util
 from scripts.core.cache import save_cache
 
-TABLE_PATH = f"{RESOURCE_PATH}/tables/food_table.json"
+TABLE_PATH = f"{RESOURCE_DIR}/tables/food_table.json"
 
 evolvedrecipe_products = []
 recipe_products = []

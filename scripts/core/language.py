@@ -2,7 +2,7 @@ import os
 import json
 import re
 import chardet
-from scripts.core.constants import DATA_PATH
+from scripts.core.constants import DATA_DIR
 from scripts.core.version import Version
 from scripts.core import config_manager
 from scripts.utils.echo import echo_error, echo_warning, echo_info
@@ -203,7 +203,7 @@ class Translate:
     @classmethod
     def _cache(cls):
 
-        cache_path = os.path.join(DATA_PATH, cls._CACHE_JSON)
+        cache_path = os.path.join(DATA_DIR, cls._CACHE_JSON)
         cls._translations, cache_version = load_cache(cache_path, "translation", get_version=True)
 
         if cache_version != Version.get():

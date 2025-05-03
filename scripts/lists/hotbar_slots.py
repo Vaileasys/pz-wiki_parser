@@ -2,13 +2,13 @@ from pathlib import Path
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.parser import item_parser
-from scripts.core.constants import OUTPUT_PATH
+from scripts.core.constants import OUTPUT_DIR
 from scripts.utils import utility, lua_helper, util
 from scripts.core.cache import save_cache, load_cache
 from scripts.utils.echo import echo
 
 language_code = Language.get()
-output_dir = Path(OUTPUT_PATH) / language_code.lower()
+output_dir = Path(OUTPUT_DIR) / language_code.lower()
 
 hotbar_data = {}
 # All items from item_parser

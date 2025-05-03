@@ -1,7 +1,7 @@
 import os, json, re
 from tqdm import tqdm
 from collections import defaultdict
-from scripts.core.constants import PBAR_FORMAT, DATA_PATH
+from scripts.core.constants import PBAR_FORMAT, DATA_DIR
 from scripts.core.language import Language, Translate
 from scripts.core.version import Version
 from scripts.core.cache import load_cache
@@ -1031,8 +1031,8 @@ def main():
     CRAFT_CACHE_FILE = "parsed_craftRecipe_data.json"
     BUILD_CACHE_FILE = "parsed_entity_data.json"
 
-    craft_cache_path = os.path.join(DATA_PATH, CRAFT_CACHE_FILE)
-    build_cache_path = os.path.join(DATA_PATH, BUILD_CACHE_FILE)
+    craft_cache_path = os.path.join(DATA_DIR, CRAFT_CACHE_FILE)
+    build_cache_path = os.path.join(DATA_DIR, BUILD_CACHE_FILE)
 
     try:
         try:

@@ -8,11 +8,11 @@ from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.core.file_loading import write_file
 from scripts.utils.echo import echo_warning, echo_success
-from scripts.core.constants import OUTPUT_PATH
+from scripts.core.constants import OUTPUT_DIR
 from scripts.utils.util import format_link, convert_int
 
-REL_DIR = "vehicle_infoboxes"
-OUTPUT_DIR = os.path.join(OUTPUT_PATH, Language.get(), REL_DIR)
+REL_DIR = os.path.join("vehicle", "infoboxes")
+OUTPUT_DIR = os.path.join(OUTPUT_DIR, Language.get(), REL_DIR)
 
 
 def get_vehicle():
@@ -116,7 +116,7 @@ def process_vehicle(vehicle_id):
             content.append(f"|{key}={value}")
         content.append("}}")
 
-        write_file(content, rel_path=rel_path)
+        write_file(content, rel_path=rel_path, suppress=True)
 
 
 def automatic_extraction():

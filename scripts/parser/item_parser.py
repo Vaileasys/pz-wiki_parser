@@ -2,7 +2,7 @@ import os
 import re
 from scripts.core.language import Language, Translate
 from scripts.core.version import Version
-from scripts.core.constants import DATA_PATH
+from scripts.core.constants import DATA_DIR
 from scripts.utils.echo import echo_info, echo_warning
 from scripts.core.cache import save_cache, load_cache
 from scripts.core.file_loading import get_script_files
@@ -309,7 +309,7 @@ def init():
     global parsed_data
     Language.get() # Initialise so we don't interrupt progress bars
 
-    cache_file = os.path.join(DATA_PATH, CACHE_JSON)
+    cache_file = os.path.join(DATA_DIR, CACHE_JSON)
     # Try to get cache from json file
     cached_data, cache_version = load_cache(cache_file, "item", get_version=True, backup_old=True)
     game_version = Version.get()

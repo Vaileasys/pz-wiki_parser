@@ -3,7 +3,7 @@ import os
 from scripts.objects.item import Item
 from scripts.core import logger
 from scripts.core.language import Language, Translate
-from scripts.core.constants import (PBAR_FORMAT, OUTPUT_PATH)
+from scripts.core.constants import (PBAR_FORMAT, OUTPUT_DIR)
 from scripts.utils.echo import echo_success, echo_warning
 
 filters = {
@@ -32,7 +32,7 @@ def translate_category(category, property="DisplayCategory"):
 
 def write_to_output(items_data):
     language_code = Language.get()
-    output_dir = f'{OUTPUT_PATH}/{language_code}/item_list/'
+    output_dir = f'{OUTPUT_DIR}/{language_code}/item_list/'
     output_file = f'item_list.txt'
     os.makedirs(output_dir, exist_ok=True)
     output_path = os.path.join(output_dir, output_file)

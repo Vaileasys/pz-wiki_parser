@@ -1,6 +1,6 @@
 import os, re
 from scripts.core.version import Version
-from scripts.core.constants import DATA_PATH
+from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache, load_cache
 
 RECIPES_DIR = os.path.join("resources", "scripts")
@@ -555,7 +555,7 @@ def parse_construction_recipe(text):
 def main():
     global parsed_data
 
-    cache_file = os.path.join(DATA_PATH, CACHE_JSON)
+    cache_file = os.path.join(DATA_DIR, CACHE_JSON)
     # Try to get cache from json file
     parsed_data, cache_version = load_cache(cache_file, get_version=True)
 

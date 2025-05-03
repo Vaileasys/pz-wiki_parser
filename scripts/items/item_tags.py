@@ -4,7 +4,7 @@ from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.core.version import Version
 from scripts.core.language import Language
-from scripts.core.constants import OUTPUT_PATH, PBAR_FORMAT, DATA_PATH
+from scripts.core.constants import OUTPUT_DIR, PBAR_FORMAT, DATA_DIR
 from scripts.utils import utility, util
 from scripts.core.cache import save_cache, load_cache
 from scripts.utils.echo import echo_success, echo_warning, echo_error
@@ -13,7 +13,7 @@ CACHE_JSON = "tags_data.json"
 is_run_locally = False
 
 language_code = Language.get()
-output_tags_dir = os.path.join(OUTPUT_PATH, language_code, "tags")
+output_tags_dir = os.path.join(OUTPUT_DIR, language_code, "tags")
 
 tag_data = {}
 
@@ -260,7 +260,7 @@ def generate_tags_dict():
     """Generate a tags dictionary, mapping them to their associated items."""
     tags_dict = {}
 
-    cache_file = os.path.join(DATA_PATH, CACHE_JSON)
+    cache_file = os.path.join(DATA_DIR, CACHE_JSON)
     tags_dict, cache_version = load_cache(cache_file, "tags", get_version=True)
     game_version = Version.get()
 

@@ -6,12 +6,12 @@ from scripts.parser import item_parser
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.lists import hotbar_slots
-from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
+from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
 from scripts.utils import utility, util, table_helper
 from scripts.core.cache import save_cache, load_cache
 from scripts.utils.echo import echo_info
 
-TABLE_PATH = f"{RESOURCE_PATH}/tables/container_table.json"
+TABLE_PATH = f"{RESOURCE_DIR}/tables/container_table.json"
 
 table_map = None
 table_type_map = None

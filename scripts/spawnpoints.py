@@ -1,6 +1,6 @@
 from pathlib import Path
 from scripts.core.language import Translate
-from scripts.core.constants import DATA_PATH
+from scripts.core.constants import DATA_DIR
 from scripts.utils import lua_helper
 from scripts.core.cache import save_cache
 from scripts.core.file_loading import get_game_file_map

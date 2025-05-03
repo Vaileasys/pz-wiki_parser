@@ -1,10 +1,10 @@
 from scripts.objects.vehicle import Vehicle
 from scripts.utils import table_helper
 from scripts.utils.util import format_link, convert_int
-from scripts.core.constants import RESOURCE_PATH, PBAR_FORMAT
+from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
 from scripts.core.cache import save_cache
 
-TABLE_PATH = f"{RESOURCE_PATH}/tables/vehicle_table.json"
+TABLE_PATH = f"{RESOURCE_DIR}/tables/vehicle_table.json"
 VEHICLE_BLACKLIST = ["Base.SportsCar_ez", "Base.ModernCar_Martin"]
 
 table_map = {}

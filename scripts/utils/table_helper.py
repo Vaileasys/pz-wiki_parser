@@ -1,11 +1,11 @@
 from pathlib import Path
 from scripts.core.language import Language, Translate
-from scripts.core.constants import OUTPUT_PATH
+from scripts.core.constants import OUTPUT_DIR
 from scripts.core.cache import load_json
 from scripts.utils.echo import echo_success, echo_info, echo_warning, echo_error
 
 
-OUTPUT_DIR = Path(OUTPUT_PATH) / Language.get() / "item_list"
+OUTPUT_DIR = Path(OUTPUT_DIR) / Language.get() / "item_list"
 
 DEF_TABLE_HEADER = '{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"'
 DEF_TABLE_FOOTER = '|}'

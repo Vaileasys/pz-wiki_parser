@@ -1,7 +1,7 @@
 import os
 from lupa import LuaRuntime
 from scripts.core.version import Version
-from scripts.core.constants import DATA_PATH
+from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache, load_cache
 
 STASH_DIRECTORY = os.path.join("resources", "lua", "stashes")
@@ -101,7 +101,7 @@ def parse_all_stash_files(directory):
     """Parse all lua stash files, returning them as a dictionary, separated by file name."""
     global stash_data
 
-    cache_file = os.path.join(DATA_PATH, CACHE_JSON)
+    cache_file = os.path.join(DATA_DIR, CACHE_JSON)
     # Try to get cache from json file
     stash_data, cache_version = load_cache(cache_file, "stash", get_version=True)
 

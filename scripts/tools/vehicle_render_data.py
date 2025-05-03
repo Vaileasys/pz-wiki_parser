@@ -4,9 +4,9 @@ import os
 from scripts.objects.vehicle import Vehicle
 from scripts.core.cache import save_json
 from scripts.utils.echo import echo_success
-from scripts.core.constants import OUTPUT_PATH
+from scripts.core.constants import OUTPUT_DIR
 
-PATH = os.path.join(OUTPUT_PATH, "vehicle_render_data.json")
+PATH = os.path.join(OUTPUT_DIR, "vehicle_render_data.json")
 
 WHEEL_ORIGINS = {
     # "Name": (X, Y, Z, Scale) --scale is relative, based on wheel original size

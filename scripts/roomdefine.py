@@ -5,14 +5,14 @@ import concurrent.futures
 import scripts.parser.distribution_parser as distribution_parser
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
-from scripts.core.constants import DATA_PATH
+from scripts.core.constants import DATA_DIR
 from scripts.utils import utility
 
 
 def main():
     distribution_parser.main()
 
-    json_path = Path(DATA_PATH) / "distributions" / "all_items.json"
+    json_path = Path(DATA_DIR) / "distributions" / "all_items.json"
 
     data = utility.load_cache(json_path)
 

@@ -5,7 +5,7 @@ import csv
 from difflib import SequenceMatcher
 from tqdm import tqdm
 from scripts.core.language import Language
-from scripts.core.constants import (PBAR_FORMAT, DATA_PATH)
+from scripts.core.constants import (PBAR_FORMAT, DATA_DIR)
 from scripts.core.cache import save_cache, load_cache
 from scripts.utils.echo import echo, echo_info, echo_warning, echo_error
 
@@ -800,7 +800,7 @@ def main(run_directly=False):
 
     global see_also_cache
     CACHE_FILE = "item_see_also_data.json"
-    see_also_cache_file = os.path.join(DATA_PATH, CACHE_FILE)
+    see_also_cache_file = os.path.join(DATA_DIR, CACHE_FILE)
     see_also_cache = load_cache(see_also_cache_file, "see also")
 
     infobox_dir = os.path.join("output", language_code, "infoboxes")
