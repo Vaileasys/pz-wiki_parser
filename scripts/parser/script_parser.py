@@ -3,7 +3,7 @@ from pathlib import Path
 from scripts.core.file_loading import get_script_files, read_file
 from scripts.core.language import Translate
 from scripts.core.cache import save_cache
-from scripts.utils.echo import echo, echo_info, echo_warning, echo_error, echo_success
+from scripts.utils.echo import echo, echo_info, echo_warning, echo_error, echo_success, echo_debug
 from scripts.parser.recipe_parser import parse_recipe_block, parse_construction_recipe
 
 PREFIX_BLACKLIST = {
@@ -96,6 +96,19 @@ script_cache = {}
 
 def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -> dict:
     """Injects and merges template! and template entries into each script definition."""
+    def recursive_merge(destination: dict, source: dict):
+        """Recursively adds values from source into destination, without overwriting existing ones."""
+        for key, value in source.items():
+            if key not in destination:
+                destination[key] = value
+            else:
+                dst_val = destination[key]
+                if isinstance(dst_val, dict) and isinstance(value, dict):
+                    recursive_merge(dst_val, value)
+                else:
+                    # Existing non-dict value, don't overwrite
+                    pass
+
     def merge_template(script_data: dict, template_path: str, script_id: str, script_type: str, template_dict: dict) -> dict:
         """Merges a template into the script data."""
         module = script_id.split(".", 1)[0]
@@ -137,7 +150,23 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
                 dest[final_key] = current_template
             else:
                 if isinstance(dest[final_key], dict) and isinstance(current_template, dict):
-                    dest[final_key].update(current_template)
+                    recursive_merge(dest[final_key], current_template)
+            
+            # Handle wildcard inheritance, e.g., Seat* → SeatFrontLeft
+            if len(parts) >= 2 and parts[1] == "part":
+                part_name = final_key
+                template_group = parts[0]
+                base_template_id = f"{module}.{script_type}_{template_group}"
+                base_template = template_dict.get(base_template_id)
+
+                if base_template:
+                    part_block = base_template.get("part", {})
+                    for wildcard, wildcard_data in part_block.items():
+                        if "*" in wildcard and isinstance(wildcard_data, dict):
+                            prefix = wildcard.rstrip("*")
+                            if part_name.startswith(prefix):
+                                if isinstance(dest[part_name], dict):
+                                    recursive_merge(dest[part_name], wildcard_data)
 
         else:
             # Merge full template
@@ -147,9 +176,15 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
                 echo_warning(f"[{script_id}] template '{template_id}' not found.")
                 return script_data
 
+            # Merge sub-templates recursively
+            sub_template_list = template.get("template")
+            if sub_template_list:
+                for sub_temp in sub_template_list:
+                    script_data = merge_template(script_data, sub_temp, script_id, script_type, template_dict)
+
             # Merge fields into script_data
             for key, value in template.items():
-                if key in ("ScriptType", "SourceFile"):
+                if key in ("ScriptType", "SourceFile", "template"):
                     continue
                 if key not in script_data:
                     script_data[key] = value
@@ -157,13 +192,7 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
                     if isinstance(script_data[key], list) and isinstance(value, list):
                         script_data[key] = list(dict.fromkeys(script_data[key] + value))
                     elif isinstance(script_data[key], dict) and isinstance(value, dict):
-                        script_data[key].update(value)
-
-            # Merge sub-templates recursively
-            sub_template_list = template.get("template")
-            if sub_template_list:
-                for sub_temp in sub_template_list:
-                    script_data = merge_template(script_data, sub_temp, script_id, script_type, template_dict)
+                        recursive_merge(script_data[key], value)
 
         return script_data
 
