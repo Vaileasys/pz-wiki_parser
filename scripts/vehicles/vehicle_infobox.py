@@ -8,11 +8,10 @@ from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.core.file_loading import write_file
 from scripts.utils.echo import echo_warning, echo_success
-from scripts.core.constants import OUTPUT_DIR
+from scripts.core.constants import OUTPUT_DIR, VEHICLE_DIR
 from scripts.utils.util import format_link, convert_int
 
-REL_DIR = os.path.join("vehicle", "infoboxes")
-OUTPUT_PATH = os.path.join(OUTPUT_DIR, Language.get(), REL_DIR)
+ROOT_DIR = os.path.join(VEHICLE_DIR.format(language_code=Language.get()), "infoboxes")
 
 
 def get_vehicle():
@@ -107,7 +106,7 @@ def process_vehicle(vehicle_id):
     parameters = generate_data(vehicle_id)
     if parameters is not None:
         vehicle_id = parameters.get("vehicle_id")
-        rel_path = os.path.join(REL_DIR, f'{vehicle_id}.txt')
+        rel_path = f'{vehicle_id}.txt'
         content = []
 
         # Generate infobox
@@ -116,14 +115,14 @@ def process_vehicle(vehicle_id):
             content.append(f"|{key}={value}")
         content.append("}}")
 
-        write_file(content, rel_path=rel_path, suppress=True)
+        write_file(content, rel_path=rel_path, root_path=ROOT_DIR, suppress=True)
 
 
 def automatic_extraction():
     # Create 'output_dir'
-    if os.path.exists(OUTPUT_PATH):
-        shutil.rmtree(OUTPUT_PATH)
-    os.makedirs(OUTPUT_PATH)
+    if os.path.exists(ROOT_DIR):
+        shutil.rmtree(ROOT_DIR)
+    os.makedirs(ROOT_DIR)
 
     for vehicle_id in Vehicle.keys():
         process_vehicle(vehicle_id)
@@ -131,18 +130,18 @@ def automatic_extraction():
 
 def main():
     # Call early
-    language_code = Language.get()
+    Language.get()
 
     while True:
         choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
         if choice == '1':
             automatic_extraction()
-            echo_success(f"Extraction complete, the files can be found in {OUTPUT_PATH}.")
+            echo_success(f"Extraction complete, the files can be found in '{ROOT_DIR}'.")
             break
         elif choice == '2':
             vehicle_id = get_vehicle()
             process_vehicle(vehicle_id)
-            echo_success(f"Extraction complete, the file can be found in {OUTPUT_PATH}.")
+            echo_success(f"Extraction complete, the file can be found in '{ROOT_DIR}'.")
             break
         elif choice == 'q':
             break

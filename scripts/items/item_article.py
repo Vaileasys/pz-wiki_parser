@@ -5,7 +5,7 @@ import csv
 from difflib import SequenceMatcher
 from tqdm import tqdm
 from scripts.core.language import Language
-from scripts.core.constants import (PBAR_FORMAT, DATA_DIR)
+from scripts.core.constants import PBAR_FORMAT, DATA_DIR, OUTPUT_LANG_DIR, ITEM_DIR
 from scripts.core.cache import save_cache, load_cache
 from scripts.utils.echo import echo, echo_info, echo_warning, echo_error
 
@@ -803,8 +803,11 @@ def main(run_directly=False):
     see_also_cache_file = os.path.join(DATA_DIR, CACHE_FILE)
     see_also_cache = load_cache(see_also_cache_file, "see also")
 
-    infobox_dir = os.path.join("output", language_code, "infoboxes")
-    output_dir = os.path.join("output", language_code, "articles")
+    output_root_dir = OUTPUT_LANG_DIR.format(language_code=language_code)
+    output_item_dir = ITEM_DIR.format(language_code=language_code)
+
+    infobox_dir = os.path.join(output_item_dir, "infoboxes")
+    output_dir = os.path.join(output_item_dir, "articles")
     consumables_dir = os.path.join("output", language_code, "consumables")
     fixing_dir = os.path.join("output", language_code, "fixing")
     dictionary_dir = os.path.join("resources", "item_id_dictionary.csv")

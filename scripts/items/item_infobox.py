@@ -8,15 +8,15 @@ from scripts.core import logger
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.lists import hotbar_slots
-from scripts.core.constants import PBAR_FORMAT, RESOURCE_DIR
+from scripts.core.constants import PBAR_FORMAT, RESOURCE_DIR, ITEM_DIR
 from scripts.utils import utility, lua_helper, util
 from scripts.utils.util import capitalize
 from scripts.core.cache import save_cache
 from scripts.utils.echo import echo, echo_success, echo_error
+from scripts.core.file_loading import write_file
 
+ROOT_DIR = os.path.join(ITEM_DIR.format(language_code=Language.get()), "infoboxes")
 
-language_code = ""
-lcs = ""
 # Clothing vision penalties (percents)
 clothing_penalties = {}
 hotbar_slot_data = {}
@@ -288,7 +288,7 @@ def generate_infobox(item_id, item_data):
 
             bl = id_data.get('BodyLocation', item_data.get('CanBeEquipped'))
             if bl is not None:
-                bl = f"[[BodyLocation{lcs}#{bl}|{bl}]]"
+                bl = f"[[BodyLocation{Language.get_subpage()}#{bl}|{bl}]]"
                 if not any(x in body_location for x in (bl, remove_descriptor(bl))):
                     body_location.append(bl + descriptor)
                 if bl in clothing_penalties:
@@ -438,40 +438,40 @@ def generate_infobox(item_id, item_data):
         return parameters
     except Exception as e:
         logger.write(f"Error generating data for {item_id}", True, exception=e, category="error")
+        raise
 
 
-def write_to_output(parameters, output_dir):
-    os.makedirs(output_dir, exist_ok=True)
-    item_id = parameters.get("item_id")
-    output_file = os.path.join(output_dir, f'{item_id}.txt')
-    content = []
-    content.append("{{Infobox item")
+def process_item(item_id, item_data):
+    try:
+        parameters = generate_infobox(item_id, item_data)
+        if parameters is not None:
+            item_id = parameters.get("item_id")
+            rel_path = f'{item_id}.txt'
+            content = []
 
-    for key, value in parameters.items():
-        content.append(f"|{key}={value}")
+            # Generate infobox
+            content.append("{{Infobox item")
+            for key, value in parameters.items():
+                content.append(f"|{key}={value}")
+            content.append("}}")
+
+            write_file(content, rel_path=rel_path, root_path=ROOT_DIR, suppress=True)
+        return True
     
-    content.append("}}")
-
-    with open(output_file, 'w', encoding='utf-8') as file:
-        file.write("\n".join(content))
+    except Exception as e:
+        return False
 
 
-def process_item(item_data, item_id, output_dir):
-    parameters = generate_infobox(item_id, item_data)
-    if parameters is not None:
-        write_to_output(parameters, output_dir)
-
-
-def automatic_extraction(output_dir):
-    if os.path.exists(output_dir):
-        shutil.rmtree(output_dir)
-    os.makedirs(output_dir)
+def automatic_extraction():
+    if os.path.exists(ROOT_DIR):
+        shutil.rmtree(ROOT_DIR)
+    os.makedirs(ROOT_DIR)
 
     parsed_item_data = item_parser.get_item_data()
     with tqdm(total=len(parsed_item_data), desc="Processing items", unit=" items", bar_format=PBAR_FORMAT, unit_scale=True, leave=False) as pbar:
         for item_id, item_data in parsed_item_data.items():
             pbar.set_postfix_str(f'Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})')
-            process_item(item_data, item_id, output_dir)
+            process_item(item_id, item_data)
             pbar.update(1)
         elapsed_time = pbar.format_dict["elapsed"]
     echo_success(f"Finished processing items after {elapsed_time:.2f} seconds.")
@@ -479,30 +479,23 @@ def automatic_extraction(output_dir):
 
 def main():
     global hotbar_slot_data
-    global language_code
-    global lcs
-    language_code = Language.get()
-    if language_code != "en":
-        lcs = f"/{language_code}"
+    Language.get() # Initialise early
     generate_clothing_penalties()
-    output_dir = os.path.join("output", language_code, "infoboxes")
 
     hotbar_slot_data = hotbar_slots.get_hotbar_slots()
 
     while True:
         choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
         if choice == '1':
-            automatic_extraction(output_dir)
+            automatic_extraction()
             save_cache({"data": item_ids_already_processed}, "item_ids_already_processed.json")
-            echo_success(f"Extraction complete, the files can be found in '{output_dir}'.")
+            echo_success(f"Extraction complete, the files can be found in '{ROOT_DIR}'.")
             return
         elif choice == '2':
             item_data, item_id = get_item()
-            parameters = generate_infobox(item_id, item_data)
-            if parameters is not None:
-                write_to_output(parameters, output_dir)
-                output_path = os.path.join(output_dir, item_id + ".txt")
-                echo_success(f"Extraction complete, the file can be found in '{output_path}'.")
+            success = process_item(item_id, item_data)
+            if success:
+                echo_success(f"Extraction complete, the file can be found in '{os.path.join(ROOT_DIR, item_id)}.txt'.")
             else:
                 echo_error(f"Error writing file. Refer to log: {logger.get_log_path()}")
             return
@@ -510,7 +503,6 @@ def main():
             return
         else:
             echo("Invalid choice.")
-    
 
 
 if __name__ == "__main__":

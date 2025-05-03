@@ -412,6 +412,7 @@ def main():
     global table_map
     global all_items
     global table_type_map
+    Language.get()
     table_map, column_headings, table_type_map = table_helper.get_table_data(TABLE_PATH, "type_map")
     find_boxes()
 
