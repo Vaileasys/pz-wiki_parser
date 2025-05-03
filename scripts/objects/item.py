@@ -49,6 +49,7 @@ class Item:
 
         self.name = None     # English name
         self.page = None     # Wiki page
+        self.has_page = None # Page defined (bool)
         self.icon = None     # Primary icon (str)
         self.icons = None    # All icons (list)
         self.burn_time = None
@@ -165,6 +166,13 @@ class Item:
     def keys(self):
         return self.data.keys()
     
+    ## ------------------------- Misc Methods ------------------------- ##
+
+    def page_exists(self) -> bool:
+        if self.has_page is None:
+            self.find_page()
+        return self.has_page
+    
     ## ------------------------- Property Methods ------------------------- ##
     
     def get_file(self):
@@ -179,19 +187,23 @@ class Item:
     def get_id_type(self):
         return self.id_type
 
-    def get_page(self, fallback: str = "Unknown") -> str:
+    def get_page(self, fallback: str = None) -> str:
         """Returns the page name for this item, calling find_page() if needed."""
         if self.page is None:
+            if fallback is None:
+                fallback = self.get_name()
             self.find_page(fallback)
         return self.page
 
     def find_page(self, fallback: str = "Unknown") -> str:
         """Finds and sets the wiki page name this item belongs to."""
-        item_id_data = utility.get_item_id_data(True)
+        item_id_data = utility.get_item_id_data(True) #TODO: move this function to a class method
 
+        self.has_page = False
         for page_name, item_ids in item_id_data.items():
             if self.item_id in item_ids:
                 self.page = page_name
+                self.has_page = True
                 return self.page
 
         logger.write(f"Couldn't find a page for '{self.item_id}'")
@@ -258,9 +270,14 @@ class Item:
                 if is_english:
                     self.name = name
                 return name
+        
+        display_name = Translate.get(item_id, "DisplayName", "en" if is_english else language_code)
+        # Vehicle parts
+        if self.get("VehicleType", 0) > 0:
+            self.name = Translate.get("IGUI_ItemNameMechanicalType").replace("%1", display_name).replace("%2", Translate.get("IGUI_VehicleType_" + str(self.get("VehicleType"))))
+            return self.name
 
         # Default fallback
-        display_name = Translate.get(item_id, "DisplayName", "en" if is_english else language_code)
         if display_name == item_id:
             display_name = self.get("DisplayName", item_id)
 
@@ -496,4 +513,4 @@ class Item:
 
 
 if __name__ == "__main__":
-    print(Item("Base.Gloves_FingerlessLeatherGloves_Black").get_icon(format=False, all_icons=True))
+    print(Item("Base.BigTrunk1").get_name())
