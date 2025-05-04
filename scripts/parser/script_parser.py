@@ -727,16 +727,47 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
             continue
 
         if script_type == "entity":
-            # feed the whole text to construction parser
-            recipes = parse_construction_recipe(content)
+            file_texts: dict[str, str] = {}
+            for filepath in script_files:
+                if Path(filepath).stem in SCRIPT_CONFIGS["entity"].get("file_blacklist", []):
+                    echo_info(f"Skipping blacklisted file path: '{Path(filepath).stem}'")
+                    continue
+
+                text = read_file(filepath)
+                if not text:
+                    echo_warning(f"File is empty or unreadable: {filepath}")
+                    continue
+
+                file_texts[filepath] = text
+
+            if not file_texts:
+                echo_warning("No entity files found.")
+                return {}
+
+            full_text = "\n".join(file_texts.values())
+            recipes = parse_construction_recipe(full_text)
+
+            entity_dict = {}
             for recipe in recipes:
                 name = recipe.get("name")
                 if not name:
                     continue
+
+                # Best‑effort: find which file contains the entity definition
+                source_file = next(
+                    (Path(p).stem for p, t in file_texts.items()
+                     if re.search(rf'\bentity\s+{re.escape(name)}\b', t)),
+                    "unknown"
+                )
+
                 recipe["ScriptType"] = script_type
-                recipe["SourceFile"] = Path(filepath).stem
+                recipe["SourceFile"] = source_file
                 entity_dict[name] = recipe
-#            continue
+
+            save_cache(entity_dict, "parsed_entity_data.json")
+            script_cache[script_type] = entity_dict
+            echo_success(f"Parsed {len(entity_dict)} entity entries.")
+            return dict(sorted(entity_dict.items()))
 
         # Clean up comments and prep for parsing
         lines = remove_comments(content.splitlines())

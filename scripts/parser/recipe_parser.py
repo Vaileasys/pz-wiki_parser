@@ -387,7 +387,7 @@ def parse_module_skin_mapping(module_block: str) -> Dict[str, Dict[str, Dict[str
             }
             entity_position = entity_next_position
 
-        skin_mapping[skin_name] = entity_entries
+        skin_mapping.setdefault(skin_name, {}).update(entity_entries)
         pattern_position = next_position
 
     return skin_mapping
@@ -468,35 +468,56 @@ def parse_sprite_config(block_text: str) -> Tuple[Dict[str, List[str]], float]:
 
 
 def parse_construction_recipe(full_text: str) -> List[Dict[str, Any]]:
+    """
+    Parse every `entity … { component CraftRecipe { … } }` in the source text
+    and return a list of normalised recipe dictionaries.
+
+    The routine now:
+
+      1.  Collects a *global* skin‑mapping for **all** modules first.
+      2.  Parses each entity and resolves its (skinName, entityStyle) pair
+          against that global table so the `outputs` field is always filled
+          when the information exists anywhere in the file‑set.
+    """
     construction_recipes: List[Dict[str, Any]] = []
     module_blocks = parse_module_block(full_text)
 
+    global_skin_mapping: Dict[str, Dict[str, Dict[str, str]]] = {}
     for module_entry in module_blocks:
-        skin_mapping_all = parse_module_skin_mapping(module_entry["block"])
+        skin_map = parse_module_skin_mapping(module_entry["block"])
+        # merge (keeps earlier values if there are duplicates)
+        for skin_name, entity_map in skin_map.items():
+            global_skin_mapping.setdefault(skin_name, {}).update(entity_map)
+
+    for module_entry in module_blocks:
         entity_blocks = parse_entity_blocks(module_entry["block"])
 
         for entity_entry in entity_blocks:
             entity_name: str = entity_entry["name"]
             craft_recipe_block = entity_entry["components"].get("CraftRecipe")
             if not craft_recipe_block:
-                continue
+                continue  # entity has no CraftRecipe component
 
-            parsed_recipe_block = parse_recipe_block(craft_recipe_block.splitlines(), entity_name)
+            parsed_recipe_block = parse_recipe_block(
+                craft_recipe_block.splitlines(), block_id=entity_name
+            )
+
             recipe_output: Dict[str, Any] = {"name": entity_name}
             recipe_output.update(parsed_recipe_block)
 
-            skin_name: str = entity_entry.get("skinName", "")
-            style_mapping = skin_mapping_all.get(skin_name, {})
+            skin_name: str = entity_entry.get("skinName")
             entity_style: str = entity_entry.get("entityStyle")
 
-            if entity_style and entity_style in style_mapping:
-                skin_entry_mapping = style_mapping[entity_style]
-                recipe_output["outputs"] = [
-                    {
-                        "displayName": skin_entry_mapping.get("DisplayName"),
-                        "icon": skin_entry_mapping.get("Icon"),
-                    }
-                ]
+            if skin_name and entity_style:
+                style_mapping = global_skin_mapping.get(skin_name, {})
+                if entity_style in style_mapping:
+                    skin_entry_mapping = style_mapping[entity_style]
+                    recipe_output["outputs"] = [
+                        {
+                            "displayName": skin_entry_mapping.get("DisplayName"),
+                            "icon":        skin_entry_mapping.get("Icon"),
+                        }
+                    ]
 
             sprite_outputs, base_health = parse_sprite_config(
                 entity_entry["components"].get("SpriteConfig", "")

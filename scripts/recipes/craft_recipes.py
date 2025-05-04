@@ -325,33 +325,39 @@ def process_workstation(recipe: dict, build_data: dict) -> str:
 
     workstation_mapping = {
         "anysurfacecraft": "Any surface",
-        "choppingblock": "Chopping block",
+        "choppingblock": "Chopping Block",
+        "coffeemachine": "Coffee Machine",
         "grindstone": "Grindstone",
         "grinding_slab": "Grinding Slab",
-        "weaving": "Loom",
+        "weaving": "Simple Loom",
         "stone_mill": "Stone Mill",
         "stone_quern": "Stone Quern",
         "churnbucket": "Butter Churn",
-        "dryleatherlarge": "Large Drying Rack",
-        "dryleathermedium": "Medium Drying Rack",
-        "dryleathersmall": "Small Drying Rack",
+        "dryleatherlarge": "Leather Drying Rack (Large)",
+        "dryleathermedium": "Leather Drying Rack (Medium)",
+        "dryleathersmall": "Leather Drying Rack (Small)",
         "tanleather": "Tanning Barrel",
         "advancedforge": "Advanced Forge",
-        "dryingrackgrain": "Drying Rack (Grain)",
-        "dryingrackherb": "Drying Rack (Herb)",
+        "dryingrackgrain": "Large Plant Drying Rack",
+        "dryingrackherb": "Small Plant Drying Rack",
         "forge": "Forge",
+        "primitivefurnace": "Primitive Furnace",
         "furnace": "Furnace",
+        "advancedfurnace": "Advanced Furnace",
         "metalbandsaw": "Metal Bandsaw",
         "potterywheel": "Pottery Wheel",
         "potterybench": "Pottery Bench",
         "primitiveforge": "Primitive Forge",
-        "primitivefurnace": "Primitive Furnace",
         "removeflesh": "Softening Beam",
         "removefur": "Softening Beam",
         "spinningwheel": "Spinning Wheel",
         "standingdrillpress": "Standing Drill Press",
         "whetstone": "Whetstone",
-        "toaster": "Toaster"
+        "toaster": "Toaster",
+        "handpress": "Hand Press",
+        "domekiln": "Kiln - Dome",
+        "kilnlarge": "Advanced Kiln",
+        "kilnsmall": "Primitive Kiln",
     }
 
     for tag_identifier in tag_list:
@@ -417,10 +423,26 @@ def process_products(recipe: dict, build_data: dict) -> str:
     """
     is_building = "spriteOutputs" in recipe
 
-    # Header with the recipe's display name
+    first_out = next(iter(recipe.get("outputs", [])), {})
+    raw_label = first_out.get("displayName", "")
     raw_name = recipe.get("name", "")
-    display_name = Translate.get(raw_name, "Recipe")
-    products_markup = f"products=<small>''{display_name}''</small><br>"
+    base_label = raw_label or raw_name
+
+    for key in (base_label.replace(" ", ""),
+                base_label.replace(" ", "_")):
+
+        product_name = Translate.get(key)
+        if product_name and product_name != key:  # found a real translation?
+            break
+    else:  # ran through both keys
+        product_name = raw_label or raw_name  # final local fallback
+
+    display_name = product_name.replace("_", " ")
+
+    recipe_name = Translate.get(raw_name)
+    products_markup = f"products=<small>''{recipe_name}''</small><br>"
+
+    display_name = display_name.replace("Construct ", "")
 
     if is_building:
         outputs = recipe.get("outputs", [])
@@ -437,7 +459,7 @@ def process_products(recipe: dict, build_data: dict) -> str:
         if outputs:
             for out in outputs:
                 icon_ref = out.get("icon")
-                label = out.get("displayName", display_name)
+                label = out.get("displayName", product_name)
                 count = out.get("count", 1)
 
                 if icon_ref:
@@ -448,7 +470,7 @@ def process_products(recipe: dict, build_data: dict) -> str:
                     elif icon_ref.startswith("Build_"):
                         size = "96x96px"
                     built_entries.append(
-                        f"[[File:{img}.png|{size}|class=pixelart]]<br>[[{label}]] ×{count}"
+                        f"[[File:{img}.png|{size}|class=pixelart]]<br>[[{product_name}]] ×{count}"
                     )
                 elif first_sprite:
                     sp, size = first_sprite, "64x128px"
@@ -458,7 +480,7 @@ def process_products(recipe: dict, build_data: dict) -> str:
                     elif first_sprite.startswith("Build_"):
                         size = "96x96px"
                     built_entries.append(
-                        f"[[File:{sp}.png|{size}|class=pixelart]]<br>[[{label}]] ×{count}"
+                        f"[[File:{sp}.png|{size}|class=pixelart]]<br>[[{product_name}]] ×{count}"
                     )
         elif first_sprite:
             sp, size = first_sprite, "64x128px"
