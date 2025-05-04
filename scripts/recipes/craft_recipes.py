@@ -617,10 +617,11 @@ def process_recipes(data: dict) -> str:
     requirements_info = data.get("requirements", {})
     skillbook_list = requirements_info.get("skillbooks", [])
     autolearn_dict = requirements_info.get("autolearn", {})
+    autolearn_any_list = requirements_info.get("autolearn_any", [])
     schematic_categories = requirements_info.get("schematics", [])
     trait_list = requirements_info.get("traits", [])
 
-    if not (skillbook_list or autolearn_dict or schematic_categories or trait_list):
+    if not (skillbook_list or autolearn_dict or autolearn_any_list or schematic_categories or trait_list):
         return "''none''"
 
     formatted_parts = [""]
@@ -651,6 +652,15 @@ def process_recipes(data: dict) -> str:
             if index > 0:
                 formatted_parts.extend(["<br><small>and</small><br>"])
             formatted_parts.append(f"[[{Translate.get(skill_key, 'Perk')}]] {level_required}")
+
+    if autolearn_any_list:
+        formatted_parts.append("<br><small>Auto-learnt if any of:</small><br>")
+        for index, skill_entry in enumerate(autolearn_any_list):
+            if ":" in skill_entry:
+                sk, lvl = skill_entry.split(":", 1)
+                if index > 0:
+                    formatted_parts.extend(["<br><small>or</small><br>"])
+                formatted_parts.append(f"[[{Translate.get(sk.strip(), 'Perk')}]] {lvl.strip()}")
 
     return "".join(formatted_parts)
 
@@ -736,6 +746,7 @@ def process_requirements(recipe: dict, parsed_item_metadata: dict, literature_da
         for sk_key, sk_level in autolearn_entry.items():
             requirements_work["autolearn"][sk_key] = int(sk_level)
 
+    requirements_work["autolearn_any"] = recipe.get("AutoLearnAny", [])
     recipes_string = process_recipes({"requirements": requirements_work})
     skills_string  = process_skills({"requirements": requirements_work})
     return recipes_string, skills_string
