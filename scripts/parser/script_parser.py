@@ -510,52 +510,48 @@ def normalise(value: str) -> str | int | float | bool:
 
 def remove_comments(lines: list[str]) -> list[str]:
     """
-    Remove single-line and multi-line comments from a list of lines.
+    Strip // single‑line comments and nested /* … */ block comments.
 
-    Args:
-        lines (list[str]): Raw lines from a script file.
+    Parameters:
+    lines : list[str]
+        Raw lines read from a text file.
 
-    Returns:
-        list[str]: Cleaned lines with comments removed.
+    Returns
+    list[str]
+        Lines with comments removed; blank lines are dropped.
     """
-    clean_lines = []
-    in_multiline_comment = False
+    cleaned_lines: list[str] = []
+    block_depth = 0
 
-    for line in lines:
-        line = line.strip()
-        if not line:
-            continue
+    for raw_line in lines:
+        char_pos = 0
+        output_chars: list[str] = []
 
-        # Handle multi-line comments
-        if in_multiline_comment:
-            if "*/" in line:
-                _, after = line.split("*/", 1)
-                line = after.strip()
-                in_multiline_comment = False
-            else:
+        while char_pos < len(raw_line):
+            # Single line comments
+            if block_depth == 0 and raw_line[char_pos : char_pos + 2] == "//":
+                break
+
+            # Multi line comments (nesting supported)
+            if raw_line[char_pos : char_pos + 2] == "/*":
+                block_depth += 1
+                char_pos += 2
+                continue
+            if block_depth and raw_line[char_pos : char_pos + 2] == "*/":
+                block_depth -= 1
+                char_pos += 2
                 continue
 
-        # Inline block comments
-        while "/*" in line and "*/" in line:
-            pre, rest = line.split("/*", 1)
-            _, post = rest.split("*/", 1)
-            line = (pre + post).strip()
+            if block_depth == 0:
+                output_chars.append(raw_line[char_pos])
 
-        # Start multi-line comment
-        if "/*" in line:
-            line, _ = line.split("/*", 1)
-            line = line.strip()
-            in_multiline_comment = True
+            char_pos += 1
 
-        # Inline line comments
-        if "//" in line:
-            line, _ = line.split("//", 1)
-            line = line.strip()
+        stripped_line = "".join(output_chars).strip()
+        if stripped_line and block_depth == 0:
+            cleaned_lines.append(stripped_line)
 
-        if line:
-            clean_lines.append(line)
-
-    return clean_lines
+    return cleaned_lines
 
 
 def parse_key_value_line(line: str, data: dict, block_id: str = "Unknown", script_type: str = "") -> None:
