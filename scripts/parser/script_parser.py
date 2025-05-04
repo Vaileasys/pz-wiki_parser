@@ -62,7 +62,15 @@ SCRIPT_CONFIGS = {
         "list_keys_semicolon": ["tags", "Tags", "AutoLearnAll", "AutoLearnAny"]
     },
     "entity": {
-        "file_blacklist": ["dbg_entity_test_new_components"],
+        "file_blacklist": [
+        "dbg_entity_test_new_components",
+        "dbg_entity_test_resources",
+        "dbg_entity_turbo",
+        "dbg_example_recipes",
+        "entity_channels_test",
+        "items_testing",
+        "craftrecipe_testing"
+    ],
         # Handled through recipe_parser
         "list_keys": ["row"],
         "list_keys_space": ["row"],
