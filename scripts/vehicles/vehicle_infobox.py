@@ -128,12 +128,20 @@ def automatic_extraction():
         process_vehicle(vehicle_id)
 
 
-def main():
+def main(pre_choice:str=None):
+    """
+    :param pre_choice: str - Automatically sets a choice without querying the user.
+    """
     # Call early
     Language.get()
 
     while True:
-        choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
+        options = ("1", "2", "q")
+        if str(pre_choice).lower() not in options:
+            choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
+        else:
+            choice = str(pre_choice).lower()
+
         if choice == '1':
             automatic_extraction()
             echo_success(f"Extraction complete, the files can be found in '{ROOT_DIR}'.")

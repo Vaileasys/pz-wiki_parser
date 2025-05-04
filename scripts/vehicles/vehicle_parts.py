@@ -8,7 +8,7 @@ from scripts.utils.echo import echo_success
 from scripts.core.language import Translate, Language
 from scripts.core.constants import PBAR_FORMAT
 
-TABLE_HEADER = '{| class="wikitable theme-red"'
+TABLE_HEADER = '{| class="wikitable theme-red sortable"'
 TABLE_HEADINGS = (
     '! Part',
     '! Category',
@@ -33,7 +33,7 @@ def process_vehicle(vehicle_id):
         skill_list = []
         if skills:
             for skill, level in skills.items():
-                skill_list.append(f'{Translate.get("IGUI_perks_" + skill)} {level}')
+                skill_list.append(f'[[{Translate.get("IGUI_perks_" + skill)}]] {level}')
         if not skill_list:
             skill_list = ['style="text-align:center;"| -']
 
@@ -125,7 +125,7 @@ def main():
             
             rows = process_vehicle(vehicle_id)
             content = generate_table(vehicle_id, rows)
-            rel_path = os.path.join(REL_DIR, vehicle_id)
+            rel_path = os.path.join(REL_DIR, vehicle_id + ".txt")
             output_dir = write_file(content, rel_path, suppress=True)
 
             pbar.update(1)

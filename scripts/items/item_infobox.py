@@ -14,6 +14,7 @@ from scripts.utils.util import capitalize
 from scripts.core.cache import save_cache
 from scripts.utils.echo import echo, echo_success, echo_error
 from scripts.core.file_loading import write_file
+from scripts.objects.item import Item
 
 ROOT_DIR = os.path.join(ITEM_DIR.format(language_code=Language.get()), "infoboxes")
 
@@ -201,11 +202,31 @@ def generate_infobox(item_id, item_data):
         # Add item ids to the processed list, so we don't create infoboxes unecessarily
         processed_item_ids.extend(all_item_ids)
 
-        name = utility.get_name(item_id, item_data)
+        name = Item(item_id).get_name()
 
         icons = utility.find_icon(item_id, True)
 
         model = utility.get_model(item_data)
+
+        container_name = None
+        if item_data.get("ContainerName"):
+            container_name = Translate.get("Fluid_Container_" + get_any_property(all_items, "ContainerName"))
+
+        vehicle_type = item_data.get("VehicleType")
+        if vehicle_type:
+            vehicle_type = Translate.get("IGUI_VehicleType_" + str(get_any_property(all_items, "VehicleType")))
+        
+        mechanics_tool = None
+        recommended_level = None
+        required_recipe = None
+        max_capacity = None
+        if item_data.get("MechanicsItem", "").lower() == "true":
+            if item_data.get("MaxCapacity"):
+                if any(part in item_id for part in ("CarSeat", "GloveBox", "Trunk")):
+                    max_capacity = item_data["MaxCapacity"]
+            mechanics_tool = "placeholder"
+            recommended_level = "placeholder"
+            required_recipe = "placeholder"
 
         fluid_capacity_ml = float(get_any_property(all_items, 'capacity', 0)) * 1000
         fluid_capacity = None
@@ -254,6 +275,15 @@ def generate_infobox(item_id, item_data):
                 recipes[i] = recipes[i].replace(" ", "_")
                 recipes[i] = Translate.get(recipes[i], 'TeachedRecipes')
             recipes = "<br>".join(recipes)
+        
+        res_recipes = get_any_property(all_items, 'ResearchableRecipes')
+        if res_recipes is not None:
+            if isinstance(res_recipes, str):
+                res_recipes = [res_recipes]
+            for i in range(len(res_recipes)):
+                res_recipes[i] = res_recipes[i].replace(" ", "_")
+                res_recipes[i] = Translate.get(res_recipes[i], 'TeachedRecipes')
+            res_recipes = "<br>".join(res_recipes)
 
         # (Attachments) Get weapons that it's used for.
         weapon = None
@@ -314,6 +344,7 @@ def generate_infobox(item_id, item_data):
         tags = item_data.get("Tags")
         
         parameters = {
+            #-------------- GENERAL --------------#
             "name": name,
             "model": model,
             "icon":  icons,
@@ -321,7 +352,9 @@ def generate_infobox(item_id, item_data):
             "category": category,
             "weight": get_param_values(all_items, 'Weight', True, default=1),
             "capacity": get_any_property(all_items, 'Capacity'),
-            "container_name": Translate.get(get_any_property(all_items, 'ContainerName'), 'ContainerName'),
+            "container_name": container_name,
+            "vehicle_type": vehicle_type,
+            #-------------- PROPERTIES --------------#
             "weight_reduction": get_any_property(all_items, 'WeightReduction'),
             "max_units": get_any_property(all_items, 'UseDelta'),
             "fluid_capacity": fluid_capacity,
@@ -340,6 +373,7 @@ def generate_infobox(item_id, item_data):
             "can_boil_water": capitalize(get_any_property(all_items, 'CanBoilWater')),
             "writable": capitalize(get_any_property(all_items, 'CanBeWrite')),
             "recipes": recipes,
+            "researchable_recipes": res_recipes,
             "skill_trained": Translate.get(get_any_property(all_items, 'SkillTrained'), 'SkillTrained'),
             "foraging_change": foraging,
             "page_number": get_any_property(all_items, 'NumberOfPages') or get_any_property(all_items, 'PageToWrite'),
@@ -374,6 +408,19 @@ def generate_infobox(item_id, item_data):
             "transmit_range": get_any_property(all_items, 'TransmitRange'),
             "min_channel": get_any_property(all_items, 'MinChannel'),
             "max_channel": get_any_property(all_items, 'MaxChannel'),
+            "max_capacity": max_capacity,
+            "brake_force": get_any_property(all_items, 'brakeForce'),
+            "engine_loudness": get_any_property(all_items, 'EngineLoudness'),
+            "degradation_standard": get_any_property(all_items, 'ConditionLowerStandard'),
+            "degradation_offroad": get_any_property(all_items, 'ConditionLowerOffroad'),
+            "suspension_damping": get_any_property(all_items, 'SuspensionDamping'),
+            "suspension_compression": get_any_property(all_items, 'SuspensionCompression'),
+            "wheel_friction": get_any_property(all_items, 'WheelFriction'),
+            "chance_to_spawn_damaged": get_any_property(all_items, 'ChanceToSpawnDamaged'),
+            "mechanics_tool": mechanics_tool,
+            "recommended_level": recommended_level,
+            "required_recipe": required_recipe,
+            #-------------- PERFORMANCE --------------#
             "damage_type": None,
             "min_damage": get_any_property(all_items, 'MinDamage'),
             "max_damage": get_any_property(all_items, 'MaxDamage'),
@@ -399,12 +446,14 @@ def generate_infobox(item_id, item_data):
             "effect_range": get_any_property(all_items, 'ExplosionRange') or get_any_property(all_items, 'FireRange') or get_any_property(all_items, 'SmokeRange') or get_any_property(all_items, 'NoiseRange'),
             "effect_duration": get_any_property(all_items, 'NoiseDuration'),
             "effect_timer": get_any_property(all_items, 'ExplosionTimer'),
+            #-------------- NUTRITION --------------#
             "hunger_change": get_any_property(all_items, 'HungerChange'),
             "thirst_change": get_any_property(all_items, 'ThirstChange'),
             "calories": get_any_property(all_items, 'Calories'),
             "carbohydrates": get_any_property(all_items, 'Carbohydrates'),
             "proteins": get_any_property(all_items, 'Proteins'),
             "lipids": get_any_property(all_items, 'Lipids'),
+            #-------------- EFFECT --------------#
             "unhappy_change": get_any_property(all_items, 'UnhappyChange'),
             "boredom_change": get_any_property(all_items, 'BoredomChange'),
             "stress_change": get_any_property(all_items, 'StressChange'),
@@ -418,6 +467,7 @@ def generate_infobox(item_id, item_data):
             "reduce_infection_power": get_any_property(all_items, 'ReduceInfectionPower'),
             "bandage_power": get_param_values(all_items, 'BandagePower', True),
             "poison_power": get_any_property(all_items, 'PoisonPower'),
+            #-------------- COOKING --------------#
             "cook_minutes": get_any_property(all_items, 'MinutesToCook'),
             "burn_minutes": get_any_property(all_items, 'MinutesToBurn'),
             "dangerous_uncooked": capitalize(get_any_property(all_items, 'DangerousUncooked')),
@@ -426,6 +476,7 @@ def generate_infobox(item_id, item_data):
             "bad_cold": capitalize(get_any_property(all_items, 'BadCold')),
             "spice": capitalize(get_any_property(all_items, 'Spice')),
             "evolved_recipe": evolved_recipe,
+            #-------------- TECHNICAL --------------#
             "tag": tags,
             "guid": guid,
             "clothing_item": get_param_values(all_items, 'ClothingItem'),
