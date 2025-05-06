@@ -121,6 +121,7 @@ def generate_table(
         caption_bottom: str = None,
         table_before: str = None,
         table_after: str = None,
+        do_bot_flag: bool = True,
         do_horizontal_scroll: bool = True
         ) -> list:
     """
@@ -133,6 +134,7 @@ def generate_table(
     :param str table_footer: The closing wiki table footer. Defaults to DEF_TABLE_FOOTER.
     :param str table_before: A string to be added before the table. Defaults to empty string.
     :param str table_after: A string to be added after the table. Defaults to empty string.
+    :param bool do_bot_flag: Determines whether to add the bot flag comment. Defaults to True.
     :param bool do_horizontal_scroll: Determines whether to add the horizontal scrolling wrapper. Defaults to True.
     :return list: A list of strings forming the complete table content.
     """
@@ -145,7 +147,10 @@ def generate_table(
     table_before = "" if table_before is None else table_before
     table_after = "" if table_after is None else table_after
 
-    content.append(f'<!--BOT_FLAG-start-{table_type.replace(" ", "_")}. DO NOT REMOVE-->' + table_wrap_before + table_before + table_header)
+    bot_flag_start = f'<!--BOT_FLAG-start-{table_type.replace(" ", "_")}. DO NOT REMOVE-->' if do_bot_flag else ''
+    bot_flag_end = f'<!--BOT_FLAG-end-{table_type.replace(" ", "_")}. DO NOT REMOVE-->' if do_bot_flag else ''
+
+    content.append(bot_flag_start + table_wrap_before + table_before + table_header)
 
     if caption_top:
         content.append(f'|+ style="caption-side:top; font-weight:normal; | {caption_top}', '|-')
@@ -163,7 +168,7 @@ def generate_table(
     if caption_bottom and not caption_top:
         content.extend(['|-', f'|+ style="caption-side:bottom; font-weight:normal; border: none;" | {caption_bottom}'])
     
-    content.append(table_footer + table_after + table_after_after + f'<!--BOT_FLAG-end-{table_type.replace(" ", "_")}. DO NOT REMOVE-->')
+    content.append(table_footer + table_after + table_after_after + bot_flag_end)
 
     # Get translations
     content = [Translate.get_wiki(value) for value in content]
@@ -228,6 +233,7 @@ def create_tables(
         table_footer = DEF_TABLE_FOOTER,
         combine_tables: bool = True,
         root_path: str = os.path.join(ITEM_DIR, "lists"),
+        do_bot_flag: bool = True,
         suppress: bool = False
         ):
     """
@@ -239,6 +245,8 @@ def create_tables(
     :param dict table_map: A mapping of table types to their expected column keys. Defaults to empty dictionary.
     :param str|None table_header: Custom table header to use. Defaults to DEF_TABLE_HEADER.
     :param bool combine_tables: If True, combines all tables into one file. Defaults to True.
+    :param str root_path: The root path where the files will be written. {language_code} will be formatted to current language code.
+    :param bool do_bot_flag: Determines whether to add the bot flag comment. Defaults to True.
     :param bool suppress: Suppresses terminal prints when creating files. Note: will still print final folder location.
     :return: None
     """
@@ -257,7 +265,7 @@ def create_tables(
 
         column_headings = get_column_headings(table_type, table_map, columns)
 
-        content.extend(generate_table(table_type, data, column_headings, table_header, table_footer, caption_bottom=caption))
+        content.extend(generate_table(table_type, data, column_headings, table_header, table_footer, caption_bottom=caption, do_bot_flag=do_bot_flag))
         rel_path = os.path.join(item_type, table_type + ".txt")
         output_dir = write_file(content, rel_path=rel_path, root_path=root_path, suppress=suppress)
 
@@ -269,4 +277,5 @@ def create_tables(
         rel_path = os.path.join(item_type, "all_tables.txt")
         write_file(all_tables, rel_path=rel_path, root_path=root_path, suppress=suppress)
 
-    echo_success(f"Tables written to {output_dir}")
+    tables_name = Path(rel_path).parent.name.replace("_", " ").capitalize()
+    echo_success(f"{tables_name} tables written to '{output_dir}'")

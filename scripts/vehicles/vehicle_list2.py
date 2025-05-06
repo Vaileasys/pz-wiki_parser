@@ -117,8 +117,8 @@ def main():
     all_vehicle_data_parent = find_vehicles("parent")
     veh_type = os.path.join("lists", "vehicles_by_type")
     veh_type_parent = os.path.join("lists", "vehicles_by_model")
-    table_helper.create_tables(veh_type, all_vehicle_data, table_map=table_map, columns=column_headings, root_path=VEHICLE_DIR)
-    table_helper.create_tables(veh_type_parent, all_vehicle_data_parent, table_map=table_map, columns=column_headings, root_path=VEHICLE_DIR)
+    table_helper.create_tables(veh_type, all_vehicle_data, table_map=table_map, columns=column_headings, root_path=VEHICLE_DIR, suppress=True)
+    table_helper.create_tables(veh_type_parent, all_vehicle_data_parent, table_map=table_map, columns=column_headings, root_path=VEHICLE_DIR, do_bot_flag=False, suppress=True)
 
 if __name__ == "__main__":
     main()
