@@ -2,11 +2,10 @@ import os
 import json
 import chardet
 import re
-from scripts.parser import item_parser
 from scripts.core import logger, config_manager, version
 from scripts.core.constants import DATA_DIR
 from scripts.utils import utility
-import warnings
+from scripts.utils.echo import echo_deprecated
 
 language_code = None
 default_language = None
@@ -94,11 +93,7 @@ def get_wiki_translation(value):
     :return: Value with all strings translated.
     :rtype: str
     """
-    warnings.warn(
-        "'translate.get_wiki_translation()' is deprecated and will be removed. Import language.py and use 'Translate.get_wiki()' instead.",
-        DeprecationWarning,
-        stacklevel=2
-    )
+    echo_deprecated("'translate.get_wiki_translation()' is deprecated, import language.py and use 'Translate.get_wiki()' instead.")
     placeholders = re.findall(r'\<\<(.*?)\>\>', value)
 
     # Replace each placeholder with its translation
@@ -148,11 +143,7 @@ def get_translation(property_value, property_key=None, lang_code=language_code, 
     :param default (optional): Default translation to use if no translation can be found. Uses 'property_value' if undefined.
     :return: Translation for the property.
     """
-    warnings.warn(
-        "'translate.get_translation()' is deprecated and will be removed. Import language.py and use 'Translate.get()' instead.",
-        DeprecationWarning,
-        stacklevel=2
-    )
+    echo_deprecated("'translate.get_translation()' is deprecated, import language.py and use 'Translate.get()' instead.")
     global language_code
 
     if not property_value:
@@ -295,11 +286,7 @@ def cache_translations():
 
 
 def get_language_code():
-    warnings.warn(
-        "'translate.get_language_code()' is deprecated and will be removed. Import language.py and use 'Language.get()' instead.",
-        DeprecationWarning,
-        stacklevel=2
-    )
+    echo_deprecated("'translate.get_language_code()' is deprecated, import language.py and use 'Language.get()' instead.")
     global language_code
     if language_code is None:
         init_translations()

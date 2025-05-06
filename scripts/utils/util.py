@@ -1,5 +1,6 @@
 from scripts.core.language import Language
-import warnings
+from scripts.utils.echo import echo_deprecated
+
 
 def capitalize(value):
     """
@@ -75,11 +76,7 @@ def format_link(name:str, page:str=None) -> str:
     :param page: The target page (optional). Defaults to `name`.
     :return: The formatted wiki link.
     """
-    warnings.warn(
-        "format_link() is deprecated and will be removed in the future. Use link() instead.",
-        DeprecationWarning,
-        stacklevel=2
-    )
+    echo_deprecated("'format_link()' is deprecated, use link() instead.")
     language_code = Language.get()
     
     if language_code != "en":

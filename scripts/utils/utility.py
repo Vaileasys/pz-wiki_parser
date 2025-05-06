@@ -10,8 +10,7 @@ from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.core.constants import (DATA_DIR, RESOURCE_DIR)
 from scripts.utils import lua_helper
-from scripts.utils.echo import echo_error, echo_warning
-import warnings
+from scripts.utils.echo import echo_error, echo_warning, echo_deprecated
 
 
 parsed_burn_data = {}
@@ -343,20 +342,12 @@ def get_burn_time(item_id, item_data):
 
 # Save parsed data to json file
 def save_cache(data: dict, data_file: str, data_dir=DATA_DIR, suppress=False):
-    warnings.warn(
-        "'utility.save_cache()' is deprecated and will be removed. Use 'storage.save_cache()' instead.",
-        DeprecationWarning,
-        stacklevel=2
-    )
+    echo_deprecated("'utility.save_cache()' is deprecated, use 'storage.save_cache()' instead.")
     cache.save_cache(data=data, data_file=data_file, data_dir=data_dir, suppress=suppress)
 
 
 def load_cache(cache_file, cache_name="data", get_version=False, backup_old=False, suppress=False):
-    warnings.warn(
-        "'utility.load_cache()' is deprecated and will be removed. Use 'storage.load_cache()' instead.",
-        DeprecationWarning,
-        stacklevel=2
-    )
+    echo_deprecated("'utility.load_cache()' is deprecated, use 'storage.load_cache()' instead.")
     if get_version:
         json_cache, cache_version = cache.load_cache(cache_file=cache_file, cache_name=cache_name, get_version=get_version, backup_old=backup_old, suppress=suppress)
         return json_cache, cache_version
@@ -365,11 +356,7 @@ def load_cache(cache_file, cache_name="data", get_version=False, backup_old=Fals
 
 
 def clear_cache(cache_path=DATA_DIR, cache_name=None, suppress=False):
-    warnings.warn(
-        "'utility.clear_cache()' is deprecated and will be removed. Use 'storage.clear_cache()' instead.",
-        DeprecationWarning,
-        stacklevel=2
-    )
+    echo_deprecated("'utility.clear_cache()' is deprecated, use 'storage.clear_cache()' instead.")
     cache.clear_cache(cache_path=cache_path, cache_name=cache_name, suppress=suppress)
 
 

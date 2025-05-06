@@ -1,10 +1,9 @@
 import os
-import warnings
 from pathlib import Path
 from scripts.core.language import Language, Translate
 from scripts.core.constants import OUTPUT_DIR, ITEM_DIR
 from scripts.core.cache import load_json
-from scripts.utils.echo import echo_success, echo_info, echo_warning, echo_error
+from scripts.utils.echo import echo_success, echo_info, echo_warning, echo_error, echo_deprecated
 from scripts.core.file_loading import write_file
 
 DEF_TABLE_HEADER = '{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"'
@@ -184,11 +183,7 @@ def write_to_file(content:list, rel_path="list.txt", suppress=False):
     :param str rel_path: The relative path where the file will be saved. If no file extension is given, the path is treated as a directory.
     :return: The directory the file is saved to.
     """
-    warnings.warn(
-        "write_to_file() is deprecated and will be removed in a future version. Use file_loading.write_file() instead.",
-        category=DeprecationWarning,
-        stacklevel=2
-    )
+    echo_deprecated("write_to_file() is deprecated, use file_loading.write_file() instead.")
 
     _output_path = OUTPUT_DIR / rel_path
     _output_dir = _output_path.parent if _output_path.suffix else _output_path
