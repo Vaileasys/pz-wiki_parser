@@ -1,5 +1,5 @@
 from scripts.core.language import Language
-
+import warnings
 
 def capitalize(value):
     """
@@ -51,6 +51,22 @@ def format_positive(value):
         return str(value)
 
 
+def link(page:str, name:str=None) -> str:
+    """
+    Returns a wiki link in the format [[Page|Name]], including a language suffix for non-English languages.
+
+    :param page: The target page
+    :param name: The display text of the link (optional). Defaults to `page`.
+    :return: The formatted wiki link.
+    """
+    if name is None:
+        return f"[[{page}{Language.get_subpage()}]]"
+    elif page == name and Language.get() == "en":
+        return f"[[{page}]]"
+    else:
+        return f"[[{page}{Language.get_subpage()}|{name}]]"
+
+# @Deprecated
 def format_link(name:str, page:str=None) -> str:
     """
     Returns a wiki link in the format [[Page|Name]], including a language suffix for non-English languages.
@@ -59,6 +75,11 @@ def format_link(name:str, page:str=None) -> str:
     :param page: The target page (optional). Defaults to `name`.
     :return: The formatted wiki link.
     """
+    warnings.warn(
+        "format_link() is deprecated and will be removed in the future. Use link() instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
     language_code = Language.get()
     
     if language_code != "en":

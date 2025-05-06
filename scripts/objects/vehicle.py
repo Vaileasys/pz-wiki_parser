@@ -5,9 +5,9 @@ from scripts.core import logger
 from scripts.core.language import Translate
 from scripts.objects.item import Item
 from scripts.utils.echo import echo_warning
-from scripts.core.cache import save_json
 from scripts.utils.lua_helper import load_lua_file, parse_lua_tables
 from scripts.core.cache import save_cache
+from scripts.utils.util import link
 
 class Vehicle:
     _vehicles = None # Shared cache for all vehicles
@@ -55,6 +55,7 @@ class Vehicle:
 
         self.name = None # English name
         self.page = None # Wiki page
+        self.wiki_link = None # Wiki link with page, name and language code
         self.model = self.id_type + "_Model.png"
         self.models_all = None
 
@@ -98,11 +99,7 @@ class Vehicle:
     
     def __repr__(self):
         """Overview of the vehicle when called directly: Vehicle(vehicle_id)"""
-        name = self.get_name()
-        vehicle_parent = self.parent_id
-        source = fr"{self.get_path()}"
-
-        return (f'<Vehicle: {name} ({self.vehicle_id}) — {vehicle_parent}, "{source}">')
+        return f'<{self.vehicle_id}>'
     
     @classmethod
     def all(cls):
@@ -357,11 +354,16 @@ class Vehicle:
             "Base.VanSeats": "Franklin Valuline (6-seater)",
             "Base.VanRadio": "Radio Van"
         }
-        parent_id = self.vehicle_id if self.parent_id is None else self.parent_id
-        if parent_id in PAGE_FIX:
-            self.page = PAGE_FIX[parent_id]
+        if self.vehicle_id in PAGE_FIX:
+            self.page = PAGE_FIX[self.vehicle_id]
         else:
-            self.page = Vehicle(parent_id).get_name()
+            self.page = self.get_name()
+
+    def get_link(self) -> str:
+        """Return the wiki page for this vehicle."""
+        if self.wiki_link is None:
+            self.wiki_link = link(self.get_page(), self.get_name())
+        return self.wiki_link
 
     def get_variants(self) -> list:
         """Returns a list of vehicle_ids that use this vehicle as their parent."""

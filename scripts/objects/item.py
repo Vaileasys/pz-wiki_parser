@@ -9,6 +9,7 @@ from scripts.core.constants import RESOURCE_DIR
 from scripts.utils.echo import echo_warning
 from scripts.core.cache import load_cache, save_cache
 from scripts.core.version import Version
+from scripts.utils.util import link
 
 class Item:
     _items = None  # Shared cache for all items
@@ -49,6 +50,7 @@ class Item:
 
         self.name = None     # English name
         self.page = None     # Wiki page
+        self.wiki_link = None # Wiki link
         self.has_page = None # Page defined (bool)
         self.icon = None     # Primary icon (str)
         self.icons = None    # All icons (list)
@@ -284,6 +286,12 @@ class Item:
         if is_english:
             self.name = display_name
         return display_name
+    
+    def get_link(self) -> str:
+        """Return the wiki link for this item."""
+        if self.wiki_link is None:
+            self.wiki_link = link(self.get_page(), self.get_name())
+        return self.wiki_link
     
     def get_icon(self, format: bool = True, all_icons: bool = True, cycling: bool = True, custom_name: str = None) -> str | list[str]:
         """
