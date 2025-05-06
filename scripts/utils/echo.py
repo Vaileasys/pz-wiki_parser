@@ -17,7 +17,8 @@ def _echo_colour(message, prefix, colour_code, *, emit_warning: bool = False, wa
             return
     
     if emit_warning:
-        tb = traceback.extract_stack()[-3]
+        stack = traceback.extract_stack()
+        tb = stack[-4] if len(stack) >= 4 else stack[-3]
         filename, lineno, func, _ = tb
         
         if func == "<module>":

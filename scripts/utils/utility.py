@@ -5,13 +5,15 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 from scripts.parser import item_parser
 from scripts.recipes import legacy_recipe_parser
-from scripts.core import logger, config_manager, cache
+from scripts.core import logger, config_manager
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.core.constants import (DATA_DIR, RESOURCE_DIR)
 from scripts.utils import lua_helper
 from scripts.utils.echo import echo_error, echo_warning, echo_deprecated
-
+from scripts.core.cache import save_cache as new_save_cache
+from scripts.core.cache import load_cache as new_load_cache
+from scripts.core.cache import clear_cache as new_clear_cache
 
 parsed_burn_data = {}
 item_id_dict_data = {}
@@ -256,13 +258,13 @@ def get_burn_data():
     CACHE_FILE = "burn_data.json"
 
     if not parsed_burn_data:
-        parsed_burn_data, cache_version = load_cache(CACHE_FILE, "burn", True, suppress=True)
+        parsed_burn_data, cache_version = new_load_cache(CACHE_FILE, "burn", True, suppress=True)
 
         if cache_version != Version.get():
             lua_runtime = lua_helper.load_lua_file("camping_fuel.lua")
             parsed_burn_data = lua_helper.parse_lua_tables(lua_runtime, TABLES)
 
-            save_cache(parsed_burn_data, "burn_data.json")
+            new_save_cache(parsed_burn_data, "burn_data.json")
 
     return parsed_burn_data
 
@@ -343,21 +345,21 @@ def get_burn_time(item_id, item_data):
 # Save parsed data to json file
 def save_cache(data: dict, data_file: str, data_dir=DATA_DIR, suppress=False):
     echo_deprecated("'utility.save_cache()' is deprecated, use 'storage.save_cache()' instead.")
-    cache.save_cache(data=data, data_file=data_file, data_dir=data_dir, suppress=suppress)
+    new_save_cache(data=data, data_file=data_file, data_dir=data_dir, suppress=suppress)
 
 
 def load_cache(cache_file, cache_name="data", get_version=False, backup_old=False, suppress=False):
     echo_deprecated("'utility.load_cache()' is deprecated, use 'storage.load_cache()' instead.")
     if get_version:
-        json_cache, cache_version = cache.load_cache(cache_file=cache_file, cache_name=cache_name, get_version=get_version, backup_old=backup_old, suppress=suppress)
+        json_cache, cache_version = new_load_cache(cache_file=cache_file, cache_name=cache_name, get_version=get_version, backup_old=backup_old, suppress=suppress)
         return json_cache, cache_version
-    json_cache = cache.load_cache(cache_file=cache_file, cache_name=cache_name, get_version=get_version, backup_old=backup_old, suppress=suppress)
+    json_cache = new_load_cache(cache_file=cache_file, cache_name=cache_name, get_version=get_version, backup_old=backup_old, suppress=suppress)
     return json_cache
 
 
 def clear_cache(cache_path=DATA_DIR, cache_name=None, suppress=False):
     echo_deprecated("'utility.clear_cache()' is deprecated, use 'storage.clear_cache()' instead.")
-    cache.clear_cache(cache_path=cache_path, cache_name=cache_name, suppress=suppress)
+    new_clear_cache(cache_path=cache_path, cache_name=cache_name, suppress=suppress)
 
 
 # Gets an item name. This is for special cases where the name needs to be manipulated.
@@ -465,7 +467,7 @@ def get_item_id_data(suppress=False):
 
     if not item_id_dict_data:
         cache_file = "item_id_dictionary.json"
-        cache_version, cache_data = load_cache(cache_file, 'Item ID dictionary', get_version=True, suppress=suppress)
+        cache_version, cache_data = new_load_cache(cache_file, 'Item ID dictionary', get_version=True, suppress=suppress)
 
         if cache_version != Version.get():
             data = {}
@@ -485,7 +487,7 @@ def get_item_id_data(suppress=False):
                     data[key] = values
             
             item_id_dict_data = data
-            save_cache(item_id_dict_data, cache_file, suppress=suppress)
+            new_save_cache(item_id_dict_data, cache_file, suppress=suppress)
         
         else:
             item_id_dict_data = cache_data
@@ -519,7 +521,7 @@ def find_icon(item_id, all_icons=False):
     """
     icon_default = "Question_On"
     icon = icon_default
-    texture_cache = load_cache(f"{RESOURCE_DIR}/texture_names.json", "texture cache", suppress=True)
+    texture_cache = new_load_cache(f"{RESOURCE_DIR}/texture_names.json", "texture cache", suppress=True)
     icon_cache_files = texture_cache.get("Item", [])
 
     def check_icon_exists(icon_name, icon_cache_files):
