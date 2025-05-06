@@ -5,7 +5,7 @@ from tqdm import tqdm
 _ignore_warnings = False # True=Ignore warnings
 _warnings_level = 3 # 0=All, 1=Error, 2=Warnings, 3=Deprecated
 
-def ignore_warnings(ignore: bool = True, warnings_level: int = 0):
+def ignore_warnings(warnings_level: int = 0, ignore: bool = True):
     global _ignore_warnings, _warnings_level
     _ignore_warnings = ignore
     _warnings_level = warnings_level
