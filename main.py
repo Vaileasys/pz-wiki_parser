@@ -12,35 +12,33 @@ menu_structure = {
         'sub_options': None
     },
     '1': {
-        'name': 'Data generation',
-        'description': 'Generate working data.',
+        'name': 'Items',
+        'description': '',
         'sub_options': {
             '1': {'module': 'scripts.items.item_infobox', 'name': 'Item infobox', 'description': 'Generates item infoboxes.'},
-            '2': {'module': 'scripts.fluids.fluid_infobox', 'name': 'Fluid infobox', 'description': 'Generates fluid infoboxes.'},
-            '3': {'module': 'fixing', 'name': 'Fixing', 'description': 'Generates fixing recipes.'},
-            '4': {'module': 'consumables', 'name': 'Consumables', 'description': 'Generate consumables tables.'},
-            '5': {'module': 'scripts.items.item_codesnip', 'name': 'Item codesnips', 'description': 'Generate codesnip files.'},
-            '6': {'module': 'distribution', 'name': 'Distributions', 'description': 'Generate distribution files.'},
-            '7': {'module': 'scripts.items.item_body_part', 'name': 'Body part', 'description': 'Generates body part templates.'},
-            '8': {'module': 'scripts.parser.tiles_parser', 'name': 'Tile parser', 'description': 'DEV TILE PARSER.'},
+            '2': {'module': 'scripts.items.item_codesnip', 'name': 'Item codesnips', 'description': 'Generate codesnip files.'},
+            '3': {'module': 'consumables', 'name': 'Consumables', 'description': 'Generate consumables tables.'},
+            '4': {'module': 'distribution', 'name': 'Distributions', 'description': 'Generate distribution files.'},
+            '5': {'module': 'scripts.items.item_body_part', 'name': 'Body part', 'description': 'Generates body part templates.'},
+            '6': {'module': 'scripts.items.item_article', 'name': 'Item article', 'description': 'Generate articles for items.'},
         },
     },
     '2': {
-        'name': 'Page generation',
-        'description': 'Generate pages or lists.',
+        'name': 'Fluids',
+        'description': '',
         'sub_options': {
-            '1': {'module': 'scripts.items.item_article', 'name': 'Item article', 'description': 'Generate articles for items.'},
+            '1': {'module': 'scripts.fluids.fluid_infobox', 'name': 'Fluid infobox', 'description': 'Generates fluid infoboxes.'},
             '2': {'module': 'scripts.fluids.fluid_article', 'name': 'Fluid article', 'description': 'Generate articles for fluids.'},
-            '3': {'module': 'lists.item_list', 'name': 'Item list', 'description': 'Returns all items in a list organised by DisplayCategory.'},
-            '4': {'module': 'lists.weapon_list', 'name': 'Weapon list', 'description': 'Return all weapons in a list with stats organised by their skill.'},
-            '5': {'module': 'lists.clothing_list', 'name': 'Clothing list', 'description': 'Return all clothing in a list with stats organised by body location.'},
-            '6': {'module': 'lists.food_list', 'name': 'Food list', 'description': 'Generate food and nutrition pages.'},
-            '7': {'module': 'scripts.parser.radio_parser', 'name': 'Radio transcripts', 'description': 'Generate radio transcripts.'},
-            '8': {'module': 'scripts.parser.outfit_parser', 'name': 'Outfit parser', 'description': 'Parse outfit xml files.'},
-            '9': {'module': 'roomdefine', 'name': 'Room definitions', 'description': 'Create roomdef item page.'},
         },
     },
     '3': {
+        'name': 'Tiles',
+        'description': '',
+        'sub_options': {
+            '1': {'module': 'scripts.tiles.tiles_batch', 'name': 'Tile processing', 'description': 'Process tile data.'},
+        },
+    },
+    '4': {
         'name': 'Recipes',
         'description': 'Manage and generate tags.',
         'sub_options': {
@@ -48,15 +46,27 @@ menu_structure = {
             '2': {'module': 'scripts.recipes.researchrecipes', 'name': 'Research recipes', 'description': 'Process research recipes.'},
             '3': {'module': 'scripts.recipes.teached_recipes', 'name': 'Teached recipes', 'description': 'Process teached recipes.'},
             '4': {'module': 'scripts.recipes.evolvedrecipe', 'name': 'Evolved recipes', 'description': 'Process evolved recipes.'},
-            '5': {'module': 'scripts.recipes.legacy_recipe_output', 'name': 'Legacy recipe parser', 'description': 'Process recipes.'}, # TODO Remove after implementation
+            '5': {'module': 'fixing', 'name': 'Fixing', 'description': 'Generates fixing recipes.'},
+            '6': {'module': 'scripts.recipes.legacy_recipe_output', 'name': 'Legacy recipe parser', 'description': 'Process recipes.'},
         }
     },
-    '4': {
+    '5': {
         'name': 'Tags',
         'description': 'Manage and generate tags.',
-        'sub_options': None # Handled by item_tags.py
+        'sub_options': None
     },
-    '5': {
+    '6': {
+        'name': 'Lists',
+        'description': 'Generate lists for articles',
+        'sub_options': {
+            '1': {'module': 'lists.item_list', 'name': 'Item list', 'description': 'Returns all items in a list organised by DisplayCategory.'},
+            '2': {'module': 'lists.weapon_list', 'name': 'Weapon list', 'description': 'Return all weapons in a list with stats organised by their skill.'},
+            '3': {'module': 'lists.clothing_list', 'name': 'Clothing list', 'description': 'Return all clothing in a list with stats organised by body location.'},
+            '4': {'module': 'lists.food_list', 'name': 'Food list', 'description': 'Generate food and nutrition pages.'},
+            '5': {'module': 'scripts.parser.outfit_parser', 'name': 'Outfit list', 'description': 'Parse outfit xml files.'},
+        },
+    },
+    '7': {
         'name': 'Tools',
         'description': 'Data analysis and generate reports.',
         'sub_options': {
@@ -65,11 +75,14 @@ menu_structure = {
             '3': {'module': 'tools.compare_item_lists', 'name': 'Compare item lists', 'description': "Generates a list of unique items comparing 'PZwiki:Item_list' versions."}
         },
     },
-    '6': {
-        'name': 'Script parser',
-        'description': 'Manual script parser, mostly for testing.',
-        'sub_options': None
-    }
+    '8': {
+        'name': 'Other',
+        'description': '',
+        'sub_options': {
+            '1': {'module': 'roomdefine', 'name': 'Room definitions', 'description': 'Create roomdef item page.'},
+            '2': {'module': 'scripts.parser.radio_parser', 'name': 'Radio transcripts', 'description': 'Generate radio transcripts.'},
+        },
+    },
 }
 
 settings_structure = {
@@ -106,14 +119,23 @@ def display_menu(menu, is_root=False, title=None):
         print(f"{title.center(50)}")
         print("=" * 50 + "\033[0m")
 
-    for key, value in menu.items():
-        print(f"{key}: {value['name']} - {value['description']}")
+    for key, option in menu.items():
+        name = option['name']
+        description = option.get('description', '').strip()
+
+        # Top-level (root) menus show only key and name, no hyphen or description
+        if is_root:
+            print(f"{key}: {name}")
+        else:
+            if description:
+                print(f"{key}: {name} - {description}")
+            else:
+                print(f"{key}: {name}")
 
     if not is_root:
         print("B: Back")
-    if is_root:
+    else:
         print("Q: Quit")
-
 
 def handle_module(module_name, user_input=None):
     try:
@@ -122,13 +144,12 @@ def handle_module(module_name, user_input=None):
             module.main(user_input)
         else:
             module.main()
-    except ImportError as e:
-        echo_error(f"Error importing module {module_name}: {e}")
-    except AttributeError as e:
-        echo_error(f"Module {module_name} does not have a main() function: {e}")
-    except Exception as e:
-        echo_error(f"An error occurred while running {module_name}: {e}")
-
+    except ImportError as error:
+        echo_error(f"Error importing module {module_name}: {error}")
+    except AttributeError as error:
+        echo_error(f"Module {module_name} does not have a main() function: {error}")
+    except Exception as error:
+        echo_error(f"An error occurred while running {module_name}: {error}")
 
 def navigate_menu(menu, is_root=False, title=None):
     while True:
@@ -138,65 +159,56 @@ def navigate_menu(menu, is_root=False, title=None):
         display_menu(menu, is_root, title)
         user_input = input("> ").strip().upper()
 
-        if is_root and user_input == "Q" or not is_root and user_input == "B":
+        if (is_root and user_input == "Q") or (not is_root and user_input == "B"):
             break
 
         if user_input in menu:
-            selected_option = menu[user_input]
-            if not selected_option.get("sub_options"):
+            selected = menu[user_input]
+            name = selected['name']
+            subs = selected.get('sub_options')
+
+            # If no sub-options, simply run or show header
+            if not subs:
                 print("\033[94m" + "=" * 50)
-                print(f"{selected_option['name'].center(50)}")
+                print(f"{name.center(50)}")
                 print("=" * 50 + "\033[0m")
 
-            # Check if it's the settings menu and link to settings_structure
-            if selected_option['name'] == 'Settings' and selected_option['sub_options'] is None:
+            if name == 'Settings' and subs is None:
                 navigate_menu(settings_structure)
-            elif selected_option['name'] == 'Clear cache':
+            elif name == 'Clear cache':
                 cache.clear_cache()
-            elif selected_option['name'] == 'Run First Time Setup':
+            elif name == 'Run First Time Setup':
                 handle_module('scripts.core.setup')
-            elif selected_option['name'] == 'Tags':
+            elif name == 'Tags':
                 handle_module('scripts.items.item_tags')
-            elif selected_option['name'] == 'Script parser':
+            elif name == 'Script parser':
                 handle_module('scripts.parser.script_parser')
-            elif 'module' in selected_option:
-                handle_module(selected_option['module'])
-            elif 'sub_options' in selected_option:
-                navigate_menu(selected_option['sub_options'], title=selected_option['name'])
+            elif 'module' in selected:
+                handle_module(selected['module'])
+            elif subs:
+                navigate_menu(subs, title=name)
         else:
             echo_error("Invalid input. Please try again.")
 
-
 def check_first_run():
-    first_time_run = config_manager.get_config('first_time_run')
-    # Convert config entry to a boolean
-    if first_time_run == '1':
-        first_time_run = True
-    else:
-        first_time_run = False
-
-    if not first_time_run:
-        # If the flag is False (0), it's the first run
+    first_run_flag = config_manager.get_config('first_time_run')
+    is_first_run = first_run_flag == '0'
+    if is_first_run:
         choice = input("Would you like to run the first-time setup? (Y/N): ").strip().upper()
         if choice == 'Y':
             setup.main()
             logger.write("Setup first time set up completed.")
-
         else:
             logger.write("Skipping first-time setup.", True)
         config_manager.set_config('first_time_run', '1')
 
-
 def main():
     # Add the /scripts/ directory to the system path
-    script_dir = os.path.join(os.path.dirname(__file__), 'scripts')
-    sys.path.append(script_dir)
+    scripts_path = os.path.join(os.path.dirname(__file__), 'scripts')
+    sys.path.append(scripts_path)
 
     check_first_run()
-
-    print("\nWelcome to the wiki parser!\n")
     navigate_menu(menu_structure, is_root=True)
-
 
 if __name__ == "__main__":
     main()
