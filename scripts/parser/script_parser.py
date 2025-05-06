@@ -1,4 +1,5 @@
 import re
+import copy
 from pathlib import Path
 from scripts.core.file_loading import get_script_files, read_file
 from scripts.core.language import Translate
@@ -108,7 +109,9 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
         """Recursively adds values from source into destination, without overwriting existing ones."""
         for key, value in source.items():
             if key not in destination:
-                destination[key] = value
+                destination[key] = copy.deepcopy(value)
+            elif isinstance(destination[key], dict) and isinstance(value, dict):
+                recursive_merge(destination[key], value)
             else:
                 dst_val = destination[key]
                 if isinstance(dst_val, dict) and isinstance(value, dict):
@@ -155,7 +158,7 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
             # Add or merge final key
             final_key = parts[-1]
             if final_key not in dest:
-                dest[final_key] = current_template
+                dest[final_key] = copy.deepcopy(current_template)
             else:
                 if isinstance(dest[final_key], dict) and isinstance(current_template, dict):
                     recursive_merge(dest[final_key], current_template)
@@ -195,7 +198,7 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
                 if key in ("ScriptType", "SourceFile", "template"):
                     continue
                 if key not in script_data:
-                    script_data[key] = value
+                    script_data[key] = copy.deepcopy(value)
                 else:
                     if isinstance(script_data[key], list) and isinstance(value, list):
                         script_data[key] = list(dict.fromkeys(script_data[key] + value))
@@ -213,10 +216,9 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
             script_data = merge_template(script_data, template_name, script_id, script_type, template_dict)
 
         # Inject and merge 'template'
-        template_list = script_data.get("template")
-        if template_list:
-            for temp in template_list:
-                script_data = merge_template(script_data, temp, script_id, script_type, template_dict)
+        template_list = list(script_data.get("template", []))
+        for temp in template_list:
+            script_data = merge_template(script_data, temp, script_id, script_type, template_dict)
 
         # Remove templates
         script_data.pop("template!", None)
