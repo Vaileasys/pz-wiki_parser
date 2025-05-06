@@ -17,7 +17,7 @@ TABLE_HEADINGS = (
     '! Tools',
     '! Items'
     )
-REL_DIR = os.path.join("vehicle", "maintenance")
+REL_DIR = os.path.join("vehicle", "mechanics")
 
 def process_vehicle(vehicle_id):
     vehicle = Vehicle(vehicle_id)
@@ -119,7 +119,7 @@ def generate_table(vehicle_id, rows):
 
 def main():
     Language.get()
-    with tqdm(total=Vehicle.count(), desc="Processing vehicles", bar_format=PBAR_FORMAT, unit=" vehicles", leave=False) as pbar:
+    with tqdm(total=Vehicle.count(), desc="Generating vehicle mechanics", bar_format=PBAR_FORMAT, unit=" vehicles", leave=False) as pbar:
         for vehicle_id in Vehicle.keys():
             pbar.set_postfix_str(f"Processing: {vehicle_id[:30]}")
             
@@ -130,7 +130,7 @@ def main():
 
             pbar.update(1)
     
-    echo_success(f"Files saved to '{output_dir}'")
+    echo_success(f"Vehicle part files saved to '{output_dir}'")
 
 if __name__ == "__main__":
     main()

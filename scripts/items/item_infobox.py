@@ -416,7 +416,7 @@ def generate_infobox(item_id, item_data):
             "suspension_damping": get_any_property(all_items, 'SuspensionDamping'),
             "suspension_compression": get_any_property(all_items, 'SuspensionCompression'),
             "wheel_friction": get_any_property(all_items, 'WheelFriction'),
-            "chance_to_spawn_damaged": get_any_property(all_items, 'ChanceToSpawnDamaged'),
+            "chance_damaged": get_any_property(all_items, 'ChanceToSpawnDamaged'),
             "mechanics_tool": mechanics_tool,
             "recommended_level": recommended_level,
             "required_recipe": required_recipe,
