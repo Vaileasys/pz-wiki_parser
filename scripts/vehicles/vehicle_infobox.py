@@ -1,6 +1,5 @@
 import os
 import shutil
-import json
 from scripts.core import logger
 from scripts.objects.vehicle import Vehicle
 from scripts.objects.item import Item
@@ -8,8 +7,8 @@ from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.core.file_loading import write_file
 from scripts.utils.echo import echo_warning, echo_success
-from scripts.core.constants import OUTPUT_DIR, VEHICLE_DIR
-from scripts.utils.util import format_link, convert_int
+from scripts.core.constants import VEHICLE_DIR
+from scripts.utils.util import convert_int, link
 
 ROOT_DIR = os.path.join(VEHICLE_DIR.format(language_code=Language.get()), "infoboxes")
 
@@ -45,6 +44,10 @@ def generate_data(vehicle_id:str):
     try:
         vehicle = Vehicle(vehicle_id)
 
+        manufacturer = vehicle.get_manufacturer()
+        if manufacturer is not None and manufacturer != "Unknown":
+            manufacturer = link(manufacturer)
+
         trunk_types_raw = vehicle.get_trunk_capacity().keys()
         trunk_types = []
         trunk_open = f' ({Translate.get("IGUI_Open")})' if "TruckBedOpen" in vehicle.get_trunk_capacity() else ""
@@ -64,8 +67,8 @@ def generate_data(vehicle_id:str):
         parameters = {
             "name": vehicle.get_name(),
             "image": vehicle.get_model(),
-            "manufacturer": f"[[{vehicle.get_manufacturer()}]]" if vehicle.get_manufacturer() is not None else None,
-            "base_model": vehicle.get_full_parent().get_link(),
+            "manufacturer": manufacturer,
+            "base_model": vehicle.get_full_parent().get_link() if not vehicle.is_trailer and vehicle.get_full_parent().vehicle_id != vehicle_id else None,
             "vehicle_type": vehicle.get_vehicle_type(),
 #            "service": vehicle.get_service(),
 #            "business": vehicle.get_business(),
@@ -87,10 +90,6 @@ def generate_data(vehicle_id:str):
             "roll_influence": convert_int(vehicle.get_roll_influence()) if not vehicle.is_burnt and not vehicle.is_wreck else None,
             "suspension_stiffness": convert_int(vehicle.get_suspension_stiffness()) if not vehicle.is_burnt and not vehicle.is_wreck else None,
             "offroad_efficiency": convert_int(vehicle.get_offroad_efficiency()) if not vehicle.is_burnt and not vehicle.is_wreck else None,
-#            "siren": vehicle.get_has_siren(),
-#            "backup_beeper": vehicle.get_has_reverse_beeper(),
-#            "key_rings": "".join(key_rings),
-#            "zombie_types": "<br>".join(vehicle.get_zombie_type()),
             "mesh": vehicle.get_mesh_path().split("/")[-1],
             "vehicle_id": vehicle_id,
         }
@@ -111,7 +110,7 @@ def process_vehicle(vehicle_id):
         content = []
 
         # Generate infobox
-        content.append("{{Infobox vehicle/sandbox")
+        content.append("{{Infobox vehicle")
         for key, value in parameters.items():
             content.append(f"|{key}={value}")
         content.append("}}")

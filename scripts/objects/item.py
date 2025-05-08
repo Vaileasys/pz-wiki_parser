@@ -6,7 +6,7 @@ from scripts.core.language import Language, Translate
 from scripts.utils import utility, lua_helper
 from scripts.core import logger
 from scripts.core.constants import RESOURCE_DIR
-from scripts.utils.echo import echo_warning
+from scripts.utils.echo import echo_warning, ignore_warnings
 from scripts.core.cache import load_cache, save_cache
 from scripts.core.version import Version
 from scripts.utils.util import link
@@ -54,7 +54,6 @@ class Item:
         self.has_page = None # Page defined (bool)
         self.icon = None     # Primary icon (str)
         self.icons = None    # All icons (list)
-        self.burn_time = None
     
     # Allows 'item["DisplayName"]'
     def __getitem__(self, key):
@@ -164,9 +163,6 @@ class Item:
 
     def get(self, key: str, default=None):
         return self.data.get(key, default)
-
-    def keys(self):
-        return self.data.keys()
     
     ## ------------------------- Misc Methods ------------------------- ##
 
@@ -521,4 +517,5 @@ class Item:
 
 
 if __name__ == "__main__":
-    print(Item("Base.BigTrunk1").get_name())
+    ignore_warnings(1)
+    print(Item("Base.Twigs").get_burn_time())
