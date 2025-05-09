@@ -42,11 +42,14 @@ def write_to_output(items_data):
     lc_subpage = ""
     if language_code != "en":
         lc_subpage = f"/{language_code}"
+    
+    content.append('{| class="wikitable theme-blue"')
+    translated_header = Translate.get_wiki(HEADER)
 
     for display_category in sorted(items_data.keys()):
-        translated_header = Translate.get_wiki(HEADER)
-        content.append(f"=={display_category}==")
-        content.append('{| class="wikitable theme-blue"')
+        content.append("|-")
+        content.append(f'! colspan="3"| <h3 style="margin-top:0;">{display_category}</h3>')
+        content.append("|-")
         content.append(f"{translated_header}")
 
         for item in items_data[display_category]:
@@ -71,7 +74,8 @@ def write_to_output(items_data):
             content.append(f"| {icons_image}")
             content.append(f"| {item_link}")
             content.append(f"| {item_id}")
-        content.append("|}\n")
+
+    content.append("|}\n")
 
     with open(output_path, 'w', encoding='utf-8') as file:
         file.write("\n".join(content))
