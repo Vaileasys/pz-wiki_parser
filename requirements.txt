@@ -1,4 +1,3 @@
 chardet
 tqdm
 lupa
-slpp
