@@ -7,7 +7,7 @@ from scripts.vehicles import vehicle_infobox, vehicle_parts, vehicle_list2
 from scripts.core.file_loading import read_file, write_file
 from scripts.core.constants import VEHICLE_DIR, PBAR_FORMAT
 from scripts.core.version import Version
-from scripts.utils.util import format_link
+from scripts.utils.util import link
 from scripts.utils.echo import echo_success
 
 VEH_DIR = VEHICLE_DIR.format(language_code=Language.get())
@@ -31,7 +31,7 @@ def generate_intro(vehicle: Vehicle):
     name = vehicle.get_name()
     parent_link = "[[trailer]]" if vehicle.is_trailer else vehicle.get_parent().get_link()
     damage = ""
-    car_wreck_link = format_link("car wreck", "Car Wreck")
+    car_wreck_link = link("Car Wreck", "car wreck")
     if vehicle.is_burnt:
         name = name[0].lower() + name[1:]
         type_link = car_wreck_link
@@ -45,15 +45,15 @@ def generate_intro(vehicle: Vehicle):
         side = side + " side" if side in ("left", "right") else side
         damage = f", with damage to the {side}"
     else:
-        type_link = format_link("vehicle")
+        type_link = link("vehicle")
 
-    return [f"A '''{name}''' is a {type_link} in {format_link('Project Zomboid')}. It is a [[#Variants|variant]] of the {parent_link}{damage}."]
+    return [f"A '''{name}''' is a {type_link} in {link('Project Zomboid')}. It is a [[#Variants|variant]] of the {parent_link}{damage}."]
 
 def generate_overview(vehicle: Vehicle):
     content = []
 
     if vehicle.get_has_lightbar():
-        content.append(f"The {vehicle.get_name()} features a {format_link('lightbar')}, which includes a siren.")
+        content.append(f"The {vehicle.get_name()} features a {link('lightbar')}, which includes a siren.")
     
     key_rings = vehicle.get_special_key_ring()
     if key_rings:
@@ -73,7 +73,7 @@ def generate_overview(vehicle: Vehicle):
     if zombie_types:
         outfits = []
         for outfit in zombie_types:
-            outfits.append(format_link(outfit, outfit + " (outfit)"))
+            outfits.append(link(outfit + " (outfit)"), outfit)
 
         if len(outfits) > 1:
             content.append(f"\nThe vehicle will spawn with zombies in the following outfits:")
@@ -85,7 +85,7 @@ def generate_overview(vehicle: Vehicle):
     return content
 
 def generate_mechanics(vehicle: Vehicle):
-    DISMANTLING = "{vehicle_type} " + f"vehicles can be dismantled with a {format_link('welder mask', 'Welder Mask')} and {format_link('propane torch', 'Propane Torch')}, providing some metal {format_link('materials', 'Material')}, destroying the vehicle. A higher {format_link('metalworking')} skill will yield more usable materials."
+    DISMANTLING = "{vehicle_type} " + f"vehicles can be dismantled with a {link('Welder Mask', 'welder mask')} and {link('Propane Torch', 'propane torch')}, providing some metal {link('Material', 'materials')}, destroying the vehicle. A higher {link('metalworking')} skill will yield more usable materials."
     content = ["{{Main|Mechanics}}"]
     if vehicle.is_burnt:
         content.append("A burnt vehicle cannot be salvaged for parts, and the mechanics menu will display no useful information.")

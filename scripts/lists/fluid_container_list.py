@@ -54,7 +54,7 @@ def get_items():
         if 'capacity' in item_data:
             display_name = Translate.get(item_id, 'DisplayName')
             page_name = utility.get_page(item_id, display_name)
-            item_link = util.format_link(display_name, page_name)
+            item_link = util.link(page_name, display_name)
             icon = utility.get_icon(item_id, True, True, True)
             container_name = item_data.get('ContainerName', '-')
             container_name = Translate.get(container_name, 'ContainerName')

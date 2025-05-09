@@ -63,7 +63,7 @@ def process_ingredients(data):
                 item_id = item.get("raw_name", "Unknown Item")
                 name = utility.get_name(item_id)
                 page = utility.get_page(item_id, name)
-                link = util.format_link(name, page)
+                link = util.link(page, name)
                 if item_id != "Any fluid container":
                     try:
                         icon = utility.get_icon(item_id) if item_id else "Question_On.png"
@@ -91,7 +91,7 @@ def process_ingredients(data):
                 item_id = item.get("raw_name", "Unknown Item")
                 name = utility.get_name(item_id)
                 page = utility.get_page(item_id, name)
-                link = util.format_link(name, page)
+                link = util.link(page, name)
                 if item_id != "Any fluid container":
                     try:
                         icon = utility.get_icon(item_id) if item_id else "Question_On.png"
@@ -171,7 +171,7 @@ def process_tools(data):
                     name = utility.get_name(item_id)
 
                 page = utility.get_page(item_id, name)
-                link = util.format_link(name, page)
+                link = util.link(page, name)
                 try:
                     icon = utility.get_icon(item_id) if item_id else "Question_On.png"
                     if isinstance(icon, list):
@@ -371,7 +371,7 @@ def process_products(data):
             item_id = output_info.get("raw_product")
             name = utility.get_name(item_id)
             page = utility.get_page(item_id, name)
-            link = util.format_link(name, page)
+            link = util.link(page, name)
 
             products_number = output_info.get("products_number", 1)
             if item_id:
@@ -405,7 +405,7 @@ def process_products(data):
                         item_id = raw_output
                         name = utility.get_name(item_id)
                         page = utility.get_page(item_id, name)
-                        link = util.format_link(name, page)
+                        link = util.link(page, name)
                         try:
                             icon = utility.get_icon(raw_output) if raw_output else "Question_On.png"
                             if isinstance(icon, list):

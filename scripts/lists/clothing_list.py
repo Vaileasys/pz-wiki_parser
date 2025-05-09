@@ -42,7 +42,7 @@ def generate_data(item_data, item_id):
 
     item_name = item_data.get("DisplayName", 'Unknown')
     page_name = utility.get_page(item_id, item_name)
-    link = util.format_link(item_name, page_name)
+    link = util.link(page_name, item_name)
     icon = utility.get_icon(item_id, True, True, True)
     can_have_holes = item_data.get("CanHaveHoles", "true").lower() == "true"
     body_parts_list = utility.get_body_parts(item_data, True, "-")

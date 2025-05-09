@@ -64,7 +64,7 @@ def write_tag_table():
 
                 # Generate link for each item
                 tag_items = ', '.join(
-                    util.format_link(item['name'], item['page'])
+                    util.link(item['page'], item['name'])
                     for item in tag_data
                 )
 
@@ -94,7 +94,7 @@ def write_tag_list():
                     icon = item['icon']
                     name = item['name']
                     page = item['page']
-                    link = util.format_link(name, page)
+                    link = util.link(page, name)
                     file.write(f"|-\n| [[File:{icon}|32x32px]] || {link} || {item_id}\n")
                 file.write('|}')
             pbar.update(1)

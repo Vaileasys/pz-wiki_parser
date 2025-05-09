@@ -1,7 +1,7 @@
 from tqdm import tqdm
 from scripts.core.language import Language, Translate
 from scripts.utils import utility, table_helper
-from scripts.utils.util import format_link, format_positive
+from scripts.utils.util import link, format_positive
 from scripts.utils.echo import echo
 from scripts.parser import item_parser, fixing_parser
 from scripts.recipes import legacy_recipe_parser
@@ -202,7 +202,7 @@ def generate_data(item_id, item_data):
     item = {}
 
     item["icon"] = item_data.get("IconFormatted") if "icon" in columns else None
-    item["name"] = format_link(item_name, utility.get_page(item_id, item_name)) if "name" in columns else None
+    item["name"] = link(utility.get_page(item_id, item_name), item_name) if "name" in columns else None
     item["weight"] = item_data.get("Weight", "1") if "weight" in columns else None
     if "equipped" in columns:
         equipped = "<<1h>>"

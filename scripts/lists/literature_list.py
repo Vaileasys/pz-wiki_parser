@@ -127,7 +127,7 @@ def get_skills(item_id, item_data):
             skill_translated = Translate.get(skill, "SkillTrained")
         else:
             skill_translated = skill_en
-        return util.format_link(skill_translated, skill_en)
+        return util.link(skill_en, skill_translated)
     
     return "-"
 

@@ -1,7 +1,7 @@
 import os
 from scripts.objects.vehicle import Vehicle
 from scripts.utils import table_helper
-from scripts.utils.util import format_link, convert_int
+from scripts.utils.util import link, convert_int
 from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT, VEHICLE_DIR
 from scripts.core.cache import save_cache
 
@@ -21,10 +21,10 @@ def generate_data(vehicle_id, table_type, section_type="vehicle"):
 
     name = vehicle.get_name()
     page = vehicle.get_page()
-    link = format_link(name, page)
+    page_link = link(page, name)
 
     vehicle_data["model"] = model if "model" in columns else None
-    vehicle_data["name"] = link if "name" in columns else None
+    vehicle_data["name"] = page_link if "name" in columns else None
     vehicle_data["type"] = vehicle.get_vehicle_type() if "type" in columns else None
     vehicle_data["mass"] = convert_int(vehicle.get_mass()) if "mass" in columns else None
     vehicle_data["engine_power"] = convert_int(vehicle.get_engine_power()) if "engine_power" in columns else None

@@ -199,7 +199,7 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
             lines = []
             for itm in data["items"]:
                 icon = utility.get_icon(itm["raw"])
-                link = util.format_link(itm["translated"], utility.get_page(itm["raw"], itm["translated"]))
+                link = util.link(utility.get_page(itm["raw"], itm["translated"]), itm["translated"])
                 lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {link} <small>×{itm['amount']}</small>")
             formatted.append(("item","<br>".join(lines),"One of"))
 
@@ -209,7 +209,7 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
             qty = data.get("amount",1)
             for itm in data["items"]:
                 icon = utility.get_icon(itm["raw"])
-                link = util.format_link(itm["translated"], utility.get_page(itm["raw"], itm["translated"]))
+                link = util.link(utility.get_page(itm["raw"], itm["translated"]), itm["translated"])
                 lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {link} <small>×{qty}</small>")
             desc = "One of" if len(data["items"])>1 else "Each of"
             formatted.append(("item","<br>".join(lines),desc))
@@ -283,7 +283,7 @@ def process_tools(recipe: dict, build_data: dict) -> str:
                 name  = utility.get_name(rid)
                 page  = utility.get_page(rid, name)
                 icon  = utility.get_icon(rid)
-                lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {util.format_link(name, page)}")
+                lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {util.link(page, name)}")
 
         if not lines:
             continue
@@ -397,7 +397,7 @@ def process_output_mapper(recipe: dict, mapper_key: str) -> list[str]:
 
         item_name = utility.get_name(raw_output_key)
         page_url = utility.get_page(raw_output_key, item_name)
-        link_html = util.format_link(item_name, page_url)
+        link_html = util.link(page_url, item_name)
 
         formatted_lines.append(
             f"[[File:{icon_filename}|64x64px|class=pixelart]]<br>{link_html} ×{output_amount}"
@@ -544,7 +544,7 @@ def process_products(recipe: dict, build_data: dict) -> str:
                     icon = icon[0] if icon else "Question On.png"
                 nm = utility.get_name(rid)
                 url = utility.get_page(rid, nm)
-                link = util.format_link(nm, url)
+                link = util.link(url, nm)
                 item_lines.append(f"[[File:{icon}|64x64px|class=pixelart]]<br>{link} ×{qty}")
 
     # Assemble sections
@@ -788,7 +788,7 @@ def output_item_article_lists(crafting_recipe_map: dict[str, dict], building_rec
             if is_concrete(entry["item_id"])
         ]
 
-    def extract_ids(field) -> str:
+    def extract_ids(field) -> str: # type: ignore
         for el in field:
             cand = None
             if isinstance(el, str):

@@ -261,7 +261,7 @@ def process_item(item_id, item_data, pbar):
             if slot != "-":
                 slot_name = hotbar_data.get(slot, {}).get("name")
                 slot_page = f"AttachmentsProvided#{slot}"
-                slot = util.format_link(name=slot_name, page=slot_page)
+                slot = util.link(slot_page, slot_name)
             slots_list.append(slot)
         item["extra_slots"] = "<br>".join(slots_list)
 

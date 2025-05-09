@@ -3,7 +3,7 @@ from tqdm import tqdm
 from scripts.objects.vehicle import Vehicle
 from scripts.objects.item import Item
 from scripts.core.file_loading import write_file
-from scripts.utils.util import format_link
+from scripts.utils.util import link
 from scripts.utils.echo import echo_success
 from scripts.core.language import Translate, Language
 from scripts.core.constants import PBAR_FORMAT
@@ -43,7 +43,7 @@ def process_vehicle(vehicle_id):
         for recipe_mag in RECIPE_MAGS:
             item = Item(recipe_mag)
             if recipes in item.get("TeachedRecipes"):
-                knowledge_link = format_link(Translate.get(f"Recipe_{recipes.replace(' ', '_')}", default=recipes), item.get_page())
+                knowledge_link = link(item.get_page(), Translate.get(f"Recipe_{recipes.replace(' ', '_')}", default=recipes))
                 knowledge = f'{item.get_icon()} {knowledge_link}'
                 break
 
@@ -54,12 +54,12 @@ def process_vehicle(vehicle_id):
         for _, item_data in tools_dict.items():
             if "type" in item_data:
                 item = Item(item_data.get("type"))
-                item_link = format_link(item.get_name(), item.get_page())
+                item_link = link(item.get_page(), item.get_name())
                 item_icon = item.get_icon()
                 tools.append(f"{item_icon} {item_link}")
             elif "tags" in item_data:
                 tag = item_data.get("tags")
-                tag_link = format_link(f"{tag} (tag)")
+                tag_link = link(f"{tag} (tag)")
                 tag_template = f'{{{{Tag {tag}}}}}'
                 tools.append(f'{tag_template} {tag_link}')
         tools = "<br>".join(tools)
@@ -78,7 +78,7 @@ def process_vehicle(vehicle_id):
             else:
                 item_id = value
             item = Item(item_id)
-            item_link = format_link(item.get_name(), item.get_page())
+            item_link = link(item.get_page(), item.get_name())
             item_icon = item.get_icon()
             items.append(f"{item_icon} {item_link}")
         if not items:

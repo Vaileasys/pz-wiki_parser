@@ -188,7 +188,7 @@ def write_attachment_table():
             for item_id in slot_items_list:
                 item_name = attachment_items["AttachmentType"][item_id]["name"]
                 item_page = attachment_items["AttachmentType"][item_id]["page"]
-                item_link = util.format_link(item_name, item_page)
+                item_link = util.link(item_page, item_name)
 
                 items.append(item_link)
 
@@ -265,7 +265,7 @@ def write_hotbar_table():
             for item_id in slot_items_list:
                 item_name = attachment_items["AttachmentsProvided"][item_id]["name"]
                 item_page = attachment_items["AttachmentsProvided"][item_id]["page"]
-                item_link = util.format_link(item_name, item_page)
+                item_link = util.link(item_page, item_name)
                 item_icon = attachment_items["AttachmentsProvided"][item_id]["icon"]
 
                 items.append(f"{item_icon} {item_link}")

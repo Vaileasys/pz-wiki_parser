@@ -1,6 +1,6 @@
 from scripts.objects.vehicle import Vehicle
 from scripts.core.file_loading import write_file
-from scripts.utils.util import format_link
+from scripts.utils.util import link
 from scripts.core.constants import VEHICLE_DIR
 
 def generate_table(data):
@@ -31,7 +31,7 @@ def generate_data():
         vehicle = Vehicle(vehicle_id)
         name = vehicle.get_name()
         page = vehicle.get_page()
-        link = format_link(name, page)
+        page_link = link(page, name)
 
         vtype = "Trailer" if vehicle.is_trailer else vehicle.get_full_parent().get_name()
 
@@ -40,7 +40,7 @@ def generate_data():
 
         processed_vehicle = {
             "name": name,
-            "link": link,
+            "link": page_link,
             "model": f'[[File:{vehicle.get_model()}|128x128px]]',
             "vehicle_id": vehicle_id
         }

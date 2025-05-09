@@ -1,7 +1,7 @@
 from scripts.utils import lua_helper, table_helper
 from scripts.parser import item_parser
 from scripts.core.language import Translate
-from scripts.utils.util import format_positive, format_link
+from scripts.utils.util import format_positive, link
 from scripts.utils.echo import echo_warning, echo_info
 from scripts.core.constants import RESOURCE_DIR
 from scripts.utils.media_helper import CODES, parse_code_effects
@@ -58,7 +58,7 @@ def generate_data(guid, rm_data):
         code_title = Translate.get(CODES.get(code, {}).get("title", code))
         code_type = CODES.get(code, {}).get("type", "moodle")
         if code_type == "skill":
-            skills.append(f"{format_link(code_title)}: {format_positive(value)}")
+            skills.append(f"{link(code_title)}: {format_positive(value)}")
         if code_type == "recipe":
 #            recipes.append(f"{code_title.replace('%1', value)}")
             recipes.append(value)
@@ -70,7 +70,7 @@ def generate_data(guid, rm_data):
     skills = None if not skills else "<br>".join(skills)
     recipes = None if not recipes else "<br>".join(recipes)
 
-    item["title"] = format_link(full_title, page) if "title" in columns else None
+    item["title"] = link(page, full_title) if "title" in columns else None
     item["author"] = rm_data.get("author", empty_string) if "author" in columns else None
     item["production"] = rm_data.get("extra", empty_string) if "production" in columns else None
     if "cover" in columns:
