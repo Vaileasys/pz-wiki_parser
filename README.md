@@ -28,10 +28,8 @@ Additionally, several Python modules are required for some of the scripts to fun
       pip install -r requirements.txt
 
 3. **Using pip (manual)**:
-   * `pip install chardet`
    * `pip install tqdm`
    * `pip install lupa`
-   * `pip install slpp`
 
 ---
 

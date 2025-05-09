@@ -1,7 +1,6 @@
 import os
 import json
 import re
-import chardet
 from scripts.core.constants import DATA_DIR
 from scripts.core.version import Version
 from scripts.core import config_manager
@@ -225,7 +224,6 @@ class Translate:
 
         parsed = {}
         encoding = Language.get_encoding(wiki_code)
-        encoding_detected = False
 
         for root, _, files in os.walk(base_dir):
             for name in files:
@@ -252,11 +250,8 @@ class Translate:
                             if val.startswith('"'): val = val[1:]
                             if val.endswith('"'): val = val[:-1]
                             parsed[key] = val
-                except UnicodeDecodeError:
-                    if encoding_detected:
-                        raise
-                    encoding = cls._detect_encoding(path)
-                    encoding_detected = True
+                except UnicodeDecodeError as e:
+                    echo_error(f"Couldn't decode {name}: {e}")
                 except Exception as e:
                     echo_error(f"TXT error in {name}: {e}")
 
@@ -270,10 +265,3 @@ class Translate:
         if line.strip().startswith('--'):
             return ''
         return re.split(r'--', line, maxsplit=1)[0].strip()
-
-    @staticmethod
-    def _detect_encoding(path):
-        with open(path, 'rb') as f:
-            raw = f.read()
-            result = chardet.detect(raw)
-            return result['encoding']
