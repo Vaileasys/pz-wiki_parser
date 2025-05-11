@@ -13,6 +13,7 @@ config_default = {
         "default_language": 'en',
         "version": '42.7.0',
         "game_directory": 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\ProjectZomboid',
+        "debug_mode": 'false'
     }
 }
 
@@ -99,6 +100,8 @@ def set_config(key, value, section="Settings"):
     :param value: The value to set for the specified key.
     :param section: Section where the key-value pair should be added or updated (optional).
     """
+    global config_data
+
     config = open_config()
 
     # Check if section exists, if not, add it
@@ -111,6 +114,10 @@ def set_config(key, value, section="Settings"):
     # Save the updated config back to the INI file
     with open(config_file, 'w') as configfile:
         config.write(configfile)
+
+    # Reload to update memory
+    config_data = load_config()
+
     logger.write(f"Configuration updated: [{section}] {key} = {value}")
 
 

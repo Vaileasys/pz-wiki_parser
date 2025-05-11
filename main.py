@@ -103,10 +103,13 @@ settings_structure = {
     },
     '3': {
         'name': 'Clear cache',
-        'description': 'Clear the data cache.',
-        'module': 'setup'
+        'description': 'Clear the data cache.'
     },
     '4': {
+        'name': 'Toggle debug',
+        'description': f'Toggle debug mode, to show or hide debug prints. Current: {config_manager.get_config("debug_mode")}'
+    },
+    '5': {
         'name': 'Run First Time Setup',
         'description': 'Run the initial setup again.',
         'module': 'setup'
@@ -177,6 +180,10 @@ def navigate_menu(menu, is_root=False, title=None):
                 navigate_menu(settings_structure)
             elif name == 'Clear cache':
                 cache.clear_cache()
+            elif name == 'Toggle debug':
+                new_debug = "true" if config_manager.get_config("debug_mode") == "false" else "false"
+                config_manager.set_config("debug_mode", new_debug)
+                settings_structure['4']['description'] = f'Toggle debug mode, to show or hide debug prints. Current: {new_debug}'
             elif name == 'Run First Time Setup':
                 handle_module('scripts.core.setup')
             elif name == 'Tags':
