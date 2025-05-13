@@ -19,12 +19,12 @@ def get_ids_from_page(page, id_type: str = "item_id") -> list[str]:
     return get_flattened_page_dict().get(page).get(id_type)
 
 
-def get_page_from_id(query_id: str, id_type: str = None) -> str:
-    """Returns a page for a given id. Option to provide the 'id_type' to search only in that id type."""
+def get_pages_from_id(query_id: str, id_type: str = None) -> list[str]:
+    """Returns a list of pages for a given id. Option to provide the 'id_type' to search only in that id type."""
     if id_type is None:
         for key, value in get_id_data().items():
             if query_id in value:
-                return value[query_id][0]
+                return value[query_id]
         echo_warning(f"Unable to find page for '{query_id}'.")
         return None
     
