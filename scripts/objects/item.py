@@ -435,6 +435,23 @@ class Item:
         if cycling and len(icon_list) > 1:
             return f'<span class="cycle-img">{"".join(icon_list)}</span>'
         return ''.join(icon_list)
+    
+    def has_tag(self, tag: str) -> bool:
+        return tag in self.get("Tags", [])
+    
+    @property
+    def should_burn(self):
+        """Checks if an item 'should burn', not that it 'can burn'."""
+        if hasattr(self, "_should_burn"):
+            return self._should_burn
+        
+        self._should_burn = True
+        # Logic copied from 'ISCampingMenu.shouldBurn()'
+        is_clothing = self.get("Type", "").lower() == "clothing"
+        fabric_type = self.get("FabricType")
+        if is_clothing and not fabric_type: self._should_burn = False
+        if is_clothing and fabric_type == "Leather": self._should_burn = False
+        return self._should_burn
 
     def get_burn_time(self):
         if not hasattr(self, "burn_time"):
@@ -443,6 +460,7 @@ class Item:
     
     def calculate_burn_time(self):
         """Calculates and stores burn time for this item."""
+        #TODO: clean up and use should_burn property
         if not self.data:
             self.burn_time = ""
             return
@@ -510,6 +528,29 @@ class Item:
             self.burn_time = f"{hours} {hours_unit}, {minutes} {minutes_unit}" if minutes else f"{hours} {hours_unit}"
         else:
             self.burn_time = f"{minutes} {minutes_unit}"
+    
+    @property
+    def is_tinder(self):
+        if hasattr(self, "_is_tinder"):
+            return self._is_tinder
+        
+        if not self.should_burn: return
+
+        fuel_data = Item._burn_data
+        campingLightFireType = fuel_data["campingLightFireType"]
+        campingLightFireCategory = fuel_data["campingLightFireCategory"]
+
+        # Logic copied from 'ISCampingMenu.isValidTinder()'
+        category = self.get("Type")
+        id_type = self.id_type
+
+        self._is_tinder = self.has_tag("IsFireTinder")
+        if campingLightFireType.get(id_type) or campingLightFireCategory.get(category): self._is_tinder = True
+        if campingLightFireType.get(id_type) and campingLightFireType.get(id_type) == 0: self._is_tinder = False
+        if campingLightFireCategory.get(category) and campingLightFireCategory.get(category) == 0: self._is_tinder = False
+        if self.has_tag("NotFireTinder"): self._is_tinder = False
+
+        return self._is_tinder
     
     #TODO: get_model
     #TODO: get_body_parts
