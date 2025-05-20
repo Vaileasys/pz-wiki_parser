@@ -248,9 +248,11 @@ def parse_foraging(forage_definitions_path, output_path):
     """
 
     additional_files = [
-        "Ammo", "Animals", "Berries", "Clothing", "DeadAnimals", "ForestGoods",
-        "ForestRarities", "Fruits", "Herbs", "Insects", "Junk", "Medical",
-        "MedicinalPlants", "Mushrooms", "Stones", "Vegetables", "WildPlants"
+        "Ammo", "Animals", "Artifacts", "Berries", "Bones", "Clothing", "CraftingMaterials",
+        "DeadAnimals", "ForestGoods",
+        "ForestRarities", "Fruits", "Herbs", "Insects", "Junk", "JunkFood", "JunkWeapons", "Medical",
+        "MedicinalPlants", "Mushrooms", "Stones", "Trash", "Vegetables", "WildPlants",
+
     ]
 
     def preprocess_lua_code(lua_code):
