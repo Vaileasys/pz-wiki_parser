@@ -16,8 +16,15 @@ from scripts.items import item_tags
 def fluid_rgb(fluid_id):
     """
     Retrieve the name and RGB values of a fluid based on its ID.
+    Supports IDs in the form 'categories[Water]' by extracting 'Water'.
     """
     try:
+        # Handle fluid 'categories'
+        if isinstance(fluid_id, str):
+            match = re.match(r'categories\[(.+?)\]', fluid_id)
+            if match:
+                fluid_id = match.group(1)
+
         fluid_metadata = fluid_parser.get_fluid_data().get(fluid_id)
         if not fluid_metadata:
             raise ValueError(f"No fluid found for ID: {fluid_id}")
@@ -43,16 +50,17 @@ def fluid_rgb(fluid_id):
         else:
             rgb_values = numeric_rgb_color
 
-        red_value = int(float(rgb_values[0]) * 255)
+        red_value   = int(float(rgb_values[0]) * 255)
         green_value = int(float(rgb_values[1]) * 255)
-        blue_value = int(float(rgb_values[2]) * 255)
+        blue_value  = int(float(rgb_values[2]) * 255)
 
         return {
             "name": fluid_name,
-            "R": red_value,
-            "G": green_value,
-            "B": blue_value
+            "R":    red_value,
+            "G":    green_value,
+            "B":    blue_value
         }
+
     except Exception as error:
         raise RuntimeError(f"Error processing fluid '{fluid_id}': {error}")
 
@@ -1154,7 +1162,7 @@ def main():
                         "construction": False,
                     }
                 except Exception as error:
-                    echo_warning(f"Skipping crafting recipe '{recipe_id}' due to error: {error}")
+                    echo_error(f"Skipping crafting recipe '{recipe_id}' due to error: {error}")
                 finally:
                     progress_bar.update(1)
 
