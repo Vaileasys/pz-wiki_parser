@@ -35,7 +35,8 @@ menu_structure = {
         'name': 'Tiles',
         'description': '',
         'sub_options': {
-            '1': {'module': 'scripts.tiles.tiles_batch', 'name': 'Tile processing', 'description': 'Process tile data.'},
+            '1': {'module': 'scripts.tiles.tiles_batch', 'name': 'Tile batch', 'description': 'Process tiles.'},
+            '2': {'module': 'scripts.tiles.tiles_stitcher', 'name': 'Tile stitcher', 'description': 'Stitch tile sprites.'},
         },
     },
     '4': {

@@ -1,11 +1,12 @@
-#!/usr/bin/env python3
+"""
+This script was originally written in JavaScript by User:Jab.
+It has been converted to python for use in the wiki parser.
+"""
+
 import os
 import struct
-import json
-
-# —————————————————————————————————————————————————————————————————————
-# Enums and reverse lookups
-# —————————————————————————————————————————————————————————————————————
+from scripts.core.constants import DATA_DIR
+from scripts.core.cache import save_cache
 
 IsoFlagType = {
     'collideW': 0, 'collideN': 1, 'solidfloor': 2, 'noStart': 3, 'windowW': 4,
@@ -22,16 +23,19 @@ IsoFlagType = {
     'sheetCurtains': 49, 'waterPiped': 50, 'HoppableN': 51, 'HoppableW': 52,
     'bed': 53, 'blueprint': 54, 'canPathW': 55, 'canPathN': 56, 'blocksight': 57,
     'climbSheetE': 58, 'climbSheetS': 59, 'climbSheetTopE': 60,
-    'climbSheetTopS': 61, 'makeWindowInvincible': 62, 'water': 63, 'canBeCut': 64,
-    'canBeRemoved': 65, 'taintedWater': 66, 'smoke': 67, 'attachedN': 68,
-    'attachedS': 69, 'attachedE': 70, 'attachedW': 71, 'attachedFloor': 72,
-    'attachedSurface': 73, 'attachedCeiling': 74, 'attachedNW': 75,
-    'ForceAmbient': 76, 'WallSE': 77, 'WindowN': 78, 'WindowW': 79,
-    'FloorHeightOneThird': 80, 'FloorHeightTwoThirds': 81, 'CantClimb': 82,
-    'diamondFloor': 83, 'attachedSE': 84, 'TallHoppableW': 85,
+    'climbSheetTopS': 61, 'makeWindowInvincible': 62, 'water': 63,
+    'canBeCut': 64, 'canBeRemoved': 65, 'taintedWater': 66, 'smoke': 67,
+    'attachedN': 68, 'attachedS': 69, 'attachedE': 70, 'attachedW': 71,
+    'attachedFloor': 72, 'attachedSurface': 73, 'attachedCeiling': 74,
+    'attachedNW': 75, 'ForceAmbient': 76, 'WallSE': 77, 'WindowN': 78,
+    'WindowW': 79, 'FloorHeightOneThird': 80, 'FloorHeightTwoThirds': 81,
+    'CantClimb': 82, 'diamondFloor': 83, 'attachedSE': 84, 'TallHoppableW': 85,
     'WallWTrans': 86, 'TallHoppableN': 87, 'WallNTrans': 88, 'container': 89,
     'DoorWallW': 90, 'DoorWallN': 91, 'WallW': 92, 'WallN': 93, 'WallNW': 94,
-    'SpearOnlyAttackThrough': 95, 'forceRender': 96, 'open': 97, 'MAX': 98
+    'SpearOnlyAttackThrough': 95, 'forceRender': 96, 'open': 97,
+    'SpriteConfig': 98, 'BlockRain': 99, 'EntityScript': 100, 'isEave': 101,
+    'openAir': 102, 'HasLightOnSprite': 103, 'unlit': 104, 'NeverCutaway': 105,
+    'DoubleDoor1': 106, 'DoubleDoor2': 107, 'MAX': 108
 }
 IsoFlagTypeName = {v: k for k, v in IsoFlagType.items()}
 
@@ -156,7 +160,7 @@ class PropertyContainer:
         self.flags_set    = []
 
     def set_flag(self, flag: int):
-        # Match JS logic: use 32-bit shift space
+        # 32-bit shift space
         if flag == 0:
             self.SpriteFlags1 |= (1 << (flag % 32))
         else:
@@ -356,17 +360,15 @@ class IsoWorld:
         # Object-type
         if name in IsoObjectType and IsoObjectType[name]!=IsoObjectType['MAX']:
             t = IsoObjectType[name]
-            # skip wall override logic
             if not ((spr.type in (IsoObjectType['doorW'],IsoObjectType['doorN'])) and t==IsoObjectType['wall']):
                 spr.type = t
-            # only set flags for doors
             if t==IsoObjectType['doorW']:
                 spr.properties.set_flag(IsoFlagType['doorW'])
             elif t==IsoObjectType['doorN']:
                 spr.properties.set_flag(IsoFlagType['doorN'])
             return
 
-        # Other props
+        # Other
         if name in ('firerequirement','fireRequirement'):
             spr.firerequirement = int(val)
         elif name=='BurntTile':
@@ -435,7 +437,6 @@ class IsoWorld:
                 spr.name=name
                 spr.tileSheetIndex=i
                 defs.append(spr)
-                # attachments
                 if 'damaged' in name or 'trash_' in name:
                     spr.attachedFloor=True
                     spr.properties.set_property('attachedFloor','true',False)
@@ -447,30 +448,24 @@ class IsoWorld:
             self.set_open_door_properties(base, defs)
 
 def main():
-    input_folder = os.path.join('resources','tiles')
-    output_folder = 'data'
-    os.makedirs(output_folder, exist_ok=True)
+    input_folder = os.path.join('resources', 'tiles')
+    os.makedirs(DATA_DIR, exist_ok=True)
 
     IsoSpriteManager()
-    world=IsoWorld()
+    world = IsoWorld()
 
-    # Stage 1: gather all property strings
-    for fname in os.listdir(input_folder):
+    for fname in sorted(os.listdir(input_folder)):
         if fname.endswith('.tiles'):
-            world.load_tile_definitions_property_strings(os.path.join(input_folder,fname))
+            world.load_tile_definitions_property_strings(os.path.join(input_folder, fname))
     world.set_custom_property_values()
     world.generate_tile_property_lookup_tables()
 
-    # Stage 2: parse all .tiles
-    for fname in os.listdir(input_folder):
+    for fname in sorted(os.listdir(input_folder)):
         if fname.endswith('.tiles'):
-            # use file_num=1 for all to mirror newtiledefinitions behavior
-            world.read_tile_definitions(os.path.join(input_folder,fname), 1)
+            world.read_tile_definitions(os.path.join(input_folder, fname), 1)
 
-    # Combined output
-    combined={k:spr.to_json() for k,spr in world.tiles.items()}
-    with open(os.path.join(output_folder,'tiles_data.json'),'w',encoding='utf-8') as f:
-        json.dump(combined,f,indent=2)
+    combined = {k: spr.to_json() for k, spr in world.tiles.items()}
+    save_cache(combined, 'tiles_data.json', DATA_DIR)
 
 if __name__=='__main__':
     main()
