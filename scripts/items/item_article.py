@@ -1,15 +1,10 @@
-import os
-import re
-import sys
-import csv
-from difflib import SequenceMatcher
+import os, re, sys, csv
 from tqdm import tqdm
 from scripts.core.language import Language
-from scripts.core.constants import PBAR_FORMAT, DATA_DIR, OUTPUT_LANG_DIR, ITEM_DIR
+from scripts.core.constants import PBAR_FORMAT, DATA_DIR, ITEM_DIR
 from scripts.core.cache import save_cache, load_cache
 from scripts.utils.echo import echo, echo_info, echo_warning, echo_error
 
-# Language dictionary
 LANGUAGE_DATA = {
     "en": {
         "intro_template": "{article} '''{lowercase_name}''' is an [[item]] in [[Project Zomboid]].",
@@ -321,8 +316,8 @@ def process_file(file_path, output_dir, consumables_dir, infobox_data_list, item
 
     header = generate_header(category, skill_type, infobox_version, language_code, name)
     body_content = assemble_body(lowercase_name, os.path.basename(file_path), name, item_id, category, skill_type,
-                                 infobox, consumables_dir, infobox_data_list, item_id_dict, fixing_dir, code_dir,
-                                 distribution_dir, history_dir, crafting_dir, language_code, pbar)
+                                 infobox, consumables_dir, fixing_dir, code_dir,
+                                 distribution_dir, history_dir, crafting_dir, language_code)
 
     intro = generate_intro(lowercase_name, language_code)
 
@@ -403,7 +398,6 @@ def generate_header(category, skill_type, infobox_version, language_code, name):
         "Firearm": "{{Header|Project Zomboid|Items|Weapons|Firearms}}"
     }
 
-    # Remove link markup from skill type for comparison
     skill_type = re.sub(r'\[\[(?:[^\|\]]*\|)?([^\|\]]+)\]\]', r'\1', skill_type).strip()
 
     # Determine the correct header based on the category and skill type
@@ -415,7 +409,6 @@ def generate_header(category, skill_type, infobox_version, language_code, name):
     else:
         header = "{{Header|Project Zomboid|Items}}"
 
-    # Use the original name directly for the Title template
     if language_code == "en":
         full_header = f"""{header}
 {{{{Page version|{infobox_version}}}}}
@@ -432,8 +425,6 @@ def generate_header(category, skill_type, infobox_version, language_code, name):
 def generate_consumable_properties(item_id, consumables_dir):
     if not os.path.exists(consumables_dir):
         return ""
-
-    # Generate the filename to check
     filename = re.sub(r'[^\w\-_\. ]', '_', item_id) + '.txt'
     file_path = os.path.join(consumables_dir, filename)
 
@@ -448,364 +439,343 @@ def generate_consumable_properties(item_id, consumables_dir):
 
 
 def generate_condition(name, category, skill_type, infobox, fixing_dir, language_code):
-    """
-    Generates a condition section for an item page based on the item's infobox and fixing files.
-
-    Args:
-        name (str): The name of the item.
-        category (str): The category of the item.  # (no longer used for condition logic)
-        skill_type (str): The skill type of the item.
-        infobox (str): The contents of the item's infobox.
-        fixing_dir (str): The directory containing the fixing files.
-        language_code (str): The language code to use for the condition text.
-
-    Returns:
-        str: The condition section for the item page, or empty string if
-             either condition_max or condition_lower_chance is missing.
-    """
     language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
+    m_max = re.search(r'\|condition_max\s*=\s*(\d+)', infobox)
+    m_low = re.search(r'\|condition_lower_chance\s*=\s*(\d+)', infobox)
 
-    # Look for both fields in the infobox
-    condition_max_match = re.search(r'\|condition_max\s*=\s*(\d+)', infobox)
-    condition_lower_chance_match = re.search(r'\|condition_lower_chance\s*=\s*(\d+)', infobox)
-
-    # If either is missing, skip the section entirely
-    if not condition_max_match or not condition_lower_chance_match:
+    if not m_max or not m_low:
         return ""
-
-    condition_max = condition_max_match.group(1)
-    condition_lower_chance = condition_lower_chance_match.group(1)
-
-    # Format the skill_type_lower for insertion
-    if '|' in skill_type:
-        part0, part1 = skill_type.split('|', 1)
-        skill_type_lower = f"{part0}|{part1.lower()}"
-    else:
-        skill_type_lower = skill_type.lower()
-
-    # Build the condition text from the template
-    condition_text = language_data["condition_text"].format(
+    condition_max = m_max.group(1)
+    condition_lower_chance = m_low.group(1)
+    skill_type_lower = skill_type.lower().split('|')[-1]
+    text = language_data["condition_text"].format(
         name=name,
         condition_max=condition_max,
         skill_type=skill_type,
         skill_type_lower=skill_type_lower,
         condition_lower_chance=condition_lower_chance
     )
-
-    # Capitalize first letter
-    condition_text = condition_text[0].upper() + condition_text[1:]
-
-    # Append a Repairing subsection if there's a matching fixing file
+    text = text[0].upper() + text[1:]
     repairing_header = language_data["headers"]["Repairing"]
+    token = f"|item_id={re.search(r'\|item_id\s*=\s*(.+)', infobox).group(1).strip()}"
     if os.path.isdir(fixing_dir):
-        item_id_match = re.search(r'\|item_id\s*=\s*(.+)', infobox)
-        if item_id_match:
-            item_id = item_id_match.group(1).strip()
-            token = f"|item_id={item_id}"
-            for fname in os.listdir(fixing_dir):
-                path = os.path.join(fixing_dir, fname)
-                try:
-                    with open(path, 'r', encoding='utf-8') as fh:
-                        content = fh.read()
-                        if token in content:
-                            fixing_content = content.strip()
-                            condition_text += f"\n\n==={repairing_header}===\n{fixing_content}"
-                            break
-                except Exception as e:
-                    echo_error(f"Error reading {path}: {e}")
-
-    return condition_text
+        for fname in os.listdir(fixing_dir):
+            path = os.path.join(fixing_dir, fname)
+            try:
+                with open(path, 'r', encoding='utf-8') as fh:
+                    content = fh.read()
+                if token in content:
+                    text += f"\n\n==={repairing_header}===\n{content.strip()}"
+                    break
+            except Exception as e:
+                echo_error(f"Error reading {path}: {e}")
+    return text
 
 
-def generate_crafting(item_id, crafting_dir, language_code):
+def generate_crafting(item_id, crafting_dir, teachedrecipes_dir, language_code):
     if language_code != "en":
         return ""
 
-    if not os.path.exists(crafting_dir):
-        return ""
+    parts = []
 
-    filename = f"{item_id}.txt"
-    file_path = os.path.join(crafting_dir, filename)
-
-    if os.path.isfile(file_path):
+    # What it crafts
+    what_fp = os.path.join(crafting_dir, f"{item_id}_whatitcrafts.txt")
+    if os.path.isfile(what_fp):
         try:
-            with open(file_path, 'r', encoding='utf-8') as file:
-                return file.read().strip()
+            with open(what_fp, 'r', encoding='utf-8') as fh:
+                parts.append(fh.read().strip())
         except Exception as e:
-            echo_error(f"Error reading {file_path}: {e}")
+            echo_error(f"Error reading {what_fp}: {e}")
 
+    # Researchable recipes
+    research_fp = os.path.join(crafting_dir, f"{item_id}_research.txt")
+    if os.path.isfile(research_fp):
+        try:
+            with open(research_fp, 'r', encoding='utf-8') as fh:
+                research = fh.read().strip()
+            parts.append(
+                "====Researchable recipes====\n"
+                f"{research}"
+            )
+        except Exception as e:
+            echo_error(f"Error reading {research_fp}: {e}")
+
+    # Learned recipes
+    learned_fp = os.path.join(teachedrecipes_dir, f"{item_id}_Teached.txt")
+    if os.path.isfile(learned_fp):
+        try:
+            with open(learned_fp, 'r', encoding='utf-8') as fh:
+                learned = fh.read().strip()
+            parts.append(
+                "====Learned recipes====\n"
+                f"{learned}"
+            )
+        except Exception as e:
+            echo_error(f"Error reading {learned_fp}: {e}")
+
+    if not parts:
+        return ""
+    return "\n\n".join(parts)
+
+
+def generate_building(item_id, building_dir):
+    path = os.path.join(building_dir, f"{item_id}_constructionwhatitcrafts.txt")
+    if os.path.isfile(path):
+        try:
+            with open(path, 'r', encoding='utf-8') as fh:
+                return fh.read().strip()
+        except Exception as e:
+            echo_error(f"Error reading {path}: {e}")
+    return ""
+
+
+def generate_learned_recipes(item_id, teached_dir):
+    path = os.path.join(teached_dir, f"{item_id}_Teached.txt")
+    if os.path.isfile(path):
+        try:
+            with open(path, 'r', encoding='utf-8') as fh:
+                return fh.read().strip()
+        except Exception as e:
+            echo_error(f"Error reading {path}: {e}")
+    return ""
+
+
+def generate_body_part(item_id, body_parts_dir):
+    path = os.path.join(body_parts_dir, f"{item_id}.txt")
+    if os.path.isfile(path):
+        try:
+            with open(path, 'r', encoding='utf-8') as fh:
+                content = fh.read().strip()
+            return (
+                "{{Main|BodyLocation{{!}}Body location}}\n"
+                "{| style=\"text-align:center;\"\n"
+                f"|'''{item_id}'''<br>{content}\n"
+                "|}"
+            )
+        except Exception as e:
+            echo_error(f"Error reading {path}: {e}")
     return ""
 
 
 def generate_location(original_filename, infobox_name, item_id, distribution_dir):
-    if not os.path.exists(distribution_dir):
+    if not os.path.isdir(distribution_dir):
         return ""
-
-    # Generate possible filenames to check
-    possible_filenames = [
-        original_filename,
-        infobox_name,
-        re.sub(r'.*\.', '', item_id)
-    ]
-
-    for filename in possible_filenames:
-        file_path = os.path.join(distribution_dir, filename + '.txt')
-        if os.path.isfile(file_path):
+    for name in (original_filename, infobox_name, re.sub(r'.*\.', '', item_id)):
+        path = os.path.join(distribution_dir, name + '.txt')
+        if os.path.isfile(path):
             try:
-                with open(file_path, 'r', encoding='utf-8') as file:
-                    return file.read().strip()
+                with open(path, 'r', encoding='utf-8') as fh:
+                    return fh.read().strip()
             except Exception as e:
-                echo_error(f"Error reading {file_path}: {e}")
+                echo_error(f"Error reading {path}: {e}")
     return ""
+
+
+def generate_obtaining(item_id, crafting_dir, original_filename, infobox_name, distribution_dir):
+    parts = []
+    # Recipes
+    howto = os.path.join(crafting_dir, f"{item_id}_howtocraft.txt")
+    if os.path.isfile(howto):
+        try:
+            with open(howto, 'r', encoding='utf-8') as fh:
+                parts.append(f"===Recipes===\n{fh.read().strip()}")
+        except Exception as e:
+            echo_error(f"Error reading {howto}: {e}")
+
+    # Loot
+    loot = generate_location(original_filename, infobox_name, item_id, distribution_dir)
+    if loot:
+        parts.append(f"===Loot===\n{loot}")
+    return "\n\n".join(parts)
 
 
 def generate_history(item_id, history_dir, language_code):
     if language_code != "en":
         return ""
-
-    history_file_name = f"{item_id}.txt"
-    history_file_path = os.path.join(history_dir, history_file_name)
-
-    if os.path.isfile(history_file_path):
+    path = os.path.join(history_dir, f"{item_id}.txt")
+    if os.path.isfile(path):
         try:
-            with open(history_file_path, 'r', encoding='utf-8') as file:
-                contents = file.read().strip()
-                content = f"{contents}"
+            with open(path, 'r', encoding='utf-8') as fh:
+                return fh.read().strip()
         except Exception as e:
-            echo_error(f"Error reading {history_file_path}: {e}")
-            content = f"{{{{HistoryTable|\n|item_id={item_id}\n}}}}"
-        return content
+            echo_error(f"Error reading {path}: {e}")
+    return f"{{{{HistoryTable|\n|item_id={item_id}\n}}}}"
 
 
 def generate_code(item_id, code_dir):
-    if not os.path.exists(code_dir):
+    if not os.path.isdir(code_dir):
         return ""
-
-    # Generate the filename to check
     filename = re.sub(r'.*\.', '', item_id) + '.txt'
-    file_path = os.path.join(code_dir, filename)
-
-    if os.path.isfile(file_path):
+    path = os.path.join(code_dir, filename)
+    if os.path.isfile(path):
         try:
-            with open(file_path, 'r', encoding='utf-8') as file:
-                contents = file.read().strip()
-                return f"""{{{{CodeBox|
-{contents}
-}}}}"""
+            with open(path, 'r', encoding='utf-8') as fh:
+                return f"{{{{CodeBox|\n{fh.read().strip()}\n}}}}"
         except Exception as e:
-            echo_error(f"Error reading {file_path}: {e}")
-
+            echo_error(f"Error reading {path}: {e}")
     return ""
 
 
 def load_infoboxes(infobox_dir):
-    # Store extracted infoboxes in memory for efficiency
-    """
-    Loads infobox data from a directory of text files.
-
-    The function opens each file in the given directory, reads its content,
-    extracts the infobox data using regular expressions, and stores it in a
-    list of dictionaries. The returned list contains dictionaries with the
-    keys 'name', 'category', 'skill_type', 'tags', and 'item_id'.
-
-    Args:
-        infobox_dir (str): The path to the directory containing the infobox
-            data.
-
-    Returns:
-        list: A list of dictionaries containing the extracted infobox data.
-    """
-    infobox_data_list = []
-    infobox_files = [f for f in os.listdir(infobox_dir) if f.endswith('.txt')]
-
-    for file_name in infobox_files:
-        file_path = os.path.join(infobox_dir, file_name)
+    infobox_data = []
+    for fname in os.listdir(infobox_dir):
+        if not fname.endswith('.txt'):
+            continue
+        path = os.path.join(infobox_dir, fname)
         try:
-            with open(file_path, 'r', encoding='utf-8') as file:
-                content = file.read()
+            with open(path, 'r', encoding='utf-8') as fh:
+                txt = fh.read()
         except Exception as e:
-            echo_error(f"Error reading {file_path}: {e}")
+            echo_error(f"Error reading {path}: {e}")
             continue
-
-        infobox_data = {
-            'name': re.search(r'\|name\s*=\s*(.+)', content).group(1).strip() if re.search(r'\|name\s*=\s*(.+)',
-                                                                                           content) else "",
-            'category': re.search(r'\|category\s*=\s*(.+)', content).group(1).strip() if re.search(
-                r'\|category\s*=\s*(.+)', content) else "",
-            'skill_type': re.search(r'\|skill_type\s*=\s*(.+)', content).group(1).strip() if re.search(
-                r'\|skill_type\s*=\s*(.+)', content) else "",
-            'tags': [tag.strip() for tag in re.findall(r'\|tag\d?\s*=\s*(.+)', content)],
-            'item_id': re.search(r'\|item_id\s*=\s*(.+)', content).group(1).strip() if re.search(
-                r'\|item_id\s*=\s*(.+)', content) else ""
-        }
-
-        infobox_data_list.append(infobox_data)
-
-    return infobox_data_list
+        infobox_data.append({
+            'name': re.search(r'\|name\s*=\s*(.+)', txt).group(1).strip() if re.search(r'\|name\s*=\s*(.+)', txt) else "",
+            'category': re.search(r'\|category\s*=\s*(.+)', txt).group(1).strip() if re.search(r'\|category\s*=\s*(.+)', txt) else "",
+            'skill_type': re.search(r'\|skill_type\s*=\s*(.+)', txt).group(1).strip() if re.search(r'\|skill_type\s*=\s*(.+)', txt) else "",
+            'tags': [t.strip() for t in re.findall(r'\|tag\d?\s*=\s*(.+)', txt)],
+            'item_id': re.search(r'\|item_id\s*=\s*(.+)', txt).group(1).strip() if re.search(r'\|item_id\s*=\s*(.+)', txt) else ""
+        })
+    return infobox_data
 
 
-def calculate_relevance(current_item, other_item):
-    category_match = current_item.get('category') == other_item.get('category')
-    tag_similarity = len(set(current_item.get('tags', [])).intersection(set(other_item.get('tags', []))))
-    name_similarity = SequenceMatcher(None, current_item.get('name', ''), other_item.get('name', '')).ratio()
-    skill_type_match = current_item.get('skill_type') == other_item.get('skill_type')
-
-    # Weight scores
-    relevance_score = (
-            name_similarity * 8 +
-            category_match * 8 +
-            tag_similarity * 5 +
-            skill_type_match * 3
-    )
-    return relevance_score
-
-
-def find_most_relevant_items(current_item, all_items_infoboxes, item_id_dict):
-    relevance_scores = []
-    current_item_name = current_item.get('name', '').lower()
-
-    for item in all_items_infoboxes:
-        other_item_name = item.get('name', '').lower()
-        if other_item_name == current_item_name:
-            continue
-
-        # Skip items without an item ID
-        other_item_id = item.get('item_id', '').strip()
-        if not other_item_id:
-            continue
-
-        # Ensure the other item has an English name
-        english_name = item_id_dict.get(other_item_id)
-        if not english_name:
-            continue
-
-        # Calculate the relevance score
-        relevance = calculate_relevance(current_item, item)
-        relevance_scores.append((relevance, english_name))
-
-    # Sort by relevance score in descending order and pick the top 3 English names
-    top_relevant_items = sorted(relevance_scores, reverse=True, key=lambda x: x[0])[:3]
-
-    # Extract the names from the top relevant items
-    relevant_english_names = [item_name for score, item_name in top_relevant_items]
-
-    return relevant_english_names
-
-"""
-see_also_cache = {}
-
-def generate_see_also(language_code, current_item, infobox_data_list, item_id_dict):
-    global see_also_cache
-
-    item_id = current_item.get("item_id")
-
-    if item_id in see_also_cache:
-        relevant_items = see_also_cache[item_id]
-    else:
-        # Find the most relevant items, ensuring they have English names
-        relevant_items = find_most_relevant_items(current_item, infobox_data_list, item_id_dict)
-        see_also_cache[item_id] = relevant_items
-
-    # Create a 'See also' list formatted for a wiki page, ensuring all names are in English
-    see_also_list = '\n'.join([f"*{{{{ll|{name}}}}}" for name in relevant_items])
-
-    # Determine the appropriate Navbox template based on the item's category and language code
-    category_list = ["Weapon", "Tool", "Clothing", "Food"]
-    if current_item.get('category') in category_list:
-        navbox_param = current_item.get('category', '').lower()
-        if language_code == "en":
-            navbox = f"{{{{Navbox items|{navbox_param}}}}}"
-        else:
-            navbox = f"{{{{Navbox items/{language_code}|{navbox_param}}}}}"
-    else:
-        if language_code == "en":
-            navbox = f"{{{{Navbox items}}}}"
-        else:
-            navbox = f"{{{{Navbox items/{language_code}}}}}"
-
-    # Return the formatted 'See also' section along with the Navbox template
-    return f"{see_also_list}\n\n{navbox}"
-"""
-
-def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox, consumables_dir,
-                  infobox_data_list, item_id_dict, fixing_dir, code_dir, distribution_dir, history_dir, crafting_dir,
-                  language_code, pbar):
-    """
-        Assembles the body content for an item's article.
-
-        Args:
-            name (str): The name of the item.
-            original_filename (str): The original filename of the item.
-            infobox_name (str): The name of the infobox.
-            item_id (str): The unique ID of the item.
-            category (str): The category of the item.
-            skill_type (str): The skill type of the item.
-            infobox (str): The contents of the item's infobox.
-            consumables_dir (str): The directory containing consumables data.
-            infobox_data_list (list): A list of dictionaries containing extracted infobox data.
-            item_id_dict (dict): A dictionary mapping item IDs to names.
-            fixing_dir (str): The directory containing fixing data.
-            code_dir (str): The directory containing code data.
-            distribution_dir (str): The directory containing distribution data.
-            history_dir (str): The directory containing history files.
-            language_code (str): The language code to use for the generated content.
-
-        Returns:
-            str: The assembled body content for the item's article.
-        """
-
+def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type,
+                  infobox, consumables_dir, fixing_dir, code_dir, distribution_dir,
+                  history_dir, crafting_dir, building_dir, teachedrecipes_dir,
+                  body_parts_dir, language_code,
+                  ):
     language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
-    headers = language_data["headers"]
-    help_text = language_data["help_text"]
+    headers       = language_data["headers"]
+    help_text     = language_data["help_text"]
 
-    body_content = f"\n=={headers['Usage']}==\n{help_text}\n"
+    body = f"\n=={headers['Usage']}==\n{help_text}\n"
 
-    consumable_properties = generate_consumable_properties(item_id, consumables_dir)
-    if consumable_properties:
-        body_content += f"\n==={headers['Consumable properties']}===\n{consumable_properties}\n"
+    # Crafting
+    crafting_inner = generate_crafting(item_id, crafting_dir, teachedrecipes_dir, language_code)
+    if crafting_inner:
+        body += f"\n===Crafting===\n{crafting_inner}\n"
+
+    # Building
+    build_txt = generate_building(item_id, building_dir)
+    if build_txt:
+        body += f"\n===Building===\n{build_txt}\n"
+
+    # Body part
+    bp = generate_body_part(item_id, body_parts_dir)
+    if bp:
+        body += f"\n===Body part===\n{bp}\n"
+
+    # Consumable properties
+    cons = generate_consumable_properties(item_id, consumables_dir)
+    if cons:
+        body += f"\n==={headers['Consumable properties']}===\n{cons}\n"
+
+    # Condition
+    cond = generate_condition(name, category, skill_type, infobox, fixing_dir, language_code)
+    if cond:
+        body += f"\n===Condition===\n{cond}\n"
+
+
 
     sections = {
-        headers['Condition']: generate_condition(name, category, skill_type, infobox, fixing_dir, language_code),
-        "Crafting": generate_crafting(item_id, crafting_dir, language_code),
-        headers['Location']: generate_location(original_filename, infobox_name, item_id, distribution_dir),
-        "History": generate_history(item_id, history_dir, language_code),
-        headers['Code']: generate_code(item_id, code_dir) + "\n\n{{Navbox items}}",
-        # COMMENTED OUT FOR EFFICIENCY # headers['See also']: generate_see_also(language_code, {
-#            'name': name,
-#            'category': category,
-#            'skill_type': skill_type,
-#            'tags': re.findall(r'\|tag\d?\s*=\s*(.+)', infobox),
-#            'item_id': item_id
-#        }, infobox_data_list, item_id_dict)
+        "Obtaining": generate_obtaining(item_id, crafting_dir, original_filename, infobox_name, distribution_dir),
+        "History":    generate_history(item_id, history_dir, language_code),
+        headers['Code']: generate_code(item_id, code_dir) + "\n\n==Navigation==\n{{Navbox items}}",
     }
+    for title, content in sections.items():
+        if content and content.strip():
+            body += f"\n=={title}==\n{content}\n"
 
-    for section, content in sections.items():
-        if content is None:
-            echo_warning(f"{item_id} has no content for '{section}'")
-            continue
-        if content.strip():
-            body_content += f"\n=={section}==\n{content}\n"
-        else:
-            continue
+    return body.strip()
 
-    return body_content.strip()
+
+def process_files(file_path,
+                  output_dir,
+                  consumables_dir,
+                  item_id_dict,
+                  generate_all,
+                  fixing_dir,
+                  code_dir,
+                  distribution_dir,
+                  history_dir,
+                  crafting_dir,
+                  building_dir,
+                  teached_dir,
+                  body_parts_dir,
+                  language_code,
+                  pbar):
+    try:
+        with open(file_path, 'r', encoding='utf-8') as fh:
+            content = fh.read()
+    except Exception as e:
+        echo_error(f"Error reading {file_path}: {e}")
+        return
+
+    infobox_match = re.search(r'(\{\{Infobox item.*?\}\})', content, re.DOTALL)
+    if not infobox_match:
+        echo_warning(f"Infobox not found in {file_path}")
+        return
+    infobox = infobox_match.group(1)
+
+    item_id_match = re.search(r'\|item_id\s*=\s*(.+)', infobox)
+    if not item_id_match:
+        echo_warning(f"Item ID not found in {file_path}")
+        return
+    item_id = item_id_match.group(1).strip()
+
+    if not generate_all and item_id in item_id_dict:
+        return
+
+    version_match = re.search(r'\|infobox_version\s*=\s*([\d\.]+)', infobox)
+    infobox_version = version_match.group(1) if version_match else ""
+    name_match = re.search(r'\|name\s*=\s*(.+)', infobox)
+    name = name_match.group(1).strip() if name_match else ""
+    lowercase_name = name.lower()
+    category_match = re.search(r'\|category\s*=\s*(.+)', infobox)
+    category = category_match.group(1).strip() if category_match else ""
+    skill_type_match = re.search(r'\|skill_type\s*=\s*(.+)', infobox)
+    skill_type = skill_type_match.group(1).strip() if skill_type_match else ""
+
+    header = generate_header(category, skill_type, infobox_version, language_code, name)
+    body_content = assemble_body(
+        name,
+        os.path.basename(file_path),
+        name,
+        item_id,
+        category,
+        skill_type,
+        infobox,
+        consumables_dir,
+        fixing_dir,
+        code_dir,
+        distribution_dir,
+        history_dir,
+        crafting_dir,
+        building_dir,
+        teached_dir,
+        body_parts_dir,
+        language_code,
+    )
+    intro = generate_intro(lowercase_name, language_code)
+
+    new_content = f"{header}\n{infobox}\n{intro}\n\n{body_content}"
+    safe_id = re.sub(r'[^\w\-_\. ]', '_', item_id) + '.txt'
+    new_path = os.path.join(output_dir, safe_id)
+    try:
+        with open(new_path, 'w', encoding='utf-8') as fh:
+            fh.write(new_content.strip())
+    except Exception as e:
+        echo_error(f"Error writing {new_path}: {e}")
 
 
 def main(run_directly=False):
-    # 'run_directly' is used to determine if the script was run directly, or called from another module, such as main.py.
     if not run_directly:
-        # Only change the language if the script wasn't run directly - this is already done by get_language_code() if it's undefined.
         Language.init()
     language_code = Language.get()
 
-    global see_also_cache
-    CACHE_FILE = "item_see_also_data.json"
-    see_also_cache_file = os.path.join(DATA_DIR, CACHE_FILE)
-    see_also_cache = load_cache(see_also_cache_file, "see also")
+    cache_file = "item_see_also_data.json"
+    see_also_cache = load_cache(os.path.join(DATA_DIR, cache_file), "see also")
 
-    output_root_dir = OUTPUT_LANG_DIR.format(language_code=language_code)
     output_item_dir = ITEM_DIR.format(language_code=language_code)
-
     infobox_dir = os.path.join(output_item_dir, "infoboxes")
     output_dir = os.path.join(output_item_dir, "articles")
     consumables_dir = os.path.join("output", language_code, "consumables")
@@ -814,52 +784,57 @@ def main(run_directly=False):
     distribution_dir = os.path.join("output", "distributions", "complete")
     history_dir = os.path.join("resources", "history")
     code_dir = os.path.join("output", "codesnips")
-    crafting_dir = os.path.join("output", "recipes", "crafting_combined")
+    crafting_dir = os.path.join("output", "recipes", "crafting")
+    building_dir = os.path.join("output", "recipes", "building")
+    teached_dir = os.path.join("output", "recipes", "teachedrecipes")
+    body_parts_dir = os.path.join("output", language_code, "body_parts")
 
-    warnings = []
-
-    if not os.path.exists(infobox_dir):
+    if not os.path.isdir(infobox_dir):
         echo_warning("Infoboxes directory not found")
         sys.exit(1)
-
     text_files = [f for f in os.listdir(infobox_dir) if f.endswith('.txt')]
-
     if not text_files:
         echo_warning("Infoboxes not found")
         sys.exit(1)
 
     echo_info(f"{len(text_files)} files found")
-
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
 
     while True:
-        user_choice = input(
-            "Do you want to generate:\n1: All items\n2: New items (Don't exist on the wiki currently)\nQ: Quit\n> ").strip().lower()
-        if user_choice == 'q':
-            return
-        if user_choice in ['1', '2']:
+        choice = input("Do you want to generate:\n1: All items\n2: New items\nQ: Quit\n> ").strip().lower()
+        if choice in ('1', '2', 'q'):
             break
-        echo("Invalid input. Please enter 1 or 2.")
-    generate_all = user_choice == '1'
+        echo("Invalid input. Please enter 1, 2, or Q.")
+    if choice == 'q':
+        return
+    generate_all = (choice == '1')
 
-    infobox_data_list = load_infoboxes(infobox_dir)
     item_id_dict = load_item_id_dictionary(dictionary_dir)
 
     with tqdm(total=len(text_files), desc="Generating articles", bar_format=PBAR_FORMAT, unit=" files") as pbar:
-        for text_file in text_files:
-            pbar.set_postfix_str(f"Processing: {text_file[:60].rstrip('.txt')}")
-            file_path = os.path.join(infobox_dir, text_file)
-            process_file(file_path, output_dir, consumables_dir, infobox_data_list, item_id_dict, generate_all, fixing_dir,
-                        code_dir, distribution_dir, history_dir, crafting_dir, language_code, pbar=pbar)
-            
+        for fname in text_files:
+            pbar.set_postfix_str(f"Processing: {fname[:-4]}")
+            process_files(
+                os.path.join(infobox_dir, fname),
+                output_dir,
+                consumables_dir,
+                item_id_dict,
+                generate_all,
+                fixing_dir,
+                code_dir,
+                distribution_dir,
+                history_dir,
+                crafting_dir,
+                building_dir,
+                teached_dir,
+                body_parts_dir,
+                language_code,
+                pbar
+            )
             pbar.update(1)
         pbar.bar_format = f"Item articles written to '{output_dir}'."
 
-    if warnings:
-        echo_warning("\n".join(warnings))
-    
-    save_cache(see_also_cache, CACHE_FILE, suppress=True)
+    save_cache(see_also_cache, cache_file, suppress=True)
 
 
 if __name__ == "__main__":

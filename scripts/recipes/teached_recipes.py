@@ -18,7 +18,6 @@ def main():
             teached_recipes = [teached_recipes]
 
         lines = [
-            "===Learned recipes===",
             "Reading this item will teach the following crafting recipes:"
         ]
 

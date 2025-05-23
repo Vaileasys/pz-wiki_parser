@@ -21,7 +21,6 @@ def main():
             researchable_recipes = [researchable_recipes]
 
         lines = [
-            "===Researchable recipes===",
             "The following recipes can be learned by researching this item:",
             "",
             f"{{{{Crafting/sandbox|id={item_id}_research"

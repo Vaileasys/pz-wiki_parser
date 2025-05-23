@@ -904,22 +904,6 @@ def output_item_article_lists(crafting_recipe_map: dict[str, dict], building_rec
         write_file(os.path.join("output", "recipes", "building", f"{tid}.txt"),
                    render_template(tid, names))
 
-    # Combine crafting
-    os.makedirs(os.path.join("output", "recipes", "crafting_combined"), exist_ok=True)
-    all_items = set(usage_by_crafting) | set(production_by_item)
-    for iid in all_items:
-        sections: list[str] = []
-        if iid in production_by_item:
-            sections.append("===How it's made===")
-            sections.append(render_template(f"{iid}_howtomake", production_by_item[iid]))
-        if iid in usage_by_crafting:
-            sections.append("")  # blank line before next header
-            sections.append("===What it makes===")
-            sections.append(render_template(f"{iid}_whatitcrafts", usage_by_crafting[iid]))
-
-        write_file(os.path.join("output", "recipes", "crafting_combined", f"{iid}.txt"),
-                   "\n".join(sections))
-
 
 def output_skill_usage(recipe_data_map: dict[str, dict]) -> None:
     """
