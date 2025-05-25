@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from scripts.core.language import Language, Translate
+from scripts.core.language import Translate
 from scripts.core.constants import OUTPUT_DIR, ITEM_DIR
 from scripts.core.cache import load_json
 from scripts.utils.echo import echo_success, echo_info, echo_warning, echo_error, echo_deprecated
@@ -118,6 +118,7 @@ def generate_table(
         table_footer: str = DEF_TABLE_FOOTER,
         caption_top: str = None,
         caption_bottom: str = None,
+        caption: str = None,
         table_before: str = None,
         table_after: str = None,
         do_bot_flag: bool = True,
@@ -151,8 +152,11 @@ def generate_table(
 
     content.append(bot_flag_start + table_wrap_before + table_before + table_header)
 
-    if caption_top:
+    if caption_top and not caption:
         content.append(f'|+ style="caption-side:top; font-weight:normal; | {caption_top}', '|-')
+    
+    if caption:
+        content.append('|+ ' + caption)
 
     content.extend(column_headings)
 
@@ -164,7 +168,7 @@ def generate_table(
         
         content.extend(item_content)
 
-    if caption_bottom and not caption_top:
+    if caption_bottom and not caption_top and not caption:
         content.extend(['|-', f'|+ style="caption-side:bottom; font-weight:normal; border: none;" | {caption_bottom}'])
     
     content.append(table_footer + table_after + table_after_after + bot_flag_end)
@@ -226,6 +230,9 @@ def create_tables(
         table_map: dict = {},
         table_header = DEF_TABLE_HEADER,
         table_footer = DEF_TABLE_FOOTER,
+        caption = None,
+        caption_top = None,
+        caption_bottom = None,
         combine_tables: bool = True,
         root_path: str = os.path.join(ITEM_DIR, "lists"),
         do_bot_flag: bool = True,
@@ -251,7 +258,15 @@ def create_tables(
 
         content = []
 
-        caption, data = process_notes(data)
+        # Reset captions per table
+        local_caption = caption
+        local_caption_top = caption_top
+        local_caption_bottom = caption_bottom
+
+        caption_notes, data = process_notes(data)
+
+        if not local_caption_top and not local_caption_bottom and not local_caption:
+            local_caption_bottom = caption_notes
 
         # Sort by item_name then remove it before writing
         data.sort(key=lambda x: x["item_name"])
@@ -260,7 +275,7 @@ def create_tables(
 
         column_headings = get_column_headings(table_type, table_map, columns)
 
-        content.extend(generate_table(table_type, data, column_headings, table_header, table_footer, caption_bottom=caption, do_bot_flag=do_bot_flag))
+        content.extend(generate_table(table_type, data, column_headings, table_header, table_footer, caption_bottom=local_caption_bottom, caption_top=local_caption_top, caption=local_caption, do_bot_flag=do_bot_flag))
         rel_path = os.path.join(item_type, table_type + ".txt")
         output_dir = write_file(content, rel_path=rel_path, root_path=root_path, suppress=suppress)
 

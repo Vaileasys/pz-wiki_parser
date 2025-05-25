@@ -177,7 +177,7 @@ def parse_foraging():
         "Clothing.lua",
         "CraftingMaterials.lua",
         "DeadAnimals.lua",
-        "ForestGoods.lua",
+        "Firewood.lua",
         "ForestRarities.lua",
         "Fruits.lua",
         "Herbs.lua",
@@ -196,7 +196,7 @@ def parse_foraging():
     # Inject lua: Foraging - initialises and stubs Events table
     lua_runtime = lua_helper.load_lua_file(lua_files, inject_lua=LUA_EVENTS)
     parsed_data = lua_helper.parse_lua_tables(lua_runtime)
-    all_forage_data = parsed_data["forageDefs"]
+    all_forage_data = parsed_data["forageSystem"]["forageDefinitions"]
     save_cache(all_forage_data, "foraging_2.json")
 
     global forage_categories

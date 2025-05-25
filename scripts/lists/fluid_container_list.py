@@ -52,7 +52,7 @@ def get_items():
 
     for item_id, item_data in item_parser.get_item_data().items():
         if 'capacity' in item_data:
-            display_name = Translate.get(item_id, 'DisplayName')
+            display_name = Translate.get(item_id, 'DisplayName', default=item_data.get("DisplayName"))
             page_name = utility.get_page(item_id, display_name)
             item_link = util.link(page_name, display_name)
             icon = utility.get_icon(item_id, True, True, True)
