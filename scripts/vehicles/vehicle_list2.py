@@ -10,6 +10,18 @@ VEHICLE_BLACKLIST = ["Base.SportsCar_ez", "Base.ModernCar_Martin"]
 
 table_map = {}
 
+def check_dash(value, vehicle: Vehicle, burnt=False, wreck=False):
+    """Checks if the value should be a dash instead of None or the usual returned value."""
+    is_burnt = vehicle.is_burnt
+    is_wreck = vehicle.is_wreck
+
+    if burnt and is_burnt:
+        return "-"
+    elif wreck and is_wreck:
+        return "-"
+    else:
+        return value
+
 def generate_data(vehicle_id, table_type, section_type="vehicle"):
     vehicle = Vehicle(vehicle_id)
     
@@ -27,14 +39,14 @@ def generate_data(vehicle_id, table_type, section_type="vehicle"):
     vehicle_data["name"] = page_link if "name" in columns else None
     vehicle_data["type"] = vehicle.get_vehicle_type() if "type" in columns else None
     vehicle_data["mass"] = convert_int(vehicle.get_mass()) if "mass" in columns else None
-    vehicle_data["engine_power"] = convert_int(vehicle.get_engine_power()) if "engine_power" in columns else None
-    vehicle_data["engine_quality"] = vehicle.get_engine_quality() if "engine_quality" in columns else None
-    vehicle_data["engine_loudness"] = vehicle.get_engine_loudness() if "engine_loudness" in columns else None
-    vehicle_data["max_speed"] = convert_int(vehicle.get_max_speed()) if "max_speed" in columns else None
-    vehicle_data["suspension_stiffness"] = convert_int(vehicle.get_suspension_stiffness()) if "suspension_stiffness" in columns else None
-    vehicle_data["seats"] = vehicle.get_seats() if "seats" in columns else None
-    vehicle_data["protection"] = convert_int(vehicle.get_player_damage_protection()) if "protection" in columns else None
-    vehicle_data["glove_box_capacity"] = convert_int(vehicle.get_glove_box_capacity()) if "glove_box_capacity" in columns else None
+    vehicle_data["engine_power"] = check_dash(convert_int(vehicle.get_engine_power()), vehicle, True, True) if "engine_power" in columns else None
+    vehicle_data["engine_quality"] = check_dash(vehicle.get_engine_quality(), vehicle, True, True) if "engine_quality" in columns else None
+    vehicle_data["engine_loudness"] = check_dash(vehicle.get_engine_loudness(), vehicle, True, True) if "engine_loudness" in columns else None
+    vehicle_data["max_speed"] = check_dash(convert_int(vehicle.get_max_speed()), vehicle, True, True) if "max_speed" in columns else None
+    vehicle_data["suspension_stiffness"] = check_dash(convert_int(vehicle.get_suspension_stiffness()), vehicle, True, True) if "suspension_stiffness" in columns else None
+    vehicle_data["seats"] = check_dash(vehicle.get_seats(), vehicle, True, False) if "seats" in columns else None
+    vehicle_data["protection"] = check_dash(convert_int(vehicle.get_player_damage_protection()), vehicle, True, True) if "protection" in columns else None
+    vehicle_data["glove_box_capacity"] = check_dash(convert_int(vehicle.get_glove_box_capacity()), vehicle, True, False) if "glove_box_capacity" in columns else None
     if "trunk_capacity" in columns:
         trunk_capacities = list(vehicle.get_trunk_capacity().values())
         trunk_capacities = [str(capacity) for capacity in trunk_capacities]
@@ -51,9 +63,9 @@ def generate_data(vehicle_id, table_type, section_type="vehicle"):
         vehicle_data["animal_trailer_size"] = animal_trailer_size
     if "lightbar" in columns:
         if vehicle.get_has_lightbar():
-            vehicle_data["lightbar"] = '[[File:UI Tick.png|link=|Has lightbar and siren]]'
+            vehicle_data["lightbar"] = '[[File:UI_Tick.png|link=|Has lightbar and siren]]'
         else:
-            vehicle_data["lightbar"] = '[[File:UI Cross.png|link=|No lightbar and siren]]'
+            vehicle_data["lightbar"] = '[[File:UI_Cross.png|link=|No lightbar and siren]]'
 
 
     vehicle_data["vehicle_id"] = vehicle_id if "vehicle_id" in columns else None
@@ -97,7 +109,9 @@ def find_vehicles(section_type: str):
         vehicle = Vehicle(vehicle_id)
 
         # Skip vehicles that aren't parents
-        if (not vehicle.is_parent and section_type == "vehicle") or vehicle.is_burnt or vehicle.is_wreck:
+        if not vehicle.is_parent and section_type == "vehicle":
+            continue
+        if section_type != "parent" and (vehicle.is_burnt or vehicle.is_wreck):
             continue
 
         table_type = find_table_type(vehicle, section_type)
@@ -113,12 +127,18 @@ def find_vehicles(section_type: str):
 def main():
     global table_map
     table_map, column_headings = table_helper.get_table_data(TABLE_PATH)
+
     all_vehicle_data = find_vehicles("vehicle")
     all_vehicle_data_parent = find_vehicles("parent")
+
     veh_type = os.path.join("lists", "vehicles_by_type")
     veh_type_parent = os.path.join("lists", "vehicles_by_model")
+
+    PARENT_HEADER = '{| class="wikitable theme-red sortable sticky-column mw-collapsible" style="text-align: center;" data-expandtext="{{int:show}}" data-collapsetext="{{int:hide}}"'
+    PARENT_CAPTION = 'style="min-width:300px;" | Variants list'
+
     table_helper.create_tables(veh_type, all_vehicle_data, table_map=table_map, columns=column_headings, root_path=VEHICLE_DIR, suppress=True)
-    table_helper.create_tables(veh_type_parent, all_vehicle_data_parent, table_map=table_map, columns=column_headings, root_path=VEHICLE_DIR, do_bot_flag=False, suppress=True)
+    table_helper.create_tables(veh_type_parent, all_vehicle_data_parent, table_map=table_map, table_header=PARENT_HEADER, caption=PARENT_CAPTION, columns=column_headings, root_path=VEHICLE_DIR, suppress=True)
 
 if __name__ == "__main__":
     main()

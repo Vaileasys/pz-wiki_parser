@@ -8,7 +8,8 @@ from scripts.utils.echo import echo_success
 from scripts.core.language import Translate, Language
 from scripts.core.constants import PBAR_FORMAT
 
-TABLE_HEADER = '{| class="wikitable theme-red sortable"'
+TABLE_HEADER = '{| class="wikitable theme-red sortable mw-collapsible" data-expandtext="{{int:show}}" data-collapsetext="{{int:hide}}"'
+TABLE_CAPTION = '|+ style="min-width:300px;" | Parts list'
 TABLE_HEADINGS = (
     '! Part',
     '! Category',
@@ -103,7 +104,9 @@ def generate_table(vehicle_id, rows):
     mechanic_overlay = vehicle.get_mechanics_overlay()
     if mechanic_overlay:
         content.append(f"[[File:{mechanic_overlay}base.png|thumb|Vehicle mechanics UI for the {vehicle.get_name()}.]]")
+    content.append('<div class="scroll-x">')
     content.append(TABLE_HEADER)
+    content.append(TABLE_CAPTION)
     content.extend(TABLE_HEADINGS)
 
     rows.sort(key=lambda x: x[1]) # Sort by 'Category' (index 1)
@@ -113,6 +116,7 @@ def generate_table(vehicle_id, rows):
             content.append(f'| {cell}')
     
     content.append('|}')
+    content.append('</div>')
     return content
 
 
@@ -123,10 +127,11 @@ def main():
         for vehicle_id in Vehicle.keys():
             pbar.set_postfix_str(f"Processing: {vehicle_id[:30]}")
             
-            rows = process_vehicle(vehicle_id)
-            content = generate_table(vehicle_id, rows)
-            rel_path = os.path.join(REL_DIR, vehicle_id + ".txt")
-            output_dir = write_file(content, rel_path, suppress=True)
+            if Vehicle(vehicle_id).get_parts():
+                rows = process_vehicle(vehicle_id)
+                content = generate_table(vehicle_id, rows)
+                rel_path = os.path.join(REL_DIR, vehicle_id + ".txt")
+                output_dir = write_file(content, rel_path, suppress=True)
 
             pbar.update(1)
     

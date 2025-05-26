@@ -34,6 +34,10 @@ class Vehicle:
         if vehicle_id in cls._instances:
             return cls._instances[vehicle_id]
 
+        if vehicle_id not in cls._vehicles:
+            logger.write(f"Skipped invalid vehicle ID: {vehicle_id}")
+            return None
+
         instance = super().__new__(cls)
         cls._instances[vehicle_id] = instance
         return instance
@@ -221,8 +225,17 @@ class Vehicle:
         return self.name
     
     def find_name(self) -> str:
-        car_name = self.get("carModelName", self.id_type) or self.id_type
+        #car_name = self.get("carModelName", self.id_type) #temp removed
+        car_name = self.id_type #temp
+        car_model = self.get("carModelName")
         name = Translate.get("IGUI_VehicleName" + car_name, lang_code="en")
+
+        # temp block
+        if car_model:
+            new_name = Translate.get("IGUI_VehicleName" + car_model, lang_code="en")
+            if "IGUI_VehicleName" in name:
+                name = new_name
+
         if "Burnt" in car_name:
             unburnt = car_name.replace("Burnt", "")
             unburnt_name = Translate.get("IGUI_VehicleName" + unburnt, lang_code="en")
@@ -812,7 +825,7 @@ class Vehicle:
         return self.glove_box_capacity
 
     def find_glove_box_capacity(self) -> None:
-        glove_box = self.get_part("GloveBox")
+        glove_box = self.get_part("GloveBox") if not self.is_burnt else None
         if glove_box is not None:
             capacity = int(self.find_part_capacity(glove_box, "GloveBox"))
             self.glove_box_capacity = max(capacity, 5)

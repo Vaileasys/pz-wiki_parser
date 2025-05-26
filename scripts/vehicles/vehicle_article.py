@@ -3,12 +3,13 @@ from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.objects.vehicle import Vehicle
 from scripts.objects.item import Item
-from scripts.vehicles import vehicle_infobox, vehicle_parts, vehicle_list2
+from scripts.vehicles import vehicle_infobox, vehicle_parts, vehicle_list2, vehicle_spawns
 from scripts.core.file_loading import read_file, write_file
 from scripts.core.constants import VEHICLE_DIR, PBAR_FORMAT
 from scripts.core.version import Version
 from scripts.utils.util import link
 from scripts.utils.echo import echo_success
+from scripts.parser.outfit_parser import get_outfits, translate_outfit_name
 
 VEH_DIR = VEHICLE_DIR.format(language_code=Language.get())
 
@@ -26,6 +27,7 @@ def generate_header(vehicle: Vehicle):
     header = header.format(category=category)
 
     return [header, page_version]
+
 
 def generate_intro(vehicle: Vehicle):
     name = vehicle.get_name()
@@ -49,43 +51,47 @@ def generate_intro(vehicle: Vehicle):
 
     return [f"A '''{name}''' is a {type_link} in {link('Project Zomboid')}. It is a [[#Variants|variant]] of the {parent_link}{damage}."]
 
+
 def generate_overview(vehicle: Vehicle):
+    outfits_data = get_outfits()
+    def check_outfit_exists(outfit):
+        """Checks if an outfit exists and append a formatted bullet link."""
+        outfits = []
+        if outfits_data.get("FemaleOutfits", {}).get(outfit):
+            outfits.append("* " + link(translate_outfit_name(outfit) + " (female)"))
+        if outfits_data.get("MaleOutfits", {}).get(outfit):
+            outfits.append("* " + link(translate_outfit_name(outfit) + " (male)"))
+        return outfits
+
     content = []
 
+    # Lightbar
     if vehicle.get_has_lightbar():
+        content.append("===Lightbar===")
         content.append(f"The {vehicle.get_name()} features a {link('lightbar')}, which includes a siren.")
     
+    # Key Rings
     key_rings = vehicle.get_special_key_ring()
     if key_rings:
-        key_ring_list = []
+        content.append("===Key rings===")
+        content.append(f"One of the following key rings can spawn along with the vehicle:")
         for item_type in key_rings:
             item = Item(item_type)
-            key_ring_list.append(f"{item.get_icon()} {item.get_link()}")
+            content.append(f"* {item.get_icon()} {item.get_link()}")
 
-        if len(key_ring_list) > 1:
-            content.append(f"\nOne of the following key rings can spawn along with the vehicle:")
-            for key_ring in key_ring_list:
-                content.append(f"*{key_ring}")
-        else:
-            content.append(f"\nThe following key ring can spawn along with the vehicle: {key_ring_list[0]}")
-
+    # Outfits
     zombie_types = vehicle.get_zombie_type()
     if zombie_types:
-        outfits = []
+        content.append("===Outfits===")
+        content.append(f"The vehicle will spawn with zombies in the following outfits:")
         for outfit in zombie_types:
-            outfits.append(link(outfit + " (outfit)"), outfit)
-
-        if len(outfits) > 1:
-            content.append(f"\nThe vehicle will spawn with zombies in the following outfits:")
-            for outfit in outfits:
-                content.append(f"* {outfit}")
-        else:
-            content.append(f"\nThe vehicle will spawn with zombies in the following outfit: {outfits[0]}")
+            content.extend(check_outfit_exists(outfit))
 
     return content
 
+
 def generate_mechanics(vehicle: Vehicle):
-    DISMANTLING = "{vehicle_type} " + f"vehicles can be dismantled with a {link('Welder Mask', 'welder mask')} and {link('Propane Torch', 'propane torch')}, providing some metal {link('Material', 'materials')}, destroying the vehicle. A higher {link('metalworking')} skill will yield more usable materials."
+    DISMANTLING = "{vehicle_type} " + f"vehicles can be dismantled with a {link('Welder Mask', 'welder mask')} and {link('Propane Torch', 'propane torch')}, providing some metal {link('Material', 'materials')}, destroying the vehicle. A higher {link('welding')} skill will yield more usable materials."
     content = ["{{Main|Mechanics}}"]
     if vehicle.is_burnt:
         content.append("A burnt vehicle cannot be salvaged for parts, and the mechanics menu will display no useful information.")
@@ -96,26 +102,45 @@ def generate_mechanics(vehicle: Vehicle):
         vehicle_type = "Burnt" if vehicle.is_burnt else "Wrecked"
         content.extend(["\n===Dismantling===", DISMANTLING.format(vehicle_type=vehicle_type)])
     if not vehicle.is_burnt:
-        content.extend(["\n===Parts===", "The below table shows a list of parts this vehicle can have and the requirements to install/uninstall."])
+        content.extend(["\n===Parts===", "The table below shows a list of parts this vehicle can have and the requirements to install/uninstall."])
         content.extend(load_file(rel_path=os.path.join("mechanics", vehicle.vehicle_id + ".txt")))
 
     return content
 
-def generate_see_also():
-    return ["*{{ll|Vehicle Key}}", "*{{ll|Mechanic}}", "*{{ll|Vehicle Knowledge}}"]
+
+def generate_location(vehicle: Vehicle):
+    content = []
+    content.extend(load_file(rel_path=os.path.join("vehicle_spawns", vehicle.vehicle_id + ".txt")))
+
+    return content
+
+
+def generate_see_also(vehicle: Vehicle):
+    content = ["Mechanic", "Vehicle Knowledge"]
+    if vehicle.is_burnt or vehicle.is_wreck:
+        content.append("Vehicle")
+    else:
+        content.extend(["Vehicle Key", "Car Wreck"])
+    content = sorted(content)
+    content = [f"*{{{{ll|{page}}}}}" for page in content]
+    return content
+
 
 def load_file(rel_path):
     path = os.path.join(VEH_DIR, rel_path)
-    file_str = read_file(path)
-    return file_str.splitlines()
+    if os.path.exists(path):
+        file_str = read_file(path)
+        return file_str.splitlines()
+    return []
+    
 
 def load_modules():
     vehicle_infobox.main(pre_choice="1")
     vehicle_parts.main()
     vehicle_list2.main()
+    vehicle_spawns.main()
 
 def process_vehicle(vehicle_id):
-    
     if vehicle_id in VEHICLE_BLACKLIST:
         return
     
@@ -129,8 +154,9 @@ def process_vehicle(vehicle_id):
     intro_content = generate_intro(vehicle)
     overview_content = generate_overview(vehicle)
     mechanics_content = generate_mechanics(vehicle)
+    location_content = generate_location(vehicle)
     variants_content = load_file(rel_path=os.path.join("lists", "vehicles_by_model", parent_id + ".txt"))
-    see_also_content = generate_see_also()
+    see_also_content = generate_see_also(vehicle)
 
     content = []
 
@@ -139,14 +165,21 @@ def process_vehicle(vehicle_id):
     content.extend(infobox_content)
     content.extend(intro_content)
 
-    content.append("\n==Overview==")
-    content.extend(overview_content)
+    if overview_content:
+        content.append("\n==Overview==")
+        content.extend(overview_content)
 
-    content.append("\n==Mechanics==")
-    content.extend(mechanics_content)
+    if mechanics_content:
+        content.append("\n==Mechanics==")
+        content.extend(mechanics_content)
+    
+    if location_content:
+        content.append("\n==Location==")
+        content.extend(location_content)
 
-    content.append("\n==Variants==")
-    content.extend(variants_content)
+    if variants_content:
+        content.append("\n==Variants==")
+        content.extend(variants_content)
 
     content.append("\n==See also==")
     content.extend(see_also_content)
