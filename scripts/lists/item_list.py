@@ -5,6 +5,7 @@ from scripts.core import logger
 from scripts.core.language import Language, Translate
 from scripts.core.constants import (PBAR_FORMAT, OUTPUT_DIR)
 from scripts.utils.echo import echo_success, echo_warning
+from scripts.core.constants import ITEM_DIR
 
 filters = {
 #    'ExampleItemPrefix': (True,),
@@ -31,17 +32,12 @@ def translate_category(category, property="DisplayCategory"):
 
 
 def write_to_output(items_data):
-    language_code = Language.get()
-    output_dir = f'{OUTPUT_DIR}/{language_code}/item_list/'
+    output_dir = os.path.join(ITEM_DIR.format(language_code=Language.get()), "lists")
     output_file = f'item_list.txt'
     os.makedirs(output_dir, exist_ok=True)
     output_path = os.path.join(output_dir, output_file)
 
     content = []
-
-    lc_subpage = ""
-    if language_code != "en":
-        lc_subpage = f"/{language_code}"
     
     content.append('{| class="wikitable theme-blue"')
     translated_header = Translate.get_wiki(HEADER)
@@ -62,8 +58,8 @@ def write_to_output(items_data):
             icons_image = ' '.join([f"[[File:{icon}|32x32px]]" for icon in icons])
             item_link = f"[[{page_name}]]"
 
-            if language_code != "en" or page_name != item_name:
-                item_link = f"[[{page_name}{lc_subpage}|{item_name}]]"
+            if Language.get() != "en" or page_name != item_name:
+                item_link = f"[[{page_name}{Language.get_subpage}|{item_name}]]"
 
             if id_rec:
                 content.append('|-')

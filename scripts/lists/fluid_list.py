@@ -4,6 +4,7 @@ from scripts.core.language import Language, Translate
 from scripts.parser import fluid_parser
 from scripts.utils import utility
 from scripts.utils.echo import echo_success
+from scripts.core.constants import FLUID_DIR
 
 #TODO: add translations
 
@@ -24,11 +25,9 @@ HEADER = """{| class="wikitable theme-red sortable sticky-column" style="text-al
 ! <<fluid_id>>
 |-"""
 
-
 # Write fluid data to file
 def write_fluids_to_file(items, file_name):
-    language_code = Language.get()
-    output_dir = os.path.join("output", language_code, "item_list")
+    output_dir = os.path.join(FLUID_DIR.format(language_code=Language.get()), "lists")
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 

@@ -9,6 +9,7 @@ from scripts.core.language import Language, Translate
 from scripts.parser import item_parser, fluid_parser
 from scripts.utils import utility, util
 from scripts.utils.echo import echo_success, echo_info
+from scripts.core.constants import ITEM_DIR
 
 HEADER = """{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"
 ! Icon
@@ -22,8 +23,7 @@ HEADER = """{| class="wikitable theme-red sortable sticky-column" style="text-al
 |-"""
 
 def write_items_to_file(items, file_name):
-    language_code = Language.get()
-    output_dir = os.path.join("output", language_code, "item_list")
+    output_dir = os.path.join(ITEM_DIR.format(language_code=Language.get()), "lists")
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 

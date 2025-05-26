@@ -1,6 +1,8 @@
+import os
 from scripts.objects.item import Item
 from scripts.core.file_loading import write_file
 from scripts.utils.util import convert_int
+from scripts.core.constants import ITEM_DIR
 
 def generate_table(data):
     content = []
@@ -77,7 +79,8 @@ def generate_data():
 def main():
     data = generate_data()
     content = generate_table(data)
-    write_file(content)
+    root_path = os.path.join(ITEM_DIR, "lists")
+    write_file(content, root_path=root_path, rel_path="fuel.txt")
 
 if __name__ == "__main__":
     main()
