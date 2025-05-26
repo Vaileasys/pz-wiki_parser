@@ -4,6 +4,15 @@ import xml.etree.ElementTree as ET
 import re
 from difflib import SequenceMatcher
 from scripts.core.version import Version
+from scripts.utils.echo import echo_error, echo_success
+
+_outfits_cache = {}
+
+def get_outfits():
+    """Returns the generated outfit data."""
+    if not _outfits_cache:
+        main()
+    return _outfits_cache
 
 def translate_outfit_name(outfit_label):
     # Add spaces before capital letters, but skip if preceded by "KY"
@@ -32,52 +41,55 @@ def guid_item_mapping(guid_table):
             filename = os.path.splitext(os.path.basename(path))[0]
             guid_mapping[guid] = filename
     except ET.ParseError as e:
-        print(f"Error parsing GUID table XML: {e}")
+        echo_error(f"Error parsing GUID table XML: {e}")
     return guid_mapping
 
 
-def get_outfits(xml_file, guid_mapping):
+def parse_outfits(xml_file, guid_mapping):
     """Parse the outfits XML file and return a structured JSON based on GUID mapping."""
-    try:
-        tree = ET.parse(xml_file)
-        root = tree.getroot()
-    except ET.ParseError as e:
-        print(f"Error parsing clothing XML: {e}")
-        return {}
+    global _outfits_cache
+    if not _outfits_cache:
+        try:
+            tree = ET.parse(xml_file)
+            root = tree.getroot()
+        except ET.ParseError as e:
+            echo_error(f"Error parsing clothing XML: {e}")
+            return {}
 
-    output_json = {
-        "FemaleOutfits": {},
-        "MaleOutfits": {}
-    }
+        output_json = {
+            "FemaleOutfits": {},
+            "MaleOutfits": {}
+        }
 
-    for outfit in root.findall('.//m_FemaleOutfits') + root.findall('.//m_MaleOutfits'):
-        outfit_type = "FemaleOutfits" if outfit.tag == 'm_FemaleOutfits' else "MaleOutfits"
-        outfit_name = outfit.find('m_Name').text if outfit.find('m_Name') is not None else "Unknown Outfit"
-        outfit_guid = outfit.find('m_Guid').text if outfit.find('m_Guid') is not None else "No GUID"
-        items_with_probabilities = {}
+        for outfit in root.findall('.//m_FemaleOutfits') + root.findall('.//m_MaleOutfits'):
+            outfit_type = "FemaleOutfits" if outfit.tag == 'm_FemaleOutfits' else "MaleOutfits"
+            outfit_name = outfit.find('m_Name').text if outfit.find('m_Name') is not None else "Unknown Outfit"
+            outfit_guid = outfit.find('m_Guid').text if outfit.find('m_Guid') is not None else "No GUID"
+            items_with_probabilities = {}
 
-        for item_block in outfit.findall('m_items'):
-            probability_tag = item_block.find('probability')
-            probability = float(probability_tag.text) * 100 if probability_tag is not None else 100
-            probability = int(probability)
+            for item_block in outfit.findall('m_items'):
+                probability_tag = item_block.find('probability')
+                probability = float(probability_tag.text) * 100 if probability_tag is not None else 100
+                probability = int(probability)
 
-            item_guid = item_block.find('itemGUID').text if item_block.find('itemGUID') is not None else None
-            if item_guid:
-                item_name = guid_mapping.get(item_guid, item_guid)
-                items_with_probabilities[item_name] = probability
+                item_guid = item_block.find('itemGUID').text if item_block.find('itemGUID') is not None else None
+                if item_guid:
+                    item_name = guid_mapping.get(item_guid, item_guid)
+                    items_with_probabilities[item_name] = probability
 
-            for subitem in item_block.findall('.//subItems/itemGUID'):
-                subitem_guid = subitem.text
-                subitem_name = guid_mapping.get(subitem_guid, subitem_guid)
-                items_with_probabilities[subitem_name] = probability
+                for subitem in item_block.findall('.//subItems/itemGUID'):
+                    subitem_guid = subitem.text
+                    subitem_name = guid_mapping.get(subitem_guid, subitem_guid)
+                    items_with_probabilities[subitem_name] = probability
 
-        if outfit_name:
-            output_json[outfit_type][outfit_name] = {
-                "GUID": outfit_guid,
-                "Items": items_with_probabilities
-            }
+            if outfit_name:
+                output_json[outfit_type][outfit_name] = {
+                    "GUID": outfit_guid,
+                    "Items": items_with_probabilities
+                }
+        _outfits_cache = output_json
 
-    return output_json
+    return _outfits_cache
 
 
 def generate_articles(outfits_json, output_dir, translated_names):
@@ -219,7 +231,7 @@ def generate_name_guid_table(translated_names, outfits_json, output_file):
     # Write the table to the output file
     with open(output_file, 'w', encoding='utf-8') as file:
         file.write(table_content)
-    print(f"Name-GUID table written to {output_file}")
+    echo_success(f"Name-GUID table written to {output_file}")
 
 
 def main():
@@ -234,14 +246,14 @@ def main():
     outfits_json_path = os.path.join(json_output_dir, "outfits.json")
 
     guid_mapping = guid_item_mapping(guid_table_path)
-    outfits_json = get_outfits(outfits_xml_path, guid_mapping)
+    outfits_json = parse_outfits(outfits_xml_path, guid_mapping)
 
     translated_names = generate_translated_names(outfits_json)
 
     # Save outfits JSON data
     with open(outfits_json_path, 'w', encoding='utf-8') as json_file:
         json.dump(outfits_json, json_file, ensure_ascii=False, indent=4)
-    print(f"Outfits data written to {outfits_json_path}")
+    echo_success(f"Outfits data written to {outfits_json_path}")
 
     # Generate articles
     generate_articles(outfits_json, articles_output_dir, translated_names)
