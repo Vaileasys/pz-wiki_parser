@@ -6,7 +6,7 @@ from scripts.core.language import Language
 from scripts.core.cache import load_cache
 from scripts.utils.echo import echo_error
 from scripts.tiles.tiles_infobox import extract_tile_stats, prepare_tile_list, build_misc_params
-from scripts.core.page_manager import init as init_pages, get_pages_from_id
+from scripts.core.page_manager import init as init_pages, get_pages
 
 MOVABLE_DEFINITIONS_CACHE_FILE = "movable_definitions.json"
 
@@ -507,7 +507,7 @@ def generate_furniture_lists(named_tiles_data: dict) -> None:
             found = None
             for vk in order:
                 try:
-                    pages = get_pages_from_id(vk, id_type="sprite_id")
+                    pages = get_pages(vk, id_type="sprite_id")
                 except KeyError:
                     pages = None
                 if pages:
