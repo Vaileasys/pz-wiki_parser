@@ -18,14 +18,14 @@ def main():
             teached_recipes = [teached_recipes]
 
         lines = [
-            "Reading this item will teach the following crafting recipes:"
+            f"<!-- Bot flag|TeachedRecipes|id={item_id} -->\nReading this item will teach the following recipes:"
         ]
 
         for recipe in teached_recipes:
             recipe_link = get_recipe(recipe)
             lines.append(f"*{recipe_link}")
 
-        output_content = "\n".join(lines)
+        output_content = "\n".join(lines) + f"\n<!-- Bot flag end|TeachedRecipes|id={item_id} -->"
         teached_file_path = os.path.join(teached_dir, f"{item_id}_Teached.txt")
 
         try:
