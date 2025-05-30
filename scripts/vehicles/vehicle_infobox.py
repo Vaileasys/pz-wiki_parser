@@ -8,7 +8,7 @@ from scripts.core.language import Language, Translate
 from scripts.core.file_loading import write_file
 from scripts.utils.echo import echo_warning, echo_success
 from scripts.core.constants import VEHICLE_DIR
-from scripts.utils.util import convert_int, link
+from scripts.utils.util import convert_int, link, enumerate_params, check_zero
 
 ROOT_DIR = os.path.join(VEHICLE_DIR.format(language_code=Language.get()), "infoboxes")
 
@@ -21,24 +21,6 @@ def get_vehicle():
             return query_id
         echo_warning(f"No vehicle found for '{query_id}', please try again.")
 
-
-def enumerate_params(parameters):
-    new_parameters = {}
-    for key, value in parameters.items():
-        # Remove key-value pairs if they have no value
-        if not value:
-            continue
-        if isinstance(value, list):
-            new_parameters[key] = value[0]
-            for i, v in enumerate(value[1:], start=2):
-                new_parameters[f"{key}{i}"] = v
-        else:
-            new_parameters[key] = value
-    return new_parameters
-
-def check_zero(value: int|float) -> int|float|None:
-    """Returns None if the value is zero."""
-    return None if float(value) == 0.0 else value
 
 def generate_data(vehicle_id:str):
     try:

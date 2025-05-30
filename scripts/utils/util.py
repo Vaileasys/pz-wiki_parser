@@ -134,3 +134,24 @@ def convert_int(value: int | float) -> int | float:
         return str(int(value))
 
     return str(value)
+
+## ------------------------- Infobox helpers ------------------------- ##
+
+def enumerate_params(parameters):
+    new_parameters = {}
+    for key, value in parameters.items():
+        # Remove key-value pairs if they have no value
+        if not value:
+            continue
+        if isinstance(value, list):
+            new_parameters[key] = value[0]
+            for i, v in enumerate(value[1:], start=2):
+                new_parameters[f"{key}{i}"] = v
+        else:
+            new_parameters[key] = value
+    return new_parameters
+
+
+def check_zero(value: int|float, default = None) -> int|float|None:
+    """Returns 'default' if the value is zero."""
+    return default if float(value) == 0.0 else value
