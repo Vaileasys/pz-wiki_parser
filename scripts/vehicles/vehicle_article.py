@@ -4,7 +4,7 @@ from scripts.core.language import Language
 from scripts.objects.vehicle import Vehicle
 from scripts.objects.item import Item
 from scripts.vehicles import vehicle_infobox, vehicle_parts, vehicle_list2, vehicle_spawns
-from scripts.core.file_loading import read_file, write_file
+from scripts.core.file_loading import load_file, write_file
 from scripts.core.constants import VEHICLE_DIR, PBAR_FORMAT
 from scripts.core.version import Version
 from scripts.utils.util import link
@@ -103,14 +103,14 @@ def generate_mechanics(vehicle: Vehicle):
         content.extend(["\n===Dismantling===", DISMANTLING.format(vehicle_type=vehicle_type)])
     if not vehicle.is_burnt:
         content.extend(["\n===Parts===", "The table below shows a list of parts this vehicle can have and the requirements to install/uninstall."])
-        content.extend(load_file(rel_path=os.path.join("mechanics", vehicle.vehicle_id + ".txt")))
+        content.extend(load_file(rel_path=os.path.join("mechanics", vehicle.vehicle_id + ".txt"), root_path=VEH_DIR))
 
     return content
 
 
 def generate_location(vehicle: Vehicle):
     content = []
-    content.extend(load_file(rel_path=os.path.join("vehicle_spawns", vehicle.vehicle_id + ".txt")))
+    content.extend(load_file(rel_path=os.path.join("vehicle_spawns", vehicle.vehicle_id + ".txt"), root_path=VEH_DIR))
 
     return content
 
@@ -125,14 +125,6 @@ def generate_see_also(vehicle: Vehicle):
     content = [f"*{{{{ll|{page}}}}}" for page in content]
     return content
 
-
-def load_file(rel_path):
-    path = os.path.join(VEH_DIR, rel_path)
-    if os.path.exists(path):
-        file_str = read_file(path)
-        return file_str.splitlines()
-    return []
-    
 
 def load_modules():
     vehicle_infobox.main(pre_choice="1")
@@ -150,12 +142,12 @@ def process_vehicle(vehicle_id):
         parent_id = "Base.Trailer"
 
     header_content = generate_header(vehicle)
-    infobox_content = load_file(rel_path=os.path.join("infoboxes", vehicle_id + ".txt"))
+    infobox_content = load_file(rel_path=os.path.join("infoboxes", vehicle_id + ".txt"), root_path=VEH_DIR)
     intro_content = generate_intro(vehicle)
     overview_content = generate_overview(vehicle)
     mechanics_content = generate_mechanics(vehicle)
     location_content = generate_location(vehicle)
-    variants_content = load_file(rel_path=os.path.join("lists", "vehicles_by_model", parent_id + ".txt"))
+    variants_content = load_file(rel_path=os.path.join("lists", "vehicles_by_model", parent_id + ".txt"), root_path=VEH_DIR)
     see_also_content = generate_see_also(vehicle)
 
     content = []

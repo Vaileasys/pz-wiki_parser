@@ -347,6 +347,27 @@ def write_file(content:list, rel_path="output.txt", root_path=None, suppress=Fal
     
     return output_dir
 
+def load_file(rel_path, root_path=None):
+    """
+    Load a text file and return its lines as a list.
+
+    Args:
+        rel_path (str): Relative path to the file.
+        root_path (str, optional): Root directory to join with rel_path. Defaults to 'OUTPUT_LANG_DIR'.
+
+    Returns:
+        list[str]: List of lines from the file, or an empty list if not found.
+    """
+    if root_path is None:
+        root_path = os.path.join(OUTPUT_LANG_DIR)
+
+    path = Path(root_path.format(language_code=Language.get())) / rel_path
+
+    if os.path.exists(path):
+        file_str = read_file(path)
+        return file_str.splitlines()
+    return []
+
 
 if __name__ == "__main__":
 #    print(get_game_file_map())
