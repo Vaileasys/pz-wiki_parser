@@ -2,7 +2,7 @@ import os
 from scripts.parser import script_parser
 from scripts.core.file_loading import get_script_path
 from scripts.core.language import Language, Translate
-from scripts.utils.page_dictionary import PageDict
+from scripts.core.page_manager import get_pages
 from scripts.core import logger
 from scripts.utils.util import link
 from scripts.core.cache import load_json
@@ -41,7 +41,8 @@ class Fluid:
 
         self._module, self._id_type = fluid_id.split(".", 1)
 
-        self._name = None
+        self._name = None # Translated name
+        self._name_en = None # English name
         self._page = None # Wiki page
         self._wiki_link = None # Wiki link
 
@@ -140,18 +141,33 @@ class Fluid:
     @property
     def page(self):
         if self._page is None:
-            self._page = PageDict.get_page(self.fluid_id, type_="fluid") or self.name
+            pages = get_pages(self.fluid_id, id_type="fluid_id")
+            self._page = pages[0] if pages else self.name_en
         return self._page
+
+    @property
+    def display_name(self):
+        return self.get("DisplayName", "Fluid_Name_" + self.id_type)
 
     @property
     def name(self):
         if self._name is None:
-            language_code = Language.get()
-            if language_code == "en":
-                self._name = Translate.get(self.get("DisplayName", self.fluid_id))
-            else:
-                self._name = Translate.get(self.fluid_id, "DisplayName", language_code)
+            name = Translate.get(self.display_name, "Fluid_Name_Fluid")
+            if self._id_type == "TaintedWater":
+                tainted_water = Translate.get("IGUI_ItemNameTaintedWater")
+                name = tainted_water.replace("%1", name)
+            self._name = name
         return self._name
+
+    @property
+    def name_en(self):
+        if self._name_en is None:
+            name = Translate.get(self.display_name, lang_code="en")
+            if self._id_type == "TaintedWater":
+                tainted_water = Translate.get("IGUI_ItemNameTaintedWater", lang_code="en")
+                name = tainted_water.replace("%1", name)
+            self._name_en = name
+        return self._name_en
 
     @property
     def wiki_link(self):
@@ -234,16 +250,20 @@ class Fluid:
     # --- Color --- #
 
     @property
-    def rgb_raw(self):
+    def color_reference(self):
+        return self.data.get('ColorReference', None)
+
+    @property
+    def color(self):
         """Return the fluid color as [R, G, B] integers (0–255)."""
         Fluid._load_color_reference()
 
-        color = self.data.get('ColorReference', self.data.get('Color', [0.0, 0.0, 0.0]))
+        color_ = self.color_reference or self.data.get('Color', [0.0, 0.0, 0.0])
 
-        if isinstance(color, str):
-            rgb_values = Fluid._color_reference["colors"].get(color, [0.0, 0.0, 0.0])
+        if isinstance(color_, str):
+            rgb_values = Fluid._color_reference["colors"].get(color_, [0.0, 0.0, 0.0])
         else:
-            rgb_values = color
+            rgb_values = color_
 
         color_rgb = [int(c * 255) for c in rgb_values]
         return color_rgb
@@ -251,7 +271,7 @@ class Fluid:
     @property
     def rgb(self):
         """Return the fluid color as a wiki RGB template string, e.g., '{{rgb|140, 198, 0}}'."""
-        rgb_values = self.rgb_raw
+        rgb_values = self.color
         return f"{{{{rgb|{rgb_values[0]}, {rgb_values[1]}, {rgb_values[2]}}}}}"
     
     # --- Categories --- #
@@ -263,18 +283,18 @@ class Fluid:
 
     @property
     def blend_whitelist(self):
-        """Return a FluidBlendList wrapping 'BlendWhiteList' (truthy), or None if missing (falsy)."""
+        """Return FluidBlendList for BlendWhiteList (empty if missing)."""
         if not hasattr(self, '_blend_whitelist'):
             blend_data = self.data.get("BlendWhiteList")
-            self._blend_whitelist = FluidBlendList(blend_data) if blend_data else None
+            self._blend_whitelist = FluidBlendList(blend_data or {})
         return self._blend_whitelist
 
     @property
     def blend_blacklist(self):
-        """Return a FluidBlendList wrapping 'BlendBlackList' (truthy), or None if missing (falsy)."""
+        """Return FluidBlendList for BlendBlackList (empty if missing)."""
         if not hasattr(self, '_blend_blacklist'):
             blend_data = self.data.get("BlendBlackList")
-            self._blend_blacklist = FluidBlendList(blend_data) if blend_data else None
+            self._blend_blacklist = FluidBlendList(blend_data or {})
         return self._blend_blacklist
 
 
@@ -319,9 +339,5 @@ class FluidBlendList:
 if __name__ == "__main__":
     Language.get()
 
-    fluid = Fluid("Base.Petrol")
-    print(f'Thirst change: {fluid.thirst_change}')
-    print(f'Whitelist categories: {fluid.blend_whitelist.categories}')
-    print(f'Poison max effect: {fluid.poison.max_effect}')
+    fluid = Fluid("Base.Acid")
     print(f'Page: {fluid.page}')
-    print(f'Wiki link: {fluid.wiki_link}')
