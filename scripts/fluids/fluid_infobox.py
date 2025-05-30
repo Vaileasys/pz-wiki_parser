@@ -1,147 +1,121 @@
 import os
 import shutil
-import json
-from scripts.parser import fluid_parser
-from scripts.core import logger
+from tqdm import tqdm
+from scripts.objects.fluid import Fluid
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
-from scripts.utils import utility
+from scripts.core.constants import FLUID_DIR, PBAR_FORMAT
+from scripts.core.file_loading import write_file
+from scripts.utils.util import enumerate_params, check_zero
 from scripts.utils.echo import echo_warning, echo_success
+from scripts.core import logger
 
-# Get a fluid's data
-def get_fluid():
+ROOT_DIR = os.path.join(FLUID_DIR.format(language_code=Language.get()), "infoboxes")
+
+
+def check_fluid():
+    """Check if a fluid exists"""
     while True:
-        query_fluid_id = input("Enter a fluid id\n> ")
-        for fluid_id, fluid_data in fluid_parser.get_fluid_data().items():
-            if fluid_id == query_fluid_id:
-                return fluid_data, fluid_id
-        echo_warning(f"No fluid found for '{query_fluid_id}', please try again.")
+        query_id = input("Enter a fluid id\n> ")
+        query_id = Fluid.fix_fluid_id(query_id)
+        if query_id in Fluid.keys():
+            return query_id
+        echo_warning(f"No fluid found for '{query_id}', please try again.")
 
 
-# Get a fluid's infobox parameters and write to the output file
-def write_to_output(fluid_data, fluid_id, output_dir):
+def generate_data(fluid_id):
+    """Generate a fluid's infobox parameters"""
     try:
-        # Load color_reference.json to get rgb values
-        with open(os.path.join("resources", "color_reference.json"), "r") as f:
-            color_reference = json.load(f)
+        fluid = Fluid(fluid_id)
 
-        os.makedirs(output_dir, exist_ok=True)
-        output_file = os.path.join(output_dir, f'{fluid_id}.txt')
-        with open(output_file, 'w', encoding='utf-8') as file:
-            file.write("{{Infobox fluid")
+        parameters = {
+            "name": fluid.name,
+            "categories": '<br>'.join(fluid.categories),
+            "blend_whitelist": fluid.blend_whitelist.categories,
+            "blend_blacklist": fluid.blend_blacklist.categories,
+            "unhappy_change": check_zero(fluid.unhappy_change),
+            "stress_change": check_zero(fluid.stress_change),
+            "fatigue_change": check_zero(fluid.fatigue_change),
+            "endurance_change": check_zero(fluid.endurance_change),
+            "flu_reduction": check_zero(fluid.flu_reduction),
+            "pain_reduction": check_zero(fluid.pain_reduction),
+            "sick_reduction": check_zero(fluid.food_sickness_reduction),
+            "hunger_change": check_zero(fluid.hunger_change),
+            "thirst_change": check_zero(fluid.thirst_change),
+            "calories": check_zero(fluid.calories),
+            "carbohydrates": check_zero(fluid.carbohydrates),
+            "proteins": check_zero(fluid.proteins),
+            "lipids": check_zero(fluid.lipids),
+            "alcohol": check_zero(fluid.alcohol),
+            "poison_max_effect": Translate.get("Fluid_Poison_" + fluid.poison.max_effect) if fluid.poison.max_effect != "None" else None,
+            "poison_min_amount": check_zero(fluid.poison.min_amount),
+            "poison_dilute_ratio": check_zero(fluid.poison.dilute_ratio),
+            "fluid_color": ', '.join(str(c) for c in fluid.color),
+            "fluid_color_ref": fluid.color_reference,
+            "fluid_id": f"{fluid_id}",
+            "infobox_version": Version.get()
+        }
 
-            name = utility.get_fluid_name(fluid_data)
-            # Special case for TaintedWater
-            if fluid_id == "TaintedWater":
-                # Get translation for tainted water string
-                tainted_water = Translate.get("ItemNameTaintedWater", 'IGUI')
-                name = tainted_water.replace("%1", name)
+        parameters = enumerate_params(parameters)
+        parameters["infobox_version"] = Version.get()
 
-            color = fluid_data.get('ColorReference', fluid_data.get('Color', [0.0, 0.0, 0.0])),
-
-            if len(color) > 1:
-                rgb_values = color
-            # lookup color_reference for RGB values
-            else:
-                rgb_values = color_reference["colors"].get(color[0], [0.0, 0.0, 0.0])
-
-            color_rgb = [int(c * 255) for c in rgb_values]
-            fluid_color = f"{color_rgb[0]}, {color_rgb[1]}, {color_rgb[2]}"
-
-            properties_data = {}
-            if 'Properties' in fluid_data:
-                properties_data = fluid_data['Properties']
-
-            poison_data = {}
-            if 'Poison' in fluid_data:
-                poison_data = fluid_data['Poison']
-            poison_max_effect = poison_data.get('maxEffect')
-            if poison_max_effect == "None" or None:
-                poison_max_effect = ''
-
-            blend_whitelist_data = {}
-            blend_whitelist = ''
-            if 'BlendWhiteList' in fluid_data:
-                blend_whitelist_data = fluid_data['BlendWhiteList']
-                if isinstance(blend_whitelist_data, dict): # Fix for 'Test' being a string and not a dict
-                    if blend_whitelist_data['whitelist']:
-                        blend_whitelist = '<br>'.join(blend_whitelist_data['categories'])
-                else: blend_whitelist_data = {}
-
-            blend_blacklist_data = {}
-            blend_blacklist = ''
-            if 'BlendBlackList' in fluid_data:
-                blend_blacklist_data = fluid_data['BlendBlackList']
-                if isinstance(blend_blacklist_data, dict): # Fix for 'Test' being a string and not a dict
-                    if blend_blacklist_data['blacklist']:
-                        blend_blacklist = '<br>'.join(blend_blacklist_data['categories'])
-                else: blend_blacklist_data = {}
-
-            parameters = {
-                "name": name,
-                "categories": '<br>'.join(fluid_data.get('Categories', '')),
-                "blend_whitelist": blend_whitelist,
-                "blend_blacklist": blend_blacklist,
-                "unhappy_change": properties_data.get('unhappyChange', ''),
-                "stress_change": properties_data.get('stressChange', ''),
-                "fatigue_change": properties_data.get('fatigueChange', ''),
-                "endurance_change": properties_data.get('enduranceChange', ''),
-                "flu_reduction": properties_data.get('fluReduction', ''),
-                "pain_reduction": properties_data.get('painReduction', ''),
-                "sick_reduction": properties_data.get('foodSicknessReduction', ''),
-                "hunger_change": properties_data.get('hungerChange', ''),
-                "thirst_change": properties_data.get('thirstChange', ''),
-                "calories": properties_data.get('calories', ''),
-                "carbohydrates": properties_data.get('carbohydrates', ''),
-                "proteins": properties_data.get('proteins', ''),
-                "lipids": properties_data.get('lipids', ''),
-                "alcohol": properties_data.get('alcohol', ''),
-                "poison_max_effect": poison_max_effect,
-                "poison_min_amount": poison_data.get('minAmount', ''),
-                "poison_dilute_ratio": poison_data.get('diluteRatio', ''),
-                "fluid_color": fluid_color,
-                "fluid_color_ref": fluid_data.get('ColorReference', ''),
-                "fluid_id": f"Base.{fluid_id}",
-                "infobox_version": Version.get()
-            }
-
-            for key, value in parameters.items():
-                if value:
-                    file.write(f"\n|{key}={value}")
-
-            file.write("\n}}")
+        return parameters
     except Exception as e:
-        logger.write(f"Error writing file {fluid_id}.txt: {e}", True)
+        logger.write(f"Error generating data for {fluid_id}", True, exception=e, category="error")
 
 
-def process_fluid(fluid_data, fluid_id, output_dir):
-    write_to_output(fluid_data, fluid_id, output_dir)
+def process_fluid(fluid_id):
+    parameters = generate_data(fluid_id)
+    if parameters is not None:
+        fluid_id = parameters.get("fluid_id")
+        rel_path = f'{fluid_id}.txt'
+        content = []
+
+        # Generate infobox template
+        content.append("{{Infobox fluid")
+        for key, value in parameters.items():
+            content.append(f"|{key}={value}")
+        content.append("}}")
+
+        write_file(content, rel_path=rel_path, root_path=ROOT_DIR, suppress=True)
 
 
-def automatic_extraction(output_dir):
+def automatic_extraction():
     # Create 'output_dir'
-    if os.path.exists(output_dir):
-        shutil.rmtree(output_dir)
-    os.makedirs(output_dir)
+    if os.path.exists(ROOT_DIR):
+        shutil.rmtree(ROOT_DIR)
+    os.makedirs(ROOT_DIR)
 
-    for fluid_id, fluid_data in fluid_parser.get_fluid_data().items():
-        process_fluid(fluid_data, fluid_id, output_dir)
+    with tqdm(total=len(Fluid.keys()), desc="Processing fluids", unit=" items", bar_format=PBAR_FORMAT, unit_scale=True, leave=False) as pbar:
+        for fluid_id in Fluid.keys():
+            pbar.set_postfix_str(f"Processing: '{fluid_id[:30]}'")
+            process_fluid(fluid_id)
+            pbar.update(1)
 
 
-def main():
-    language_code = Language.get()
-    output_dir = os.path.join("output", language_code, "fluid_infoboxes")
+def main(pre_choice: str = None):
+    """
+    :param pre_choice: str - Automatically sets a choice without querying the user.
+    """
+    # Call early
+    Language.get()
 
     while True:
-        choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
+        options = ("1", "2", "q")
+        if str(pre_choice).lower() not in options:
+            choice = input("1: Automatic\n2: Manual\nQ: Quit\n> ").strip().lower()
+        else:
+            choice = str(pre_choice).lower()
+
         if choice == '1':
-            automatic_extraction(output_dir)
-            echo_success(f"Extraction complete, the files can be found in {output_dir}.")
+            automatic_extraction()
+            echo_success(f"Fluid infoboxes generated and saved to '{ROOT_DIR}'.")
             return
         elif choice == '2':
-            fluid_data, fluid_id = get_fluid()
-            process_fluid(fluid_data, fluid_id, output_dir)
-            echo_success(f"Extraction complete, the file can be found in {output_dir}.")
+            fluid_id = check_fluid()
+            process_fluid(fluid_id)
+            file_path = os.path.join(ROOT_DIR, fluid_id + ".txt")
+            echo_success(f"Fluid infobox generated and saved to '{file_path}'.")
             return
         elif choice == 'q':
             return

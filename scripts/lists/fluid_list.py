@@ -1,120 +1,68 @@
 import os
-import json
 from scripts.core.language import Language, Translate
-from scripts.parser import fluid_parser
-from scripts.utils import utility
+from scripts.objects.fluid import Fluid
+from scripts.utils.util import check_zero
+from scripts.utils.table_helper import get_table_data, create_tables
 from scripts.utils.echo import echo_success
-from scripts.core.constants import FLUID_DIR
+from scripts.core.constants import FLUID_DIR, RESOURCE_DIR
 
-#TODO: add translations
-
-HEADER = """{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"
-! <<name>>
-! <<color>>
-! [[File:Status_Hunger_32.png|32px|link=|<<hunger>>]]
-! [[File:Status_Thirst_32.png|32px|link=|<<thirst>>]]
-! [[File:Fire_01_1.png|32px|link=|<<calories>>]]
-! [[File:Wheat.png|32px|link=|<<carbohydrates>>]]
-! [[File:Butter.png|32px|link=|<<fat>>]]
-! [[File:Steak.png|32px|link=|<<proteins>>]]
-! [[File:SkullPoison.png|link=|<<poison>>]]
-! [[File:Mood_Drunk_32.png|32px|link=|<<alcohol>>]]
-! [[File:Mood_Sleepy_32.png|32px|link=|<<fatigue>>]]
-! [[File:Mood_Stressed_32.png|32px|link=|<<stress>>]]
-! [[File:Mood_Sad_32.png|32px|link=|<<unhappiness>>]]
-! <<fluid_id>>
-|-"""
-
-# Write fluid data to file
-def write_fluids_to_file(items, file_name):
-    output_dir = os.path.join(FLUID_DIR.format(language_code=Language.get()), "lists")
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
-    output_file = os.path.join(output_dir, f"{file_name}.txt")
-    with open(output_file, "w", encoding="utf-8") as file:
-        translated_header = Translate.get_wiki(HEADER)
-        bot_flag_start = f'<!--BOT_FLAG-start-{file_name.replace(" ", "_")}. DO NOT REMOVE-->'
-        bot_flag_end = f'<!--BOT_FLAG-end-{file_name.replace(" ", "_")}. DO NOT REMOVE-->'
-        file.write(bot_flag_start + translated_header)
-        for item in items:
-            for value in item.values():
-                # Replace '0' with '-'
-                value = '-' if value == 0 or value == '0' or value == 'None' else value
-                file.write(f"\n| {value}")
-            file.write(f"\n|-")
-        file.write("\n|}" + bot_flag_end)
-
-    echo_success(f"Fluids written to: {output_file}")
+TABLE_PATH = os.path.join(RESOURCE_DIR, "tables", "fluid_table.json")
+ROOT_PATH = os.path.join(FLUID_DIR, "lists")
 
 
-# Get fluid data for table
-def get_fluids():
-    fluids = []
+def generate_data(fluid_id):
+    """Get fluid data for table"""
+    table_type = "default"
+    columns = table_map.get(table_type) if table_map.get(table_type) is not None else table_map.get("default")
 
-    # Load color_reference.json to get rgb values
-    with open(os.path.join("resources", "color_reference.json"), "r") as f:
-        color_reference = json.load(f)
+    fluid_content = {}
 
-    for fluid_id, fluid_data in fluid_parser.get_fluid_data().items():
-        fluid_id = f"Base.{fluid_id}" # Assume fluid ID is in the 'Base' module
+    fluid = Fluid(fluid_id)
 
-        name = utility.get_fluid_name(fluid_data)
-        if Language.get() != "en":
-            name_en = utility.get_fluid_name(fluid_data, "en")
-            name = f"[[{name_en} (fluid)/{Language.get()}|{name}]]"
-        else:
-            name = f"[[{name} (fluid)|{name}]]"
+    print(fluid_id)
+    fluid_content = {
+        "name": fluid.wiki_link,
+        "color": fluid.rgb,
+        "hunger_change": check_zero(fluid.hunger_change, default='-'),
+        "thirst_change": check_zero(fluid.thirst_change, default='-'),
+        "calories": check_zero(fluid.calories, default='-'),
+        "carbohydrates": check_zero(fluid.carbohydrates, default='-'),
+        "lipids": check_zero(fluid.lipids, default='-'),
+        "proteins": check_zero(fluid.proteins, default='-'),
+        "poison": Translate.get("Fluid_Poison_" + fluid.poison.max_effect) if fluid.poison.max_effect != "None" else "-",
+        "alcohol": check_zero(fluid.alcohol),
+        "fatigue_change": check_zero(fluid.fatigue_change),
+        "stress_change": check_zero(fluid.stress_change),
+        "unhappy_change": check_zero(fluid.unhappy_change),
+        # No fluids with the following data yet
+        #"flu_reduction": check_zero(fluid.flu_reduction),
+        #"pain_reduction": check_zero(fluid.pain_reduction),
+        #"endurance_change": check_zero(fluid.endurance_change),
+        #"food_sickness_reduction": check_zero(fluid.food_sickness_reduction),
+        "fluid_id": fluid_id
+    }
 
-        color = fluid_data.get('ColorReference', fluid_data.get('Color', [0.0, 0.0, 0.0])),
+    # Remove any values that are None
+    fluid_content = {k: v for k, v in fluid_content.items() if v is not None}
 
-        if len(color) > 1:
-            rgb_values = color
-        # lookup color_reference for RGB values
-        else:
-            rgb_values = color_reference["colors"].get(color[0], [0.0, 0.0, 0.0])
+    # Ensure column order is correct
+    fluid_content = {key: fluid_content[key] for key in columns if key in fluid_content}
 
-        color_rgb = [int(c * 255) for c in rgb_values]
-        color_str = f"{{{{rgb|{color_rgb[0]}, {color_rgb[1]}, {color_rgb[2]}}}}}"
+    # Add item_name for sorting
+    fluid_content["item_name"] = fluid.name
 
-        if 'Properties' in fluid_data:
-            properties_data = fluid_data['Properties']
-
-        if 'Poison' in fluid_data:
-            poison_data = fluid_data['Poison']
-            poison = poison_data.get('maxEffect', '-')
-        else:
-            poison = '-'
-
-        fluid_values = {
-            "name": name,
-            "color": color_str,
-            "hunger_change": properties_data.get('hungerChange', '-'),
-            "thirst_change": properties_data.get('thirstChange', '-'),
-            "calories": properties_data.get('calories', '-'),
-            "carbohydrates": properties_data.get('carbohydrates', '-'),
-            "lipids": properties_data.get('lipids', '-'),
-            "proteins": properties_data.get('proteins', '-'),
-            "poison": poison,
-            "alcohol": properties_data.get('alcohol', '-'),
-            "fatigue_change": properties_data.get('fatigueChange', '-'),
-            "stress_change": properties_data.get('stressChange', '-'),
-            "unhappy_change": properties_data.get('unhappyChange', '-'),
-            # No fluids with the following data yet
-#            "flu_reduction": properties_data.get('fluReduction', '-'),
-#            "pain_reduction": properties_data.get('painReduction', '-'),
-#            "endurance_change": properties_data.get('enduranceChange', '-'),
-#            "food_sickness_reduction": properties_data.get('foodSicknessReduction', '-'),
-            "fluid_id": fluid_id
-        }
-
-        fluids.append(fluid_values)
-
-    write_fluids_to_file(fluids, 'fluid')
+    return fluid_content
 
 
 def main():
-    get_fluids()
+    global table_map
+    table_map, column_headings = get_table_data(TABLE_PATH)
+    fluid_data = {"fluid": []}
+
+    for fluid_id in Fluid.keys():
+        fluid_data["fluid"].append(generate_data(fluid_id))
+
+    create_tables("fluid", fluid_data, table_map=table_map, columns=column_headings, root_path=ROOT_PATH)
 
 
 if __name__ == "__main__":

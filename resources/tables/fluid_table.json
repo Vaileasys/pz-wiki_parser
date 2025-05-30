@@ -1,0 +1,52 @@
+{
+    "map": {
+        "default": [
+            "name",
+            "color",
+            "hunger",
+            "thirst",
+            "calories",
+            "carbohydrates",
+            "proteins",
+            "lipids",
+            "poison",
+            "alcohol",
+            "fatigue",
+            "stress",
+            "unhappiness",
+            "item_id"
+        ],
+        "fluid": [
+            "name",
+            "color",
+            "hunger",
+            "thirst",
+            "calories",
+            "carbohydrates",
+            "proteins",
+            "lipids",
+            "poison",
+            "alcohol",
+            "fatigue",
+            "stress",
+            "unhappiness",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "name": "! <<name>>",
+        "color": "! <<color>>",
+        "hunger": "! [[File:Status_Hunger_32.png|32px|link=|<<hunger>>]]",
+        "thirst": "! [[File:Status_Thirst_32.png|32px|link=|<<thirst>>]]",
+        "calories": "! [[File:Fire_01_1.png|32px|link=|<<calories>>]]",
+        "carbohydrates": "! [[File:Wheat.png|32px|link=|<<carbohydrates>>]]",
+        "proteins": "! [[File:Steak.png|32px|link=|<<proteins>>]]",
+        "lipids": "! [[File:Butter.png|32px|link=|<<fat>>]]",
+        "poison": "! [[File:SkullPoison.png|link=|<<poison>>]]",
+        "alcohol": "! [[File:Mood_Drunk_32.png|32px|link=|<<alcohol>>]]",
+        "fatigue": "! [[File:Mood_Sleepy_32.png|32px|link=|<<fatigue>>]]",
+        "stress": "! [[File:Mood_Stressed_32.png|32px|link=|<<stress>>]]",
+        "unhappiness": "! [[File:Mood_Sad_32.png|32px|link=|<<unhappiness>>]]",
+        "fluid_id": "! Fluid ID"
+    }
+}
