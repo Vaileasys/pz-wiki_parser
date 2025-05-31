@@ -39,10 +39,6 @@ def get_table_data(path:str, extra_keys:str|list=None):
     return map, headings
 
 
-#def map_heading_rows():
-
-
-
 def get_column_headings(table_type:str, table_map:dict, columns:dict):
     """
     Returns the list of column headings for a given table type.
@@ -177,33 +173,6 @@ def generate_table(
     content = [Translate.get_wiki(value) for value in content]
 
     return content
-
-
-def write_to_file(content:list, rel_path="list.txt", suppress=False):
-    """
-    Writes content to a file, creating directories as needed.
-
-    :param list content: A list of strings to write to the file.
-    :param str rel_path: The relative path where the file will be saved. If no file extension is given, the path is treated as a directory.
-    :return: The directory the file is saved to.
-    """
-    echo_deprecated("write_to_file() is deprecated, use file_loading.write_file() instead.")
-
-    _output_path = OUTPUT_DIR / rel_path
-    _output_dir = _output_path.parent if _output_path.suffix else _output_path
-    _output_dir.mkdir(parents=True, exist_ok=True)
-
-    if _output_path.suffix:
-        with open(_output_path, 'w', encoding='utf-8') as file:
-            file.write("\n".join(content))
-
-        if not suppress:
-            echo_info(f"File saved to '{_output_path}'")
-        
-    else:
-        echo_error(f"No file written. '{_output_path}' appears to be a directory.")
-    
-    return _output_dir
 
 
 def process_notes(data_list):

@@ -7,7 +7,7 @@ from scripts.core.constants import OUTPUT_LANG_DIR
 from scripts.core.language import Language
 from scripts.core.version import Version
 from scripts.core.cache import save_cache, load_cache
-from scripts.utils.echo import echo, echo_warning, echo_success, echo_error, ignore_warnings
+from scripts.utils.echo import echo_info, echo_warning, echo_success, echo_error, ignore_warnings
 
 #ignore_warnings()
 
@@ -340,7 +340,7 @@ def write_file(content:list, rel_path="output.txt", root_path=None, suppress=Fal
             file.write("\n".join(content))
 
         if not suppress:
-            echo(f"File saved to '{output_path}'")
+            echo_info(f"File saved to '{output_path}'")
         
     else:
         echo_error(f"No file written. '{output_path}' appears to be a directory.")

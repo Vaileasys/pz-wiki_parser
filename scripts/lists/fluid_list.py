@@ -10,16 +10,13 @@ TABLE_PATH = os.path.join(RESOURCE_DIR, "tables", "fluid_table.json")
 ROOT_PATH = os.path.join(FLUID_DIR, "lists")
 
 
-def generate_data(fluid_id):
+def process_fluid(fluid_id):
     """Get fluid data for table"""
     table_type = "default"
     columns = table_map.get(table_type) if table_map.get(table_type) is not None else table_map.get("default")
 
-    fluid_content = {}
-
     fluid = Fluid(fluid_id)
 
-    print(fluid_id)
     fluid_content = {
         "name": fluid.wiki_link,
         "color": fluid.rgb,
@@ -55,14 +52,15 @@ def generate_data(fluid_id):
 
 
 def main():
+    Language.get()
     global table_map
     table_map, column_headings = get_table_data(TABLE_PATH)
     fluid_data = {"fluid": []}
 
     for fluid_id in Fluid.keys():
-        fluid_data["fluid"].append(generate_data(fluid_id))
+        fluid_data["fluid"].append(process_fluid(fluid_id))
 
-    create_tables("fluid", fluid_data, table_map=table_map, columns=column_headings, root_path=ROOT_PATH)
+    create_tables("fluid", fluid_data, table_map=table_map, columns=column_headings, root_path=ROOT_PATH, combine_tables=False)
 
 
 if __name__ == "__main__":
