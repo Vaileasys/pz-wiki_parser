@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from scripts.core.language import Translate
-from scripts.core.constants import OUTPUT_DIR, ITEM_DIR
+from scripts.core.constants import ITEM_DIR, BOT_FLAG, BOT_FLAG_END
 from scripts.core.cache import load_json
 from scripts.utils.echo import echo_success, echo_info, echo_warning, echo_error, echo_deprecated
 from scripts.core.file_loading import write_file
@@ -147,8 +147,8 @@ def generate_table(
     table_before = "" if table_before is None else table_before
     table_after = "" if table_after is None else table_after
 
-    bot_flag_start = f'<!--BOT_FLAG-start-{table_type.replace(" ", "_")}. DO NOT REMOVE-->' if do_bot_flag else ''
-    bot_flag_end = f'<!--BOT_FLAG-end-{table_type.replace(" ", "_")}. DO NOT REMOVE-->' if do_bot_flag else ''
+    bot_flag_start = BOT_FLAG.format(type="table", id=table_type.replace(" ", "_")) if do_bot_flag else ''
+    bot_flag_end = BOT_FLAG_END.format(type="table", id=table_type.replace(" ", "_")) if do_bot_flag else ''
 
     content.append(bot_flag_start + table_wrap_before + table_before + table_header)
 

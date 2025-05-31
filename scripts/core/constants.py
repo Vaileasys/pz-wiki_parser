@@ -20,3 +20,7 @@ RECIPES_DIR = os.path.join(OUTPUT_LANG_DIR, "recipes")
 
 # TQDM progress bar format - 'bar_format' variable
 PBAR_FORMAT = "{l_bar}{bar:30}{r_bar}"
+
+# Other
+BOT_FLAG = "<!-- Bot_flag|type={type}|id={id} -->"
+BOT_FLAG_END = "<!-- Bot_flag_end|type={type}|id={id} -->"
