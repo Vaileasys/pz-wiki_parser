@@ -10,6 +10,8 @@ from scripts.utils.echo import echo_warning, ignore_warnings
 from scripts.core.cache import load_cache, save_cache
 from scripts.core.version import Version
 from scripts.utils.util import link
+from scripts.core.page_manager import get_pages
+from scripts.objects.components import FluidContainer, Durability
 
 class Item:
     _items = None  # Shared cache for all items
@@ -43,17 +45,18 @@ class Item:
 
         item_id = self.fix_item_id(item_id)
 
-        self.item_id = item_id
+        self._item_id = item_id
         self.data = Item._items.get(item_id, {})
 
-        self.module, self.id_type = item_id.split(".", 1)
+        self._module, self._id_type = item_id.split(".", 1)
 
-        self.name = None     # English name
-        self.page = None     # Wiki page
-        self.wiki_link = None # Wiki link
-        self.has_page = None # Page defined (bool)
-        self.icon = None     # Primary icon (str)
-        self.icons = None    # All icons (list)
+        self._name = None
+        self._name_en = None  # English name
+        self._page = None     # Wiki page
+        self._wiki_link = None # Wiki link
+        self._has_page = None # Page defined (bool)
+        self._icon = None     # Primary icon (str)
+        self._icons = None    # All icons (list)
     
     # Allows 'item["DisplayName"]'
     def __getitem__(self, key):
@@ -69,7 +72,7 @@ class Item:
         item_type = self.get("Type", "Unknown")
         source = fr"{self.get_path()}"
 
-        return (f'<Item {name} ({self.item_id}) — {item_type}, "{source}">')
+        return (f'<Item {name} ({self._item_id}) — {item_type}, "{source}">')
 
     @classmethod
     def _load_items(cls):
@@ -167,11 +170,14 @@ class Item:
     ## ------------------------- Misc Methods ------------------------- ##
 
     def page_exists(self) -> bool:
-        if self.has_page is None:
+        if self._has_page is None:
             self.find_page()
-        return self.has_page
+        return self._has_page
     
     ## ------------------------- Property Methods ------------------------- ##
+
+    def get_component(self, key: str):
+        return self.data.get("component", {}).get(key, {})
     
     def get_file(self):
         return self.data.get("SourceFile")
@@ -180,48 +186,48 @@ class Item:
         return get_script_path(self.get_file(), prefer="item")
 
     def get_module(self):
-        return self.module
+        return self._module
 
     def get_id_type(self):
-        return self.id_type
+        return self._id_type
 
     def get_page(self, fallback: str = None) -> str:
         """Returns the page name for this item, calling find_page() if needed."""
-        if self.page is None:
+        if self._page is None:
             if fallback is None:
                 fallback = self.get_name()
             self.find_page(fallback)
-        return self.page
+        return self._page
 
     def find_page(self, fallback: str = "Unknown") -> str:
         """Finds and sets the wiki page name this item belongs to."""
         item_id_data = utility.get_item_id_data(True) #TODO: move this function to a class method
 
-        self.has_page = False
+        self._has_page = False
         for page_name, item_ids in item_id_data.items():
-            if self.item_id in item_ids:
-                self.page = page_name
-                self.has_page = True
-                return self.page
+            if self._item_id in item_ids:
+                self._page = page_name
+                self._has_page = True
+                return self._page
 
-        logger.write(f"Couldn't find a page for '{self.item_id}'")
-        self.page = fallback
-        return self.page
+        logger.write(f"Couldn't find a page for '{self._item_id}'")
+        self._page = fallback
+        return self._page
 
     def get_name(self, language: str = None) -> str:
         """Returns the item name for the current language"""
         language_code = language or Language.get()
 
         if language_code == "en":
-            if self.name is None:
+            if self._name is None:
                 self.find_name("en")
-            return self.name
+            return self._name
 
         return self.find_name(language_code)
 
     def find_name(self, language: str = None) -> str:
         """Finds an item name if it has a special case, otherwise translates the DisplayName."""
-        item_id = self.item_id
+        item_id = self._item_id
         language_code = language or Language.get()
         is_english = (language_code == "en")
 
@@ -266,28 +272,28 @@ class Item:
 
                 name = f"{prefix}{infix}{suffix}"
                 if is_english:
-                    self.name = name
+                    self._name = name
                 return name
         
         display_name = Translate.get(item_id, "DisplayName", "en" if is_english else language_code)
         # Vehicle parts
         if self.get("VehicleType", 0) > 0:
-            self.name = Translate.get("IGUI_ItemNameMechanicalType").replace("%1", display_name).replace("%2", Translate.get("IGUI_VehicleType_" + str(self.get("VehicleType"))))
-            return self.name
+            self._name = Translate.get("IGUI_ItemNameMechanicalType").replace("%1", display_name).replace("%2", Translate.get("IGUI_VehicleType_" + str(self.get("VehicleType"))))
+            return self._name
 
         # Default fallback
         if display_name == item_id:
             display_name = self.get("DisplayName", item_id)
 
         if is_english:
-            self.name = display_name
+            self._name = display_name
         return display_name
     
     def get_link(self) -> str:
         """Return the wiki link for this item."""
-        if self.wiki_link is None:
-            self.wiki_link = link(self.get_page(), self.get_name())
-        return self.wiki_link
+        if self._wiki_link is None:
+            self._wiki_link = link(self.get_page(), self.get_name())
+        return self._wiki_link
     
     def get_icon(self, format: bool = True, all_icons: bool = True, cycling: bool = True, custom_name: str = None) -> str | list[str]:
         """
@@ -299,13 +305,13 @@ class Item:
         # Return raw icons if formatting is disabled
         if not format:
             if all_icons:
-                if self.icons is None:
+                if self._icons is None:
                     self._find_icon()
-                return self.icons
+                return self._icons
             else:
-                if self.icon is None:
+                if self._icon is None:
                     self._find_icon()
-                return self.icon
+                return self._icon
 
         # Otherwise return formatted wiki link
         return self._format_icon(format=True, all_icons=all_icons, cycling=cycling, custom_name=custom_name)
@@ -337,7 +343,7 @@ class Item:
             with open(icons_csv, newline='', encoding='UTF-8') as csv_file:
                 csv_reader = csv.DictReader(csv_file)
                 for row in csv_reader:
-                    if row['item_id'] == self.item_id:
+                    if row['item_id'] == self._item_id:
                         icon = [row['icon'] + ".png"]
                         break
         else:
@@ -385,19 +391,19 @@ class Item:
 
         checked = check_icon_exists(all_icons)
         if checked and checked != all_icons:
-            logger.write(f"Icon was modified for {self.item_id} with icon: {all_icons}", False, "log_modified_icons.txt")
+            logger.write(f"Icon was modified for {self._item_id} with icon: {all_icons}", False, "log_modified_icons.txt")
         elif not checked:
-            logger.write(f"Missing icon for '{self.item_id}' with icon: {all_icons}", False, "log_missing_icons.txt")
+            logger.write(f"Missing icon for '{self._item_id}' with icon: {all_icons}", False, "log_missing_icons.txt")
 
         all_icons = checked or all_icons
-        self.icons = all_icons
-        self.icon = all_icons[0]
+        self._icons = all_icons
+        self._icon = all_icons[0]
 
     def _format_icon(self, format: bool = False, all_icons: bool = False, cycling: bool = False, custom_name: str = None) -> str | list[str]:
         """Returns the icon or formatted wiki markup based on given options. Supports cycling image formatting and translations."""
         if not self.data:
-            echo_warning(f"Item ID '{self.item_id}' doesn't exist")
-            return self.item_id
+            echo_warning(f"Item ID '{self._item_id}' doesn't exist")
+            return self._item_id
 
         # Force all_icons if cycling is True
         if cycling:
@@ -406,13 +412,13 @@ class Item:
 
         # Use cached icons or fetch them
         if all_icons:
-            if self.icons is None:
+            if self._icons is None:
                 self._find_icon()
-            icons = self.icons
+            icons = self._icons
         else:
-            if self.icon is None:
+            if self._icon is None:
                 self._find_icon()
-            icons = self.icon
+            icons = self._icon
 
         if not format:
             return icons
@@ -438,20 +444,7 @@ class Item:
     
     def has_tag(self, tag: str) -> bool:
         return tag in self.get("Tags", [])
-    
-    @property
-    def should_burn(self):
-        """Checks if an item 'should burn', not that it 'can burn'."""
-        if hasattr(self, "_should_burn"):
-            return self._should_burn
-        
-        self._should_burn = True
-        # Logic copied from 'ISCampingMenu.shouldBurn()'
-        is_clothing = self.get("Type", "").lower() == "clothing"
-        fabric_type = self.get("FabricType")
-        if is_clothing and not fabric_type: self._should_burn = False
-        if is_clothing and fabric_type == "Leather": self._should_burn = False
-        return self._should_burn
+
 
     def get_burn_time(self):
         if not hasattr(self, "burn_time"):
@@ -469,7 +462,7 @@ class Item:
             Item.load_burn_data()
 
         valid_fuel = False
-        id_type = self.id_type
+        id_type = self._id_type
         category = self.get("Type", "")
         weight = float(self.get("Weight", 1))
         tags = self.get("Tags", [])
@@ -529,6 +522,128 @@ class Item:
         else:
             self.burn_time = f"{minutes} {minutes_unit}"
     
+    ## ------------------------- Properties ------------------------- ##
+
+    # --- Base Properties --- #
+
+    @property
+    def file(self):
+        return self.data.get("SourceFile")
+
+    @property
+    def path(self):
+        return get_script_path(self.file, prefer="fluid")
+
+    @property
+    def item_id(self):
+        return self._item_id
+
+    @property
+    def module(self):
+        return self._module
+
+    @property
+    def id_type(self):
+        return self._id_type
+    
+    @property
+    def page(self):
+        if self._page is None:
+            pages = get_pages(self.item_id, id_type="item_id")
+            self._page = pages[0] if pages else self.name_en
+        return self._page
+
+    @property
+    def display_name(self):
+        return "ItemName_" + self.item_id
+
+    @property
+    def name(self):
+        if self._name is None:
+            self._name = Translate.get(self.display_name)
+        return self._name
+
+    @property
+    def name_en(self):
+        if self._name_en is None:
+            self._name_en = Translate.get(self.display_name, lang_code="en")
+        return self._name_en
+
+    @property
+    def wiki_link(self):
+        if self._wiki_link is None:
+            self._wiki_link = link(self.page, self.name)
+        return self._wiki_link
+    
+    @property
+    def icon(self):
+        return self.get_icon()
+    
+    # --- Script Properties --- #
+
+    @property
+    def weight(self):
+        return self.data.get("Weight", 1)
+    
+    @property
+    def capacity(self):
+        return self.data.get("Capacity", 0)
+    
+    @property
+    def weight_reduction(self):
+        return self.data.get("WeightReduction", 0)
+
+    # --- Components --- #
+
+    @property
+    def components(self):
+        return list(self.data.get("component", {}).keys())
+
+    @property
+    def fluid_container(self):
+        if not hasattr(self, '_fluid_container'):
+            self._fluid_container = FluidContainer(self.get_component("FluidContainer"))
+        return self._fluid_container
+
+    @property
+    def durability(self):
+        if not hasattr(self, '_durability'):
+            self._durability = Durability(self.get_component("Durability"))
+        return self._durability
+
+    # --- Inferred Properties --- #
+
+    @property
+    def weight_full(self):
+        total_weight = self.weight
+
+        if self.fluid_container:
+            total_weight = self.weight + self.fluid_container.capacity
+        else:
+            total_weight = self.weight + self.capacity
+
+        total_weight = round(total_weight, 2)
+
+        if total_weight.is_integer():
+            return int(total_weight)
+        else:
+            return total_weight
+        
+
+    @property
+    def should_burn(self):
+        """Checks if an item 'should burn', not that it 'can burn'."""
+        if hasattr(self, "_should_burn"):
+            return self._should_burn
+        
+        self._should_burn = True
+        # Logic copied from 'ISCampingMenu.shouldBurn()'
+        is_clothing = self.get("Type", "").lower() == "clothing"
+        fabric_type = self.get("FabricType")
+        if is_clothing and not fabric_type: self._should_burn = False
+        if is_clothing and fabric_type == "Leather": self._should_burn = False
+        return self._should_burn
+
     @property
     def is_tinder(self):
         if hasattr(self, "_is_tinder"):
@@ -542,7 +657,7 @@ class Item:
 
         # Logic copied from 'ISCampingMenu.isValidTinder()'
         category = self.get("Type")
-        id_type = self.id_type
+        id_type = self._id_type
 
         self._is_tinder = self.has_tag("IsFireTinder")
         if campingLightFireType.get(id_type) or campingLightFireCategory.get(category): self._is_tinder = True

@@ -48,13 +48,29 @@
             "accept_item",
             "max_item_size",
             "item_id"
+        ],
+        "fluid_container": [
+            "icon",
+            "name",
+            "container_name",
+            "weight",
+            "fluid_capacity",
+            "weight_full",
+            "rain_factor",
+            "boilable",
+            "boilable_microwave",
+            "coffee_maker",
+            "fluids",
+            "item_id"
         ]
     },
     "headings": {
         "icon": "! Icon",
         "name": "! Name",
+        "container_name": "! Container name",
         "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=Heavy load|Encumbrance]]",
         "capacity": "! [[File:UI_Weight_Max.png|32px|link=|Capacity]]",
+        "fluid_capacity": "! Capacity",
         "weight_reduction": "! [[File:UI_Weight_Min.png|32px|link=|Encumbrance reduced]]",
         "weight_full": "! [[File:Status_HeavyLoad_32.png|32px|link=Heavy load|Full encumbrance]] {{Tooltip|(full)|Full encumbrance}}",
         "weight_full_organized": "! [[File:Trait_organized.png|18px|link=Organized|Full encumbrance with organized]] {{Tooltip|(full)|Full encumbrance with organized}}",
@@ -64,6 +80,11 @@
         "body_location": "! [[File:UI_BodyPart.png|32px|link=|Body location]]",
         "accept_item": "! Valid items",
         "max_item_size": "! [[File:UI_Weight_Max.png|32px|link=Heavy load|Maximum content encumbrance]] {{Tooltip|(item)|Maximum content encumbrance}}",
+        "rain_factor": "! [[File:Moodle_Icon_Wet.png|Rainwater collection factor]]",
+        "boilable": "! [[File:Campfire.png|32px|link=Campfire|Can boiled in an oven or campfire]]",
+        "boilable_microwave": "! [[File:appliances_cooking_01_25.png|24px|link=Appliances#Ovens|Safe to boil in microwave]]",
+        "coffee_maker": "! [[File:appliances_cooking_01_61.png|24px|link=Appliances#Ovens|Fits coffee maker]]",
+        "fluids": "! Spawned fluids",
         "item_id": "! Item ID"
     },
     "type_map": {

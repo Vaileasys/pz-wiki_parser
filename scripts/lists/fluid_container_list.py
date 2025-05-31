@@ -1,154 +1,111 @@
-""" This is a temporary list for items that are used as fluid containers.
-
-This will be fleshed out more with translations and the new list system once completed.
-"""
-
 import os
-import json
-from scripts.core.language import Language, Translate
-from scripts.parser import item_parser, fluid_parser
-from scripts.utils import utility, util
-from scripts.utils.echo import echo_success, echo_info
-from scripts.core.constants import ITEM_DIR
+from tqdm import tqdm
+from scripts.core.language import Language
+from scripts.utils.table_helper import get_table_data, create_tables
+from scripts.core.constants import ITEM_DIR, RESOURCE_DIR, PBAR_FORMAT
+from scripts.objects.item import Item
+from scripts.utils.echo import echo_info, echo_success
+from scripts.utils.util import convert_int, check_zero
 
-HEADER = """{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"
-! Icon
-! Name
-! Container name
-! [[File:Status_HeavyLoad_32.png|32px|link=|Weight]] (empty)
-! Capacity
-! [[File:Status_HeavyLoad_32.png|32px|link=|Weight]] (full)
-! Spawned fluid(s)
-! Item ID
-|-"""
-
-def write_items_to_file(items, file_name):
-    output_dir = os.path.join(ITEM_DIR.format(language_code=Language.get()), "lists")
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
-    output_file = os.path.join(output_dir, f"{file_name}.txt")
-    with open(output_file, "w", encoding="utf-8") as file:
-        bot_flag_start = f'<!--BOT_FLAG-start-{file_name.replace(" ", "_")}. DO NOT REMOVE-->'
-        bot_flag_end = f'<!--BOT_FLAG-end-{file_name.replace(" ", "_")}. DO NOT REMOVE-->'
-        file.write(bot_flag_start + HEADER)
-        for item in items:
-            del item['item_name'] # Delete 'item_name' as it was only used for sorting
-            for value in item.values():
-                file.write(f"\n| {value}")
-            file.write(f"\n|-")
-        file.write("\n|}" + bot_flag_end)
-
-    echo_success(f"Item names written to {output_file}")
-
-def get_items():
-    fluid_containers = []
-    parsed_fluid_data = fluid_parser.get_fluid_data()
-    i = 0 # fluid containers
-    j = 0 # fluid containers with a fluid
-
-    with open(os.path.join("resources", "color_reference.json"), "r") as f:
-        color_reference = json.load(f)
-
-    for item_id, item_data in item_parser.get_item_data().items():
-        if 'capacity' in item_data:
-            display_name = Translate.get(item_id, 'DisplayName', default=item_data.get("DisplayName"))
-            page_name = utility.get_page(item_id, display_name)
-            item_link = util.link(page_name, display_name)
-            icon = utility.get_icon(item_id, True, True, True)
-            container_name = item_data.get('ContainerName', '-')
-            container_name = Translate.get(container_name, 'ContainerName')
-
-            fluid_capacity_ml = float(item_data.get('capacity', 0)) * 1000
-            fluid_capacity = int(fluid_capacity_ml)
-            weight = float(item_data.get('Weight', 1))
-            weight_ml = (fluid_capacity / 1000) + weight
-            if weight_ml.is_integer():
-                weight_ml = int(weight_ml)
-            else:
-                weight_ml = round(weight_ml, 1)
-            if weight.is_integer():
-                weight = int(weight)
-            else:
-                weight = round(weight, 1)
-
-            fluids_list = "-"
-            if "fluids" in item_data:
-                fluids_list = []
-                for fluid in item_data.get("fluids", []):
-                    fluid_id = fluid.get("FluidID", None)
-                    fluid_data = parsed_fluid_data[fluid_id]
-                    if fluid_id is not None:
-                        fluid_name = utility.get_fluid_name(fluid_data)
-                        fluid_name_en = utility.get_fluid_name(fluid_data, 'en')
-                        if Language.get() != "en":
-                            fluid_name = f"[[{fluid_name_en} (fluid)/{Language.get()}|{fluid_name}]]"
-                        else:
-                            fluid_name = f"[[{fluid_name_en} (fluid)|{fluid_name}]]"
-                    else:
-                        fluid_name = "-"
-#                    liquid_count = fluid.get("LiquidCount", 0)
-                    colors = fluid.get("Color", [])
-
-                    # Convert liquid_count to mL
-#                    liquid_count_str = f"{int(fluid_capacity_ml * float(liquid_count))}mL"
-
-                    # Get the fluid color from the fluid_id
-                    if not colors and fluid_id:
-                        if fluid_data['ColorReference']:
-                            colors = fluid_data['ColorReference']
-                        elif fluid_data['Color']:
-                            colors = fluid_data['Color']
-                        else:
-                            colors = [0.0, 0.0, 0.0]
-
-                    # lookup color_reference for RGB values
-                    if isinstance(colors, str):
-                        # Colour references found in 'Colors.class'
-                        rgb_values = color_reference["colors"].get(colors, [0.0, 0.0, 0.0])
-                    else:
-                        rgb_values = colors
-
-                    colors_rgb = [int(c * 255) for c in rgb_values]
-                    colors_str = f"{{{{rgb|{colors_rgb[0]}, {colors_rgb[1]}, {colors_rgb[2]}}}}}"
+TABLE_PATH = os.path.join(RESOURCE_DIR, "tables", "container_table.json")
+ROOT_PATH = os.path.join(ITEM_DIR, "lists")
 
 
-                    # Append the formatted string
-#                    fluids_list.append(f"{liquid_count_str} × {fluid_name} ({colors_str})")
-                    fluids_list.append(f"{fluid_name} {colors_str}")
+def tick(text:str=None, link:str=None):
+    link = f"|link=" + link if link else ""
+    text = "|" + text if text else ""
+    return f"[[File:UI_Tick.png|32px{link}{text}]]"
 
-                fluids_list = "<br>".join(fluids_list)
-
-            item = {
-                "icon": icon,
-                "item_link": item_link,
-                "ContainerName": container_name,
-                "weight": str(weight),
-                "capacity": str(fluid_capacity) + "mL",
-                "weight_ml": str(weight_ml),
-                "fluids": fluids_list,
-                "item_id": item_id,
-                "item_name": display_name
-            }
-
-            fluid_containers.append(item)
+def cross(text:str=None, link:str=None):
+    link = f"|link=" + link if link else ""
+    text = "|" + text if text else ""
+    return f"[[File:UI_Cross.png|32px{link}{text}]]"
 
 
-            i = i +1
+def process_item(item: Item):
+    table_type = "fluid_container"
+    columns = table_map.get(table_type) if table_map.get(table_type) is not None else table_map.get("default")
+    heading = table_type
 
-            if 'fluids' in item_data:
-                j = j +1
-    
-    # Sort by the item_name
-    fluid_containers.sort(key=lambda e: e['item_name'])
+    capacity = convert_int(item.fluid_container.capacity) + "L"
 
-    echo_info(f"Found {i} items that are a fluid container")
-    echo_info(f"Found {j} items with a fluid")
-    write_items_to_file(fluid_containers, 'fluid_container')
+    rain_factor = check_zero(convert_int(item.fluid_container.rain_factor), default="-")
+
+    boilable = tick(link="Heat source", text="Can be boiled in an oven or campfire") if item.has_tag("Cookable") else cross(link="Heat source", text="Can be boiled in an oven or campfire")
+    boilable_microwave = tick(link="White Microwave", text="Can be boiled in a microwave") if item.has_tag("CookableMicrowave") else cross(link="White Microwave", text="Can't be boiled in a microwave")
+    coffee_maker = tick(link="Espresso Deluxe", text="Can be used in an espresso machine") if item.has_tag("CoffeeMaker") else cross(link="Espresso Deluxe", text="Can't be used in an espresso machine")
+
+    fluids = []
+    for fluid in item.fluid_container.fluids:
+        fluids.append(fluid.wiki_link + " " + fluid.rgb)
+    fluids = "<br>".join(fluids) if fluids else "-"
+
+    item_content = {
+        "icon": item.icon,
+        "name": item.wiki_link,
+        "container_name": item.fluid_container.container_name,
+        "weight": convert_int(item.weight),
+        "fluid_capacity": convert_int(capacity),
+        "weight_full": convert_int(item.weight_full),
+        "rain_factor": rain_factor,
+        "boilable": boilable,
+        "boilable_microwave": boilable_microwave,
+        "coffee_maker": coffee_maker,
+        "fluids": fluids,
+        "item_id": item.item_id
+    }
+
+    # Remove any values that are None
+    item_content = {k: v for k, v in item_content.items() if v is not None}
+
+    # Convert all values to strings
+    item_content = {k: str(v) for k, v in item_content.items()}
+
+    # Ensure column order is correct
+    item_content = {key: item_content[key] for key in columns if key in item_content}
+
+    # Add item_name for sorting
+    item_content["item_name"] = item.name
+
+    return heading, item_content
+
+
+def find_items() -> dict:
+    items = {}
+    item_count = 0
+
+    # Get items
+    with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+        for item_id in Item.keys():
+            pbar.set_postfix_str(f"Processing: {item_id[:30]}")
+            item = Item(item_id)
+            if item.fluid_container:
+                heading, item_content = process_item(item)
+
+                # Add heading to dict if it hasn't been added yet.
+                if heading not in items:
+                    items[heading] = []
+
+                items[heading].append(item_content)
+
+                item_count += 1
         
+            pbar.update(1)
+
+    echo_info(f"Finished processing {item_count} items for {len(items)} tables.")
+    
+    return items
+
 
 def main():
-    get_items()
+    Language.get()
+    global table_map
+    table_map, column_headings = get_table_data(TABLE_PATH)
+
+    items = find_items()
+
+    create_tables("fluid_container", items, table_map=table_map, columns=column_headings, root_path=ROOT_PATH, combine_tables=False)
+
 
 if __name__ == "__main__":
     main()

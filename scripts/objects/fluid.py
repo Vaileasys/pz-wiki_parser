@@ -12,21 +12,27 @@ class Fluid:
     _color_reference = None # Shared color reference cache
     _instances = {}
 
-    def __new__(cls, fluid_id: str):
-        """Returns an existing Fluid instance if one already exists for the given ID."""
+    def __new__(cls, fluid_id: str, mix_ratio=None, color=None):
+        """Returns an existing Fluid instance if one already exists for the given ID.
+        If overrides are provided, returns a new instance"""
         if cls._fluids is None:
             cls._load_fluids()
 
         fluid_id = cls.fix_fluid_id(fluid_id)
 
-        if fluid_id in cls._instances:
-            return cls._instances[fluid_id]
+        # If no overrides, reuse shared instance
+        if mix_ratio is None and color is None:
+            if fluid_id in cls._instances:
+                return cls._instances[fluid_id]
 
-        instance = super().__new__(cls)
-        cls._instances[fluid_id] = instance
-        return instance
+            instance = super().__new__(cls)
+            cls._instances[fluid_id] = instance
+            return instance
 
-    def __init__(self, fluid_id: str):
+        # If overrides, always create fresh instance
+        return super().__new__(cls)
+
+    def __init__(self, fluid_id: str, mix_ratio=None, color=None):
         """Initialises the fluid’s data if it hasn’t been initialised yet."""
         if hasattr(self, 'fluid_id'):
             return
@@ -45,6 +51,9 @@ class Fluid:
         self._name_en = None # English name
         self._page = None # Wiki page
         self._wiki_link = None # Wiki link
+
+        self._color = color
+        self._mix_ratio = mix_ratio
 
     def __getitem__(self, key):
         return self.data[key]
@@ -175,6 +184,11 @@ class Fluid:
             self._wiki_link = link(self.page, self.name)
         return self._wiki_link
     
+    @property
+    def mix_ratio(self):
+        """Return the fluid’s relative mix ratio (defaults to 1.0 if not set)."""
+        return self._mix_ratio if self._mix_ratio is not None else 1.0
+    
     # --- Properties --- #
 
     @property
@@ -256,14 +270,17 @@ class Fluid:
     @property
     def color(self):
         """Return the fluid color as [R, G, B] integers (0–255)."""
-        Fluid._load_color_reference()
-
-        color_ = self.color_reference or self.data.get('Color', [0.0, 0.0, 0.0])
-
-        if isinstance(color_, str):
-            rgb_values = Fluid._color_reference["colors"].get(color_, [0.0, 0.0, 0.0])
+        if self._color:
+            rgb_values = self._color
         else:
-            rgb_values = color_
+            Fluid._load_color_reference()
+
+            color_ = self.color_reference or self.data.get('Color', [0.0, 0.0, 0.0])
+            
+            if isinstance(color_, str):
+                rgb_values = Fluid._color_reference["colors"].get(color_, [0.0, 0.0, 0.0])
+            else:
+                rgb_values = color_
 
         color_rgb = [int(c * 255) for c in rgb_values]
         return color_rgb
