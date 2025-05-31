@@ -1,26 +1,16 @@
 import os
 from tqdm import tqdm
 from scripts.core.language import Language
-from scripts.utils.table_helper import get_table_data, create_tables
-from scripts.core.constants import ITEM_DIR, RESOURCE_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
-from scripts.utils.echo import echo_info, echo_success
-from scripts.utils.util import convert_int, check_zero
+from scripts.core.constants import ITEM_DIR, RESOURCE_DIR, PBAR_FORMAT
+from scripts.utils.table_helper import get_table_data, create_tables
+from scripts.utils.echo import echo_info
+from scripts.utils.util import convert_int, check_zero, tick, cross
 
 TABLE_PATH = os.path.join(RESOURCE_DIR, "tables", "container_table.json")
 ROOT_PATH = os.path.join(ITEM_DIR, "lists")
 
-
-def tick(text:str=None, link:str=None):
-    link = f"|link=" + link if link else ""
-    text = "|" + text if text else ""
-    return f"[[File:UI_Tick.png|32px{link}{text}]]"
-
-def cross(text:str=None, link:str=None):
-    link = f"|link=" + link if link else ""
-    text = "|" + text if text else ""
-    return f"[[File:UI_Cross.png|32px{link}{text}]]"
-
+table_map = {}
 
 def process_item(item: Item):
     table_type = "fluid_container"

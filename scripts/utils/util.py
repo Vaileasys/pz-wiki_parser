@@ -135,6 +135,18 @@ def convert_int(value: int | float) -> int | float:
 
     return str(value)
 
+
+def tick(text: str = None, link: str = None):
+    link = f"|link=" + link if link else ""
+    text = "|" + text if text else ""
+    return f"[[File:UI_Tick.png|32px{link}{text}]]"
+
+def cross(text: str = None, link: str = None):
+    link = f"|link=" + link if link else ""
+    text = "|" + text if text else ""
+    return f"[[File:UI_Cross.png|32px{link}{text}]]"
+
+
 ## ------------------------- Infobox helpers ------------------------- ##
 
 def enumerate_params(parameters):

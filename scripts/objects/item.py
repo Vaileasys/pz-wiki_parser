@@ -447,15 +447,15 @@ class Item:
 
 
     def get_burn_time(self):
-        if not hasattr(self, "burn_time"):
+        if not hasattr(self, "_burn_time"):
             self.calculate_burn_time()
-        return self.burn_time
+        return self._burn_time
     
     def calculate_burn_time(self):
         """Calculates and stores burn time for this item."""
         #TODO: clean up and use should_burn property
         if not self.data:
-            self.burn_time = ""
+            self._burn_time = ""
             return
 
         if Item._burn_data is None:
@@ -483,7 +483,7 @@ class Item:
         if category.lower() == "clothing" and (fabric_type == "" or fabric_type.lower() == "leather"): valid_fuel = False
 
         if not valid_fuel:
-            self.burn_time = ""
+            self._burn_time = ""
             return
 
         # Fuel duration logic
@@ -518,9 +518,9 @@ class Item:
 
         # Convert to appropriate string layout
         if hours > 0:
-            self.burn_time = f"{hours} {hours_unit}, {minutes} {minutes_unit}" if minutes else f"{hours} {hours_unit}"
+            self._burn_time = f"{hours} {hours_unit}, {minutes} {minutes_unit}" if minutes else f"{hours} {hours_unit}"
         else:
-            self.burn_time = f"{minutes} {minutes_unit}"
+            self._burn_time = f"{minutes} {minutes_unit}"
     
     ## ------------------------- Properties ------------------------- ##
 
@@ -582,6 +582,10 @@ class Item:
     # --- Script Properties --- #
 
     @property
+    def type(self):
+        return self.data.get("Type", "Normal")
+
+    @property
     def weight(self):
         return self.data.get("Weight", 1)
     
@@ -628,6 +632,13 @@ class Item:
             return int(total_weight)
         else:
             return total_weight
+        
+    
+    @property
+    def burn_time(self):
+        if not hasattr(self, "_burn_time"):
+            self.calculate_burn_time()
+        return self._burn_time
         
 
     @property
