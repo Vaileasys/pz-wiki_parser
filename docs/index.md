@@ -11,7 +11,6 @@
 ### article_content
 
 - [hotbar_slots_content.py](scripts/article_content/hotbar_slots_content.md)
-- [item_container_contents.py](scripts/article_content/item_container_contents.md)
 - [item_literature_titles.py](scripts/article_content/item_literature_titles.md)
 
 ### core
@@ -37,6 +36,7 @@
 - [item_article.py](scripts/items/item_article.md)
 - [item_body_part.py](scripts/items/item_body_part.md)
 - [item_codesnip.py](scripts/items/item_codesnip.md)
+- [item_container_contents.py](scripts/items/item_container_contents.md)
 - [item_infobox.py](scripts/items/item_infobox.md)
 - [item_tags.py](scripts/items/item_tags.md)
 
