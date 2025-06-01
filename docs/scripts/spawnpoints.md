@@ -1,4 +1,4 @@
-[Previous File](roomdefine.md) | [Next Folder](article_content/hotbar_slots_content.md) | [Back to Index](../INDEX.md)
+[Previous File](roomdefine.md) | [Next Folder](article_content/hotbar_slots_content.md) | [Back to Index](../index.md)
 
 # spawnpoints.py
 
@@ -21,4 +21,4 @@ _Processes spawnpoints lua file._
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/spawnpoints.py#L138)
 
 
-[Previous File](roomdefine.md) | [Next Folder](article_content/hotbar_slots_content.md) | [Back to Index](../INDEX.md)
+[Previous File](roomdefine.md) | [Next Folder](article_content/hotbar_slots_content.md) | [Back to Index](../index.md)
