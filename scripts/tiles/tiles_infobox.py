@@ -1,3 +1,20 @@
+#!/usr/bin/env python3
+"""
+Project Zomboid Wiki Infobox Generator
+
+This script generates MediaWiki infobox templates for Project Zomboid tiles. It processes
+tile definitions and properties to create structured information boxes that appear at
+the top of wiki articles, containing key information about each tile type.
+
+The script handles:
+- Display names and translations
+- Tile properties and statistics
+- Tool requirements and skill levels
+- Container capacities and special features
+- Multi-tile object composition
+- Image and sprite references
+"""
+
 import os
 from typing import Dict, List, Tuple
 from scripts.core.language import Translate
@@ -38,6 +55,16 @@ _BED_QUALITY_MAP = {
 
 
 def _parse_grid(pos: str) -> Tuple[int, int]:
+    """
+    Parse a grid position string into column and row coordinates.
+
+    Args:
+        pos (str): Position string in format "row,column"
+
+    Returns:
+        tuple[int, int]: A tuple of (column, row) coordinates.
+        Returns (0, 0) if parsing fails.
+    """
     try:
         row, col = map(int, pos.split(","))
         return col, row
@@ -46,12 +73,31 @@ def _parse_grid(pos: str) -> Tuple[int, int]:
 
 
 def _build_output_name(sprite_ids: List[str]) -> str:
+    """
+    Generate a composite name from multiple sprite IDs.
+
+    Args:
+        sprite_ids (List[str]): List of sprite identifiers.
+
+    Returns:
+        str: Combined name where the first ID is the base and subsequent
+             ones are appended as suffixes, joined with '+'.
+    """
     first = sprite_ids[0]
     extras = [sid.rsplit("_", 1)[-1] for sid in sprite_ids[1:]]
     return "+".join([first, *extras])
 
 
 def _get_composite_names(tile_list: List[dict]) -> List[Tuple[str, str]]:
+    """
+    Generate composite names for multi-tile objects based on facing direction.
+
+    Args:
+        tile_list (List[dict]): List of tile entries with sprite and facing information.
+
+    Returns:
+        List[Tuple[str, str]]: List of tuples containing (facing_direction, composite_name).
+    """
     composite: List[Tuple[str, str]] = []
     for facing in ["S", "E", "N", "W"]:
         entries = [t for t in tile_list if t["facing"] == facing]
@@ -69,6 +115,23 @@ def extract_tile_stats(
     definitions: Dict[str, dict],
     lang_code: str
 ) -> Tuple[float, int, str, str, str, str]:
+    """
+    Extract key statistics and requirements for a tile group.
+
+    Args:
+        tiles (Dict[str, dict]): Dictionary of tile definitions.
+        definitions (Dict[str, dict]): Dictionary of game definitions.
+        lang_code (str): Language code for translations.
+
+    Returns:
+        Tuple[float, int, str, str, str, str]: Tuple containing:
+            - encumbrance: Weight/encumbrance value
+            - max_size: Maximum size of the tile group
+            - pickup_skill: Required skill for pickup
+            - pickup_tool: Required tool for pickup
+            - dis_skill: Required skill for disassembly
+            - dis_tool: Required tool for disassembly
+    """
     tile_list, facing_counts = prepare_tile_list(tiles)
     max_size = max(facing_counts.values(), default=1) or 1
 
@@ -106,6 +169,18 @@ def generate_infoboxes(
     lang_code: str,
     game_version: str
 ) -> Dict[str, str]:
+    """
+    Generate infobox templates for all tile groups.
+
+    Args:
+        named_tiles_data (Dict[str, Dict]): Dictionary of tile groups and their definitions.
+        definitions (Dict[str, Dict]): Dictionary of game definitions.
+        lang_code (str): Language code for translations.
+        game_version (str): Current game version.
+
+    Returns:
+        Dict[str, str]: Dictionary mapping tile group names to their infobox markup.
+    """
     output_directory = os.path.join("output", lang_code, "tiles", "infoboxes")
     os.makedirs(output_directory, exist_ok=True)
 
@@ -160,6 +235,19 @@ def build_infobox(
     lang_code: str,
     game_version: str
 ) -> str:
+    """
+    Build a complete infobox template for a tile group.
+
+    Args:
+        display_name (str): Display name of the tile group.
+        tiles (Dict[str, dict]): Dictionary of tile definitions.
+        definitions (Dict[str, dict]): Dictionary of game definitions.
+        lang_code (str): Language code for translations.
+        game_version (str): Current game version.
+
+    Returns:
+        str: Complete MediaWiki infobox template markup.
+    """
     tile_list, facing_counts = prepare_tile_list(tiles)
     max_size = max(facing_counts.values(), default=1) or 1
 
@@ -187,6 +275,17 @@ def build_infobox(
 
 
 def prepare_tile_list(tiles: Dict[str, dict]) -> Tuple[List[dict], Dict[str, int]]:
+    """
+    Process tile definitions into a structured list and count facings.
+
+    Args:
+        tiles (Dict[str, dict]): Dictionary of tile definitions.
+
+    Returns:
+        Tuple[List[dict], Dict[str, int]]: Tuple containing:
+            - List of processed tile entries with extracted properties
+            - Dictionary counting tiles for each facing direction
+    """
     tile_list: List[dict] = []
     facing_counts = {"E": 0, "S": 0, "W": 0, "N": 0}
 
@@ -233,6 +332,16 @@ def prepare_tile_list(tiles: Dict[str, dict]) -> Tuple[List[dict], Dict[str, int
 
 
 def build_icon_params(tile_list: List[dict], max_size: int) -> List[str]:
+    """
+    Generate icon parameters for the infobox template.
+
+    Args:
+        tile_list (List[dict]): List of processed tile entries.
+        max_size (int): Maximum size of the tile group.
+
+    Returns:
+        List[str]: List of icon parameter lines for the infobox template.
+    """
     facing_map = {"S": "South", "W": "West", "N": "North", "E": "East"}
     sprite_label = "sprite"
     icon_lines: List[str] = []

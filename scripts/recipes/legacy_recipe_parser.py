@@ -1,3 +1,21 @@
+#!/usr/bin/env python3
+"""
+Project Zomboid Wiki Legacy Recipe Parser
+
+This script parses legacy recipe definitions from Project Zomboid's script files.
+It handles the complex task of parsing various recipe formats, including crafting
+recipes, fluid recipes, and construction recipes, converting them into a structured
+format for wiki documentation.
+
+The script handles:
+- Parsing recipe blocks from multiple source files
+- Processing nested recipe definitions
+- Handling item mappers and substitutions
+- Processing fluid and energy recipes
+- Managing construction and crafting recipes
+- Cache management for parsed data
+"""
+
 import os, re
 from scripts.core.version import Version
 from scripts.core.constants import DATA_DIR
@@ -13,8 +31,15 @@ parsed_data = {}
 def remove_comments(text):
     """
     Removes block comments from text.
+
+    Args:
+        text (str): Text containing block comments.
+
+    Returns:
+        str: Text with all block comments removed.
+
     Comments start with /* and end with */.
-    Supports nested comments.
+    Supports nested comments and preserves non-comment text.
     """
     result = []
     current_line = 0
@@ -41,7 +66,15 @@ def remove_comments(text):
 
 
 def get_recipe_data():
-    """Returns the parsed recipe data. Initialises if the parsed data is empty."""
+    """
+    Returns the parsed recipe data.
+
+    Returns:
+        dict: Parsed recipe data, initializing it if empty.
+
+    This function serves as the main interface to access the parsed recipe data,
+    ensuring the data is loaded before being accessed.
+    """
     global parsed_data
     if not parsed_data:
         main()
@@ -49,6 +82,20 @@ def get_recipe_data():
 
 
 def gather_recipe_lines(directory: str):
+    """
+    Gathers recipe definitions from all relevant files in the directory.
+
+    Args:
+        directory (str): Root directory to search for recipe files.
+
+    Returns:
+        list: All lines from valid recipe files.
+
+    Searches for files that:
+    - Start with 'recipes', 'entity', or 'craftrecipe'
+    - End with '.txt'
+    - Don't contain 'test' or 'dbg' in the name
+    """
     all_lines = []
     for root, dirs, files in os.walk(directory):
         for filename in files:
@@ -67,6 +114,21 @@ def gather_recipe_lines(directory: str):
 
 
 def extract_recipe_blocks(lines):
+    """
+    Extracts individual recipe blocks from a list of lines.
+
+    Args:
+        lines (list): List of text lines to process.
+
+    Returns:
+        list: List of tuples containing (recipe_name, recipe_text).
+
+    Handles:
+    - Recipe block detection and extraction
+    - Proper bracket matching
+    - Comment removal
+    - Recipe name extraction
+    """
     blocks = []
     in_recipe = False
     bracket_level = 0
@@ -102,6 +164,27 @@ def extract_recipe_blocks(lines):
 
 
 def parse_recipe_block(recipe_name, recipe_text):
+    """
+    Parses a recipe block into a structured dictionary.
+
+    Args:
+        recipe_name (str): Name of the recipe.
+        recipe_text (str): Raw text of the recipe block.
+
+    Returns:
+        dict: Structured recipe data including:
+            - name: Recipe name
+            - inputs: List of input items
+            - outputs: List of output items
+            - itemMappers: Dictionary of item mappings
+            - Additional properties like category
+
+    Handles:
+    - Item mapper definitions
+    - Input and output blocks
+    - Property parsing
+    - Comment removal
+    """
     recipe_text = remove_comments(recipe_text)
     recipe_dict = {"name": recipe_name, "inputs": [], "outputs": []}
     mapper_pattern = re.compile(r'itemMapper\s+(\S+)\s*\{(.*?)\}', re.DOTALL | re.IGNORECASE)
@@ -174,6 +257,23 @@ def parse_recipe_block(recipe_name, recipe_text):
 
 
 def parse_items_block(block_text, is_output=False, recipe_dict=None):
+    """
+    Parses a block of item definitions within a recipe.
+
+    Args:
+        block_text (str): Text containing item definitions.
+        is_output (bool): Whether this is an output block.
+        recipe_dict (dict): Parent recipe dictionary for context.
+
+    Returns:
+        list: List of parsed item definitions.
+
+    Handles:
+    - Fluid items and modifiers
+    - Energy items
+    - Regular items
+    - Item properties and amounts
+    """
     if recipe_dict is None:
         recipe_dict = {}
     # Remove block comments from the entire block
@@ -246,6 +346,15 @@ def parse_items_block(block_text, is_output=False, recipe_dict=None):
 
 
 def is_any_fluid_container(item_obj):
+    """
+    Checks if an item object represents any fluid container.
+
+    Args:
+        item_obj (dict): Item object to check.
+
+    Returns:
+        bool: True if the item is any fluid container, False otherwise.
+    """
     if (item_obj.get("index") == 1 and item_obj.get("items") and
         len(item_obj["items"]) == 1 and item_obj["items"][0] == "Base.*"):
         return True
@@ -253,6 +362,19 @@ def is_any_fluid_container(item_obj):
 
 
 def parse_fluid_line(line):
+    """
+    Parses a fluid line definition.
+
+    Args:
+        line (str): Line containing fluid definition.
+
+    Returns:
+        dict: Parsed fluid information including:
+            - sign: '+' or '-' for fluid addition/removal
+            - items: List of fluid types
+            - amount: Fluid amount
+        Returns None if parsing fails.
+    """
     pattern = re.compile(r'^([+-])fluid\s+([\d\.]+)\s+(?:\[(.*?)\]|(\S+))', re.IGNORECASE)
     m = pattern.match(line)
     if not m:
@@ -270,6 +392,18 @@ def parse_fluid_line(line):
 
 
 def parse_energy_line(line):
+    """
+    Parses an energy line definition.
+
+    Args:
+        line (str): Line containing energy definition.
+
+    Returns:
+        dict: Parsed energy information including:
+            - energy: True flag
+            - amount: Energy amount
+        Returns None if parsing fails.
+    """
     pattern = re.compile(r'^energy\s+([\d\.]+)\s+(\S+)\s*(.*)$', re.IGNORECASE)
     m = pattern.match(line)
     if not m:
@@ -284,6 +418,20 @@ def parse_energy_line(line):
 
 
 def parse_item_line(line):
+    """
+    Parses an item line definition.
+
+    Args:
+        line (str): Line containing item definition.
+
+    Returns:
+        dict: Parsed item information including:
+            - items: List of item types
+            - amount: Item amount
+            - index: Item index
+            - Additional properties
+        Returns None if parsing fails.
+    """
     pattern = re.compile(r'^item\s+(\d+)\s+(.*)$', re.IGNORECASE)
     m = pattern.match(line)
     if not m:
@@ -365,8 +513,16 @@ def parse_item_line(line):
 
 def extract_block(text, start_index):
     """
-    Given a text and an index of an opening '{', this function returns the block text (including the braces)
-    and the index immediately after the block.
+    Extracts a complete block of text between braces.
+
+    Args:
+        text (str): Text to extract block from.
+        start_index (int): Starting position for extraction.
+
+    Returns:
+        tuple: (block_text, end_index) where:
+            - block_text: Extracted block content
+            - end_index: Index after the closing brace
     """
     bracket_level = 0
     end_index = start_index
@@ -383,7 +539,17 @@ def extract_block(text, start_index):
 
 
 def parse_module_block(text):
-    """Extracts module blocks from the file text."""
+    """
+    Parses a module block definition.
+
+    Args:
+        text (str): Text containing module definition.
+
+    Returns:
+        tuple: (skin_mapping, entity_blocks) where:
+            - skin_mapping: Dictionary of skin mappings
+            - entity_blocks: List of entity block definitions
+    """
     modules = []
     module_pattern = re.compile(r'module\s+(\w+)\s*\{', re.IGNORECASE)
     pos = 0
@@ -400,7 +566,13 @@ def parse_module_block(text):
 
 def parse_module_skin_mapping(module_block):
     """
-    Parses the xuiSkin block to extract a mapping of entity styles to their DisplayName and Icon.
+    Parses skin mappings from a module block.
+
+    Args:
+        module_block (str): Module block text.
+
+    Returns:
+        dict: Dictionary of skin mappings.
     """
     mapping = {}
     skin_pattern = re.compile(r'xuiSkin\s+(\w+)\s*\{', re.IGNORECASE)
@@ -427,7 +599,14 @@ def parse_module_skin_mapping(module_block):
 
 def parse_entity_blocks(module_block, skin_mapping):
     """
-    Extracts entity blocks from the module and parses any component blocks.
+    Parses entity blocks from a module block.
+
+    Args:
+        module_block (str): Module block text.
+        skin_mapping (dict): Dictionary of skin mappings.
+
+    Returns:
+        list: List of parsed entity blocks.
     """
     entities = []
     entity_pattern = re.compile(r'entity\s+(\S+)\s*\{', re.IGNORECASE)
@@ -463,17 +642,13 @@ def parse_entity_blocks(module_block, skin_mapping):
 
 def parse_sprite_config(block_text):
     """
-    Parses the SpriteConfig component to extract sprite rows grouped by face direction
-    and the skillBaseHealth attribute.
+    Parses sprite configuration from a block.
 
-    For each face block (e.g., "face S" or "face E"), this function extracts all row assignments,
-    splits any multiple sprite identifiers (separated by whitespace), and returns a dictionary
-    mapping the face identifier to a list of sprite entries.
+    Args:
+        block_text (str): Block containing sprite configuration.
 
     Returns:
-        tuple: (sprites_by_face, skillBaseHealth)
-            sprites_by_face: dict with keys as face directions and values as lists of sprites.
-            skillBaseHealth: float or None.
+        dict: Parsed sprite configuration.
     """
     sprites_by_face = {}
     skillBaseHealth = None
@@ -512,8 +687,13 @@ def parse_sprite_config(block_text):
 
 def parse_construction_recipe(text):
     """
-    Processes the full text for module blocks and extracts construction recipes
-    by combining CraftRecipe, SpriteConfig, and xuiSkin (via UiConfig) data.
+    Parses a construction recipe definition.
+
+    Args:
+        text (str): Text containing construction recipe.
+
+    Returns:
+        dict: Parsed construction recipe data.
     """
     # Remove block comments from the full text first.
     text = remove_comments(text)
@@ -553,6 +733,16 @@ def parse_construction_recipe(text):
 
 
 def main():
+    """
+    Main execution function for legacy recipe parsing.
+
+    This function:
+    1. Checks for existing cache
+    2. If needed, parses all recipe files
+    3. Processes recipe blocks and definitions
+    4. Saves parsed data to cache
+    5. Returns the parsed recipe data
+    """
     global parsed_data
 
     cache_file = os.path.join(DATA_DIR, CACHE_JSON)

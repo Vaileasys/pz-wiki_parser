@@ -1,3 +1,22 @@
+#!/usr/bin/env python3
+"""
+Project Zomboid Wiki Crafting Recipe Processor
+
+This script processes crafting recipes from Project Zomboid, converting them into
+wiki-ready format. It handles both standard crafting recipes and building recipes,
+with support for various recipe components and special cases.
+
+The script handles:
+- Fluid processing with RGB color values
+- Ingredient processing with quantities
+- Tool requirements and workstations
+- Product outputs and mappers
+- Experience gains and skill requirements
+- Recipe learning methods
+- Item and skill usage documentation
+- Lua table generation for templates
+"""
+
 import os, json, re
 from tqdm import tqdm
 from collections import defaultdict
@@ -15,8 +34,26 @@ from scripts.items import item_tags
 
 def fluid_rgb(fluid_id):
     """
-    Retrieve the name and RGB values of a fluid based on its ID.
-    Supports IDs in the form 'categories[Water]' by extracting 'Water'.
+    Get RGB color values for a fluid type.
+
+    Args:
+        fluid_id (str): Fluid identifier, can be in form 'categories[Water]'.
+
+    Returns:
+        dict: Dictionary containing:
+            - name: Display name of the fluid
+            - R: Red color value (0-255)
+            - G: Green color value (0-255)
+            - B: Blue color value (0-255)
+
+    Raises:
+        RuntimeError: If there's an error processing the fluid.
+
+    Handles:
+    - Category-based fluid IDs
+    - Color reference lookups
+    - Tainted water special case
+    - RGB value normalization
     """
     try:
         # Handle fluid 'categories'
@@ -67,10 +104,23 @@ def fluid_rgb(fluid_id):
 
 def process_ingredients(recipe: dict, build_data: dict) -> str:
     """
-    Parses recipe['inputs'] into ingredients, then formats them into
-    the wiki‑markup string with “Each of:” / “One of:” grouping.
-    Uses 'count' if present (for building recipes), otherwise falls back
-    to 'amount' or 'index' for crafting recipes.
+    Process recipe ingredients into wiki markup.
+
+    Args:
+        recipe (dict): Recipe data containing ingredients.
+        build_data (dict): Additional building recipe data.
+
+    Returns:
+        str: Wiki markup for ingredients section.
+
+    Handles:
+    - Energy inputs
+    - Fluid ingredients with colors
+    - Numbered list ingredients
+    - Tag-based ingredients
+    - Simple item ingredients
+    - Proper grouping of "One of" vs "Each of" items
+    - Icon integration
     """
     input_list = recipe.get("inputs")
     if not isinstance(input_list, list):
@@ -249,13 +299,21 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
 
 def process_tools(recipe: dict, build_data: dict) -> str:
     """
-    Build the wiki‑markup for the “tools” column.
+    Process tool requirements into wiki markup.
 
-    • One group per Keep‑mode input.
-    • “One of:” if that input offers >1 option, otherwise “Each of:”.
-    • Consecutive single‑option inputs share one “Each of:” heading.
-    • Flags (may degrade, damaged, …) are written **once per group**,
-      after the list of options, never after every option.
+    Args:
+        recipe (dict): Recipe data containing tool requirements.
+        build_data (dict): Additional building recipe data.
+
+    Returns:
+        str: Wiki markup for tools section.
+
+    Handles:
+    - Individual tool requirements
+    - Tool tag groups
+    - Tool condition flags
+    - Icon integration
+    - Proper grouping of requirements
     """
     FLAG_MAP = {
         'IsDamaged':       "damaged",
@@ -325,7 +383,19 @@ def process_tools(recipe: dict, build_data: dict) -> str:
 
 def process_workstation(recipe: dict, build_data: dict) -> str:
     """
-    Determines the crafting workstation required by the recipe.
+    Process workstation requirements into wiki markup.
+
+    Args:
+        recipe (dict): Recipe data containing workstation info.
+        build_data (dict): Additional building recipe data.
+
+    Returns:
+        str: Wiki markup for workstation section.
+
+    Handles:
+    - Required crafting stations
+    - Special location requirements
+    - Building-specific workstations
     """
     tag_list = recipe.get("tags")
     if not tag_list:
@@ -378,8 +448,19 @@ def process_workstation(recipe: dict, build_data: dict) -> str:
 
 def process_output_mapper(recipe: dict, mapper_key: str) -> list[str]:
     """
-    Given a recipe and a mapper key, return formatted product lines for that mapper.
-    Always uses the 'count' field on the output entry (defaulting to 1).
+    Process output mapper strings into item lists.
+
+    Args:
+        recipe (dict): Recipe data containing mappers.
+        mapper_key (str): Key for the mapper to process.
+
+    Returns:
+        list[str]: List of mapped item IDs.
+
+    Handles:
+    - Mapper resolution
+    - Item ID normalization
+    - Multiple mapper types
     """
     item_mappers = recipe.get("itemMappers", {})
     mapper_data = item_mappers.get(mapper_key)
@@ -416,18 +497,21 @@ def process_output_mapper(recipe: dict, mapper_key: str) -> list[str]:
 
 def process_products(recipe: dict, build_data: dict) -> str:
     """
-    Processes recipe['outputs'] into a wiki‑markup string listing products.
+    Process recipe products into wiki markup.
 
-    For building recipes (identified by the presence of "spriteOutputs"):
-      - If an "icon" field exists on an output entry, that image is used.
-      - Otherwise, falls back to the first available sprite in "spriteOutputs".
-      - Icons beginning with "Item_" drop the prefix and render at 64×64px.
-      - Icons beginning with "Build_" render at 96×96px.
-      - All others render at 64×128px.
-      - If the recipe has no "outputs" entries at all, still use the first sprite.
+    Args:
+        recipe (dict): Recipe data containing products.
+        build_data (dict): Additional building recipe data.
 
-    For crafting recipes (no "spriteOutputs" key), the standard item/mapper/fluid/energy
-    handling is applied.
+    Returns:
+        str: Wiki markup for products section.
+
+    Handles:
+    - Standard product outputs
+    - Building recipe outputs
+    - Fluid outputs with colors
+    - Icon integration
+    - Amount formatting
     """
     is_building = "spriteOutputs" in recipe
 
@@ -586,7 +670,19 @@ def process_products(recipe: dict, build_data: dict) -> str:
 
 def process_xp(recipe: dict, build_data: dict) -> str:
     """
-    Processes recipe['xpAward'] into a formatted XP string.
+    Process experience gains into wiki markup.
+
+    Args:
+        recipe (dict): Recipe data containing XP info.
+        build_data (dict): Additional building recipe data.
+
+    Returns:
+        str: Wiki markup for XP section.
+
+    Handles:
+    - XP amounts per skill
+    - Multiple skill XP gains
+    - Building-specific XP
     """
     xp_award_list = recipe.get("xpAward")
     if not xp_award_list:
@@ -612,7 +708,19 @@ def process_xp(recipe: dict, build_data: dict) -> str:
 
 def process_recipes(data: dict) -> str:
     """
-    Formats recipe requirements (skillbooks, schematics, traits, autolearn).
+    Process recipe learning methods into wiki markup.
+
+    Args:
+        data (dict): Recipe data containing learning methods.
+
+    Returns:
+        str: Wiki markup for recipe learning section.
+
+    Handles:
+    - Skillbook requirements
+    - Auto-learn conditions
+    - Schematic requirements
+    - Trait requirements
     """
     SCHEMATIC = {
         "ExplosiveSchematics": ["Schematic (explosive)"],
@@ -675,7 +783,18 @@ def process_recipes(data: dict) -> str:
 
 def process_skills(data: dict) -> str:
     """
-    Formats recipe skill requirements.
+    Process skill requirements into wiki markup.
+
+    Args:
+        data (dict): Recipe data containing skill requirements.
+
+    Returns:
+        str: Wiki markup for skills section.
+
+    Handles:
+    - Required skill levels
+    - Multiple skill requirements
+    - Skill alternatives
     """
     skill_requirements = data.get("requirements", {}).get("skillrequired", {})
     if not skill_requirements:
@@ -690,8 +809,21 @@ def process_skills(data: dict) -> str:
 
 def process_requirements(recipe: dict, parsed_item_metadata: dict, literature_data: dict) -> tuple[str, str]:
     """
-    Aggregates all requirement data and returns two formatted strings:
-      (recipes_string, skills_string)
+    Process recipe requirements into wiki markup.
+
+    Args:
+        recipe (dict): Recipe data.
+        parsed_item_metadata (dict): Item metadata for reference.
+        literature_data (dict): Literature data for books/magazines.
+
+    Returns:
+        tuple[str, str]: (recipes_markup, skills_markup) for wiki sections.
+
+    Handles:
+    - Skill requirements
+    - Literature requirements
+    - Trait requirements
+    - Auto-learn conditions
     """
     requirements_work = {
         "skillrequired": {},
@@ -762,10 +894,15 @@ def process_requirements(recipe: dict, parsed_item_metadata: dict, literature_da
 
 def build_tag_to_items_map(parsed_item_data: dict) -> dict[str, list[dict[str, str]]]:
     """
-    Reverse lookup: tag → list of item_ids that carry it.
-    Instead of relying on the limited 'Tags' field in parsed_item_data,
-    we pull the complete tag→items mapping from item_tags.get_tag_data(),
-    so that we include *every* item registered under each tag.
+    Build mapping of tags to items.
+
+    Args:
+        parsed_item_data (dict): Parsed item data.
+
+    Returns:
+        dict[str, list[dict[str, str]]]: Mapping of tags to item lists.
+
+    Creates a lookup table for items by their tags.
     """
     full_tag_data = item_tags.get_tag_data()
 
@@ -778,12 +915,15 @@ def build_tag_to_items_map(parsed_item_data: dict) -> dict[str, list[dict[str, s
 
 def output_item_article_lists(crafting_recipe_map: dict[str, dict], building_recipe_map: dict[str, dict], tag_to_items_map: dict[str, list[dict[str, str]]]) -> None:
     """
-    Creates per‑item templates and combined helpers, skipping wildcards.
-    Generates:
-      • crafting/<item>_whatitcrafts.txt
-      • building/<item>_constructionwhatitcrafts.txt
-      • crafting/<item>_howtomake.txt
-      • crafting_combined/<item>.txt   (crafting only)
+    Generate wiki article lists for items.
+
+    Args:
+        crafting_recipe_map (dict[str, dict]): Crafting recipe data.
+        building_recipe_map (dict[str, dict]): Building recipe data.
+        tag_to_items_map (dict[str, list[dict[str, str]]]): Tag to items mapping.
+
+    Creates files documenting how items are used in recipes,
+    both as ingredients and as products.
     """
 
     def is_concrete(item_id: str) -> bool:
@@ -907,7 +1047,13 @@ def output_item_article_lists(crafting_recipe_map: dict[str, dict], building_rec
 
 def output_skill_usage(recipe_data_map: dict[str, dict]) -> None:
     """
-    For each skill, lists which recipes grant XP or require it.
+    Generate wiki markup for skill usage.
+
+    Args:
+        recipe_data_map (dict[str, dict]): Recipe data.
+
+    Creates files documenting which recipes require each skill
+    and what level of skill is needed.
     """
     os.makedirs(os.path.join("output", "recipes", "skills"), exist_ok=True)
     skill_name_mapping = {
@@ -949,7 +1095,13 @@ def output_skill_usage(recipe_data_map: dict[str, dict]) -> None:
 
 def output_lua_tables(recipe_data_map: dict[str, dict]) -> None:
     """
-    Emit Lua data files for crafting categories, building recipes, and an index.
+    Generate Lua tables for recipe data.
+
+    Args:
+        recipe_data_map (dict[str, dict]): Recipe data.
+
+    Creates Lua table files that can be used by wiki templates
+    to display recipe information.
     """
     base_directory = os.path.join("output", "recipes")
     data_directory = os.path.join(base_directory, "data_files")
@@ -1050,6 +1202,16 @@ def output_lua_tables(recipe_data_map: dict[str, dict]) -> None:
 
 
 def main():
+    """
+    Main execution function for recipe processing.
+
+    This function:
+    1. Loads necessary data from parsers
+    2. Processes all recipes into wiki format
+    3. Generates item usage documentation
+    4. Creates skill usage documentation
+    5. Outputs Lua tables for templates
+    """
     language_code = Language.get()
     game_version  = Version.get()
 

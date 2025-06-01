@@ -1,12 +1,35 @@
+#!/usr/bin/env python3
+"""
+Project Zomboid Wiki Article Generator
+
+This script generates complete wiki articles for Project Zomboid tiles. It combines
+various components including infoboxes, usage information, code snippets, and navigation
+elements to create comprehensive wiki pages for each tile type.
+
+The script handles:
+- Article structure and formatting
+- Usage descriptions based on tile properties
+- Dismantling and breakage information
+- Code snippet integration
+- Navigation elements
+"""
+
 import os
 from scripts.core.language import Language
 from scripts.core.version import Version
 
 def process_usage(tile_name, tile_data, scrappings):
     """
-    Build the 'Usage' section, combining:
-      1) property-based usage sentences
-      2) dismantling and breakage under 'Dismantling' and 'Breakage' subheaders.
+    Build the 'Usage' section for a tile article.
+
+    Args:
+        tile_name (str): Name of the tile group.
+        tile_data (dict): Dictionary containing tile properties and variants.
+        scrappings (dict): Dictionary containing dismantling and breakage information.
+
+    Returns:
+        str: Formatted wiki markup for the Usage section, including property-based
+             descriptions and dismantling/breakage information.
     """
     usage_intro = "==Usage==\n"
 
@@ -98,8 +121,15 @@ def process_usage(tile_name, tile_data, scrappings):
 
 def process_codesnip(tile_data, codesnips):
     """
-    Wrap all CodeSnip snippets for each sprite in this tile group
-    in a single CodeBox, with no extra blank lines between.
+    Create a CodeBox section containing all CodeSnip templates for a tile group.
+
+    Args:
+        tile_data (dict): Dictionary of sprite names and their data.
+        codesnips (dict): Dictionary mapping sprite names to their CodeSnip markup.
+
+    Returns:
+        str: Formatted wiki markup for the Code section containing all relevant
+             CodeSnip templates wrapped in a CodeBox.
     """
     snippets = []
     for sprite_name in tile_data.keys():
@@ -113,7 +143,18 @@ def process_codesnip(tile_data, codesnips):
 
 def assemble_article(header, infobox, intro, usage, codesnip, navigation):
     """
-    Combine all sections into the full article text, separated by blank lines.
+    Combine all article sections into a complete wiki article.
+
+    Args:
+        header (str): Article header with metadata templates.
+        infobox (str): Infobox template markup.
+        intro (str): Article introduction paragraph.
+        usage (str): Usage section markup.
+        codesnip (str): Code section markup.
+        navigation (str): Navigation template markup.
+
+    Returns:
+        str: Complete wiki article text with all sections properly formatted.
     """
     sections = [
         header,
@@ -129,7 +170,14 @@ def assemble_article(header, infobox, intro, usage, codesnip, navigation):
 
 def sanitize_filename(name):
     """
-    Make a string safe for use as a filesystem filename.
+    Convert a string into a safe filesystem filename.
+
+    Args:
+        name (str): Original string to convert.
+
+    Returns:
+        str: Sanitized string safe for use as a filename, with special characters
+             replaced by underscores and spaces converted to underscores.
     """
     safe = []
     for ch in name:
@@ -142,8 +190,18 @@ def sanitize_filename(name):
 
 def generate_tile_articles(tiles_data, infoboxes, codesnips, scrappings):
     """
-    Generate a wiki article for every tile group, using provided mappings,
-    then write all of them in batch to output/{lang}/tiles/articles/{tile_name}.txt
+    Generate and save wiki articles for all tile groups.
+
+    Args:
+        tiles_data (dict): Dictionary containing all tile group data.
+        infoboxes (dict): Dictionary mapping tile names to their infobox markup.
+        codesnips (dict): Dictionary mapping sprite names to their CodeSnip markup.
+        scrappings (dict): Dictionary containing dismantling and breakage information.
+
+    The function generates complete wiki articles by combining various components
+    and saves them to individual files in the output directory structure.
+    Each article includes metadata, infobox, introduction, usage information,
+    code snippets, and navigation elements.
     """
     articles = {}
     version = Version.get()

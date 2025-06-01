@@ -1,3 +1,16 @@
+#!/usr/bin/env python3
+"""
+Project Zomboid Wiki Tile Stitcher
+
+This script is responsible for combining multiple sprite tiles into composite images
+for the Project Zomboid Wiki. It handles multi-tile furniture and objects that span
+multiple grid cells, combining their individual sprites into a single cohesive image
+while maintaining proper positioning and orientation.
+
+The script processes sprites based on their facing direction (North, South, East, West)
+and grid positions, using threading for improved performance.
+"""
+
 import os
 from PIL import Image
 from tqdm import tqdm
@@ -44,8 +57,14 @@ OUTPUT_IMAGES_BASE_PATH = os.path.join(OUTPUT_DIR, LANGUAGE_CODE, "tiles", "imag
 
 def parse_grid_position(position_string: str) -> tuple[int, int]:
     """
-    position_string is "row,column" (first = vertical index, second = horizontal index).
-    Returns (column_index, row_index).
+    Parse a grid position string into column and row indices.
+
+    Args:
+        position_string (str): A string in the format "row,column" where both values are integers.
+
+    Returns:
+        tuple[int, int]: A tuple containing (column_index, row_index).
+        Returns (0, 0) if the parsing fails.
     """
     try:
         row_index, column_index = map(int, position_string.split(","))
@@ -56,8 +75,14 @@ def parse_grid_position(position_string: str) -> tuple[int, int]:
 
 def build_output_name(sprite_identifier_list: list[str]) -> str:
     """
-    Combine multiple sprite identifiers into a single output name.
-    The first identifier is taken as the base, and subsequent ones append their suffix.
+    Generate an output filename by combining multiple sprite identifiers.
+
+    Args:
+        sprite_identifier_list (list[str]): List of sprite identifiers to combine.
+
+    Returns:
+        str: Combined filename where the first identifier is the base and subsequent
+             ones are appended as suffixes, joined with '+'.
     """
     base_identifier = sprite_identifier_list[0]
     additional_suffixes = [identifier.rsplit("_", 1)[-1] for identifier in sprite_identifier_list[1:]]
@@ -66,7 +91,19 @@ def build_output_name(sprite_identifier_list: list[str]) -> str:
 
 def composite_sprites(facing_direction: str, sprite_entries_list: list[dict], output_base_name: str, progress_bar) -> None:
     """
-    Composite multiple sprite images into a single image for a given facing direction.
+    Create a composite image by combining multiple sprite images for a specific facing direction.
+
+    Args:
+        facing_direction (str): The direction the sprite is facing ('N', 'S', 'E', or 'W').
+        sprite_entries_list (list[dict]): List of sprite entries containing sprite IDs and grid positions.
+        output_base_name (str): Base name for the output file.
+        progress_bar: tqdm progress bar instance for tracking progress.
+
+    The function handles:
+        - Sorting sprites by grid position
+        - Computing canvas size based on sprite positions
+        - Compositing sprites onto a single image
+        - Saving the resulting image to the appropriate directory
     """
     # Sort entries by grid coordinates
     sprite_entries_list.sort(key=lambda entry_item: (entry_item["grid"][1], entry_item["grid"][0]))
@@ -136,6 +173,13 @@ def composite_sprites(facing_direction: str, sprite_entries_list: list[dict], ou
 
 
 def main() -> None:
+    """
+    Main execution function for the tile stitcher.
+
+    Processes the named furniture cache to identify multi-tile objects and creates
+    composite images for each valid combination. Uses multi-threading to improve
+    performance when processing multiple sprites.
+    """
     named_furniture_data = load_cache(NAMED_FURNITURE_CACHE_PATH, "named furniture")
     stitching_tasks_list: list[tuple[str, list[dict], str]] = []
 

@@ -1,9 +1,35 @@
+#!/usr/bin/env python3
+"""
+Project Zomboid Wiki Scrapping Table Generator
+
+This script generates wiki tables for item scrapping and breakage information in Project Zomboid.
+It processes tile definitions to create formatted MediaWiki tables showing what materials
+can be obtained from disassembling or breaking various objects in the game.
+
+The script handles both disassembly (intentional scrapping) and breakage (destruction)
+mechanics, generating separate tables for each process with relevant drop rates and quantities.
+"""
+
 import os
 from scripts.utils import utility
 from scripts.core.language import Translate
 from scripts.utils.echo import echo_error
 
 def generate_scrapping_tables(tiles: dict, definitions: dict, lang_code: str) -> dict:
+    """
+    Generate scrapping and breakage tables for tiles in the specified language.
+
+    Args:
+        tiles (dict): Dictionary containing tile definitions and properties.
+        definitions (dict): Dictionary containing scrapping and material definitions.
+        lang_code (str): Language code for localization.
+
+    Returns:
+        dict: Dictionary containing generated scrapping and breakage information for each tile group.
+
+    The function creates MediaWiki-formatted tables for both scrapping and breakage mechanics,
+    saving them to separate files in the output directory.
+    """
     base_dir = os.path.join('output', lang_code, 'tiles', 'crafting')
     os.makedirs(base_dir, exist_ok=True)
 
@@ -48,6 +74,17 @@ def generate_scrapping_tables(tiles: dict, definitions: dict, lang_code: str) ->
 
 
 def _generate_disassembly_section(generic: dict, definitions: dict) -> str:
+    """
+    Generate a MediaWiki table for disassembly (scrapping) information.
+
+    Args:
+        generic (dict): Generic properties of the tile containing material information.
+        definitions (dict): Dictionary containing scrap item definitions and rules.
+
+    Returns:
+        str: MediaWiki-formatted table showing disassembly materials, chances, and quantities.
+        Returns empty string if no materials are defined.
+    """
     scrap_items = definitions.get('scrap_items', [])
     scrap_defs = definitions.get('scrap_definitions', {})
 
@@ -119,6 +156,17 @@ def _generate_disassembly_section(generic: dict, definitions: dict) -> str:
 
 
 def _generate_breakage_section(generic: dict, definitions: dict) -> str:
+    """
+    Generate a MediaWiki table for breakage (destruction) information.
+
+    Args:
+        generic (dict): Generic properties of the tile containing material information.
+        definitions (dict): Dictionary containing material definitions for breakage.
+
+    Returns:
+        str: MediaWiki-formatted table showing breakage materials, chances, and quantities.
+        Returns empty string if no materials are defined.
+    """
     material_defs = definitions.get('material_definitions', {})
 
     materials = [generic.get(k) for k in ('Material','Material2','Material3') if generic.get(k)]

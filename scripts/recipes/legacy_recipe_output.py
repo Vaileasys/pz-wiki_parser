@@ -1,3 +1,21 @@
+#!/usr/bin/env python3
+"""
+Project Zomboid Wiki Legacy Recipe Output Generator
+
+This script processes parsed recipe data and generates formatted wiki markup for
+recipe pages. It handles various recipe components including ingredients, tools,
+skills, and products, converting them into properly formatted wiki templates.
+
+The script handles:
+- Ingredient processing with icons and amounts
+- Tool requirements with conditions and flags
+- Recipe learning methods (books, traits, etc.)
+- Product outputs with quantities
+- XP gains and workstation requirements
+- Item usage tracking and documentation
+- Lua table generation for wiki templates
+"""
+
 import os
 import re
 import json
@@ -10,6 +28,22 @@ from scripts.utils import utility, util
 
 
 def process_ingredients(data):
+    """
+    Process recipe ingredients and format them for wiki display.
+
+    Args:
+        data (dict): Recipe data containing ingredient information.
+
+    Returns:
+        str: Formatted wiki markup for ingredients section.
+
+    Handles:
+    - Tag-based ingredients with icons
+    - Fluid ingredients with colors
+    - Numbered list ingredients
+    - Standard ingredients with amounts
+    - Proper grouping of "One of" vs "Each of" items
+    """
     if (
         "inputs" not in data or
         "ingredients" not in data["inputs"] or
@@ -134,13 +168,20 @@ def process_ingredients(data):
 
 def process_tools(data):
     """
-    Process the 'tools' field from the data and format it, including icons and sorting 'each of' items to the top.
+    Process tool requirements and format them for wiki display.
 
     Args:
-        data (dict): The recipe data containing tool requirements.
+        data (dict): Recipe data containing tool requirements.
 
     Returns:
-        str: A formatted string representing the tools and their conditions.
+        str: Formatted wiki markup for tools section.
+
+    Handles:
+    - Individual tool requirements
+    - Tool tag groups
+    - Tool condition flags
+    - Proper grouping of "One of" vs "Each of" tools
+    - Icon integration for tools
     """
     tools_data = data.get("inputs", {}).get("../tools", {})
     if not tools_data:
@@ -210,13 +251,20 @@ def process_tools(data):
 
 def process_recipes(data):
     """
-    Process the 'skillbooks', 'autolearn', 'schematics', and 'traits' fields from the data and format them.
+    Process recipe learning methods and format them for wiki display.
 
     Args:
-        data (dict): The recipe data containing skillbooks, autolearn, schematics, and traits information.
+        data (dict): Recipe data containing learning requirements.
 
     Returns:
-        str: A formatted string representing the recipes and their conditions.
+        str: Formatted wiki markup for recipe learning section.
+
+    Handles:
+    - Skillbook requirements
+    - Auto-learn conditions
+    - Schematic requirements
+    - Trait requirements
+    - Proper formatting with alternatives
     """
     SCHEMATIC = {
         "ExplosiveSchematics": ["Schematic (explosive)"],
@@ -290,13 +338,18 @@ def process_recipes(data):
 
 def process_skills(data):
     """
-    Process the 'skillrequired' field from the data and format it.
+    Process skill requirements and format them for wiki display.
 
     Args:
-        data (dict): The recipe data containing skill requirements.
+        data (dict): Recipe data containing skill requirements.
 
     Returns:
-        str: A formatted string representing the skills and their levels.
+        str: Formatted wiki markup for skills section.
+
+    Handles:
+    - Skill level requirements
+    - Multiple skill combinations
+    - Proper formatting with alternatives
     """
     skills_data = data.get("requirements", {}).get("skillrequired", {})
     if not skills_data:
@@ -312,6 +365,20 @@ def process_skills(data):
 
 
 def process_workstation(data):
+    """
+    Process workstation requirements and format them for wiki display.
+
+    Args:
+        data (dict): Recipe data containing workstation information.
+
+    Returns:
+        str: Formatted wiki markup for workstation section.
+
+    Handles:
+    - Required crafting stations
+    - Special location requirements
+    - Proper formatting with alternatives
+    """
     if "workstation" in data and data["workstation"].strip():
         if data['workstation'] == "Any surface":
             return f"workstation=''{data['workstation']}''"
@@ -322,16 +389,19 @@ def process_workstation(data):
 
 def process_products(data):
     """
-    Processes the 'outputs' field from the data and formats it, including icons for item products and mapper objects.
+    Process recipe products and format them for wiki display.
 
-    For construction recipes:
-      - If an "icon" field exists, that image is used.
-      - Otherwise, the code falls back to searching the (potentially nested) "spriteOutputs" structure
-        for the first sprite value.
-      - If the resulting icon name starts with "Item_", the prefix is removed and the icon is rendered at 64x64.
-      - Otherwise, it is rendered at 96x96.
+    Args:
+        data (dict): Recipe data containing product information.
 
-    For non-construction recipes, standard processing is applied.
+    Returns:
+        str: Formatted wiki markup for products section.
+
+    Handles:
+    - Standard product outputs
+    - Fluid outputs
+    - Product amounts and variations
+    - Icon integration for products
     """
     construction = data.get("construction", False)
     names = data.get("name", [])
@@ -465,6 +535,20 @@ def process_products(data):
 
 
 def process_xp(data):
+    """
+    Process experience gains and format them for wiki display.
+
+    Args:
+        data (dict): Recipe data containing XP information.
+
+    Returns:
+        str: Formatted wiki markup for XP section.
+
+    Handles:
+    - XP amounts per skill
+    - Multiple skill XP gains
+    - Proper formatting with amounts
+    """
     if "xp" in data:
         if data['xp'] == "0":
             return "xp=''0''"
@@ -475,13 +559,19 @@ def process_xp(data):
 
 def fluid_rgb(fluid_id):
     """
-    Retrieve the name and RGB values of a fluid based on its ID.
+    Get RGB color values for a fluid type.
 
     Args:
-        fluid_id (str): The ID of the fluid to process.
+        fluid_id (str): Identifier for the fluid.
 
     Returns:
-        dict: A dictionary containing the fluid name and RGB values as separate keys.
+        dict: Dictionary containing:
+            - name: Display name of the fluid
+            - R: Red color value
+            - G: Green color value
+            - B: Blue color value
+
+    Handles proper color mapping for all fluid types.
     """
     try:
         fluid_data = fluid_parser.get_fluid_data().get(fluid_id)
@@ -527,9 +617,20 @@ def fluid_rgb(fluid_id):
 
 def gather_item_usage(recipes_data, tags_data):
     """
-    For each item (by its raw name), collect the set of recipe names in which
-    it appears as an input and the set of recipe names in which it appears as an output.
-    Tag-based ingredients and tools are processed separately for regular and construction recipes.
+    Gather information about how items are used in recipes.
+
+    Args:
+        recipes_data (dict): Dictionary of all recipe data.
+        tags_data (dict): Dictionary of item tag data.
+
+    Returns:
+        tuple: Four dictionaries mapping items to their recipe usage:
+            - Normal recipe inputs
+            - Normal recipe outputs
+            - Construction recipe inputs
+            - Construction recipe outputs
+
+    Tracks both direct item usage and tag-based usage.
     """
     normal_item_input_map = defaultdict(set)
     normal_item_output_map = defaultdict(set)
@@ -649,12 +750,16 @@ def gather_item_usage(recipes_data, tags_data):
 
 def output_item_usage(normal_item_input_map, normal_item_output_map, construction_item_input_map, construction_item_output_map):
     """
-    Outputs combined files and individual recipe files for item usage, separated by type.
+    Generate wiki markup for item usage in recipes.
 
-    - Non-construction combined files are saved in output/recipes/crafting_combined/.
-    - Non-construction individual recipe files are saved in output/recipes/crafting/.
-    - Construction combined files are saved in output/recipes/construction_crafting_combined/.
-    - Construction individual recipe files are saved in output/recipes/construction_crafting/.
+    Args:
+        normal_item_input_map (dict): Items used as inputs in normal recipes.
+        normal_item_output_map (dict): Items produced as outputs in normal recipes.
+        construction_item_input_map (dict): Items used as inputs in construction recipes.
+        construction_item_output_map (dict): Items produced as outputs in construction recipes.
+
+    Creates individual files documenting how each item is used in recipes,
+    both as ingredients and as products.
     """
     # Process non-construction items
     combined_output_dir_normal = os.path.join("output", "recipes", "crafting_combined")
@@ -733,8 +838,13 @@ def output_item_usage(normal_item_input_map, normal_item_output_map, constructio
 
 def output_skill_usage(recipes_data):
     """
-    For each recipe, checks both the xp field and the 'skillrequired' entries.
-    Certain skills are remapped for simplicity
+    Generate wiki markup for skill usage in recipes.
+
+    Args:
+        recipes_data (dict): Dictionary of all recipe data.
+
+    Creates files documenting which recipes require each skill
+    and what level of skill is needed.
     """
     skills_output_dir = os.path.join("output", "recipes", "skills")
     os.makedirs(skills_output_dir, exist_ok=True)
@@ -794,12 +904,31 @@ def output_skill_usage(recipes_data):
 
 
 def strip_prefix(text, prefix):
+    """
+    Remove a prefix from text if it exists.
+
+    Args:
+        text (str): Text to process.
+        prefix (str): Prefix to remove.
+
+    Returns:
+        str: Text with prefix removed if it existed, original text otherwise.
+    """
     if text.startswith(prefix):
         return text[len(prefix):]
     return text
 
 
 def output_lua_tables(processed_recipes):
+    """
+    Generate Lua tables for recipe data.
+
+    Args:
+        processed_recipes (dict): Dictionary of processed recipe data.
+
+    Creates Lua table files that can be used by wiki templates
+    to display recipe information.
+    """
     output_dir = os.path.join("output", "recipes")
     os.makedirs(output_dir, exist_ok=True)
     os.makedirs(os.path.join("output", "recipes", "data_files"), exist_ok=True)
@@ -902,13 +1031,21 @@ def output_lua_tables(processed_recipes):
         f.write("return index\n")
 
 
-def strip_prefix(text, prefix):
-    if text.startswith(prefix):
-        return text[len(prefix):]
-    return text
-
-
 def main(recipes_data=None):
+    """
+    Main execution function for recipe output generation.
+
+    Args:
+        recipes_data (dict, optional): Pre-loaded recipe data.
+            If None, data will be loaded from cache.
+
+    This function:
+    1. Loads or uses provided recipe data
+    2. Processes all recipes into wiki format
+    3. Generates item usage documentation
+    4. Creates skill usage documentation
+    5. Outputs Lua tables for templates
+    """
     print("Processing recipe output...")
     if not recipes_data:
         recipes_data = legacy_recipe_format.get_processed_recipes()

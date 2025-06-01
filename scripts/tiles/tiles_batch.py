@@ -1,3 +1,19 @@
+#!/usr/bin/env python3
+"""
+Project Zomboid Wiki Tile Processing Orchestrator
+
+This script orchestrates the complete tile processing pipeline for the Project Zomboid Wiki.
+It manages cache generation, data parsing, and the generation of various wiki components
+including infoboxes, code snippets, scrapping tables, and complete articles.
+
+The script handles:
+- Cache management and validation
+- Data parsing from game files
+- Generation of wiki components
+- Article assembly and organization
+- List generation for furniture and crafting surfaces
+"""
+
 import os
 
 from scripts.core.cache import load_cache
@@ -23,12 +39,22 @@ TILE_CACHE_FILE = "tiles_data.json"
 NAMED_FURNITURE_CACHE_FILE = "named_furniture.json"
 MOVABLE_DEFINITIONS_CACHE_FILE = "movable_definitions.json"
 
-"""
-This script handles the cache generation an the in order running of tiles scripts
-"""
-
 
 def generate_cache(cache_path: str, cache_label: str, parser_func, game_version: str):
+    """
+    Generate or load a cache file for tile data.
+
+    Args:
+        cache_path (str): Path to the cache file.
+        cache_label (str): Human-readable label for the cache type.
+        parser_func (callable): Function to parse data if cache needs regeneration.
+        game_version (str): Current game version for cache validation.
+
+    Returns:
+        tuple: (cache_data, cache_version) where:
+            - cache_data: The loaded data or None if loading failed
+            - cache_version: Version string of the cache or None if loading failed
+    """
     try:
         data, cache_version = load_cache(cache_path, cache_label, get_version=True)
         if cache_version != game_version:
@@ -41,8 +67,22 @@ def generate_cache(cache_path: str, cache_label: str, parser_func, game_version:
         echo_error(f"Error loading {cache_label.lower()} cache: {exc}")
         return None, None
 
+
 def main():
-    """Ensure caches are fresh, generate all components, and assemble articles."""
+    """
+    Main execution function for the tile processing pipeline.
+
+    This function:
+    1. Ensures all necessary caches are present and up-to-date
+    2. Loads or generates required data from game files
+    3. Generates various wiki components:
+       - Infoboxes for tile properties
+       - CodeSnips showing tile definitions
+       - Scrapping tables for dismantling info
+       - Complete wiki articles
+       - Furniture and crafting surface lists
+    4. Provides progress feedback through echo messages
+    """
     os.makedirs(DATA_DIR, exist_ok=True)
     game_version = Version.get()
     lang_code    = Language.get()

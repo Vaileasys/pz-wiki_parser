@@ -1,3 +1,20 @@
+#!/usr/bin/env python3
+"""
+Project Zomboid Wiki Named Furniture Filter
+
+This script processes and organizes tile data for named furniture in Project Zomboid.
+It handles both manually defined furniture groups and automatically detected furniture
+based on game properties. The script is responsible for grouping related furniture
+sprites and organizing them into logical sets for wiki documentation.
+
+The script handles:
+- Manual furniture group definitions
+- Automatic furniture detection and grouping
+- Multi-sprite furniture composition
+- Variant handling for similar furniture types
+- Directional (facing) furniture organization
+"""
+
 import os
 from os import path
 from scripts.core.constants import DATA_DIR
@@ -138,14 +155,21 @@ MANUAL_GROUPS = {
 
 def process_tiles(tiles_data: dict) -> dict:
     """
-    1) Emit any manual groups from MANUAL_GROUPS.
-    2) Bucket the remaining tiles by "GroupName CustomName".
-    3) Within each bucket, first split by sprite-key prefix (up to the first '_').
-       - If multiple prefixes, treat each as a variant and suffix the display name with _2, _3, etc.
-    4) For each variant group:
-       a) If any sprite has 'Facing', sort by Facing order and emit as one multi-sprite object.
-       b) Otherwise, split by signature (tileSheetIndex, PickUpWeight, IsoType, Material, Material2, Material3);
-          single-signature groups keep the base name; multi-signature groups get _2, _3 suffixes.
+    Process and organize tile data into furniture groups.
+
+    Args:
+        tiles_data (dict): Raw tile data from the game files.
+
+    Returns:
+        dict: Processed and organized furniture groups.
+
+    The processing follows these steps:
+    1. Process manually defined groups from MANUAL_GROUPS
+    2. Group remaining tiles by their GroupName and CustomName properties
+    3. Within each group:
+        - Split by sprite prefix if multiple exist
+        - Handle facing directions for multi-sprite objects
+        - Group by signature for variant handling
     """
     processed = {}
 
@@ -187,8 +211,16 @@ def process_tiles(tiles_data: dict) -> dict:
 
     def _process_group(entries, base_name):
         """
-        entries: list of (tile_name, tile_info)
-        base_name: name under which this group should be emitted (may include _2, _3 suffix)
+        Process a group of related tile entries into a furniture group.
+
+        Args:
+            entries (list): List of tuples containing (tile_name, tile_info).
+            base_name (str): Base name for the group, may include variant suffixes.
+
+        The function handles:
+        - Multi-sprite furniture with facing directions
+        - Signature-based grouping for variants
+        - Name deduplication for multiple variants
         """
         # Multi-sprite grouping
         if any('Facing' in info.get('properties', {}).get('generic', {}) for _, info in entries):
@@ -255,6 +287,15 @@ def process_tiles(tiles_data: dict) -> dict:
     return processed
 
 def main():
+    """
+    Main execution function for the named furniture filter.
+
+    This function:
+    1. Loads the tile data cache
+    2. Processes tiles into furniture groups
+    3. Saves the processed data back to cache
+    4. Provides progress feedback through echo messages
+    """
     os.makedirs(DATA_DIR, exist_ok=True)
 
     tiles_cache_filename = 'tiles_data.json'

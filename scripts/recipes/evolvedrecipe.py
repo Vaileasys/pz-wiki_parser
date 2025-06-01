@@ -1,9 +1,42 @@
+#!/usr/bin/env python3
+"""
+Project Zomboid Wiki Evolved Recipes Generator
+
+This script processes items in Project Zomboid that are part of evolved recipes
+(recipes that can change or improve over time, like food combinations). It generates
+wiki markup using the EvolvedRecipesForItem template to document these recipes.
+
+The script handles:
+- Parsing item data for evolved recipe properties
+- Processing spice attributes for recipes
+- Formatting recipe combinations and variations
+- Generating MediaWiki template markup
+- Special handling for cooked food variants
+"""
+
 import os
 from tqdm import tqdm
 from scripts.parser import item_parser
 
 
 def main():
+    """
+    Main execution function for evolved recipes generation.
+
+    This function:
+    1. Loads parsed item data
+    2. Identifies items with evolved recipe properties
+    3. Processes special attributes like spices
+    4. Formats recipe data for wiki template
+    5. Creates output files with proper template markup
+
+    The output is saved in the 'output/evolved_recipes' directory,
+    with one file per item that has evolved recipe properties.
+    Special handling is included for:
+    - Spice attributes
+    - List-type recipe values
+    - Cooked food variants
+    """
     parsed_item_data = item_parser.get_item_data()
     output_dir = os.path.join("output", "evolved_recipes")
     os.makedirs(output_dir, exist_ok=True)

@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+"""
+Project Zomboid Wiki CodeSnip Generator
+
+This script generates MediaWiki CodeSnip templates for Project Zomboid tile definitions.
+It processes tile data and creates formatted code snippets that can be embedded in wiki
+pages, showing the exact tile definitions from the game's source files.
+
+Each tile's definition is formatted as a JSON code block within a CodeSnip template,
+which provides syntax highlighting and source attribution on the wiki. The script
+generates individual files for each tile definition and maintains a mapping of
+all generated snippets.
+"""
+
 import os, json
 from typing import Dict
 from scripts.utils.echo import echo_error

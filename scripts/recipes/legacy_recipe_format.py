@@ -1,3 +1,20 @@
+#!/usr/bin/env python3
+"""
+Project Zomboid Wiki Legacy Recipe Formatter
+
+This script processes raw recipe data into a structured format suitable for wiki
+documentation. It handles the complex task of formatting various recipe components,
+including inputs, outputs, requirements, and special cases like construction recipes.
+
+The script handles:
+- Recipe name translation and formatting
+- Input processing (tools, ingredients, energy)
+- Output processing with mappers
+- Requirement formatting (skills, books, traits)
+- Construction recipe special cases
+- XP and workstation information
+"""
+
 import os
 import re
 import json
@@ -14,8 +31,15 @@ from scripts.core.cache import save_cache, load_cache
 processed_recipes = {}
 
 def get_processed_recipes():
-    """Returns the processed recipe data. Initialises if the parsed data is empty."""
+    """
+    Get the processed recipe data, initializing if empty.
 
+    Returns:
+        dict: Dictionary of processed recipe data.
+
+    This function serves as the main interface to access processed recipe data,
+    ensuring the data is loaded before being accessed.
+    """
     print("getting processed recipes")
     if not processed_recipes:
         main()
@@ -24,14 +48,24 @@ def get_processed_recipes():
 
 def process_recipe(recipe, parsed_item_data):
     """
-    Processes a recipe and returns a dictionary of its details.
+    Process a recipe into a structured format.
 
     Args:
-        recipe (dict): A dictionary containing the recipe details.
-        parsed_item_data (dict): Parsed item data to aid in processing requirements.
+        recipe (dict): Raw recipe data.
+        parsed_item_data (dict): Parsed item data for reference.
 
     Returns:
-        dict: A dictionary with the recipe's processed details.
+        dict: Processed recipe data including:
+            - name: Recipe name and translation
+            - inputs: Tools and ingredients
+            - outputs: Products and results
+            - requirements: Skills, books, and traits
+            - workstation: Required crafting location
+            - xp: Experience gains
+            - construction: Construction recipe flag
+            - category: Recipe category
+
+    Handles validation and proper formatting of all recipe components.
     """
     if not isinstance(recipe, dict):
         print("Invalid recipe format: Expected a dictionary.")
@@ -56,13 +90,16 @@ def process_recipe(recipe, parsed_item_data):
 
 def process_name(recipe):
     """
-    Processes the 'name' field of the recipe to find the raw name and its translation.
+    Process recipe name and get its translation.
 
     Args:
-        recipe (dict): A dictionary containing the recipe details.
+        recipe (dict): Recipe data containing name field.
 
     Returns:
-        tuple: A tuple containing the raw name and translated name, or (None, None) if the name field is not found.
+        tuple: (raw_name, translated_name) where:
+            - raw_name: Original recipe name
+            - translated_name: Translated version of the name
+        Returns (None, None) if name is invalid.
     """
     if "name" not in recipe or not isinstance(recipe["name"], str):
         print("No 'name' field found or 'name' is not a valid string.")
@@ -76,13 +113,23 @@ def process_name(recipe):
 
 def process_inputs(recipe):
     """
-    Processes the 'inputs' field of the recipe into tools, ingredients, and energy.
+    Process recipe inputs into structured format.
 
     Args:
-        recipe (dict): A dictionary containing the recipe details.
+        recipe (dict): Recipe data containing inputs field.
 
     Returns:
-        dict: A dictionary with tools and ingredients processed from the inputs field.
+        dict: Processed inputs containing:
+            - tools: Required tools with properties
+            - ingredients: Required ingredients with amounts
+            - energy: Energy requirements if any
+
+    Handles:
+    - Tool requirements and flags
+    - Ingredient amounts and types
+    - Fluid ingredients
+    - Energy inputs
+    - Numbered list inputs
     """
     inputs_key = "inputs"
     if inputs_key not in recipe or not isinstance(recipe[inputs_key], list):
@@ -283,19 +330,17 @@ def process_inputs(recipe):
 
 def construction_output(outputs, recipe):
     """
-    Processes construction-type outputs.
-    For each output, if an "icon" exists, it is copied over.
-    Otherwise, if no icon exists and a sprite is available from "spriteOutputs",
-    that sprite value is used as the icon.
-    If the outputs list is empty, a new output is generated using the recipe's
-    translated name (the second value in the "name" tuple) and the first sprite found.
+    Process construction recipe outputs.
 
     Args:
-        outputs (list): The outputs list from a construction recipe.
-        recipe (dict): The full recipe, which may also contain a 'spriteOutputs' key.
+        outputs (list): List of output items.
+        recipe (dict): Full recipe data.
 
     Returns:
-        dict: A dictionary with key 'outputs' holding the processed outputs.
+        list: Processed construction outputs with:
+            - Sprite information
+            - Icon details
+            - Item properties
     """
     processed_outputs = {}
     output_index = 1
@@ -351,15 +396,17 @@ def construction_output(outputs, recipe):
 
 def process_outputs(recipe):
     """
-    Processes the 'outputs' field of the recipe and returns a dictionary of outputs.
+    Process recipe outputs into structured format.
 
     Args:
-        recipe (dict): A dictionary containing the recipe details.
+        recipe (dict): Recipe data containing outputs.
 
     Returns:
-        dict: A dictionary of processed outputs, with each output labeled as 'outputX',
-              where X starts at 1. Each 'outputX' is itself a dictionary containing details
-              about the product, including raw names, translated names, product numbers, or fluid data.
+        dict: Processed outputs containing:
+            - Standard outputs with amounts
+            - Construction outputs if applicable
+            - Mapper-based outputs
+            - Fluid outputs
     """
     outputs_key = "outputs"
     if outputs_key not in recipe or not isinstance(recipe[outputs_key], list):
@@ -425,15 +472,17 @@ def process_outputs(recipe):
 
 def process_output_mapper(recipe, mapper_string):
     """
-    Processes the 'mapper' field in the 'outputs' field of the recipe.
+    Process output mapper strings into structured format.
 
     Args:
-        recipe (dict): A dictionary containing the recipe details.
-        mapper_string (str): The value of the 'mapper' field in the output.
+        recipe (dict): Recipe data.
+        mapper_string (str): Mapper string to process.
 
     Returns:
-        dict: A dictionary containing the processed output mapper details,
-              including both raw and translated outputs, in the same order.
+        dict: Processed mapper data with:
+            - Mapped items
+            - Item properties
+            - Amounts
     """
     # Check if 'itemMappers' exists in the recipe
     if "itemMappers" not in recipe or not isinstance(recipe["itemMappers"], dict):
@@ -476,14 +525,19 @@ def process_output_mapper(recipe, mapper_string):
 
 def process_requirements(recipe, parsed_item_data):
     """
-    Processes the 'requirements' field of the recipe, extracting required skills, books, schematics, and traits.
+    Process recipe requirements into structured format.
 
     Args:
-        recipe (dict): A dictionary containing the recipe details.
-        parsed_item_data (dict): The parsed item data from 'parsed_item_data.json'.
+        recipe (dict): Recipe data.
+        parsed_item_data (dict): Reference item data.
 
     Returns:
-        dict: A dictionary containing processed requirements, including skills, books, schematics, and traits.
+        dict: Processed requirements including:
+            - Required skills and levels
+            - Required books or literature
+            - Required traits
+            - Auto-learn conditions
+            - Schematic requirements
     """
     requirements = {
         "skillrequired": {},
@@ -587,13 +641,14 @@ def process_requirements(recipe, parsed_item_data):
 
 def process_workstation(recipe):
     """
-    Processes the top-level 'Tags' field of the recipe to determine the workstation.
+    Process workstation requirements.
 
     Args:
-        recipe (dict): A dictionary containing the recipe details.
+        recipe (dict): Recipe data.
 
     Returns:
-        str: A string representing the workstation based on the tags, or an empty string if no relevant tags are found.
+        str: Formatted workstation requirement,
+             or empty string if no workstation needed.
     """
     tags_key = next((key for key in recipe if key.lower() == "tags" and not isinstance(recipe[key], (dict, list))), None)
 
@@ -650,14 +705,14 @@ def process_workstation(recipe):
 
 def process_xp(recipe):
     """
-    Processes the 'xpAward' field of the recipe, separates strings and numbers,
-    translates strings, and formats the output.
+    Process experience gain information.
 
     Args:
-        recipe (dict): A dictionary containing the recipe details.
+        recipe (dict): Recipe data.
 
     Returns:
-        str: A formatted XP string if the 'xpAward' field is present, or "0" if absent or invalid.
+        str: Formatted XP gain information,
+             or "0" if no XP is gained.
     """
     if "xpAward" not in recipe:
         return "0"
@@ -684,6 +739,16 @@ def process_xp(recipe):
 
 
 def main():
+    """
+    Main execution function for recipe formatting.
+
+    This function:
+    1. Loads necessary data from parsers
+    2. Processes all recipes into structured format
+    3. Handles construction recipes
+    4. Saves processed data to cache
+    5. Returns processed recipe data
+    """
     global processed_recipes
     language_code = Language.get()
     game_version = Version.get()
