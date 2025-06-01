@@ -1,13 +1,13 @@
-[Previous](scripts/recipes/teached_recipes.md) | [Back to Index](../INDEX.md) | [Next](scripts/spawnpoints.md)
+[Previous File](fixing.md) | [Next File](spawnpoints.md) | [Next Folder](article_content/hotbar_slots_content.md) | [Back to Index](../INDEX.md)
 
-# scripts/roomdefine.py
+# roomdefine.py
 
 ## Functions
 
-- `main()`
-- `process_single_room(room_name, data)`
-- `generate_per_letter_files(room_to_containers)`
-- `generate_main_page(room_to_containers)`
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/roomdefine.py#L13)
+### [`process_single_room(room_name: str, data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/roomdefine.py#L52)
+### [`generate_per_letter_files(room_to_containers: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/roomdefine.py#L71)
+### [`generate_main_page(room_to_containers: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/roomdefine.py#L149)
 
 
-[Previous](scripts/recipes/teached_recipes.md) | [Back to Index](../INDEX.md) | [Next](scripts/spawnpoints.md)
+[Previous File](fixing.md) | [Next File](spawnpoints.md) | [Next Folder](article_content/hotbar_slots_content.md) | [Back to Index](../INDEX.md)
