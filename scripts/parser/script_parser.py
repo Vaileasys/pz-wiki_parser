@@ -60,18 +60,51 @@ SCRIPT_CONFIGS = {
         # Handled through recipe_parser
         "list_keys": ["inputs"],
         "dict_keys_colon": ["AutoLearnAll", "AutoLearnAny", "xpAward", "SkillRequired"],
-        "list_keys_semicolon": ["tags", "Tags", "AutoLearnAll", "AutoLearnAny"]
+        "list_keys_semicolon": ["tags", "Tags", "AutoLearnAll", "AutoLearnAny"],
+        "file_blacklist": [
+            "dbg_entity_turbo",
+            "dbg_entity_test_new_components",
+            "dbg_example_recipes",
+            "dbg_entity_test_resources",
+            "recipes_blacksmith_TEST_RECIPES",
+            "craftrecipe_testing",
+            "TESTING_CapGuns",
+            "entity_channels_test",
+            "TESTING_items_food_fluids",
+            "TESTING_Misc",
+            "items_testing",
+            "dbg_entity_test_new_components",
+            "dbg_entity_test_resources",
+            "x_entity_channels_test",
+            "x_entity_test",
+            "items_debug"
+        ],
+        "folder_blacklist": [
+            "tempNotWorking"
+        ]
     },
     "entity": {
         "file_blacklist": [
-        "dbg_entity_test_new_components",
-        "dbg_entity_test_resources",
-        "dbg_entity_turbo",
-        "dbg_example_recipes",
-        "entity_channels_test",
-        "items_testing",
-        "craftrecipe_testing"
-    ],
+            "dbg_entity_turbo",
+            "dbg_entity_test_new_components",
+            "dbg_example_recipes",
+            "dbg_entity_test_resources",
+            "recipes_blacksmith_TEST_RECIPES",
+            "craftrecipe_testing",
+            "TESTING_CapGuns",
+            "entity_channels_test",
+            "TESTING_items_food_fluids",
+            "TESTING_Misc",
+            "items_testing",
+            "dbg_entity_test_new_components",
+            "dbg_entity_test_resources",
+            "x_entity_channels_test",
+            "x_entity_test",
+            "items_debug"
+        ],
+        "folder_blacklist": [
+            "tempNotWorking"
+        ],
         # Handled through recipe_parser
         "list_keys": ["row"],
         "list_keys_space": ["row"],
@@ -696,6 +729,34 @@ def parse_block(lines: list[str], block_id: str = "Unknown", script_type: str = 
     return data
 
 
+def is_blacklisted(filepath: str, script_type: str) -> bool:
+    """
+    Check if a file should be blacklisted based on file and folder blacklists.
+    
+    Args:
+        filepath (str): Path to the file to check
+        script_type (str): Type of script being parsed
+        
+    Returns:
+        bool: True if file should be blacklisted, False otherwise
+    """
+    path = Path(filepath)
+    config = SCRIPT_CONFIGS.get(script_type, {})
+    
+    # Check file blacklist
+    if path.stem in config.get("file_blacklist", []):
+        echo_info(f"Skipping blacklisted file: '{path.stem}'")
+        return True
+        
+    # Check folder blacklist
+    for folder in config.get("folder_blacklist", []):
+        if folder in str(path):
+            echo_info(f"Skipping file in blacklisted folder '{folder}': '{path.stem}'")
+            return True
+            
+    return False
+
+
 def extract_script_data(script_type: str, do_post_processing: bool = True, cache_result: bool = True) -> dict[str, dict]:
     """
     Parses all script files of a given script type, extracting blocks into dictionaries keyed by FullType (i.e. [Module].[Type])
@@ -721,10 +782,8 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
         echo_warning("No script files found.")
 
     for filepath in script_files:
-        
-        # Skip files in the 'file_blacklist' for this script_type
-        if Path(filepath).stem in SCRIPT_CONFIGS.get(script_type, {}).get("file_blacklist", []):
-            echo_info(f"Skipping blacklisted file path: '{Path(filepath).stem}'")
+        # Check if file should be blacklisted
+        if is_blacklisted(filepath, script_type):
             continue
 
         content = read_file(filepath)
@@ -735,8 +794,8 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
         if script_type == "entity":
             file_texts: dict[str, str] = {}
             for filepath in script_files:
-                if Path(filepath).stem in SCRIPT_CONFIGS["entity"].get("file_blacklist", []):
-                    echo_info(f"Skipping blacklisted file path: '{Path(filepath).stem}'")
+                # Check if file should be blacklisted
+                if is_blacklisted(filepath, script_type):
                     continue
 
                 text = read_file(filepath)
