@@ -769,14 +769,24 @@ def process_recipes(data: dict) -> str:
                 formatted_parts.extend(["<br><small>and</small><br>"])
             formatted_parts.append(f"[[{Translate.get(skill_key, 'Perk')}]] {level_required}")
 
-    if autolearn_any_list:
-        formatted_parts.append("<br><small>Auto-learnt if any of:</small><br>")
-        for index, skill_entry in enumerate(autolearn_any_list):
-            if ":" in skill_entry:
-                sk, lvl = skill_entry.split(":", 1)
-                if index > 0:
-                    formatted_parts.extend(["<br><small>or</small><br>"])
-                formatted_parts.append(f"[[{Translate.get(sk.strip(), 'Perk')}]] {lvl.strip()}")
+    # Handle autolearn_any list
+    valid_autolearn_entries = []
+    for skill_entry in autolearn_any_list:
+        if isinstance(skill_entry, str) and ":" in skill_entry:
+            sk, lvl = skill_entry.split(":", 1)
+            sk = sk.strip()
+            lvl = lvl.strip()
+            if sk and lvl:  # Only add if both parts are non-empty
+                valid_autolearn_entries.append((sk, lvl))
+
+    if valid_autolearn_entries:
+        if formatted_parts[-1]:  # If we have previous content, add spacing
+            formatted_parts.append("<br>")
+        formatted_parts.append("<small>Auto-learnt if any of:</small><br>")
+        for index, (skill_key, level) in enumerate(valid_autolearn_entries):
+            if index > 0:
+                formatted_parts.extend(["<br><small>or</small><br>"])
+            formatted_parts.append(f"[[{Translate.get(skill_key, 'Perk')}]] {level}")
 
     return "".join(formatted_parts)
 
@@ -829,6 +839,7 @@ def process_requirements(recipe: dict, parsed_item_metadata: dict, literature_da
         "skillrequired": {},
         "skillbooks":   [],
         "autolearn":    {},
+        "autolearn_any": [],
         "schematics":   [],
         "traits":       [],
     }
@@ -886,7 +897,14 @@ def process_requirements(recipe: dict, parsed_item_metadata: dict, literature_da
         for sk_key, sk_level in autolearn_entry.items():
             requirements_work["autolearn"][sk_key] = int(sk_level)
 
-    requirements_work["autolearn_any"] = recipe.get("AutoLearnAny", [])
+    # AutoLearnAny - handle both string and list formats
+    auto_learn_any = recipe.get("AutoLearnAny")
+    if auto_learn_any:
+        if isinstance(auto_learn_any, str):
+            requirements_work["autolearn_any"].append(auto_learn_any)
+        elif isinstance(auto_learn_any, list):
+            requirements_work["autolearn_any"].extend(auto_learn_any)
+
     recipes_string = process_recipes({"requirements": requirements_work})
     skills_string  = process_skills({"requirements": requirements_work})
     return recipes_string, skills_string
