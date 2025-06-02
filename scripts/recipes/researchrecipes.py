@@ -11,12 +11,14 @@ The script handles:
 - Generating formatted wiki markup with recipe lists
 - Creating output in both research and crafting directories
 - Proper template formatting for wiki integration
+- Expanding meta recipes into their component recipes
 """
 
 import os
 from tqdm import tqdm
 from scripts.parser import item_parser
-
+from scripts.parser import metarecipe_parser
+from scripts.utils.echo import echo_info, echo_success
 
 def main():
     """
@@ -28,6 +30,7 @@ def main():
     3. Generates wiki markup using Crafting/sandbox template
     4. Creates output files in both research and crafting directories
     5. Handles proper formatting for wiki integration
+    6. Expands meta recipes into their component recipes
 
     The output is saved in two locations:
     - output/recipes/researchrecipes/
@@ -35,13 +38,15 @@ def main():
     Each containing one file per researchable item.
     """
     parsed_item_data = item_parser.get_item_data()
+    # Load meta recipe data for expansion
+    metarecipe_data = metarecipe_parser.get_metarecipe_data()
 
     research_dir = os.path.join("output", "recipes", "researchrecipes")
     crafting_dir = os.path.join("output", "recipes", "crafting")
     os.makedirs(research_dir, exist_ok=True)
     os.makedirs(crafting_dir, exist_ok=True)
 
-    for item_id, item_data in tqdm(parsed_item_data.items(), desc="Processing Items"):
+    for item_id, item_data in tqdm(parsed_item_data.items(), desc="Processing research recipes"):
         researchable_recipes = item_data.get("ResearchableRecipes")
         if not researchable_recipes:
             continue
@@ -49,13 +54,16 @@ def main():
         # Ensure researchable_recipes is always a list.
         if not isinstance(researchable_recipes, list):
             researchable_recipes = [researchable_recipes]
+            
+        # Expand meta recipes
+        expanded_recipes = metarecipe_parser.expand_recipe_list(researchable_recipes)
 
         lines = [
             "The following recipes can be learned by researching this item:",
             "",
             f"{{{{Crafting/sandbox|id={item_id}_research"
         ]
-        for recipe in researchable_recipes:
+        for recipe in expanded_recipes:
             lines.append(f"|{recipe}")
         lines.append("}}")
 
