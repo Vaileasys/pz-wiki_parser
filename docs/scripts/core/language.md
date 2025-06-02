@@ -28,12 +28,15 @@
 ##### [`get(property_value, property_key, lang_code, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L163)
 
 _Get a translation for a given value, using optional prefix logic._
+
 ##### [`get_wiki(value: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L179)
 
 _Translate all wiki-style placeholders (<< >>) inside a string._
+
 ##### [`load()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L188)
 
 _Force-load all translation data, bypassing lazy init._
+
 ##### [`_ensure_loaded()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L198)
 ##### [`_cache()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L203)
 ##### [`_parse(wiki_code, game_code)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L220)

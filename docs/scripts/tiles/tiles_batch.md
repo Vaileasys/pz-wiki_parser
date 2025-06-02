@@ -2,7 +2,7 @@
 
 # tiles_batch.py
 
-> Project Zomboid Wiki Tile Processing Orchestrator
+Project Zomboid Wiki Tile Processing Orchestrator
 
 This script orchestrates the complete tile processing pipeline for the Project Zomboid Wiki.
 It manages cache generation, data parsing, and the generation of various wiki components
@@ -17,7 +17,7 @@ The script handles:
 
 ## Functions
 
-### [`generate_cache(cache_path: str, cache_label: str, parser_func, game_version: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_batch.py#L44)
+### [`generate_cache(cache_path: str, cache_label: str, parser_func, game_version: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_batch.py#L43)
 
 _Generate or load a cache file for tile data._
 
@@ -34,11 +34,13 @@ _Generate or load a cache file for tile data._
 <ins>**Returns:**</ins>
   - **tuple:**
       - (cache_data, cache_version) where:
-      - - cache_data: The loaded data or None if loading failed
-      - - cache_version: Version string of the cache or None if loading failed
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_batch.py#L72)
+        - cache_data: The loaded data or None if loading failed
+        - cache_version: Version string of the cache or None if loading failed
+
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_batch.py#L71)
 
 _Main execution function for the tile processing pipeline._
+
 
 
 [Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_article.md) | [Next File](tiles_codesnip.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)

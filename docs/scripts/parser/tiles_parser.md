@@ -2,12 +2,12 @@
 
 # tiles_parser.py
 
-> This script was originally written in JavaScript by User:Jab.
+This script was originally written in JavaScript by User:Jab.
 It has been converted to python for use in the wiki parser.
 
 ## Functions
 
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/tiles_parser.py#L451)
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/tiles_parser.py#L450)
 
 ## Classes
 

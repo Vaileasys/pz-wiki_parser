@@ -2,7 +2,7 @@
 
 # tiles_codesnip.py
 
-> Project Zomboid Wiki CodeSnip Generator
+Project Zomboid Wiki CodeSnip Generator
 
 This script generates MediaWiki CodeSnip templates for Project Zomboid tile definitions.
 It processes tile data and creates formatted code snippets that can be embedded in wiki
@@ -15,7 +15,7 @@ all generated snippets.
 
 ## Functions
 
-### [`generate_codesnips(named_tiles_data: Dict[str, Dict[str, dict]], lang_code: str, game_version: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_codesnip.py#L20)
+### [`generate_codesnips(named_tiles_data: Dict[str, Dict[str, dict]], lang_code: str, game_version: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_codesnip.py#L19)
 
 _Generate a CodeSnip wikitext snippet for each tile in every named group,_
 
@@ -30,6 +30,7 @@ _Generate a CodeSnip wikitext snippet for each tile in every named group,_
 <ins>**Returns:**</ins>
   - **dict:**
       - Mapping from sprite_name to its CodeSnip wikitext.
+
 
 
 [Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_batch.md) | [Next File](tiles_infobox.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)

@@ -4,7 +4,7 @@
 
 ## Functions
 
-### [`timestamp_to_datetime(timestamp: Union[int, str])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L41)
+### [`timestamp_to_datetime(timestamp: Union[int, str])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L40)
 
 _Convert a timestamp to time and date strings._
 
@@ -15,7 +15,8 @@ _Convert a timestamp to time and date strings._
 <ins>**Returns:**</ins>
   - **Tuple[str, str]:**
       - A tuple containing the time in 24-hour format and date in ISO format.
-### [`replace_cat(cat: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L58)
+
+### [`replace_cat(cat: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L57)
 
 _Replace category with its replacement if available._
 
@@ -26,7 +27,8 @@ _Replace category with its replacement if available._
 <ins>**Returns:**</ins>
   - **str:**
       - The replaced category.
-### [`replace_codes(code_part: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L70)
+
+### [`replace_codes(code_part: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L69)
 
 _Replace code part with its replacement if available._
 
@@ -37,7 +39,8 @@ _Replace code part with its replacement if available._
 <ins>**Returns:**</ins>
   - **str:**
       - The replaced code part.
-### [`get_person(color: dict, person_map: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L82)
+
+### [`get_person(color: dict, person_map: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L81)
 
 _Get person identifier based on color._
 
@@ -50,23 +53,30 @@ _Get person identifier based on color._
 <ins>**Returns:**</ins>
   - **str:**
       - The person identifier.
-### [`get_channel_cat(channel_entry: Union[ET.Element, None])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L100)
+
+### [`get_channel_cat(channel_entry: Union[ET.Element, None])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L99)
 
 _Get channel category from channel entry._
 
 <ins>**Args:**</ins>
+  - **channel_entry (ET.Element or None)**:
+      - _The channel entry element._
 
 <ins>**Returns:**</ins>
   - **str:**
       - The channel category.
-### [`process_broadcast_entries(entries: List[ET.Element], output_file, channel_entry: Union[ET.Element, None], log_file, broadcast_entry_count: int)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L118)
+
+### [`process_broadcast_entries(entries: List[ET.Element], output_file, channel_entry: Union[ET.Element, None], log_file, broadcast_entry_count: int)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L117)
 
 _Process broadcast entries and write to output file._
 
 <ins>**Args:**</ins>
+  - **entries (List[ET.Element])**:
+      - _List of broadcast entries._
   - **output_file (file object)**:
       - _The output file to write to._
-      - _channel_entry (ET.Element or None): The channel entry._
+  - **channel_entry (ET.Element or None)**:
+      - _The channel entry._
   - **log_file (file object)**:
       - _The log file to write to._
   - **broadcast_entry_count (int)**:
@@ -75,9 +85,11 @@ _Process broadcast entries and write to output file._
 <ins>**Returns:**</ins>
   - **int:**
       - The updated broadcast entry count.
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L203)
+
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L202)
 
 _Main function to process the RadioData.xml and generate output._
+
 
 
 [Previous Folder](../objects/components.md) | [Previous File](outfit_parser.md) | [Next File](recipe_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)

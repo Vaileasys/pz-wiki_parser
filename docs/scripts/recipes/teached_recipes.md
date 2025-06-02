@@ -2,7 +2,7 @@
 
 # teached_recipes.py
 
-> Project Zomboid Wiki Taught Recipes Generator
+Project Zomboid Wiki Taught Recipes Generator
 
 This script processes items in Project Zomboid that teach recipes (like recipe books
 or VHS tapes) and generates wiki markup showing which recipes each item teaches.
@@ -16,9 +16,10 @@ The script handles:
 
 ## Functions
 
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/teached_recipes.py#L23)
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/teached_recipes.py#L22)
 
 _Main execution function for taught recipes generation._
+
 
 
 [Previous Folder](../parser/distribution_container_parser.md) | [Previous File](researchrecipes.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)

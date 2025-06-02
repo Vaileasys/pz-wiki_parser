@@ -2,7 +2,7 @@
 
 # tiles_navbox.py
 
-> Project Zomboid Wiki Navigation Box Generator
+Project Zomboid Wiki Navigation Box Generator
 
 This script generates navigation boxes (navboxes) for tile-related pages on the
 Project Zomboid Wiki. Navigation boxes provide quick links between related articles
@@ -16,7 +16,7 @@ The script handles:
 
 ## Functions
 
-### [`generate_navbox(tiles_data: dict, lang_code: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_navbox.py#L22)
+### [`generate_navbox(tiles_data: dict, lang_code: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_navbox.py#L21)
 
 _Generate a navigation box template for tile articles._
 
@@ -29,7 +29,8 @@ _Generate a navigation box template for tile articles._
 <ins>**Returns:**</ins>
   - **str:**
       - MediaWiki markup for the navigation box template.
-### [`save_navbox(navbox_content: str, lang_code: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_navbox.py#L36)
+
+### [`save_navbox(navbox_content: str, lang_code: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_navbox.py#L35)
 
 _Save the generated navigation box to a file._
 
@@ -38,9 +39,11 @@ _Save the generated navigation box to a file._
       - _Generated navigation box markup._
   - **lang_code (str)**:
       - _Language code for determining output path._
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_navbox.py#L56)
+
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_navbox.py#L55)
 
 _Main execution function for navigation box generation._
+
 
 
 [Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_infobox.md) | [Next File](tiles_scrapping.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)

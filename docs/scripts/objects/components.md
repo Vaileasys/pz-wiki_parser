@@ -16,12 +16,15 @@
 ##### [`fluids`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L30)
 
 _Return a list of Fluid objects, capturing mix ratio and color if provided._
+
 ##### [`fluid_proportions`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L57)
 
 _Return the raw list of fluid proportions._
+
 ##### [`fluid_map`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L71)
 
 _Return a dict mapping Fluid objects to normalised proportions._
+
 ##### [`pick_random_fluid`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L94)
 ##### [`initial_percent_min`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L98)
 ##### [`initial_percent_max`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L102)

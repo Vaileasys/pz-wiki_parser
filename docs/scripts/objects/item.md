@@ -9,6 +9,7 @@
 ##### [`_load_items()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L78)
 
 _Load item data only once and store in class-level cache._
+
 ##### [`fix_item_id(item_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L83)
 
 _Attempts to fix a partial item_id by assuming the 'Base' module first,_
@@ -20,9 +21,11 @@ _Attempts to fix a partial item_id by assuming the 'Base' module first,_
 <ins>**Returns:**</ins>
   - **str:**
       - The best-guess full item_id.
+
 ##### [`all()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L113)
 
 _Return all items as a dictionary of {item_id: Item}._
+
 ##### [`keys()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L120)
 ##### [`values()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L126)
 ##### [`count()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L132)
@@ -30,13 +33,16 @@ _Return all items as a dictionary of {item_id: Item}._
 ##### [`load_burn_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L145)
 
 _Loads and caches burn time data from camping_fuel.lua._
+
 #### Object Methods
 ##### [`__new__(item_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L22)
 
 _Returns an existing Item instance if one already exists for the given ID._
+
 ##### [`__init__(item_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L38)
 
 _Sets up the item's data if it hasn’t been initialised yet._
+
 ##### [`__getitem__(key)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L62)
 ##### [`__contains__(key)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L66)
 ##### [`__repr__()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L70)
@@ -46,16 +52,20 @@ _Sets up the item's data if it hasn’t been initialised yet._
 ##### [`find_name(language: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L180)
 
 _Finds an item name if it has a special case, otherwise translates the DisplayName._
+
 ##### [`get_icon(format: bool, all_icons: bool, cycling: bool, custom_name: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L244)
 
 _Main interface for getting icons._
+
 ##### [`_find_icon()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L265)
 ##### [`_format_icon(format: bool, all_icons: bool, cycling: bool, custom_name: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L348)
 
 _Returns the icon or formatted wiki markup based on given options. Supports cycling image formatting and translations._
+
 ##### [`calculate_burn_time()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L385)
 
 _Calculates and stores burn time for this item._
+
 #### Properties
 ##### [`file`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L461)
 ##### [`path`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L465)
@@ -432,6 +442,7 @@ _Calculates and stores burn time for this item._
 ##### [`should_burn`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1318)
 
 _Checks if an item 'should burn', not that it 'can burn'._
+
 ##### [`is_tinder`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1332)
 
 

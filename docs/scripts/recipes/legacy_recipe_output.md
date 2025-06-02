@@ -2,7 +2,7 @@
 
 # legacy_recipe_output.py
 
-> Project Zomboid Wiki Legacy Recipe Output Generator
+Project Zomboid Wiki Legacy Recipe Output Generator
 
 This script processes parsed recipe data and generates formatted wiki markup for
 recipe pages. It handles various recipe components including ingredients, tools,
@@ -19,7 +19,7 @@ The script handles:
 
 ## Functions
 
-### [`process_ingredients(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L31)
+### [`process_ingredients(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L30)
 
 _Process recipe ingredients and format them for wiki display._
 
@@ -30,13 +30,15 @@ _Process recipe ingredients and format them for wiki display._
 <ins>**Returns:**</ins>
   - **str:**
       - Formatted wiki markup for ingredients section.
-      - Handles:
-      - - Tag-based ingredients with icons
-      - - Fluid ingredients with colors
-      - - Numbered list ingredients
-      - - Standard ingredients with amounts
-      - - Proper grouping of "One of" vs "Each of" items
-### [`process_tools(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L170)
+
+<ins>**Handles:**</ins>
+  - Tag-based ingredients with icons
+  - Fluid ingredients with colors
+  - Numbered list ingredients
+  - Standard ingredients with amounts
+  - Proper grouping of "One of" vs "Each of" items
+
+### [`process_tools(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L169)
 
 _Process tool requirements and format them for wiki display._
 
@@ -47,13 +49,15 @@ _Process tool requirements and format them for wiki display._
 <ins>**Returns:**</ins>
   - **str:**
       - Formatted wiki markup for tools section.
-      - Handles:
-      - - Individual tool requirements
-      - - Tool tag groups
-      - - Tool condition flags
-      - - Proper grouping of "One of" vs "Each of" tools
-      - - Icon integration for tools
-### [`process_recipes(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L253)
+
+<ins>**Handles:**</ins>
+  - Individual tool requirements
+  - Tool tag groups
+  - Tool condition flags
+  - Proper grouping of "One of" vs "Each of" tools
+  - Icon integration for tools
+
+### [`process_recipes(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L252)
 
 _Process recipe learning methods and format them for wiki display._
 
@@ -64,13 +68,15 @@ _Process recipe learning methods and format them for wiki display._
 <ins>**Returns:**</ins>
   - **str:**
       - Formatted wiki markup for recipe learning section.
-      - Handles:
-      - - Skillbook requirements
-      - - Auto-learn conditions
-      - - Schematic requirements
-      - - Trait requirements
-      - - Proper formatting with alternatives
-### [`process_skills(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L340)
+
+<ins>**Handles:**</ins>
+  - Skillbook requirements
+  - Auto-learn conditions
+  - Schematic requirements
+  - Trait requirements
+  - Proper formatting with alternatives
+
+### [`process_skills(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L339)
 
 _Process skill requirements and format them for wiki display._
 
@@ -81,11 +87,13 @@ _Process skill requirements and format them for wiki display._
 <ins>**Returns:**</ins>
   - **str:**
       - Formatted wiki markup for skills section.
-      - Handles:
-      - - Skill level requirements
-      - - Multiple skill combinations
-      - - Proper formatting with alternatives
-### [`process_workstation(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L368)
+
+<ins>**Handles:**</ins>
+  - Skill level requirements
+  - Multiple skill combinations
+  - Proper formatting with alternatives
+
+### [`process_workstation(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L367)
 
 _Process workstation requirements and format them for wiki display._
 
@@ -96,11 +104,13 @@ _Process workstation requirements and format them for wiki display._
 <ins>**Returns:**</ins>
   - **str:**
       - Formatted wiki markup for workstation section.
-      - Handles:
-      - - Required crafting stations
-      - - Special location requirements
-      - - Proper formatting with alternatives
-### [`process_products(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L391)
+
+<ins>**Handles:**</ins>
+  - Required crafting stations
+  - Special location requirements
+  - Proper formatting with alternatives
+
+### [`process_products(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L390)
 
 _Process recipe products and format them for wiki display._
 
@@ -111,12 +121,14 @@ _Process recipe products and format them for wiki display._
 <ins>**Returns:**</ins>
   - **str:**
       - Formatted wiki markup for products section.
-      - Handles:
-      - - Standard product outputs
-      - - Fluid outputs
-      - - Product amounts and variations
-      - - Icon integration for products
-### [`process_xp(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L538)
+
+<ins>**Handles:**</ins>
+  - Standard product outputs
+  - Fluid outputs
+  - Product amounts and variations
+  - Icon integration for products
+
+### [`process_xp(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L537)
 
 _Process experience gains and format them for wiki display._
 
@@ -127,11 +139,13 @@ _Process experience gains and format them for wiki display._
 <ins>**Returns:**</ins>
   - **str:**
       - Formatted wiki markup for XP section.
-      - Handles:
-      - - XP amounts per skill
-      - - Multiple skill XP gains
-      - - Proper formatting with amounts
-### [`fluid_rgb(fluid_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L561)
+
+<ins>**Handles:**</ins>
+  - XP amounts per skill
+  - Multiple skill XP gains
+  - Proper formatting with amounts
+
+### [`fluid_rgb(fluid_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L560)
 
 _Get RGB color values for a fluid type._
 
@@ -142,12 +156,13 @@ _Get RGB color values for a fluid type._
 <ins>**Returns:**</ins>
   - **dict:**
       - Dictionary containing:
-      - - name: Display name of the fluid
-      - - R: Red color value
-      - - G: Green color value
-      - - B: Blue color value
+        - name: Display name of the fluid
+        - R: Red color value
+        - G: Green color value
+        - B: Blue color value
       - Handles proper color mapping for all fluid types.
-### [`gather_item_usage(recipes_data, tags_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L619)
+
+### [`gather_item_usage(recipes_data, tags_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L618)
 
 _Gather information about how items are used in recipes._
 
@@ -160,12 +175,13 @@ _Gather information about how items are used in recipes._
 <ins>**Returns:**</ins>
   - **tuple:**
       - Four dictionaries mapping items to their recipe usage:
-      - - Normal recipe inputs
-      - - Normal recipe outputs
-      - - Construction recipe inputs
-      - - Construction recipe outputs
+        - Normal recipe inputs
+        - Normal recipe outputs
+        - Construction recipe inputs
+        - Construction recipe outputs
       - Tracks both direct item usage and tag-based usage.
-### [`output_item_usage(normal_item_input_map, normal_item_output_map, construction_item_input_map, construction_item_output_map)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L752)
+
+### [`output_item_usage(normal_item_input_map, normal_item_output_map, construction_item_input_map, construction_item_output_map)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L751)
 
 _Generate wiki markup for item usage in recipes._
 
@@ -180,7 +196,8 @@ _Generate wiki markup for item usage in recipes._
       - _Items produced as outputs in construction recipes._
       - _Creates individual files documenting how each item is used in recipes,_
       - _both as ingredients and as products._
-### [`output_skill_usage(recipes_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L840)
+
+### [`output_skill_usage(recipes_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L839)
 
 _Generate wiki markup for skill usage in recipes._
 
@@ -189,7 +206,8 @@ _Generate wiki markup for skill usage in recipes._
       - _Dictionary of all recipe data._
       - _Creates files documenting which recipes require each skill_
       - _and what level of skill is needed._
-### [`strip_prefix(text, prefix)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L907)
+
+### [`strip_prefix(text, prefix)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L906)
 
 _Remove a prefix from text if it exists._
 
@@ -202,7 +220,8 @@ _Remove a prefix from text if it exists._
 <ins>**Returns:**</ins>
   - **str:**
       - Text with prefix removed if it existed, original text otherwise.
-### [`output_lua_tables(processed_recipes)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L923)
+
+### [`output_lua_tables(processed_recipes)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L922)
 
 _Generate Lua tables for recipe data._
 
@@ -211,7 +230,8 @@ _Generate Lua tables for recipe data._
       - _Dictionary of processed recipe data._
       - _Creates Lua table files that can be used by wiki templates_
       - _to display recipe information._
-### [`main(recipes_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L1035)
+
+### [`main(recipes_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L1034)
 
 _Main execution function for recipe output generation._
 
@@ -225,6 +245,7 @@ _Main execution function for recipe output generation._
       - _3. Generates item usage documentation_
       - _4. Creates skill usage documentation_
       - _5. Outputs Lua tables for templates_
+
 
 
 [Previous Folder](../parser/distribution_container_parser.md) | [Previous File](legacy_recipe_format.md) | [Next File](legacy_recipe_parser.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)

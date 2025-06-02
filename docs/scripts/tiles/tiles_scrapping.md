@@ -2,7 +2,7 @@
 
 # tiles_scrapping.py
 
-> Project Zomboid Wiki Scrapping Table Generator
+Project Zomboid Wiki Scrapping Table Generator
 
 This script generates wiki tables for item scrapping and breakage information in Project Zomboid.
 It processes tile definitions to create formatted MediaWiki tables showing what materials
@@ -13,7 +13,7 @@ mechanics, generating separate tables for each process with relevant drop rates 
 
 ## Functions
 
-### [`generate_scrapping_tables(tiles: dict, definitions: dict, lang_code: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L19)
+### [`generate_scrapping_tables(tiles: dict, definitions: dict, lang_code: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L18)
 
 _Generate scrapping and breakage tables for tiles in the specified language._
 
@@ -30,7 +30,8 @@ _Generate scrapping and breakage tables for tiles in the specified language._
       - Dictionary containing generated scrapping and breakage information for each tile group.
       - The function creates MediaWiki-formatted tables for both scrapping and breakage mechanics,
       - saving them to separate files in the output directory.
-### [`_generate_disassembly_section(generic: dict, definitions: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L77)
+
+### [`_generate_disassembly_section(generic: dict, definitions: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L76)
 
 _Generate a MediaWiki table for disassembly (scrapping) information._
 
@@ -44,7 +45,8 @@ _Generate a MediaWiki table for disassembly (scrapping) information._
   - **str:**
       - MediaWiki-formatted table showing disassembly materials, chances, and quantities.
       - Returns empty string if no materials are defined.
-### [`_generate_breakage_section(generic: dict, definitions: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L159)
+
+### [`_generate_breakage_section(generic: dict, definitions: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L158)
 
 _Generate a MediaWiki table for breakage (destruction) information._
 
@@ -58,6 +60,7 @@ _Generate a MediaWiki table for breakage (destruction) information._
   - **str:**
       - MediaWiki-formatted table showing breakage materials, chances, and quantities.
       - Returns empty string if no materials are defined.
+
 
 
 [Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_navbox.md) | [Next File](tiles_stitcher.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)

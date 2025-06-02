@@ -4,8 +4,8 @@
 
 ## Functions
 
-### [`get_item()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L10)
-### [`get_icon_variant(item_id: str, variant: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L19)
+### [`get_item()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L9)
+### [`get_icon_variant(item_id: str, variant: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L18)
 
 _Gets an icon for a specific variant. Returns the base icon if there is no variant defined or it doesn't exist._
 
@@ -18,11 +18,12 @@ _Gets an icon for a specific variant. Returns the base icon if there is no varia
 <ins>**Returns:**</ins>
   - **str:**
       - The icon for the defined variant. Will return the base icon if the variant isn't defined or doesn't exist.
-### [`is_egg(tags)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L53)
-### [`write_to_output(item_data, item_id, output_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L63)
-### [`process_item(item_data, item_id, output_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L101)
-### [`automatic_extraction(output_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L105)
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L114)
+
+### [`is_egg(tags)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L52)
+### [`write_to_output(item_data, item_id, output_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L62)
+### [`process_item(item_data, item_id, output_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L100)
+### [`automatic_extraction(output_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L104)
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L113)
 
 
 [Next File](distribution.md) | [Next Folder](article_content/hotbar_slots_content.md) | [Back to Index](../index.md)

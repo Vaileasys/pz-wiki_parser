@@ -2,7 +2,7 @@
 
 # tiles_article.py
 
-> Project Zomboid Wiki Article Generator
+Project Zomboid Wiki Article Generator
 
 This script generates complete wiki articles for Project Zomboid tiles. It combines
 various components including infoboxes, usage information, code snippets, and navigation
@@ -17,7 +17,7 @@ The script handles:
 
 ## Functions
 
-### [`process_usage(tile_name, tile_data, scrappings)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L22)
+### [`process_usage(tile_name, tile_data, scrappings)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L21)
 
 _Build the 'Usage' section for a tile article._
 
@@ -33,7 +33,8 @@ _Build the 'Usage' section for a tile article._
   - **str:**
       - Formatted wiki markup for the Usage section, including property-based
       - descriptions and dismantling/breakage information.
-### [`process_codesnip(tile_data, codesnips)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L123)
+
+### [`process_codesnip(tile_data, codesnips)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L122)
 
 _Create a CodeBox section containing all CodeSnip templates for a tile group._
 
@@ -47,7 +48,8 @@ _Create a CodeBox section containing all CodeSnip templates for a tile group._
   - **str:**
       - Formatted wiki markup for the Code section containing all relevant
       - CodeSnip templates wrapped in a CodeBox.
-### [`assemble_article(header, infobox, intro, usage, codesnip, navigation)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L145)
+
+### [`assemble_article(header, infobox, intro, usage, codesnip, navigation)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L144)
 
 _Combine all article sections into a complete wiki article._
 
@@ -68,7 +70,8 @@ _Combine all article sections into a complete wiki article._
 <ins>**Returns:**</ins>
   - **str:**
       - Complete wiki article text with all sections properly formatted.
-### [`sanitize_filename(name)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L172)
+
+### [`sanitize_filename(name)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L171)
 
 _Convert a string into a safe filesystem filename._
 
@@ -80,7 +83,8 @@ _Convert a string into a safe filesystem filename._
   - **str:**
       - Sanitized string safe for use as a filename, with special characters
       - replaced by underscores and spaces converted to underscores.
-### [`generate_tile_articles(tiles_data, infoboxes, codesnips, scrappings)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L192)
+
+### [`generate_tile_articles(tiles_data, infoboxes, codesnips, scrappings)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L191)
 
 _Generate and save wiki articles for all tile groups._
 
@@ -97,6 +101,7 @@ _Generate and save wiki articles for all tile groups._
       - _and saves them to individual files in the output directory structure._
       - _Each article includes metadata, infobox, introduction, usage information,_
       - _code snippets, and navigation elements._
+
 
 
 [Previous Folder](../recipes/craft_recipes.md) | [Previous File](named_furniture_filter.md) | [Next File](tiles_batch.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)

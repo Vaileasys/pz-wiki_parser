@@ -4,19 +4,23 @@
 
 ## Functions
 
-### [`capitalize(value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L6)
+### [`capitalize(value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L5)
 
 _Safely perform the capitalize method if a value is not a string. Lists will also be capitalized, provided their values are strings._
-### [`format_positive(value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L39)
+
+### [`format_positive(value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L38)
 
 _Formats a number with '+' if positive, trimming trailing zeros. Returns original value as string if invalid._
-### [`link(page: str, name: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L56)
+
+### [`link(page: str, name: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L55)
 
 _Returns a wiki link in the format [[Page|Name]], including a language suffix for non-English languages._
-### [`format_link(name: str, page: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L72)
+
+### [`format_link(name: str, page: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L71)
 
 _Returns a wiki link in the format [[Page|Name]], including a language suffix for non-English languages._
-### [`convert_percentage(value: str | int | float, start_zero, percentage)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L92)
+
+### [`convert_percentage(value: str | int | float, start_zero, percentage)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L91)
 
 _Converts a numeric value to a percentage string._
 
@@ -33,15 +37,18 @@ _Converts a numeric value to a percentage string._
   - **str:**
       - The formatted percentage as a string with a '%' sign.
       - Returns '-' for invalid inputs.
-### [`convert_int(value: int | float)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L123)
+
+### [`convert_int(value: int | float)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L122)
 
 _Converts a value to an integer if it has no decimal (isn't float-like)._
-### [`tick(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L140)
-### [`cross(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L145)
-### [`enumerate_params(parameters)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L153)
-### [`check_zero(value: int | float, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L168)
+
+### [`tick(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L139)
+### [`cross(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L144)
+### [`enumerate_params(parameters)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L152)
+### [`check_zero(value: int | float, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L167)
 
 _Returns 'default' if the value is zero._
+
 
 
 [Previous Folder](../tools/compare_item_lists.md) | [Previous File](table_helper.md) | [Next File](utility.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)

@@ -2,24 +2,28 @@
 
 # compare_item_lists.py
 
-> This script is used to compare 2 txt files for unique item IDs.
+This script is used to compare 2 txt files for unique item IDs.
 The txt files should be in the format of the 'PZwiki:Item_list' article (item_list.py).
 
 ## Functions
 
-### [`extract_item_ids(file_path)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/compare_item_lists.py#L14)
+### [`extract_item_ids(file_path)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/compare_item_lists.py#L13)
 
 _Extracts item IDs from the given file based on the format Base.<item_name>._
-### [`get_version(file_path)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/compare_item_lists.py#L31)
+
+### [`get_version(file_path)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/compare_item_lists.py#L30)
 
 _Extracts the version number from the Page version template._
-### [`compare_item_ids(file1, file2)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/compare_item_lists.py#L41)
+
+### [`compare_item_ids(file1, file2)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/compare_item_lists.py#L40)
 
 _Compares item IDs from two files and returns common and unique item IDs._
-### [`write_results(common, unique1, unique2, version1, version2, include_ids)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/compare_item_lists.py#L56)
+
+### [`write_results(common, unique1, unique2, version1, version2, include_ids)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/compare_item_lists.py#L55)
 
 _Writes the comparison results to separate text files with versioned filenames._
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/compare_item_lists.py#L81)
+
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/compare_item_lists.py#L80)
 
 
 [Previous Folder](../tiles/named_furniture_filter.md) | [Next File](item_dict.md) | [Next Folder](../utils/echo.md) | [Back to Index](../../index.md)

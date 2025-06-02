@@ -4,7 +4,7 @@
 
 ## Functions
 
-### [`get_ids(page, id_type: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L18)
+### [`get_ids(page, id_type: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L17)
 
 _Returns a list of ids for a given page and id_type._
 
@@ -17,7 +17,8 @@ _Returns a list of ids for a given page and id_type._
 <ins>**Returns:**</ins>
   - **list[str] or None:**
       - List of ids if found.
-### [`get_pages(query_id: str, id_type: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L32)
+
+### [`get_pages(query_id: str, id_type: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L31)
 
 _Returns a list of pages for a given id._
 
@@ -30,7 +31,8 @@ _Returns a list of pages for a given id._
 <ins>**Returns:**</ins>
   - **list[str] or None:**
       - List of pages if found, else None.
-### [`get_categories(page)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L58)
+
+### [`get_categories(page)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L57)
 
 _Returns the list of categories for the given page._
 
@@ -41,7 +43,8 @@ _Returns the list of categories for the given page._
 <ins>**Returns:**</ins>
   - **list:**
       - Category names if found, else an empty list.
-### [`get_id_categories(script_id, id_type)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L71)
+
+### [`get_id_categories(script_id, id_type)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L70)
 
 _Returns the list of categories for the given script_id._
 
@@ -54,27 +57,35 @@ _Returns the list of categories for the given script_id._
 <ins>**Returns:**</ins>
   - **list:**
       - Category names if found, else an empty list.
-### [`get_id_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L90)
+
+### [`get_id_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L89)
 
 _Returns the page dictionary organised with the id as the key._
-### [`get_flattened_page_dict()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L98)
+
+### [`get_flattened_page_dict()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L97)
 
 _Returns the flattened page dictionary, removing first-level keys (item, tile, vehicle)._
-### [`get_raw_page_dict()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L106)
+
+### [`get_raw_page_dict()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L105)
 
 _Returns the raw page dictionary data._
-### [`_flatten_page_dict()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L112)
+
+### [`_flatten_page_dict()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L111)
 
 _Flattens the page dictionary into a single-level dict._
-### [`_restructure_id_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L121)
+
+### [`_restructure_id_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L120)
 
 _Restructures the flattened page dict so the key is the id, and page is the value._
-### [`load(filepath)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L141)
+
+### [`load(filepath)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L140)
 
 _Load the page dictionary data from file if not already loaded._
-### [`init()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L148)
+
+### [`init()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L147)
 
 _Initialise all data, storing in cache._
+
 
 
 [Previous Folder](../article_content/hotbar_slots_content.md) | [Previous File](logger.md) | [Next File](setup.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)

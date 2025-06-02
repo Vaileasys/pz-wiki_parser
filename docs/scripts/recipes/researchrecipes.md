@@ -2,7 +2,7 @@
 
 # researchrecipes.py
 
-> Project Zomboid Wiki Research Recipes Generator
+Project Zomboid Wiki Research Recipes Generator
 
 This script processes items in Project Zomboid that can be researched to learn new
 recipes. It generates wiki markup showing which recipes can be learned by researching
@@ -16,9 +16,10 @@ The script handles:
 
 ## Functions
 
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/researchrecipes.py#L22)
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/researchrecipes.py#L21)
 
 _Main execution function for research recipes generation._
+
 
 
 [Previous Folder](../parser/distribution_container_parser.md) | [Previous File](legacy_recipe_parser.md) | [Next File](teached_recipes.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)

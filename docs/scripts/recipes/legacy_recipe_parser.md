@@ -2,7 +2,7 @@
 
 # legacy_recipe_parser.py
 
-> Project Zomboid Wiki Legacy Recipe Parser
+Project Zomboid Wiki Legacy Recipe Parser
 
 This script parses legacy recipe definitions from Project Zomboid's script files.
 It handles the complex task of parsing various recipe formats, including crafting
@@ -19,7 +19,7 @@ The script handles:
 
 ## Functions
 
-### [`remove_comments(text)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L32)
+### [`remove_comments(text)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L31)
 
 _Removes block comments from text._
 
@@ -32,7 +32,8 @@ _Removes block comments from text._
       - Text with all block comments removed.
       - Comments start with /* and end with */.
       - Supports nested comments and preserves non-comment text.
-### [`get_recipe_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L69)
+
+### [`get_recipe_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L68)
 
 _Returns the parsed recipe data._
 
@@ -41,7 +42,8 @@ _Returns the parsed recipe data._
       - Parsed recipe data, initializing it if empty.
       - This function serves as the main interface to access the parsed recipe data,
       - ensuring the data is loaded before being accessed.
-### [`gather_recipe_lines(directory: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L85)
+
+### [`gather_recipe_lines(directory: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L84)
 
 _Gathers recipe definitions from all relevant files in the directory._
 
@@ -53,10 +55,11 @@ _Gathers recipe definitions from all relevant files in the directory._
   - **list:**
       - All lines from valid recipe files.
       - Searches for files that:
-      - - Start with 'recipes', 'entity', or 'craftrecipe'
-      - - End with '.txt'
-      - - Don't contain 'test' or 'dbg' in the name
-### [`extract_recipe_blocks(lines)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L117)
+        - Start with 'recipes', 'entity', or 'craftrecipe'
+        - End with '.txt'
+        - Don't contain 'test' or 'dbg' in the name
+
+### [`extract_recipe_blocks(lines)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L116)
 
 _Extracts individual recipe blocks from a list of lines._
 
@@ -67,12 +70,14 @@ _Extracts individual recipe blocks from a list of lines._
 <ins>**Returns:**</ins>
   - **list:**
       - List of tuples containing (recipe_name, recipe_text).
-      - Handles:
-      - - Recipe block detection and extraction
-      - - Proper bracket matching
-      - - Comment removal
-      - - Recipe name extraction
-### [`parse_recipe_block(recipe_name, recipe_text)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L167)
+
+<ins>**Handles:**</ins>
+  - Recipe block detection and extraction
+  - Proper bracket matching
+  - Comment removal
+  - Recipe name extraction
+
+### [`parse_recipe_block(recipe_name, recipe_text)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L166)
 
 _Parses a recipe block into a structured dictionary._
 
@@ -85,17 +90,19 @@ _Parses a recipe block into a structured dictionary._
 <ins>**Returns:**</ins>
   - **dict:**
       - Structured recipe data including:
-      - - name: Recipe name
-      - - inputs: List of input items
-      - - outputs: List of output items
-      - - itemMappers: Dictionary of item mappings
-      - - Additional properties like category
-      - Handles:
-      - - Item mapper definitions
-      - - Input and output blocks
-      - - Property parsing
-      - - Comment removal
-### [`parse_items_block(block_text, is_output, recipe_dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L260)
+        - name: Recipe name
+        - inputs: List of input items
+        - outputs: List of output items
+        - itemMappers: Dictionary of item mappings
+        - Additional properties like category
+
+<ins>**Handles:**</ins>
+  - Item mapper definitions
+  - Input and output blocks
+  - Property parsing
+  - Comment removal
+
+### [`parse_items_block(block_text, is_output, recipe_dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L259)
 
 _Parses a block of item definitions within a recipe._
 
@@ -110,12 +117,14 @@ _Parses a block of item definitions within a recipe._
 <ins>**Returns:**</ins>
   - **list:**
       - List of parsed item definitions.
-      - Handles:
-      - - Fluid items and modifiers
-      - - Energy items
-      - - Regular items
-      - - Item properties and amounts
-### [`is_any_fluid_container(item_obj)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L349)
+
+<ins>**Handles:**</ins>
+  - Fluid items and modifiers
+  - Energy items
+  - Regular items
+  - Item properties and amounts
+
+### [`is_any_fluid_container(item_obj)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L348)
 
 _Checks if an item object represents any fluid container._
 
@@ -126,7 +135,8 @@ _Checks if an item object represents any fluid container._
 <ins>**Returns:**</ins>
   - **bool:**
       - True if the item is any fluid container, False otherwise.
-### [`parse_fluid_line(line)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L365)
+
+### [`parse_fluid_line(line)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L364)
 
 _Parses a fluid line definition._
 
@@ -137,11 +147,12 @@ _Parses a fluid line definition._
 <ins>**Returns:**</ins>
   - **dict:**
       - Parsed fluid information including:
-      - - sign: '+' or '-' for fluid addition/removal
-      - - items: List of fluid types
-      - - amount: Fluid amount
+        - sign: '+' or '-' for fluid addition/removal
+        - items: List of fluid types
+        - amount: Fluid amount
       - Returns None if parsing fails.
-### [`parse_energy_line(line)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L395)
+
+### [`parse_energy_line(line)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L394)
 
 _Parses an energy line definition._
 
@@ -152,10 +163,11 @@ _Parses an energy line definition._
 <ins>**Returns:**</ins>
   - **dict:**
       - Parsed energy information including:
-      - - energy: True flag
-      - - amount: Energy amount
+        - energy: True flag
+        - amount: Energy amount
       - Returns None if parsing fails.
-### [`parse_item_line(line)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L421)
+
+### [`parse_item_line(line)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L420)
 
 _Parses an item line definition._
 
@@ -166,12 +178,13 @@ _Parses an item line definition._
 <ins>**Returns:**</ins>
   - **dict:**
       - Parsed item information including:
-      - - items: List of item types
-      - - amount: Item amount
-      - - index: Item index
-      - - Additional properties
+        - items: List of item types
+        - amount: Item amount
+        - index: Item index
+        - Additional properties
       - Returns None if parsing fails.
-### [`extract_block(text, start_index)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L515)
+
+### [`extract_block(text, start_index)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L514)
 
 _Extracts a complete block of text between braces._
 
@@ -184,9 +197,10 @@ _Extracts a complete block of text between braces._
 <ins>**Returns:**</ins>
   - **tuple:**
       - (block_text, end_index) where:
-      - - block_text: Extracted block content
-      - - end_index: Index after the closing brace
-### [`parse_module_block(text)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L542)
+        - block_text: Extracted block content
+        - end_index: Index after the closing brace
+
+### [`parse_module_block(text)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L541)
 
 _Parses a module block definition._
 
@@ -197,9 +211,10 @@ _Parses a module block definition._
 <ins>**Returns:**</ins>
   - **tuple:**
       - (skin_mapping, entity_blocks) where:
-      - - skin_mapping: Dictionary of skin mappings
-      - - entity_blocks: List of entity block definitions
-### [`parse_module_skin_mapping(module_block)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L568)
+        - skin_mapping: Dictionary of skin mappings
+        - entity_blocks: List of entity block definitions
+
+### [`parse_module_skin_mapping(module_block)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L567)
 
 _Parses skin mappings from a module block._
 
@@ -210,7 +225,8 @@ _Parses skin mappings from a module block._
 <ins>**Returns:**</ins>
   - **dict:**
       - Dictionary of skin mappings.
-### [`parse_entity_blocks(module_block, skin_mapping)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L601)
+
+### [`parse_entity_blocks(module_block, skin_mapping)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L600)
 
 _Parses entity blocks from a module block._
 
@@ -223,7 +239,8 @@ _Parses entity blocks from a module block._
 <ins>**Returns:**</ins>
   - **list:**
       - List of parsed entity blocks.
-### [`parse_sprite_config(block_text)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L644)
+
+### [`parse_sprite_config(block_text)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L643)
 
 _Parses sprite configuration from a block._
 
@@ -234,7 +251,8 @@ _Parses sprite configuration from a block._
 <ins>**Returns:**</ins>
   - **dict:**
       - Parsed sprite configuration.
-### [`parse_construction_recipe(text)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L689)
+
+### [`parse_construction_recipe(text)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L688)
 
 _Parses a construction recipe definition._
 
@@ -245,9 +263,11 @@ _Parses a construction recipe definition._
 <ins>**Returns:**</ins>
   - **dict:**
       - Parsed construction recipe data.
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L736)
+
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_parser.py#L735)
 
 _Main execution function for legacy recipe parsing._
+
 
 
 [Previous Folder](../parser/distribution_container_parser.md) | [Previous File](legacy_recipe_output.md) | [Next File](researchrecipes.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)

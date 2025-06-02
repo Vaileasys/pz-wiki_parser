@@ -2,7 +2,7 @@
 
 # named_furniture_filter.py
 
-> Project Zomboid Wiki Named Furniture Filter
+Project Zomboid Wiki Named Furniture Filter
 
 This script processes and organizes tile data for named furniture in Project Zomboid.
 It handles both manually defined furniture groups and automatically detected furniture
@@ -18,7 +18,7 @@ The script handles:
 
 ## Functions
 
-### [`process_tiles(tiles_data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/named_furniture_filter.py#L157)
+### [`process_tiles(tiles_data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/named_furniture_filter.py#L156)
 
 _Process and organize tile data into furniture groups._
 
@@ -33,12 +33,14 @@ _Process and organize tile data into furniture groups._
       - 1. Process manually defined groups from MANUAL_GROUPS
       - 2. Group remaining tiles by their GroupName and CustomName properties
       - 3. Within each group:
-      - - Split by sprite prefix if multiple exist
-      - - Handle facing directions for multi-sprite objects
-      - - Group by signature for variant handling
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/named_furniture_filter.py#L290)
+        - Split by sprite prefix if multiple exist
+        - Handle facing directions for multi-sprite objects
+        - Group by signature for variant handling
+
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/named_furniture_filter.py#L289)
 
 _Main execution function for the named furniture filter._
+
 
 
 [Previous Folder](../recipes/craft_recipes.md) | [Next File](tiles_article.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
