@@ -16,7 +16,8 @@ and grid positions, using threading for improved performance.
 
 ### [`parse_grid_position(position_string: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_stitcher.py#L58)
 
-_Parse a grid position string into column and row indices._
+Parse a grid position string into column and row indices.
+
 
 <ins>**Args:**</ins>
   - **position_string (str)**:
@@ -29,7 +30,8 @@ _Parse a grid position string into column and row indices._
 
 ### [`build_output_name(sprite_identifier_list: list[str])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_stitcher.py#L76)
 
-_Generate an output filename by combining multiple sprite identifiers._
+Generate an output filename by combining multiple sprite identifiers.
+
 
 <ins>**Args:**</ins>
   - **sprite_identifier_list (list[str])**:
@@ -42,7 +44,8 @@ _Generate an output filename by combining multiple sprite identifiers._
 
 ### [`composite_sprites(facing_direction: str, sprite_entries_list: list[dict], output_base_name: str, progress_bar)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_stitcher.py#L92)
 
-_Create a composite image by combining multiple sprite images for a specific facing direction._
+Create a composite image by combining multiple sprite images for a specific facing direction.
+
 
 <ins>**Args:**</ins>
   - **facing_direction (str)**:
@@ -60,7 +63,11 @@ _Create a composite image by combining multiple sprite images for a specific fac
 
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_stitcher.py#L175)
 
-_Main execution function for the tile stitcher._
+Main execution function for the tile stitcher.
+
+Processes the named furniture cache to identify multi-tile objects and creates
+composite images for each valid combination. Uses multi-threading to improve
+performance when processing multiple sprites.
 
 
 

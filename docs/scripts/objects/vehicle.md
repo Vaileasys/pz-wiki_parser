@@ -8,27 +8,29 @@
 #### Class Methods
 ##### [`all()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L109)
 
-_Return all vehicles as a dictionary of {vehicle_id: Vehicle}._
+Return all vehicles as a dictionary of {vehicle_id: Vehicle}.
 
 ##### [`keys()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L116)
 
-_Return all vehicle IDs._
+Return all vehicle IDs.
 
 ##### [`values()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L123)
 
-_Return all vehicle instances._
+Return all vehicle instances.
 
 ##### [`count()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L130)
 
-_Return the number of loaded vehicles._
+Return the number of loaded vehicles.
 
 ##### [`get_model_data(model_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L137)
 
-_Return model data for a given model_id._
+Return model data for a given model_id.
 
 ##### [`fix_vehicle_id(vehicle_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L144)
 
-_Attempts to fix a partial vehicle_id by assuming the 'Base' module first,_
+Attempts to fix a partial vehicle_id by assuming the 'Base' module first,
+
+then falling back to a full search through parsed vehicle data.
 
 <ins>**Args:**</ins>
   - **vehicle_id (str)**:
@@ -40,323 +42,325 @@ _Attempts to fix a partial vehicle_id by assuming the 'Base' module first,_
 
 ##### [`_load_vehicles()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L174)
 
-_Load vehicle data only once and store in class-level cache._
+Load vehicle data only once and store in class-level cache.
 
 ##### [`_load_models()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L179)
 
-_Load vehicle models and store them in a class-level cache._
+Load vehicle models and store them in a class-level cache.
 
 ##### [`_load_mechanics_overlay()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L189)
 
-_Load mechanics overlay from LUA table._
+Load mechanics overlay from LUA table.
 
 ##### [`format_model()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L477)
 #### Object Methods
 ##### [`__new__(vehicle_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L25)
 
-_Returns an existing Vehicle instance if one already exists for the given ID._
+Returns an existing Vehicle instance if one already exists for the given ID.
+
+Fixes partial IDs like 'Van' to 'Base.Van' before checking or creating the instance.
 
 ##### [`__init__(vehicle_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L45)
 
-_Sets up the vehicle's data if it hasn’t been initialised yet._
+Sets up the vehicle's data if it hasn’t been initialised yet.
 
 ##### [`__getitem__(key)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L96)
 
-_Allows 'vehicle["DisplayName"]'_
+Allows 'vehicle["DisplayName"]'
 
 ##### [`__contains__(key)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L100)
 
-_Allows 'in' checks. e.g. '"EvolvedRecipe" in vehicle'_
+Allows 'in' checks. e.g. '"EvolvedRecipe" in vehicle'
 
 ##### [`__repr__()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L104)
 
-_Overview of the vehicle when called directly: Vehicle(vehicle_id)_
+Overview of the vehicle when called directly: Vehicle(vehicle_id)
 
 ##### [`setup_vehicle()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L196)
 
-_Initialise vehicle values._
+Initialise vehicle values.
 
 ##### [`get(key: str, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L207)
 
-_Safely get a value from vehicle data with an optional default._
+Safely get a value from vehicle data with an optional default.
 
 ##### [`get_file()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L213)
 
-_Return the source file for this vehicle._
+Return the source file for this vehicle.
 
 ##### [`get_path()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L217)
 
-_Return the full path of the source file._
+Return the full path of the source file.
 
 ##### [`get_name()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L221)
 
-_Return the translated name of the vehicle._
+Return the translated name of the vehicle.
 
 ##### [`find_name()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L227)
 ##### [`find_is_trailer()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L248)
 
-_Determine whether the vehicle is a trailer_
+Determine whether the vehicle is a trailer
 
 ##### [`get_parent()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L255)
 
-_Return the parent as a Vehicle object, or None if this is the root or unknown._
+Return the parent as a Vehicle object, or None if this is the root or unknown.
 
 ##### [`find_parent()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L263)
 
-_Finds the parent vehicle, based on the 3D model._
+Finds the parent vehicle, based on the 3D model.
 
 ##### [`get_full_parent()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L302)
 
-_Return the full parent as a Vehicle object, or self if this is the root or unknown._
+Return the full parent as a Vehicle object, or self if this is the root or unknown.
 
 ##### [`find_full_parent()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L310)
 
-_Finds the vehicle type, the parent make/model._
+Finds the vehicle type, the parent make/model.
 
 ##### [`get_children()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L341)
 ##### [`find_children()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L346)
 ##### [`get_page()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L359)
 
-_Return the wiki page for this vehicle._
+Return the wiki page for this vehicle.
 
 ##### [`find_page()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L365)
 ##### [`get_link()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L375)
 
-_Return the wiki page for this vehicle._
+Return the wiki page for this vehicle.
 
 ##### [`get_variants()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L381)
 
-_Returns a list of vehicle_ids that use this vehicle as their parent._
+Returns a list of vehicle_ids that use this vehicle as their parent.
 
 ##### [`find_variants()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L387)
 
-_Finds and caches all vehicles whose parent matches this vehicle_id._
+Finds and caches all vehicles whose parent matches this vehicle_id.
 
 ##### [`get_manufacturer()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L394)
 
-_Returns the vehicles manufacturer_
+Returns the vehicles manufacturer
 
 ##### [`get_lore_model()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L400)
 
-_Returns the vehicles lore model_
+Returns the vehicles lore model
 
 ##### [`find_manufacturer()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L406)
 
-_Finds and caches the vehicle manufacturer based on the name._
+Finds and caches the vehicle manufacturer based on the name.
 
 ##### [`get_mechanic_type()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L424)
 
-_Return the mechanic type ID for this vehicle._
+Return the mechanic type ID for this vehicle.
 
 ##### [`get_vehicle_type()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L428)
 
-_Return the translated mechanic type name._
+Return the translated mechanic type name.
 
 ##### [`find_vehicle_type()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L434)
 ##### [`get_model()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L440)
 
-_Return the rendered 3D model wiki file name as PNG._
+Return the rendered 3D model wiki file name as PNG.
 
 ##### [`find_all_models()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L457)
 
-_Return all the rendered 3D models including that of all children._
+Return all the rendered 3D models including that of all children.
 
 ##### [`get_mesh_id()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L493)
 
-_Return the internal model ID._
+Return the internal model ID.
 
 ##### [`get_mesh_path()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L499)
 
-_Return the file path to the vehicle mesh._
+Return the file path to the vehicle mesh.
 
 ##### [`find_mesh_path()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L505)
 ##### [`get_texture_path()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L508)
 
-_Return the texture path for the vehicle skin._
+Return the texture path for the vehicle skin.
 
 ##### [`get_car_model_name()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L514)
 
-_Return the in-game display name from carModelName, if defined._
+Return the in-game display name from carModelName, if defined.
 
 ##### [`get_mass()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L521)
 
-_Return the vehicle mass, defaulting to 800.0._
+Return the vehicle mass, defaulting to 800.0.
 
 ##### [`get_zombie_type()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L525)
 
-_Return a list of zombie types allowed to spawn in the vehicle._
+Return a list of zombie types allowed to spawn in the vehicle.
 
 ##### [`get_special_key_ring()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L534)
 
-_Return possible special key ring types defined for the vehicle._
+Return possible special key ring types defined for the vehicle.
 
 ##### [`get_special_key_chance()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L543)
 
-_Return the chance percentage of the vehicle spawning with a special key ring._
+Return the chance percentage of the vehicle spawning with a special key ring.
 
 ##### [`get_engine_repair_level()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L547)
 
-_Return the engine repair level required._
+Return the engine repair level required.
 
 ##### [`get_player_damage_protection()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L551)
 
-_Return the player damage protection value._
+Return the player damage protection value.
 
 ##### [`get_wheels()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L555)
 
-_Return the wheels in the vehicle._
+Return the wheels in the vehicle.
 
 ##### [`get_doors()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L561)
 
-_Return the doors in the vehicle._
+Return the doors in the vehicle.
 
 ##### [`get_seats()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L572)
 
-_Return the number of seats in the vehicle._
+Return the number of seats in the vehicle.
 
 ##### [`get_wheel_friction()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L578)
 
-_Return the vehicle's wheel friction value._
+Return the vehicle's wheel friction value.
 
 ##### [`get_braking_force()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L583)
 
-_Return the vehicle's braking force._
+Return the vehicle's braking force.
 
 ##### [`get_max_speed()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L588)
 
-_Return the vehicle's max speed._
+Return the vehicle's max speed.
 
 ##### [`get_roll_influence()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L592)
 
-_Return the roll influence value._
+Return the roll influence value.
 
 ##### [`get_is_small_vehicle()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L596)
 
-_Return whether the vehicle is small._
+Return whether the vehicle is small.
 
 ##### [`get_stopping_movement_force()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L600)
 
-_Return the stopping force applied when idle._
+Return the stopping force applied when idle.
 
 ##### [`get_animal_trailer_size()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L604)
 
-_Return the trailer's animal capacity._
+Return the trailer's animal capacity.
 
 ##### [`get_attachments()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L608)
 
-_Return the attachment points available._
+Return the attachment points available.
 
 ##### [`get_offroad_efficiency()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L612)
 
-_Return the offroad driving efficiency._
+Return the offroad driving efficiency.
 
 ##### [`get_has_lightbar()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L616)
 
-_Return whether the vehicle has a lightbar._
+Return whether the vehicle has a lightbar.
 
 ##### [`get_has_siren()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L622)
 
-_Return whether the vehicle has a siren._
+Return whether the vehicle has a siren.
 
 ##### [`find_lightbar()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L628)
 
-_Detect if the vehicle has a lightbar siren._
+Detect if the vehicle has a lightbar siren.
 
 ##### [`get_has_reverse_beeper()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L635)
 
-_Return whether the vehicle has a reverse beeper._
+Return whether the vehicle has a reverse beeper.
 
 ##### [`get_front_end_health()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L642)
 
-_Return the vehicle's front-end health._
+Return the vehicle's front-end health.
 
 ##### [`get_rear_end_health()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L646)
 
-_Return the vehicle's rear-end health._
+Return the vehicle's rear-end health.
 
 ##### [`get_engine_force()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L651)
 
-_Return the engine force._
+Return the engine force.
 
 ##### [`get_engine_power()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L655)
 
-_Returns the engine power in horsepower (hp)._
+Returns the engine power in horsepower (hp).
 
 ##### [`get_engine_quality()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L659)
 
-_Return the engine quality._
+Return the engine quality.
 
 ##### [`get_engine_loudness()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L663)
 
-_Return how loud the engine is._
+Return how loud the engine is.
 
 ##### [`get_engine_rpm_type()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L667)
 
-_Return the engine RPM type._
+Return the engine RPM type.
 
 ##### [`get_steering_increment()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L672)
 
-_Return how fast the steering changes._
+Return how fast the steering changes.
 
 ##### [`get_steering_clamp()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L676)
 
-_Return the steering limit angle._
+Return the steering limit angle.
 
 ##### [`get_suspension_stiffness()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L681)
 
-_Return the suspension stiffness._
+Return the suspension stiffness.
 
 ##### [`get_suspension_compression()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L685)
 
-_Return the suspension compression rate._
+Return the suspension compression rate.
 
 ##### [`get_suspension_damping()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L690)
 
-_Return the suspension damping rate._
+Return the suspension damping rate.
 
 ##### [`get_max_suspension_travel_cm()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L695)
 
-_Return the max suspension travel in cm._
+Return the max suspension travel in cm.
 
 ##### [`get_suspension_rest_length()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L699)
 
-_Return the rest length of the suspension._
+Return the rest length of the suspension.
 
 ##### [`get_parts_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L704)
 
-_Return parts data with wildcard templates merged into specific parts._
+Return parts data with wildcard templates merged into specific parts.
 
 ##### [`get_parts()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L736)
 
-_Return a list of part names._
+Return a list of part names.
 
 ##### [`get_part(part)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L740)
 
-_Return part data, allowing fuzzy lookup with '*'._
+Return part data, allowing fuzzy lookup with '*'.
 
 ##### [`get_part_table(part: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L753)
 
-_Return the part table if present, or the base data._
+Return the part table if present, or the base data.
 
 ##### [`get_part_install(part: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L766)
 
-_Return install data for a given part._
+Return install data for a given part.
 
 ##### [`get_part_uninstall(part: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L771)
 
-_Return uninstall data for a given part._
+Return uninstall data for a given part.
 
 ##### [`get_recipes()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L776)
 
-_Return recipes that need to be known to remove parts._
+Return recipes that need to be known to remove parts.
 
 ##### [`find_part_recipe()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L782)
 
-_Find and cache install/uninstall recipes from parts._
+Find and cache install/uninstall recipes from parts.
 
 ##### [`find_part_capacity(part_data: dict, part: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L804)
 
-_Determine part capacity from part container or fallback itemType._
+Determine part capacity from part container or fallback itemType.
 
 ##### [`get_glove_box_capacity()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L822)
 ##### [`find_glove_box_capacity()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L827)
@@ -368,7 +372,7 @@ _Determine part capacity from part container or fallback itemType._
 ##### [`calculate_total_capacity()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L878)
 ##### [`get_mechanics_overlay()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L885)
 
-_Return mechanics overlay._
+Return mechanics overlay.
 
 
 

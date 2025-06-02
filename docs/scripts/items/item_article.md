@@ -6,7 +6,12 @@
 
 ### [`load_item_id_dictionary(dictionary_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L193)
 
-_Loads the item_id dictionary from a given CSV file._
+Loads the item_id dictionary from a given CSV file.
+
+The dictionary is expected to have the following format:
+article_name, item_id1, item_id2, ...
+The function will return a dictionary with the item_id as the key and the
+article_name as the value.
 
 <ins>**Args:**</ins>
   - **dictionary_dir (str)**:

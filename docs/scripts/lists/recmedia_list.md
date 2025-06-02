@@ -6,7 +6,7 @@
 
 ### [`generate_data(guid, rm_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/recmedia_list.py#L15)
 
-_Generates all data for the recmedia item, for table generation._
+Generates all data for the recmedia item, for table generation.
 
 ### [`find_table_type(rm_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/recmedia_list.py#L110)
 ### [`process_items()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/recmedia_list.py#L128)
@@ -15,11 +15,11 @@ _Generates all data for the recmedia item, for table generation._
 ### [`translate_rm_strings(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/recmedia_list.py#L162)
 ### [`organise_lines(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/recmedia_list.py#L176)
 
-_Changes data from a list of dicts, to a nested dict with the line id ('text') as the key._
+Changes data from a list of dicts, to a nested dict with the line id ('text') as the key.
 
 ### [`parse_rm_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/recmedia_list.py#L185)
 
-_Parses lua file converting tables to Python._
+Parses lua file converting tables to Python.
 
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/recmedia_list.py#L194)
 

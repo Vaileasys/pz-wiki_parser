@@ -7,11 +7,11 @@
 ### [`get_log_path(file_name)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/logger.py#L11)
 ### [`init_log_file(file_name)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/logger.py#L15)
 
-_Initialise log file erasing existing contents_
+Initialise log file erasing existing contents
 
 ### [`write(message, print_bool, file_name, exception, category)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/logger.py#L23)
 
-_Used to log important info to a log file_
+Used to log important info to a log file
 
 
 

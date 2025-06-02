@@ -18,7 +18,16 @@ The script handles:
 
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/teached_recipes.py#L22)
 
-_Main execution function for taught recipes generation._
+Main execution function for taught recipes generation.
+
+This function:
+1. Loads parsed item data
+2. Identifies items that teach recipes
+3. Generates wiki markup for each teaching item
+4. Creates individual files with recipe lists
+5. Includes proper bot flags for wiki integration
+The output is saved in the 'output/recipes/teachedrecipes' directory,
+with one file per teaching item.
 
 
 

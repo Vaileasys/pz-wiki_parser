@@ -20,7 +20,8 @@ The script handles:
 
 ### [`process_tiles(tiles_data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/named_furniture_filter.py#L156)
 
-_Process and organize tile data into furniture groups._
+Process and organize tile data into furniture groups.
+
 
 <ins>**Args:**</ins>
   - **tiles_data (dict)**:
@@ -39,7 +40,13 @@ _Process and organize tile data into furniture groups._
 
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/named_furniture_filter.py#L289)
 
-_Main execution function for the named furniture filter._
+Main execution function for the named furniture filter.
+
+This function:
+1. Loads the tile data cache
+2. Processes tiles into furniture groups
+3. Saves the processed data back to cache
+4. Provides progress feedback through echo messages
 
 
 

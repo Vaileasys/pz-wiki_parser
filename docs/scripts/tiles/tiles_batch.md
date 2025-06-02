@@ -19,7 +19,8 @@ The script handles:
 
 ### [`generate_cache(cache_path: str, cache_label: str, parser_func, game_version: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_batch.py#L43)
 
-_Generate or load a cache file for tile data._
+Generate or load a cache file for tile data.
+
 
 <ins>**Args:**</ins>
   - **cache_path (str)**:
@@ -39,7 +40,18 @@ _Generate or load a cache file for tile data._
 
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_batch.py#L71)
 
-_Main execution function for the tile processing pipeline._
+Main execution function for the tile processing pipeline.
+
+This function:
+1. Ensures all necessary caches are present and up-to-date
+2. Loads or generates required data from game files
+3. Generates various wiki components:
+- Infoboxes for tile properties
+- CodeSnips showing tile definitions
+- Scrapping tables for dismantling info
+- Complete wiki articles
+- Furniture and crafting surface lists
+4. Provides progress feedback through echo messages
 
 
 

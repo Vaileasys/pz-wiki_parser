@@ -11,7 +11,8 @@
 ### [`get_maps_dir()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L28)
 ### [`map_dir(base_dir, extension, media_type, suppress, exclude_ext)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L32)
 
-_Maps all files with the given extension in a directory._
+Maps all files with the given extension in a directory.
+
 
 <ins>**Args:**</ins>
   - **base_dir (str)**:
@@ -29,7 +30,8 @@ _Maps all files with the given extension in a directory._
 
 ### [`map_game_files(suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L96)
 
-_Maps script and lua files, then saves to cache._
+Maps script and lua files, then saves to cache.
+
 
 <ins>**Args:**</ins>
   - **suppress (bool)**:
@@ -41,7 +43,8 @@ _Maps script and lua files, then saves to cache._
 
 ### [`get_file_paths(mapping: dict, filename: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L129)
 
-_Returns all matching file paths from the mapping, optionally filtered by keyword._
+Returns all matching file paths from the mapping, optionally filtered by keyword.
+
 
 <ins>**Args:**</ins>
   - **mapping (dict)**:
@@ -57,7 +60,8 @@ _Returns all matching file paths from the mapping, optionally filtered by keywor
 
 ### [`get_game_file_map()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L152)
 
-_Returns the cached game file map. Loads from disk once if needed._
+Returns the cached game file map. Loads from disk once if needed.
+
 
 <ins>**Returns:**</ins>
   - **dict:**
@@ -65,7 +69,8 @@ _Returns the cached game file map. Loads from disk once if needed._
 
 ### [`get_lua_files(filenames: str | list[str], prefer: str, media_type: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L165)
 
-_Resolves base Lua filenames to absolute paths using the file map._
+Resolves base Lua filenames to absolute paths using the file map.
+
 
 <ins>**Args:**</ins>
   - **filenames (str or list[str])**:
@@ -81,7 +86,8 @@ _Resolves base Lua filenames to absolute paths using the file map._
 
 ### [`get_script_files(prefix: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L215)
 
-_Retrieves a list of script .txt files from the game scripts folder, optionally filtering by prefix._
+Retrieves a list of script .txt files from the game scripts folder, optionally filtering by prefix.
+
 
 <ins>**Args:**</ins>
   - **prefix (str | None)**:
@@ -93,7 +99,8 @@ _Retrieves a list of script .txt files from the game scripts folder, optionally 
 
 ### [`get_script_relpath(name: str, prefer: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L233)
 
-_Retrieves the relative path to a script (.txt) file by name, as stored in the file map._
+Retrieves the relative path to a script (.txt) file by name, as stored in the file map.
+
 
 <ins>**Args:**</ins>
   - **name (str)**:
@@ -106,7 +113,8 @@ _Retrieves the relative path to a script (.txt) file by name, as stored in the f
 
 ### [`get_lua_relpath(name: str, prefer: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L249)
 
-_Retrieves the relative path to a Lua (.lua) file by name, as stored in the file map._
+Retrieves the relative path to a Lua (.lua) file by name, as stored in the file map.
+
 
 <ins>**Args:**</ins>
   - **name (str)**:
@@ -119,7 +127,8 @@ _Retrieves the relative path to a Lua (.lua) file by name, as stored in the file
 
 ### [`get_script_path(name: str, prefer: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L265)
 
-_Retrieves the absolute path to a script (.txt) file by name._
+Retrieves the absolute path to a script (.txt) file by name.
+
 
 <ins>**Args:**</ins>
   - **name (str)**:
@@ -132,7 +141,8 @@ _Retrieves the absolute path to a script (.txt) file by name._
 
 ### [`get_lua_path(name: str, prefer: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L281)
 
-_Retrieves the absolute path to a Lua (.lua) file by name._
+Retrieves the absolute path to a Lua (.lua) file by name.
+
 
 <ins>**Args:**</ins>
   - **name (str)**:
@@ -145,7 +155,8 @@ _Retrieves the absolute path to a Lua (.lua) file by name._
 
 ### [`read_file(path: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L298)
 
-_Reads the contents of a file as a string._
+Reads the contents of a file as a string.
+
 
 <ins>**Args:**</ins>
   - **path (str)**:
@@ -157,11 +168,17 @@ _Reads the contents of a file as a string._
 
 ### [`write_file(content: list, rel_path, root_path, suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L323)
 
-_Writes content to a file, creating directories as needed._
+Writes content to a file, creating directories as needed.
+
+:param list content: A list of strings to write to the file.
+:param str rel_path: The relative path where the file will be saved. If no file extension is given, the path is treated as a directory.
+:param str root_path: The root path where the rel_path will be appended. {language_code} will be formatted to current language code.
+:return: The directory the file is saved to.
 
 ### [`load_file(rel_path, root_path)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L350)
 
-_Load a text file and return its lines as a list._
+Load a text file and return its lines as a list.
+
 
 <ins>**Args:**</ins>
   - **rel_path (str)**:

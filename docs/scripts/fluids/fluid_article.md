@@ -6,11 +6,12 @@
 
 ### [`check_name(fluid_id, name, method)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_article.py#L23)
 
-_Check if a name is or contains a proper noun for capitalisation_
+Check if a name is or contains a proper noun for capitalisation
 
 ### [`calculate_similar_fluids(fluid_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_article.py#L64)
 
-_Gets similar fluids based on a calculated score._
+Gets similar fluids based on a calculated score.
+
 
 <ins>**Args:**</ins>
   - **fluid_id (str)**:

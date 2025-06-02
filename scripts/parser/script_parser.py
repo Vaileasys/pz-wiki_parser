@@ -15,14 +15,14 @@ COLON_SEPARATOR = ["fixing", "evolvedrecipe"]
 
 # Available configs:
 # list_keys              = Store multiple identical keys as a list. Always treated as a list.
-# list_keys_semicolon    = Split the value by semicolons (;) into a list. Always treated as a list.
-# list_keys_slash        = Split the value by slashes (/) into a list. Always treated as a list.
-# list_keys_pipe         = Split the value by pipes (|) into a list. Always treated as a list.
+# list_keys_semicolon    = Split the value by semicolons (`;`) into a list. Always treated as a list.
+# list_keys_slash        = Split the value by slashes (`/`) into a list. Always treated as a list.
+# list_keys_pipe         = Split the value by pipes (`|`) into a list. Always treated as a list.
 # list_keys_space        = Split the value by spaces into a list. Always treated as a list.
-# list_keys_colon        = Split the value by colons (:) into a list. Always treated as a list.
+# list_keys_colon        = Split the value by colons (`:`) into a list. Always treated as a list.
 # dict_keys              = Store multiple identical keys as counts in a dict. Always treated as a dict.
-# dict_keys_colon        = Split each entry by colon (:) and store as key-value pairs in a dict. Always treated as a dict.
-# dict_keys_equal        = Split each entry by equals sign (=) and store as key-value pairs in a dict. Always treated as a dict.
+# dict_keys_colon        = Split each entry by colon (`:`) and store as key-value pairs in a dict. Always treated as a dict.
+# dict_keys_equal        = Split each entry by equals sign (`=`) and store as key-value pairs in a dict. Always treated as a dict.
 # dict_keys_space        = Split each entry by the first space and store as key-value pairs in a dict. Always treated as a dict.
 SCRIPT_CONFIGS = {
     "item": {
@@ -296,35 +296,35 @@ def split_dict(value: list[str], character: str) -> dict:
     return result
 
 def split_pipe_list(value: str) -> list:
-    """Splits at pipes '|' and normalises as a list."""
+    """Splits at pipes `|` and normalises as a list."""
     return split_list(value, "|")
 
 def split_slash_list(value: str) -> list:
-    """Splits at slashes '/' and normalises as a list."""
+    """Splits at slashes `/` and normalises as a list."""
     return split_list(value, "/")
 
 def split_space_list(value: str) -> list:
-    """Splits at spaces ' ' and normalises as a list."""
+    """Splits at spaces ` ` and normalises as a list."""
     return split_list(value, " ")
 
 def split_semicolon_list(value: str) -> list:
-    """Splits at semicolons ';' and normalises as a list."""
+    """Splits at semicolons `;` and normalises as a list."""
     return split_list(value, ";")
 
 def split_colon_list(value: str) -> list:
-    """Splits at colons ':' and normalises as a list."""
+    """Splits at colons `:` and normalises as a list."""
     return split_list(value, ":")
 
 def split_colon_dict(value: list[str]) -> dict:
-    """Splits at colons ':' and normalises as a dict."""
+    """Splits at colons `:` and normalises as a dict."""
     return split_dict(value, ":")
 
 def split_equal_dict(value: list[str]) -> dict:
-    """Splits at equals '=' and normalises as a dict."""
+    """Splits at equals `=` and normalises as a dict."""
     return split_dict(value, "=")
 
 def split_space_dict(value: list[str]) -> dict:
-    """Splits at spaces ' ' and normalises as a dict."""
+    """Splits at spaces ` ` and normalises as a dict."""
     return split_dict(value, " ")
 
 

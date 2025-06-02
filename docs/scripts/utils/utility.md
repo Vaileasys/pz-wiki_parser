@@ -7,18 +7,31 @@
 ### [`get_item_data_from_id(item_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L23)
 ### [`fix_item_id(item_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L29)
 
-_Checks if an item_id is formatted correctly (i.e., 'module.item_name'). _
+Checks if an item_id is formatted correctly (i.e., 'module.item_name'). 
+
+If not, it'll assume it's just the 'item_name' and search the parsed item data for its 'module'.
+It will then return the full item_id.
+:param item_id: The Item ID to check, which could be either in the format 'module.item_name' or just 'item_name' (without the module).
+:type item_id: str
+:returns: The correct item_id in the format 'module.item_name'. Otherwise it'll return the input string.
+:rtype: item_id (str)
+:example:
+Given `item_id = "Cooked"` and `item_parser.get_item_data()` contains a key like `"Food.Cooked"`,
+this function will return `"Food.Cooked"`.
 
 ### [`get_clothing_xml_value(item_data, xml_value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L57)
 ### [`get_model(item_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L92)
 ### [`get_body_parts(item_data, link, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L151)
 
-_Gets body parts for an item and returns as a list._
+Gets body parts for an item and returns as a list.
+
+:returns: Translated body parts.
+:rtype: body_parts (list)
 
 ### [`get_skill_type_mapping(item_data, item_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L206)
 ### [`get_burn_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L247)
 
-_Returns burn time data from camping_fuel.lua._
+Returns burn time data from camping_fuel.lua.
 
 ### [`get_burn_time(item_id, item_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L273)
 ### [`save_cache(data: dict, data_file: str, data_dir, suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L346)
@@ -26,7 +39,8 @@ _Returns burn time data from camping_fuel.lua._
 ### [`clear_cache(cache_path, cache_name, suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L360)
 ### [`get_name(item_id, item_data, language)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L366)
 
-_Gets an item name if it has a special case, otherwise translates the DisplayName._
+Gets an item name if it has a special case, otherwise translates the DisplayName.
+
 
 <ins>**Args:**</ins>
   - **item_id (str)**:
@@ -42,16 +56,41 @@ _Gets an item name if it has a special case, otherwise translates the DisplayNam
 
 ### [`get_item_id_data(suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L456)
 
-_Loads item_id_dictionary.csv into memory, mapping each page name to a list of item IDs found in its infobox._
+Loads item_id_dictionary.csv into memory, mapping each page name to a list of item IDs found in its infobox.
+
+:param suppress (bool, optional): Suppress print statements. Defaults to False.
+:return: Returns all page names and the item IDs in the page's infobox.
+:rtype: item_id_dict_data (dict)
 
 ### [`get_page(item_id, name)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L499)
 ### [`find_icon(item_id, all_icons)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L511)
 
-_Retrieves the icon associated with a given item_id. Can return a single icon (string) (default) or multiple icons (list),_
+Retrieves the icon associated with a given item_id. Can return a single icon (string) (default) or multiple icons (list),
+
+depending on the 'get_all_icons' parameter.
+:param item_id (str): The ID of the item for which to retrieve the icon.
+:param get_all_icons (bool, optional): If True, returns all icon variants as a list. If False (default), returns only the first icon as a string.
+:return: The icon (or list of icons) associated with the item_id. Returns the default icon ("Question_On") if no specific icon is found.
+:rtype: icon (list[str])
 
 ### [`get_icon(item_id, format, all_icons, cycling, custom_name)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L637)
 
-_Retrieves the icon(s) associated with a given item_id, with optional formatting and cycling through multiple icons._
+Retrieves the icon(s) associated with a given item_id, with optional formatting and cycling through multiple icons.
+
+:param item_id: The ID of the item for which to retrieve the icon(s).
+:type item_id: str
+:param format: If True, formats the icon(s) with language-specific links, display names, and cycling support.
+Defaults to False.
+:type format: bool, optional
+:param all_icons: If True, returns all icon variants for the item_id. If False, only the primary icon is returned.
+Defaults to False.
+:type all_icons: bool, optional
+:param cycling: If True, formats the icons as a cycling image if there are multiple icons.
+This option will force all_icons to be True. Defaults to False.
+:type cycling: bool, optional
+:return: The icon(s) associated with the item_id. If format is True, returns a formatted string. If format is False,
+returns either a single icon (str).
+:rtype: icon_result (str)
 
 ### [`get_guid(item_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L712)
 ### [`get_fluid_name(fluid_data, lang)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L722)

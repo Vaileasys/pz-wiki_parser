@@ -7,7 +7,8 @@
 ### [`get_item()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L9)
 ### [`get_icon_variant(item_id: str, variant: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L18)
 
-_Gets an icon for a specific variant. Returns the base icon if there is no variant defined or it doesn't exist._
+Gets an icon for a specific variant. Returns the base icon if there is no variant defined or it doesn't exist.
+
 
 <ins>**Args:**</ins>
   - **item_id (str)**:

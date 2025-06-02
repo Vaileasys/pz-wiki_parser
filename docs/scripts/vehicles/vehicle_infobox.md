@@ -10,7 +10,7 @@
 ### [`automatic_extraction()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/vehicles/vehicle_infobox.py#L103)
 ### [`main(pre_choice: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/vehicles/vehicle_infobox.py#L113)
 
-_:param pre_choice: str - Automatically sets a choice without querying the user._
+:param pre_choice: str - Automatically sets a choice without querying the user.
 
 
 

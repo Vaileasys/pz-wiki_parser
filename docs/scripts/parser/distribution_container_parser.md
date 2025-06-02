@@ -7,15 +7,21 @@
 ### [`get_distribution_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/distribution_container_parser.py#L13)
 ### [`convert_list_to_dict(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/distribution_container_parser.py#L18)
 
-_Converts lists with alternating key-value pairs into dicts._
+Converts lists with alternating key-value pairs into dicts.
+
+E.g. ["Apple", 8, "Banana", 10] -> {"Apple": 8, "Banana": 10}
 
 ### [`sort_proc_list(item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/distribution_container_parser.py#L36)
 
-_Sorts keys within procList._
+Sorts keys within procList.
 
 ### [`sort_keys(data, is_top_level)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/distribution_container_parser.py#L49)
 
-_Sorts data:_
+Sorts data:
+
+- Top-level: lowercase first keys are first, then uppercase, with each group sorted alphabetically.
+- Nested: boolean keys first.
+- Special case for procList items.
 
 ### [`init()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/distribution_container_parser.py#L86)
 

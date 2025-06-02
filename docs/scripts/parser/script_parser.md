@@ -6,71 +6,73 @@
 
 ### [`inject_templates(script_dict: dict, script_type: str, template_dict: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L106)
 
-_Injects and merges template! and template entries into each script definition._
+Injects and merges template! and template entries into each script definition.
 
 ### [`post_process(script_dict: dict, script_type: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L231)
 
-_Applies post-processing logic based on script type._
+Applies post-processing logic based on script type.
 
 ### [`split_list(value: str, character: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L241)
 
-_Splits by a specific character and normalises as a list_
+Splits by a specific character and normalises as a list
 
 ### [`split_dict(value: list[str], character: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L245)
 
-_Splits at a specific character and normalises as a dict._
+Splits at a specific character and normalises as a dict.
 
 ### [`split_pipe_list(value: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L265)
 
-_Splits at pipes '|' and normalises as a list._
+Splits at pipes '|' and normalises as a list.
 
 ### [`split_slash_list(value: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L269)
 
-_Splits at slashes '/' and normalises as a list._
+Splits at slashes '/' and normalises as a list.
 
 ### [`split_space_list(value: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L273)
 
-_Splits at spaces ' ' and normalises as a list._
+Splits at spaces ' ' and normalises as a list.
 
 ### [`split_semicolon_list(value: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L277)
 
-_Splits at semicolons ';' and normalises as a list._
+Splits at semicolons ';' and normalises as a list.
 
 ### [`split_colon_list(value: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L281)
 
-_Splits at colons ':' and normalises as a list._
+Splits at colons ':' and normalises as a list.
 
 ### [`split_colon_dict(value: list[str])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L285)
 
-_Splits at colons ':' and normalises as a dict._
+Splits at colons ':' and normalises as a dict.
 
 ### [`split_equal_dict(value: list[str])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L289)
 
-_Splits at equals '=' and normalises as a dict._
+Splits at equals '=' and normalises as a dict.
 
 ### [`split_space_dict(value: list[str])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L293)
 
-_Splits at spaces ' ' and normalises as a dict._
+Splits at spaces ' ' and normalises as a dict.
 
 ### [`parse_evolved_recipe(value: str, block_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L300)
 
-_Special case for processing values of 'EvolvedRecipe'._
+Special case for processing values of 'EvolvedRecipe'.
 
 ### [`parse_fluid(value: str, block_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L325)
 
-_Special case for processing values of 'fluid'._
+Special case for processing values of 'fluid'.
 
 ### [`parse_fixer(value: str, block_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L340)
 
-_Special case for processing values of 'fixer'._
+Special case for processing values of 'fixer'.
 
 ### [`parse_item_mapper(lines: list[str], block_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L372)
 
-_Special case for processing values of 'itemMapper'._
+Special case for processing values of 'itemMapper'.
 
 ### [`process_value(key: str, value: str, block_id: str, script_type: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L400)
 
-_Processes a raw value string into its appropriate type based on key and script type rules._
+Processes a raw value string into its appropriate type based on key and script type rules.
+
+Applies special handling for known keys and uses config-based rules to convert values into lists or dictionaries based on separators.
 
 <ins>**Args:**</ins>
   - **key (str)**:
@@ -87,7 +89,8 @@ _Processes a raw value string into its appropriate type based on key and script 
 
 ### [`normalise(value: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L489)
 
-_Convert a string to its type: int, float, bool, or str._
+Convert a string to its type: int, float, bool, or str.
+
 
 <ins>**Args:**</ins>
   - **value (str)**:
@@ -98,11 +101,20 @@ _Convert a string to its type: int, float, bool, or str._
 
 ### [`remove_comments(lines: list[str])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L521)
 
-_Strip // single‑line comments and nested /* … */ block comments._
+Strip // single‑line comments and nested /* … */ block comments.
+
+Parameters:
+lines : list[str]
+Raw lines read from a text file.
+Returns
+list[str]
+Lines with comments removed; blank lines are dropped.
 
 ### [`parse_key_value_line(line: str, data: dict, block_id: str, script_type: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L567)
 
-_Parses a single key-value line and inserts or merges it into the provided data dictionary._
+Parses a single key-value line and inserts or merges it into the provided data dictionary.
+
+Supports both '=' and ':' as separators, applies script-type-specific processing rules, and handles merging of values, lists, and nested dictionaries.
 
 <ins>**Args:**</ins>
   - **line (str)**:
@@ -119,7 +131,8 @@ _Parses a single key-value line and inserts or merges it into the provided data 
 
 ### [`parse_block(lines: list[str], block_id: str, script_type: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L629)
 
-_Parse a block of script lines into a nested dictionary._
+Parse a block of script lines into a nested dictionary.
+
 
 <ins>**Args:**</ins>
   - **lines (list[str])**:
@@ -135,7 +148,8 @@ _Parse a block of script lines into a nested dictionary._
 
 ### [`extract_script_data(script_type: str, do_post_processing: bool, cache_result: bool)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L699)
 
-_Parses all script files of a given script type, extracting blocks into dictionaries keyed by FullType (i.e. [Module].[Type])_
+Parses all script files of a given script type, extracting blocks into dictionaries keyed by FullType (i.e. [Module].[Type])
+
 
 <ins>**Args:**</ins>
   - **script_type (str)**:

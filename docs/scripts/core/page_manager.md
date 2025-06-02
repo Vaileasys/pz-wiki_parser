@@ -6,7 +6,8 @@
 
 ### [`get_ids(page, id_type: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L17)
 
-_Returns a list of ids for a given page and id_type._
+Returns a list of ids for a given page and id_type.
+
 
 <ins>**Args:**</ins>
   - **page (str)**:
@@ -20,7 +21,8 @@ _Returns a list of ids for a given page and id_type._
 
 ### [`get_pages(query_id: str, id_type: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L31)
 
-_Returns a list of pages for a given id._
+Returns a list of pages for a given id.
+
 
 <ins>**Args:**</ins>
   - **query_id (str)**:
@@ -34,7 +36,8 @@ _Returns a list of pages for a given id._
 
 ### [`get_categories(page)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L57)
 
-_Returns the list of categories for the given page._
+Returns the list of categories for the given page.
+
 
 <ins>**Args:**</ins>
   - **page (str)**:
@@ -46,7 +49,8 @@ _Returns the list of categories for the given page._
 
 ### [`get_id_categories(script_id, id_type)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L70)
 
-_Returns the list of categories for the given script_id._
+Returns the list of categories for the given script_id.
+
 
 <ins>**Args:**</ins>
   - **script_id (str)**:
@@ -60,31 +64,31 @@ _Returns the list of categories for the given script_id._
 
 ### [`get_id_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L89)
 
-_Returns the page dictionary organised with the id as the key._
+Returns the page dictionary organised with the id as the key.
 
 ### [`get_flattened_page_dict()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L97)
 
-_Returns the flattened page dictionary, removing first-level keys (item, tile, vehicle)._
+Returns the flattened page dictionary, removing first-level keys (item, tile, vehicle).
 
 ### [`get_raw_page_dict()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L105)
 
-_Returns the raw page dictionary data._
+Returns the raw page dictionary data.
 
 ### [`_flatten_page_dict()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L111)
 
-_Flattens the page dictionary into a single-level dict._
+Flattens the page dictionary into a single-level dict.
 
 ### [`_restructure_id_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L120)
 
-_Restructures the flattened page dict so the key is the id, and page is the value._
+Restructures the flattened page dict so the key is the id, and page is the value.
 
 ### [`load(filepath)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L140)
 
-_Load the page dictionary data from file if not already loaded._
+Load the page dictionary data from file if not already loaded.
 
 ### [`init()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/page_manager.py#L147)
 
-_Initialise all data, storing in cache._
+Initialise all data, storing in cache.
 
 
 

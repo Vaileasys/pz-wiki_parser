@@ -10,7 +10,7 @@
 ### [`format_fixers(module, fixers)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fixing.py#L93)
 ### [`format_skills(skills, skill_values)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fixing.py#L114)
 
-_Format skills and skill values into a string with <br> for line breaks._
+Format skills and skill values into a string with <br> for line breaks.
 
 ### [`write_to_output(module, fixing_id, fixing_data, output_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fixing.py#L139)
 ### [`process_item(module, fixing_id, fixing_data, output_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fixing.py#L211)

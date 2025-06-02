@@ -19,7 +19,20 @@ The script handles:
 
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/evolvedrecipe.py#L22)
 
-_Main execution function for evolved recipes generation._
+Main execution function for evolved recipes generation.
+
+This function:
+1. Loads parsed item data
+2. Identifies items with evolved recipe properties
+3. Processes special attributes like spices
+4. Formats recipe data for wiki template
+5. Creates output files with proper template markup
+The output is saved in the 'output/evolved_recipes' directory,
+with one file per item that has evolved recipe properties.
+Special handling is included for:
+- Spice attributes
+- List-type recipe values
+- Cooked food variants
 
 
 

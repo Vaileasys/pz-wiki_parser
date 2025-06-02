@@ -6,7 +6,7 @@
 
 ### [`generate_clothing_penalties()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L30)
 
-_Extracts clothing penalties from 'forageSystem.lua' and stores in memory as 'clothing_penalties'._
+Extracts clothing penalties from 'forageSystem.lua' and stores in memory as 'clothing_penalties'.
 
 ### [`get_item()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L39)
 ### [`get_item_ids(item_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L48)
@@ -14,15 +14,23 @@ _Extracts clothing penalties from 'forageSystem.lua' and stores in memory as 'cl
 ### [`enumerate_params(parameters)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L96)
 ### [`remove_descriptor(value: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L111)
 
-_Removes the descriptor from the end of string._
+Removes the descriptor from the end of string.
 
 ### [`get_any_property(items: dict, script_param: bool | str | int | float | list, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L118)
 
-_Gets the first property value that isn't None and returns it._
+Gets the first property value that isn't None and returns it.
+
+Used for items with multiple variants.
 
 ### [`get_param_values(items: dict, script_param: str, rstring: bool, default: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L138)
 
-_Gets the script parameter values for a list of items._
+Gets the script parameter values for a list of items.
+
+:param items: dict - A dictionary where keys are item IDs and values are item data dictionaries.
+:param script_param: str - The key for the script parameter to retrieve values from each item.
+:param rstring: bool, optional - If True, returns a string with values joined by "<br>", otherwise returns a list. Default is False.
+:param default: str, optional - The default value to use if the script parameter is not found in an item. Default is None.
+:return: list or str - A list of unique parameter values or a string if rstring is True.
 
 ### [`generate_infobox(item_id, item_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L165)
 ### [`process_item(item_id, item_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L495)

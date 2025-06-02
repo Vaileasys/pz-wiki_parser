@@ -8,16 +8,16 @@
 #### Class Methods
 ##### [`_load_fluids()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L68)
 
-_Load fluid data only once and store in class-level cache._
+Load fluid data only once and store in class-level cache.
 
 ##### [`_load_color_reference()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L73)
 ##### [`fix_fluid_id(fluid_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L78)
 
-_Fixes a partial fluid_id by assuming 'Base' first, then fallback to search._
+Fixes a partial fluid_id by assuming 'Base' first, then fallback to search.
 
 ##### [`all()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L101)
 
-_Return all fluids as a dictionary of {fluid_id: Fluid}._
+Return all fluids as a dictionary of {fluid_id: Fluid}.
 
 ##### [`keys()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L108)
 ##### [`values()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L114)
@@ -25,11 +25,13 @@ _Return all fluids as a dictionary of {fluid_id: Fluid}._
 #### Object Methods
 ##### [`__new__(fluid_id: str, mix_ratio, color)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L15)
 
-_Returns an existing Fluid instance if one already exists for the given ID._
+Returns an existing Fluid instance if one already exists for the given ID.
+
+If overrides are provided, returns a new instance
 
 ##### [`__init__(fluid_id: str, mix_ratio, color)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L35)
 
-_Initialises the fluid’s data if it hasn’t been initialised yet._
+Initialises the fluid’s data if it hasn’t been initialised yet.
 
 ##### [`__getitem__(key)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L58)
 ##### [`__contains__(key)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L61)
@@ -47,11 +49,11 @@ _Initialises the fluid’s data if it hasn’t been initialised yet._
 ##### [`wiki_link`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L182)
 ##### [`mix_ratio`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L188)
 
-_Return the fluid’s relative mix ratio (defaults to 1.0 if not set)._
+Return the fluid’s relative mix ratio (defaults to 1.0 if not set).
 
 ##### [`properties`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L195)
 
-_Return the 'Properties' block or an empty dict._
+Return the 'Properties' block or an empty dict.
 
 ##### [`fatigue_change`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L200)
 ##### [`hunger_change`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L204)
@@ -69,28 +71,28 @@ _Return the 'Properties' block or an empty dict._
 ##### [`food_sickness_reduction`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L252)
 ##### [`poison`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L258)
 
-_Return a FluidPoison object wrapping the 'Poison' block._
+Return a FluidPoison object wrapping the 'Poison' block.
 
 ##### [`color_reference`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L267)
 ##### [`color`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L271)
 
-_Return the fluid color as [R, G, B] integers (0–255)._
+Return the fluid color as [R, G, B] integers (0–255).
 
 ##### [`rgb`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L289)
 
-_Return the fluid color as a wiki RGB template string, e.g., '{{rgb|140, 198, 0}}'._
+Return the fluid color as a wiki RGB template string, e.g., '{{rgb|140, 198, 0}}'.
 
 ##### [`categories`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L297)
 
-_Return the fluid's category list, or empty if none._
+Return the fluid's category list, or empty if none.
 
 ##### [`blend_whitelist`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L302)
 
-_Return FluidBlendList for BlendWhiteList (empty if missing)._
+Return FluidBlendList for BlendWhiteList (empty if missing).
 
 ##### [`blend_blacklist`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L310)
 
-_Return FluidBlendList for BlendBlackList (empty if missing)._
+Return FluidBlendList for BlendBlackList (empty if missing).
 
 
 ### `FluidPoison`

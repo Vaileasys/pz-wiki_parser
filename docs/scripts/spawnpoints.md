@@ -6,21 +6,21 @@
 
 ### [`format_coordinates(posX, posY)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/spawnpoints.py#L16)
 
-_Format coordinates as a wiki template._
+Format coordinates as a wiki template.
 
 ### [`normalise_profession(profession)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/spawnpoints.py#L21)
 ### [`reorder_spawn_data(normalised_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/spawnpoints.py#L41)
 
-_Reorder data to be grouped by coordinate instead of profession._
+Reorder data to be grouped by coordinate instead of profession.
 
 ### [`normalise_spawn_data(spawn_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/spawnpoints.py#L62)
 
-_Normalise world coordinates._
+Normalise world coordinates.
 
 ### [`write_to_file(coord_data, output_file)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/spawnpoints.py#L81)
 ### [`process_lua_file(lua_file)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/spawnpoints.py#L98)
 
-_Processes spawnpoints lua file._
+Processes spawnpoints lua file.
 
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/spawnpoints.py#L137)
 

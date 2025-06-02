@@ -15,7 +15,8 @@ mechanics, generating separate tables for each process with relevant drop rates 
 
 ### [`generate_scrapping_tables(tiles: dict, definitions: dict, lang_code: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L18)
 
-_Generate scrapping and breakage tables for tiles in the specified language._
+Generate scrapping and breakage tables for tiles in the specified language.
+
 
 <ins>**Args:**</ins>
   - **tiles (dict)**:
@@ -33,7 +34,8 @@ _Generate scrapping and breakage tables for tiles in the specified language._
 
 ### [`_generate_disassembly_section(generic: dict, definitions: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L76)
 
-_Generate a MediaWiki table for disassembly (scrapping) information._
+Generate a MediaWiki table for disassembly (scrapping) information.
+
 
 <ins>**Args:**</ins>
   - **generic (dict)**:
@@ -48,7 +50,8 @@ _Generate a MediaWiki table for disassembly (scrapping) information._
 
 ### [`_generate_breakage_section(generic: dict, definitions: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L158)
 
-_Generate a MediaWiki table for breakage (destruction) information._
+Generate a MediaWiki table for breakage (destruction) information.
+
 
 <ins>**Args:**</ins>
   - **generic (dict)**:

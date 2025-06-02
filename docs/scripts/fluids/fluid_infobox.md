@@ -6,17 +6,17 @@
 
 ### [`check_fluid()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_infobox.py#L16)
 
-_Check if a fluid exists_
+Check if a fluid exists
 
 ### [`generate_data(fluid_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_infobox.py#L26)
 
-_Generate a fluid's infobox parameters_
+Generate a fluid's infobox parameters
 
 ### [`process_fluid(fluid_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_infobox.py#L67)
 ### [`automatic_extraction()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_infobox.py#L83)
 ### [`main(pre_choice: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_infobox.py#L96)
 
-_:param pre_choice: str - Automatically sets a choice without querying the user._
+:param pre_choice: str - Automatically sets a choice without querying the user.
 
 
 

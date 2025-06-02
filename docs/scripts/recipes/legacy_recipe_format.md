@@ -20,7 +20,8 @@ The script handles:
 
 ### [`get_processed_recipes()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_format.py#L33)
 
-_Get the processed recipe data, initializing if empty._
+Get the processed recipe data, initializing if empty.
+
 
 <ins>**Returns:**</ins>
   - **dict:**
@@ -30,7 +31,8 @@ _Get the processed recipe data, initializing if empty._
 
 ### [`process_recipe(recipe, parsed_item_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_format.py#L49)
 
-_Process a recipe into a structured format._
+Process a recipe into a structured format.
+
 
 <ins>**Args:**</ins>
   - **recipe (dict)**:
@@ -53,7 +55,8 @@ _Process a recipe into a structured format._
 
 ### [`process_name(recipe)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_format.py#L91)
 
-_Process recipe name and get its translation._
+Process recipe name and get its translation.
+
 
 <ins>**Args:**</ins>
   - **recipe (dict)**:
@@ -68,7 +71,8 @@ _Process recipe name and get its translation._
 
 ### [`process_inputs(recipe)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_format.py#L114)
 
-_Process recipe inputs into structured format._
+Process recipe inputs into structured format.
+
 
 <ins>**Args:**</ins>
   - **recipe (dict)**:
@@ -90,7 +94,8 @@ _Process recipe inputs into structured format._
 
 ### [`construction_output(outputs, recipe)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_format.py#L331)
 
-_Process construction recipe outputs._
+Process construction recipe outputs.
+
 
 <ins>**Args:**</ins>
   - **outputs (list)**:
@@ -107,7 +112,8 @@ _Process construction recipe outputs._
 
 ### [`process_outputs(recipe)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_format.py#L397)
 
-_Process recipe outputs into structured format._
+Process recipe outputs into structured format.
+
 
 <ins>**Args:**</ins>
   - **recipe (dict)**:
@@ -123,7 +129,8 @@ _Process recipe outputs into structured format._
 
 ### [`process_output_mapper(recipe, mapper_string)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_format.py#L473)
 
-_Process output mapper strings into structured format._
+Process output mapper strings into structured format.
+
 
 <ins>**Args:**</ins>
   - **recipe (dict)**:
@@ -140,7 +147,8 @@ _Process output mapper strings into structured format._
 
 ### [`process_requirements(recipe, parsed_item_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_format.py#L526)
 
-_Process recipe requirements into structured format._
+Process recipe requirements into structured format.
+
 
 <ins>**Args:**</ins>
   - **recipe (dict)**:
@@ -159,7 +167,8 @@ _Process recipe requirements into structured format._
 
 ### [`process_workstation(recipe)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_format.py#L642)
 
-_Process workstation requirements._
+Process workstation requirements.
+
 
 <ins>**Args:**</ins>
   - **recipe (dict)**:
@@ -172,7 +181,8 @@ _Process workstation requirements._
 
 ### [`process_xp(recipe)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_format.py#L706)
 
-_Process experience gain information._
+Process experience gain information.
+
 
 <ins>**Args:**</ins>
   - **recipe (dict)**:
@@ -185,7 +195,14 @@ _Process experience gain information._
 
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_format.py#L741)
 
-_Main execution function for recipe formatting._
+Main execution function for recipe formatting.
+
+This function:
+1. Loads necessary data from parsers
+2. Processes all recipes into structured format
+3. Handles construction recipes
+4. Saves processed data to cache
+5. Returns processed recipe data
 
 
 

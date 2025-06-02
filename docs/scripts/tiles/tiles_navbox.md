@@ -18,7 +18,8 @@ The script handles:
 
 ### [`generate_navbox(tiles_data: dict, lang_code: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_navbox.py#L21)
 
-_Generate a navigation box template for tile articles._
+Generate a navigation box template for tile articles.
+
 
 <ins>**Args:**</ins>
   - **tiles_data (dict)**:
@@ -32,7 +33,8 @@ _Generate a navigation box template for tile articles._
 
 ### [`save_navbox(navbox_content: str, lang_code: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_navbox.py#L35)
 
-_Save the generated navigation box to a file._
+Save the generated navigation box to a file.
+
 
 <ins>**Args:**</ins>
   - **navbox_content (str)**:
@@ -42,7 +44,12 @@ _Save the generated navigation box to a file._
 
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_navbox.py#L55)
 
-_Main execution function for navigation box generation._
+Main execution function for navigation box generation.
+
+This function:
+1. Loads tile data
+2. Generates the navigation box content
+3. Saves the navigation box to the appropriate output location
 
 
 

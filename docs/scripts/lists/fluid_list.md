@@ -6,7 +6,7 @@
 
 ### [`process_fluid(fluid_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/fluid_list.py#L14)
 
-_Get fluid data for table_
+Get fluid data for table
 
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/fluid_list.py#L55)
 

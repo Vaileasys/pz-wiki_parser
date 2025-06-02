@@ -19,7 +19,8 @@ The script handles:
 
 ### [`process_usage(tile_name, tile_data, scrappings)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L21)
 
-_Build the 'Usage' section for a tile article._
+Build the 'Usage' section for a tile article.
+
 
 <ins>**Args:**</ins>
   - **tile_name (str)**:
@@ -36,7 +37,8 @@ _Build the 'Usage' section for a tile article._
 
 ### [`process_codesnip(tile_data, codesnips)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L122)
 
-_Create a CodeBox section containing all CodeSnip templates for a tile group._
+Create a CodeBox section containing all CodeSnip templates for a tile group.
+
 
 <ins>**Args:**</ins>
   - **tile_data (dict)**:
@@ -51,7 +53,8 @@ _Create a CodeBox section containing all CodeSnip templates for a tile group._
 
 ### [`assemble_article(header, infobox, intro, usage, codesnip, navigation)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L144)
 
-_Combine all article sections into a complete wiki article._
+Combine all article sections into a complete wiki article.
+
 
 <ins>**Args:**</ins>
   - **header (str)**:
@@ -73,7 +76,8 @@ _Combine all article sections into a complete wiki article._
 
 ### [`sanitize_filename(name)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L171)
 
-_Convert a string into a safe filesystem filename._
+Convert a string into a safe filesystem filename.
+
 
 <ins>**Args:**</ins>
   - **name (str)**:
@@ -86,7 +90,8 @@ _Convert a string into a safe filesystem filename._
 
 ### [`generate_tile_articles(tiles_data, infoboxes, codesnips, scrappings)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L191)
 
-_Generate and save wiki articles for all tile groups._
+Generate and save wiki articles for all tile groups.
+
 
 <ins>**Args:**</ins>
   - **tiles_data (dict)**:

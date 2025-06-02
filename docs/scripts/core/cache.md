@@ -6,15 +6,16 @@
 
 ### [`load_json(path: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L10)
 
-_Load JSON data from a file. Returns empty dict on failure._
+Load JSON data from a file. Returns empty dict on failure.
 
 ### [`save_json(path: str, data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L22)
 
-_Save dictionary data to a JSON file. Returns True if successful._
+Save dictionary data to a JSON file. Returns True if successful.
 
 ### [`save_cache(data: dict, data_file: str, data_dir, suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L33)
 
-_Caches data by saving it to a json file._
+Caches data by saving it to a json file.
+
 
 <ins>**Args:**</ins>
   - **data (dict)**:
@@ -28,7 +29,8 @@ _Caches data by saving it to a json file._
 
 ### [`load_cache(cache_file, cache_name, get_version, backup_old, suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L60)
 
-_Loads the cache from a json file with the option to return the version of it, and back it up if it's old._
+Loads the cache from a json file with the option to return the version of it, and back it up if it's old.
+
 
 <ins>**Args:**</ins>
   - **cache_file (str)**:
@@ -50,7 +52,8 @@ _Loads the cache from a json file with the option to return the version of it, a
 
 ### [`clear_cache(cache_path, cache_name, suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L109)
 
-_Clears the cache at a specified file path._
+Clears the cache at a specified file path.
+
 
 <ins>**Args:**</ins>
   - **cache_path (str)**:

@@ -6,7 +6,8 @@
 
 ### [`timestamp_to_datetime(timestamp: Union[int, str])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L40)
 
-_Convert a timestamp to time and date strings._
+Convert a timestamp to time and date strings.
+
 
 <ins>**Args:**</ins>
   - **timestamp (int or str)**:
@@ -18,7 +19,8 @@ _Convert a timestamp to time and date strings._
 
 ### [`replace_cat(cat: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L57)
 
-_Replace category with its replacement if available._
+Replace category with its replacement if available.
+
 
 <ins>**Args:**</ins>
   - **cat (str)**:
@@ -30,7 +32,8 @@ _Replace category with its replacement if available._
 
 ### [`replace_codes(code_part: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L69)
 
-_Replace code part with its replacement if available._
+Replace code part with its replacement if available.
+
 
 <ins>**Args:**</ins>
   - **code_part (str)**:
@@ -42,7 +45,8 @@ _Replace code part with its replacement if available._
 
 ### [`get_person(color: dict, person_map: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L81)
 
-_Get person identifier based on color._
+Get person identifier based on color.
+
 
 <ins>**Args:**</ins>
   - **color (dict)**:
@@ -56,7 +60,8 @@ _Get person identifier based on color._
 
 ### [`get_channel_cat(channel_entry: Union[ET.Element, None])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L99)
 
-_Get channel category from channel entry._
+Get channel category from channel entry.
+
 
 <ins>**Args:**</ins>
   - **channel_entry (ET.Element or None)**:
@@ -68,7 +73,8 @@ _Get channel category from channel entry._
 
 ### [`process_broadcast_entries(entries: List[ET.Element], output_file, channel_entry: Union[ET.Element, None], log_file, broadcast_entry_count: int)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L117)
 
-_Process broadcast entries and write to output file._
+Process broadcast entries and write to output file.
+
 
 <ins>**Args:**</ins>
   - **entries (List[ET.Element])**:
@@ -88,7 +94,7 @@ _Process broadcast entries and write to output file._
 
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L202)
 
-_Main function to process the RadioData.xml and generate output._
+Main function to process the RadioData.xml and generate output.
 
 
 

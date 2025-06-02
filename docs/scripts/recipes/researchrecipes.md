@@ -18,7 +18,18 @@ The script handles:
 
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/researchrecipes.py#L21)
 
-_Main execution function for research recipes generation._
+Main execution function for research recipes generation.
+
+This function:
+1. Loads parsed item data
+2. Identifies items with researchable recipes
+3. Generates wiki markup using Crafting/sandbox template
+4. Creates output files in both research and crafting directories
+5. Handles proper formatting for wiki integration
+The output is saved in two locations:
+- output/recipes/researchrecipes/
+- output/recipes/crafting/
+Each containing one file per researchable item.
 
 
 

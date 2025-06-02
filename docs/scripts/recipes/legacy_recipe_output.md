@@ -21,7 +21,8 @@ The script handles:
 
 ### [`process_ingredients(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L30)
 
-_Process recipe ingredients and format them for wiki display._
+Process recipe ingredients and format them for wiki display.
+
 
 <ins>**Args:**</ins>
   - **data (dict)**:
@@ -40,7 +41,8 @@ _Process recipe ingredients and format them for wiki display._
 
 ### [`process_tools(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L169)
 
-_Process tool requirements and format them for wiki display._
+Process tool requirements and format them for wiki display.
+
 
 <ins>**Args:**</ins>
   - **data (dict)**:
@@ -59,7 +61,8 @@ _Process tool requirements and format them for wiki display._
 
 ### [`process_recipes(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L252)
 
-_Process recipe learning methods and format them for wiki display._
+Process recipe learning methods and format them for wiki display.
+
 
 <ins>**Args:**</ins>
   - **data (dict)**:
@@ -78,7 +81,8 @@ _Process recipe learning methods and format them for wiki display._
 
 ### [`process_skills(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L339)
 
-_Process skill requirements and format them for wiki display._
+Process skill requirements and format them for wiki display.
+
 
 <ins>**Args:**</ins>
   - **data (dict)**:
@@ -95,7 +99,8 @@ _Process skill requirements and format them for wiki display._
 
 ### [`process_workstation(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L367)
 
-_Process workstation requirements and format them for wiki display._
+Process workstation requirements and format them for wiki display.
+
 
 <ins>**Args:**</ins>
   - **data (dict)**:
@@ -112,7 +117,8 @@ _Process workstation requirements and format them for wiki display._
 
 ### [`process_products(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L390)
 
-_Process recipe products and format them for wiki display._
+Process recipe products and format them for wiki display.
+
 
 <ins>**Args:**</ins>
   - **data (dict)**:
@@ -130,7 +136,8 @@ _Process recipe products and format them for wiki display._
 
 ### [`process_xp(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L537)
 
-_Process experience gains and format them for wiki display._
+Process experience gains and format them for wiki display.
+
 
 <ins>**Args:**</ins>
   - **data (dict)**:
@@ -147,7 +154,8 @@ _Process experience gains and format them for wiki display._
 
 ### [`fluid_rgb(fluid_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L560)
 
-_Get RGB color values for a fluid type._
+Get RGB color values for a fluid type.
+
 
 <ins>**Args:**</ins>
   - **fluid_id (str)**:
@@ -164,7 +172,8 @@ _Get RGB color values for a fluid type._
 
 ### [`gather_item_usage(recipes_data, tags_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L618)
 
-_Gather information about how items are used in recipes._
+Gather information about how items are used in recipes.
+
 
 <ins>**Args:**</ins>
   - **recipes_data (dict)**:
@@ -183,7 +192,8 @@ _Gather information about how items are used in recipes._
 
 ### [`output_item_usage(normal_item_input_map, normal_item_output_map, construction_item_input_map, construction_item_output_map)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L751)
 
-_Generate wiki markup for item usage in recipes._
+Generate wiki markup for item usage in recipes.
+
 
 <ins>**Args:**</ins>
   - **normal_item_input_map (dict)**:
@@ -199,7 +209,8 @@ _Generate wiki markup for item usage in recipes._
 
 ### [`output_skill_usage(recipes_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L839)
 
-_Generate wiki markup for skill usage in recipes._
+Generate wiki markup for skill usage in recipes.
+
 
 <ins>**Args:**</ins>
   - **recipes_data (dict)**:
@@ -209,7 +220,8 @@ _Generate wiki markup for skill usage in recipes._
 
 ### [`strip_prefix(text, prefix)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L906)
 
-_Remove a prefix from text if it exists._
+Remove a prefix from text if it exists.
+
 
 <ins>**Args:**</ins>
   - **text (str)**:
@@ -223,7 +235,8 @@ _Remove a prefix from text if it exists._
 
 ### [`output_lua_tables(processed_recipes)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L922)
 
-_Generate Lua tables for recipe data._
+Generate Lua tables for recipe data.
+
 
 <ins>**Args:**</ins>
   - **processed_recipes (dict)**:
@@ -233,7 +246,8 @@ _Generate Lua tables for recipe data._
 
 ### [`main(recipes_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/legacy_recipe_output.py#L1034)
 
-_Main execution function for recipe output generation._
+Main execution function for recipe output generation.
+
 
 <ins>**Args:**</ins>
   - **recipes_data (dict, optional)**:

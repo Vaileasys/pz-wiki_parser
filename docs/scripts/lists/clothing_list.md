@@ -6,11 +6,11 @@
 
 ### [`get_body_location(body_location)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/clothing_list.py#L23)
 
-_Gets the section and table for a BodyLocation_
+Gets the section and table for a BodyLocation
 
 ### [`generate_data(item_data, item_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/clothing_list.py#L36)
 
-_Gets the item's properties based on the BodyLocation as defined for its table_
+Gets the item's properties based on the BodyLocation as defined for its table
 
 ### [`find_items()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/clothing_list.py#L159)
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/clothing_list.py#L186)

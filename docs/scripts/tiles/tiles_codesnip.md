@@ -17,7 +17,10 @@ all generated snippets.
 
 ### [`generate_codesnips(named_tiles_data: Dict[str, Dict[str, dict]], lang_code: str, game_version: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_codesnip.py#L19)
 
-_Generate a CodeSnip wikitext snippet for each tile in every named group,_
+Generate a CodeSnip wikitext snippet for each tile in every named group,
+
+write each snippet to its own file, and return a mapping of
+sprite_name -> codesnip wikitext.
 
 <ins>**Args:**</ins>
   - **named_tiles_data (dict)**:

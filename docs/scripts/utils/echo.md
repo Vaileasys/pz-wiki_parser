@@ -8,7 +8,7 @@
 ### [`_echo_colour(message, prefix, colour_code)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L15)
 ### [`echo(message)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L46)
 
-_Safely prints a standard message with tqdm support._
+Safely prints a standard message with tqdm support.
 
 ### [`echo_info(message)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L54)
 ### [`echo_warning(message)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L57)

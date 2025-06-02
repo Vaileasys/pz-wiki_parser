@@ -27,15 +27,15 @@
 #### Class Methods
 ##### [`get(property_value, property_key, lang_code, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L163)
 
-_Get a translation for a given value, using optional prefix logic._
+Get a translation for a given value, using optional prefix logic.
 
 ##### [`get_wiki(value: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L179)
 
-_Translate all wiki-style placeholders (<< >>) inside a string._
+Translate all wiki-style placeholders (<< >>) inside a string.
 
 ##### [`load()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L188)
 
-_Force-load all translation data, bypassing lazy init._
+Force-load all translation data, bypassing lazy init.
 
 ##### [`_ensure_loaded()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L198)
 ##### [`_cache()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L203)

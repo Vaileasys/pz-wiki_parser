@@ -6,7 +6,7 @@
 
 ### [`check_fixing(item_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/weapon_list.py#L17)
 
-_Check if it can be fixed_
+Check if it can be fixed
 
 ### [`generate_ammo_data(item_id, item_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/weapon_list.py#L28)
 ### [`get_function(item_id, item_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/weapon_list.py#L106)

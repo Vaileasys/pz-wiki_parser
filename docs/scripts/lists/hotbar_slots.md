@@ -10,22 +10,22 @@
 ### [`generate_hotbar_slots()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/hotbar_slots.py#L67)
 ### [`clean_hotbar_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/hotbar_slots.py#L129)
 
-_Cleans up the hotbar data making its structure consistent._
+Cleans up the hotbar data making its structure consistent.
 
 ### [`get_items()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/hotbar_slots.py#L155)
 
-_Modifies item data to include only items that have AttachmentType and AttachmentsProvided_
+Modifies item data to include only items that have AttachmentType and AttachmentsProvided
 
 ### [`write_attachment_table()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/hotbar_slots.py#L170)
 ### [`write_hotbar_table()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/hotbar_slots.py#L229)
 ### [`clean_attached_locations_data(data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/hotbar_slots.py#L299)
 
-_Clean data parsed from AttachedLocations.lua_
+Clean data parsed from AttachedLocations.lua
 
 ### [`parse_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/hotbar_slots.py#L323)
 ### [`generate_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/hotbar_slots.py#L360)
 
-_Generates data by parsing data and modifying it._
+Generates data by parsing data and modifying it.
 
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/hotbar_slots.py#L389)
 

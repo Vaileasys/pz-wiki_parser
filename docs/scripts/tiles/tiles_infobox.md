@@ -20,7 +20,8 @@ The script handles:
 
 ### [`_parse_grid(pos: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L57)
 
-_Parse a grid position string into column and row coordinates._
+Parse a grid position string into column and row coordinates.
+
 
 <ins>**Args:**</ins>
   - **pos (str)**:
@@ -33,7 +34,8 @@ _Parse a grid position string into column and row coordinates._
 
 ### [`_build_output_name(sprite_ids: List[str])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L75)
 
-_Generate a composite name from multiple sprite IDs._
+Generate a composite name from multiple sprite IDs.
+
 
 <ins>**Args:**</ins>
   - **sprite_ids (List[str])**:
@@ -46,7 +48,8 @@ _Generate a composite name from multiple sprite IDs._
 
 ### [`_get_composite_names(tile_list: List[dict])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L91)
 
-_Generate composite names for multi-tile objects based on facing direction._
+Generate composite names for multi-tile objects based on facing direction.
+
 
 <ins>**Args:**</ins>
   - **tile_list (List[dict])**:
@@ -58,7 +61,8 @@ _Generate composite names for multi-tile objects based on facing direction._
 
 ### [`extract_tile_stats(tiles: Dict[str, dict], definitions: Dict[str, dict], lang_code: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L113)
 
-_Extract key statistics and requirements for a tile group._
+Extract key statistics and requirements for a tile group.
+
 
 <ins>**Args:**</ins>
   - **tiles (Dict[str, dict])**:
@@ -80,7 +84,8 @@ _Extract key statistics and requirements for a tile group._
 
 ### [`generate_infoboxes(named_tiles_data: Dict[str, Dict], definitions: Dict[str, Dict], lang_code: str, game_version: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L166)
 
-_Generate infobox templates for all tile groups._
+Generate infobox templates for all tile groups.
+
 
 <ins>**Args:**</ins>
   - **named_tiles_data (Dict[str, Dict])**:
@@ -98,7 +103,8 @@ _Generate infobox templates for all tile groups._
 
 ### [`build_infobox(display_name: str, tiles: Dict[str, dict], definitions: Dict[str, dict], lang_code: str, game_version: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L231)
 
-_Build a complete infobox template for a tile group._
+Build a complete infobox template for a tile group.
+
 
 <ins>**Args:**</ins>
   - **display_name (str)**:
@@ -118,7 +124,8 @@ _Build a complete infobox template for a tile group._
 
 ### [`prepare_tile_list(tiles: Dict[str, dict])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L277)
 
-_Process tile definitions into a structured list and count facings._
+Process tile definitions into a structured list and count facings.
+
 
 <ins>**Args:**</ins>
   - **tiles (Dict[str, dict])**:
@@ -132,7 +139,8 @@ _Process tile definitions into a structured list and count facings._
 
 ### [`build_icon_params(tile_list: List[dict], max_size: int)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L334)
 
-_Generate icon parameters for the infobox template._
+Generate icon parameters for the infobox template.
+
 
 <ins>**Args:**</ins>
   - **tile_list (List[dict])**:

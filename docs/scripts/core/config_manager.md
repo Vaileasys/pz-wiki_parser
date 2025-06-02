@@ -6,27 +6,39 @@
 
 ### [`setup_config()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L20)
 
-_Sets up the config file with default settings from config_default._
+Sets up the config file with default settings from config_default.
 
 ### [`update_missing_entries(config)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L35)
 
-_Checks if there are missing sections or keys in the config file, and update the config file with any missing entries from config_default._
+Checks if there are missing sections or keys in the config file, and update the config file with any missing entries from config_default.
 
 ### [`open_config()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L63)
 
-_Open the config object._
+Open the config object.
+
+:return: Loaded config object.
 
 ### [`load_config()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L81)
 
-_Load configuration from the config file into a dictionary._
+Load configuration from the config file into a dictionary.
+
+:return: Config file dictionary.
 
 ### [`set_config(key, value, section)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L95)
 
-_Update or add an entry in the configuration file._
+Update or add an entry in the configuration file.
+
+:param key: The key to update or add.
+:param value: The value to set for the specified key.
+:param section: Section where the key-value pair should be added or updated (optional).
 
 ### [`get_config(key, section)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L124)
 
-_Get an entry from the configuration file._
+Get an entry from the configuration file.
+
+:param key: The key to get the value for.
+:param section: Section where the key-value pair should be taken from (optional).
+:return: Value of the config key.
 
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L148)
 

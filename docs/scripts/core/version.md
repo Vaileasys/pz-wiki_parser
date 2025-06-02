@@ -12,16 +12,16 @@
 #### Class Methods
 ##### [`get()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/version.py#L8)
 
-_Returns the current version. If unset, pulls from config._
+Returns the current version. If unset, pulls from config.
 
 ##### [`set(new_version: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/version.py#L16)
 ##### [`update()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/version.py#L20)
 
-_Loads version from config._
+Loads version from config.
 
 ##### [`change()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/version.py#L25)
 
-_Prompts the user for a new version number and updates it._
+Prompts the user for a new version number and updates it.
 
 ##### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/version.py#L33)
 

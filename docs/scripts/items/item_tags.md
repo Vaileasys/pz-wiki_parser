@@ -6,19 +6,19 @@
 
 ### [`write_tag_image()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L23)
 
-_Write each tag's item icons for `cycle-img`._
+Write each tag's item icons for `cycle-img`.
 
 ### [`write_tag_table()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L49)
 
-_Write a wikitable showing all tags and corresponding items._
+Write a wikitable showing all tags and corresponding items.
 
 ### [`write_tag_list()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L77)
 
-_Write each tag item as an item_list._
+Write each tag item as an item_list.
 
 ### [`get_see_also(all_filenames, reference_filename)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L107)
 
-_Get 3 similarly named filenames and include in 'see also'_
+Get 3 similarly named filenames and include in 'see also'
 
 ### [`write_article(tag, item_content, see_also_list, dest_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L129)
 ### [`get_item_list(source_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L170)
@@ -26,7 +26,8 @@ _Get 3 similarly named filenames and include in 'see also'_
 ### [`generate_article_templates()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L217)
 ### [`get_tag_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L242)
 
-_Retrieve tag data, generating it if not already._
+Retrieve tag data, generating it if not already.
+
 
 <ins>**Returns:**</ins>
   - **dict:**
@@ -39,7 +40,7 @@ _Retrieve tag data, generating it if not already._
 
 ### [`generate_tags_dict()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L259)
 
-_Generate a tags dictionary, mapping them to their associated items._
+Generate a tags dictionary, mapping them to their associated items.
 
 ### [`run_function(option: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L315)
 ### [`display_menu(menu, is_root)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L349)

@@ -8,23 +8,23 @@
 ### [`process_generic(item_id, item_data, on_create)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/article_content/item_literature_titles.py#L176)
 ### [`process_special(item_id, item_data, on_create)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/article_content/item_literature_titles.py#L196)
 
-_Process special items_
+Process special items
 
 ### [`process_schematic(item_id, item_data, on_create)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/article_content/item_literature_titles.py#L216)
 
-_Process schematic data_
+Process schematic data
 
 ### [`process_comic(item_id, item_data, on_create)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/article_content/item_literature_titles.py#L241)
 
-_Process comic data_
+Process comic data
 
 ### [`process_magazine(item_id, item_data, on_create)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/article_content/item_literature_titles.py#L264)
 
-_Process magazine data_
+Process magazine data
 
 ### [`process_book(item_id, item_data, on_create)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/article_content/item_literature_titles.py#L300)
 
-_Process book data_
+Process book data
 
 ### [`write_to_file(item_id, literature_titles, literature_type)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/article_content/item_literature_titles.py#L355)
 ### [`combine_txt_files(type)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/article_content/item_literature_titles.py#L497)
