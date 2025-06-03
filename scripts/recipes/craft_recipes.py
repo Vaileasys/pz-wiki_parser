@@ -31,6 +31,54 @@ from scripts.utils import utility, util
 from scripts.utils.echo import echo_success, echo_warning, echo_info, echo_error
 from scripts.items import item_tags
 
+# Cache for unit tool IDs to avoid repeated computation
+_unit_tool_ids_cache = None
+
+def get_unit_tool_ids() -> list[str]:
+    """
+    Get list of item IDs that should be treated as unit tools.
+    Finds all items with Type "Drainable" from the item data cache.
+    
+    Returns:
+        list[str]: List of item IDs that are unit tools (drainable items)
+    """
+    global _unit_tool_ids_cache
+    
+    if _unit_tool_ids_cache is not None:
+        return _unit_tool_ids_cache
+        
+    item_data = get_item_data()
+    unit_tool_ids = []
+    
+    for item_id, item_info in item_data.items():
+        if item_info.get("Type") == "Drainable":
+            unit_tool_ids.append(item_id)
+    
+    _unit_tool_ids_cache = unit_tool_ids
+    return unit_tool_ids
+
+def get_use_delta(item_id: str, item_data: dict) -> float:
+    """
+    Get the UseDelta value for a unit tool item.
+    
+    Args:
+        item_id (str): The item ID to look up
+        item_data (dict): Dictionary of parsed item data
+        
+    Returns:
+        float: The UseDelta value as a float, or 0.1 as default if not found
+    """
+    if not item_id.startswith("Base."):
+        item_id = f"Base.{item_id}"
+        
+    item_info = item_data.get(item_id, {})
+    use_delta = item_info.get("UseDelta")
+    
+    try:
+        return float(use_delta) if use_delta else 0.1
+    except (ValueError, TypeError):
+        return 0.1
+
 
 def fluid_rgb(fluid_id):
     """
@@ -121,11 +169,16 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
     - Simple item ingredients
     - Proper grouping of "One of" vs "Each of" items
     - Icon integration
+    - Unit items with Unit bar template
     """
     input_list = recipe.get("inputs")
     if not isinstance(input_list, list):
         return "''none''"
 
+    # Load item data for UseDelta lookup
+    item_data = get_item_data()
+    unit_tool_ids = get_unit_tool_ids()
+    
     parsed_ingredients = {"ingredients": {}}
     ingredient_counter = 0
     EXCLUDED_ITEM_IDS = {"Base.bobOmb"}
@@ -186,7 +239,8 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
                     parsed.append({
                         "raw": rid,
                         "amount": amt,
-                        "translated": safe_name_lookup(rid)
+                        "translated": safe_name_lookup(rid),
+                        "is_unit": rid in unit_tool_ids
                     })
                 info["numbered_list"] = True
                 info["items"] = parsed
@@ -204,7 +258,8 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
                 parsed.append({
                     "raw": rid,
                     "amount": ent.get("amount", quantity),
-                    "translated": safe_name_lookup(rid)
+                    "translated": safe_name_lookup(rid),
+                    "is_unit": rid in unit_tool_ids
                 })
             info["numbered_list"] = True
             info["items"] = parsed
@@ -218,20 +273,35 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
         if not info and "items" in input_entry:
             valid = [c for c in input_entry["items"]
                      if isinstance(c, str) and c not in EXCLUDED_ITEM_IDS]
-            info["items"] = [
-                {"raw": c, "translated": safe_name_lookup(c)}
-                for c in valid
-            ]
-            info["amount"] = quantity
+            
+            if valid:
+                info["items"] = [
+                    {
+                        "raw": c, 
+                        "translated": safe_name_lookup(c),
+                        "is_unit": c in unit_tool_ids
+                    }
+                    for c in valid
+                ]
+                info["amount"] = quantity
+            else:
+                # Skip if no valid items
+                continue
 
         if not info:
             echo_error(f"Unhandled ingredient #{input_index}: {input_entry}")
-
-        parsed_ingredients["ingredients"][key] = info
+        
+        # Only add to parsed ingredients if we have actual content
+        if info:
+            parsed_ingredients["ingredients"][key] = info
 
     # Build string
     formatted = []
     for data in parsed_ingredients["ingredients"].values():
+        # Skip empty data entries
+        if not data:
+            continue
+            
         # tags
         if "tags" in data:
             lines = []
@@ -258,7 +328,15 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
             for itm in data["items"]:
                 icon = utility.get_icon(itm["raw"])
                 link = util.link(utility.get_page(itm["raw"], itm["translated"]), itm["translated"])
-                lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {link} <small>×{itm['amount']}</small>")
+                if itm.get("is_unit"):
+                    # Handle unit items with Unit bar
+                    use_delta = get_use_delta(itm["raw"], item_data)
+                    unit_bar = f"{{{{#invoke:Unit bar|main|{itm['amount']}|{use_delta}}}}}"
+
+                    lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {link} <br>{unit_bar}")
+                else:
+                    # Regular items
+                    lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {link} <small>×{itm['amount']}</small>")
             formatted.append(("item","<br>".join(lines),"One of"))
 
         # Simple items
@@ -268,7 +346,14 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
             for itm in data["items"]:
                 icon = utility.get_icon(itm["raw"])
                 link = util.link(utility.get_page(itm["raw"], itm["translated"]), itm["translated"])
-                lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {link} <small>×{qty}</small>")
+                if itm.get("is_unit"):
+                    # Handle unit items with Unit bar
+                    use_delta = get_use_delta(itm["raw"], item_data)
+                    unit_bar = f"{{{{#invoke:Unit bar|main|{qty}|{use_delta}}}}}"
+                    lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {link} <br>{unit_bar}")
+                else:
+                    # Regular items
+                    lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {link} <small>×{qty}</small>")
             desc = "One of" if len(data["items"])>1 else "Each of"
             formatted.append(("item","<br>".join(lines),desc))
 
@@ -314,6 +399,7 @@ def process_tools(recipe: dict, build_data: dict) -> str:
     - Tool condition flags
     - Icon integration
     - Proper grouping of requirements
+    - Unit items with Unit bar template
     """
     FLAG_MAP = {
         'IsDamaged':       "damaged",
@@ -326,7 +412,12 @@ def process_tools(recipe: dict, build_data: dict) -> str:
     EXCLUDED = {"Base.bobOmb"}
 
     groups: list[tuple[str, list[str]]] = []
+    
+    # Load item data for UseDelta lookup
+    item_data = get_item_data()
+    unit_tool_ids = get_unit_tool_ids()
 
+    # Process tools
     for inp in recipe.get("inputs", []):
         if inp.get("mode") != "Keep" \
            or "fluidModifier" in inp \
@@ -334,6 +425,7 @@ def process_tools(recipe: dict, build_data: dict) -> str:
             continue
 
         lines: list[str] = []
+        count = inp.get("count", 1)  # Get the count for this input
 
         # Tags
         if "tags" in inp:
@@ -346,10 +438,18 @@ def process_tools(recipe: dict, build_data: dict) -> str:
             for rid in inp["items"]:
                 if rid in EXCLUDED or rid.startswith("Base.*"):
                     continue
-                name  = utility.get_name(rid)
-                page  = utility.get_page(rid, name)
-                icon  = utility.get_icon(rid)
-                lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {util.link(page, name)}")
+                    
+                name = utility.get_name(rid)
+                page = utility.get_page(rid, name)
+                icon = utility.get_icon(rid)
+                
+                # Check if this is a unit tool
+                if rid in unit_tool_ids:
+                    use_delta = get_use_delta(rid, item_data)
+                    unit_bar = f"{{{{#invoke:Unit bar|main|{count}|{use_delta}}}}}"
+                    lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {util.link(page, name)} <br>{unit_bar}")
+                else:
+                    lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {util.link(page, name)}")
 
         if not lines:
             continue
@@ -368,6 +468,8 @@ def process_tools(recipe: dict, build_data: dict) -> str:
 
     # Handle each of
     out, last = [""], None
+    
+    # Process tools
     for desc, lines in groups:
         if desc == "One of" or desc != last:
             if last is not None:
