@@ -7,9 +7,7 @@ from scripts.core.constants import OUTPUT_LANG_DIR
 from scripts.core.language import Language
 from scripts.core.version import Version
 from scripts.core.cache import save_cache, load_cache
-from scripts.utils.echo import echo_info, echo_warning, echo_success, echo_error, ignore_warnings
-
-#ignore_warnings()
+from scripts.utils.echo import echo_info, echo_warning, echo_success, echo_error
 
 _game_file_map_cache = {}
 
@@ -27,6 +25,16 @@ def get_scripts_dir():
 
 def get_maps_dir():
     return os.path.join(get_media_dir(), "maps")
+
+def get_clothing_dir():
+    return os.path.join(get_media_dir(), "clothing")
+
+BASE_MEDIA_DIRS = {
+    "lua": get_lua_dir(),
+    "scripts": get_scripts_dir(),
+    "maps": get_maps_dir(),
+    "clothing": get_clothing_dir(),
+}
 
 
 def map_dir(base_dir, extension=None, media_type="scripts", suppress=False, exclude_ext=None):
@@ -111,11 +119,13 @@ def map_game_files(suppress=False):
         scripts = map_dir(get_scripts_dir(), ".txt", "scripts", suppress=suppress)
         lua = map_dir(get_lua_dir(), ".lua", "lua", suppress=suppress)
         maps = map_dir(get_maps_dir(), media_type="maps", suppress=suppress, exclude_ext=[".lotheader", ".png", ".bin", ".lotpack", ".zip", ".bak"])
+        clothing = map_dir(get_clothing_dir(), ".xml", media_type="clothing", suppress=suppress)
 
         mapping = {
             "scripts": scripts,
             "lua": lua,
-            "maps": maps
+            "maps": maps,
+            "clothing": clothing
         }
 
         _game_file_map_cache = mapping
@@ -161,139 +171,120 @@ def get_game_file_map() -> dict:
         _game_file_map_cache = map_game_files()
     return _game_file_map_cache
 
+## -------------------- Get files -------------------- ##
 
-def get_lua_files(filenames: str | list[str], prefer: str = None, media_type: str = "lua") -> list[str]:
+def get_files_by_type(filenames: str | list[str] = None, media_type: str = "scripts", prefer: str = None, prefix: str = None) -> list[str]:
     """
-    Resolves base Lua filenames to absolute paths using the file map.
+    Resolves filenames to absolute paths using the file map for the specified media type.
 
     Args:
-        filenames (str or list[str]): Lua file names (no extension or path).
+        filenames (str or list[str], optional): File names (no extension or path). If None, includes all files.
+        media_type (str): Media type ("lua", "scripts", "maps", "clothing", etc.).
         prefer (str, optional): Keyword to prioritise among duplicates.
-        media_type (str): Media type ("lua", "scripts", etc.).
+        prefix (str, optional): Only include files starting with this prefix.
 
     Returns:
         list[str]: Absolute file paths.
     """
-    if isinstance(filenames, str):
+    file_map = get_game_file_map().get(media_type, {})
+    paths = []
+
+    base_dir = BASE_MEDIA_DIRS.get(media_type, get_media_dir())
+
+    if filenames is None:
+        filenames = list(file_map.keys())
+    elif isinstance(filenames, str):
         filenames = [filenames]
 
     filenames = [n.replace("\\", "/") for n in filenames]
-    lua_map = get_game_file_map().get(media_type, {})
-    paths = []
-
-    base_dir = {"lua": get_lua_dir(), "scripts": get_scripts_dir(), "maps": get_maps_dir()}
-    base_dir = base_dir.get(media_type, get_lua_dir())
 
     for filename in filenames:
-        filename_lower = filename.lower()
-        is_lua_file = filename_lower.endswith(".lua")
         filename_key = os.path.splitext(filename)[0]
 
-        if is_lua_file:
-            rel_paths = get_file_paths(lua_map, filename_key, prefer=prefer)
-            if rel_paths:
-                for rel_path in rel_paths:
-                    abs_path = os.path.join(base_dir, rel_path)
-                    paths.append(abs_path)
-            else:
-                echo_warning(f"Lua file '{filename}' not found in map.")
+        if prefix and not filename_key.startswith(prefix):
+            continue
+
+        rel_paths = get_file_paths(file_map, filename_key, prefer=prefer)
+        if rel_paths:
+            for rel_path in rel_paths:
+                abs_path = os.path.join(base_dir, rel_path)
+                paths.append(abs_path)
         else:
-            folder_matches = []
-            for rel_paths in lua_map.values():
-                for rel_path in rel_paths:
-                    if rel_path.lower().startswith(f"{filename_lower}/"):
-                        folder_matches.append(os.path.join(base_dir, rel_path))
+            echo_warning(f"{media_type.capitalize()} file '{filename}' not found in map.")
 
-            if folder_matches:
-                paths.extend(folder_matches)
-            else:
-                echo_warning(f"Lua folder '{filename}' not found in map.")
-
-    return paths
+    return sorted(paths)
 
 
-def get_script_files(prefix: str = None) -> list[str]:
+def get_script_files(filenames: str | list[str] = None, media_type: str = "scripts", prefer: str = None, prefix: str = None) -> list[str]:
+    return get_files_by_type(filenames, media_type=media_type, prefer=prefer, prefix=prefix)
+
+
+def get_lua_files(filenames: str | list[str] = None, media_type: str = "lua", prefer: str = None) -> list[str]:
+    return get_files_by_type(filenames, media_type=media_type, prefer=prefer)
+
+
+def get_clothing_files(filenames: str | list[str] = None, media_type: str = "clothing", prefer: str = None) -> list[str]:
+    return get_files_by_type(filenames, media_type=media_type, prefer=prefer)
+
+## -------------------- Get rel path -------------------- ##
+
+def get_relpath_by_type(name: str, media_type: str, prefer: str = None) -> str | None:
     """
-    Retrieves a list of script .txt files from the game scripts folder, optionally filtering by prefix.
+    Retrieves the relative path to a file by name, as stored in the file map for the specified media type.
 
     Args:
-        prefix (str | None): Only files starting with this prefix will be included. If None, all .txt files are included.
+        name (str): The filename without extension.
+        media_type (str): Media type ("lua", "scripts", "maps", "clothing", etc.).
+        prefer (str, optional): Keyword to prioritise among duplicates.
 
     Returns:
-        list[str]: List of absolute file paths.
+        str | None: The relative file path if found, else None.
     """
-    script_files = []
-    for root, _, files in os.walk(get_scripts_dir()):
-        for file in files:
-            if file.endswith(".txt") and (prefix is None or file.startswith(prefix)):
-                script_files.append(os.path.join(root, file))
-    return sorted(script_files)
-
-
-def get_script_relpath(name: str, prefer: str = None) -> str | None:
-    """
-    Retrieves the relative path to a script (.txt) file by name, as stored in the file map.
-
-    Args:
-        name (str): The filename without extension (e.g., "AssaultRifle").
-        prefer (str, optional): Keyword to prioritise among duplicates (e.g., "weapons").
-
-    Returns:
-        str | None: The relative file path (e.g., "weapons/AssaultRifle.txt") if found, else None.
-    """
-    file_map = get_game_file_map().get("scripts", {})
-    rel_paths = get_file_paths(file_map, name, prefer=prefer)
-    return rel_paths[0].replace("/", "\\") if rel_paths else None
-
-
-def get_lua_relpath(name: str, prefer: str = None) -> str | None:
-    """
-    Retrieves the relative path to a Lua (.lua) file by name, as stored in the file map.
-
-    Args:
-        name (str): The filename without extension (e.g., "ISInventoryPage").
-        prefer (str, optional): Keyword to prioritise among duplicates (e.g., "client").
-
-    Returns:
-        str | None: The relative file path (e.g., "client/ISInventoryPage.lua") if found, else None.
-    """
-    file_map = get_game_file_map().get("lua", {})
+    file_map = get_game_file_map().get(media_type, {})
     rel_paths = get_file_paths(file_map, name, prefer=prefer)
     return rel_paths[0].replace("\\", "/") if rel_paths else None
 
 
-def get_script_path(name: str, prefer: str = None) -> str | None:
+def get_script_relpath(name: str, prefer: str = None) -> str | None:
+    return get_relpath_by_type(name, media_type="scripts", prefer=prefer)
+
+def get_lua_relpath(name: str, prefer: str = None) -> str | None:
+    return get_relpath_by_type(name, media_type="lua", prefer=prefer)
+
+def get_clothing_relpath(name: str, prefer: str = None) -> str | None:
+    return get_relpath_by_type(name, media_type="clothing", prefer=prefer)
+
+## -------------------- Get abs path -------------------- ##
+
+def get_abs_path_by_type(name: str, media_type: str, prefer: str = None) -> str | None:
     """
-    Retrieves the absolute path to a script (.txt) file by name.
+    Retrieves the absolute path to a file by name for the specified media type.
 
     Args:
-        name (str): The filename without extension (e.g., "AssaultRifle").
-        prefer (str, optional): Keyword to prioritise among duplicates (e.g., "weapons").
+        name (str): The filename without extension.
+        media_type (str): Media type ("lua", "scripts", "maps", "clothing", etc.).
+        prefer (str, optional): Keyword to prioritise among duplicates.
 
     Returns:
         str | None: The absolute file path if found, otherwise None.
     """
-    rel_path = get_script_relpath(name, prefer=prefer)
+    rel_path = get_relpath_by_type(name, media_type, prefer=prefer)
     if rel_path:
-        return os.path.join(get_scripts_dir(), rel_path.replace("/", "\\"))
+        base_dir = BASE_MEDIA_DIRS.get(media_type, get_media_dir()) # fallback to media root if unknown
+        return os.path.join(base_dir, rel_path.replace("/", "\\"))
     return None
 
-def get_lua_path(name: str, prefer: str = None) -> str | None:
-    """
-    Retrieves the absolute path to a Lua (.lua) file by name.
+def get_script_path(name: str, media_type: str = "scripts", prefer: str = None) -> str | None:
+    return get_abs_path_by_type(name, media_type=media_type, prefer=prefer)
 
-    Args:
-        name (str): The filename without extension (e.g., "ISInventoryPage").
-        prefer (str, optional): Keyword to prioritise among duplicates (e.g., "client").
+def get_lua_path(name: str, media_type: str = "lua", prefer: str = None) -> str | None:
+    return get_abs_path_by_type(name, media_type=media_type, prefer=prefer)
 
-    Returns:
-        str | None: The absolute file path if found, otherwise None.
-    """
-    rel_path = get_lua_relpath(name, prefer=prefer)
-    if rel_path:
-        return os.path.join(get_lua_dir(), rel_path.replace("/", "\\"))
-    return None
+def get_clothing_path(name: str, media_type: str = "clothing", prefer: str = None) -> str | None:
+    return get_abs_path_by_type(name, media_type=media_type, prefer=prefer)
 
+
+## -------------------- General file access -------------------- ##
 
 def read_file(path: str) -> str:
     """
