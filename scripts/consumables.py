@@ -6,7 +6,6 @@ from scripts.core.language import Language, Translate
 from scripts.utils import utility
 from scripts.utils.echo import echo_success, echo_warning
 
-
 def get_item():
     while True:
         query_item_id = input("Enter an item id\n> ")
@@ -16,7 +15,7 @@ def get_item():
         echo_warning(f"No item found for '{query_item_id}', please try again.")
 
 
-def get_icon_variant(item_id, variant=None):
+def get_icon_variant(item_id: str, variant: str = None):
     """Gets an icon for a specific variant. Returns the base icon if there is no variant defined or it doesn't exist.
 
     Args:

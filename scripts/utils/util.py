@@ -140,11 +140,31 @@ def convert_int(value: int | float) -> int | float:
 
 
 def tick(text: str = None, link: str = None):
+    """
+    Return a wiki-formatted tick/check icon, optionally with text and link.
+
+    Args:
+        text (str, optional): Display text.
+        link (str, optional): Link target.
+
+    Returns:
+        str: Formatted wiki string for the tick icon.
+    """
     link = f"|link=" + link if link else ""
     text = "|" + text if text else ""
     return f"[[File:UI_Tick.png|32px{link}{text}]]"
 
 def cross(text: str = None, link: str = None):
+    """
+    Return a wiki-formatted cross icon, optionally with text and link.
+
+    Args:
+        text (str, optional): Display text.
+        link (str, optional): Link target.
+
+    Returns:
+        str: Formatted wiki string for the cross icon.
+    """
     link = f"|link=" + link if link else ""
     text = "|" + text if text else ""
     return f"[[File:UI_Cross.png|32px{link}{text}]]"
@@ -153,6 +173,16 @@ def cross(text: str = None, link: str = None):
 ## ------------------------- Infobox helpers ------------------------- ##
 
 def enumerate_params(parameters):
+    """
+    Expand list values in a dict into numbered keys for infobox use.
+
+    Args:
+        parameters (dict): Dictionary of parameter names and values.
+            List values will be split into numbered keys.
+
+    Returns:
+        dict: New dictionary with expanded numbered keys.
+    """
     new_parameters = {}
     for key, value in parameters.items():
         # Remove key-value pairs if they have no value
@@ -168,5 +198,14 @@ def enumerate_params(parameters):
 
 
 def check_zero(value: int|float, default = None) -> int|float|None:
-    """Returns 'default' if the value is zero."""
+    """
+    Return 'default' if the numeric value is zero, else return the value.
+
+    Args:
+        value (int or float): Value to check.
+        default (optional): Value to return if input is zero.
+
+    Returns:
+        int, float, or None: Original value or 'default' if zero.
+    """
     return default if float(value) == 0.0 else value
