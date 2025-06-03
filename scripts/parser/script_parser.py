@@ -789,8 +789,6 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
     
     # Try load from disk cache if not debug mode
     if use_cache and not config.get_debug_mode():
-        echo_debug("Loading from cache")
-        print(config.get_debug_mode())
         # Try to load cache from local storage
         saved_cache_data = check_cache_version(script_type)
         if saved_cache_data:
