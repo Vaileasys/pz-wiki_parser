@@ -2,7 +2,7 @@
 
 import shutil
 from pathlib import Path
-from scripts.core import config_manager
+from scripts.core import config_manager as config
 from scripts.core.constants import RESOURCE_DIR
 from scripts.core.cache import save_cache, load_cache
 
@@ -113,7 +113,7 @@ def main():
 #        "weapons",
 #        "WorldItems"
     ]
-    textures_dir = Path(config_manager.get_config("game_directory")) / "media" / "textures"
+    textures_dir = Path(config.get_game_directory()) / "media" / "textures"
 
     for folder_name in texture_folders:
         source_folder = textures_dir / folder_name if folder_name != "." else textures_dir

@@ -1,6 +1,6 @@
 import re
 from pathlib import Path
-from scripts.core import config_manager
+from scripts.core import config_manager as config
 from scripts.core.version import Version
 from scripts.core.cache import save_cache, load_cache
 
@@ -31,7 +31,7 @@ def parse_evolved_recipes():
     # Check if cache is old and should be updated
     if cache_version != game_version:
 
-        game_directory = Path(config_manager.get_config("game_directory"))
+        game_directory = Path(config.get_game_directory())
         file_path = game_directory / "media" / "scripts" / "evolvedrecipes.txt"
 
         with open(file_path, 'r', encoding='utf-8') as file:

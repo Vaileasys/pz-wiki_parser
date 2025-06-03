@@ -2,7 +2,7 @@ import os
 import json
 import chardet
 import re
-from scripts.core import logger, config_manager, version
+from scripts.core import logger, config_manager as config, version
 from scripts.core.constants import DATA_DIR
 from scripts.utils import utility
 from scripts.utils.echo import echo_deprecated
@@ -306,7 +306,7 @@ def update_default_language():
     :return: Updated default language.
     """
     global default_language
-    default_language = config_manager.get_config('default_language')
+    default_language = config.get_default_language()
     return default_language
 
 
@@ -321,7 +321,7 @@ def init_translations():
     print("Initialising translations")
     global default_language
     global language_code
-    default_language = config_manager.get_config('default_language')
+    default_language = config.get_default_language()
     if language_code is None:
         language_code = change_language()
     cache_translations()

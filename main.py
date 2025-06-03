@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import importlib, sys, os
-from scripts.core import config_manager, setup, logger, cache
-from scripts.core.version import Version
+from scripts.core import config_manager as config, setup, logger, cache
+from scripts.core.language import Language
 from scripts.utils.echo import echo_error
 
 menu_structure = {
@@ -109,7 +109,7 @@ settings_structure = {
     },
     '4': {
         'name': 'Toggle debug',
-        'description': f'Toggle debug mode, to show or hide debug prints. Current: {config_manager.get_config("debug_mode")}'
+        'description': f'Toggle debug mode, to show or hide debug prints. Current: {config.get_debug_mode()}'
     },
     '5': {
         'name': 'Run First Time Setup',
@@ -145,6 +145,8 @@ def display_menu(menu, is_root=False, title=None):
 def handle_module(module_name, user_input=None):
     try:
         module = importlib.import_module(module_name)
+        if config.get_debug_mode():
+            cache.clear_cache()
         if user_input is not None:
             module.main(user_input)
         else:
@@ -159,8 +161,7 @@ def handle_module(module_name, user_input=None):
 def navigate_menu(menu, is_root=False, title=None):
     while True:
         if is_root:
-            version_number = Version.get()
-            title = f"Main Menu (Game version: {version_number})"
+            title = f"Main Menu (Game version: {config.get_version()})"
         display_menu(menu, is_root, title)
         user_input = input("> ").strip().upper()
 
@@ -183,8 +184,8 @@ def navigate_menu(menu, is_root=False, title=None):
             elif name == 'Clear cache':
                 cache.clear_cache()
             elif name == 'Toggle debug':
-                new_debug = "true" if config_manager.get_config("debug_mode") == "false" else "false"
-                config_manager.set_config("debug_mode", new_debug)
+                new_debug = not config.get_debug_mode()
+                config.set_debug_mode(new_debug)
                 settings_structure['4']['description'] = f'Toggle debug mode, to show or hide debug prints. Current: {new_debug}'
             elif name == 'Run First Time Setup':
                 handle_module('scripts.core.setup')
@@ -200,8 +201,7 @@ def navigate_menu(menu, is_root=False, title=None):
             echo_error("Invalid input. Please try again.")
 
 def check_first_run():
-    first_run_flag = config_manager.get_config('first_time_run')
-    is_first_run = first_run_flag == '0'
+    is_first_run = config.get_first_time_run()
     if is_first_run:
         choice = input("Would you like to run the first-time setup? (Y/N): ").strip().upper()
         if choice == 'Y':
@@ -209,7 +209,7 @@ def check_first_run():
             logger.write("Setup first time set up completed.")
         else:
             logger.write("Skipping first-time setup.", True)
-        config_manager.set_config('first_time_run', '1')
+        config.set_first_time_run(False)
 
 def main():
     # Add the /scripts/ directory to the system path

@@ -2,7 +2,7 @@ import os
 import shutil
 import platform
 from pathlib import Path
-from scripts.core import config_manager
+from scripts.core import config_manager as config
 from scripts.core.constants import LUA_PATH
 from scripts.utils.echo import echo, echo_warning, echo_success, echo_error, ignore_warnings, echo_info
 
@@ -315,7 +315,7 @@ def handle_translations(media_dir):
 
 def main():
     install_path = get_install_path()
-    config_manager.set_config('game_directory', install_path)
+    config.set_game_directory(install_path)
 
     try:
         media_dir = verify_media_directory(install_path)

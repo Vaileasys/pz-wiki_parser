@@ -2,7 +2,7 @@
 
 import os
 from pathlib import Path
-from scripts.core import config_manager
+from scripts.core import config_manager as config
 from scripts.core.constants import OUTPUT_LANG_DIR
 from scripts.core.language import Language
 from scripts.core.version import Version
@@ -11,10 +11,10 @@ from scripts.utils.echo import echo_info, echo_warning, echo_success, echo_error
 
 #ignore_warnings()
 
-_game_file_map_cache= {}
+_game_file_map_cache = {}
 
 def get_game_dir():
-    return config_manager.get_config("game_directory")
+    return config.get_game_directory()
 
 def get_media_dir():
     return os.path.join(get_game_dir(), "media")

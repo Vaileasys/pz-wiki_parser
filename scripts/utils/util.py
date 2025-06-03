@@ -1,4 +1,3 @@
-from scripts.core.language import Language
 from scripts.utils.echo import echo_deprecated
 
 
@@ -60,6 +59,8 @@ def link(page:str, name:str=None) -> str:
     :param name: The display text of the link (optional). Defaults to `page`.
     :return: The formatted wiki link.
     """
+    from scripts.core.language import Language
+
     if name is None:
         return f"[[{page}{Language.get_subpage()}]]"
     elif page == name and Language.get() == "en":
@@ -76,6 +77,8 @@ def format_link(name:str, page:str=None) -> str:
     :param page: The target page (optional). Defaults to `name`.
     :return: The formatted wiki link.
     """
+    from scripts.core.language import Language
+
     echo_deprecated("'format_link()' is deprecated, use link() instead.")
     language_code = Language.get()
     

@@ -3,7 +3,7 @@ import json
 import re
 from scripts.core.constants import DATA_DIR
 from scripts.core.version import Version
-from scripts.core import config_manager
+from scripts.core import config_manager as config
 from scripts.utils.echo import echo_error, echo_warning, echo_info
 from scripts.core.cache import save_cache, load_cache
 
@@ -85,19 +85,19 @@ class Language:
 
     @classmethod
     def update_default(cls):
-        cls._default_language = config_manager.get_config("default_language")
+        cls._default_language = config.get_default_language()
         return cls._default_language
 
     @classmethod
     def init(cls):
         echo_info("Initialising language")
         cls.update_default()
-        cls._language_code = cls.prompt()
+        cls._language_code = cls._prompt()
         cls.set_subpage(cls._language_code)
         Translate.load()
 
     @classmethod
-    def prompt(cls):
+    def _prompt(cls):
         code = input(f"Enter language code (default '{cls._default_language}')\n> ").strip().lower()
         if code not in LANGUAGE_CODES:
             echo_info(f"Unrecognised language code, defaulting to '{cls._default_language}'")

@@ -5,7 +5,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 from scripts.parser import item_parser
 from scripts.recipes import legacy_recipe_parser
-from scripts.core import logger, config_manager
+from scripts.core import logger, config_manager as config
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.core.constants import (DATA_DIR, RESOURCE_DIR)
@@ -90,7 +90,7 @@ def get_clothing_xml_value(item_data, xml_value):
 
 # gets model for item_data as PNG
 def get_model(item_data):
-    textures_dir = Path(config_manager.get_config("game_directory")) / "media" / "textures"
+    textures_dir = Path(config.get_game_directory()) / "media" / "textures"
     model = None
 
     if 'ClothingItem' in item_data:

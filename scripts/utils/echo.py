@@ -1,7 +1,6 @@
 import os
 import traceback
 from tqdm import tqdm
-from scripts.core import config_manager
 
 _ignore_warnings = False # True=Ignore warnings
 _warnings_level = 3 # 0=All, 1=Error, 2=Warnings, 3=Deprecated
@@ -64,7 +63,8 @@ def echo_success(message):
     _echo_colour(message, "[Success]", "92")
 
 def echo_debug(message):
-    debug_mode = config_manager.get_config("debug_mode")
+    from scripts.core import config_manager as config
+    debug_mode = config.get_debug_mode()
 
     if debug_mode == "true":
         _echo_colour(message, "[Debug]", "95")

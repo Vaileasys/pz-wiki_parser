@@ -3,9 +3,11 @@ import copy
 from pathlib import Path
 from scripts.core.file_loading import get_script_files, read_file
 from scripts.core.language import Translate
-from scripts.core.cache import save_cache
+from scripts.core.cache import save_cache, load_cache
 from scripts.utils.echo import echo, echo_info, echo_warning, echo_error, echo_success, echo_debug
 from scripts.parser.recipe_parser import parse_recipe_block, parse_construction_recipe
+from scripts.core.version import Version
+from scripts.core import config_manager as config
 
 PREFIX_BLACKLIST = {
     "item": ["MakeUp_", "ZedDmg_", "Wound_", "Bandage_", "F_Hair_", "M_Hair_", "M_Beard_"]
@@ -757,7 +759,14 @@ def is_blacklisted(filepath: str, script_type: str) -> bool:
     return False
 
 
-def extract_script_data(script_type: str, do_post_processing: bool = True, cache_result: bool = True) -> dict[str, dict]:
+def check_cache_version(script_type: str):
+    cached_data, cached_version = load_cache(f"parsed_{script_type}_data.json", f"{script_type} data", get_version=True)
+    if cached_version == Version.get():
+        return cached_data
+    return {}
+
+
+def extract_script_data(script_type: str, do_post_processing: bool = True, cache_result: bool = True, use_cache = True) -> dict[str, dict]:
     """
     Parses all script files of a given script type, extracting blocks into dictionaries keyed by FullType (i.e. [Module].[Type])
 
@@ -770,9 +779,23 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
     """
     global script_cache
 
-    # If script_type from cache if it's already been parsed.
+    # Clear memory cache
+    if not use_cache or config.get_debug_mode():
+        script_cache = {}
+    
+    # Get script_type from cache if it's already been parsed.
     if script_type in script_cache:
         return script_cache[script_type]
+    
+    # Try load from disk cache if not debug mode
+    if use_cache and not config.get_debug_mode():
+        echo_debug("Loading from cache")
+        print(config.get_debug_mode())
+        # Try to load cache from local storage
+        saved_cache_data = check_cache_version(script_type)
+        if saved_cache_data:
+            script_cache[script_type] = saved_cache_data # Cache in memory for next run
+            return saved_cache_data
 
     script_dict = {}
     entity_dict = {} # special case for entity
