@@ -66,7 +66,7 @@ def echo_debug(message):
     from scripts.core import config_manager as config
     debug_mode = config.get_debug_mode()
 
-    if debug_mode == "true":
+    if debug_mode:
         _echo_colour(message, "[Debug]", "95")
 
 def echo_deprecated(message):
