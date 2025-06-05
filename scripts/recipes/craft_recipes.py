@@ -538,6 +538,9 @@ def process_workstation(recipe: dict, build_data: dict) -> str:
         "domekiln": "Kiln - Dome",
         "kilnlarge": "Advanced Kiln",
         "kilnsmall": "Primitive Kiln",
+        "heckling": "Heckle Comb",
+        "rippling": "Ripple Comb",
+        "scutching": "Scutching Board",
     }
 
     for tag_identifier in tag_list:
