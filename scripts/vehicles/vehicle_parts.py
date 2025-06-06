@@ -4,7 +4,7 @@ from scripts.objects.vehicle import Vehicle
 from scripts.objects.item import Item
 from scripts.core.file_loading import write_file
 from scripts.utils.util import link
-from scripts.utils.echo import echo_success
+from scripts.utils import echo
 from scripts.core.language import Translate, Language
 from scripts.core.constants import PBAR_FORMAT
 
@@ -120,7 +120,6 @@ def generate_table(vehicle_id, rows):
     return content
 
 
-
 def main():
     Language.get()
     with tqdm(total=Vehicle.count(), desc="Generating vehicle mechanics", bar_format=PBAR_FORMAT, unit=" vehicles", leave=False) as pbar:
@@ -135,7 +134,7 @@ def main():
 
             pbar.update(1)
     
-    echo_success(f"Vehicle part files saved to '{output_dir}'")
+    echo.success(f"Vehicle part files saved to '{output_dir}'")
 
 if __name__ == "__main__":
     main()

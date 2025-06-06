@@ -8,7 +8,7 @@ from scripts.core.file_loading import load_file, write_file
 from scripts.core.constants import VEHICLE_DIR, PBAR_FORMAT
 from scripts.core.version import Version
 from scripts.utils.util import link
-from scripts.utils.echo import echo_success
+from scripts.utils import echo
 from scripts.parser.outfit_parser import get_outfits, translate_outfit_name
 
 VEH_DIR = VEHICLE_DIR.format(language_code=Language.get())
@@ -192,7 +192,7 @@ def main():
             process_vehicle(vehicle_id)
             pbar.update(1)
 
-    echo_success(f"Article files saved to '{output_dir}'")
+    echo.success(f"Article files saved to '{output_dir}'")
 
 if __name__ == "__main__":
     main()

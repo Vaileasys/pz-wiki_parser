@@ -3,12 +3,12 @@ from scripts.core.language import Language, Translate
 from scripts.objects.fluid import Fluid
 from scripts.utils.util import check_zero
 from scripts.utils.table_helper import get_table_data, create_tables
-from scripts.utils.echo import echo_success
 from scripts.core.constants import FLUID_DIR, RESOURCE_DIR
 
 TABLE_PATH = os.path.join(RESOURCE_DIR, "tables", "fluid_table.json")
 ROOT_PATH = os.path.join(FLUID_DIR, "lists")
 
+table_map = {}
 
 def process_fluid(fluid_id):
     """Get fluid data for table"""

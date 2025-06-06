@@ -4,7 +4,7 @@ from scripts.core.file_loading import get_script_path
 from scripts.core import logger
 from scripts.core.language import Translate
 from scripts.objects.item import Item
-from scripts.utils.echo import echo_warning
+from scripts.utils import echo
 from scripts.utils.lua_helper import load_lua_file, parse_lua_tables
 from scripts.core.cache import save_cache
 from scripts.utils.util import link
@@ -292,7 +292,7 @@ class Vehicle:
         self.parent_id = Vehicle.fix_vehicle_id(self.parent_id)
         
         if self.parent_id not in Vehicle._vehicles:
-            echo_warning(f"[{self.vehicle_id}] No vehicle found for '{self.parent_id}'")
+            echo.warning(f"[{self.vehicle_id}] No vehicle found for '{self.parent_id}'")
             self.parent_id = "Unknown"
             return
         
@@ -747,7 +747,7 @@ class Vehicle:
             data = parts_data[part + "*"]
             return data
         else:
-            echo_warning(f"Part '{part}' couldn't be found for '{self.vehicle_id}'.")
+            echo.warning(f"Part '{part}' couldn't be found for '{self.vehicle_id}'.")
             return None
 
     def get_part_table(self, part: str) -> dict | None:
@@ -760,7 +760,7 @@ class Vehicle:
             # Return just "table" if it exists
             return data["table"] if "table" in data else data
 
-        echo_warning(f"Part '{part}' couldn't be found for '{self.vehicle_id}'.")
+        echo.warning(f"Part '{part}' couldn't be found for '{self.vehicle_id}'.")
         return None
     
     def get_part_install(self, part: str) -> dict | None:
@@ -816,7 +816,7 @@ class Vehicle:
             part_item = part_item + str(self.get_mechanic_type())
             return Item(part_item).get("MaxCapacity")
         
-        echo_warning(f"[{self.vehicle_id}] Couldn't find capacity for '{part or 'part'}'.")
+        echo.warning(f"[{self.vehicle_id}] Couldn't find capacity for '{part or 'part'}'.")
         return 0
 
     def get_glove_box_capacity(self) -> int:
@@ -853,7 +853,7 @@ class Vehicle:
                 self.trunk_capacity[part_name] = capacity
 
         if not self.trunk_capacity:
-            echo_warning(f"[{self.vehicle_id}] No trunk capacities found.")
+            echo.warning(f"[{self.vehicle_id}] No trunk capacities found.")
     
     def get_seat_capacity(self) -> int:
         if self.seat_capacity is None:

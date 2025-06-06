@@ -4,7 +4,7 @@ import json
 import re
 from scripts.core.constants import DATA_DIR
 from scripts.core.version import Version
-from scripts.utils.echo import echo_success, echo_error, echo_warning, echo_info
+from scripts.utils import echo
 
 
 def load_json(path:str) -> dict:
@@ -15,7 +15,7 @@ def load_json(path:str) -> dict:
         with open(path, 'r', encoding='utf-8') as file:
             return json.load(file)
     except (json.JSONDecodeError, OSError) as e:
-        echo_warning(f"Failed to load JSON from {path} – {e}")
+        echo.warning(f"Failed to load JSON from {path} – {e}")
         return {}
 
 
@@ -26,7 +26,7 @@ def save_json(path:str, data:dict) -> bool:
             json.dump(data, file, ensure_ascii=False, indent=4)
         return True
     except OSError as e:
-        echo_error(f"Could not write to {path} – {e}")
+        echo.error(f"Could not write to {path} – {e}")
         return False
 
 
@@ -54,10 +54,10 @@ def save_cache(data: dict, data_file: str, data_dir=DATA_DIR, suppress=False):
     save_json(data_file_path, data_copy)
     
     if not suppress:
-        echo_info(f"{cache_name.capitalize()} saved to '{data_file_path}'")
+        echo.info(f"{cache_name.capitalize()} saved to '{data_file_path}'")
 
 
-def load_cache(cache_file, cache_name="data", get_version=False, backup_old=False, suppress=False):
+def load_cache(cache_file, cache_name="data", get_version=False, backup_old=False, suppress=False) -> dict:
     """Loads the cache from a json file with the option to return the version of it, and back it up if it's old.
 
     Args:
@@ -90,16 +90,16 @@ def load_cache(cache_file, cache_name="data", get_version=False, backup_old=Fals
             json_cache.pop("version", None)
 
             if not suppress:
-                echo_info(f"{cache_name.capitalize()} loaded from cache: '{cache_file}' ({cache_version})")
+                echo.info(f"{cache_name.capitalize()} loaded from cache: '{cache_file}' ({cache_version})")
 
             if backup_old and cache_version != Version.get():
                 shutil.copy(cache_file, cache_file.replace(".json", "_old.json"))
 
     except json.JSONDecodeError as e:
-        echo_error(f"Failed to decode JSON file 'cache_file': {e}")
+        echo.error(f"Failed to decode JSON file 'cache_file': {e}")
 
     except Exception as e:
-        echo_error(f"Failed getting {cache_name.lower()} '{cache_file}': {e}")
+        echo.error(f"Failed getting {cache_name.lower()} '{cache_file}': {e}")
 
     if get_version:
         return json_cache, cache_version
@@ -131,6 +131,6 @@ def clear_cache(cache_path=DATA_DIR, cache_name=None, suppress=False):
                 os.remove(cache_path)  # Delete file
 
         if not suppress:
-            echo_success(f"{cache_name.capitalize()} cleared.")
+            echo.success(f"{cache_name.capitalize()} cleared.")
     except Exception as e:
-        echo_error(f"Failed clearing {cache_name.lower()} '{cache_path}': {e}")
+        echo.error(f"Failed clearing {cache_name.lower()} '{cache_path}': {e}")
