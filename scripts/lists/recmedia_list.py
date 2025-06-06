@@ -44,6 +44,7 @@ def generate_data(guid, rm_data):
     
     style_center = "style=\"text-align: center;\" | "
     style_nowrap = "style=\"white-space: nowrap;\" | "
+    style_wrap = "style=\"white-space: wrap;\" | "
     empty_string = style_center + "-"
 
     moodles = {}
@@ -74,7 +75,7 @@ def generate_data(guid, rm_data):
     item["author"] = rm_data.get("author", empty_string) if "author" in columns else None
     item["production"] = rm_data.get("extra", empty_string) if "production" in columns else None
     if "cover" in columns:
-        item["cover"] = rm_data.get("extra") if rm_data.get("extra") else empty_string
+        item["cover"] = style_wrap + rm_data.get("extra") if rm_data.get("extra") else empty_string
     item["lines"] = style_center + str(len(lines)) if "lines" in columns else None
     if "effect" in columns:
         item["effect"] = style_nowrap + moodle_list if moodle_list else empty_string
