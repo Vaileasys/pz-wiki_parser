@@ -163,6 +163,3 @@ def echo_debug(message):
 
 def echo_deprecated(message):
     _message(message, "[Deprecated]", "95", emit_warning=True, warnings_level=3)
-
-
-success("test")
