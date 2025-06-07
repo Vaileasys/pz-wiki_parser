@@ -22,7 +22,10 @@ item_id_dict_data = {}
 def get_item_data_from_id(item_id):
     item_id = fix_item_id(item_id)
     all_item_data = item_parser.get_item_data()
-    return all_item_data.get(item_id)
+    item_data = all_item_data.get(item_id, {})
+    if not item_data:
+        echo.warning(f"No item data found for {item_id}")
+    return item_data
 
 
 def fix_item_id(item_id):
@@ -362,7 +365,7 @@ def clear_cache(cache_path=DATA_DIR, cache_name=None, suppress=False):
 
 
 # Gets an item name. This is for special cases where the name needs to be manipulated.
-def get_name(item_id, item_data=None, language=None):
+def get_name(item_id, item_data:dict={}, language=None):
     """Gets an item name if it has a special case, otherwise translates the DisplayName.
 
     Args:

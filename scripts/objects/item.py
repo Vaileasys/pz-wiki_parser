@@ -336,7 +336,9 @@ class Item:
         self._item_id = item_id
         self.data = Item._items.get(item_id, {})
 
-        self._module, self._id_type = item_id.split(".", 1)
+        id_parts = item_id.split(".", 1)
+        self._module = id_parts[0]
+        self._id_type = id_parts[1] if len(id_parts) == 2 else None
 
         self._name = None
         self._name_en = None  # English name
@@ -449,6 +451,14 @@ class Item:
                 save_cache(parsed_burn_data, CACHE_FILE)
 
             cls._burn_data = parsed_burn_data
+
+    @classmethod
+    def exists(cls, item_id: str) -> bool:
+        if cls._items is None:
+            cls._load_items()
+
+        item_id = cls.fix_item_id(item_id)
+        return item_id in cls._items
     
     ## ------------------------- Dict-like Methods ------------------------- ##
 
@@ -894,6 +904,14 @@ class Item:
     ## ------------------------- Properties ------------------------- ##
 
     # --- Core --- #
+
+    @property
+    def valid(self) -> bool:
+        return bool(self.data)
+
+    @property
+    def script_type(self) -> str:
+        return self.data.get("ScriptType")
 
     @property
     def file(self):
