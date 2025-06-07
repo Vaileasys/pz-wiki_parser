@@ -1,7 +1,7 @@
 import os
-from scripts.parser import item_parser
+from scripts.objects.item import Item
 from scripts.core.language import Language
-from scripts.utils import utility
+from scripts.utils import echo
 
 # Dictionary for body part combinations. This is used in 'Template:Body_part' to display the image and body parts.
 BODY_PARTS_DICT = {
@@ -165,10 +165,9 @@ def get_body_part_ref(search_list):
 
 # Gets all items with 'BloodLocation' and passes them through 'get_item()'
 def get_items():
-    parsed_item_data = item_parser.get_item_data()
     data = {}
-    for item_id, item_data in parsed_item_data.items():
-        if 'BloodLocation' in item_data:
+    for item_id in Item.all():
+        if Item(item_id).blood_location:
             data[item_id] = get_item(item_id)
 
     return data
@@ -176,16 +175,14 @@ def get_items():
 
 # Gets body parts for an item
 def get_item(item_id):
-    parsed_item_data = item_parser.get_item_data()
-
-    if item_id in parsed_item_data:
-        item_data = parsed_item_data[item_id]
-        if 'BloodLocation' in item_data:
-            body_parts = utility.get_body_parts(item_data, False)
+    if Item.exists(item_id):
+        item = Item(item_id)
+        if item.blood_location:
+            body_parts = item.get_body_parts(raw_id=True)
 
             return body_parts
     else:
-        print(f"No data found for '{item_id}'")
+        echo.warning(f"No data found for '{item_id}'")
 
     return
 
@@ -205,7 +202,7 @@ def write_to_file(data):
         
         i += 1
 
-    print(f"{i} body part files created in '{output_dir}'")
+    echo.success(f"{i} body part files created in '{output_dir}'")
 
 
 def main():

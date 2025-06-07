@@ -1,13 +1,12 @@
 import os
 from difflib import SequenceMatcher
 from tqdm import tqdm
-from scripts.parser import item_parser
+from scripts.objects.item import Item
 from scripts.core.version import Version
 from scripts.core.language import Language
 from scripts.core.constants import OUTPUT_DIR, PBAR_FORMAT, DATA_DIR
-from scripts.utils import utility, util
+from scripts.utils import util, echo
 from scripts.core.cache import save_cache, load_cache
-from scripts.utils import echo
 
 CACHE_JSON = "tags_data.json"
 is_run_locally = False
@@ -266,18 +265,16 @@ def generate_tags_dict():
 
     # If cache version is old, we generate new data
     if cache_version != game_version:
-        parsed_item_data = item_parser.get_item_data()
 
-        with tqdm(total=len(parsed_item_data), desc="Generating tag data", bar_format=PBAR_FORMAT, unit=" items") as pbar:
-            for item_id, item_data in parsed_item_data.items():
-                pbar.set_postfix_str(f'Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})')
-                if 'Tags' in item_data:
-                    name = utility.get_name(item_id, item_data)
-                    page = utility.get_page(item_id, name)
-                    icon = utility.get_icon(item_id)
-                    tags = item_data.get('Tags', [])
-                    if isinstance(tags, str):
-                        tags = [tags]
+        with tqdm(total=Item.count(), desc="Generating tag data", bar_format=PBAR_FORMAT, unit=" items") as pbar:
+            for item_id in Item.all():
+                item = Item(item_id)
+                pbar.set_postfix_str(f'Processing: {item.type} ({item_id[:30]})')
+                if 'Tags' in item.data:
+                    name = item.name
+                    page = item.page
+                    icon = item.icon
+                    tags = item.tags
                     for tag in tags:
                         if tag not in tags_dict:
                             tags_dict[tag] = []
