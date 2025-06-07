@@ -202,7 +202,7 @@ def generate_infobox(item_id, item_data):
         # Add item ids to the processed list, so we don't create infoboxes unecessarily
         processed_item_ids.extend(all_item_ids)
 
-        name = Item(item_id).get_name()
+        name = Item(item_id).name
 
         icons = utility.find_icon(item_id, True)
 
