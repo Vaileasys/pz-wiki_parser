@@ -3,7 +3,7 @@ import copy
 from scripts.core.cache import save_cache, load_cache
 from scripts.utils.lua_helper import load_lua_file, parse_lua_tables, LUA_EVENTS
 from scripts.core.file_loading import write_file
-from scripts.utils.echo import echo_debug, echo_warning
+from scripts.utils import echo
 from scripts.parser.zone_parser import get_zone_data, get_coord
 from scripts.core.constants import VEHICLE_DIR
 from scripts.objects.vehicle import Vehicle
@@ -60,7 +60,7 @@ def construct_zone_list(data):
         content_data[name] = []
 
 #        if name in FILTER:
-#            echo_debug(f"Skipping '{name}' due to filter match.")
+#            echo.debug(f"Skipping '{name}' due to filter match.")
 #            continue
 
         content = []
@@ -81,7 +81,7 @@ def generate_zone_article(data):
 
         vehicles = get_zone_defs().get(name.lower(), {}).get("vehicles", {})
         if not vehicles:
-            echo_warning(f"Couldn't find a vehicle zone def for '{name}'")
+            echo.warning(f"Couldn't find a vehicle zone def for '{name}'")
         
         vehicles_content = []
         for vehicle_id, veh_data in vehicles.items():

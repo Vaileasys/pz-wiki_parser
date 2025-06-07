@@ -18,7 +18,7 @@ import json
 from scripts.core.version import Version
 from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache, load_cache
-from scripts.utils.echo import echo_info, echo_warning, echo_success
+from scripts.utils import echo
 
 # Cache file name
 CACHE_JSON = "metarecipe_data.json"
@@ -113,7 +113,7 @@ def main():
     
     # Parse meta recipes if there is no cache, or it's outdated
     if cache_version != Version.get():
-        echo_info("Building meta recipe cache")
+        echo.info("Building meta recipe cache")
         
         # Load craft recipe data
         CRAFT_CACHE_FILE = "parsed_craftRecipe_data.json"
@@ -128,11 +128,11 @@ def main():
             # Save the mapping to cache
             save_cache(metarecipe_data, CACHE_JSON)
             
-            echo_success(f"Metarecipe cache saved to {CACHE_JSON}")
+            echo.success(f"Metarecipe cache saved to {CACHE_JSON}")
             
         except Exception as e:
-            echo_warning(f"Error building meta recipe mapping: {e}")
+            echo.warning(f"Error building meta recipe mapping: {e}")
             metarecipe_data = {}
     else:
         metarecipe_data = meta_cache
-        echo_info(f"Loaded meta recipes from cache")
+        echo.info(f"Loaded meta recipes from cache")

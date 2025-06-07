@@ -5,7 +5,7 @@ from scripts.parser import item_parser
 from scripts.core.constants import OUTPUT_DIR
 from scripts.utils import utility, lua_helper, util
 from scripts.core.cache import save_cache, load_cache
-from scripts.utils.echo import echo
+from scripts.utils import echo
 
 language_code = Language.get()
 output_dir = Path(OUTPUT_DIR) / language_code.lower()
@@ -223,7 +223,7 @@ def write_attachment_table():
     with open(output_path, 'w', encoding='utf-8') as file:
         file.write("\n".join(table))
     if not _suppress:
-        echo(f"File saved to {output_path}")
+        echo.write(f"File saved to {output_path}")
 
 
 def write_hotbar_table():
@@ -293,7 +293,7 @@ def write_hotbar_table():
     with open(output_path, 'w', encoding='utf-8') as file:
         file.write("\n".join(table))
     if not _suppress:
-        echo(f"File saved to {output_path}")
+        echo.write(f"File saved to {output_path}")
 
 
 def clean_attached_locations_data(data):

@@ -7,7 +7,7 @@ from scripts.core.language import Language
 from scripts.core.constants import OUTPUT_DIR, PBAR_FORMAT, DATA_DIR
 from scripts.utils import utility, util
 from scripts.core.cache import save_cache, load_cache
-from scripts.utils.echo import echo_success, echo_warning, echo_error
+from scripts.utils import echo
 
 CACHE_JSON = "tags_data.json"
 is_run_locally = False
@@ -43,7 +43,7 @@ def write_tag_image():
                 tag_string = "".join(output_list)
                 file.write(f'<span class="cycle-img">{tag_string}</span>')
             pbar.update(1)
-    echo_success(f"Tag images completed. Files can be found in '{output_dir}'")
+    echo.success(f"Tag images completed. Files can be found in '{output_dir}'")
 
 
 def write_tag_table():
@@ -71,7 +71,7 @@ def write_tag_table():
                 file.write(f'|- id="tag-{tag}"\n| [[{tag} (tag)|{tag}]] || {tag_items}\n')
                 pbar.update(1)
             file.write('|}')
-    echo_success(f"Tags table completed. File can be found in '{output_file}'")
+    echo.success(f"Tags table completed. File can be found in '{output_file}'")
 
 
 def write_tag_list():
@@ -98,7 +98,7 @@ def write_tag_list():
                     file.write(f"|-\n| [[File:{icon}|32x32px]] || {link} || {item_id}\n")
                 file.write('|}')
             pbar.update(1)
-    echo_success(f"Tags list completed. Files can be found in '{output_dir}'")
+    echo.success(f"Tags list completed. Files can be found in '{output_dir}'")
 
 
 ## -------------------- ARTICLES -------------------- ##
@@ -108,7 +108,7 @@ def get_see_also(all_filenames, reference_filename):
     """Get 3 similarly named filenames and include in 'see also'"""
 
     if len(all_filenames) < 3:
-        echo_warning("Not enough files to select 3 similar filenames.")
+        echo.warning("Not enough files to select 3 similar filenames.")
         return []
 
     reference_name = os.path.splitext(reference_filename)[0]
@@ -169,7 +169,7 @@ def write_article(tag, item_content, see_also_list, dest_dir):
 
 def get_item_list(source_dir):
     if not os.path.exists(source_dir):
-        echo_error(f"The source directory {source_dir} does not exist. Make sure to run 'item_tags.py (Tag images)' first")
+        echo.error(f"The source directory {source_dir} does not exist. Make sure to run 'item_tags.py (Tag images)' first")
         return []
 
     item_list = []
@@ -192,7 +192,7 @@ def get_item_list(source_dir):
 def generate_article_modding():
     source_dir = os.path.join(output_tags_dir, "item_list")
     if not os.path.exists(source_dir):
-        echo_warning(f"'source_dir' doesn't exist, running 'Tag item list'")
+        echo.warning(f"'source_dir' doesn't exist, running 'Tag item list'")
         write_tag_list()
     dest_dir = os.path.join(output_tags_dir, "articles", "modding")
     item_list = get_item_list(source_dir)
@@ -209,7 +209,7 @@ def generate_article_modding():
 
                 pbar.update(1)
 
-        echo_success(f"Modding articles completed. Files can be found in '{dest_dir}'")
+        echo.success(f"Modding articles completed. Files can be found in '{dest_dir}'")
 
 
 ## -------------------- TEMPLATE ARTICLE -------------------- ##
@@ -217,7 +217,7 @@ def generate_article_modding():
 def generate_article_templates():
     source_dir = os.path.join(output_tags_dir, "cycle-img")
     if not os.path.exists(source_dir):
-        echo_warning(f"'source_dir' doesn't exist, running 'Tag item list'")
+        echo.warning(f"'source_dir' doesn't exist, running 'Tag item list'")
         write_tag_image()
     dest_dir = os.path.join(output_tags_dir, "articles", "templates")
     item_list = get_item_list(source_dir)
@@ -234,7 +234,7 @@ def generate_article_templates():
 
                 pbar.update(1)
 
-        echo_success(f"Template articles completed. Files can be found in '{dest_dir}'")
+        echo.success(f"Template articles completed. Files can be found in '{dest_dir}'")
 
 
 ## -------------------- TAG DATA -------------------- ##

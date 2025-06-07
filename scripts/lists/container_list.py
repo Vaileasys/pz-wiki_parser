@@ -9,7 +9,7 @@ from scripts.lists import hotbar_slots
 from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
 from scripts.utils import utility, util, table_helper
 from scripts.core.cache import save_cache, load_cache
-from scripts.utils.echo import echo_info
+from scripts.utils import echo
 
 TABLE_PATH = f"{RESOURCE_DIR}/tables/container_table.json"
 
@@ -176,7 +176,7 @@ def get_cached_types():
 
                 category_cache[cat_type][cat_item_id] = {"name": name, "icon": icon, "page": page}
                 pbar.update(1)
-        echo_info("Items organised by type and cached.")
+        echo.info("Items organised by type and cached.")
 
         save_cache(category_cache, CACHE_FILE)
     
@@ -321,7 +321,7 @@ def find_items():
 
             pbar.update(1)
 
-    echo_info(f"Finished processing {item_count} items for {len(container_dict)} tables.")
+    echo.info(f"Finished processing {item_count} items for {len(container_dict)} tables.")
            
     return container_dict
 

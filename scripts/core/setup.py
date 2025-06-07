@@ -4,7 +4,7 @@ import platform
 from pathlib import Path
 from scripts.core import config_manager as config
 from scripts.core.constants import LUA_PATH
-from scripts.utils.echo import echo, echo_warning, echo_success, echo_error, ignore_warnings, echo_info
+from scripts.utils import echo
 
 
 def get_install_path():
@@ -38,19 +38,19 @@ def get_install_path():
             if selected_path.exists():
                 return selected_path
             else:
-                echo_error("That path doesn't exist on your system.")
+                echo.error("That path doesn't exist on your system.")
                 return get_install_path()
         elif choice == count+1:
             manual_path = Path(input("Please enter the install location: ").strip())
             if manual_path.exists():
                 return manual_path
             else:
-                echo_error("That path doesn't exist.")
+                echo.error("That path doesn't exist.")
                 return get_install_path()
         else:
             raise ValueError
     except ValueError:
-        echo_error("Invalid choice, please try again.")
+        echo.error("Invalid choice, please try again.")
         return get_install_path()
 
 
@@ -78,7 +78,7 @@ def copy_scripts_and_radio(media_dir):
         shutil.rmtree(scripts_destination)
 
     shutil.copytree(scripts_dir, scripts_destination)
-    echo_info(f"Copied {scripts_dir} to {scripts_destination}")
+    echo.info(f"Copied {scripts_dir} to {scripts_destination}")
 
     # Check and copy radio folder
     if not os.path.exists(radio_dir):
@@ -88,7 +88,7 @@ def copy_scripts_and_radio(media_dir):
         shutil.rmtree(radio_destination)
 
     shutil.copytree(radio_dir, radio_destination)
-    echo_info(f"Copied {radio_dir} to {radio_destination}")
+    echo.info(f"Copied {radio_dir} to {radio_destination}")
 
 
 def copy_lua_files(media_dir: str) -> None:
@@ -202,7 +202,7 @@ def find_and_copy_files(destination_dir, input_dir, files_to_copy, rename_func=N
                 dst_filename = rename_func(Path(root).name) if rename_func else file
                 dst = dst / dst_filename
                 shutil.copy(src, dst)
-                echo_info(f"Copied {file} to {dst}")
+                echo.info(f"Copied {file} to {dst}")
 
 
 def rename_spawnpoints(folder_name: str) -> str:
@@ -228,9 +228,9 @@ def copy_tile_definitions(media_dir):
     os.makedirs(dst_dir, exist_ok=True)
     if os.path.exists(src):
         shutil.copy(src, dst_dir)
-        echo_info(f"Copied newtiledefinitions.tiles to {dst_dir}")
+        echo.info(f"Copied newtiledefinitions.tiles to {dst_dir}")
     else:
-        echo_warning(f"newtiledefinitions.tiles not found at {src}, skipping.")
+        echo.warning(f"newtiledefinitions.tiles not found at {src}, skipping.")
 
 
 def copy_xml_files(media_dir):
@@ -253,9 +253,9 @@ def copy_xml_files(media_dir):
         dst_path = os.path.join(destination_dir, file_name)
         if os.path.exists(src_path):
             shutil.copy(src_path, dst_path)
-            echo_info(f"Copied {file_name} to {dst_path}")
+            echo.info(f"Copied {file_name} to {dst_path}")
         else:
-            echo_warning(f"{file_name} not found in {src_path}, skipping.")
+            echo.warning(f"{file_name} not found in {src_path}, skipping.")
 
     # Copy contents of the clothing folder
     if os.path.exists(source_clothing_dir):
@@ -266,9 +266,9 @@ def copy_xml_files(media_dir):
                 shutil.copytree(src_path, dst_path, dirs_exist_ok=True)
             else:
                 shutil.copy2(src_path, dst_path)
-            echo_info(f"Copied {item} to {dst_path}")
+            echo.info(f"Copied {item} to {dst_path}")
     else:
-        echo_warning(f"Clothing folder not found at {source_clothing_dir}, skipping.")
+        echo.warning(f"Clothing folder not found at {source_clothing_dir}, skipping.")
 
 
 def copy_java_files(install_path):
@@ -296,7 +296,7 @@ def copy_java_files(install_path):
                 src = os.path.join(root, file)
                 dst = os.path.join(destination_dir, file)
                 shutil.copy(src, dst)
-                echo_info(f"Copied {file} to {dst}")
+                echo.info(f"Copied {file} to {dst}")
 
 
 def handle_translations(media_dir):
@@ -308,9 +308,9 @@ def handle_translations(media_dir):
 
     if os.path.exists(translation_dir):
         shutil.copytree(translation_dir, destination_dir, dirs_exist_ok=True)
-        echo_info(f"Copied local translation to {destination_dir}")
+        echo.info(f"Copied local translation to {destination_dir}")
     else:
-        echo_error(f"Translation directory not found in {translation_dir}")
+        echo.error(f"Translation directory not found in {translation_dir}")
 
 
 def main():
@@ -320,7 +320,7 @@ def main():
     try:
         media_dir = verify_media_directory(install_path)
     except FileNotFoundError as e:
-        echo_error(e)
+        echo.error(e)
         return
 
     try:
@@ -332,9 +332,9 @@ def main():
         copy_java_files(install_path)
         handle_translations(media_dir)
     except FileNotFoundError as e:
-        echo_error(e)
+        echo.error(e)
     else:
-        echo_success(f"Setup complete")
+        echo.success(f"Setup complete")
 
 
 if __name__ == "__main__":

@@ -63,13 +63,13 @@ def reset():
     Reset the config file to the default values in `CONFIG_DEFAULTS`.
     Overwrites the existing config file.
     """
-    from scripts.utils.echo import echo_info
+    from scripts.utils import echo
     config = configparser.ConfigParser()
     for section, values in CONFIG_DEFAULTS.items():
         config[section] = values
     with open(CONFIG_FILE, 'w') as file:
         config.write(file)
-    echo_info("Config file reset.")
+    echo.info("Config file reset.")
 
 
 def refresh():

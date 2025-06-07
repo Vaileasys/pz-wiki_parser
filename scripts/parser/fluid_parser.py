@@ -1,7 +1,7 @@
 import re
 import os
 from scripts.core.cache import save_cache
-from scripts.utils.echo import echo_info
+from scripts.utils import echo
 
 RESOURCE_PATH = os.path.join("resources", "scripts")
 DATA_FILE = "fluid_data.json"
@@ -214,7 +214,7 @@ def init():
 
     fluid_data = parse_files(RESOURCE_PATH)
     save_cache(fluid_data, DATA_FILE)
-    echo_info(f"Total number of fluids parsed: {fluid_counter}")
+    echo.info(f"Total number of fluids parsed: {fluid_counter}")
 
     
 if __name__ == "__main__":

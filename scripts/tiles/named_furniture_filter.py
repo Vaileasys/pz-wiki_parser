@@ -19,7 +19,7 @@ import os
 from os import path
 from scripts.core.constants import DATA_DIR
 from scripts.core.cache import load_cache, save_cache
-from scripts.utils.echo import echo_info, echo_error, echo_success
+from scripts.utils import echo
 
 MANUAL_GROUPS = {
     'Air conditioner': [
@@ -300,23 +300,23 @@ def main():
 
     tiles_cache_filename = 'tiles_data.json'
     tiles_cache_path = path.join(DATA_DIR, tiles_cache_filename)
-    echo_info(f'Loading tiles cache from {tiles_cache_path}')
+    echo.info(f'Loading tiles cache from {tiles_cache_path}')
     try:
         tiles_data = load_cache(tiles_cache_path, 'Tiles')
     except Exception as err:
-        echo_error(f'Error loading tiles cache: {err}')
+        echo.error(f'Error loading tiles cache: {err}')
         return
 
     processed_data = process_tiles(tiles_data)
 
     output_filename = 'named_furniture.json'
     output_path = path.join(DATA_DIR, output_filename)
-    echo_info(f'Saving processed tiles to {output_path}')
+    echo.info(f'Saving processed tiles to {output_path}')
     try:
         save_cache(processed_data, output_filename, DATA_DIR)
-        echo_success(f'Successfully saved {len(processed_data)} groups to {output_filename}')
+        echo.success(f'Successfully saved {len(processed_data)} groups to {output_filename}')
     except Exception as err:
-        echo_error(f'Error saving processed tiles: {err}')
+        echo.error(f'Error saving processed tiles: {err}')
 
 if __name__ == '__main__':
     main()

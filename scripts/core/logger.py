@@ -1,7 +1,7 @@
 import os
 import traceback
 from scripts.core.constants import OUTPUT_DIR
-from scripts.utils.echo import echo, echo_error, echo_warning, echo_info, echo_success
+from scripts.utils import echo
 
 LOG_PATH = os.path.join(OUTPUT_DIR, "logging")
 DEF_FILE = "log.txt"
@@ -52,16 +52,16 @@ def write(message, print_bool=False, file_name=DEF_FILE, exception=None, categor
 
     if print_bool:
         echo_functions = {
-            "error": echo_error,
-            "warning": echo_warning,
-            "info": echo_info,
-            "success": echo_success
+            "error": echo.error,
+            "warning": echo.warning,
+            "info": echo.info,
+            "success": echo.success
         }
 
         if category in echo_functions:
             echo_functions[category](f"{message}{post_message}")
         else:
-            echo(f"{message}{post_message}")
+            echo.write(f"{message}{post_message}")
 
     with open(file_name, 'a') as file:
         file.write(f"{message}{post_message}\n")

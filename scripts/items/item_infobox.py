@@ -9,10 +9,9 @@ from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.lists import hotbar_slots
 from scripts.core.constants import PBAR_FORMAT, RESOURCE_DIR, ITEM_DIR
-from scripts.utils import utility, lua_helper, util
+from scripts.utils import utility, lua_helper, util, echo
 from scripts.utils.util import capitalize
 from scripts.core.cache import save_cache
-from scripts.utils.echo import echo, echo_success, echo_error
 from scripts.core.file_loading import write_file
 from scripts.objects.item import Item
 
@@ -42,7 +41,7 @@ def get_item():
         for item_id, item_data in item_parser.get_item_data().items():
             if item_id == query_item_id:
                 return item_data, item_id
-        echo(f"No item found for '{query_item_id}', please try again.")
+        echo.write(f"No item found for '{query_item_id}', please try again.")
 
 
 def get_item_ids(item_id):
@@ -525,7 +524,7 @@ def automatic_extraction():
             process_item(item_id, item_data)
             pbar.update(1)
         elapsed_time = pbar.format_dict["elapsed"]
-    echo_success(f"Finished processing items after {elapsed_time:.2f} seconds.")
+    echo.success(f"Finished processing items after {elapsed_time:.2f} seconds.")
 
 
 def main():
@@ -540,20 +539,20 @@ def main():
         if choice == '1':
             automatic_extraction()
             save_cache({"data": item_ids_already_processed}, "item_ids_already_processed.json")
-            echo_success(f"Extraction complete, the files can be found in '{ROOT_DIR}'.")
+            echo.success(f"Extraction complete, the files can be found in '{ROOT_DIR}'.")
             return
         elif choice == '2':
             item_data, item_id = get_item()
             success = process_item(item_id, item_data)
             if success:
-                echo_success(f"Extraction complete, the file can be found in '{os.path.join(ROOT_DIR, item_id)}.txt'.")
+                echo.success(f"Extraction complete, the file can be found in '{os.path.join(ROOT_DIR, item_id)}.txt'.")
             else:
-                echo_error(f"Error writing file. Refer to log: {logger.get_log_path()}")
+                echo.error(f"Error writing file. Refer to log: {logger.get_log_path()}")
             return
         elif choice == 'q':
             return
         else:
-            echo("Invalid choice.")
+            echo.write("Invalid choice.")
 
 
 if __name__ == "__main__":

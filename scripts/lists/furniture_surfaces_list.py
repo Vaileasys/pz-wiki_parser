@@ -3,7 +3,7 @@ from scripts.core.constants import DATA_DIR
 from scripts.core.version import Version
 from scripts.core.language import Language
 from scripts.core.cache import load_cache
-from scripts.utils.echo import echo_error
+from scripts.utils import echo
 from scripts.tiles.tiles_infobox import extract_tile_stats
 from scripts.core.page_manager import init as init_pages, get_pages
 
@@ -174,4 +174,4 @@ def generate_surface_list(named_tiles_data: dict):
         with open(out_file, "w", encoding="utf-8") as f:
             f.write(text)
     except Exception as err:
-        echo_error(f"Failed writing 'furniture_surfaces_list': {err}")
+        echo.error(f"Failed writing 'furniture_surfaces_list': {err}")

@@ -1,6 +1,6 @@
 from scripts.utils.lua_helper import load_lua_file, parse_lua_tables
 from scripts.core.cache import save_cache
-from scripts.utils.echo import echo_error, echo_debug
+from scripts.utils import echo
 
 _data = {}
 
@@ -42,7 +42,7 @@ def get_zone_data(key: str = None) -> dict|list:
     rvalue = _data.get(key)
 
     if not rvalue:
-        echo_error(f"Couldn't find zone data for '{key}'")
+        echo.error(f"Couldn't find zone data for '{key}'")
         return {}
 
     if key not in USE_NAME:

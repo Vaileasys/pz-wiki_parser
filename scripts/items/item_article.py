@@ -3,7 +3,7 @@ from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.core.constants import PBAR_FORMAT, DATA_DIR, ITEM_DIR
 from scripts.core.cache import save_cache, load_cache
-from scripts.utils.echo import echo, echo_info, echo_warning, echo_error
+from scripts.utils import echo
 
 LANGUAGE_DATA = {
     "en": {
@@ -221,7 +221,7 @@ def load_item_id_dictionary(dictionary_dir):
                         item_id_dict[item_id] = article_name
 
     except Exception as e:
-        echo_error(f"Error reading {dictionary_dir}: {e}")
+        echo.error(f"Error reading {dictionary_dir}: {e}")
 
     return item_id_dict
 
@@ -334,7 +334,7 @@ def generate_consumable_properties(item_id, consumables_dir):
             with open(file_path, 'r', encoding='utf-8') as file:
                 return file.read().strip()
         except Exception as e:
-            echo_error(f"Error reading {file_path}: {e}")
+            echo.error(f"Error reading {file_path}: {e}")
 
     return ""
 
@@ -369,7 +369,7 @@ def generate_condition(name, category, skill_type, infobox, fixing_dir, language
                     text += f"\n\n==={repairing_header}===\n{content.strip()}"
                     break
             except Exception as e:
-                echo_error(f"Error reading {path}: {e}")
+                echo.error(f"Error reading {path}: {e}")
     return text
 
 
@@ -386,7 +386,7 @@ def generate_crafting(item_id, crafting_dir, teachedrecipes_dir, language_code):
             with open(what_fp, 'r', encoding='utf-8') as fh:
                 parts.append(fh.read().strip())
         except Exception as e:
-            echo_error(f"Error reading {what_fp}: {e}")
+            echo.error(f"Error reading {what_fp}: {e}")
 
     # Researchable recipes
     research_fp = os.path.join(crafting_dir, f"{item_id}_research.txt")
@@ -399,7 +399,7 @@ def generate_crafting(item_id, crafting_dir, teachedrecipes_dir, language_code):
                 f"{research}"
             )
         except Exception as e:
-            echo_error(f"Error reading {research_fp}: {e}")
+            echo.error(f"Error reading {research_fp}: {e}")
 
     # Learned recipes
     learned_fp = os.path.join(teachedrecipes_dir, f"{item_id}_Teached.txt")
@@ -412,7 +412,7 @@ def generate_crafting(item_id, crafting_dir, teachedrecipes_dir, language_code):
                 f"{learned}"
             )
         except Exception as e:
-            echo_error(f"Error reading {learned_fp}: {e}")
+            echo.error(f"Error reading {learned_fp}: {e}")
 
     if not parts:
         return ""
@@ -426,7 +426,7 @@ def generate_building(item_id, building_dir):
             with open(path, 'r', encoding='utf-8') as fh:
                 return fh.read().strip()
         except Exception as e:
-            echo_error(f"Error reading {path}: {e}")
+            echo.error(f"Error reading {path}: {e}")
     return ""
 
 
@@ -437,7 +437,7 @@ def generate_learned_recipes(item_id, teached_dir):
             with open(path, 'r', encoding='utf-8') as fh:
                 return fh.read().strip()
         except Exception as e:
-            echo_error(f"Error reading {path}: {e}")
+            echo.error(f"Error reading {path}: {e}")
     return ""
 
 
@@ -454,7 +454,7 @@ def generate_body_part(item_id, body_parts_dir):
                 "|}"
             )
         except Exception as e:
-            echo_error(f"Error reading {path}: {e}")
+            echo.error(f"Error reading {path}: {e}")
     return ""
 
 
@@ -468,7 +468,7 @@ def generate_location(original_filename, infobox_name, item_id, distribution_dir
                 with open(path, 'r', encoding='utf-8') as fh:
                     return fh.read().strip()
             except Exception as e:
-                echo_error(f"Error reading {path}: {e}")
+                echo.error(f"Error reading {path}: {e}")
     return ""
 
 
@@ -481,7 +481,7 @@ def generate_obtaining(item_id, crafting_dir, original_filename, infobox_name, d
             with open(howto, 'r', encoding='utf-8') as fh:
                 parts.append(f"===Recipes===\n{fh.read().strip()}")
         except Exception as e:
-            echo_error(f"Error reading {howto}: {e}")
+            echo.error(f"Error reading {howto}: {e}")
 
     # Loot
     loot = generate_location(original_filename, infobox_name, item_id, distribution_dir)
@@ -499,7 +499,7 @@ def generate_history(item_id, history_dir, language_code):
             with open(path, 'r', encoding='utf-8') as fh:
                 return fh.read().strip()
         except Exception as e:
-            echo_error(f"Error reading {path}: {e}")
+            echo.error(f"Error reading {path}: {e}")
     return f"{{{{HistoryTable|\n|item_id={item_id}\n}}}}"
 
 
@@ -513,7 +513,7 @@ def generate_code(item_id, code_dir):
             with open(path, 'r', encoding='utf-8') as fh:
                 return f"{{{{CodeBox|\n{fh.read().strip()}\n}}}}"
         except Exception as e:
-            echo_error(f"Error reading {path}: {e}")
+            echo.error(f"Error reading {path}: {e}")
     return ""
 
 
@@ -527,7 +527,7 @@ def load_infoboxes(infobox_dir):
             with open(path, 'r', encoding='utf-8') as fh:
                 txt = fh.read()
         except Exception as e:
-            echo_error(f"Error reading {path}: {e}")
+            echo.error(f"Error reading {path}: {e}")
             continue
         infobox_data.append({
             'name': re.search(r'\|name\s*=\s*(.+)', txt).group(1).strip() if re.search(r'\|name\s*=\s*(.+)', txt) else "",
@@ -608,18 +608,18 @@ def process_files(file_path,
         with open(file_path, 'r', encoding='utf-8') as fh:
             content = fh.read()
     except Exception as e:
-        echo_error(f"Error reading {file_path}: {e}")
+        echo.error(f"Error reading {file_path}: {e}")
         return
 
     infobox_match = re.search(r'(\{\{Infobox item.*?\}\})', content, re.DOTALL)
     if not infobox_match:
-        echo_warning(f"Infobox not found in {file_path}")
+        echo.warning(f"Infobox not found in {file_path}")
         return
     infobox = infobox_match.group(1)
 
     item_id_match = re.search(r'\|item_id\s*=\s*(.+)', infobox)
     if not item_id_match:
-        echo_warning(f"Item ID not found in {file_path}")
+        echo.warning(f"Item ID not found in {file_path}")
         return
     item_id = item_id_match.group(1).strip()
 
@@ -665,7 +665,7 @@ def process_files(file_path,
         with open(new_path, 'w', encoding='utf-8') as fh:
             fh.write(new_content.strip())
     except Exception as e:
-        echo_error(f"Error writing {new_path}: {e}")
+        echo.error(f"Error writing {new_path}: {e}")
 
 
 def main(run_directly=False):
@@ -691,21 +691,21 @@ def main(run_directly=False):
     body_parts_dir = os.path.join("output", language_code, "body_parts")
 
     if not os.path.isdir(infobox_dir):
-        echo_warning("Infoboxes directory not found")
+        echo.warning("Infoboxes directory not found")
         sys.exit(1)
     text_files = [f for f in os.listdir(infobox_dir) if f.endswith('.txt')]
     if not text_files:
-        echo_warning("Infoboxes not found")
+        echo.warning("Infoboxes not found")
         sys.exit(1)
 
-    echo_info(f"{len(text_files)} files found")
+    echo.info(f"{len(text_files)} files found")
     os.makedirs(output_dir, exist_ok=True)
 
     while True:
         choice = input("Do you want to generate:\n1: All items\n2: New items\nQ: Quit\n> ").strip().lower()
         if choice in ('1', '2', 'q'):
             break
-        echo("Invalid input. Please enter 1, 2, or Q.")
+        echo.write("Invalid input. Please enter 1, 2, or Q.")
     if choice == 'q':
         return
     generate_all = (choice == '1')

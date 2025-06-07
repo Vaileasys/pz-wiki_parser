@@ -5,7 +5,7 @@ from scripts.objects.item import Item
 from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
 from scripts.utils.table_helper import get_table_data, create_tables
 from scripts.utils.util import tick, cross
-from scripts.utils.echo import echo_info
+from scripts.utils import echo
 
 TABLE_PATH = os.path.join(RESOURCE_DIR, "tables", "fuel_table.json")
 
@@ -68,7 +68,7 @@ def find_items() -> dict:
         
             pbar.update(1)
 
-    echo_info(f"Finished processing {item_count} items for {len(items)} tables.")
+    echo.info(f"Finished processing {item_count} items for {len(items)} tables.")
     
     return items
 

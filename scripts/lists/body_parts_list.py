@@ -4,7 +4,7 @@ from pathlib import Path
 import json
 from scripts.core.language import Language, Translate
 from scripts.core.constants import (RESOURCE_DIR, OUTPUT_DIR)
-from scripts.utils.echo import echo_warning, echo_success
+from scripts.utils import echo
 
 language_code = Language.get()
 
@@ -58,9 +58,9 @@ def get_display_name(body_part):
     if display_name is None:
         display_name = display_name_data.get("MAX")
         if display_name is None:
-            echo_warning(f"No display name found for '{body_part}': Is the data empty?")
+            echo.warning(f"No display name found for '{body_part}': Is the data empty?")
         else:
-            echo_warning(f"No display name found for '{body_part}': Please check the body_part.")
+            echo.warning(f"No display name found for '{body_part}': Please check the body_part.")
 
     return display_name
 
@@ -93,7 +93,7 @@ def write_to_file(content):
     output_path = OUTPUT_PATH / OUTPUT_FILE
     with open(output_path, "w") as file:
         file.write("\n".join(content))
-    echo_success(f"File written to '{output_path}'")
+    echo.success(f"File written to '{output_path}'")
 
 
 def init_data():

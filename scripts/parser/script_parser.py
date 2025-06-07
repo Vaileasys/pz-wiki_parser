@@ -4,7 +4,7 @@ from pathlib import Path
 from scripts.core.file_loading import get_script_files, read_file
 from scripts.core.language import Translate
 from scripts.core.cache import save_cache, load_cache
-from scripts.utils.echo import echo, echo_info, echo_warning, echo_error, echo_success, echo_debug
+from scripts.utils import echo
 from scripts.parser.recipe_parser import parse_recipe_block, parse_construction_recipe
 from scripts.core.version import Version
 from scripts.core import config_manager as config
@@ -165,19 +165,19 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
             base_template_id = f"{module}.{script_type}_{parts[0]}"
             base_template = template_dict.get(base_template_id)
             if not base_template:
-                echo_warning(f"[{script_id}] base template '{base_template_id}' not found.")
+                echo.warning(f"[{script_id}] base template '{base_template_id}' not found.")
                 return script_data
 
             # Walk through nested templates
             current_template = base_template
             for key in parts[1:]:
                 if current_template is None:
-                    echo_warning(f"[{script_id}] template path '{template_path}' is incomplete at '{key}'.")
+                    echo.warning(f"[{script_id}] template path '{template_path}' is incomplete at '{key}'.")
                     return script_data
                 current_template = current_template.get(key)
 
             if current_template is None:
-                echo_warning(f"[{script_id}] could not fully walk path '{template_path}'.")
+                echo.warning(f"[{script_id}] could not fully walk path '{template_path}'.")
                 return script_data
 
             # Build path inside script_data
@@ -186,7 +186,7 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
                 if key not in dest:
                     dest[key] = {}
                 elif not isinstance(dest[key], dict):
-                    echo_warning(f"[{script_id}] expected dict at '{key}' but found {type(dest[key])}.")
+                    echo.warning(f"[{script_id}] expected dict at '{key}' but found {type(dest[key])}.")
                     return script_data
                 dest = dest[key]
 
@@ -219,7 +219,7 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
             template_id = f"{module}.{script_type}_{template_path}"
             template = template_dict.get(template_id)
             if not template:
-                echo_warning(f"[{script_id}] template '{template_id}' not found.")
+                echo.warning(f"[{script_id}] template '{template_id}' not found.")
                 return script_data
 
             # Merge sub-templates recursively
@@ -349,7 +349,7 @@ def parse_evolved_recipe(value: str, block_id: str = "Unknown") -> dict:
                 is_cooked = True
 
         if ':' not in entry:
-            echo_warning(f"[{block_id}] No ':' in 'EvolvedRecipe' value: {value}")
+            echo.warning(f"[{block_id}] No ':' in 'EvolvedRecipe' value: {value}")
             continue
 
         name, amount = entry.split(':', 1)
@@ -395,7 +395,7 @@ def parse_fixer(value: str, block_id: str = "Unknown") -> dict:
             skill, level = entry.split('=', 1)
             skill_dict[normalise(skill)] = normalise(level)
         else:
-            echo_warning(f"[{block_id}] Invalid skill entry in Fixer: '{entry}'")
+            echo.warning(f"[{block_id}] Invalid skill entry in Fixer: '{entry}'")
 
     fixer_data[item_name] = {
         "Amount": item_amount,
@@ -415,7 +415,7 @@ def parse_item_mapper(lines: list[str], block_id: str = "Unknown") -> dict:
 
         match = re.match(r'^([\w\.]+)\s*=\s*([\w\.]+)', line)
         if not match:
-            echo_warning(f"[{block_id}] Malformed itemMapper line: '{line}'")
+            echo.warning(f"[{block_id}] Malformed itemMapper line: '{line}'")
             continue
 
         output, input_ = match.groups()
@@ -424,7 +424,7 @@ def parse_item_mapper(lines: list[str], block_id: str = "Unknown") -> dict:
 
         # Reverse the key-value to be: 'input: output'
         if input_ in mapper:
-            echo_warning(f"[{block_id}] Duplicate input '{input_}' in itemMapper: already mapped to '{mapper[input_]}'")
+            echo.warning(f"[{block_id}] Duplicate input '{input_}' in itemMapper: already mapped to '{mapper[input_]}'")
         mapper[input_] = output
 
     return mapper
@@ -640,7 +640,7 @@ def parse_key_value_line(line: str, data: dict, block_id: str = "Unknown", scrip
                 if k not in existing:
                     existing[k] = v
                 elif existing[k] != v:
-                    echo_warning(f"[{block_id}] Duplicate subkey '{k}' in '{key}' with different value: '{v}' – existing: '{existing[k]}'")
+                    echo.warning(f"[{block_id}] Duplicate subkey '{k}' in '{key}' with different value: '{v}' – existing: '{existing[k]}'")
 
         # Merge list-style values
         elif isinstance(existing, list):
@@ -654,7 +654,7 @@ def parse_key_value_line(line: str, data: dict, block_id: str = "Unknown", scrip
 
         # Conflict between single values
         elif existing != processed:
-            echo_warning(f"[{block_id}] Duplicate key '{key}'. Replacing '{existing}' with '{processed}'")
+            echo.warning(f"[{block_id}] Duplicate key '{key}'. Replacing '{existing}' with '{processed}'")
             data[key] = processed
 
     else:
@@ -747,13 +747,13 @@ def is_blacklisted(filepath: str, script_type: str) -> bool:
     
     # Check file blacklist
     if path.stem in config.get("file_blacklist", []):
-        echo_info(f"Skipping blacklisted file: '{path.stem}'")
+        echo.info(f"Skipping blacklisted file: '{path.stem}'")
         return True
         
     # Check folder blacklist
     for folder in config.get("folder_blacklist", []):
         if folder in str(path):
-            echo_info(f"Skipping file in blacklisted folder '{folder}': '{path.stem}'")
+            echo.info(f"Skipping file in blacklisted folder '{folder}': '{path.stem}'")
             return True
             
     return False
@@ -800,7 +800,7 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
     script_files = get_script_files()
 
     if not script_files:
-        echo_warning("No script files found.")
+        echo.warning("No script files found.")
 
     for filepath in script_files:
         # Check if file should be blacklisted
@@ -809,7 +809,7 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
 
         content = read_file(filepath)
         if not content:
-            echo_warning(f"File is empty or unreadable: {filepath}")
+            echo.warning(f"File is empty or unreadable: {filepath}")
             continue
 
         if script_type == "entity":
@@ -821,13 +821,13 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
 
                 text = read_file(filepath)
                 if not text:
-                    echo_warning(f"File is empty or unreadable: {filepath}")
+                    echo.warning(f"File is empty or unreadable: {filepath}")
                     continue
 
                 file_texts[filepath] = text
 
             if not file_texts:
-                echo_warning("No entity files found.")
+                echo.warning("No entity files found.")
                 return {}
 
             full_text = "\n".join(file_texts.values())
@@ -852,7 +852,7 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
 
             save_cache(entity_dict, "parsed_entity_data.json")
             script_cache[script_type] = entity_dict
-            echo_success(f"Parsed {len(entity_dict)} entity entries.")
+            echo.success(f"Parsed {len(entity_dict)} entity entries.")
             return dict(sorted(entity_dict.items()))
 
         # Clean up comments and prep for parsing
@@ -928,9 +928,9 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
         script_dict = post_process(script_dict, script_type)
 
     if not script_dict:
-        echo_warning("No valid script entries were found.")
+        echo.warning("No valid script entries were found.")
     else:
-        echo_success(f"Parsed {len(script_dict)} {script_type} entries.")
+        echo.success(f"Parsed {len(script_dict)} {script_type} entries.")
 
     if cache_result:
         # Cache dict in memory
@@ -981,7 +981,7 @@ def main():
         else:
             script_type = option
 
-        echo_info(f"Processing '{script_type}'...")
+        echo.info(f"Processing '{script_type}'...")
 
         extract_script_data(script_type)
 

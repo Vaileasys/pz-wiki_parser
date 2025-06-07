@@ -28,7 +28,7 @@ from scripts.parser.script_parser import extract_script_data
 from scripts.parser import literature_parser, fluid_parser
 from scripts.parser.item_parser import get_item_data
 from scripts.utils import utility, util
-from scripts.utils.echo import echo_success, echo_warning, echo_info, echo_error
+from scripts.utils import echo
 from scripts.items import item_tags
 
 # Cache for unit tool IDs to avoid repeated computation
@@ -289,7 +289,7 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
                 continue
 
         if not info:
-            echo_error(f"Unhandled ingredient #{input_index}: {input_entry}")
+            echo.error(f"Unhandled ingredient #{input_index}: {input_entry}")
         
         # Only add to parsed ingredients if we have actual content
         if info:
@@ -570,7 +570,7 @@ def process_output_mapper(recipe: dict, mapper_key: str) -> list[str]:
     item_mappers = recipe.get("itemMappers", {})
     mapper_data = item_mappers.get(mapper_key)
     if not mapper_data or not isinstance(mapper_data, dict):
-        echo_warning(f"Mapper '{mapper_key}' not found or invalid in recipe '{recipe.get('name')}'")
+        echo.warning(f"Mapper '{mapper_key}' not found or invalid in recipe '{recipe.get('name')}'")
         return []
 
     # Look for the count on the matching output entry; default to 1
@@ -993,9 +993,9 @@ def process_requirements(recipe: dict, parsed_item_metadata: dict, literature_da
                             break
 
     except FileNotFoundError:
-        echo_error("MainCreationMethods.lua not found for trait parsing")
+        echo.error("MainCreationMethods.lua not found for trait parsing")
     except Exception as error:
-        echo_error(f"Error parsing traits: {error}")
+        echo.error(f"Error parsing traits: {error}")
 
     # AutoLearnAll
     for autolearn_entry in recipe.get("AutoLearnAll", []):
@@ -1346,17 +1346,17 @@ def main():
 
     try:
         try:
-            echo_info("Building item tags")
+            echo.info("Building item tags")
             tags_data = item_tags.get_tag_data()
             item_tags.write_tag_image()
         except Exception as exc:
-            echo_error(f"Error while building item tags: {exc}")
+            echo.error(f"Error while building item tags: {exc}")
         else:
-            echo_success("Item tags built successfully")
+            echo.success("Item tags built successfully")
 
         # Craft cache
         try:
-            echo_info("Loading craft cache")
+            echo.info("Loading craft cache")
             parsed_craft_data, craft_cache_version = load_cache(
                 craft_cache_path, "Craft", get_version=True
             )
@@ -1365,7 +1365,7 @@ def main():
                 raise ValueError("Craft cache version mismatch")
 
         except Exception as exc:
-            echo_info(f"{exc}; regenerating")
+            echo.info(f"{exc}; regenerating")
 
             extract_script_data("craftRecipe")
 
@@ -1373,11 +1373,11 @@ def main():
                 craft_cache_path, "Craft", get_version=True
             )
         craft_data = parsed_craft_data
-        echo_success("Craft cache ready")
+        echo.success("Craft cache ready")
 
         # Build cache
         try:
-            echo_info("Loading build cache")
+            echo.info("Loading build cache")
             parsed_build_data, build_cache_version = load_cache(
                 build_cache_path, "Build", get_version=True
             )
@@ -1386,19 +1386,19 @@ def main():
                 raise ValueError("Build cache version mismatch")
 
         except Exception as exc:
-            echo_info(f"{exc}; regenerating")
+            echo.info(f"{exc}; regenerating")
             extract_script_data("entity")
 
             parsed_build_data, build_cache_version = load_cache(
                 build_cache_path, "Build", get_version=True
             )
         build_data = parsed_build_data
-        echo_success("Build cache ready")
+        echo.success("Build cache ready")
         ''
     except Exception as exc:
-        echo_error(f"Error while gathering cache: {exc}")
+        echo.error(f"Error while gathering cache: {exc}")
     else:
-        echo_success("Cache ready")
+        echo.success("Cache ready")
 
     parsed_item_data = get_item_data()
     literature_data  = literature_parser.get_literature_data()
@@ -1431,7 +1431,7 @@ def main():
                         "construction": False,
                     }
                 except Exception as error:
-                    echo_error(f"Skipping crafting recipe '{recipe_id}' due to error: {error}")
+                    echo.error(f"Skipping crafting recipe '{recipe_id}' due to error: {error}")
                 finally:
                     progress_bar.update(1)
 
@@ -1458,52 +1458,52 @@ def main():
                         "construction": True,
                     }
                 except Exception as error:
-                    echo_warning(f"Skipping building recipe '{recipe_id}' due to error: {error}")
+                    echo.warning(f"Skipping building recipe '{recipe_id}' due to error: {error}")
                 finally:
                     progress_bar.update(1)
 
     except Exception as exc:
-        echo_error(f"Error while running main processing loop: {exc}")
+        echo.error(f"Error while running main processing loop: {exc}")
 
     else:
-        echo_success("Recipes processed.")
+        echo.success("Recipes processed.")
 
     try: # Begin outputting
         try:
-            echo_info("Mapping item tags")
+            echo.info("Mapping item tags")
             tag_map = build_tag_to_items_map(parsed_item_data)
         except Exception as exc:
-            echo_error(f"Error while mapping item tags: {exc}")
+            echo.error(f"Error while mapping item tags: {exc}")
             tag_map = {}
         else:
-            echo_success("Item tags mapped")
+            echo.success("Item tags mapped")
 
         try:
-            echo_info("Writing skill usage")
+            echo.info("Writing skill usage")
             output_skill_usage(processed_recipe_map)
         except Exception as exc:
-            echo_error(f"Error while writing skill usage: {exc}")
+            echo.error(f"Error while writing skill usage: {exc}")
         else:
-            echo_success("Skill usage written")
+            echo.success("Skill usage written")
 
         try:
-            echo_info("Writing lua tables")
+            echo.info("Writing lua tables")
             output_lua_tables(processed_recipe_map)
         except Exception as exc:
-            echo_error(f"Error while writing lua tables: {exc}")
+            echo.error(f"Error while writing lua tables: {exc}")
         else:
-            echo_success("Lua tables written")
+            echo.success("Lua tables written")
 
         try:
-            echo_info("Writing per-item article lists")
+            echo.info("Writing per-item article lists")
             output_item_article_lists(craft_data, build_data, tag_map)
         except Exception as exc:
-            echo_error(f"Error while writing per-item article lists: {exc}")
+            echo.error(f"Error while writing per-item article lists: {exc}")
         else:
-            echo_success("Item article lists written")
+            echo.success("Item article lists written")
 
     except Exception as exc:
-        echo_error(f"Error while writing output: {exc}")
+        echo.error(f"Error while writing output: {exc}")
 
     else:
-        echo_success("Recipe output complete")
+        echo.success("Recipe output complete")

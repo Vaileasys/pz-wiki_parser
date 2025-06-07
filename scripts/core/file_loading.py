@@ -7,7 +7,7 @@ from scripts.core.constants import OUTPUT_LANG_DIR
 from scripts.core.language import Language
 from scripts.core.version import Version
 from scripts.core.cache import save_cache, load_cache
-from scripts.utils.echo import echo_info, echo_warning, echo_success, echo_error
+from scripts.utils import echo
 
 _game_file_map_cache = {}
 
@@ -91,7 +91,7 @@ def map_dir(base_dir, extension=None, media_type="scripts", suppress=False, excl
                 mapping[name].append(rel_path)
                 if not suppress:
                     if name not in duplicate_cache:
-                        echo_warning(f"Duplicate file name detected: '{name}'")
+                        echo.warning(f"Duplicate file name detected: '{name}'")
                         duplicate_cache.append(name)
             else:
                 mapping[name] = [rel_path]
@@ -210,7 +210,7 @@ def get_files_by_type(filenames: str | list[str] = None, media_type: str = "scri
                 abs_path = os.path.join(base_dir, rel_path)
                 paths.append(abs_path)
         else:
-            echo_warning(f"{media_type.capitalize()} file '{filename}' not found in map.")
+            echo.warning(f"{media_type.capitalize()} file '{filename}' not found in map.")
 
     return sorted(paths)
 
@@ -300,13 +300,13 @@ def read_file(path: str) -> str:
         with open(path, "r", encoding="utf-8") as f:
             return f.read()
     except (FileNotFoundError, IsADirectoryError):
-        echo_warning(f"File not found or is a directory: {path}")
+        echo.warning(f"File not found or is a directory: {path}")
     except PermissionError:
-        echo_warning(f"Permission denied: {path}")
+        echo.warning(f"Permission denied: {path}")
     except UnicodeDecodeError:
-        echo_warning(f"Could not decode file as UTF-8: {path}")
+        echo.warning(f"Could not decode file as UTF-8: {path}")
     except OSError as e:
-        echo_warning(f"OS error while reading {path}: {e}")
+        echo.warning(f"OS error while reading {path}: {e}")
     
     return ""
 
@@ -331,10 +331,10 @@ def write_file(content:list, rel_path="output.txt", root_path=None, suppress=Fal
             file.write("\n".join(content))
 
         if not suppress:
-            echo_info(f"File saved to '{output_path}'")
+            echo.info(f"File saved to '{output_path}'")
         
     else:
-        echo_error(f"No file written. '{output_path}' appears to be a directory.")
+        echo.error(f"No file written. '{output_path}' appears to be a directory.")
     
     return output_dir
 
@@ -363,4 +363,4 @@ def load_file(rel_path, root_path=None):
 if __name__ == "__main__":
 #    print(get_game_file_map())
     result = map_game_files()
-    echo_success(f"Mapped {len(result['scripts'])} script files, {len(result['lua'])} lua files and {len(result['maps'])} maps files.")
+    echo.success(f"Mapped {len(result['scripts'])} script files, {len(result['lua'])} lua files and {len(result['maps'])} maps files.")

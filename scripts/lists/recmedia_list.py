@@ -2,7 +2,7 @@ from scripts.utils import lua_helper, table_helper
 from scripts.parser import item_parser
 from scripts.core.language import Translate
 from scripts.utils.util import format_positive, link
-from scripts.utils.echo import echo_warning, echo_info
+from scripts.utils import echo
 from scripts.core.constants import RESOURCE_DIR
 from scripts.utils.media_helper import CODES, parse_code_effects
 from scripts.core.cache import save_cache
@@ -54,7 +54,7 @@ def generate_data(guid, rm_data):
     for code, value in merged_effects.items():
         code_id = CODES.get(code, {}).get("id", code)
         if code_id is None:
-            echo_warning(f"code_id for '{code}' doesn't exist.")
+            echo.warning(f"code_id for '{code}' doesn't exist.")
             continue
         code_title = Translate.get(CODES.get(code, {}).get("title", code))
         code_type = CODES.get(code, {}).get("type", "moodle")
@@ -83,7 +83,7 @@ def generate_data(guid, rm_data):
         if moodle in columns:
             item[moodle] = style_center + str(value)
         else:
-            echo_info(f"Unused '{moodle}' moodle was found for '{guid}' ({table_type}). Should it be added to the table map?")
+            echo.info(f"Unused '{moodle}' moodle was found for '{guid}' ({table_type}). Should it be added to the table map?")
     for code, code_data in CODES.items():
         if code_data.get("type") == "moodle":
             code_id = code_data.get("id")
@@ -156,7 +156,7 @@ def find_item_id(media_category):
         if item_data.get("MediaCategory") == media_category:
             return item_id
         
-    echo_warning("Unable to find media category.")
+    echo.warning("Unable to find media category.")
     return "style=\"text-align: center;\" | -"
 
 

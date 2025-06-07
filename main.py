@@ -3,7 +3,7 @@
 import importlib, sys, os
 from scripts.core import config_manager as config, setup, logger, cache
 from scripts.core.language import Language
-from scripts.utils.echo import echo_error
+from scripts.utils import echo
 
 menu_structure = {
     '0': {
@@ -152,11 +152,11 @@ def handle_module(module_name, user_input=None):
         else:
             module.main()
     except ImportError as error:
-        echo_error(f"Error importing module {module_name}: {error}")
+        echo.error(f"Error importing module {module_name}: {error}")
     except AttributeError as error:
-        echo_error(f"Module {module_name} does not have a main() function: {error}")
+        echo.error(f"Module {module_name} does not have a main() function: {error}")
     except Exception as error:
-        echo_error(f"An error occurred while running {module_name}: {error}")
+        echo.error(f"An error occurred while running {module_name}: {error}")
 
 def navigate_menu(menu, is_root=False, title=None):
     while True:
@@ -198,7 +198,7 @@ def navigate_menu(menu, is_root=False, title=None):
             elif subs:
                 navigate_menu(subs, title=name)
         else:
-            echo_error("Invalid input. Please try again.")
+            echo.error("Invalid input. Please try again.")
 
 def check_first_run():
     is_first_run = config.get_first_time_run()

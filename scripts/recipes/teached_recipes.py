@@ -19,7 +19,7 @@ from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.parser import metarecipe_parser
 from scripts.utils.utility import get_recipe
-from scripts.utils.echo import echo_info, echo_success
+from scripts.utils import echo
 
 def main():
     """

@@ -1,4 +1,4 @@
-from scripts.utils.echo import echo_deprecated
+from scripts.utils import echo
 
 
 def capitalize(value):
@@ -79,7 +79,7 @@ def format_link(name:str, page:str=None) -> str:
     """
     from scripts.core.language import Language
 
-    echo_deprecated("'format_link()' is deprecated, use link() instead.")
+    echo.deprecated("'format_link()' is deprecated, use link() instead.")
     language_code = Language.get()
     
     if language_code != "en":

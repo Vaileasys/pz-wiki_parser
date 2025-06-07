@@ -129,37 +129,3 @@ def deprecated(message: str):
         message (str): The deprecation message to display.
     """
     _message(message, "[Deprecated]", "95", emit_warning=True, warnings_level=3)
-
-
-## --------------- DEPRECATED --------------- ##
-
-
-def echo(message):
-    """Safely prints a standard message with tqdm support."""
-    if tqdm._instances:
-        tqdm.write(f"{message}")
-    else:
-        print(f"{message}")
-
-
-def echo_info(message):
-    _message(message, "[Info]", "96")
-
-def echo_warning(message):
-    _message(message, "[Warning]", "93", emit_warning=True, warnings_level=2)
-
-def echo_error(message):
-    _message(message, "[Error]", "91", emit_warning=True, warnings_level=1)
-
-def echo_success(message):
-    _message(message, "[Success]", "92")
-
-def echo_debug(message):
-    from scripts.core import config_manager as config
-    debug_mode = config.get_debug_mode()
-
-    if debug_mode:
-        _message(message, "[Debug]", "95")
-
-def echo_deprecated(message):
-    _message(message, "[Deprecated]", "95", emit_warning=True, warnings_level=3)

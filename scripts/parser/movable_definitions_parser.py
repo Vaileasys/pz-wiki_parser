@@ -1,7 +1,7 @@
 import re, os
 from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache
-from scripts.utils.echo import echo_success
+from scripts.utils import echo
 
 def split_arguments(arguments_string):
     argument_list = []
@@ -157,7 +157,7 @@ def main():
     }
 
     save_cache(consolidated_definitions, 'movable_definitions.json', DATA_DIR)
-    echo_success("Movable definitions parsed and cached successfully.")
+    echo.success("Movable definitions parsed and cached successfully.")
 
 if __name__ == '__main__':
     main()

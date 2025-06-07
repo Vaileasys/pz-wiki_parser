@@ -9,8 +9,7 @@ from scripts.core import logger, config_manager as config
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.core.constants import (DATA_DIR, RESOURCE_DIR)
-from scripts.utils import lua_helper
-from scripts.utils.echo import echo_error, echo_warning, echo_deprecated
+from scripts.utils import lua_helper, echo
 from scripts.core.cache import save_cache as new_save_cache
 from scripts.core.cache import load_cache as new_load_cache
 from scripts.core.cache import clear_cache as new_clear_cache
@@ -84,7 +83,7 @@ def get_clothing_xml_value(item_data, xml_value):
 #                echo(f"'{xml_value}' not found for '{clothing_item}'")
                 return None
         except ET.ParseError as e:
-            echo_error(f"Failed parsing XML file: {file_path}\n{e}")
+            echo.error(f"Failed parsing XML file: {file_path}\n{e}")
             return None
         
 
@@ -180,7 +179,7 @@ def get_body_parts(item_data, link=True, default=""):
                 if link:
                     translation_string = body_part_names.get(part, body_part_names.get("MAX"))
                     if translation_string is None:
-                        echo_warning(f"No translation string found for {part}")
+                        echo.warning(f"No translation string found for {part}")
                     translated_part = Translate.get(translation_string)
                 
                     if language_code != 'en':
@@ -221,7 +220,7 @@ def get_skill_type_mapping(item_data, item_id):
         if skill:
             if len(skill) > 1:
                 skill = "<br>".join(skill)
-                echo_warning(f"More than one skill value found for {item_id} with a value of: {skill}")
+                echo.warning(f"More than one skill value found for {item_id} with a value of: {skill}")
                 return skill
             skill = skill[0]
             if skill == "Firearm":
@@ -344,12 +343,12 @@ def get_burn_time(item_id, item_data):
 
 # Save parsed data to json file
 def save_cache(data: dict, data_file: str, data_dir=DATA_DIR, suppress=False):
-    echo_deprecated("'utility.save_cache()' is deprecated, use 'storage.save_cache()' instead.")
+    echo.deprecated("'utility.save_cache()' is deprecated, use 'storage.save_cache()' instead.")
     new_save_cache(data=data, data_file=data_file, data_dir=data_dir, suppress=suppress)
 
 
 def load_cache(cache_file, cache_name="data", get_version=False, backup_old=False, suppress=False):
-    echo_deprecated("'utility.load_cache()' is deprecated, use 'storage.load_cache()' instead.")
+    echo.deprecated("'utility.load_cache()' is deprecated, use 'storage.load_cache()' instead.")
     if get_version:
         json_cache, cache_version = new_load_cache(cache_file=cache_file, cache_name=cache_name, get_version=get_version, backup_old=backup_old, suppress=suppress)
         return json_cache, cache_version
@@ -358,7 +357,7 @@ def load_cache(cache_file, cache_name="data", get_version=False, backup_old=Fals
 
 
 def clear_cache(cache_path=DATA_DIR, cache_name=None, suppress=False):
-    echo_deprecated("'utility.clear_cache()' is deprecated, use 'storage.clear_cache()' instead.")
+    echo.deprecated("'utility.clear_cache()' is deprecated, use 'storage.clear_cache()' instead.")
     new_clear_cache(cache_path=cache_path, cache_name=cache_name, suppress=suppress)
 
 
@@ -558,7 +557,7 @@ def find_icon(item_id, all_icons=False):
                             return icon
                         return icon[0]
         else:
-            echo_warning(f"File '{icons_csv}' does not exist. Getting icon from item properties.")
+            echo.warning(f"File '{icons_csv}' does not exist. Getting icon from item properties.")
 
         # Try get icon from item properties
         parsed_item_data = item_parser.get_item_data()
@@ -602,7 +601,7 @@ def find_icon(item_id, all_icons=False):
 
 
         else:
-            echo_warning(f"'{item_id}' could not be found while getting icon.")
+            echo.warning(f"'{item_id}' could not be found while getting icon.")
             icon = icon_default
     
     else:
@@ -704,7 +703,7 @@ def get_icon(item_id, format=False, all_icons=False, cycling=False, custom_name=
         else:
             icon_result = icons
     else:
-        echo_warning(f"Item ID '{item_id}' doesn't exist")
+        echo.warning(f"Item ID '{item_id}' doesn't exist")
 
     return icon_result
 
@@ -713,7 +712,7 @@ def get_guid(item_data):
     guid = get_clothing_xml_value(item_data, 'm_GUID')
 
     if isinstance(guid, list):
-        echo_warning("Multiple GUIDs found:", guid)
+        echo.warning("Multiple GUIDs found:", guid)
         return None
     
     return guid
@@ -767,6 +766,6 @@ def get_recipe(recipe_id):
     #        if "[" not in recipe_name:
     #            echo(f"No link for: {recipe_name}")
     except:
-        echo_error(f"Failed getting recipe for {recipe_id}")
+        echo.error(f"Failed getting recipe for {recipe_id}")
 
     return recipe_name

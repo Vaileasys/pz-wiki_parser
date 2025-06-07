@@ -18,7 +18,7 @@ The script handles:
 import os
 from typing import Dict, List, Tuple
 from scripts.core.language import Translate
-from scripts.utils.echo import echo_error
+from scripts.utils import echo
 
 _TOOL_TYPE_MAP = {
     "Hammer": "tag", "Shovel": "tag",
@@ -187,7 +187,7 @@ def generate_infoboxes(
     infoboxes: Dict[str, str] = {}
     for group_name, tile_entries in named_tiles_data.items():
         if not isinstance(tile_entries, dict):
-            echo_error(f"Skipping group '{group_name}': expected a dict of tiles")
+            echo.error(f"Skipping group '{group_name}': expected a dict of tiles")
             continue
 
         first_tile_info = next(iter(tile_entries.values()))
@@ -223,7 +223,7 @@ def generate_infoboxes(
             with open(output_path, "w", encoding="utf-8") as fh:
                 fh.write(infobox_text)
         except Exception as exc:
-            echo_error(f"Failed to write infobox for '{group_name}' to '{output_path}': {exc}")
+            echo.error(f"Failed to write infobox for '{group_name}' to '{output_path}': {exc}")
 
     return infoboxes
 
