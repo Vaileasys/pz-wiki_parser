@@ -15,6 +15,7 @@ resources/*
 !resources/texture_names.json
 !resources/blood_location.json
 !resources/item_descriptors.json
+!resources/skills.json
 !resources/tables/
 
 ## Translations

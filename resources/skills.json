@@ -1,0 +1,209 @@
+{
+  "Combat": {
+    "translation": "CombatMelee",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Axe": {
+    "translation": "Axe",
+    "parent": "Combat",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000],
+    "page": "Axe (skill)"
+  },
+  "Blunt": {
+    "translation": "Blunt",
+    "parent": "Combat",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "SmallBlunt": {
+    "translation": "SmallBlunt",
+    "parent": "Combat",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "LongBlade": {
+    "translation": "LongBlade",
+    "parent": "Combat",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "SmallBlade": {
+    "translation": "SmallBlade",
+    "parent": "Combat",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Spear": {
+    "translation": "Spear",
+    "parent": "Combat",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Maintenance": {
+    "translation": "Maintenance",
+    "parent": "Combat",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Firearm": {
+    "translation": "CombatFirearms",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Aiming": {
+    "translation": "Aiming",
+    "parent": "Firearm",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Reloading": {
+    "translation": "Reloading",
+    "parent": "Firearm",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Crafting": {
+    "translation": "Crafting",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Woodwork": {
+    "translation": "Carpentry",
+    "parent": "Crafting",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Carving": {
+    "translation": "Carving",
+    "parent": "Crafting",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Cooking": {
+    "translation": "Cooking",
+    "parent": "Crafting",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Electricity": {
+    "translation": "Electricity",
+    "parent": "Crafting",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Doctor": {
+    "translation": "Doctor",
+    "parent": "Survivalist",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Glassmaking": {
+    "translation": "Glassmaking",
+    "parent": "Crafting",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "FlintKnapping": {
+    "translation": "FlintKnapping",
+    "parent": "Crafting",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Masonry": {
+    "translation": "Masonry",
+    "parent": "Crafting",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Blacksmith": {
+    "translation": "Blacksmith",
+    "parent": "Crafting",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Mechanics": {
+    "translation": "Mechanics",
+    "parent": "Crafting",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Pottery": {
+    "translation": "Pottery",
+    "parent": "Crafting",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Tailoring": {
+    "translation": "Tailoring",
+    "parent": "Crafting",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "MetalWelding": {
+    "translation": "MetalWelding",
+    "parent": "Crafting",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Survivalist": {
+    "translation": "Survivalist",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Fishing": {
+    "translation": "Fishing",
+    "parent": "Survivalist",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "PlantScavenging": {
+    "translation": "Foraging",
+    "parent": "Survivalist",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Tracking": {
+    "translation": "Tracking",
+    "parent": "Survivalist",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Trapping": {
+    "translation": "Trapping",
+    "parent": "Survivalist",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "PhysicalCategory": {
+    "translation": "PhysicalCategory",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Fitness": {
+    "translation": "Fitness",
+    "parent": "PhysicalCategory",
+    "xp": [1000, 2000, 4000, 6000, 12000, 20000, 40000, 60000, 80000, 100000],
+    "passive": true
+  },
+  "Strength": {
+    "translation": "Strength",
+    "parent": "PhysicalCategory",
+    "xp": [1000, 2000, 4000, 6000, 12000, 20000, 40000, 60000, 80000, 100000],
+    "passive": true
+  },
+  "Agility": {
+    "translation": "Agility",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Lightfoot": {
+    "translation": "Lightfooted",
+    "parent": "PhysicalCategory",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Nimble": {
+    "translation": "Nimble",
+    "parent": "PhysicalCategory",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Sprinting": {
+    "translation": "Sprinting",
+    "parent": "PhysicalCategory",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Sneak": {
+    "translation": "Sneaking",
+    "parent": "PhysicalCategory",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "FarmingCategory": {
+    "translation": "FarmingCategory",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Farming": {
+    "translation": "Farming",
+    "parent": "FarmingCategory",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Husbandry": {
+    "translation": "Husbandry",
+    "parent": "FarmingCategory",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Butchering": {
+    "translation": "Butchering",
+    "parent": "FarmingCategory",
+    "xp": [50, 100, 200, 500, 1000, 2000, 3000, 4000, 5000, 6000]
+  },
+  "Version": "42.8.1"
+}
