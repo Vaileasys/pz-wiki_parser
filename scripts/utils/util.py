@@ -138,6 +138,18 @@ def convert_int(value: int | float) -> int | float:
 
     return str(value)
 
+def to_bool(value):
+    """
+    Convert a value to boolean by checking common 'true' strings.
+
+    Args:
+        value: Any value to check.
+
+    Returns:
+        bool: True if the value matches a 'true' string; False otherwise.
+    """
+    return str(value).lower() in ('true', 't', '1', 'yes', 'y', 'on')
+
 
 def tick(text: str = None, link: str = None):
     """

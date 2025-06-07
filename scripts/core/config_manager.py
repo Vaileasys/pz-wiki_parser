@@ -1,5 +1,6 @@
 import configparser
 import os
+from scripts.utils.util import to_bool
 
 CONFIG_FILE = 'config.ini'
 CONFIG_DEFAULTS = {
@@ -51,22 +52,9 @@ def _update_missing_entries():
             _config.write(file)
 
 
-def _to_bool(value):
-    """
-    Convert a value to boolean by checking common 'true' strings.
-
-    Args:
-        value: Any value to check.
-
-    Returns:
-        bool: True if the value matches a 'true' string; False otherwise.
-    """
-    return str(value).lower() in ('true', 't', '1', 'yes', 'y', 'on')
-
-
 def _bool_to_config(value):
     if not isinstance(value, bool):
-        value = _to_bool(value)
+        value = to_bool(value)
     return "true" if value else "false"
 
 
@@ -117,7 +105,7 @@ def get_debug_mode():
         bool: Debug mode status.
     """
     _ensure_loaded()
-    return _to_bool(_data['Settings']['debug_mode'])
+    return to_bool(_data['Settings']['debug_mode'])
 
 
 def get_first_time_run():
@@ -128,7 +116,7 @@ def get_first_time_run():
         bool: First time run status.
     """
     _ensure_loaded()
-    return _to_bool(_data['Settings']['first_time_run'])
+    return to_bool(_data['Settings']['first_time_run'])
 
 
 def get_default_language():
