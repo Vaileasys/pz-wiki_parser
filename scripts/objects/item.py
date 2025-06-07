@@ -857,12 +857,13 @@ class Item:
 
         return [Skill(s) for s in expanded_skills]
     
-    def get_body_parts(self, do_link=True, default=None):
+    def get_body_parts(self, do_link:bool=True, raw_id:bool=False, default=None):
         """
         Returns a list of body parts based on the item's `BloodLocation`.
 
         Args:
             do_link (bool): If True, returns wiki-linked names. Otherwise returns plain names.
+            raw_id (bool): If True, returns internal body part ids.
             default (Any): Value to return if no blood location data is found.
 
         Returns:
@@ -870,7 +871,9 @@ class Item:
         """
         if not self.blood_location:
             return default
-        if do_link:
+        if raw_id:
+            return self.blood_location.body_parts.body_part_ids
+        elif do_link:
             return self.blood_location.body_parts.wiki_links
         else:
             return self.blood_location.body_parts.names

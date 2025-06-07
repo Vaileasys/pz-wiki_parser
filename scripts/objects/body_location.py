@@ -232,29 +232,29 @@ class BodyPart:
 
     _instances: dict[str, "BodyPart"] = {}
 
-    def __new__(cls, body_part: str):
-        if body_part in cls._instances:
-            return cls._instances[body_part]
+    def __new__(cls, body_part_id: str):
+        if body_part_id in cls._instances:
+            return cls._instances[body_part_id]
         
-        if body_part not in cls._display_names:
-            raise ValueError(f"Unknown BodyPart: {body_part}")
+        if body_part_id not in cls._display_names:
+            raise ValueError(f"Unknown BodyPart: {body_part_id}")
         
         instance = super().__new__(cls)
-        cls._instances[body_part] = instance
+        cls._instances[body_part_id] = instance
         return instance
 
     def __init__(self, body_part: str):
-        self.body_part = body_part
+        self.body_part_id = body_part
 
     def __str__(self):
-        return self.body_part
+        return self.body_part_id
 
     def __repr__(self):
         return f"<BodyPart {self.name}>"
 
     @property
     def display_name(self) -> str:
-        return self._display_names[self.body_part]
+        return self._display_names[self.body_part_id]
     @property
     def name(self) -> str:
         if not hasattr(self, "_name"):
@@ -298,10 +298,15 @@ class BodyPartList:
     def __repr__(self):
         """Returns a debug representation of the body part list."""
         return repr(self._body_parts)
+    
+    @property
+    def body_part_ids(self) -> list[str]:
+        """Returns the internal names of each body part."""
+        return [bp.body_part_id for bp in self._body_parts]
 
     @property
     def names(self) -> list[str]:
-        """Returns the internal names of each body part."""
+        """Returns the translated names of each body part."""
         return [bp.name for bp in self._body_parts]
 
     @property
