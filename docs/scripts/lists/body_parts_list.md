@@ -1,4 +1,4 @@
-[Previous Folder](../items/item_article.md) | [Previous File](body_locations_list.md) | [Next File](clothing_list.md) | [Next Folder](../objects/components.md) | [Back to Index](../../index.md)
+[Previous Folder](../items/item_article.md) | [Previous File](body_locations_list.md) | [Next File](clothing_list.md) | [Next Folder](../objects/body_location.md) | [Back to Index](../../index.md)
 
 # body_parts_list.py
 
@@ -13,4 +13,4 @@
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/body_parts_list.py#L112)
 
 
-[Previous Folder](../items/item_article.md) | [Previous File](body_locations_list.md) | [Next File](clothing_list.md) | [Next Folder](../objects/components.md) | [Back to Index](../../index.md)
+[Previous Folder](../items/item_article.md) | [Previous File](body_locations_list.md) | [Next File](clothing_list.md) | [Next Folder](../objects/body_location.md) | [Back to Index](../../index.md)

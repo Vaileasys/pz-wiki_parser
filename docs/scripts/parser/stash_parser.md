@@ -1,4 +1,4 @@
-[Previous Folder](../objects/components.md) | [Previous File](script_parser.md) | [Next File](tiles_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Previous File](script_parser.md) | [Next File](tiles_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
 
 # stash_parser.py
 
@@ -23,4 +23,4 @@ Initialise script
 
 
 
-[Previous Folder](../objects/components.md) | [Previous File](script_parser.md) | [Next File](tiles_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Previous File](script_parser.md) | [Next File](tiles_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)

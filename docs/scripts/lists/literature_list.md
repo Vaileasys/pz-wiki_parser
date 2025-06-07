@@ -1,4 +1,4 @@
-[Previous Folder](../items/item_article.md) | [Previous File](item_list.md) | [Next File](recmedia_list.md) | [Next Folder](../objects/components.md) | [Back to Index](../../index.md)
+[Previous Folder](../items/item_article.md) | [Previous File](item_list.md) | [Next File](recmedia_list.md) | [Next Folder](../objects/body_location.md) | [Back to Index](../../index.md)
 
 # literature_list.py
 
@@ -14,4 +14,4 @@
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/literature_list.py#L385)
 
 
-[Previous Folder](../items/item_article.md) | [Previous File](item_list.md) | [Next File](recmedia_list.md) | [Next Folder](../objects/components.md) | [Back to Index](../../index.md)
+[Previous Folder](../items/item_article.md) | [Previous File](item_list.md) | [Next File](recmedia_list.md) | [Next Folder](../objects/body_location.md) | [Back to Index](../../index.md)

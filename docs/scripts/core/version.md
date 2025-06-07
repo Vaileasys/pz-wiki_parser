@@ -1,4 +1,4 @@
-[Previous Folder](../article_content/hotbar_slots_content.md) | [Previous File](translate.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../consumables.md) | [Previous File](translate.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
 
 # version.py
 
@@ -26,4 +26,4 @@ Prompts the user for a new version number and updates it.
 ##### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/version.py#L33)
 
 
-[Previous Folder](../article_content/hotbar_slots_content.md) | [Previous File](translate.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../consumables.md) | [Previous File](translate.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)

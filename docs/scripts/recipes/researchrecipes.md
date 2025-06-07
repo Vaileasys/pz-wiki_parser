@@ -13,10 +13,11 @@ The script handles:
 - Generating formatted wiki markup with recipe lists
 - Creating output in both research and crafting directories
 - Proper template formatting for wiki integration
+- Expanding meta recipes into their component recipes
 
 ## Functions
 
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/researchrecipes.py#L21)
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/researchrecipes.py#L23)
 
 Main execution function for research recipes generation.
 
@@ -26,6 +27,7 @@ This function:
 3. Generates wiki markup using Crafting/sandbox template
 4. Creates output files in both research and crafting directories
 5. Handles proper formatting for wiki integration
+6. Expands meta recipes into their component recipes
 The output is saved in two locations:
 - output/recipes/researchrecipes/
 - output/recipes/crafting/

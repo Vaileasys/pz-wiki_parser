@@ -1,4 +1,4 @@
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_codesnip.md) | [Next File](tiles_navbox.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_codesnip.md) | [Next File](tiles_scrapping.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
 
 # tiles_infobox.py
 
@@ -156,4 +156,4 @@ Generate icon parameters for the infobox template.
 ### [`build_misc_params(tile_list: List[dict], definitions: Dict[str, dict], lang_code: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L390)
 
 
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_codesnip.md) | [Next File](tiles_navbox.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_codesnip.md) | [Next File](tiles_scrapping.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)

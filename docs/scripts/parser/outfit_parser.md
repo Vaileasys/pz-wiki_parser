@@ -1,4 +1,4 @@
-[Previous Folder](../objects/components.md) | [Previous File](movable_definitions_parser.md) | [Next File](radio_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Previous File](movable_definitions_parser.md) | [Next File](radio_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
 
 # outfit_parser.py
 
@@ -32,4 +32,4 @@ Main function to process XML files, generate JSON, and create articles.
 
 
 
-[Previous Folder](../objects/components.md) | [Previous File](movable_definitions_parser.md) | [Next File](radio_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Previous File](movable_definitions_parser.md) | [Next File](radio_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)

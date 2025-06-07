@@ -1,4 +1,4 @@
-[Previous Folder](../lists/body_locations_list.md) | [Previous File](components.md) | [Next File](item.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../lists/body_locations_list.md) | [Previous File](craft_recipe.md) | [Next File](item.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
 
 # fluid.py
 
@@ -113,4 +113,4 @@ Return FluidBlendList for BlendBlackList (empty if missing).
 ##### [`categories`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L352)
 
 
-[Previous Folder](../lists/body_locations_list.md) | [Previous File](components.md) | [Next File](item.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../lists/body_locations_list.md) | [Previous File](craft_recipe.md) | [Next File](item.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)

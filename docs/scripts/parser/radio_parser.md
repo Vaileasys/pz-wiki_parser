@@ -1,4 +1,4 @@
-[Previous Folder](../objects/components.md) | [Previous File](outfit_parser.md) | [Next File](recipe_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Previous File](outfit_parser.md) | [Next File](recipe_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
 
 # radio_parser.py
 
@@ -98,4 +98,4 @@ Main function to process the RadioData.xml and generate output.
 
 
 
-[Previous Folder](../objects/components.md) | [Previous File](outfit_parser.md) | [Next File](recipe_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Previous File](outfit_parser.md) | [Next File](recipe_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)

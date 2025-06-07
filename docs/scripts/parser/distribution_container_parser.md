@@ -1,4 +1,4 @@
-[Previous Folder](../objects/components.md) | [Next File](distribution_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Next File](distribution_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
 
 # distribution_container_parser.py
 
@@ -26,4 +26,4 @@ Sorts data:
 ### [`init()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/distribution_container_parser.py#L86)
 
 
-[Previous Folder](../objects/components.md) | [Next File](distribution_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Next File](distribution_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)

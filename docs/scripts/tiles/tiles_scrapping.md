@@ -1,4 +1,4 @@
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_navbox.md) | [Next File](tiles_stitcher.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_infobox.md) | [Next File](tiles_stitcher.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
 
 # tiles_scrapping.py
 
@@ -66,4 +66,4 @@ Generate a MediaWiki table for breakage (destruction) information.
 
 
 
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_navbox.md) | [Next File](tiles_stitcher.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_infobox.md) | [Next File](tiles_stitcher.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)

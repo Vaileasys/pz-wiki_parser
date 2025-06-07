@@ -1,4 +1,4 @@
-[Previous Folder](../article_content/hotbar_slots_content.md) | [Previous File](file_loading.md) | [Next File](logger.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../consumables.md) | [Previous File](file_loading.md) | [Next File](logger.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
 
 # language.py
 
@@ -19,7 +19,7 @@
 ##### [`set_default(code)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L83)
 ##### [`update_default()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L87)
 ##### [`init()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L92)
-##### [`prompt()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L100)
+##### [`_prompt()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L100)
 
 ### `Translate`
 #### Static Methods
@@ -42,4 +42,4 @@ Force-load all translation data, bypassing lazy init.
 ##### [`_parse(wiki_code, game_code)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L220)
 
 
-[Previous Folder](../article_content/hotbar_slots_content.md) | [Previous File](file_loading.md) | [Next File](logger.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../consumables.md) | [Previous File](file_loading.md) | [Next File](logger.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
