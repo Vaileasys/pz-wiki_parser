@@ -1,11 +1,13 @@
 import re
 import copy
+from tqdm import tqdm
 from pathlib import Path
 from scripts.core.file_loading import get_script_files, read_file
 from scripts.core.language import Translate
 from scripts.core.cache import save_cache, load_cache
 from scripts.utils import echo
 from scripts.parser.recipe_parser import parse_recipe_block, parse_construction_recipe
+from scripts.core.constants import PBAR_FORMAT
 from scripts.core.version import Version
 from scripts.core import config_manager as config
 
@@ -802,127 +804,132 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
     if not script_files:
         echo.warning("No script files found.")
 
-    for filepath in script_files:
-        # Check if file should be blacklisted
-        if is_blacklisted(filepath, script_type):
-            continue
+    with tqdm(total=len(script_files), desc=f"Parsing {script_type} files", unit=" files", bar_format=PBAR_FORMAT, unit_scale=True, leave=False) as pbar:
+        for filepath in script_files:
+            pbar.set_postfix_str(f"Parsing: '{Path(filepath).stem[:30]}'")
 
-        content = read_file(filepath)
-        if not content:
-            echo.warning(f"File is empty or unreadable: {filepath}")
-            continue
-
-        if script_type == "entity":
-            file_texts: dict[str, str] = {}
-            for filepath in script_files:
-                # Check if file should be blacklisted
-                if is_blacklisted(filepath, script_type):
-                    continue
-
-                text = read_file(filepath)
-                if not text:
-                    echo.warning(f"File is empty or unreadable: {filepath}")
-                    continue
-
-                file_texts[filepath] = text
-
-            if not file_texts:
-                echo.warning("No entity files found.")
-                return {}
-
-            full_text = "\n".join(file_texts.values())
-            recipes = parse_construction_recipe(full_text)
-
-            entity_dict = {}
-            for recipe in recipes:
-                name = recipe.get("name")
-                if not name:
-                    continue
-
-                # Best‑effort: find which file contains the entity definition
-                source_file = next(
-                    (Path(p).stem for p, t in file_texts.items()
-                     if re.search(rf'\bentity\s+{re.escape(name)}\b', t)),
-                    "unknown"
-                )
-
-                recipe["ScriptType"] = script_type
-                recipe["SourceFile"] = source_file
-                entity_dict[name] = recipe
-
-            save_cache(entity_dict, "parsed_entity_data.json")
-            script_cache[script_type] = entity_dict
-            echo.success(f"Parsed {len(entity_dict)} entity entries.")
-            return dict(sorted(entity_dict.items()))
-
-        # Clean up comments and prep for parsing
-        lines = remove_comments(content.splitlines())
-        module = None
-        i = 0
-
-        while i < len(lines):
-            line = lines[i].strip()
-            if not line:
-                i += 1
+            # Check if file should be blacklisted
+            if is_blacklisted(filepath, script_type):
                 continue
 
-            # Get the module name (e.g., 'module Base')
-            if match := re.match(r'^module\s+(\w+)', line):
-                module = match.group(1)
-                i += 1
+            content = read_file(filepath)
+            if not content:
+                echo.warning(f"File is empty or unreadable: {filepath}")
                 continue
 
-            # Detect block start (e.g., 'item Axe {')
-            block_match = re.match(r'^(\w+)\s+(.+)', line)
-            if block_match and i + 1 < len(lines) and lines[i + 1].strip() == "{":
-                block_type, block_name = block_match.groups()
-                if block_name is not None:
-                    block_name = block_name.replace(" ", "_")
+            if script_type == "entity":
+                file_texts: dict[str, str] = {}
+                for filepath in script_files:
+                    # Check if file should be blacklisted
+                    if is_blacklisted(filepath, script_type):
+                        continue
 
-                # Skip blacklisted prefixes (e.g., 'MakeUp_' for items)
-                blacklist = PREFIX_BLACKLIST.get(script_type, [])
-                if block_type == script_type and module and not any(block_name.startswith(prefix) for prefix in blacklist):
-                    current_id = f"{module}.{block_name}"
+                    text = read_file(filepath)
+                    if not text:
+                        echo.warning(f"File is empty or unreadable: {filepath}")
+                        continue
 
-                    if script_type == "craftRecipe":
-                        current_id = block_name
+                    file_texts[filepath] = text
 
-                    # Extract lines inside this block, between curly brackets
-                    i += 2
-                    block_lines = []
-                    block_depth = 1
+                if not file_texts:
+                    echo.warning("No entity files found.")
+                    return {}
 
-                    while i < len(lines):
-                        next_line = lines[i].strip()
-                        block_depth += next_line.count("{")
-                        block_depth -= next_line.count("}")
-                        block_lines.append(next_line)
-                        i += 1
-                        if block_depth <= 0:
-                            break
+                full_text = "\n".join(file_texts.values())
+                recipes = parse_construction_recipe(full_text)
 
-                    # Recursively parse the block and attach data, handle custom if required
-                    cleaned = remove_comments(block_lines)
-                    if script_type == "craftRecipe":
-                        block_data = parse_recipe_block(cleaned, current_id)
+                entity_dict = {}
+                for recipe in recipes:
+                    name = recipe.get("name")
+                    if not name:
+                        continue
+
+                    # Best‑effort: find which file contains the entity definition
+                    source_file = next(
+                        (Path(p).stem for p, t in file_texts.items()
+                        if re.search(rf'\bentity\s+{re.escape(name)}\b', t)),
+                        "unknown"
+                    )
+
+                    recipe["ScriptType"] = script_type
+                    recipe["SourceFile"] = source_file
+                    entity_dict[name] = recipe
+
+                save_cache(entity_dict, "parsed_entity_data.json")
+                script_cache[script_type] = entity_dict
+                echo.success(f"Parsed {len(entity_dict)} entity entries.")
+                return dict(sorted(entity_dict.items()))
+
+            # Clean up comments and prep for parsing
+            lines = remove_comments(content.splitlines())
+            module = None
+            i = 0
+
+            while i < len(lines):
+                line = lines[i].strip()
+                if not line:
+                    i += 1
+                    continue
+
+                # Get the module name (e.g., 'module Base')
+                if match := re.match(r'^module\s+(\w+)', line):
+                    module = match.group(1)
+                    i += 1
+                    continue
+
+                # Detect block start (e.g., 'item Axe {')
+                block_match = re.match(r'^(\w+)\s+(.+)', line)
+                if block_match and i + 1 < len(lines) and lines[i + 1].strip() == "{":
+                    block_type, block_name = block_match.groups()
+                    if block_name is not None:
+                        block_name = block_name.replace(" ", "_")
+
+                    # Skip blacklisted prefixes (e.g., 'MakeUp_' for items)
+                    blacklist = PREFIX_BLACKLIST.get(script_type, [])
+                    if block_type == script_type and module and not any(block_name.startswith(prefix) for prefix in blacklist):
+                        current_id = f"{module}.{block_name}"
+
+                        if script_type == "craftRecipe":
+                            current_id = block_name
+
+                        # Extract lines inside this block, between curly brackets
+                        i += 2
+                        block_lines = []
+                        block_depth = 1
+
+                        while i < len(lines):
+                            next_line = lines[i].strip()
+                            block_depth += next_line.count("{")
+                            block_depth -= next_line.count("}")
+                            block_lines.append(next_line)
+                            i += 1
+                            if block_depth <= 0:
+                                break
+
+                        # Recursively parse the block and attach data, handle custom if required
+                        cleaned = remove_comments(block_lines)
+                        if script_type == "craftRecipe":
+                            block_data = parse_recipe_block(cleaned, current_id)
+                        else:
+                            block_data = parse_block(cleaned, current_id, script_type)
+
+                        block_data["ScriptType"] = script_type
+                        block_data["SourceFile"] = Path(filepath).stem
+                        script_dict[current_id] = block_data
                     else:
-                        block_data = parse_block(cleaned, current_id, script_type)
+                        # Skip unknown or irrelevant blocks
+                        i += 2
+                        skip_depth = 1
+                        while i < len(lines) and skip_depth > 0:
+                            next_line = lines[i].strip()
+                            skip_depth += next_line.count("{")
+                            skip_depth -= next_line.count("}")
+                            i += 1
+                    continue
 
-                    block_data["ScriptType"] = script_type
-                    block_data["SourceFile"] = Path(filepath).stem
-                    script_dict[current_id] = block_data
-                else:
-                    # Skip unknown or irrelevant blocks
-                    i += 2
-                    skip_depth = 1
-                    while i < len(lines) and skip_depth > 0:
-                        next_line = lines[i].strip()
-                        skip_depth += next_line.count("{")
-                        skip_depth -= next_line.count("}")
-                        i += 1
-                continue
-
-            i += 1
+                i += 1
+            
+            pbar.update(1)
     
     if do_post_processing:
         script_dict = post_process(script_dict, script_type)
