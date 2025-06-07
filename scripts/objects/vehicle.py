@@ -814,7 +814,7 @@ class Vehicle:
         part_item = part_data.get("itemType", [None])[0]
         if part_item:
             part_item = part_item + str(self.get_mechanic_type())
-            return Item(part_item).get("MaxCapacity")
+            return Item(part_item).max_capacity
         
         echo.warning(f"[{self.vehicle_id}] Couldn't find capacity for '{part or 'part'}'.")
         return 0
@@ -890,5 +890,5 @@ class Vehicle:
 
 
 if __name__ == "__main__":
-    vehicle = Vehicle.get_mechanics_overlay()
-#    print(vehicle.get_recipes())
+    vehicle = Vehicle("Base.Van").get_total_capacity()
+    print(vehicle)

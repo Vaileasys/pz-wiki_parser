@@ -43,9 +43,9 @@ def process_vehicle(vehicle_id):
         knowledge = 'style="text-align:center;"| -'
         for recipe_mag in RECIPE_MAGS:
             item = Item(recipe_mag)
-            if recipes in item.get("TeachedRecipes"):
-                knowledge_link = link(item.get_page(), Translate.get(f"Recipe_{recipes.replace(' ', '_')}", default=recipes))
-                knowledge = f'{item.get_icon()} {knowledge_link}'
+            if recipes in item.teached_recipes:
+                knowledge_link = link(item.page, Translate.get(f"Recipe_{recipes.replace(' ', '_')}", default=recipes))
+                knowledge = f'{item.icon} {knowledge_link}'
                 break
 
         tools_dict = vehicle.get_part_install(part).get("items", {})
@@ -55,9 +55,7 @@ def process_vehicle(vehicle_id):
         for _, item_data in tools_dict.items():
             if "type" in item_data:
                 item = Item(item_data.get("type"))
-                item_link = link(item.get_page(), item.get_name())
-                item_icon = item.get_icon()
-                tools.append(f"{item_icon} {item_link}")
+                tools.append(f"{item.icon} {item.wiki_link}")
             elif "tags" in item_data:
                 tag = item_data.get("tags")
                 tag_link = link(f"{tag} (tag)")
@@ -79,9 +77,7 @@ def process_vehicle(vehicle_id):
             else:
                 item_id = value
             item = Item(item_id)
-            item_link = link(item.get_page(), item.get_name())
-            item_icon = item.get_icon()
-            items.append(f"{item_icon} {item_link}")
+            items.append(f"{item.icon} {item.wiki_link}")
         if not items:
             items.append('style="text-align:center;"| -')
 

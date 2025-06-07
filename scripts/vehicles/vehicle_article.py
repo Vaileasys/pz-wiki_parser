@@ -77,7 +77,7 @@ def generate_overview(vehicle: Vehicle):
         content.append(f"One of the following key rings can spawn along with the vehicle:")
         for item_type in key_rings:
             item = Item(item_type)
-            content.append(f"* {item.get_icon()} {item.get_link()}")
+            content.append(f"* {item.icon} {item.wiki_link}")
 
     # Outfits
     zombie_types = vehicle.get_zombie_type()

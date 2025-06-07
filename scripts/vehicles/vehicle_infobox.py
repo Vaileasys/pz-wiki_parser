@@ -43,7 +43,7 @@ def generate_data(vehicle_id:str):
         key_rings_raw = vehicle.get_special_key_ring()
         key_rings = []
         for key_ring in key_rings_raw:
-            key_ring_name = Item(key_ring).get_icon()
+            key_ring_name = Item(key_ring).icon
             key_rings.append(key_ring_name)
 
         parameters = {
