@@ -431,7 +431,7 @@ def process_tools(recipe: dict, build_data: dict) -> str:
         if "tags" in inp:
             for tag in inp["tags"]:
                 span = open(os.path.join("output", "en", "tags", "cycle-img", f"{tag}.txt"), encoding="utf-8").read()
-                lines.append(f"{span} [[{tag} (tag)]]")
+                lines.append(f"{span} [[{tag} (tag)]] <small>×{count}</small>")
 
         # Items
         elif "items" in inp:
@@ -449,7 +449,7 @@ def process_tools(recipe: dict, build_data: dict) -> str:
                     unit_bar = f"{{{{#invoke:Unit bar|main|{count}|{use_delta}}}}}"
                     lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {util.link(page, name)} <br>{unit_bar}")
                 else:
-                    lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {util.link(page, name)}")
+                    lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {util.link(page, name)} <small>×{count}</small>")
 
         if not lines:
             continue
