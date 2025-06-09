@@ -1,4 +1,4 @@
-[Previous Folder](../lists/body_locations_list.md) | [Next File](fluid.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../lists/body_locations_list.md) | [Previous File](clothing_item.md) | [Next File](craft_recipe.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
 
 # components.py
 
@@ -110,4 +110,4 @@ Return the maximum hit points (int), defaults to 0.
 
 
 
-[Previous Folder](../lists/body_locations_list.md) | [Next File](fluid.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../lists/body_locations_list.md) | [Previous File](clothing_item.md) | [Next File](craft_recipe.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)

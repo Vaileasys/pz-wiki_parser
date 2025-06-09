@@ -7,7 +7,7 @@ from scripts.core.language import Language, Translate
 from scripts.core.constants import FLUID_DIR, PBAR_FORMAT
 from scripts.core.file_loading import write_file
 from scripts.utils.util import enumerate_params, check_zero
-from scripts.utils.echo import echo_warning, echo_success
+from scripts.utils import echo
 from scripts.core import logger
 
 ROOT_DIR = os.path.join(FLUID_DIR.format(language_code=Language.get()), "infoboxes")
@@ -20,7 +20,7 @@ def check_fluid():
         query_id = Fluid.fix_fluid_id(query_id)
         if query_id in Fluid.keys():
             return query_id
-        echo_warning(f"No fluid found for '{query_id}', please try again.")
+        echo.warning(f"No fluid found for '{query_id}', please try again.")
 
 
 def generate_data(fluid_id):
@@ -109,18 +109,18 @@ def main(pre_choice: str = None):
 
         if choice == '1':
             automatic_extraction()
-            echo_success(f"Fluid infoboxes generated and saved to '{ROOT_DIR}'.")
+            echo.success(f"Fluid infoboxes generated and saved to '{ROOT_DIR}'.")
             return
         elif choice == '2':
             fluid_id = check_fluid()
             process_fluid(fluid_id)
             file_path = os.path.join(ROOT_DIR, fluid_id + ".txt")
-            echo_success(f"Fluid infobox generated and saved to '{file_path}'.")
+            echo.success(f"Fluid infobox generated and saved to '{file_path}'.")
             return
         elif choice == 'q':
             return
         else:
-            echo_warning("Invalid choice.")
+            echo.warning("Invalid choice.")
 
 
 if __name__ == "__main__":

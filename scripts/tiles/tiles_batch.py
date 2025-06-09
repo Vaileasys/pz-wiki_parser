@@ -20,7 +20,7 @@ from scripts.core.cache import load_cache
 from scripts.core.constants import DATA_DIR
 from scripts.core.version import Version
 from scripts.core.language import Language
-from scripts.utils.echo import echo_info, echo_error, echo_success
+from scripts.utils import echo
 
 # parsers
 from scripts.parser.tiles_parser import main as parse_tiles
@@ -58,13 +58,13 @@ def generate_cache(cache_path: str, cache_label: str, parser_func, game_version:
     try:
         data, cache_version = load_cache(cache_path, cache_label, get_version=True)
         if cache_version != game_version:
-            echo_info(f"Generating {cache_label.lower()} cache")
+            echo.info(f"Generating {cache_label.lower()} cache")
             parser_func()
             data, cache_version = load_cache(cache_path, cache_label, get_version=True)
-        echo_info(f"{cache_label} cache loaded")
+        echo.info(f"{cache_label} cache loaded")
         return data, cache_version
     except Exception as exc:
-        echo_error(f"Error loading {cache_label.lower()} cache: {exc}")
+        echo.error(f"Error loading {cache_label.lower()} cache: {exc}")
         return None, None
 
 
@@ -96,38 +96,38 @@ def main():
     movable_defs_data, _ = generate_cache(defs_path,   "Movable Definitions", parse_movable_definitions, game_version)
 
     if tiles_data is None or named_tiles_data is None or movable_defs_data is None:
-        echo_error("One or more caches failed to load.")
+        echo.error("One or more caches failed to load.")
         return
 
-    echo_success("All caches loaded")
+    echo.success("All caches loaded")
 
-    echo_info("Generating infoboxes")
+    echo.info("Generating infoboxes")
     infoboxes = generate_infoboxes(named_tiles_data, movable_defs_data, lang_code, game_version)
-    echo_success("Infoboxes generated")
+    echo.success("Infoboxes generated")
 
-    echo_info("Generating CodeSnips")
+    echo.info("Generating CodeSnips")
     codesnips = generate_codesnips(named_tiles_data, lang_code, game_version)
-    echo_success("CodeSnips generated")
+    echo.success("CodeSnips generated")
 
-    echo_info("Generating Scrapping tables")
+    echo.info("Generating Scrapping tables")
     scrapping = generate_scrapping_tables(
         tiles=      named_tiles_data,
         definitions=movable_defs_data,
         lang_code=  lang_code
     )
-    echo_success("Scrapping tables generated")
+    echo.success("Scrapping tables generated")
 
-    echo_info("Assembling tile articles")
+    echo.info("Assembling tile articles")
     generate_tile_articles(named_tiles_data, infoboxes, codesnips, scrapping)
-    echo_success("Tile articles assembled")
+    echo.success("Tile articles assembled")
 
-    echo_info("Generating furniture lists")
+    echo.info("Generating furniture lists")
     generate_furniture_lists(named_tiles_data)
-    echo_success("Furniture lists generated")
+    echo.success("Furniture lists generated")
 
-    echo_info("Generating crafting surfaces list")
+    echo.info("Generating crafting surfaces list")
     generate_surface_list(named_tiles_data)
-    echo_success("Crafting surfaces list generated")
+    echo.success("Crafting surfaces list generated")
 
 if __name__ == "__main__":
     main()

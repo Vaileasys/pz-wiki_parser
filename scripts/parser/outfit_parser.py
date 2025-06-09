@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 import re
 from difflib import SequenceMatcher
 from scripts.core.version import Version
-from scripts.utils.echo import echo_error, echo_success
+from scripts.utils import echo
 
 _outfits_cache = {}
 
@@ -41,7 +41,7 @@ def guid_item_mapping(guid_table):
             filename = os.path.splitext(os.path.basename(path))[0]
             guid_mapping[guid] = filename
     except ET.ParseError as e:
-        echo_error(f"Error parsing GUID table XML: {e}")
+        echo.error(f"Error parsing GUID table XML: {e}")
     return guid_mapping
 
 
@@ -53,7 +53,7 @@ def parse_outfits(xml_file, guid_mapping):
             tree = ET.parse(xml_file)
             root = tree.getroot()
         except ET.ParseError as e:
-            echo_error(f"Error parsing clothing XML: {e}")
+            echo.error(f"Error parsing clothing XML: {e}")
             return {}
 
         output_json = {
@@ -231,7 +231,7 @@ def generate_name_guid_table(translated_names, outfits_json, output_file):
     # Write the table to the output file
     with open(output_file, 'w', encoding='utf-8') as file:
         file.write(table_content)
-    echo_success(f"Name-GUID table written to {output_file}")
+    echo.success(f"Name-GUID table written to {output_file}")
 
 
 def main():
@@ -253,7 +253,7 @@ def main():
     # Save outfits JSON data
     with open(outfits_json_path, 'w', encoding='utf-8') as json_file:
         json.dump(outfits_json, json_file, ensure_ascii=False, indent=4)
-    echo_success(f"Outfits data written to {outfits_json_path}")
+    echo.success(f"Outfits data written to {outfits_json_path}")
 
     # Generate articles
     generate_articles(outfits_json, articles_output_dir, translated_names)

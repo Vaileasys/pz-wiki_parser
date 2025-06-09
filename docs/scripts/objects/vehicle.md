@@ -1,4 +1,4 @@
-[Previous Folder](../lists/body_locations_list.md) | [Previous File](item.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../lists/body_locations_list.md) | [Previous File](skill.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
 
 # vehicle.py
 
@@ -376,4 +376,4 @@ Return mechanics overlay.
 
 
 
-[Previous Folder](../lists/body_locations_list.md) | [Previous File](item.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../lists/body_locations_list.md) | [Previous File](skill.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)

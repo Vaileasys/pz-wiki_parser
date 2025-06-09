@@ -6,7 +6,7 @@ from scripts.core.version import Version
 from scripts.core.language import Language
 from scripts.fluids import fluid_infobox
 from scripts.core.file_loading import write_file, load_file
-from scripts.utils.echo import echo_info, echo_success, echo_error, echo_warning
+from scripts.utils import echo
 from scripts.utils.util import link
 
 OUTPUT_DIR = os.path.join(FLUID_DIR.format(language_code=Language.get()))
@@ -57,7 +57,7 @@ def check_name(fluid_id, name, method):
         elif method == 'capitalize':
             return name.capitalize()
     except Exception:
-        echo_error(f"'{method}' is an unknown method")
+        echo.error(f"'{method}' is an unknown method")
         return name
 
 
@@ -156,11 +156,11 @@ def generate_infobox(fluid_id: str):
         if os.path.exists(file_path):
             infobox_content = load_file(rel_path=file_name, root_path=INFOBOX_DIR)
         else:
-            echo_warning(f"File not found for '{fluid_id}'. Try generating infoboxes again.")
+            echo.warning(f"File not found for '{fluid_id}'. Try generating infoboxes again.")
             infobox_content = DEFAULT
         
     except Exception as e:
-        echo_error(f"Failed reading infobox file '{file_path}': {e}")
+        echo.error(f"Failed reading infobox file '{file_path}': {e}")
         infobox_content = DEFAULT
     
     return infobox_content
@@ -258,7 +258,7 @@ def process_fluid(fluid_id):
         content.append("*" + "\n*".join(calculate_similar_fluids(fluid_id)))
 
     except Exception as e:
-        echo_error(f"Failed processing article for '{fluid_id}': {e}")
+        echo.error(f"Failed processing article for '{fluid_id}': {e}")
         return [f"{{{{Note|type=error|Error generating article for fluid: {fluid_id}.}}}}"]
     
     write_file(content, root_path=ARTICLE_DIR, rel_path=fluid_id + ".txt", suppress=True)
@@ -277,7 +277,7 @@ def main():
             process_fluid(fluid_id)
             pbar.update(1)
 
-    echo_success(f"Fluid articles saved to '{ARTICLE_DIR}'")
+    echo.success(f"Fluid articles saved to '{ARTICLE_DIR}'")
 
 
 if __name__ == "__main__":

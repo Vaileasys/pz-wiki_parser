@@ -1,34 +1,62 @@
+"""
+Provides the FluidContainer and Durability classes for managing components 
+related to fluid handling and durability.
+
+- FluidContainer holds information about an item’s fluid types, capacities, 
+  mixing ratios, and special behaviour (e.g., random fluid selection).
+- Durability tracks an item’s material and maximum hit points, supporting 
+  durability-based mechanics.
+
+These classes serve as lightweight wrappers over raw component data, offering 
+convenient property access and helper methods.
+"""
+
 from scripts.objects.fluid import Fluid
 from scripts.core.language import Translate
 
 class FluidContainer:
+    """
+    Represents the FluidContainer component of an item or entity, holding information 
+    about contained fluids, capacities, and mixing proportions.
+    """
     def __init__(self, data: dict):
+        """
+        Initialize a FluidContainer with raw component data.
+
+        Args:
+            data (dict): FluidContainer data dictionary.
+        """
         self.data = data or {}
 
     def __bool__(self):
+        """Allow FluidContainer to evaluate as False if empty, True if data exists."""
         return bool(self.data)
 
     @property
     def container_name(self):
+        """Return the translated container name."""
         name = self.data.get("ContainerName")
         name = Translate.get("Fluid_Container_" + name, default=name)
         return name
 
     @property
     def rain_factor(self):
+        """Return the rain collection factor (float)."""
         return self.data.get("RainFactor", 0)
 
     @property
     def capacity(self):
+        """Return the container’s fluid capacity (int)."""
         return self.data.get("capacity", 0)
 
     @property
     def custom_drink_sound(self):
+        """Return the custom drink sound, if defined (str or None)."""
         return self.data.get("CustomDrinkSound")
 
     @property
     def fluids(self):
-        """Return a list of Fluid objects, capturing mix ratio and color if provided."""
+        """Return a list of Fluid objects, including mix ratios and optional colors."""
         fluids_data = self.data.get("Fluids", {})
 
         if isinstance(fluids_data, dict):
@@ -55,7 +83,7 @@ class FluidContainer:
     
     @property
     def fluid_proportions(self):
-        """Return the raw list of fluid proportions."""
+        """Return the raw list of fluid proportions (list of floats)."""
         fluids_data = self.data.get("Fluids", {})
 
         if isinstance(fluids_data, dict):
@@ -70,8 +98,8 @@ class FluidContainer:
     @property
     def fluid_map(self):
         """
-        Return a dict mapping Fluid objects to normalised proportions.
-        If PickRandomFluid is True, just map each Fluid to 1.0 (equal chance).
+        Return a dictionary mapping Fluid objects to normalised proportions.
+        If PickRandomFluid is True, all fluids are given equal weighting (1.0).
         """
         fluids = self.fluids
         proportions = self.fluid_proportions
@@ -92,28 +120,44 @@ class FluidContainer:
 
     @property
     def pick_random_fluid(self):
+        """Return whether the container picks a random fluid (bool)."""
         return self.data.get("PickRandomFluid", False)
 
     @property
     def initial_percent_min(self):
+        """Return the minimum initial fill percentage (float)."""
         return self.data.get("InitialPercentMin", 0.0)
 
     @property
     def initial_percent_max(self):
+        """Return the maximum initial fill percentage (float)."""
         return self.data.get("InitialPercentMax", 1.0)
 
 
 class Durability:
+    """
+    Represents the Durability component of an item, including material type 
+    and maximum hit points.
+    """
     def __init__(self, data: dict):
+        """
+        Initialize a Durability object with raw component data.
+
+        Args:
+            data (dict): Durability data dictionary.
+        """
         self.data = data or {}
 
     def __bool__(self):
+        """Allow Durability to evaluate as False if empty, True if data exists."""
         return bool(self.data)
 
     @property
     def material(self):
+        """Return the material type (str), defaults to 'Default'."""
         return self.data.get("Material", "Default")
 
     @property
     def max_hit_points(self):
+        """Return the maximum hit points (int), defaults to 0."""
         return self.data.get("MaxHitPoints", 0)

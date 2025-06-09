@@ -1,4 +1,4 @@
-[Previous Folder](../objects/components.md) | [Previous File](fixing_parser.md) | [Next File](item_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Previous File](fixing_parser.md) | [Next File](item_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
 
 # fluid_parser.py
 
@@ -13,4 +13,4 @@
 ### [`init()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/fluid_parser.py#L212)
 
 
-[Previous Folder](../objects/components.md) | [Previous File](fixing_parser.md) | [Next File](item_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Previous File](fixing_parser.md) | [Next File](item_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)

@@ -3,7 +3,7 @@
 import os
 from scripts.core.cache import load_json, save_cache
 from scripts.core.constants import RESOURCE_DIR
-from scripts.utils.echo import echo_warning
+from scripts.utils import echo
 
 PAGE_DICT_FILE = "page_dictionary.json"
 FILE_PATH = os.path.join(RESOURCE_DIR, PAGE_DICT_FILE)
@@ -44,13 +44,13 @@ def get_pages(query_id: str, id_type: str = None) -> list[str]:
         for key, value in id_data.items():
             if query_id in value:
                 return value[query_id]
-        echo_warning(f"Unable to find page for '{query_id}'.")
+        echo.warning(f"Unable to find page for '{query_id}'.")
         return None
 
     if id_type in id_data:
         return id_data[id_type].get(query_id)
     else:
-        echo_warning(f"Unable to find page for '{query_id}' in '{id_type}'.")
+        echo.warning(f"Unable to find page for '{query_id}' in '{id_type}'.")
         return None
 
 
@@ -82,7 +82,7 @@ def get_id_categories(script_id, id_type="item_id"):
     if pages:
         page = pages[0]
         return get_categories(page)
-    echo_warning(f"Unable to find categories for '{script_id}'.")
+    echo.warning(f"Unable to find categories for '{script_id}'.")
     return []
 
 

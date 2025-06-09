@@ -1,4 +1,4 @@
-[Previous Folder](../article_content/hotbar_slots_content.md) | [Next File](config_manager.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../consumables.md) | [Next File](config_manager.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
 
 # cache.py
 
@@ -65,4 +65,4 @@ Clears the cache at a specified file path.
 
 
 
-[Previous Folder](../article_content/hotbar_slots_content.md) | [Next File](config_manager.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../consumables.md) | [Next File](config_manager.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)

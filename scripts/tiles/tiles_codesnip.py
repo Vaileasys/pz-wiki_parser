@@ -14,7 +14,7 @@ all generated snippets.
 
 import os, json
 from typing import Dict
-from scripts.utils.echo import echo_error
+from scripts.utils import echo
 
 def generate_codesnips(
     named_tiles_data: Dict[str, Dict[str, dict]],
@@ -41,7 +41,7 @@ def generate_codesnips(
 
     for group_name, tiles in named_tiles_data.items():
         if not isinstance(tiles, dict):
-            echo_error(f"Skipping group '{group_name}': expected a dict of tiles")
+            echo.error(f"Skipping group '{group_name}': expected a dict of tiles")
             continue
 
         for sprite_name, tile_info in tiles.items():
@@ -73,6 +73,6 @@ def generate_codesnips(
                 with open(filepath, "w", encoding="utf-8") as out:
                     out.write(codesnip_markup)
             except Exception as err:
-                echo_error(f"Failed to write CodeSnip for '{sprite_name}' to '{filepath}': {err}")
+                echo.error(f"Failed to write CodeSnip for '{sprite_name}' to '{filepath}': {err}")
 
     return codesnips

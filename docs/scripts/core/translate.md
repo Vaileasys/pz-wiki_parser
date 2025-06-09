@@ -1,4 +1,4 @@
-[Previous Folder](../article_content/hotbar_slots_content.md) | [Previous File](setup.md) | [Next File](version.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../consumables.md) | [Previous File](setup.md) | [Next File](version.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
 
 # translate.py
 
@@ -41,4 +41,4 @@ Use 'get_default_langauge' instead for returning the default language.
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/translate.py#L330)
 
 
-[Previous Folder](../article_content/hotbar_slots_content.md) | [Previous File](setup.md) | [Next File](version.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../consumables.md) | [Previous File](setup.md) | [Next File](version.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)

@@ -3,7 +3,7 @@ from pathlib import Path
 from scripts.core.language import Translate
 from scripts.core.constants import ITEM_DIR, BOT_FLAG, BOT_FLAG_END
 from scripts.core.cache import load_json
-from scripts.utils.echo import echo_success, echo_info, echo_warning, echo_error, echo_deprecated
+from scripts.utils import echo
 from scripts.core.file_loading import write_file
 
 DEF_TABLE_HEADER = '{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"'
@@ -51,7 +51,7 @@ def get_column_headings(table_type:str, table_map:dict, columns:dict):
     column_def = table_map.get(table_type) or table_map.get("default")
 
     if column_def is None:
-        echo_warning(f"No mapping for table type: '{table_type}'")
+        echo.warning(f"No mapping for table type: '{table_type}'")
         return []
 
     if isinstance(column_def, list):
@@ -59,7 +59,7 @@ def get_column_headings(table_type:str, table_map:dict, columns:dict):
     elif isinstance(column_def, dict):
         return generate_column_headings(column_def, columns)
     else:
-        echo_warning(f"Invalid column definition type for '{table_type}'")
+        echo.warning(f"Invalid column definition type for '{table_type}'")
         return []
 
 
@@ -257,4 +257,4 @@ def create_tables(
         write_file(all_tables, rel_path=rel_path, root_path=root_path, suppress=suppress)
 
     tables_name = Path(rel_path).parent.name.replace("_", " ").capitalize()
-    echo_success(f"{tables_name} tables written to '{output_dir}'")
+    echo.success(f"{tables_name} tables written to '{output_dir}'")

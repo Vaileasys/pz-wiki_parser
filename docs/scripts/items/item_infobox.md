@@ -1,4 +1,4 @@
-[Previous Folder](../fluids/fluid_article.md) | [Previous File](item_container_contents.md) | [Next File](item_tags.md) | [Next Folder](../lists/body_locations_list.md) | [Back to Index](../../index.md)
+[Previous Folder](../fluids/fluid_article.md) | [Previous File](item_container_contents.md) | [Next File](item_literature_titles.md) | [Next Folder](../lists/body_locations_list.md) | [Back to Index](../../index.md)
 
 # item_infobox.py
 
@@ -38,4 +38,4 @@ Gets the script parameter values for a list of items.
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L531)
 
 
-[Previous Folder](../fluids/fluid_article.md) | [Previous File](item_container_contents.md) | [Next File](item_tags.md) | [Next Folder](../lists/body_locations_list.md) | [Back to Index](../../index.md)
+[Previous Folder](../fluids/fluid_article.md) | [Previous File](item_container_contents.md) | [Next File](item_literature_titles.md) | [Next Folder](../lists/body_locations_list.md) | [Back to Index](../../index.md)

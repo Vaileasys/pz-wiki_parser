@@ -4,7 +4,7 @@
 
 ## Functions
 
-### [`capitalize(value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L5)
+### [`capitalize(value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L4)
 
 Safely perform the capitalize method if a value is not a string. Lists will also be capitalized, provided their values are strings.
 
@@ -13,7 +13,7 @@ Safely perform the capitalize method if a value is not a string. Lists will also
 :return: Capitalized values if a string or list, otherwise None.
 :rtype: str | list | None
 
-### [`format_positive(value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L38)
+### [`format_positive(value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L37)
 
 Formats a number with '+' if positive, trimming trailing zeros. Returns original value as string if invalid.
 
@@ -22,7 +22,7 @@ Formats a number with '+' if positive, trimming trailing zeros. Returns original
 :return: Formatted string with '+' prefix if positive, or original value as a string if invalid.
 :rtype: str
 
-### [`link(page: str, name: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L55)
+### [`link(page: str, name: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L54)
 
 Returns a wiki link in the format [[Page|Name]], including a language suffix for non-English languages.
 
@@ -30,7 +30,7 @@ Returns a wiki link in the format [[Page|Name]], including a language suffix for
 :param name: The display text of the link (optional). Defaults to `page`.
 :return: The formatted wiki link.
 
-### [`format_link(name: str, page: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L71)
+### [`format_link(name: str, page: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L72)
 
 Returns a wiki link in the format [[Page|Name]], including a language suffix for non-English languages.
 
@@ -38,7 +38,7 @@ Returns a wiki link in the format [[Page|Name]], including a language suffix for
 :param page: The target page (optional). Defaults to `name`.
 :return: The formatted wiki link.
 
-### [`convert_percentage(value: str | int | float, start_zero, percentage)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L91)
+### [`convert_percentage(value: str | int | float, start_zero, percentage)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L94)
 
 Converts a numeric value to a percentage string.
 
@@ -57,16 +57,79 @@ Converts a numeric value to a percentage string.
       - The formatted percentage as a string with a '%' sign.
       - Returns '-' for invalid inputs.
 
-### [`convert_int(value: int | float)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L122)
+### [`convert_int(value: int | float)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L125)
 
 Converts a value to an integer if it has no decimal (isn't float-like).
 
-### [`tick(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L139)
-### [`cross(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L144)
-### [`enumerate_params(parameters)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L152)
-### [`check_zero(value: int | float, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L167)
+### [`to_bool(value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L141)
 
-Returns 'default' if the value is zero.
+Convert a value to boolean by checking common 'true' strings.
+
+
+<ins>**Args:**</ins>
+
+<ins>**Returns:**</ins>
+  - **bool:**
+      - True if the value matches a 'true' string; False otherwise.
+
+### [`tick(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L154)
+
+Return a wiki-formatted tick/check icon, optionally with text and link.
+
+
+<ins>**Args:**</ins>
+  - **text (str, optional)**:
+      - _Display text._
+  - **link (str, optional)**:
+      - _Link target._
+
+<ins>**Returns:**</ins>
+  - **str:**
+      - Formatted wiki string for the tick icon.
+
+### [`cross(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L169)
+
+Return a wiki-formatted cross icon, optionally with text and link.
+
+
+<ins>**Args:**</ins>
+  - **text (str, optional)**:
+      - _Display text._
+  - **link (str, optional)**:
+      - _Link target._
+
+<ins>**Returns:**</ins>
+  - **str:**
+      - Formatted wiki string for the cross icon.
+
+### [`enumerate_params(parameters)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L187)
+
+Expand list values in a dict into numbered keys for infobox use.
+
+
+<ins>**Args:**</ins>
+  - **parameters (dict)**:
+      - _Dictionary of parameter names and values._
+      - _List values will be split into numbered keys._
+
+<ins>**Returns:**</ins>
+  - **dict:**
+      - New dictionary with expanded numbered keys.
+
+### [`check_zero(value: int | float, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L212)
+
+Return 'default' if the numeric value is zero, else return the value.
+
+
+<ins>**Args:**</ins>
+  - **value (int or float)**:
+      - _Value to check._
+  - **default (optional)**:
+      - _Value to return if input is zero._
+
+<ins>**Returns:**</ins>
+  - **int, float, or None:**
+      - Original value or 'default' if zero.
 
 
 

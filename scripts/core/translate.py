@@ -2,10 +2,9 @@ import os
 import json
 import chardet
 import re
-from scripts.core import logger, config_manager, version
+from scripts.core import logger, config_manager as config, version
 from scripts.core.constants import DATA_DIR
-from scripts.utils import utility
-from scripts.utils.echo import echo_deprecated
+from scripts.utils import utility, echo
 
 language_code = None
 default_language = None
@@ -93,7 +92,7 @@ def get_wiki_translation(value):
     :return: Value with all strings translated.
     :rtype: str
     """
-    echo_deprecated("'translate.get_wiki_translation()' is deprecated, import language.py and use 'Translate.get_wiki()' instead.")
+    echo.deprecated("'translate.get_wiki_translation()' is deprecated, import language.py and use 'Translate.get_wiki()' instead.")
     placeholders = re.findall(r'\<\<(.*?)\>\>', value)
 
     # Replace each placeholder with its translation
@@ -143,7 +142,7 @@ def get_translation(property_value, property_key=None, lang_code=language_code, 
     :param default (optional): Default translation to use if no translation can be found. Uses 'property_value' if undefined.
     :return: Translation for the property.
     """
-    echo_deprecated("'translate.get_translation()' is deprecated, import language.py and use 'Translate.get()' instead.")
+    echo.deprecated("'translate.get_translation()' is deprecated, import language.py and use 'Translate.get()' instead.")
     global language_code
 
     if not property_value:
@@ -286,7 +285,7 @@ def cache_translations():
 
 
 def get_language_code():
-    echo_deprecated("'translate.get_language_code()' is deprecated, import language.py and use 'Language.get()' instead.")
+    echo.deprecated("'translate.get_language_code()' is deprecated, import language.py and use 'Language.get()' instead.")
     global language_code
     if language_code is None:
         init_translations()
@@ -306,7 +305,7 @@ def update_default_language():
     :return: Updated default language.
     """
     global default_language
-    default_language = config_manager.get_config('default_language')
+    default_language = config.get_default_language()
     return default_language
 
 
@@ -321,7 +320,7 @@ def init_translations():
     print("Initialising translations")
     global default_language
     global language_code
-    default_language = config_manager.get_config('default_language')
+    default_language = config.get_default_language()
     if language_code is None:
         language_code = change_language()
     cache_translations()

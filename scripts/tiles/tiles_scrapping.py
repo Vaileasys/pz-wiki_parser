@@ -13,7 +13,7 @@ mechanics, generating separate tables for each process with relevant drop rates 
 import os
 from scripts.utils import utility
 from scripts.core.language import Translate
-from scripts.utils.echo import echo_error
+from scripts.utils import echo
 
 def generate_scrapping_tables(tiles: dict, definitions: dict, lang_code: str) -> dict:
     """
@@ -54,7 +54,7 @@ def generate_scrapping_tables(tiles: dict, definitions: dict, lang_code: str) ->
                     with open(file_path, 'w', encoding='utf-8') as out:
                         out.write(content)
                 except Exception as e:
-                    echo_error(f"Failed writing scrapping table for '{group_name}': {e}")
+                    echo.error(f"Failed writing scrapping table for '{group_name}': {e}")
 
         # Breakage
         if can_break:
@@ -66,7 +66,7 @@ def generate_scrapping_tables(tiles: dict, definitions: dict, lang_code: str) ->
                     with open(file_path, 'w', encoding='utf-8') as out:
                         out.write(content)
                 except Exception as e:
-                    echo_error(f"Failed writing breakage table for '{group_name}': {e}")
+                    echo.error(f"Failed writing breakage table for '{group_name}': {e}")
 
         scrappings[group_name] = group_entry
 

@@ -18,7 +18,7 @@ from concurrent.futures import ThreadPoolExecutor
 from scripts.core.language import Language
 from scripts.core.cache import load_cache
 from scripts.core.constants import RESOURCE_DIR, OUTPUT_DIR
-from scripts.utils.echo import echo_info, echo_warning
+from scripts.utils import echo
 
 SPRITE_WIDTH = 128
 SPRITE_HEIGHT = 256
@@ -149,7 +149,7 @@ def composite_sprites(facing_direction: str, sprite_entries_list: list[dict], ou
         image_filename = f"{sprite_identifier}.png"
         image_file_path = os.path.join(SPRITE_IMAGES_DIRECTORY, image_filename)
         if not os.path.isfile(image_file_path):
-            echo_warning(f"Missing sprite: {sprite_identifier}")
+            echo.warning(f"Missing sprite: {sprite_identifier}")
             has_missing_sprites = True
             continue
 
@@ -160,7 +160,7 @@ def composite_sprites(facing_direction: str, sprite_entries_list: list[dict], ou
         composite_canvas.alpha_composite(sprite_image, (canvas_draw_x, canvas_draw_y))
 
     if has_missing_sprites:
-        echo_warning(f"Skipping {output_base_name} ({facing_direction}) due to missing pieces")
+        echo.warning(f"Skipping {output_base_name} ({facing_direction}) due to missing pieces")
         progress_bar.update(1)
         return
 
@@ -210,7 +210,7 @@ def main() -> None:
             output_base_name = build_output_name(sprite_identifier_list)
             stitching_tasks_list.append((facing_direction, sorted_sprite_entries, output_base_name))
 
-    echo_info(f"Stitching {len(stitching_tasks_list)} multi-sprite tiles across all facings…")
+    echo.info(f"Stitching {len(stitching_tasks_list)} multi-sprite tiles across all facings…")
     with tqdm(total=len(stitching_tasks_list), desc="Stitching", unit="tile") as progress_bar:
         with ThreadPoolExecutor(max_workers=THREAD_POOL_MAX_WORKERS) as thread_pool:
             for facing_direction, sorted_sprite_entries, output_base_name in stitching_tasks_list:

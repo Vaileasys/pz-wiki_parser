@@ -1,11 +1,15 @@
 import re
 import copy
+from tqdm import tqdm
 from pathlib import Path
 from scripts.core.file_loading import get_script_files, read_file
 from scripts.core.language import Translate
-from scripts.core.cache import save_cache
-from scripts.utils.echo import echo, echo_info, echo_warning, echo_error, echo_success, echo_debug
+from scripts.core.cache import save_cache, load_cache
+from scripts.utils import echo
 from scripts.parser.recipe_parser import parse_recipe_block, parse_construction_recipe
+from scripts.core.constants import PBAR_FORMAT
+from scripts.core.version import Version
+from scripts.core import config_manager as config
 
 PREFIX_BLACKLIST = {
     "item": ["MakeUp_", "ZedDmg_", "Wound_", "Bandage_", "F_Hair_", "M_Hair_", "M_Beard_"]
@@ -163,19 +167,19 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
             base_template_id = f"{module}.{script_type}_{parts[0]}"
             base_template = template_dict.get(base_template_id)
             if not base_template:
-                echo_warning(f"[{script_id}] base template '{base_template_id}' not found.")
+                echo.warning(f"[{script_id}] base template '{base_template_id}' not found.")
                 return script_data
 
             # Walk through nested templates
             current_template = base_template
             for key in parts[1:]:
                 if current_template is None:
-                    echo_warning(f"[{script_id}] template path '{template_path}' is incomplete at '{key}'.")
+                    echo.warning(f"[{script_id}] template path '{template_path}' is incomplete at '{key}'.")
                     return script_data
                 current_template = current_template.get(key)
 
             if current_template is None:
-                echo_warning(f"[{script_id}] could not fully walk path '{template_path}'.")
+                echo.warning(f"[{script_id}] could not fully walk path '{template_path}'.")
                 return script_data
 
             # Build path inside script_data
@@ -184,7 +188,7 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
                 if key not in dest:
                     dest[key] = {}
                 elif not isinstance(dest[key], dict):
-                    echo_warning(f"[{script_id}] expected dict at '{key}' but found {type(dest[key])}.")
+                    echo.warning(f"[{script_id}] expected dict at '{key}' but found {type(dest[key])}.")
                     return script_data
                 dest = dest[key]
 
@@ -217,7 +221,7 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
             template_id = f"{module}.{script_type}_{template_path}"
             template = template_dict.get(template_id)
             if not template:
-                echo_warning(f"[{script_id}] template '{template_id}' not found.")
+                echo.warning(f"[{script_id}] template '{template_id}' not found.")
                 return script_data
 
             # Merge sub-templates recursively
@@ -347,7 +351,7 @@ def parse_evolved_recipe(value: str, block_id: str = "Unknown") -> dict:
                 is_cooked = True
 
         if ':' not in entry:
-            echo_warning(f"[{block_id}] No ':' in 'EvolvedRecipe' value: {value}")
+            echo.warning(f"[{block_id}] No ':' in 'EvolvedRecipe' value: {value}")
             continue
 
         name, amount = entry.split(':', 1)
@@ -393,7 +397,7 @@ def parse_fixer(value: str, block_id: str = "Unknown") -> dict:
             skill, level = entry.split('=', 1)
             skill_dict[normalise(skill)] = normalise(level)
         else:
-            echo_warning(f"[{block_id}] Invalid skill entry in Fixer: '{entry}'")
+            echo.warning(f"[{block_id}] Invalid skill entry in Fixer: '{entry}'")
 
     fixer_data[item_name] = {
         "Amount": item_amount,
@@ -413,7 +417,7 @@ def parse_item_mapper(lines: list[str], block_id: str = "Unknown") -> dict:
 
         match = re.match(r'^([\w\.]+)\s*=\s*([\w\.]+)', line)
         if not match:
-            echo_warning(f"[{block_id}] Malformed itemMapper line: '{line}'")
+            echo.warning(f"[{block_id}] Malformed itemMapper line: '{line}'")
             continue
 
         output, input_ = match.groups()
@@ -422,7 +426,7 @@ def parse_item_mapper(lines: list[str], block_id: str = "Unknown") -> dict:
 
         # Reverse the key-value to be: 'input: output'
         if input_ in mapper:
-            echo_warning(f"[{block_id}] Duplicate input '{input_}' in itemMapper: already mapped to '{mapper[input_]}'")
+            echo.warning(f"[{block_id}] Duplicate input '{input_}' in itemMapper: already mapped to '{mapper[input_]}'")
         mapper[input_] = output
 
     return mapper
@@ -638,7 +642,7 @@ def parse_key_value_line(line: str, data: dict, block_id: str = "Unknown", scrip
                 if k not in existing:
                     existing[k] = v
                 elif existing[k] != v:
-                    echo_warning(f"[{block_id}] Duplicate subkey '{k}' in '{key}' with different value: '{v}' – existing: '{existing[k]}'")
+                    echo.warning(f"[{block_id}] Duplicate subkey '{k}' in '{key}' with different value: '{v}' – existing: '{existing[k]}'")
 
         # Merge list-style values
         elif isinstance(existing, list):
@@ -652,7 +656,7 @@ def parse_key_value_line(line: str, data: dict, block_id: str = "Unknown", scrip
 
         # Conflict between single values
         elif existing != processed:
-            echo_warning(f"[{block_id}] Duplicate key '{key}'. Replacing '{existing}' with '{processed}'")
+            echo.warning(f"[{block_id}] Duplicate key '{key}'. Replacing '{existing}' with '{processed}'")
             data[key] = processed
 
     else:
@@ -745,19 +749,26 @@ def is_blacklisted(filepath: str, script_type: str) -> bool:
     
     # Check file blacklist
     if path.stem in config.get("file_blacklist", []):
-        echo_info(f"Skipping blacklisted file: '{path.stem}'")
+        echo.info(f"Skipping blacklisted file: '{path.stem}'")
         return True
         
     # Check folder blacklist
     for folder in config.get("folder_blacklist", []):
         if folder in str(path):
-            echo_info(f"Skipping file in blacklisted folder '{folder}': '{path.stem}'")
+            echo.info(f"Skipping file in blacklisted folder '{folder}': '{path.stem}'")
             return True
             
     return False
 
 
-def extract_script_data(script_type: str, do_post_processing: bool = True, cache_result: bool = True) -> dict[str, dict]:
+def check_cache_version(script_type: str):
+    cached_data, cached_version = load_cache(f"parsed_{script_type}_data.json", f"{script_type} data", get_version=True)
+    if cached_version == Version.get():
+        return cached_data
+    return {}
+
+
+def extract_script_data(script_type: str, do_post_processing: bool = True, cache_result: bool = True, use_cache = True) -> dict[str, dict]:
     """
     Parses all script files of a given script type, extracting blocks into dictionaries keyed by FullType (i.e. [Module].[Type])
 
@@ -770,146 +781,163 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
     """
     global script_cache
 
-    # If script_type from cache if it's already been parsed.
+    # Clear memory cache
+    if not use_cache or config.get_debug_mode():
+        script_cache = {}
+    
+    # Get script_type from cache if it's already been parsed.
     if script_type in script_cache:
         return script_cache[script_type]
+    
+    # Try load from disk cache if not debug mode
+    if use_cache and not config.get_debug_mode():
+        # Try to load cache from local storage
+        saved_cache_data = check_cache_version(script_type)
+        if saved_cache_data:
+            script_cache[script_type] = saved_cache_data # Cache in memory for next run
+            return saved_cache_data
 
     script_dict = {}
     entity_dict = {} # special case for entity
     script_files = get_script_files()
 
     if not script_files:
-        echo_warning("No script files found.")
+        echo.warning("No script files found.")
 
-    for filepath in script_files:
-        # Check if file should be blacklisted
-        if is_blacklisted(filepath, script_type):
-            continue
+    with tqdm(total=len(script_files), desc=f"Parsing {script_type} files", unit=" files", bar_format=PBAR_FORMAT, unit_scale=True, leave=False) as pbar:
+        for filepath in script_files:
+            pbar.set_postfix_str(f"Parsing: '{Path(filepath).stem[:30]}'")
 
-        content = read_file(filepath)
-        if not content:
-            echo_warning(f"File is empty or unreadable: {filepath}")
-            continue
-
-        if script_type == "entity":
-            file_texts: dict[str, str] = {}
-            for filepath in script_files:
-                # Check if file should be blacklisted
-                if is_blacklisted(filepath, script_type):
-                    continue
-
-                text = read_file(filepath)
-                if not text:
-                    echo_warning(f"File is empty or unreadable: {filepath}")
-                    continue
-
-                file_texts[filepath] = text
-
-            if not file_texts:
-                echo_warning("No entity files found.")
-                return {}
-
-            full_text = "\n".join(file_texts.values())
-            recipes = parse_construction_recipe(full_text)
-
-            entity_dict = {}
-            for recipe in recipes:
-                name = recipe.get("name")
-                if not name:
-                    continue
-
-                # Best‑effort: find which file contains the entity definition
-                source_file = next(
-                    (Path(p).stem for p, t in file_texts.items()
-                     if re.search(rf'\bentity\s+{re.escape(name)}\b', t)),
-                    "unknown"
-                )
-
-                recipe["ScriptType"] = script_type
-                recipe["SourceFile"] = source_file
-                entity_dict[name] = recipe
-
-            save_cache(entity_dict, "parsed_entity_data.json")
-            script_cache[script_type] = entity_dict
-            echo_success(f"Parsed {len(entity_dict)} entity entries.")
-            return dict(sorted(entity_dict.items()))
-
-        # Clean up comments and prep for parsing
-        lines = remove_comments(content.splitlines())
-        module = None
-        i = 0
-
-        while i < len(lines):
-            line = lines[i].strip()
-            if not line:
-                i += 1
+            # Check if file should be blacklisted
+            if is_blacklisted(filepath, script_type):
                 continue
 
-            # Get the module name (e.g., 'module Base')
-            if match := re.match(r'^module\s+(\w+)', line):
-                module = match.group(1)
-                i += 1
+            content = read_file(filepath)
+            if not content:
+                echo.warning(f"File is empty or unreadable: {filepath}")
                 continue
 
-            # Detect block start (e.g., 'item Axe {')
-            block_match = re.match(r'^(\w+)\s+(.+)', line)
-            if block_match and i + 1 < len(lines) and lines[i + 1].strip() == "{":
-                block_type, block_name = block_match.groups()
-                if block_name is not None:
-                    block_name = block_name.replace(" ", "_")
+            if script_type == "entity":
+                file_texts: dict[str, str] = {}
+                for filepath in script_files:
+                    # Check if file should be blacklisted
+                    if is_blacklisted(filepath, script_type):
+                        continue
 
-                # Skip blacklisted prefixes (e.g., 'MakeUp_' for items)
-                blacklist = PREFIX_BLACKLIST.get(script_type, [])
-                if block_type == script_type and module and not any(block_name.startswith(prefix) for prefix in blacklist):
-                    current_id = f"{module}.{block_name}"
+                    text = read_file(filepath)
+                    if not text:
+                        echo.warning(f"File is empty or unreadable: {filepath}")
+                        continue
 
-                    if script_type == "craftRecipe":
-                        current_id = block_name
+                    file_texts[filepath] = text
 
-                    # Extract lines inside this block, between curly brackets
-                    i += 2
-                    block_lines = []
-                    block_depth = 1
+                if not file_texts:
+                    echo.warning("No entity files found.")
+                    return {}
 
-                    while i < len(lines):
-                        next_line = lines[i].strip()
-                        block_depth += next_line.count("{")
-                        block_depth -= next_line.count("}")
-                        block_lines.append(next_line)
-                        i += 1
-                        if block_depth <= 0:
-                            break
+                full_text = "\n".join(file_texts.values())
+                recipes = parse_construction_recipe(full_text)
 
-                    # Recursively parse the block and attach data, handle custom if required
-                    cleaned = remove_comments(block_lines)
-                    if script_type == "craftRecipe":
-                        block_data = parse_recipe_block(cleaned, current_id)
+                entity_dict = {}
+                for recipe in recipes:
+                    name = recipe.get("name")
+                    if not name:
+                        continue
+
+                    # Best‑effort: find which file contains the entity definition
+                    source_file = next(
+                        (Path(p).stem for p, t in file_texts.items()
+                        if re.search(rf'\bentity\s+{re.escape(name)}\b', t)),
+                        "unknown"
+                    )
+
+                    recipe["ScriptType"] = script_type
+                    recipe["SourceFile"] = source_file
+                    entity_dict[name] = recipe
+
+                save_cache(entity_dict, "parsed_entity_data.json")
+                script_cache[script_type] = entity_dict
+                echo.success(f"Parsed {len(entity_dict)} entity entries.")
+                return dict(sorted(entity_dict.items()))
+
+            # Clean up comments and prep for parsing
+            lines = remove_comments(content.splitlines())
+            module = None
+            i = 0
+
+            while i < len(lines):
+                line = lines[i].strip()
+                if not line:
+                    i += 1
+                    continue
+
+                # Get the module name (e.g., 'module Base')
+                if match := re.match(r'^module\s+(\w+)', line):
+                    module = match.group(1)
+                    i += 1
+                    continue
+
+                # Detect block start (e.g., 'item Axe {')
+                block_match = re.match(r'^(\w+)\s+(.+)', line)
+                if block_match and i + 1 < len(lines) and lines[i + 1].strip() == "{":
+                    block_type, block_name = block_match.groups()
+                    if block_name is not None:
+                        block_name = block_name.replace(" ", "_")
+
+                    # Skip blacklisted prefixes (e.g., 'MakeUp_' for items)
+                    blacklist = PREFIX_BLACKLIST.get(script_type, [])
+                    if block_type == script_type and module and not any(block_name.startswith(prefix) for prefix in blacklist):
+                        current_id = f"{module}.{block_name}"
+
+                        if script_type == "craftRecipe":
+                            current_id = block_name
+
+                        # Extract lines inside this block, between curly brackets
+                        i += 2
+                        block_lines = []
+                        block_depth = 1
+
+                        while i < len(lines):
+                            next_line = lines[i].strip()
+                            block_depth += next_line.count("{")
+                            block_depth -= next_line.count("}")
+                            block_lines.append(next_line)
+                            i += 1
+                            if block_depth <= 0:
+                                break
+
+                        # Recursively parse the block and attach data, handle custom if required
+                        cleaned = remove_comments(block_lines)
+                        if script_type == "craftRecipe":
+                            block_data = parse_recipe_block(cleaned, current_id)
+                        else:
+                            block_data = parse_block(cleaned, current_id, script_type)
+
+                        block_data["ScriptType"] = script_type
+                        block_data["SourceFile"] = Path(filepath).stem
+                        script_dict[current_id] = block_data
                     else:
-                        block_data = parse_block(cleaned, current_id, script_type)
+                        # Skip unknown or irrelevant blocks
+                        i += 2
+                        skip_depth = 1
+                        while i < len(lines) and skip_depth > 0:
+                            next_line = lines[i].strip()
+                            skip_depth += next_line.count("{")
+                            skip_depth -= next_line.count("}")
+                            i += 1
+                    continue
 
-                    block_data["ScriptType"] = script_type
-                    block_data["SourceFile"] = Path(filepath).stem
-                    script_dict[current_id] = block_data
-                else:
-                    # Skip unknown or irrelevant blocks
-                    i += 2
-                    skip_depth = 1
-                    while i < len(lines) and skip_depth > 0:
-                        next_line = lines[i].strip()
-                        skip_depth += next_line.count("{")
-                        skip_depth -= next_line.count("}")
-                        i += 1
-                continue
-
-            i += 1
+                i += 1
+            
+            pbar.update(1)
     
     if do_post_processing:
         script_dict = post_process(script_dict, script_type)
 
     if not script_dict:
-        echo_warning("No valid script entries were found.")
+        echo.warning("No valid script entries were found.")
     else:
-        echo_success(f"Parsed {len(script_dict)} {script_type} entries.")
+        echo.success(f"Parsed {len(script_dict)} {script_type} entries.")
 
     if cache_result:
         # Cache dict in memory
@@ -960,7 +988,7 @@ def main():
         else:
             script_type = option
 
-        echo_info(f"Processing '{script_type}'...")
+        echo.info(f"Processing '{script_type}'...")
 
         extract_script_data(script_type)
 

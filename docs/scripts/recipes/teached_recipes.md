@@ -13,10 +13,11 @@ The script handles:
 - Generating formatted wiki markup with recipe links
 - Creating individual files for each teaching item
 - Proper bot flag markup for wiki integration
+- Expanding meta recipes into their component recipes
 
 ## Functions
 
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/teached_recipes.py#L22)
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/teached_recipes.py#L24)
 
 Main execution function for taught recipes generation.
 
@@ -26,6 +27,7 @@ This function:
 3. Generates wiki markup for each teaching item
 4. Creates individual files with recipe lists
 5. Includes proper bot flags for wiki integration
+6. Expands meta recipes into their component recipes
 The output is saved in the 'output/recipes/teachedrecipes' directory,
 with one file per teaching item.
 

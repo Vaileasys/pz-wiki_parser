@@ -2,6 +2,13 @@ import os
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from typing import Tuple, Union, List
+from scripts.core.constants import OUTPUT_LANG_DIR, RESOURCE_DIR
+from scripts.core.language import Language
+
+RESOURCE_PATH = os.path.join(RESOURCE_DIR, 'radio', 'RadioData.xml')
+RADIO_DIR = os.path.join(OUTPUT_LANG_DIR.format(language_code=Language.get()), 'radio')
+OUTPUT_FILE = "radio_output.txt"
+OUTPUT_PATH = os.path.join(RADIO_DIR, OUTPUT_FILE)
 
 EPOCH = datetime(1993, 7, 9)
 
@@ -204,23 +211,18 @@ def main():
     channel_entry_lines = 0
     broadcast_entry_count = 0
 
-    # Hardcoded file path for input and output
-    file_path = os.path.join('resources', 'radio', 'RadioData.xml')
-    output_dir = os.path.join('output', 'radio')
-    output_file_path = os.path.join(output_dir, 'radio_output.txt')
-
     # Ensure the output directory exists
-    os.makedirs(os.path.dirname(output_dir), exist_ok=True)
+    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
 
     # Extract directory of the script
     logging_dir = os.path.join('output', 'logging')
     logging_file_path = os.path.join(logging_dir, 'radio_log.txt')
     os.makedirs(logging_dir, exist_ok=True)
 
-    tree = ET.parse(file_path)
+    tree = ET.parse(RESOURCE_PATH)
     root = tree.getroot()
 
-    with open(output_file_path, 'w', encoding='utf-8') as output_file, open(logging_file_path, 'w', encoding='utf-8') as log_file:
+    with open(OUTPUT_PATH, 'w', encoding='utf-8') as output_file, open(logging_file_path, 'w', encoding='utf-8') as log_file:
         for element in root:
             if element.tag == 'Adverts':
                 output_file.write("==Adverts==\n")
@@ -267,7 +269,7 @@ def main():
         print(f"ChannelEntry: {channel_entry_lines}")
         print(f"BroadcastEntry: {broadcast_entry_count}")
         print(
-            f"{os.path.basename(output_file.name)} created in {output_file_path}"
+            f"{os.path.basename(output_file.name)} created in {OUTPUT_PATH}"
         )
         print("Process completed successfully.")
 

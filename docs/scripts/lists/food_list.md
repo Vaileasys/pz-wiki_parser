@@ -1,4 +1,4 @@
-[Previous Folder](../items/item_article.md) | [Previous File](fluid_list.md) | [Next File](fuel_list.md) | [Next Folder](../objects/components.md) | [Back to Index](../../index.md)
+[Previous Folder](../items/item_article.md) | [Previous File](fluid_list.md) | [Next File](fuel_list.md) | [Next Folder](../objects/body_location.md) | [Back to Index](../../index.md)
 
 # food_list.py
 
@@ -11,4 +11,4 @@
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/food_list.py#L235)
 
 
-[Previous Folder](../items/item_article.md) | [Previous File](fluid_list.md) | [Next File](fuel_list.md) | [Next Folder](../objects/components.md) | [Back to Index](../../index.md)
+[Previous Folder](../items/item_article.md) | [Previous File](fluid_list.md) | [Next File](fuel_list.md) | [Next Folder](../objects/body_location.md) | [Back to Index](../../index.md)

@@ -1,4 +1,4 @@
-[Previous File](consumables.md) | [Next File](fixing.md) | [Next Folder](article_content/hotbar_slots_content.md) | [Back to Index](../index.md)
+[Previous File](consumables.md) | [Next File](fixing.md) | [Next Folder](core/cache.md) | [Back to Index](../index.md)
 
 # distribution.py
 
@@ -18,4 +18,4 @@ Process JSON files and gather a list of unique items and their counts.
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/distribution.py#L568)
 
 
-[Previous File](consumables.md) | [Next File](fixing.md) | [Next Folder](article_content/hotbar_slots_content.md) | [Back to Index](../index.md)
+[Previous File](consumables.md) | [Next File](fixing.md) | [Next Folder](core/cache.md) | [Back to Index](../index.md)

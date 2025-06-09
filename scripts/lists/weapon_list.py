@@ -1,8 +1,7 @@
 from tqdm import tqdm
 from scripts.core.language import Language, Translate
-from scripts.utils import utility, table_helper
+from scripts.utils import utility, table_helper, echo
 from scripts.utils.util import link, format_positive
-from scripts.utils.echo import echo
 from scripts.parser import item_parser, fixing_parser
 from scripts.recipes import legacy_recipe_parser
 from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
@@ -325,7 +324,7 @@ def find_table_type(item_id, item_data):
             if "Improvised" in skill and len(skill) > 1:
                 skill = [cat for cat in skill if cat != "Improvised"]
                 if len(skill) > 1:
-                    echo(f"WARNING: More than 1 skill ({','.join(skill)})")
+                    echo.write(f"WARNING: More than 1 skill ({','.join(skill)})")
             table_type = skill[0]
         elif item_data.get("SubCategory") == "Firearm":
             # Firearm

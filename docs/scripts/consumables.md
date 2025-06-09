@@ -1,4 +1,4 @@
-[Next File](distribution.md) | [Next Folder](article_content/hotbar_slots_content.md) | [Back to Index](../index.md)
+[Next File](distribution.md) | [Next Folder](core/cache.md) | [Back to Index](../index.md)
 
 # consumables.py
 
@@ -27,4 +27,4 @@ Gets an icon for a specific variant. Returns the base icon if there is no varian
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/consumables.py#L113)
 
 
-[Next File](distribution.md) | [Next Folder](article_content/hotbar_slots_content.md) | [Back to Index](../index.md)
+[Next File](distribution.md) | [Next Folder](core/cache.md) | [Back to Index](../index.md)

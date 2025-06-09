@@ -1,4 +1,4 @@
-[Previous Folder](../objects/components.md) | [Previous File](distribution_container_parser.md) | [Next File](evolvedrecipe_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Previous File](distribution_container_parser.md) | [Next File](evolvedrecipe_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
 
 # distribution_parser.py
 
@@ -77,4 +77,4 @@ constants. It then saves the collected constants to a JSON file at the specified
 ### [`init()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/distribution_parser.py#L708)
 
 
-[Previous Folder](../objects/components.md) | [Previous File](distribution_container_parser.md) | [Next File](evolvedrecipe_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Previous File](distribution_container_parser.md) | [Next File](evolvedrecipe_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)

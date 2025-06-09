@@ -1,4 +1,4 @@
-[Previous Folder](../objects/components.md) | [Previous File](evolvedrecipe_parser.md) | [Next File](fluid_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Previous File](evolvedrecipe_parser.md) | [Next File](fluid_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
 
 # fixing_parser.py
 
@@ -11,4 +11,4 @@
 ### [`init(suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/fixing_parser.py#L162)
 
 
-[Previous Folder](../objects/components.md) | [Previous File](evolvedrecipe_parser.md) | [Next File](fluid_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Previous File](evolvedrecipe_parser.md) | [Next File](fluid_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)

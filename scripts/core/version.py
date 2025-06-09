@@ -1,4 +1,4 @@
-from scripts.core import config_manager, logger
+from scripts.core import config_manager as config, logger
 
 class Version:
     # Version is stored in config.ini. This will update when changed in the script.
@@ -19,13 +19,13 @@ class Version:
     @classmethod
     def update(cls):
         """Loads version from config."""
-        cls.set(config_manager.get_config('version'))
+        cls.set(config.get_version())
 
     @classmethod
     def change(cls):
         """Prompts the user for a new version number and updates it."""
         new_version = input("Enter the new version number:\n> ").strip()
-        config_manager.set_config('version', new_version)
+        config.set('version', new_version)
         cls.update()
         logger.write(f"Version number updated to {new_version}.", True)
 

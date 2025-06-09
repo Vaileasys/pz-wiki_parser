@@ -3,8 +3,8 @@ import json
 import re
 from scripts.core.constants import DATA_DIR
 from scripts.core.version import Version
-from scripts.core import config_manager
-from scripts.utils.echo import echo_error, echo_warning, echo_info
+from scripts.core import config_manager as config
+from scripts.utils import echo
 from scripts.core.cache import save_cache, load_cache
 
 LANGUAGE_CODES = {
@@ -85,24 +85,24 @@ class Language:
 
     @classmethod
     def update_default(cls):
-        cls._default_language = config_manager.get_config("default_language")
+        cls._default_language = config.get_default_language()
         return cls._default_language
 
     @classmethod
     def init(cls):
-        echo_info("Initialising language")
+        echo.info("Initialising language")
         cls.update_default()
-        cls._language_code = cls.prompt()
+        cls._language_code = cls._prompt()
         cls.set_subpage(cls._language_code)
         Translate.load()
 
     @classmethod
-    def prompt(cls):
+    def _prompt(cls):
         code = input(f"Enter language code (default '{cls._default_language}')\n> ").strip().lower()
         if code not in LANGUAGE_CODES:
-            echo_info(f"Unrecognised language code, defaulting to '{cls._default_language}'")
+            echo.info(f"Unrecognised language code, defaulting to '{cls._default_language}'")
             code = cls._default_language
-        echo_info(f"Language set to '{code}' ({cls.get_language_name(code)})")
+        echo.info(f"Language set to '{code}' ({cls.get_language_name(code)})")
         return code
 
     @staticmethod
@@ -212,7 +212,7 @@ class Translate:
                     parsed = cls._parse(wiki_code, game_code)
                     cls._translations[wiki_code] = parsed
                 except Exception as e:
-                    echo_warning(f"Failed to load {wiki_code}: {e}")
+                    echo.warning(f"Failed to load {wiki_code}: {e}")
 
             save_cache(cls._translations, cls._CACHE_JSON, suppress=True)
 
@@ -236,7 +236,7 @@ class Translate:
                         with open(path, 'r', encoding="UTF-8") as f:
                             parsed.update(json.load(f))
                     except Exception as e:
-                        echo_error(f"JSON error in {name}: {e}")
+                        echo.error(f"JSON error in {name}: {e}")
                     continue
 
                 try:
@@ -251,9 +251,9 @@ class Translate:
                             if val.endswith('"'): val = val[:-1]
                             parsed[key] = val
                 except UnicodeDecodeError as e:
-                    echo_error(f"Couldn't decode {name}: {e}")
+                    echo.error(f"Couldn't decode {name}: {e}")
                 except Exception as e:
-                    echo_error(f"TXT error in {name}: {e}")
+                    echo.error(f"TXT error in {name}: {e}")
 
         return parsed
 

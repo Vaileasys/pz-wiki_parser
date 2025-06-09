@@ -1,4 +1,4 @@
-[Previous Folder](../article_content/hotbar_slots_content.md) | [Previous File](page_manager.md) | [Next File](translate.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../consumables.md) | [Previous File](page_manager.md) | [Next File](translate.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
 
 # setup.py
 
@@ -27,4 +27,4 @@ Copy newtiledefinitions.tiles from media_dir to resources/tiles.
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/setup.py#L316)
 
 
-[Previous Folder](../article_content/hotbar_slots_content.md) | [Previous File](page_manager.md) | [Next File](translate.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../consumables.md) | [Previous File](page_manager.md) | [Next File](translate.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)

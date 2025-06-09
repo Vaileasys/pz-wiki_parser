@@ -1,4 +1,4 @@
-[Previous Folder](../items/item_article.md) | [Previous File](body_parts_list.md) | [Next File](container_list.md) | [Next Folder](../objects/components.md) | [Back to Index](../../index.md)
+[Previous Folder](../items/item_article.md) | [Previous File](body_parts_list.md) | [Next File](container_list.md) | [Next Folder](../objects/body_location.md) | [Back to Index](../../index.md)
 
 # clothing_list.py
 
@@ -16,4 +16,4 @@ Gets the item's properties based on the BodyLocation as defined for its table
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/clothing_list.py#L186)
 
 
-[Previous Folder](../items/item_article.md) | [Previous File](body_parts_list.md) | [Next File](container_list.md) | [Next Folder](../objects/components.md) | [Back to Index](../../index.md)
+[Previous Folder](../items/item_article.md) | [Previous File](body_parts_list.md) | [Next File](container_list.md) | [Next Folder](../objects/body_location.md) | [Back to Index](../../index.md)

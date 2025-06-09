@@ -2,7 +2,7 @@ import os
 from lupa import LuaRuntime, LuaError
 from scripts.core.file_loading import get_lua_files, read_file, get_lua_dir
 from scripts.core.cache import save_cache
-from scripts.utils.echo import echo_error, echo_warning
+from scripts.utils import echo
 
 def load_lua_file(lua_files: str | list[str], lua_runtime: LuaRuntime = None, dependencies: list[str] = None, inject_lua: str = None, prefer: str = None, media_type: str = "lua") -> LuaRuntime:
     """
@@ -41,7 +41,7 @@ def load_lua_file(lua_files: str | list[str], lua_runtime: LuaRuntime = None, de
                 raise LuaError(f"Error executing main Lua file '{lua_path}': {e}")
 
     except (FileNotFoundError, IOError, LuaError) as e:
-        echo_error(str(e))
+        echo.error(str(e))
         raise
 
     return lua_runtime
@@ -118,7 +118,7 @@ def parse_lua_tables(lua_runtime: LuaRuntime, tables: list[str] = None) -> dict:
                 lua_table = lua_runtime.eval(table_name)
                 parsed_data[table_name] = lua_to_python(lua_table)
             except LuaError:
-                echo_warning(f"Table '{table_name}' not found.")
+                echo.warning(f"Table '{table_name}' not found.")
     else:
         for key, value in globals_dict.items():
             if key not in STANDARD_LUA_LIBS and type(value).__name__ == '_LuaTable':

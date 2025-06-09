@@ -1,10 +1,9 @@
 from pathlib import Path
 from scripts.core.language import Translate
 from scripts.core.constants import DATA_DIR
-from scripts.utils import lua_helper
+from scripts.utils import lua_helper, echo
 from scripts.core.cache import save_cache
 from scripts.core.file_loading import get_game_file_map
-from scripts.utils.echo import echo_success, echo_warning
 
 OUTPUT_DIR = Path("output") / "spawnpoints"
 
@@ -92,7 +91,7 @@ def write_to_file(coord_data, output_file):
     output_path = OUTPUT_DIR / output_file
     with open(output_path, "w") as file:
         file.write("\n".join(content))
-    echo_success(f"File written to '{output_path}'")
+    echo.success(f"File written to '{output_path}'")
 
 
 def process_lua_file(lua_file):
@@ -131,7 +130,7 @@ def process_lua_file(lua_file):
         
         write_to_file(reordered_data, f"{output_name}.txt")
     except KeyError as e:
-        echo_warning(f"'{lua_file}' has no {e} key. Skipping.")
+        echo.warning(f"'{lua_file}' has no {e} key. Skipping.")
 
 
 def main():
@@ -146,7 +145,7 @@ def main():
                 lua_files.append(path)
 
     if not lua_files:
-        echo_warning("No Lua files found in the spawnpoints directory. Try running setup again.")
+        echo.warning("No Lua files found in the spawnpoints directory. Try running setup again.")
         return
 
     for lua_file in lua_files:

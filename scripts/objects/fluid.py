@@ -45,7 +45,9 @@ class Fluid:
         self.fluid_id = fluid_id
         self.data = Fluid._fluids.get(fluid_id, {})
 
-        self._module, self._id_type = fluid_id.split(".", 1)
+        id_parts = fluid_id.split(".", 1)
+        self._module = id_parts[0]
+        self._id_type = id_parts[1] if len(id_parts) == 2 else None
 
         self._name = None # Translated name
         self._name_en = None # English name
@@ -122,6 +124,14 @@ class Fluid:
             cls._load_fluids()
         return len(cls._fluids)
 
+    @classmethod
+    def exists(cls, fluid_id: str) -> bool:
+        if cls._fluids is None:
+            cls._load_fluids()
+
+        fluid_id = cls.fix_fluid_id(fluid_id)
+        return fluid_id in cls._fluids
+
     ## ------------------------- Dict-like Methods ------------------------- ##
 
     def get(self, key: str, default=None):
@@ -130,6 +140,14 @@ class Fluid:
     ## ------------------------- Properties ------------------------- ##
 
     # --- Base Properties --- #
+
+    @property
+    def valid(self) -> bool:
+        return bool(self.data)
+
+    @property
+    def script_type(self) -> str:
+        return self.data.get("ScriptType")
 
     @property
     def file(self):
@@ -284,6 +302,18 @@ class Fluid:
 
         color_rgb = [int(c * 255) for c in rgb_values]
         return color_rgb
+
+    @property
+    def r(self):
+        return self.color[0]
+
+    @property
+    def g(self):
+        return self.color[1]
+
+    @property
+    def b(self):
+        return self.color[2]
 
     @property
     def rgb(self):

@@ -1,9 +1,10 @@
 from pathlib import Path
 from tqdm import tqdm
-from scripts.parser import item_parser, distribution_container_parser
+from scripts.parser import distribution_container_parser
+from scripts.objects.item import Item
 from scripts.core.language import Language
-from scripts.core.constants import (PBAR_FORMAT, OUTPUT_DIR)
-from scripts.utils import utility, util
+from scripts.core.constants import PBAR_FORMAT, OUTPUT_LANG_DIR
+from scripts.utils import util, echo
 from scripts.core.cache import save_cache
 
 TABLE_HEADER = (
@@ -17,8 +18,7 @@ TABLE_CAPTION = '|+ style="white-space:nowrap; border:none; font-weight:normal; 
 TABLE_FOOTER = "|}"
 
 distribution_data = distribution_container_parser.get_distribution_data()
-language_code = Language.get()
-output_dir = Path(OUTPUT_DIR) / language_code.lower() / "container_contents"
+output_dir = Path(OUTPUT_LANG_DIR.format(language_code=Language.get())) / "container_contents"
 
 
 def get_probabilities(container_data):
@@ -100,16 +100,16 @@ def find_distro_key(search_dict, search_key):
     return None
 
 
-def process_item(item_type, pbar):
+def process_item(id_type):
     has_distro = False
     item_probabilities = {}
 
-    distro_key = find_distro_key(distribution_data, item_type)
+    distro_key = find_distro_key(distribution_data, id_type)
     if distro_key:
         has_distro = True
-        container_contents = distribution_data[distro_key].get(item_type)
+        container_contents = distribution_data[distro_key].get(id_type)
         if not container_contents:
-            pbar.write(f"{item_type} has no 'items'")
+            echo.info(f"{id_type} has no 'items'")
         else:
             item_probabilities = get_probabilities(container_contents)
 
@@ -118,15 +118,14 @@ def process_item(item_type, pbar):
 
 def get_items():
     container_dict = {}
-    parsed_item_data = item_parser.get_item_data()
 
     # Get items
-    with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items") as pbar:
-        for item_id, item_data in parsed_item_data.items():
+    with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+        for item_id in Item.all():
+            item = Item(item_id)
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
-            if item_data.get("Type") == "Container":
-                item_type = item_id.split(".")[1]
-                has_distro, item_contents = process_item(item_type, pbar)
+            if item.type == "Container":
+                has_distro, item_contents = process_item(item.id_type)
 
                 if not has_distro:
                     pbar.update(1)
@@ -135,22 +134,18 @@ def get_items():
                 container_dict[item_id] = item_contents
 
             pbar.update(1)
-
-        pbar.bar_format = f"Items processed."
            
     return container_dict
 
 
-def write_to_file(data):
-    content_item_cache = {}
-
+def write_to_file(data: dict):
     output_dir.mkdir(parents=True, exist_ok=True)
-    with tqdm(total=len(data), desc="Writing items", bar_format=PBAR_FORMAT, unit=" items") as pbar:
+    with tqdm(total=len(data), desc="Writing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
         for item_id, item_lists in data.items():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
 
             if not item_lists.get("items"):
-                pbar.write(f"Skipping '{item_id}': Has no items.")
+                echo.info(f"Skipping '{item_id}': Has no items.")
                 continue
 
             output_file = output_dir / f"contents-{item_id}.txt"
@@ -171,42 +166,25 @@ def write_to_file(data):
 
             item_lists["items"] = dict(sorted(item_lists["items"].items(), key=lambda x: x[1], reverse=True))
 
-            for item, chance in item_lists["items"].items():
+            for content_item_id, chance in item_lists["items"].items():
+                item = Item(content_item_id)
+
                 # Check if chance is essentially 'zero' and format
                 if chance < 0.01:
                     chance = "<0.01"
                 else:
                     chance = util.convert_int(chance)
-                
-                # Check the cached items first, if it exists, we use that data instead of processing again
-                if content_item_cache.get(item):
-                    icon = content_item_cache[item]["icon"]
-                    name_link = content_item_cache[item]["name_link"]
 
-                else:
-                    content_item_id = utility.fix_item_id(item)
-                    if content_item_id == item and "." not in content_item_id:
-                        pbar.write(f"No item ID found for '{content_item_id}'")
-                        icon = "[[File:Question_On.png]]"
-                        name_link = item
-                        
-                    else:
-                        icon = utility.get_icon(content_item_id, True, True, True)
-                        name = utility.get_name(content_item_id)
-                        page = utility.get_page(content_item_id, name)
-                        if language_code != "en":
-                            name_link = f"[[{page}/{language_code}|{name}]]"
-                        elif name != page:
-                            name_link = f"[[{page}|{name}]]"
-                        else:
-                            name_link = f"[[{page}]]"
+                if not item.valid:
+                    echo.warning(f"No data found for '{item.item_id}'")
+                    icon = "[[File:Question_On.png]]"
+                    wiki_link = content_item_id
                     
-                    # Add to cache to save time processing the same items
-                    if item not in content_item_cache:
-                        content_item_cache[item] = {"name_link": name_link, "icon": icon}
+                else:
+                    icon = item.icon
+                    wiki_link = item.wiki_link
 
-
-                table_entry = f"|-\n| {icon}\n| {name_link}\n| {chance}%"
+                table_entry = f"|-\n| {icon}\n| {wiki_link}\n| {chance}%"
                 table.append(table_entry)
             
             table.append(TABLE_FOOTER)
@@ -216,14 +194,14 @@ def write_to_file(data):
 
             pbar.update(1)
 
-        pbar.bar_format = f"Item files written to '{output_dir}'."
+        echo.success(f"Item container contents files written to '{output_dir}'.")
 
 
 def main():
     
     items = get_items()
-    write_to_file(items)
     save_cache(items, "container_contents.json")
+    write_to_file(items)
 
 
 

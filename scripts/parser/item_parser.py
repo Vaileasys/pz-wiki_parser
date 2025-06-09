@@ -3,7 +3,7 @@ import re
 from scripts.core.language import Language, Translate
 from scripts.core.version import Version
 from scripts.core.constants import DATA_DIR
-from scripts.utils.echo import echo_info, echo_warning
+from scripts.utils import echo
 from scripts.core.cache import save_cache, load_cache
 from scripts.core.file_loading import get_script_files
 
@@ -162,7 +162,7 @@ def parse_item(lines, start_index, module_name):
                 item_name = parts[1]
                 item_id = f"{module_name}.{item_name}"
             else:
-                echo_warning(f"Couldn't parse item line: {line}")
+                echo.warning(f"Couldn't parse item line: {line}")
                 i += 1
                 continue
         
@@ -191,7 +191,7 @@ def parse_item(lines, start_index, module_name):
                             for k, v in [pair.split(':', 1)]
                         }
                     except ValueError:
-                        echo_warning(f"Skipping invalid key-value pair in line: {line}")
+                        echo.warning(f"Skipping invalid key-value pair in line: {line}")
 
             # Handle multiple values (separated by ';')
             elif ';' in property_value:
@@ -220,7 +220,7 @@ def parse_module(lines):
             if len(parts) >= 2:
                 module_name = parts[1]
             else:
-                echo_warning(f"Couldn't parse module line: {line}")
+                echo.warning(f"Couldn't parse module line: {line}")
         
         # Detect the start of an item block
         elif re.match(r'^item(\s)', line): # regex to return 'item' and not any suffixes
@@ -235,7 +235,7 @@ def parse_module(lines):
                 i = end_index
                 
 #            else:
-#                echo_warning(f"Skipping item line: {line}")
+#                echo.warning(f"Skipping item line: {line}")
         i += 1
 
     return combined_dict
@@ -327,7 +327,7 @@ def init():
         save_cache(new_items, CACHE_JSON.replace(".json", "") + "_new.json")
         save_cache(modified_items, CACHE_JSON.replace(".json", "") + "_changes.json")
 
-    echo_info(f"Number of items found: {len(parsed_data)}")
+    echo.info(f"Number of items found: {len(parsed_data)}")
 
 if __name__ == "__main__":
     init()

@@ -1,4 +1,4 @@
-[Previous File](fixing.md) | [Next File](spawnpoints.md) | [Next Folder](article_content/hotbar_slots_content.md) | [Back to Index](../index.md)
+[Previous File](fixing.md) | [Next File](spawnpoints.md) | [Next Folder](core/cache.md) | [Back to Index](../index.md)
 
 # roomdefine.py
 
@@ -10,4 +10,4 @@
 ### [`generate_main_page(room_to_containers: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/roomdefine.py#L148)
 
 
-[Previous File](fixing.md) | [Next File](spawnpoints.md) | [Next Folder](article_content/hotbar_slots_content.md) | [Back to Index](../index.md)
+[Previous File](fixing.md) | [Next File](spawnpoints.md) | [Next Folder](core/cache.md) | [Back to Index](../index.md)

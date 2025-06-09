@@ -1,4 +1,4 @@
-[Previous Folder](../items/item_article.md) | [Previous File](fuel_list.md) | [Next File](furniture_surfaces_list.md) | [Next Folder](../objects/components.md) | [Back to Index](../../index.md)
+[Previous Folder](../items/item_article.md) | [Previous File](fuel_list.md) | [Next File](furniture_surfaces_list.md) | [Next Folder](../objects/body_location.md) | [Back to Index](../../index.md)
 
 # furniture_list.py
 
@@ -11,4 +11,4 @@
 ### [`generate_furniture_lists(named_tiles_data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/furniture_list.py#L451)
 
 
-[Previous Folder](../items/item_article.md) | [Previous File](fuel_list.md) | [Next File](furniture_surfaces_list.md) | [Next Folder](../objects/components.md) | [Back to Index](../../index.md)
+[Previous Folder](../items/item_article.md) | [Previous File](fuel_list.md) | [Next File](furniture_surfaces_list.md) | [Next Folder](../objects/body_location.md) | [Back to Index](../../index.md)

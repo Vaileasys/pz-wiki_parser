@@ -1,4 +1,4 @@
-[Previous Folder](../fluids/fluid_article.md) | [Previous File](item_infobox.md) | [Next Folder](../lists/body_locations_list.md) | [Back to Index](../../index.md)
+[Previous Folder](../fluids/fluid_article.md) | [Previous File](item_literature_titles.md) | [Next Folder](../lists/body_locations_list.md) | [Back to Index](../../index.md)
 
 # item_tags.py
 
@@ -48,4 +48,4 @@ Generate a tags dictionary, mapping them to their associated items.
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L377)
 
 
-[Previous Folder](../fluids/fluid_article.md) | [Previous File](item_infobox.md) | [Next Folder](../lists/body_locations_list.md) | [Back to Index](../../index.md)
+[Previous Folder](../fluids/fluid_article.md) | [Previous File](item_literature_titles.md) | [Next Folder](../lists/body_locations_list.md) | [Back to Index](../../index.md)

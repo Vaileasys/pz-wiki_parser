@@ -1,4 +1,4 @@
-[Previous File](distribution.md) | [Next File](roomdefine.md) | [Next Folder](article_content/hotbar_slots_content.md) | [Back to Index](../index.md)
+[Previous File](distribution.md) | [Next File](roomdefine.md) | [Next Folder](core/cache.md) | [Back to Index](../index.md)
 
 # fixing.py
 
@@ -18,4 +18,4 @@ Format skills and skill values into a string with <br> for line breaks.
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fixing.py#L227)
 
 
-[Previous File](distribution.md) | [Next File](roomdefine.md) | [Next Folder](article_content/hotbar_slots_content.md) | [Back to Index](../index.md)
+[Previous File](distribution.md) | [Next File](roomdefine.md) | [Next Folder](core/cache.md) | [Back to Index](../index.md)

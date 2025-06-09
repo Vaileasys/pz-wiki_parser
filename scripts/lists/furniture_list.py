@@ -4,7 +4,7 @@ from scripts.core.constants import DATA_DIR
 from scripts.core.version import Version
 from scripts.core.language import Language
 from scripts.core.cache import load_cache
-from scripts.utils.echo import echo_error
+from scripts.utils import echo
 from scripts.tiles.tiles_infobox import extract_tile_stats, prepare_tile_list, build_misc_params
 from scripts.core.page_manager import init as init_pages, get_pages
 
@@ -636,7 +636,7 @@ def generate_furniture_lists(named_tiles_data: dict) -> None:
             with open(os.path.join(output_dir, f"{category}.txt"), "w", encoding="utf-8") as f:
                 f.write(text)
         except Exception as err:
-            echo_error(f"Failed writing '{category}': {err}")
+            echo.error(f"Failed writing '{category}': {err}")
 
     leftovers = [t for t in reps if t["sprite"] not in matched_sprite_identifiers]
     if leftovers:
@@ -646,4 +646,4 @@ def generate_furniture_lists(named_tiles_data: dict) -> None:
             with open(os.path.join(output_dir, "Miscellaneous.txt"), "w", encoding="utf-8") as f:
                 f.write(text)
         except Exception as err:
-            echo_error(f"Failed writing 'Other': {err}")
+            echo.error(f"Failed writing 'Other': {err}")

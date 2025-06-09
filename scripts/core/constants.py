@@ -4,6 +4,7 @@ import os
 OUTPUT_DIR = os.path.join("output")
 RESOURCE_DIR = os.path.join("resources")
 DATA_DIR = os.path.join("data")
+DOCS_DIR = os.path.join("docs")
 
 LUA_PATH = os.path.join(RESOURCE_DIR, "lua")
 

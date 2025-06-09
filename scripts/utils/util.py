@@ -1,5 +1,4 @@
-from scripts.core.language import Language
-from scripts.utils.echo import echo_deprecated
+from scripts.utils import echo
 
 
 def capitalize(value):
@@ -60,6 +59,8 @@ def link(page:str, name:str=None) -> str:
     :param name: The display text of the link (optional). Defaults to `page`.
     :return: The formatted wiki link.
     """
+    from scripts.core.language import Language
+
     if name is None:
         return f"[[{page}{Language.get_subpage()}]]"
     elif page == name and Language.get() == "en":
@@ -76,7 +77,9 @@ def format_link(name:str, page:str=None) -> str:
     :param page: The target page (optional). Defaults to `name`.
     :return: The formatted wiki link.
     """
-    echo_deprecated("'format_link()' is deprecated, use link() instead.")
+    from scripts.core.language import Language
+
+    echo.deprecated("'format_link()' is deprecated, use link() instead.")
     language_code = Language.get()
     
     if language_code != "en":
@@ -135,13 +138,45 @@ def convert_int(value: int | float) -> int | float:
 
     return str(value)
 
+def to_bool(value):
+    """
+    Convert a value to boolean by checking common 'true' strings.
+
+    Args:
+        value: Any value to check.
+
+    Returns:
+        bool: True if the value matches a 'true' string; False otherwise.
+    """
+    return str(value).lower() in ('true', 't', '1', 'yes', 'y', 'on')
+
 
 def tick(text: str = None, link: str = None):
+    """
+    Return a wiki-formatted tick/check icon, optionally with text and link.
+
+    Args:
+        text (str, optional): Display text.
+        link (str, optional): Link target.
+
+    Returns:
+        str: Formatted wiki string for the tick icon.
+    """
     link = f"|link=" + link if link else ""
     text = "|" + text if text else ""
     return f"[[File:UI_Tick.png|32px{link}{text}]]"
 
 def cross(text: str = None, link: str = None):
+    """
+    Return a wiki-formatted cross icon, optionally with text and link.
+
+    Args:
+        text (str, optional): Display text.
+        link (str, optional): Link target.
+
+    Returns:
+        str: Formatted wiki string for the cross icon.
+    """
     link = f"|link=" + link if link else ""
     text = "|" + text if text else ""
     return f"[[File:UI_Cross.png|32px{link}{text}]]"
@@ -150,6 +185,16 @@ def cross(text: str = None, link: str = None):
 ## ------------------------- Infobox helpers ------------------------- ##
 
 def enumerate_params(parameters):
+    """
+    Expand list values in a dict into numbered keys for infobox use.
+
+    Args:
+        parameters (dict): Dictionary of parameter names and values.
+            List values will be split into numbered keys.
+
+    Returns:
+        dict: New dictionary with expanded numbered keys.
+    """
     new_parameters = {}
     for key, value in parameters.items():
         # Remove key-value pairs if they have no value
@@ -165,5 +210,14 @@ def enumerate_params(parameters):
 
 
 def check_zero(value: int|float, default = None) -> int|float|None:
-    """Returns 'default' if the value is zero."""
+    """
+    Return 'default' if the numeric value is zero, else return the value.
+
+    Args:
+        value (int or float): Value to check.
+        default (optional): Value to return if input is zero.
+
+    Returns:
+        int, float, or None: Original value or 'default' if zero.
+    """
     return default if float(value) == 0.0 else value

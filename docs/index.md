@@ -8,11 +8,6 @@
 - [roomdefine.py](scripts/roomdefine.md)
 - [spawnpoints.py](scripts/spawnpoints.md)
 
-### article_content
-
-- [hotbar_slots_content.py](scripts/article_content/hotbar_slots_content.md)
-- [item_literature_titles.py](scripts/article_content/item_literature_titles.md)
-
 ### core
 
 - [cache.py](scripts/core/cache.md)
@@ -38,6 +33,7 @@
 - [item_codesnip.py](scripts/items/item_codesnip.md)
 - [item_container_contents.py](scripts/items/item_container_contents.md)
 - [item_infobox.py](scripts/items/item_infobox.md)
+- [item_literature_titles.py](scripts/items/item_literature_titles.md)
 - [item_tags.py](scripts/items/item_tags.md)
 
 ### lists
@@ -60,9 +56,13 @@
 
 ### objects
 
+- [body_location.py](scripts/objects/body_location.md)
+- [clothing_item.py](scripts/objects/clothing_item.md)
 - [components.py](scripts/objects/components.md)
+- [craft_recipe.py](scripts/objects/craft_recipe.md)
 - [fluid.py](scripts/objects/fluid.md)
 - [item.py](scripts/objects/item.md)
+- [skill.py](scripts/objects/skill.md)
 - [vehicle.py](scripts/objects/vehicle.md)
 
 ### parser
@@ -74,6 +74,7 @@
 - [fluid_parser.py](scripts/parser/fluid_parser.md)
 - [item_parser.py](scripts/parser/item_parser.md)
 - [literature_parser.py](scripts/parser/literature_parser.md)
+- [metarecipe_parser.py](scripts/parser/metarecipe_parser.md)
 - [movable_definitions_parser.py](scripts/parser/movable_definitions_parser.md)
 - [outfit_parser.py](scripts/parser/outfit_parser.md)
 - [radio_parser.py](scripts/parser/radio_parser.md)
@@ -100,7 +101,6 @@
 - [tiles_batch.py](scripts/tiles/tiles_batch.md)
 - [tiles_codesnip.py](scripts/tiles/tiles_codesnip.md)
 - [tiles_infobox.py](scripts/tiles/tiles_infobox.md)
-- [tiles_navbox.py](scripts/tiles/tiles_navbox.md)
 - [tiles_scrapping.py](scripts/tiles/tiles_scrapping.md)
 - [tiles_stitcher.py](scripts/tiles/tiles_stitcher.md)
 

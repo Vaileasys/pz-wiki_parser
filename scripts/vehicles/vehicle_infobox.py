@@ -6,7 +6,7 @@ from scripts.objects.item import Item
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
 from scripts.core.file_loading import write_file
-from scripts.utils.echo import echo_warning, echo_success
+from scripts.utils import echo
 from scripts.core.constants import VEHICLE_DIR
 from scripts.utils.util import convert_int, link, enumerate_params, check_zero
 
@@ -19,7 +19,7 @@ def get_vehicle():
         query_id = Vehicle.fix_vehicle_id(query_id)
         if query_id in Vehicle.keys():
             return query_id
-        echo_warning(f"No vehicle found for '{query_id}', please try again.")
+        echo.warning(f"No vehicle found for '{query_id}', please try again.")
 
 
 def generate_data(vehicle_id:str):
@@ -43,7 +43,7 @@ def generate_data(vehicle_id:str):
         key_rings_raw = vehicle.get_special_key_ring()
         key_rings = []
         for key_ring in key_rings_raw:
-            key_ring_name = Item(key_ring).get_icon()
+            key_ring_name = Item(key_ring).icon
             key_rings.append(key_ring_name)
 
         parameters = {
@@ -126,17 +126,17 @@ def main(pre_choice:str=None):
 
         if choice == '1':
             automatic_extraction()
-            echo_success(f"Extraction complete, the files can be found in '{ROOT_DIR}'.")
+            echo.success(f"Extraction complete, the files can be found in '{ROOT_DIR}'.")
             break
         elif choice == '2':
             vehicle_id = get_vehicle()
             process_vehicle(vehicle_id)
-            echo_success(f"Extraction complete, the file can be found in '{ROOT_DIR}'.")
+            echo.success(f"Extraction complete, the file can be found in '{ROOT_DIR}'.")
             break
         elif choice == 'q':
             break
         else:
-            echo_warning("Invalid choice.")
+            echo.warning("Invalid choice.")
 
 
 if __name__ == "__main__":

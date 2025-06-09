@@ -18,7 +18,7 @@ import os
 from tqdm import tqdm
 from scripts.parser import item_parser
 from scripts.parser import metarecipe_parser
-from scripts.utils.echo import echo_info, echo_success
+from scripts.utils import echo
 
 def main():
     """
@@ -78,7 +78,7 @@ def main():
             with open(crafting_file_path, "w") as f:
                 f.write(output_content)
         except Exception as e:
-            tqdm.write(f"Error writing file for {item_id}: {e}")
+            echo.error(f"Error writing file for {item_id}: {e}")
 
 
 if __name__ == '__main__':

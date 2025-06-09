@@ -1,4 +1,4 @@
-[Previous Folder](../objects/components.md) | [Previous File](fluid_parser.md) | [Next File](literature_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Previous File](fluid_parser.md) | [Next File](literature_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
 
 # item_parser.py
 
@@ -44,4 +44,4 @@ Initialise parser
 
 
 
-[Previous Folder](../objects/components.md) | [Previous File](fluid_parser.md) | [Next File](literature_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/body_location.md) | [Previous File](fluid_parser.md) | [Next File](literature_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
