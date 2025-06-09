@@ -1139,7 +1139,11 @@ def output_item_article_lists(crafting_recipe_map: dict[str, dict], building_rec
         gather_inputs(rdata, is_building=True, name=rname)
 
     def render_template(tid: str, names: set[str]) -> str:
-        lines = [f"{{{{Crafting/sandbox|item={tid}"] + [f"|{n}" for n in sorted(names)] + ["}}"]
+        if "construction" in tid:
+            header = "Building recipe table"
+        else:
+            header = "Crafting recipe table"
+        lines = [f"{{{{Crafting/sandbox|header={header}|item={tid}"] + [f"|{n}" for n in sorted(names)] + ["}}"]
         return "\n".join(lines)
 
     def write_file(path: str, content: str) -> None:
@@ -1207,11 +1211,11 @@ def output_skill_usage(recipe_data_map: dict[str, dict]) -> None:
 
     # write out templates
     for skill, recipes in crafting_skill_usage.items():
-        lines = ["{{Crafting/sandbox|ID=" + skill + "_crafting"] + [f"|{r}" for r in sorted(recipes)] + ["}}"]
+        lines = ["{{Crafting/sandbox|header=Crafting recipe table|ID=" + skill + "_crafting"] + [f"|{r}" for r in sorted(recipes)] + ["}}"]
         with open(os.path.join("output", "recipes", "skills", f"{skill}_crafting.txt"), "w", encoding="utf-8") as file_handle:
             file_handle.write("\n".join(lines))
     for skill, recipes in building_skill_usage.items():
-        lines = ["{{Building|ID=" + skill + "_building"] + [f"|{r}" for r in sorted(recipes)] + ["}}"]
+        lines = ["{{Building|header=Building recipe table|ID=" + skill + "_building"] + [f"|{r}" for r in sorted(recipes)] + ["}}"]
         with open(os.path.join("output", "recipes", "skills", f"{skill}_building.txt"), "w", encoding="utf-8") as file_handle:
             file_handle.write("\n".join(lines))
 

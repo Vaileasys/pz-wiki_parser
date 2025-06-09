@@ -61,7 +61,7 @@ def main():
         lines = [
             "The following recipes can be learned by researching this item:",
             "",
-            f"{{{{Crafting/sandbox|id={item_id}_research"
+            f"{{{{Crafting/sandbox|header=Research recipes|id={item_id}_research"
         ]
         for recipe in expanded_recipes:
             lines.append(f"|{recipe}")
