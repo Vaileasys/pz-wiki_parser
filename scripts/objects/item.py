@@ -39,13 +39,13 @@ class Item:
     _icon_cache_files = None
     _burn_data = None
 
+    # Define property defaults
     _property_defaults = {
         "Type": "Normal",
         "DisplayCategory": "Unknown",
         "AlwaysWelcomeGift": False,
         "Tags": [],
         "IconsForTexture": [],
-        "IconsFortexture": [],
         "SwingAnim": "Rifle",
         "IdleAnim": "Idle",
         "RunAnim": "Run",
@@ -305,6 +305,11 @@ class Item:
         "ShoutMultiplier": 1.0,
     }
 
+    # Convert to lowercase
+    _property_defaults = {
+        k.lower(): v for k, v in _property_defaults.items()
+    }
+
     def __new__(cls, item_id: str):
         """
         Return an existing Item instance if one already exists for the given ID.
@@ -359,11 +364,33 @@ class Item:
     def __repr__(self):
         """Return a string representation of the Item showing name, ID, type, and source path."""
         return (f'<Item {self._item_id}>')
+    
+    @staticmethod
+    def _lower_keys(data):
+        """
+        Recursively converts all dictionary keys to lowercase.
+
+        Args:
+            data (dict | list | any): Input data structure to normalise.
+
+        Returns:
+            dict | list | any: The same structure with all dict keys lowercased.
+        """
+        if isinstance(data, dict):
+            return {k.lower(): Item._lower_keys(v) for k, v in data.items()}
+        elif isinstance(data, list):
+            return [Item._lower_keys(i) for i in data]
+        return data
 
     @classmethod
     def _load_items(cls):
-        """Load item data only once and store in class-level cache."""
-        cls._items = script_parser.extract_script_data("item")
+        """
+        Loads and normalises item script data into the class-level cache.
+
+        All dictionary keys are lowercased to ensure consistent access.
+        """
+        raw_data = script_parser.extract_script_data("item")
+        cls._items = {k: cls._lower_keys(v) for k, v in raw_data.items()}
 
     @classmethod
     def fix_item_id(cls, item_id: str) -> str:
@@ -473,7 +500,7 @@ class Item:
         Returns:
             any: The value from data or the provided default.
         """
-        return self.data.get(key, default)
+        return self.data.get(key.lower(), default)
     
     ## ------------------------- Private Methods ------------------------- ##
 
@@ -770,6 +797,7 @@ class Item:
         Returns:
             any: The value from data or the determined default.
         """
+        key = key.lower()
         default = self._property_defaults.get(key) if default is not None else default
         return self.data.get(key, default)
 
@@ -1003,7 +1031,7 @@ class Item:
     @property
     def raw_icon(self) -> str|None: return self.get_default("Icon")
     @property
-    def icons_for_texture(self) -> list: return self.get_default("IconsForTexture", self.get_default("IconsFortexture"))
+    def icons_for_texture(self) -> list: return self.get_default("IconsForTexture")
     @property
     def static_model(self) -> str|None: return self.get_default("StaticModel")
     @property
