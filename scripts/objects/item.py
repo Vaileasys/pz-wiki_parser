@@ -366,21 +366,17 @@ class Item:
         return (f'<Item {self._item_id}>')
     
     @staticmethod
-    def _lower_keys(data):
+    def _lower_keys(data: dict) -> dict:
         """
-        Recursively converts all dictionary keys to lowercase.
+        Converts the keys of a dictionary to lowercase.
 
         Args:
-            data (dict | list | any): Input data structure to normalise.
+            data (dict): Dictionary to normalise.
 
         Returns:
-            dict | list | any: The same structure with all dict keys lowercased.
+            dict: Dictionary with all top-level keys lowercased.
         """
-        if isinstance(data, dict):
-            return {k.lower(): Item._lower_keys(v) for k, v in data.items()}
-        elif isinstance(data, list):
-            return [Item._lower_keys(i) for i in data]
-        return data
+        return {k.lower(): v for k, v in data.items()} if isinstance(data, dict) else data
 
     @classmethod
     def _load_items(cls):
@@ -798,7 +794,8 @@ class Item:
             any: The value from data or the determined default.
         """
         key = key.lower()
-        default = self._property_defaults.get(key) if default is not None else default
+        if default is None:
+            default = self._property_defaults.get(key)
         return self.data.get(key, default)
 
     def get_component(self, key: str):
@@ -930,7 +927,7 @@ class Item:
         Returns:
             bool: True if the tag is present, False otherwise.
         """
-        return tag in self.tags
+        return bool(self.tags) and tag in self.tags
     
     ## ------------------------- Properties ------------------------- ##
 

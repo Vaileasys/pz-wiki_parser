@@ -241,7 +241,7 @@ def main():
     evolvedrecipe_data = evolvedrecipe_parser.get_evolvedrecipe_data()
     recipes_data = legacy_recipe_parser.get_recipe_data()["recipes"]
     table_map, column_headings = table_helper.get_table_data(TABLE_PATH)
-    parse_foraging()
+    #parse_foraging()
 
     cooking_recipe_data = {}
     i = 0
@@ -280,18 +280,19 @@ def main():
 
         all_food_data = {"nutrition": []}
 
+        # FIXME: parse_foraging() is broken
         # Process food items
-        for item_id, item_data in food_items.items():
-            pbar.set_postfix_str(f'Generating: Food ({item_id[:30]})')
-            table_type, item_data = find_table_type(item_id, item_data)
-            food_data = generate_data(item_id, item_data)
-
-            if table_type not in all_food_data:
-                all_food_data[table_type] = []
-            
-            all_food_data[table_type].append(food_data)
-
-            pbar.update(1)
+#        for item_id, item_data in food_items.items():
+#            pbar.set_postfix_str(f'Generating: Food ({item_id[:30]})')
+#            table_type, item_data = find_table_type(item_id, item_data)
+#            food_data = generate_data(item_id, item_data)
+#
+#            if table_type not in all_food_data:
+#                all_food_data[table_type] = []
+#            
+#            all_food_data[table_type].append(food_data)
+#
+#            pbar.update(1)
 
         # Process nutrition items
         for item_id, item_data in nutrition_items.items():

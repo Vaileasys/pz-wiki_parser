@@ -20,22 +20,22 @@ def process_fluid(fluid_id):
     fluid_content = {
         "name": fluid.wiki_link,
         "color": fluid.rgb,
-        "hunger_change": check_zero(fluid.hunger_change, default='-'),
-        "thirst_change": check_zero(fluid.thirst_change, default='-'),
+        "hunger": check_zero(fluid.hunger_change, default='-'),
+        "thirst": check_zero(fluid.thirst_change, default='-'),
         "calories": check_zero(fluid.calories, default='-'),
         "carbohydrates": check_zero(fluid.carbohydrates, default='-'),
         "lipids": check_zero(fluid.lipids, default='-'),
         "proteins": check_zero(fluid.proteins, default='-'),
         "poison": Translate.get("Fluid_Poison_" + fluid.poison.max_effect) if fluid.poison.max_effect != "None" else "-",
-        "alcohol": check_zero(fluid.alcohol),
-        "fatigue_change": check_zero(fluid.fatigue_change),
-        "stress_change": check_zero(fluid.stress_change),
-        "unhappy_change": check_zero(fluid.unhappy_change),
+        "alcohol": check_zero(fluid.alcohol, default='-'),
+        "fatigue": check_zero(fluid.fatigue_change, default='-'),
+        "stress": check_zero(fluid.stress_change, default='-'),
+        "unhappiness": check_zero(fluid.unhappy_change, default='-'),
         # No fluids with the following data yet
-        #"flu_reduction": check_zero(fluid.flu_reduction),
-        #"pain_reduction": check_zero(fluid.pain_reduction),
-        #"endurance_change": check_zero(fluid.endurance_change),
-        #"food_sickness_reduction": check_zero(fluid.food_sickness_reduction),
+        #"flu": check_zero(fluid.flu_reduction),
+        #"pain": check_zero(fluid.pain_reduction),
+        #"endurance": check_zero(fluid.endurance_change),
+        #"food_sickness": check_zero(fluid.food_sickness_reduction),
         "fluid_id": fluid_id
     }
 

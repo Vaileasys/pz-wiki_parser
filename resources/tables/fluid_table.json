@@ -14,7 +14,7 @@
             "fatigue",
             "stress",
             "unhappiness",
-            "item_id"
+            "fluid_id"
         ],
         "fluid": [
             "name",
@@ -30,7 +30,7 @@
             "fatigue",
             "stress",
             "unhappiness",
-            "item_id"
+            "fluid_id"
         ]
     },
     "headings": {
