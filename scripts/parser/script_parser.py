@@ -286,8 +286,8 @@ def split_dict(value: list[str], character: str) -> dict:
         entry = entry.strip()
         if not entry:
             continue
-        if ':' in entry:
-            key, val = entry.split(':', 1)
+        if character in entry:
+            key, val = entry.split(character, 1)
             key = normalise(key)
             if key == "":
                 continue
@@ -762,7 +762,7 @@ def is_blacklisted(filepath: str, script_type: str) -> bool:
 
 
 def check_cache_version(script_type: str):
-    cached_data, cached_version = load_cache(f"parsed_{script_type}_data.json", f"{script_type} data", get_version=True)
+    cached_data, cached_version = load_cache(f"parsed_{script_type}_data.json", f"{script_type}", get_version=True)
     if cached_version == Version.get():
         return cached_data
     return {}
