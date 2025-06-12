@@ -270,7 +270,7 @@ def generate_tags_dict():
             for item_id in Item.all():
                 item = Item(item_id)
                 pbar.set_postfix_str(f'Processing: {item.type} ({item_id[:30]})')
-                if 'Tags' in item.data:
+                if item.tags:
                     name = item.name
                     page = item.page
                     icon = item.icon
