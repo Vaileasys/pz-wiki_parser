@@ -273,7 +273,7 @@ def generate_tags_dict():
                 if item.tags:
                     name = item.name
                     page = item.page
-                    icon = item.icon
+                    icon = item.get_icon(format=False, all_icons=False)
                     tags = item.tags
                     for tag in tags:
                         if tag not in tags_dict:
