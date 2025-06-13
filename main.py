@@ -64,8 +64,16 @@ menu_structure = {
             '1': {'module': 'lists.item_list', 'name': 'Item list', 'description': 'Returns all items in a list organised by DisplayCategory.'},
             '2': {'module': 'lists.weapon_list', 'name': 'Weapon list', 'description': 'Return all weapons in a list with stats organised by their skill.'},
             '3': {'module': 'lists.clothing_list', 'name': 'Clothing list', 'description': 'Return all clothing in a list with stats organised by body location.'},
-            '4': {'module': 'lists.food_list', 'name': 'Food list', 'description': 'Generate food and nutrition pages.'},
-            '5': {'module': 'scripts.parser.outfit_parser', 'name': 'Outfit list', 'description': 'Parse outfit xml files.'},
+            '4': {'module': 'lists.container_list', 'name': 'Container list', 'description': 'Generate container tables.'},
+            '5': {'module': 'lists.fluid_container_list', 'name': 'Fluid container list', 'description': 'Generate fluid container tables.'},
+            '6': {'module': 'lists.food_list', 'name': 'Food list', 'description': 'Generate food and nutrition pages.'},
+            '7': {'module': 'lists.fuel_list', 'name': 'Fuel list', 'description': 'Generate fuel tables.'},
+            '8': {'module': 'lists.literature_list', 'name': 'Literature list', 'description': 'Generate literature tables.'},
+            '9': {'module': 'lists.recmedia_list', 'name': 'Recorded media list', 'description': 'Generate recorded media tables.'},
+            '10': {'module': 'lists.body_locations_list', 'name': 'BodyLocation list', 'description': 'Generate a BloodLocation table.'},
+            '11': {'module': 'lists.body_parts_list', 'name': 'BloodLocation/Body part list', 'description': 'Generate a BloodLocation/body part table.'},
+            '12': {'module': 'lists.food_list', 'name': 'Food list', 'description': 'Generate food and nutrition pages.'},
+            '13': {'module': 'scripts.parser.outfit_parser', 'name': 'Outfit list', 'description': 'Parse outfit xml files.'},
         },
     },
     '7': {
@@ -215,6 +223,10 @@ def main():
     # Add the /scripts/ directory to the system path
     scripts_path = os.path.join(os.path.dirname(__file__), 'scripts')
     sys.path.append(scripts_path)
+
+    # Allows setting the language externally
+    if len(sys.argv) > 1:
+        Language.set(sys.argv[1])
 
     check_first_run()
     navigate_menu(menu_structure, is_root=True)
