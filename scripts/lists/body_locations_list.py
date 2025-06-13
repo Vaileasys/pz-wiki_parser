@@ -1,109 +1,103 @@
-import os
-import re
+"""
+Generates a formatted wiki table listing Project Zomboid body locations, their exclusive relationships,
+hidden locations, and associated wearable items.
+
+This script uses parsed `BodyLocation` and `Item` data to build a wiki-compatible table and writes the
+output to a text file.
+"""
+
 from scripts.core.language import Language
-from scripts.utils import echo
+from scripts.objects.body_location import BodyLocation
+from scripts.objects.item import Item
+from scripts.utils.util import link
+from scripts.core.file_loading import write_file
 
-# Regex patterns for function calls
-set_exclusive_pattern = re.compile(r'setExclusive\s*\(\s*"([^"]+)"\s*,\s*"([^"]+)"\s*\)')
-get_location_pattern  = re.compile(r'getOrCreateLocation\s*\(\s*"([^"]+)"\s*\)')
-set_multi_pattern     = re.compile(r'setMultiItem\s*\(\s*"([^"]+)"\s*,\s*(true|false)\s*\)', re.IGNORECASE)
-set_hide_model_pattern = re.compile(r'setHideModel\s*\(\s*"([^"]+)"\s*,\s*"([^"]+)"\s*\)')
+OUTPUT_FILE = "bodylocations_exclusives.txt"
 
-LUA_FILE_PATH = os.path.join("resources", "lua", "BodyLocations.lua")
-output_file_path = os.path.join("output", "{language_code}", "bodylocations_exclusives.txt")
+def build_table(data: dict):
+    """
+    Builds a MediaWiki-formatted table from processed body location data.
 
+    Args:
+        data (dict): Dictionary of body location metadata including exclusive and hidden locations, and items.
 
-# Parses BodyLocations.lua to get body locations and exclusive locations
-def parse_bodylocations(file_path):
-    exclusives_dict = {}
-    locations = set()
-    multi_locs = set()
-    hide_locs = {}
-
-    # Helper to record exclusives in a dictionary of sets
-    def add_exclusive(a, b):
-        # Repeat for 'a' and 'b' to add them both as exclusives to their dict
-        exclusives_dict.setdefault(a, set()).add(b)
-        exclusives_dict.setdefault(b, set()).add(a)
-
-    # Helper to record hidden models in a dictionary of lists
-    def add_hide_model(a, b):
-        hide_locs.setdefault(a, set()).add(b)
-
-    with open(file_path, 'r', encoding='utf-8') as f:
-        for line in f:
-            # setExclusive("A","B")
-            match_excl = set_exclusive_pattern.search(line)
-            if match_excl:
-                locA, locB = match_excl.groups()
-                add_exclusive(locA, locB)
-                continue
-
-            # getOrCreateLocation("X")
-            match_loc = get_location_pattern.search(line)
-            if match_loc:
-                loc = match_loc.group(1)
-                locations.add(loc)
-                continue
-
-            # setMultiItem("Y", true/false)
-            match_multi = set_multi_pattern.search(line)
-            if match_multi:
-                locName, boolVal = match_multi.groups()
-                if boolVal.lower() == 'true':
-                    multi_locs.add(locName)
-                continue
-
-            # setHideModel("A", "B")
-            match_hide = set_hide_model_pattern.search(line)
-            if match_hide:
-                locA, locB = match_hide.groups()
-                add_hide_model(locA, locB)
-                continue
-
-    return exclusives_dict, locations, multi_locs, hide_locs
-
-
-# Builds the wiki table and writes to a txt file
-def build_table(lua_file_path, output_file_path):
-    exclusives_dict, locations, multi_locs, hide_locs = parse_bodylocations(lua_file_path)
-
-    wikilines = [
+    Returns:
+        list[str]: Lines of the MediaWiki table content.
+    """
+    content = [
         '{| class="wikitable theme-blue"',
-        '! Location !! Exclusive locations !! Hidden locations'
+        '! Location',
+        '! Exclusive locations',
+        '! Hidden locations',
+        '! Items'
     ]
 
-    # Filter out any multi locations from 'locations' (these are "Bandage", "Wound", "ZedDmg")
-    locations = sorted(loc for loc in locations if loc not in multi_locs)
+    for k, v in data.items():
+        content.extend((
+            f'|- id="{v.get("location")}"',
+            f'| {v.get("location")}',
+            f'| {v.get("exclusive")}',
+            f'| {v.get("hidden")}',
+            f'| {v.get("items")}'
+        ))
+    
+    content.append('|}')
 
-    # Builds the wiki table and stores each line in the 'wikilines' list
-    for location in locations:
-        # Filter out any multi locations from 'exclusives' for a 'location'
-        exclusives = sorted(excls for excls in exclusives_dict.get(location, []) if excls not in multi_locs)
-        hidden_locs = sorted(hide_locs.get(location, []))
+    return content
 
-        exclusives_str = ", ".join(f"[[#{excl}|{excl}]]" for excl in exclusives)
-        hidden_locs_str = ", ".join(f"[[#{hidden}|{hidden}]]" for hidden in hidden_locs)
 
-        wikilines.append(f'|- id="{location}"')
-        wikilines.append(f'| {location} || {exclusives_str} || {hidden_locs_str}')
+def generate_data():
+    """
+    Gathers all body location data and formats it for table generation.
 
-    wikilines.append('|}')
+    Returns:
+        dict: Mapping of location names to their display values including exclusives, hidden locations, and item icons.
+    """
+    location_data = {}
 
-    # Build the table, joining each line into a single string
-    table_str = '\n'.join(wikilines)
+    for loc_id in BodyLocation.all():
+        loc = BodyLocation(loc_id)
 
-    os.makedirs(os.path.dirname(output_file_path), exist_ok=True)
-    with open(output_file_path, 'w', encoding='utf-8') as file:
-        file.write(table_str)
+        location = loc.name
+
+        exclusive = []
+        excl_locs = loc.exclusive
+        for excl_loc in excl_locs:
+            exclusive.append(link(f"#{excl_loc.name}", excl_loc.name))
+        exclusive = " &bull; ".join(exclusive) if exclusive else "-"
+        
+        hidden = []
+        hidden_locs = loc.hide_model
+        for hidden_loc in hidden_locs:
+            hidden.append(link(f"#{hidden_loc.name}", hidden_loc.name))
+        hidden = " &bull; ".join(hidden) if hidden else "-"
+
+        items = []
+        item_ids = loc.items
+        for item_id in item_ids:
+            item = Item(item_id)
+            if item.icon not in items:
+                items.append(item.icon)
+        items = "".join(items) if items else "-"
+        
+        location_data[location] = {
+            "location": location,
+            "exclusive": exclusive,
+            "hidden": hidden,
+            "items": items,
+        }
+
+    return dict(sorted(location_data.items()))
 
 
 def main():
-    global output_file_path
-    language_code = Language.get()
-    output_file_path = output_file_path.format(language_code=language_code)
-    build_table(LUA_FILE_PATH, output_file_path)
-    echo.success(f"Output saved to '{output_file_path}'")
+    """
+    Entry point. Loads language data, generates body location table content, and writes it to a file.
+    """
+    Language.get()
+    location_data = generate_data()
+    content = build_table(location_data)
+    write_file(content, rel_path=OUTPUT_FILE)
 
 
 if __name__ == "__main__":
