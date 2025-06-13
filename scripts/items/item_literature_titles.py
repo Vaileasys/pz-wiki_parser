@@ -1,8 +1,8 @@
 from pathlib import Path
 from scripts.parser import literature_parser
 from scripts.core.language import Language, Translate
-from scripts.parser import item_parser
-from scripts.utils import utility
+from scripts.objects.item import Item
+from scripts.objects.craft_recipe import CraftRecipe
 
 # TODO: parse this dynamically from SpecialLootSpawns.lua
 BOOK = {
@@ -140,7 +140,7 @@ GENERIC_LITERATURE = {
 
 
 # Location litearture, e.g. flier & brochure
-def process_location_literature(item_id, item_data, on_create):
+def process_location_literature(item: Item, on_create):
     literature_data = literature_parser.get_literature_data()
     literature_data = literature_data["PrintMediaDefinitions"]
     business_titles = []
@@ -170,10 +170,10 @@ def process_location_literature(item_id, item_data, on_create):
                 "coord2": f"{x2}x{y2}"
             })
 
-    write_to_file(item_id, business_titles, "flier")
+    write_to_file(item.item_id, business_titles, "flier")
 
 
-def process_generic(item_id, item_data, on_create):
+def process_generic(item: Item, on_create):
     literature_data = literature_parser.get_literature_data()
     literature_titles = []
 
@@ -190,10 +190,10 @@ def process_generic(item_id, item_data, on_create):
         for i, title in enumerate(literature_titles):
             literature_titles[i] = Translate.get(title, translation_str)
 
-        write_to_file(item_id, literature_titles, "generic")
+        write_to_file(item.item_id, literature_titles, "generic")
 
 
-def process_special(item_id, item_data, on_create):
+def process_special(item: Item, on_create):
     """Process special items"""
     literature_data = literature_parser.get_literature_data()
     special_titles = []
@@ -203,17 +203,17 @@ def process_special(item_id, item_data, on_create):
         if isinstance(title_type, list):
             for id in title_type:
                 special_titles = literature_data["SpecialLootSpawns"][id]
-                write_to_file(item_id, special_titles, id.lower())
+                write_to_file(item.item_id, special_titles, id.lower())
         else:
             special_titles = literature_data["SpecialLootSpawns"][title_type]
             
             if "Photo" in on_create:
                 title_type = "photo"
 
-            write_to_file(item_id, special_titles, title_type.lower())
+            write_to_file(item.item_id, special_titles, title_type.lower())
 
 
-def process_schematic(item_id, item_data, on_create):
+def process_schematic(item: Item, on_create):
     """Process schematic data"""
 
     literature_data = literature_parser.get_literature_data()
@@ -225,7 +225,7 @@ def process_schematic(item_id, item_data, on_create):
         schematic_recipes = literature_data["SpecialLootSpawns"][literature]
 
         for i, title in enumerate(schematic_recipes):
-            schematic_recipes[i] = utility.get_recipe(title)
+            schematic_recipes[i] = CraftRecipe(title).wiki_link
         
         multiple_chance = SCHEMATIC[on_create][1]
         schematic_recipes.append(multiple_chance)
@@ -235,10 +235,10 @@ def process_schematic(item_id, item_data, on_create):
         else:
             literature_type = "schematic"
 
-        write_to_file(item_id, schematic_recipes, literature_type)
+        write_to_file(item.item_id, schematic_recipes, literature_type)
 
 
-def process_comic(item_id, item_data, on_create):
+def process_comic(item: Item, on_create):
     """Process comic data"""
     literature_data = literature_parser.get_literature_data()
     comic_titles = []
@@ -258,15 +258,14 @@ def process_comic(item_id, item_data, on_create):
 
         comic_titles = updated_values
 
-    write_to_file(item_id, comic_titles, "comic")
+    write_to_file(item.item_id, comic_titles, "comic")
 
 
-def process_magazine(item_id, item_data, on_create):
+def process_magazine(item: Item, on_create):
     """Process magazine data"""
     literature_data = literature_parser.get_literature_data()
     magazine_titles = {}
-    item_tags = item_data.get("Tags", "")
-                
+    
     if on_create in ["OnCreateMagazine3"]:
         subjects = literature_data["SpecialLootSpawns"][MAGAZINE[on_create]]
         for subject in subjects:
@@ -286,7 +285,7 @@ def process_magazine(item_id, item_data, on_create):
             nested_data = literature_data["SpecialLootSpawns"]["MagazineDetails"].get(title, {"firstYear": "1970"})
 
             # Add firstYear if "New" is in tags
-            if "New" in item_tags:
+            if item.has_tag("New"):
                 nested_data["firstYear"] = "1993"
 
             translated_title = Translate.get(title, "MagazineTitle")
@@ -294,10 +293,10 @@ def process_magazine(item_id, item_data, on_create):
 
         magazine_titles[key] = updated_values
 
-    write_to_file(item_id, magazine_titles, "magazine")
+    write_to_file(item.item_id, magazine_titles, "magazine")
 
 
-def process_book(item_id, item_data, on_create):
+def process_book(item: Item, on_create):
     """Process book data"""
     literature_data = literature_parser.get_literature_data()
     book_titles = {}
@@ -325,16 +324,10 @@ def process_book(item_id, item_data, on_create):
     hardcover_tags = ["Hardcover", "HollowBook", "FancyBook"]
     paperback_tags = ["Softcover"]
 
-    item_tags = item_data.get("Tags", "")
-
-    # Convert str to list, so it can be processed properly
-    if isinstance(item_tags, str):
-        item_tags = [item_tags]
-
-    for tag in item_tags:
-        if tag in hardcover_tags or "Book" in item_id:
+    for tag in item.tags:
+        if tag in hardcover_tags or "Book" in item.item_id:
             hardcover = True
-        if tag in paperback_tags or "Paperback" in item_id:
+        if tag in paperback_tags or "Paperback" in item.item_id:
             paperback = True
     
     # Filter book titles based on cover type
@@ -349,7 +342,7 @@ def process_book(item_id, item_data, on_create):
 
         book_titles[subject] = filtered_titles
 
-        write_to_file(item_id, book_titles, "book")
+        write_to_file(item.item_id, book_titles, "book")
 
 
 def write_to_file(item_id, literature_titles, literature_type):
@@ -478,7 +471,7 @@ def write_to_file(item_id, literature_titles, literature_type):
             file.write('</div>')
 
         elif literature_type == "flier":
-            item_name = utility.get_name(item_id, utility.get_item_data_from_id(item_id))
+            item_name = Item(item_id).name
             file.write('{| class="wikitable theme-red mw-collapsible mw-collapsed sortable"\n')
             file.write(f'|+ style="min-width: 300px;" | List of {item_name.lower()} titles\n')
             file.write('! Business !! Center !! Coord1 !! Coord2\n')
@@ -512,33 +505,32 @@ def combine_txt_files(type):
 
 
 def main():
-    for item_id, item_data in item_parser.get_item_data().items():
-        if "OnCreate" not in item_data:
+    for item_id in Item.all():
+        item = Item(item_id)
+        if "OnCreate" not in item.data:
             continue
 
         # Remove "SpecialLootSpawns." prefix
-        on_create = item_data["OnCreate"]
-        #FIXME: we currently skip if it's a list. We need to incorporate this into the script.
-        if isinstance(on_create, list):
-            print(f"Skipping: '{item_id}' as OnCreate is a list.")
-            continue
+        on_create = item.on_create
+
         if not on_create.startswith("SpecialLootSpawns."):
             continue
+
         on_create = on_create.removeprefix("SpecialLootSpawns.")
         if on_create in BOOK:
-            process_book(item_id, item_data, on_create)
+            process_book(item, on_create)
         elif on_create in MAGAZINE:
-            process_magazine(item_id, item_data, on_create)
+            process_magazine(item, on_create)
         elif on_create in ["OnCreateComicBookRetail", "OnCreateComicBook"]:
-            process_comic(item_id, item_data, on_create)
+            process_comic(item, on_create)
         elif on_create in SCHEMATIC:
-            process_schematic(item_id, item_data, on_create)
+            process_schematic(item, on_create)
         elif on_create in SPECIAL:
-            process_special(item_id, item_data, on_create)
+            process_special(item, on_create)
         elif on_create in LOCATION_LITERATURE:
-            process_location_literature(item_id, item_data, on_create)
+            process_location_literature(item, on_create)
         elif on_create in GENERIC_LITERATURE:
-            process_generic(item_id, item_data, on_create)
+            process_generic(item, on_create)
 
     # 'types' that will be combined into a single file, by 'type'.
     file_types = ["book", "magazine", "comic", "schematic", "generic"]
