@@ -1,37 +1,35 @@
 from tqdm import tqdm
 from scripts.core.language import Language, Translate
-from scripts.utils import utility, table_helper, echo
-from scripts.utils.util import link, format_positive
-from scripts.parser import item_parser, fixing_parser
-from scripts.recipes import legacy_recipe_parser
+from scripts.utils import table_helper, echo
+from scripts.utils.util import format_positive, convert_int
+from scripts.objects.item import Item
+from scripts.objects.fixing import Fixing
+from scripts.objects.craft_recipe import CraftRecipe
 from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
 
 TABLE_PATH = f"{RESOURCE_DIR}/tables/weapon_table.json"
 
 box_types = {}
-all_items = {}
 table_map = {}
 table_type_map = {}
+all_item_data = {} # Cache for each item's `TableType`
 
 def check_fixing(item_id):
-    """ Check if it can be fixed """
-    module, item_name = item_id.split('.')
-    parsed_fixing_data = fixing_parser.get_fixing_data(True)
-    for fixing, fixing_data in parsed_fixing_data[module].items():
-        if isinstance(fixing_data, dict) and 'Require' in fixing_data:
-            if item_name in fixing_data['Require']:
-                return f'[[File:UI Tick.png|link=Condition{Language.get_subpage()}#<<repairing>>|<<repairable>>]]'
-    return f'[[File:UI Cross.png|link=Condition{Language.get_subpage()}#<<repairing>>|<<not_repairable>>]]'
+    """Check if a given item can be fixed"""
+    fixing = Fixing(item_id)
+    if fixing.valid:
+        return f'[[File:UI Tick.png|link=Condition{Language.get_subpage()}#<<repairing>>|<<repairable>>]]'
+    return f'[[File:UI Cross.png|link=Condition{Language.get_subpage()}#<<repairing>>|<<not_repairable>>]]'             
+    
 
-
-def generate_ammo_data(item_id, item_data):
-    table_type = item_data.get("TableType")
+def generate_ammo_data(item_id: str, table_type: str):
     box_data = box_types.get(item_id, {})
     round_id = None
     box_id = None
     carton_id = None
     magazine = None
     weapons = []
+    item_data:dict = all_item_data.get(item_id)
 
     if table_type == "carton":
         # Get carton
@@ -73,16 +71,15 @@ def generate_ammo_data(item_id, item_data):
                 carton_q = value.get("quantity") * box_q
                 break
     
-    
-    for key, value in all_items.items():
+    for n_item_id in Item.all():
         # Get firearms
-        if value.get("TableType") in table_type_map.get("firearm") and value.get("AmmoType") == round_id:
-            weapons.append(key)
+        if all_item_data.get(n_item_id, {}).get("TableType") in table_type_map.get("firearm") and Item(n_item_id).ammo_type == round_id:
+            weapons.append(n_item_id)
             continue
         
         # Get magazine
-        if value.get("TableType") == "magazine" and value.get("AmmoType") == round_id:
-            magazine = key
+        if all_item_data.get(n_item_id, {}).get("TableType") == "magazine" and Item(n_item_id).ammo_type == round_id:
+            magazine = n_item_id
 
     # Add data to dict
     if carton_id and carton_id != item_id:
@@ -102,7 +99,7 @@ def generate_ammo_data(item_id, item_data):
     return item_data
 
 
-def get_function(item_id, item_data):
+def get_function(item: Item):
     strings = {
         "reload_time": {
             "value": "{desc1} reload time by {var1}.",
@@ -150,7 +147,7 @@ def get_function(item_id, item_data):
         if not isinstance(entry, dict) or "value" not in entry:
             continue
 
-        template = entry["value"]
+        template:str = entry["value"]
         var_names = entry.get("var", [])
         desc_names = entry.get("desc", [])
 
@@ -158,17 +155,17 @@ def get_function(item_id, item_data):
         desc_values = []
 
         for var in var_names:
-            value = item_data.get(var)
+            value = item.get(var)
             if value is None:
                 break
             var_values.append(value)
         else:
             for desc_var in desc_names:
                 try:
-                    val = float(item_data.get(desc_var, 0))
+                    val = float(item.get(desc_var))
                 except (TypeError, ValueError):
                     val = 0
-                desc = "increases" if val > 0 else "decreases"
+                desc:str = "increases" if val > 0 else "decreases"
                 desc_values.append(desc)
 
             format_map = {f"var{i+1}": val for i, val in enumerate(var_values)}
@@ -183,9 +180,9 @@ def get_function(item_id, item_data):
     return "style=\"text-align:left;\" | "+ "<br>".join(string_list) if string_list else "-"
 
 
-def generate_data(item_id, item_data):
+def generate_data(item_id, table_type):
+    item = Item(item_id)
     notes = None
-    table_type = item_data.get("TableType")
     for key, value in table_type_map.items():
         if table_type in value:
             columns = table_map.get(key)
@@ -193,87 +190,83 @@ def generate_data(item_id, item_data):
         else:
             columns = table_map.get("default")
 
-    item_name = utility.get_name(item_id, item_data)
-
     if table_type in ("round", "box", "carton"):
-        item_data = generate_ammo_data(item_id, item_data)
+        item_data = generate_ammo_data(item_id, table_type)
 
-    item = {}
+    item_dict = {}
 
-    item["icon"] = item_data.get("IconFormatted") if "icon" in columns else None
-    item["name"] = link(utility.get_page(item_id, item_name), item_name) if "name" in columns else None
-    item["weight"] = item_data.get("Weight", "1") if "weight" in columns else None
+    item_dict["icon"] = item.icon if "icon" in columns else None
+    item_dict["name"] = item.wiki_link if "name" in columns else None
+    item_dict["weight"] = convert_int(item.weight) if "weight" in columns else None
     if "equipped" in columns:
         equipped = "<<1h>>"
-        if item_data.get("RequiresEquippedBothHands", "false").lower() == "true":
+        if item.requires_equipped_both_hands:
             equipped = "<<2h>>"
-        elif item_data.get("TwoHandWeapon", "false").lower() == "true":
+        elif item.two_hand_weapon:
             equipped = "{{Tooltip|<<2h>>*|<<limited_impact_desc>>}}"
             notes = "<nowiki>*</nowiki><<limited_impact_desc>>"
-        if item_data.get("CloseKillMove") == "Jaw_Stab":
+        if item.close_kill_move == "Jaw_Stab":
             equipped = "{{Tooltip|<<1h>>*|<<jaw_stab_desc>>}}"
             notes = "<nowiki>*</nowiki><<jaw_stab_desc>>"
-        item["equipped"] = Translate.get_wiki(equipped)
+        item_dict["equipped"] = Translate.get_wiki(equipped)
     if "ammo" in columns:
-        item["ammo"] = utility.get_icon(item_data.get("AmmoType"), True, True, True) if item_data.get("AmmoType") is not None else "-"
-    item["capacity"] = item_data.get('MaxAmmo', item_data.get('ClipSize', '-')) if "capacity" in columns else None
-    item["min_damage"] = item_data.get('MinDamage', '-') if "min_damage" in columns else None
-    item["max_damage"] = item_data.get('MaxDamage', '-') if "max_damage" in columns else None
-    item["door_damage"] = item_data.get('DoorDamage', '-') if "door_damage" in columns else None
-    item["tree_damage"] = item_data.get('TreeDamage', '-') if "tree_damage" in columns else None
-    item["min_range"] = item_data.get('MinRange', '-') if "min_range" in columns else None
-    item["max_range"] = item_data.get('MaxRange', '-') if "max_range" in columns else None
-    item["attack_speed"] = item_data.get('BaseSpeed', '1') if "attack_speed" in columns else None
+        item_dict["ammo"] = Item(item.ammo_type).icon if item.ammo_type else "-"
+    item_dict["capacity"] = (item.max_ammo or item.clip_size) if "capacity" in columns else None
+    item_dict["min_damage"] = (convert_int(item.min_damage) or '-') if "min_damage" in columns else None
+    item_dict["max_damage"] = (convert_int(item.max_damage) or '-') if "max_damage" in columns else None
+    item_dict["door_damage"] = (item.door_damage or '-') if "door_damage" in columns else None
+    item_dict["tree_damage"] = (item.tree_damage or '-') if "tree_damage" in columns else None
+    item_dict["min_range"] = (convert_int(item.min_range) or '-') if "min_range" in columns else None
+    item_dict["max_range"] = (convert_int(item.max_range) or '-') if "max_range" in columns else None
+    item_dict["attack_speed"] = convert_int(item.base_speed) if "attack_speed" in columns else None
     if "endurance_mod" in columns:
-        endurance_mod = format_positive(float(item_data.get('EnduranceMod', 1)) - 1)
-        item["endurance_mod"] = "-" if endurance_mod == "0" else endurance_mod
-    item["hit_chance"] = item_data.get('HitChance', '-') + '%' if "hit_chance" in columns else None
-    item["hit_chance_mod"] = '+' + item_data.get('AimingPerkHitChanceModifier', '-') + '%' if "hit_chance_mod" in columns else None
+        endurance_mod = format_positive(item.endurance_mod - 1.0)
+        item_dict["endurance_mod"] = "-" if endurance_mod == "0" else endurance_mod
+    item_dict["hit_chance"] = (str(convert_int(item.hit_chance)) or '-') + '%' if "hit_chance" in columns else None
+    item_dict["hit_chance_mod"] = '+' + str(convert_int(item.aiming_perk_hit_chance_modifier)) + '%' if "hit_chance_mod" in columns else None
     if "crit_chance" in columns:
-        item["crit_chance"] = item_data.get("CriticalChance") + "%" if item_data.get("CriticalChance") is not None else "-"
+        item_dict["crit_chance"] = str(convert_int(item.critical_chance)) + "%" if item.critical_chance else "-"
     if "crit_multiplier" in columns:
-        item["crit_multiplier"] = item_data.get("CritDmgMultiplier") + "×" if item_data.get("CritDmgMultiplier") is not None else "-"
+        item_dict["crit_multiplier"] = str(convert_int(item.crit_dmg_multiplier)) + "×" if item.crit_dmg_multiplier else "-"
     if "crit_chance_mod" in columns:
-        item["crit_chance_mod"] = "+" + item_data.get("AimingPerkCritModifier") + "%" if item_data.get("AimingPerkCritModifier") is not None else "-"
-    if "sound_radius" in columns:
-        sound_radius = item_data.get('SoundRadius', item_data.get('NoiseRange'))
-        sound_radius_int = int(sound_radius) if sound_radius is not None else 0
-        if sound_radius_int <= 0 and item_data.get("ExplosionSound") is not None:
+        item_dict["crit_chance_mod"] = "+" + str(item.aiming_perk_crit_modifier) + "%" if item.aiming_perk_crit_modifier else "-"
+    if "sound_radius" in columns: #FIXME: check item.noise_radius
+        sound_radius = item.get('SoundRadius', item.get_default('NoiseRange'))
+        if sound_radius <= 0 and item.explosion_sound is not None:
             sound_radius = "50" # Defined in IsoTrap.class.triggerExplosion() (find: getExplosionSound)
-        if sound_radius is not None:
-            item["sound_radius"] = sound_radius
+        if sound_radius != 0:
+            item_dict["sound_radius"] = sound_radius
         else:
-            item["sound_radius"] = "-"
-    item["knockback"] = item_data.get('PushBackMod', '-') if "knockback" in columns else None
+            item_dict["sound_radius"] = "-"
+    item_dict["knockback"] = (convert_int(item.push_back_mod) or '-') if "knockback" in columns else None
     if "condition_max" in columns or "condition_lower_chance" in columns:
-        condition_max = item_data.get("ConditionMax", '0')
-        condition_lower_chance = item_data.get("ConditionLowerChanceOneIn", '0')
-        item["condition_max"] = condition_max if "condition_max" in columns else None
-        item["condition_lower_chance"] = condition_lower_chance if "condition_max" in columns else None
-        item["condition_average"] = str(int(condition_max) * int(condition_lower_chance)) if "condition_max" in columns and "condition_lower_chance" in columns else None
-    item["repairable"] = Translate.get_wiki(check_fixing(item_id)) if "repairable" in columns else None
+        condition_max = item.condition_max
+        condition_lower_chance = item.condition_lower_chance_one_in
+        item_dict["condition_max"] = condition_max if "condition_max" in columns else None
+        item_dict["condition_lower_chance"] = condition_lower_chance if "condition_max" in columns else None
+        item_dict["condition_average"] = str(int(condition_max) * int(condition_lower_chance)) if "condition_max" in columns and "condition_lower_chance" in columns else None
+    item_dict["repairable"] = Translate.get_wiki(check_fixing(item_id)) if "repairable" in columns else None
     if "magazine" in columns:
-        item["magazine"] = utility.get_icon(item_data.get("Magazine"), True, True, True) if item_data.get("Magazine") else "-"
+        item_dict["magazine"] = Item(item_data.get("Magazine")).icon if item_data.get("Magazine") else "-"
     if "weapon" in columns:
         if table_type == "magazine":
-            item["weapon"] = utility.get_icon(item_data.get("GunType"), True, True, True) if item_data.get("GunType") is not None else "-"
-        elif item_data.get("MountOn"):
+            item_dict["weapon"] = Item(item.gun_type).icon if item.gun_type is not None else "-"
+        elif item.mount_on:
             weapons_list = []
-            weapons = item_data.get("MountOn") if isinstance(item_data.get("MountOn"), list) else [item_data.get("MountOn")]
+            weapons = item.mount_on
             for weapon in weapons:
-                weapon  = "Base." + weapon if not weapon.startswith("Base.") else weapon
-                weapons_list.append(utility.get_icon(weapon, True, True, True))
-            item["weapon"] = "".join(weapons_list)
+                weapons_list.append(Item(weapon).icon)
+            item_dict["weapon"] = "".join(weapons_list)
         elif item_data.get("Weapons"):
             weapons = []
             for weapon in item_data.get("Weapons"):
-                weapons.append(all_items.get(weapon).get("IconFormatted"))
-            item["weapon"] = "".join(weapons)
+                weapons.append(Item(weapon).icon)
+            item_dict["weapon"] = "".join(weapons)
         else:
-            item["weapon"] = "-"
-    item["rounds"] = utility.get_icon(item_data.get("AmmoType"), True, True, True) + f" ({item_data.get('AmmoTypeQuantity')})" if "rounds" in columns else None
-    item["box"] = utility.get_icon(item_data.get("AmmoBox"), True, True, True) + f" ({item_data.get('AmmoBoxQuantity')})" if "box" in columns else None
-    item["carton"] = utility.get_icon(item_data.get("AmmoCarton"), True, True, True) + f" ({item_data.get('AmmoCartonQuantity')})" if "carton" in columns else None
+            item_dict["weapon"] = "-"
+    item_dict["rounds"] = Item(item_data.get("AmmoType")).icon + f" ({item_data.get('AmmoTypeQuantity')})" if "rounds" in columns else None
+    item_dict["box"] = Item(item_data.get("AmmoBox")).icon + f" ({item_data.get('AmmoBoxQuantity')})" if "box" in columns else None
+    item_dict["carton"] = Item(item_data.get("AmmoCarton")).icon + f" ({item_data.get('AmmoCartonQuantity')})" if "carton" in columns else None
     if "effect" in columns:
         effects = {
             "Smoke": {"property": "SmokeRange", "string": "Smoke"}, # Priority 1
@@ -281,70 +274,71 @@ def generate_data(item_id, item_data):
             "Fire": {"property": "FirePower", "string": "[[Fire{lcs}|Fire]]"}, # Priority 3
             "Explosion": {"property": "ExplosionPower", "string": "[[Fire{lcs}|Explosion]]"}, # Priority 4
         }
+        effect = None
         for key, value in effects.items():
-            if item_data.get(value["property"]):
+            if item.get(value["property"]) is not None:
                 effect = key
-                item["effect"] = value["string"].format(lcs=Language.get_subpage())
+                item_dict["effect"] = value["string"].format(lcs=Language.get_subpage())
                 break
             else:
-                item["effect"] = "-"
-    item["effect_power"] = item_data.get(f'{effect}Range', '-') if "effect_power" in columns else None
-    item["effect_range"] = item_data.get(f'{effect}Range', '-') if "effect_range" in columns else None
-    item["effect_timer"] = item_data.get(f'{effect}Range', '-') if "effect_timer" in columns else None
-    item["sensor_range"] = item_data.get('SensorRange', '-') if "sensor_range" in columns else None
-    item["part_type"] = Translate.get("Tooltip_weapon_" + item_data.get("PartType", "-")) if "part_type" in columns else None
-    item["weight_mod"] = item_data.get('WeightModifier', '-') if "weight_mod" in columns else None
-    item["aiming_time"] = item_data.get('AimingTimeModifier', '-') if "aiming_time" in columns else None
-    item["function"] = get_function(item_id, item_data) if "function" in columns else None
-    item["item_id"] = item_id if "item_id" in columns else None
+                item_dict["effect"] = "-"
+    item_dict["effect_power"] = item.get_default(f'{effect}Power', '-') if "effect_power" in columns else None
+    item_dict["effect_range"] = item.get_default(f'{effect}Range', '-') if "effect_range" in columns else None
+    item_dict["effect_timer"] = item.get_default(f'{effect}Timer', '-') if "effect_timer" in columns else None
+    item_dict["sensor_range"] = item.get_default('SensorRange', '-') if "sensor_range" in columns else None
+    item_dict["part_type"] = Translate.get("Tooltip_weapon_" + item.part_type) if "part_type" in columns else None
+    item_dict["weight_mod"] = (item.weight_modifier or '-') if "weight_mod" in columns else None
+    item_dict["aiming_time"] = (item.aiming_time_modifier or '-') if "aiming_time" in columns else None
+    item_dict["function"] = get_function(item) if "function" in columns else None
+    item_dict["item_id"] = item.item_id if "item_id" in columns else None
 
     # Remove any values that are None
-    item = {k: v for k, v in item.items() if v is not None}
+    item_dict = {k: v for k, v in item_dict.items() if v is not None}
 
     # Ensure column order is correct
-    item = {key: item[key] for key in columns if key in item}
+    item_dict = {key: item_dict[key] for key in columns if key in item_dict}
 
     # Add item_name for sorting
-    item["item_name"] = item_name
-    item["notes"] = notes if notes else None
+    item_dict["item_name"] = item.name
+    item_dict["notes"] = notes if notes else None
 
-    return item
+    return item_dict
 
 
-def find_table_type(item_id, item_data):
+def find_table_type(item_id):
+    global all_item_data
+
+    item = Item(item_id)
     table_type = None
-    tags = item_data.get("Tags")
 
-    if item_data.get("Type") == "Weapon":
-        skill = item_data.get("Categories")
+    if item.type == "Weapon":
+        skill = item.categories
         if skill:
             # Melee
-            skill = [skill] if isinstance(skill, str) else skill
             # Remove "Improvised" from list if more than 1
             if "Improvised" in skill and len(skill) > 1:
                 skill = [cat for cat in skill if cat != "Improvised"]
                 if len(skill) > 1:
                     echo.write(f"WARNING: More than 1 skill ({','.join(skill)})")
             table_type = skill[0]
-        elif item_data.get("SubCategory") == "Firearm":
+        elif item.subcategory == "Firearm":
             # Firearm
             table_type = "handgun"
-            if item_data.get("RequiresEquippedBothHands", "").lower() == "true":
+            if item.requires_equipped_both_hands:
                 table_type = "rifle"
-                if int(item_data.get("ProjectileCount")) > 1:
+                if int(item.projectile_count) > 1:
                     table_type = "shotgun"
-        elif item_data.get("DisplayCategory") == "Explosives":
+        elif item.raw_display_category == "Explosives":
             # Explosives
             table_type = "explosive"
-    elif item_data.get("Type").lower() == "WeaponPart".lower():
+    elif item.type.lower() == "WeaponPart".lower():
         # Weapon parts
         table_type = "weapon_part"
-    elif item_id in box_types:
+    elif item.item_id in box_types:
         # Ammo (box & carton)
-        table_type = box_types[item_id].get("type")
-    elif item_data.get("Tags") is not None:
-        tags = item_data.get("Tags")
-        tags = [tags] if isinstance(tags, str) else tags
+        table_type = box_types[item.item_id].get("type")
+    elif item.tags:
+        tags = item.tags
         # Ammo (rounds)
         if any(tag.lower() == "ammo" for tag in tags):
             table_type = "round"
@@ -352,82 +346,76 @@ def find_table_type(item_id, item_data):
             # Magazine
             table_type = "magazine"
 
-    item_data["TableType"] = table_type
-
-    return item_data
+    if table_type:
+        all_item_data[item.item_id] = {"TableType": table_type}
 
 
 def find_items():
-    items = {}
-    all_item_data = item_parser.get_item_data()
-    for item_id, item_data in all_item_data.items():
-        item_data = find_table_type(item_id, item_data)
-        if item_data.get("TableType"):
-            item_data["IconFormatted"] = utility.get_icon(item_id, True, True, True)
-            items[item_id] = item_data
-    
-    return items
+    """Finds all weapon related items and gets their table type."""
+    global all_item_data
+    for item_id in Item.all():
+        find_table_type(item_id)
 
 
 def find_boxes():
     global box_types
 
-    ammo_recipes = {
+    AMMO_RECIPES = {
         "OpenBoxOfShotgunShells": "box",
         "OpenBoxOfBullets50": "box",
         "OpenBoxOfBullets20": "box",
         "OpenCartonOfBullets": "carton"
     }
 
-    recipes_data = legacy_recipe_parser.get_recipe_data()["recipes"]
-    for recipe in recipes_data:
-        name = recipe.get("name")
-        if name in ammo_recipes:
-            outputs = recipe.get("outputs", [])
-            
-            for output in outputs:
+    for recipe_id in CraftRecipe.all():
+        recipe = CraftRecipe(recipe_id)
+        if recipe_id in AMMO_RECIPES:
+            items = None
+            for output in recipe.outputs:
                 mapper = output.get("mapper")
-                quantity = output.get("index")
+                count = output.get("count")
                 items = output.get("items")
 
             if mapper == "ammoTypes":
-                item_mappers = recipe.get("itemMappers", {}).get(mapper)
+                item_mappers:dict = recipe.item_mappers.get(mapper, {})
                 for key, value in item_mappers.items():
                     box_types[value] = {
-                        "type": ammo_recipes.get(name),
+                        "type": AMMO_RECIPES.get(recipe_id),
                         "contents": key,
-                        "quantity": quantity
+                        "quantity": count
                     }
             
             elif items is not None:
-                box_types[recipe.get("inputs")[0].get("items")[0]] = {
-                    "type": ammo_recipes.get(name),
+                box_types[recipe.inputs[0].get("items")[0]] = {
+                    "type": AMMO_RECIPES.get(recipe_id),
                     "contents": items[0],
-                    "quantity": quantity
+                    "quantity": count
                 }
 
 
 def main():
     global table_map
-    global all_items
     global table_type_map
     Language.get()
+
     table_map, column_headings, table_type_map = table_helper.get_table_data(TABLE_PATH, "type_map")
     find_boxes()
 
     with tqdm(total=0, desc="Preparing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
-        all_items = find_items()
+        find_items()
 
-        pbar.total = len(all_items)
+        pbar.total = len(all_item_data)
+        pbar.desc = "Generating tables"
         pbar.refresh()
 
         generated_data = {}
 
-        for item_id, item_data in all_items.items():
+        for item_id in all_item_data:
+            item_data = all_item_data.get(item_id, {})
             table_type = item_data.get("TableType")
             pbar.set_postfix_str(f'Generating: {table_type} ({item_id[:30]})')
             if table_type is not None:
-                new_item = generate_data(item_id, item_data)
+                new_item = generate_data(item_id, table_type)
 
                 note = new_item.pop("notes", None)
 
