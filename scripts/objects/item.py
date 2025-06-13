@@ -1538,8 +1538,6 @@ class Item:
     @property
     def always_knockdown(self) -> bool: return bool(self.get_default("AlwaysKnockdown"))
     @property
-    def crit_dmg_multiplier(self) -> float: return float(self.get_default("critDmgMultiplier"))
-    @property
     def aiming_mod(self) -> float: return float(self.get_default("AimingMod"))
     @property
     def is_aimed_hand_weapon(self) -> bool: return bool(self.get_default("IsAimedHandWeapon"))

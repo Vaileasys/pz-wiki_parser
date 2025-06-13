@@ -367,30 +367,29 @@ def find_boxes():
         "OpenCartonOfBullets": "carton"
     }
 
-    for recipe_id in CraftRecipe.all():
+    for recipe_id in AMMO_RECIPES:
         recipe = CraftRecipe(recipe_id)
-        if recipe_id in AMMO_RECIPES:
-            items = None
-            for output in recipe.outputs:
-                mapper = output.get("mapper")
-                count = output.get("count")
-                items = output.get("items")
+        output = recipe.outputs[0]
 
-            if mapper == "ammoTypes":
-                item_mappers:dict = recipe.item_mappers.get(mapper, {})
-                for key, value in item_mappers.items():
-                    box_types[value] = {
-                        "type": AMMO_RECIPES.get(recipe_id),
-                        "contents": key,
-                        "quantity": count
-                    }
-            
-            elif items is not None:
-                box_types[recipe.inputs[0].get("items")[0]] = {
+        mapper = output.get("mapper")
+        count = output.get("count")
+        items = output.get("items")
+
+        if mapper == "ammoTypes":
+            item_mappers = recipe.item_mappers.get(mapper, {})
+            for key, value in item_mappers.items():
+                box_types[value] = {
                     "type": AMMO_RECIPES.get(recipe_id),
-                    "contents": items[0],
+                    "contents": key,
                     "quantity": count
                 }
+        
+        elif items:
+            box_types[recipe.inputs[0].get("items")[0]] = {
+                "type": AMMO_RECIPES.get(recipe_id),
+                "contents": items[0],
+                "quantity": count
+            }
 
 
 def main():
