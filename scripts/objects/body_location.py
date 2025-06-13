@@ -89,14 +89,14 @@ class BodyLocation:
 
     @classmethod
     def _parse_items(cls) -> dict:
-        from scripts.parser import script_parser
+        from scripts.objects.item import Item
 
-        item_data = script_parser.extract_script_data("item")
         location_items = {}
 
-        for item_id, data in item_data.items():
+        for item_id in Item.all():
+            item = Item(item_id)
             for key in ("CanBeEquipped", "BodyLocation"):
-                loc = data.get(key)
+                loc = item.data.get(key)
                 if loc:
                     if isinstance(loc, list):
                         for l in loc:
