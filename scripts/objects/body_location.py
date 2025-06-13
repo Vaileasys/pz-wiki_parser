@@ -381,6 +381,10 @@ class BloodLocation:
 
     def __repr__(self):
         return f"<BloodLocation {self.blood_location}>"
+    
+    @classmethod
+    def all(cls) -> list["BloodLocation"]:
+        return [cls(name) for name in cls._blood_locations]
 
     @property
     def body_parts(self) -> BodyPartList:
