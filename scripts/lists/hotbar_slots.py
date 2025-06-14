@@ -1,3 +1,4 @@
+# @Deprecated: use attachment_list.py and attachment.py instead
 from pathlib import Path
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate

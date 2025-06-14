@@ -1,3 +1,4 @@
+# @Deprecated: use script_parser.py instead
 import os
 import re
 from scripts.core import logger

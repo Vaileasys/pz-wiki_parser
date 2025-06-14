@@ -1,3 +1,4 @@
+# @Deprecated: use script_parser.py instead
 import re
 import os
 from scripts.core.cache import save_cache
