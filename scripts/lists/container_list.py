@@ -2,44 +2,24 @@
 
 import random
 from tqdm import tqdm
-from scripts.parser import item_parser
 from scripts.core.version import Version
-from scripts.core.language import Language, Translate
-from scripts.lists import hotbar_slots
+from scripts.core.language import Language
+from scripts.objects.item import Item
+from scripts.objects.attachment import HotbarSlot
 from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
-from scripts.utils import utility, util, table_helper
+from scripts.utils import table_helper, echo
+from scripts.utils.util import convert_int, convert_percentage, link, check_zero
 from scripts.core.cache import save_cache, load_cache
-from scripts.utils import echo
 
 TABLE_PATH = f"{RESOURCE_DIR}/tables/container_table.json"
 
 table_map = None
 table_type_map = None
-hotbar_data = None
 category_cache = None
 
 
-def calculate_weight(item_data, trait=None):
-    TRAITS = {
-        "organized": 1.3,
-        "disorganized": 0.7
-    }
-
-    trait_mod = TRAITS.get(trait, 1.0)
-    weight = float(item_data.get('Weight', 1.0))
-    capacity = float(item_data.get('Capacity', 1.0))
-    weight_reduction = int(item_data.get('WeightReduction', 0))
-
-    if weight_reduction == 0:
-        weight_full = (weight * 0.3) + (capacity * trait_mod)
-    else:
-        weight_full = (weight * 0.3) + (capacity * trait_mod) * (weight_reduction / 100)
-
-    return round(weight_full, 2)
-
-
 # Taken from 'AcceptItemFunction.lua'
-def get_accept_item(item_data: dict):
+def find_accept_item(item: Item):
     """Returns a formatted string of accepted items based on the 'AcceptItemFunction' key in the item data.
 
     Args:
@@ -72,11 +52,10 @@ def get_accept_item(item_data: dict):
         }
     }
 
-    accept_item = item_data.get('AcceptItemFunction')
+    accept_item = item.accept_item_function
     if not accept_item:
         return "-"
     accept_item = accept_item.replace("AcceptItemFunction.", "")
-    language_code = Language.get()
 
     accepted_items = []
 
@@ -87,13 +66,13 @@ def get_accept_item(item_data: dict):
                 text = values.get("text", key)
                 image = values.get("image")
                 if image:
-                    link = ""
+                    link_text = ""
                     if page:
-                        link = f"|link={page}{Language.get_subpage}"
+                        link_text = f"|link={page}{Language.get_subpage()}"
 
                     # Build image
                     if image.lower().startswith("file:"):
-                        string = f"[[{image}|32x32px{link}|{text}]]"
+                        string = f"[[{image}|32x32px{link_text}|{text}]]"
 
                     # Build cycling image category/type
                     elif image.lower().startswith("category-"):
@@ -106,13 +85,9 @@ def get_accept_item(item_data: dict):
                                     cat_item_name = cat_item_data.get("name")
                                     cat_item_icon = cat_item_data.get("icon")
 
-                            
-
-                                    cat_item_image = f"[[File:{cat_item_icon}|32x32px{link}|{cat_item_name}]]"
+                                    cat_item_image = f"[[File:{cat_item_icon}|32x32px{link_text}|{cat_item_name}]]"
                                     if cat_item_image not in category_items_list:
                                         category_items_list.append(cat_item_image)
-
-                        
                         
                         # Build the string joining the list
                         if len(category_items_list) > 1:
@@ -132,12 +107,7 @@ def get_accept_item(item_data: dict):
                         string = image
                     
                 elif page:
-                    if language_code != "en":
-                        string = f"[[{page}/{language_code}|{text}]]"
-                    elif page == text:
-                        string = f"[[{page}]]"
-                    else:
-                        string = f"[[{page}|{text}]]"
+                    string = link(page, text)
                 else:
                     string = text
 
@@ -151,7 +121,7 @@ def get_accept_item(item_data: dict):
     return return_string
 
 
-def get_cached_types():
+def get_cached_types() -> dict:
     """Returns cached item 'Type', storing them in cache for faster operations"""
     global category_cache
     cache_version = Version.get()
@@ -163,18 +133,16 @@ def get_cached_types():
 
     # Generate data if data dict is empty or cache is old
     if not category_cache or cache_version != Version.get():
-        parsed_item_data = item_parser.get_item_data()
-        with tqdm(total=len(parsed_item_data), desc="Preparing items based on 'Type'", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
-            for cat_item_id, cat_item_data in parsed_item_data.items():
-                cat_type = cat_item_data.get("Type", "Normal")
-                pbar.set_postfix_str(f"Processing: {cat_type[:20]} ({cat_item_id[:20]})")
-                name = utility.get_name(cat_item_id, cat_item_data)
-                icon = utility.get_icon(cat_item_id)
-                page = utility.get_page(cat_item_id, name)
-                if cat_type not in category_cache:
-                    category_cache[cat_type] = {}
+        with tqdm(total=Item.count(), desc="Preparing items based on 'Type'", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+            for item_id, item in Item.all().items():
+                pbar.set_postfix_str(f"Processing: {item.type[:20]} ({item_id[:20]})")
+                name = item.name
+                icon = item.get_icon(False, False)
+                page = item.page
+                if item.type not in category_cache:
+                    category_cache[item.type] = {}
 
-                category_cache[cat_type][cat_item_id] = {"name": name, "icon": icon, "page": page}
+                category_cache[item.type][item_id] = {"name": name, "icon": icon, "page": page}
                 pbar.update(1)
         echo.info("Items organised by type and cached.")
 
@@ -184,138 +152,84 @@ def get_cached_types():
 
 
 # Get the list type, for mapping the section/table
-def find_table_type(item_data):
-    body_location = item_data.get("CanBeEquipped")
-    if body_location:
-        if body_location == "Back":
+def find_table_type(item: Item):
+    if item.can_be_equipped:
+        if item.can_be_equipped.location_id == "Back":
             return "Back"
         return "Torso"
     
-    if item_data.get('AcceptItemFunction'):
-        heading = item_data.get('AcceptItemFunction').replace("AcceptItemFunction.", "")
+    if item.accept_item_function:
+        heading = item.accept_item_function.replace("AcceptItemFunction.", "")
         # Try to get a name for the heading
-        heading_item = "Base." + heading
-        heading_translated = Translate.get(heading_item, "DisplayName")
-        if heading_translated != heading_item:
-            heading = heading_translated
+        if Item.exists(heading):
+            heading = Item(heading).name
         return heading.capitalize()
 
     return "Containers"
 
 
 # Process items, returning the heading and row data.
-def process_item(item_id, item_data, pbar):
-    language_code = Language.get()
+def process_item(item: Item):
+    table_type = find_table_type(item)
+    if table_type not in table_type_map:
+        echo.warning(f"'{table_type}' could not be found in table map.")
+        table_type = "Containers"
+    columns = table_map.get(table_type_map[table_type], table_map["generic"])
 
-    heading = find_table_type(item_data)
-    if heading not in table_type_map:
-        pbar.write(f"Warning: '{heading}' could not be found in table map.")
-        heading = "Containers"
-    columns = table_map.get(table_type_map[heading], table_map["generic"])
-
-    item_name = utility.get_name(item_id, item_data) # set item name
-    page_name = utility.get_page(item_id, item_name) # set page name
-
-    item = {}
-
-    if "icon" in columns:
-        icon = utility.get_icon(item_id, True, True, True)
-        item["icon"] = icon
-
-    if "name" in columns:
-        item_link = f"[[{page_name}]]"
-        if language_code != "en":
-            item_link = f"[[{page_name}/{language_code}|{item_name}]]"
-        item["name"] = item_link
-
-    if "weight" in columns:
-        item["weight"] = item_data.get('Weight', '1')
+    item_dict = {}
     
-    if "capacity" in columns:
-        item["capacity"] = item_data.get('Capacity', '-')
-
-    if "weight_reduction" in columns:
-        item["weight_reduction"] = util.convert_percentage(item_data.get('WeightReduction', '-'), True, True)
-
-    if "weight_full" in columns:
-        weight_full = util.convert_int(calculate_weight(item_data))
-        item["weight_full"] = str(weight_full)
-
-    if "weight_full_organized" in columns:
-        weight_full_organized = util.convert_int(calculate_weight(item_data, "organized"))
-        item["weight_full_organized"] = str(weight_full_organized)
-
-    if "weight_full_disorganized" in columns:
-        weight_full_disorganized = util.convert_int(calculate_weight(item_data, "disorganized"))
-        item["weight_full_disorganized"] = str(weight_full_disorganized)
-
-    if "move_speed" in columns:
-        item["move_speed"] = util.convert_percentage(item_data.get("RunSpeedModifier", '-'), False)
+    item_dict["icon"] = item.icon if "icon" in columns else None
+    item_dict["name"] = item.wiki_link if "name" in columns else None
+    item_dict["weight"] = convert_int(item.weight) if "weight" in columns else None
+    item_dict["capacity"] = (item.capacity or '-') if "capacity" in columns else None
+    item_dict["weight_reduction"] = convert_percentage(item.weight_reduction, True, True, default='-') if "weight_reduction" in columns else None
+    item_dict["weight_full"] = convert_int(item.calculate_weight()) if "weight_full" in columns else None
+    item_dict["weight_full_organized"] = convert_int(item.calculate_weight("organized")) if "weight_full_organized" in columns else None
+    item_dict["weight_full_disorganized"] = convert_int(item.calculate_weight("disorganized")) if "weight_full_disorganized" in columns else None
+    item_dict["move_speed"] = convert_percentage(item.run_speed_modifier, False, default='-') if "move_speed" in columns else None
 
     if "extra_slots" in columns:
-        slots_list = []
-        extra_slots = item_data.get("AttachmentsProvided", ['-'])
-        if isinstance(extra_slots, str):
-            extra_slots = [extra_slots]
-        for slot in extra_slots:
-            if slot != "-":
-                slot_name = hotbar_data.get(slot, {}).get("name")
-                slot_page = f"AttachmentsProvided#{slot}"
-                slot = util.link(slot_page, slot_name)
-            slots_list.append(slot)
-        item["extra_slots"] = "<br>".join(slots_list)
-
-    if "body_location" in columns:
-        body_location = item_data.get("CanBeEquipped")
-        if body_location:
-            if language_code == 'en':
-                item["body_location"] = f"[[BodyLocation#{body_location}|{body_location}]]"
-            else:
-                item["body_location"] = f"[[BodyLocation/{language_code}#{body_location}|{body_location}]]"
-        else:
-            item["body_location"] = "-"
-
-    if "accept_item" in columns:
-        item["accept_item"] = get_accept_item(item_data)
-
-    if "max_item_size" in columns:
-        item["max_item_size"] = util.convert_int(item_data.get('MaxItemSize', '-'))
-
-    if "item_id" in columns:
-        item["item_id"] = f"{{{{ID|{item_id}}}}}"
+        slots = []
+        for slot_id in item.attachments_provided:
+            slots.append(HotbarSlot(slot_id).wiki_link)
+        item_dict["extra_slots"] = "<br>".join(slots) if slots else '-'
+    
+    item_dict["body_location"] = (item.can_be_equipped.wiki_link or '-') if "body_location" in columns else None
+    item_dict["accept_item"] = find_accept_item(item) if "accept_item" in columns else None
+    item_dict["max_item_size"] = check_zero(item.max_item_size, default='-') if "max_item_size" in columns else None
+    item_dict["item_id"] = item.item_id if "item_id" in columns else None
     
     # Remove any values that are None
-    item = {k: v for k, v in item.items() if v is not None}
+    item_dict = {k: v for k, v in item_dict.items() if v is not None}
 
     # Ensure column order is correct
-    item = {key: item[key] for key in columns if key in item}
+    item_dict = {key: item_dict[key] for key in columns if key in item_dict}
 
     # Add item_name for sorting
-    item["item_name"] = item_name
+    item_dict["item_name"] = item.page
 
-    return heading, item
+    return table_type, item_dict
 
 
 # Get necessary literature items and process them
 def find_items():
     container_dict = {}
-    parsed_item_data = item_parser.get_item_data()
     item_count = 0
 
     get_cached_types()
 
     # Get items
-    with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
-        for item_id, item_data in parsed_item_data.items():
+    with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+        for item_id, item in Item.all().items():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
-            if item_data.get("Type") == "Container":
-                heading, item = process_item(item_id, item_data, pbar)
+            if item.type == "Container":
+                table_type, item_data = process_item(item)
 
                 # Add heading to dict if it hasn't been added yet.
-                if heading not in container_dict:
-                    container_dict[heading] = []
+                if table_type not in container_dict:
+                    container_dict[table_type] = []
 
-                container_dict[heading].append(item)
+                container_dict[table_type].append(item_data)
 
                 item_count += 1
 
@@ -327,11 +241,10 @@ def find_items():
 
 
 def main():
-    global hotbar_data
     global table_map
     global table_type_map
+    Language.get()
     table_map, column_headings, table_type_map = table_helper.get_table_data(TABLE_PATH, "type_map")
-    hotbar_data = hotbar_slots.get_hotbar_slots(suppress=True)
     items = find_items()
 
     mapped_table = {

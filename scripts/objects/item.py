@@ -780,6 +780,21 @@ class Item:
             self._burn_time = f"{hours} {hours_unit}, {minutes} {minutes_unit}" if minutes else f"{hours} {hours_unit}"
         else:
             self._burn_time = f"{minutes} {minutes_unit}"
+
+    def calculate_weight(self, trait: str = None):
+        TRAITS = {
+            "organized": 1.3,
+            "disorganized": 0.7
+        }
+
+        trait_mod = TRAITS.get(trait, 1.0)
+
+        if self.weight_reduction == 0:
+            weight_full = (self.weight * 0.3) + (self.capacity * trait_mod)
+        else:
+            weight_full = (self.weight * 0.3) + (self.capacity * trait_mod) * (self.weight_reduction / 100)
+
+        return round(weight_full, 2)
     
     ## ------------------------- Getter Methods ------------------------- ##
 
@@ -949,11 +964,11 @@ class Item:
 
     @property
     def script_type(self) -> str:
-        return self.data.get("ScriptType")
+        return self.get("ScriptType")
 
     @property
     def file(self):
-        return self.data.get("SourceFile")
+        return self.get("SourceFile")
 
     @property
     def path(self):
@@ -1784,7 +1799,7 @@ class Item:
     @property
     def components(self) -> list:
         """Returns a list of component keys defined for the item."""
-        return list(self.data.get("component", {}).keys())
+        return list(self.get("component", {}).keys())
 
     @property
     def fluid_container(self) -> FluidContainer:

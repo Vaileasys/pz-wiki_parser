@@ -1,13 +1,12 @@
 from tqdm import tqdm
 from scripts.objects.item import Item
+from scripts.objects.attachment import HotbarSlot
 from scripts.core.constants import PBAR_FORMAT, RESOURCE_DIR
-from scripts.lists import hotbar_slots
 from scripts.utils import table_helper
 from scripts.utils.util import convert_int, convert_percentage, tick, cross
 
 TABLE_PATH = f"{RESOURCE_DIR}/tables/clothing_table.json"
 
-hotbar_slot_data = {}
 table_types = {}
 body_location_map = {}
 
@@ -53,10 +52,9 @@ def generate_data(item: Item):
         if item.attachments_provided:
             hotbar_attachments = []
 
-            for slot in item.attachments_provided:
-                slot_name = hotbar_slot_data[slot].get("name")
-                slot_link = f"[[AttachmentsProvided#{slot}|{slot_name}]]"
-                hotbar_attachments.append(slot_link)
+            for slot_id in item.attachments_provided:
+                slot = HotbarSlot(slot_id)
+                hotbar_attachments.append(slot.wiki_link)
             attachments_provided = "<br>".join(hotbar_attachments)
         else:
             attachments_provided = '-'
@@ -169,12 +167,10 @@ def find_items():
 
 
 def main():
-    global hotbar_slot_data
     global table_types
     global body_location_map
     table_types, column_headings, body_location_map = table_helper.get_table_data(TABLE_PATH, "body_locations")
     
-    hotbar_slot_data = hotbar_slots.get_hotbar_slots()
     clothing_items = find_items()
 
     table_map = {
