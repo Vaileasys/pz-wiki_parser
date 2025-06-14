@@ -1,11 +1,10 @@
-from scripts.utils import lua_helper, table_helper
-from scripts.parser import item_parser
 from scripts.core.language import Translate
-from scripts.utils.util import format_positive, link
-from scripts.utils import echo
 from scripts.core.constants import RESOURCE_DIR
-from scripts.utils.media_helper import CODES, parse_code_effects
 from scripts.core.cache import save_cache
+from scripts.utils.util import format_positive, link
+from scripts.utils.media_helper import CODES, parse_code_effects
+from scripts.utils import lua_helper, table_helper, echo
+from scripts.objects.item import Item
 
 TABLE_HEADER = '{| class="wikitable theme-red sortable""'
 TABLE_PATH = f"{RESOURCE_DIR}/tables/recmedia_table.json"
@@ -152,8 +151,8 @@ def get_recmedia_data():
 
 
 def find_item_id(media_category):
-    for item_id, item_data in item_parser.get_item_data().items():
-        if item_data.get("MediaCategory") == media_category:
+    for item_id in Item.all():
+        if Item(item_id).media_category == media_category:
             return item_id
         
     echo.warning("Unable to find media category.")

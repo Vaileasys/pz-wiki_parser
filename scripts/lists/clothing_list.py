@@ -1,9 +1,9 @@
 from tqdm import tqdm
-from scripts.parser import item_parser
-from scripts.core.language import Language
+from scripts.objects.item import Item
 from scripts.core.constants import PBAR_FORMAT, RESOURCE_DIR
 from scripts.lists import hotbar_slots
-from scripts.utils import utility, table_helper, util
+from scripts.utils import table_helper
+from scripts.utils.util import convert_int, convert_percentage, tick, cross
 
 TABLE_PATH = f"{RESOURCE_DIR}/tables/clothing_table.json"
 
@@ -12,15 +12,7 @@ table_types = {}
 body_location_map = {}
 
 
-# Map fabric types to an item id
-FABRIC_TYPE = {
-    "Cotton": 'Base.RippedSheets',
-    "Denim": 'Base.DenimStrips',
-    "Leather": 'Base.LeatherStrips',
-}
-
-
-def get_body_location(body_location):
+def get_body_location(body_location: str):
     """Gets the section and table for a BodyLocation"""
     for key, value in body_location_map.items():
         if body_location in value['body_location']:
@@ -33,152 +25,145 @@ def get_body_location(body_location):
     return heading, table
 
 
-def generate_data(item_data, item_id):
+def generate_data(item: Item):
     """Gets the item's properties based on the BodyLocation as defined for its table"""
-    body_location = item_data.get("BodyLocation", item_data.get("CanBeEquipped", 'Unknown'))
-    heading, table_key = get_body_location(body_location)
+    notes = None
+    body_location = body_location = item.body_location or item.can_be_equipped
+    heading, table_key = get_body_location(body_location.location_id)
     columns = table_types.get(table_key, table_types["generic"])
-    language_code = Language.get()
 
-    item_name = item_data.get("DisplayName", 'Unknown')
-    page_name = utility.get_page(item_id, item_name)
-    link = util.link(page_name, item_name)
-    icon = utility.get_icon(item_id, True, True, True)
-    can_have_holes = item_data.get("CanHaveHoles", "true").lower() == "true"
-    body_parts_list = utility.get_body_parts(item_data, True, "-")
+    item_dict = {}
 
-    item = {}
-
-    item["icon"] = icon if "icon" in columns else None
-    item["name"] = link if "name" in columns else None    
-    item["weight"] = item_data.get('Weight', '1') if "weight" in columns else None
+    item_dict["icon"] = item.icon if "icon" in columns else None
+    item_dict["name"] = item.wiki_link if "name" in columns else None    
+    item_dict["weight"] = convert_int(item.weight) if "weight" in columns else None
 
     if "body_location" in columns:
-        
-        if language_code == 'en':
-            item["body_location"] = f"[[BodyLocation#{body_location}|{body_location}]]"
-        else:
-            item["body_location"] = f"[[BodyLocation/{language_code}#{body_location}|{body_location}]]"
+        item_dict["body_location"] = item.body_location.wiki_link if item.body_location else '-'
 
     if "display_time" in columns:
-        if item_data.get("Type") == 'AlarmClockClothing':
-            item["display_time"] = 'True'
+        if item.type == 'AlarmClockClothing':
+            item_dict["display_time"] = 'True'
         else:
-            item["display_time"] = '-'
+            item_dict["display_time"] = '-'
 
-    item["sound_radius"] = item_data.get("SoundRadius", '-') if "sound_radius" in columns else None
+    item_dict["sound_radius"] = (item.sound_radius or "-") if "sound_radius" in columns else None
 
     if "extra_slots" in columns:
-        attachments_provided = item_data.get('AttachmentsProvided')
-        if attachments_provided:
-            if isinstance(attachments_provided, str):
-                attachments_provided = [attachments_provided]
+        if item.attachments_provided:
             hotbar_attachments = []
 
-            for slot in attachments_provided:
+            for slot in item.attachments_provided:
                 slot_name = hotbar_slot_data[slot].get("name")
                 slot_link = f"[[AttachmentsProvided#{slot}|{slot_name}]]"
                 hotbar_attachments.append(slot_link)
             attachments_provided = "<br>".join(hotbar_attachments)
         else:
             attachments_provided = '-'
-        item["extra_slots"] = attachments_provided
+        item_dict["extra_slots"] = attachments_provided
     
-    item["fall_chance"] = util.convert_percentage(item_data.get("ChanceToFall", '-'), True, True) if "fall_chance" in columns else None
-    item["stomp_power"] = util.convert_percentage(item_data.get("StompPower", '-'), True) if "stomp_power" in columns else None
-    item["move_speed"] = util.convert_percentage(item_data.get("RunSpeedModifier", '-'), False) if "move_speed" in columns else None
-    item["attack_speed"] = util.convert_percentage(item_data.get("CombatSpeedModifier", '-'), False) if "attack_speed" in columns else None
-    item["body_part"] = '<br>'.join(body_parts_list) if "body_part" in columns else None
-    item["bite_def"] = util.convert_percentage(item_data.get("BiteDefense", '-'), True, True) if "bite_def" in columns else None
-    item["scratch_def"] = util.convert_percentage(item_data.get("ScratchDefense", '-'), True, True) if "scratch_def" in columns else None
-    item["bullet_def"] = util.convert_percentage(item_data.get("BulletDefense", '-'), True, True) if "bullet_def" in columns else None
+    item_dict["fall_chance"] = convert_percentage(item.chance_to_fall, True, True, default='-') if "fall_chance" in columns else None
+    item_dict["stomp_power"] = convert_percentage(item.stomp_power, True, default='-') if "stomp_power" in columns else None
+    item_dict["move_speed"] = convert_percentage(item.run_speed_modifier, False, default='-') if "move_speed" in columns else None
+    item_dict["attack_speed"] = convert_percentage(item.combat_speed_modifier, False, default='-') if "attack_speed" in columns else None
+    item_dict["body_part"] = '<br>'.join(item.get_body_parts(default="-")) if "body_part" in columns else None
+    item_dict["bite_def"] = convert_percentage(item.bite_defense, True, True, default='-') if "bite_def" in columns else None
+    item_dict["scratch_def"] = convert_percentage(item.scratch_defense, True, True, default='-') if "scratch_def" in columns else None
+    item_dict["bullet_def"] = convert_percentage(item.bullet_defense, True, True, default='-') if "bullet_def" in columns else None
 
     if "neck_def" in columns:
         neck_protection = "-"
-        if "Neck" in utility.get_body_parts(item_data, False):
-            neck_protection = 1.0 - float(item_data.get("NeckProtectionModifier", 0))
-            neck_protection = util.convert_percentage(neck_protection, True)
-        item["neck_def"] = neck_protection
+        if item.blood_location and "Neck" in item.get_body_parts(do_link=False):
+            modifier = item.neck_protection_modifier
+            neck_protection = convert_percentage(modifier, True)
+        item_dict["neck_def"] = neck_protection
 
-    item["insulation"] = util.convert_percentage(item_data.get("Insulation", '-'), True) if "insulation" in columns else None
-    item["wind_def"] = util.convert_percentage(item_data.get("WindResistance", '-'), True) if "wind_def" in columns else None
-    item["water_def"] = util.convert_percentage(item_data.get("WaterResistance", '-'), True) if "water_def" in columns else None
+    item_dict["insulation"] = convert_percentage(item.insulation, True, default='-') if "insulation" in columns else None
+    item_dict["wind_def"] = convert_percentage(item.wind_resistance, True, default='-') if "wind_def" in columns else None
+    item_dict["water_def"] = convert_percentage(item.water_resistance, True, default='-') if "water_def" in columns else None
     
     if "fabric" in columns:
-        fabric_id = FABRIC_TYPE.get(item_data.get("FabricType"))
-        if fabric_id is None:
-            fabric = "-"
+        fabric_id = item.get_fabric()
+        if fabric_id:
+            fabric = Item(fabric_id).icon
         else:
-            fabric = utility.get_icon(fabric_id, True)
-        item["fabric"] = fabric
+            fabric = "-"
+        item_dict["fabric"] = fabric
 
     if "have_holes" in columns:
-        if not can_have_holes:
-            item["have_holes"] = "[[File:UI_Cross.png|link=|Cannot get holes]]"
+        if item.body_location.location_id == "Shoes":
+            have_holes = '-'
+        elif item.can_have_holes:
+            have_holes = tick(text="Can get holes")
         else:
-            item["have_holes"] = "[[File:UI_Tick.png|link=|Can get holes]]"
+            have_holes = cross(text="Cannot get holes")
+        item_dict["have_holes"] = have_holes
 
-    item["condition_max"] = item_data.get("ConditionMax", '-') if "condition_max" in columns else None
+    item_dict["condition_max"] = item.condition_max if "condition_max" in columns else None
 
     if "condition_lower_chance" in columns:
-        lower_chance = item_data.get("ConditionLowerChanceOneIn", '-')
-        # ConditionLowerChance does nothing if it's not Shoes and CanHaveHoles = True
-        if item_data.get("BodyLocation") != "Shoes" and lower_chance != "-":
-            if can_have_holes:
-                lower_chance = "-"
-        if lower_chance != "-":
-            lower_chance = util.convert_percentage(1 / int(lower_chance), True)
+        is_chance_based = not item.can_have_holes or item.body_location.location_id == "Shoes"
 
-        item["condition_lower_chance"] = lower_chance
+        if is_chance_based:
+            lower_chance = convert_percentage(1 / int(item.condition_lower_chance_one_in), True)
+        else:
+            lower_chance = "-"
+        notes = "Note: Clothing that can get holes only lose condition when a hole is added, which depends on the body part hit and whether it already has a hole. There is no fixed 'chance' like in other items."
+        item_dict["condition_lower_chance"] = lower_chance
 
     if "condition_loss" in columns:
-        condition_max = item_data.get("ConditionMax")
-        if condition_max is not None:
-            if can_have_holes:
-                condition_loss = "-" + str(int(max(1, int(condition_max) / len(body_parts_list))))
-            else:
-                condition_loss = "-1"
+        if item.can_have_holes and len(item.get_body_parts()) > 0:
+            per_hole_loss = int(max(1, item.condition_max / len(item.get_body_parts())))
+            condition_loss = f"-{per_hole_loss}"
         else:
-            condition_loss = "-"
-        item["condition_loss"] = condition_loss
+            condition_loss = "-1"
+        item_dict["condition_loss"] = condition_loss
 
-    item["item_id"] = item_id if "item_id" in columns else None
+    item_dict["item_id"] = item.item_id if "item_id" in columns else None
 
     # Remove any values that are None
-    item = {k: v for k, v in item.items() if v is not None}
+    item_dict = {k: v for k, v in item_dict.items() if v is not None}
 
     # Ensure column order is correct
-    item = {key: item[key] for key in columns if key in item}
+    item_dict = {key: item_dict[key] for key in columns if key in item_dict}
 
     # Add item_name for sorting
-    item["item_name"] = item_name
+    item_dict["item_name"] = item.name
+    item_dict["notes"] = notes if notes else None
 
-    return heading, item
+    return heading, item_dict
 
 
 def find_items():
     blacklist = ("MakeUp_", "ZedDmg_", "Wound_", "Bandage_", "F_Hair_", "M_Hair_", "M_Beard_")
     clothing_items = {}
-    parsed_item_data = item_parser.get_item_data()
 
-    with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items") as pbar:
-        for item_id, item_data in parsed_item_data.items():
-            pbar.set_postfix_str(f'Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})')
-            if item_data.get("Type") in ("Clothing", "AlarmClockClothing") or 'CanBeEquipped' in item_data:
+    with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+        for item_id in Item.all():
+            item = Item(item_id)
+            pbar.set_postfix_str(f'Processing: {item.type} ({item_id[:30]})')
+            if item.type in ("Clothing", "AlarmClockClothing") or item.can_be_equipped:
                 # filter out blacklisted items and 'Reverse' variants
-                module, item_name = item_id.split('.')
-                if not item_name.startswith(blacklist) and not item_name.endswith("_Reverse"):
-                    if "OBSOLETE" in item_data:
+                if not item.id_type.startswith(blacklist) and not item.id_type.endswith("_Reverse"):
+                    if item.obsolete:
                         continue
-                    heading, item = generate_data(item_data, item_id)
+                    table_type, new_item = generate_data(item)
+
+                    note = new_item.pop("notes", None)
 
                     # add heading to dict if it hasn't been added yet.
-                    if heading not in clothing_items:
-                        clothing_items[heading] = []
+                    if table_type not in clothing_items:
+                        clothing_items[table_type] = [{"notes": [note]}] if note else [{"notes": []}]
+                    else:
+                        if note:
+                            if clothing_items[table_type] and "notes" in clothing_items[table_type][0]:
+                                if note not in clothing_items[table_type][0]["notes"]:
+                                    clothing_items[table_type][0]["notes"].append(note)
+                            else:
+                                clothing_items[table_type].insert(0, {"notes": [note]})
 
-                    clothing_items[heading].append(item)
+                    clothing_items[table_type].append(new_item)
             pbar.update(1)
-        pbar.bar_format = f"Items processed."
 
     return clothing_items
 
