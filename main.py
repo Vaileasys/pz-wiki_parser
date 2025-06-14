@@ -72,8 +72,8 @@ menu_structure = {
             '9': {'module': 'lists.recmedia_list', 'name': 'Recorded media list', 'description': 'Generate recorded media tables.'},
             '10': {'module': 'lists.body_locations_list', 'name': 'BodyLocation list', 'description': 'Generate a BloodLocation table.'},
             '11': {'module': 'lists.body_parts_list', 'name': 'BloodLocation/Body part list', 'description': 'Generate a BloodLocation/body part table.'},
-            '12': {'module': 'lists.food_list', 'name': 'Food list', 'description': 'Generate food and nutrition pages.'},
-            '13': {'module': 'scripts.parser.outfit_parser', 'name': 'Outfit list', 'description': 'Parse outfit xml files.'},
+            '12': {'module': 'lists.attachment_list', 'name': 'Attachment list', 'description': 'Generate AttachmentType and AttachmentsProvided tables.'},
+            '14': {'module': 'scripts.parser.outfit_parser', 'name': 'Outfit list', 'description': 'Parse outfit xml files.'},
         },
     },
     '7': {
