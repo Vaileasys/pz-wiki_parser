@@ -51,22 +51,26 @@ def format_positive(value):
         return str(value)
 
 
-def link(page:str, name:str=None) -> str:
+def link(page:str, name:str=None, anchor:str=None) -> str:
     """
-    Returns a wiki link in the format [[Page|Name]], including a language suffix for non-English languages.
+    Returns a wiki link in the format [[Page#Anchor|Name]], including a language suffix for non-English languages.
 
     :param page: The target page
     :param name: The display text of the link (optional). Defaults to `page`.
+    :param anchor: The section anchor within the page (optional).
     :return: The formatted wiki link.
     """
     from scripts.core.language import Language
 
+    page_anchor = f"{page}#{anchor}" if anchor else page
+    full_page = f"{page_anchor}{Language.get_subpage()}"
+
     if name is None:
-        return f"[[{page}{Language.get_subpage()}]]"
-    elif page == name and Language.get() == "en":
+        return f"[[{full_page}]]"
+    elif page == name and Language.get() == "en" and not anchor:
         return f"[[{page}]]"
     else:
-        return f"[[{page}{Language.get_subpage()}|{name}]]"
+        return f"[[{full_page}|{name}]]"
 
 # @Deprecated
 def format_link(name:str, page:str=None) -> str:
@@ -91,7 +95,7 @@ def format_link(name:str, page:str=None) -> str:
         return f"[[{page}|{name}]]"
 
 
-def convert_percentage(value: str | int | float, start_zero=True, percentage=False) -> str:
+def convert_percentage(value: str | int | float, start_zero=True, percentage=False, default=None) -> str:
     """Converts a numeric value to a percentage string.
 
     Args:
@@ -99,18 +103,19 @@ def convert_percentage(value: str | int | float, start_zero=True, percentage=Fal
         start_zero (bool, optional): If True, treats the value as a fraction (e.g., 0.5 -> 50%).
                                      If False, assumes the value starts from 100% (e.g., 1.5 -> 150%). Defaults to True.
         percentage (bool, optional): If True, the value is already a percentage and will not be scaled. Defaults to False.
+        default (str): The value to return for invalid input or when the percentage rounds to 0.
 
     Returns:
         str: The formatted percentage as a string with a '%' sign.
              Returns '-' for invalid inputs.
     """
     if not value or value == '-':
-        return '-'
+        return default if default is not None else '-'
     
     try:
         value = float(value)
-    except ValueError:
-        return '-'
+    except (ValueError, TypeError):
+        return default if default is not None else '-'
     
     if not percentage:
         if not start_zero:
@@ -118,6 +123,9 @@ def convert_percentage(value: str | int | float, start_zero=True, percentage=Fal
         value *= 100
 
     value = int(round(value))
+
+    if value == 0:
+        return default if default is not None else '0%'
     
     return f"{value}%"
 

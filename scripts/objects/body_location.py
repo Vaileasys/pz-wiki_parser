@@ -2,7 +2,7 @@ import re
 from scripts.core.language import Translate, Language
 from scripts.core.cache import save_cache
 from scripts.core.file_loading import get_lua_files, read_file
-from scripts.utils.util import to_bool
+from scripts.utils.util import to_bool, link
 
 class BodyLocation:
     _raw_data = None
@@ -179,6 +179,12 @@ class BodyLocation:
     ## --------------- Object Properties --------------- ##
 
     @property
+    def wiki_link(self) -> str:
+        if not hasattr(self, "_wiki_link"):
+            self._wiki_link = link(f"BodyLocation", self.location_id, anchor=self.location_id)
+        return self._wiki_link
+
+    @property
     def group(self) -> str:
         return self.data.get("Group", "")
 
@@ -268,7 +274,7 @@ class BodyPart:
     @property
     def wiki_link(self) -> str:
         if not hasattr(self, "_wiki_link"):
-            self._wiki_link = f"[[BloodLocation{Language.get_subpage()}#{self.name_en}|{self.name}]]"
+            self._wiki_link = link("BloodLocation", self.name, anchor=self.body_part_id)
         return self._wiki_link
 
 class BodyPartList:

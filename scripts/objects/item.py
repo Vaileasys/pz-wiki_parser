@@ -303,6 +303,7 @@ class Item:
         "OriginY": 0.0,
         "OriginZ": 0.0,
         "ShoutMultiplier": 1.0,
+        "OBSOLETE": False,
     }
 
     # Convert to lowercase
@@ -882,7 +883,7 @@ class Item:
 
         return [Skill(s) for s in expanded_skills]
     
-    def get_body_parts(self, do_link:bool=True, raw_id:bool=False, default=None):
+    def get_body_parts(self, do_link:bool=True, raw_id:bool=False, default=None) -> list[str]:
         """
         Returns a list of body parts based on the item's `BloodLocation`.
 
@@ -913,6 +914,15 @@ class Item:
             products.append(recipe.wiki_link)
         
         return products
+    
+    def get_fabric(self) -> str | None:
+        """Returns the item id for the item's fabric type."""
+        FABRIC_TYPES = {
+            "Cotton": 'Base.RippedSheets',
+            "Denim": 'Base.DenimStrips',
+            "Leather": 'Base.LeatherStrips',
+        }
+        return FABRIC_TYPES.get(self.fabric_type)
 
 
     ## ------------------------- Misc Methods ------------------------- ##
@@ -1637,14 +1647,6 @@ class Item:
 
     # --- Electrical/Light --- #
     @property
-    def on_create(self) -> str|None: return self.get_default("OnCreate")
-    @property
-    def on_break(self) -> str|None: return self.get_default("OnBreak")
-    @property
-    def on_cooked(self) -> str|None: return self.get_default("OnCooked")
-    @property
-    def on_eat(self) -> str|None: return self.get_default("OnEat")
-    @property
     def accept_media_type(self) -> int: return int(self.get_default("AcceptMediaType"))
     @property
     def media_category(self) -> str|None: return self.get_default("MediaCategory")
@@ -1750,6 +1752,8 @@ class Item:
     def wet(self) -> bool: return bool(self.get_default("Wet"))
     @property
     def cosmetic(self) -> bool: return bool(self.get_default("Cosmetic"))
+    @property
+    def obsolete(self) -> bool: return bool(self.get_default("OBSOLETE"))
 
     # --- Misc --- #
     @property
@@ -1961,5 +1965,11 @@ class Item:
 
 
 if __name__ == "__main__":
-    item = Item("Base.Jacket_Padded_HuntingCamo")
-    print(item.blood_location.body_parts.wiki_links)
+    from scripts.utils import util
+    item = Item("Base.Necklace_Choker_Bone")
+    neck_protection = "-"
+    if item.blood_location:
+        if "Neck" in item.get_body_parts(do_link=False):
+            neck_protection = item.neck_protection_modifier
+            neck_protection = util.convert_percentage(neck_protection, True)
+    print(neck_protection)
