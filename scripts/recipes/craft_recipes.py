@@ -1220,6 +1220,39 @@ def output_skill_usage(recipe_data_map: dict[str, dict]) -> None:
             file_handle.write("\n".join(lines))
 
 
+def output_category_usage(recipe_data_map: dict[str, dict]) -> None:
+    """
+    Generate wiki markup for category usage.
+
+    Args:
+        recipe_data_map (dict[str, dict]): Recipe data.
+
+    Creates files documenting which recipes belong to each category
+    and outputs them in template format.
+    """
+    os.makedirs(os.path.join("output", "recipes", "categories"), exist_ok=True)
+
+    crafting_category_usage: defaultdict[str, set[str]] = defaultdict(set)
+    building_category_usage: defaultdict[str, set[str]] = defaultdict(set)
+
+    for recipe_identifier, recipe_data in recipe_data_map.items():
+        is_building_recipe = bool(recipe_data.get("construction", False))
+        category = recipe_data.get("category", "Other")
+
+        target_map = building_category_usage if is_building_recipe else crafting_category_usage
+        target_map[category].add(recipe_identifier)
+
+    # write out templates
+    for category, recipes in crafting_category_usage.items():
+        lines = ["{{Crafting/sandbox|header=Crafting recipe table|collapsed=false|ID=" + category + "_crafting"] + [f"|{r}" for r in sorted(recipes)] + ["}}"]
+        with open(os.path.join("output", "recipes", "categories", f"{category}_crafting.txt"), "w", encoding="utf-8") as file_handle:
+            file_handle.write("\n".join(lines))
+    for category, recipes in building_category_usage.items():
+        lines = ["{{Building|header=Building recipe table|collapsed=false|ID=" + category + "_building"] + [f"|{r}" for r in sorted(recipes)] + ["}}"]
+        with open(os.path.join("output", "recipes", "categories", f"{category}_building.txt"), "w", encoding="utf-8") as file_handle:
+            file_handle.write("\n".join(lines))
+
+
 def output_lua_tables(recipe_data_map: dict[str, dict]) -> None:
     """
     Generate Lua tables for recipe data.
@@ -1489,6 +1522,14 @@ def main():
             echo.error(f"Error while writing skill usage: {exc}")
         else:
             echo.success("Skill usage written")
+
+        try:
+            echo.info("Writing category usage")
+            output_category_usage(processed_recipe_map)
+        except Exception as exc:
+            echo.error(f"Error while writing category usage: {exc}")
+        else:
+            echo.success("Category usage written")
 
         try:
             echo.info("Writing lua tables")
