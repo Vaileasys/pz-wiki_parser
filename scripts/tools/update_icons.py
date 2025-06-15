@@ -5,6 +5,7 @@ from pathlib import Path
 from scripts.core import config_manager as config
 from scripts.core.constants import RESOURCE_DIR
 from scripts.core.cache import save_cache, load_cache
+from scripts.utils import echo
 
 RESOURCES_DIR = Path(RESOURCE_DIR)
 ICON_DIR = RESOURCES_DIR / "icons"
@@ -72,18 +73,22 @@ def get_texture_names(textures_dir: Path, folder_key: str = None, prefix_blackli
 def copy_new_textures(texture_dir):
     if new_textures:
         for folder_key, files in new_textures.items():
-            prefix_dir = texture_dir / "new_textures" / folder_key
+            prefix_dir:Path = Path(ICON_DIR) / "new_textures" / folder_key
             prefix_dir.mkdir(parents=True, exist_ok=True)
 
-            for filename in files:
-                if folder_key == "Item":
-                    filename = f"Item_{filename}"
-                texture_path = texture_dir / filename
-                if texture_path.exists():
-                    new_filename = filename if folder_key != "Item" else filename
-                    shutil.copy(texture_path, prefix_dir / new_filename)
+            for src_file in files:
+                if folder_key == "Item" and src_file.startswith("Item_"):
+                    dst_file = src_file[len("Item_"):] # Remove 'item_' prefix
+                else:
+                    dst_file = src_file
 
-            print(f"New textures copied to '{prefix_dir}'")
+                texture_path:Path = texture_dir / src_file
+                if texture_path.exists():
+                    shutil.copy(texture_path, prefix_dir / dst_file)
+                else:
+                    echo.warning(f"'{texture_path}' not found, skipping.")
+
+            echo.success(f"New textures copied to '{prefix_dir}'")
 
 
 def save_new_texture_data():
@@ -100,8 +105,8 @@ def save_new_texture_data():
 def main():
     global textures_data
     textures_data = load_existing_textures()
-    get_texture_names(ICON_DIR)
-    copy_new_textures(ICON_DIR)
+    #get_texture_names(ICON_DIR)
+    #copy_new_textures(ICON_DIR)
 
     # Prefixes to be skipped
     prefix_blacklist = ["Item", "Build", "Zombie", "Male", "Male", "Puddles", "Bob", "BobZ", "BobZ2", "BobZ3", "F", "Hair"]
