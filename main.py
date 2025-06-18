@@ -3,7 +3,7 @@
 import importlib, sys, os
 from scripts.core import config_manager as config, setup, logger, cache
 from scripts.core.language import Language
-from scripts.utils import echo
+from scripts.utils import echo, color
 
 menu_structure = {
     '0': {
@@ -126,11 +126,14 @@ settings_structure = {
     },
 }
 
+def print_header(heading: str):
+    border = "=" * 50
+    print(color.style(f"{border}\n{heading.center(50)}\n{border}", color.BLUE))
+
+
 def display_menu(menu, is_root=False, title=None):
     if title:
-        print("\033[94m" + "=" * 50)
-        print(f"{title.center(50)}")
-        print("=" * 50 + "\033[0m")
+        print_header(title)
 
     for key, option in menu.items():
         name = option['name']
@@ -183,9 +186,7 @@ def navigate_menu(menu, is_root=False, title=None):
 
             # If no sub-options, simply run or show header
             if not subs:
-                print("\033[94m" + "=" * 50)
-                print(f"{name.center(50)}")
-                print("=" * 50 + "\033[0m")
+                print_header(title)
 
             if name == 'Settings' and subs is None:
                 navigate_menu(settings_structure)

@@ -4,11 +4,11 @@ import platform
 from pathlib import Path
 from scripts.core import config_manager as config
 from scripts.core.constants import LUA_PATH
-from scripts.utils import echo
+from scripts.utils import echo, color
 
 
 def get_install_path():
-    EXISTS_TAG = "\033[92m[exists]\033[0m"
+    EXISTS_TAG = color.style("[exists]", color.BRIGHT_GREEN)
     PLATFORM_PATHS = {
         "Windows": [
             Path("C:/Program Files (x86)/Steam/steamapps/common/ProjectZomboid"),
