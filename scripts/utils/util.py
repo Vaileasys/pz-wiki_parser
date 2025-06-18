@@ -159,6 +159,27 @@ def to_bool(value):
     return str(value).lower() in ('true', 't', '1', 'yes', 'y', 'on')
 
 
+def deep_getattr(obj: object, attr_path: str, default=None):
+    """
+    Access nested attributes on an object using dot‑notation.
+
+    Args:
+        obj: The object to fetch attributes from.
+        attr_path: A string of attribute names separated by '.', e.g. "fluid_container.capacity" - the path to the desired value.
+        default: A fallback value returned if any attribute in the path doesn't exist or its value is `None`.
+
+    Returns:
+        The value found at the end of the attribute path, or `default` if any intermediate attribute is missing or `None`.
+    """
+    for attr in attr_path.split('.'):
+        if obj is None:
+            return default
+        obj = getattr(obj, attr, default)
+        if obj is default:
+            return default
+    return obj
+
+
 def tick(text: str = None, link: str = None):
     """
     Return a wiki-formatted tick/check icon, optionally with text and link.

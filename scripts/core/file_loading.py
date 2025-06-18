@@ -1,9 +1,15 @@
-# File loading system
+"""
+File Loading System
+
+Provides utilities for mapping, locating, reading, and writing game-related files
+(like scripts, lua, maps, clothing) under the game's media directory.
+"""
 
 import os
+import shutil
 from pathlib import Path
 from scripts.core import config_manager as config
-from scripts.core.constants import OUTPUT_LANG_DIR
+from scripts.core.constants import OUTPUT_LANG_DIR, PROJECT_ROOT
 from scripts.core.language import Language
 from scripts.core.version import Version
 from scripts.core.cache import save_cache, load_cache
@@ -12,21 +18,27 @@ from scripts.utils import echo
 _game_file_map_cache = {}
 
 def get_game_dir():
+    """Return the base directory where the game is installed."""
     return config.get_game_directory()
 
 def get_media_dir():
+    """Return the path to the media folder within the game directory."""
     return os.path.join(get_game_dir(), "media")
 
 def get_lua_dir():
+    """Return the path to the 'media/lua' directory."""
     return os.path.join(get_media_dir(), "lua")
 
 def get_scripts_dir():
+    """Return the path to the 'media/scripts' directory."""
     return os.path.join(get_media_dir(), "scripts")
 
 def get_maps_dir():
+    """Return the path to the 'media/maps' directory."""
     return os.path.join(get_media_dir(), "maps")
 
 def get_clothing_dir():
+    """Return the path to the 'media/clothing' directory."""
     return os.path.join(get_media_dir(), "clothing")
 
 BASE_MEDIA_DIRS = {
@@ -216,14 +228,17 @@ def get_files_by_type(filenames: str | list[str] = None, media_type: str = "scri
 
 
 def get_script_files(filenames: str | list[str] = None, media_type: str = "scripts", prefer: str = None, prefix: str = None) -> list[str]:
+    """Return absolute paths to script files, filtering by filenames, duplicates, or prefix."""
     return get_files_by_type(filenames, media_type=media_type, prefer=prefer, prefix=prefix)
 
 
 def get_lua_files(filenames: str | list[str] = None, media_type: str = "lua", prefer: str = None) -> list[str]:
+    """Return absolute paths to Lua files, optionally filtering by name or preference keyword."""
     return get_files_by_type(filenames, media_type=media_type, prefer=prefer)
 
 
 def get_clothing_files(filenames: str | list[str] = None, media_type: str = "clothing", prefer: str = None) -> list[str]:
+    """Return absolute paths to clothing XML files, with optional name or preference filtering."""
     return get_files_by_type(filenames, media_type=media_type, prefer=prefer)
 
 ## -------------------- Get rel path -------------------- ##
@@ -246,12 +261,15 @@ def get_relpath_by_type(name: str, media_type: str, prefer: str = None) -> str |
 
 
 def get_script_relpath(name: str, prefer: str = None) -> str | None:
+    """Return the relative path of a script file by name, optionally prioritising a substring."""
     return get_relpath_by_type(name, media_type="scripts", prefer=prefer)
 
 def get_lua_relpath(name: str, prefer: str = None) -> str | None:
+    """Return the relative path of a Lua file by name, optionally prioritising a substring."""
     return get_relpath_by_type(name, media_type="lua", prefer=prefer)
 
 def get_clothing_relpath(name: str, prefer: str = None) -> str | None:
+    """Return the relative path of a clothing file by name, optionally prioritizing a substring."""
     return get_relpath_by_type(name, media_type="clothing", prefer=prefer)
 
 ## -------------------- Get abs path -------------------- ##
@@ -275,12 +293,15 @@ def get_abs_path_by_type(name: str, media_type: str, prefer: str = None) -> str 
     return None
 
 def get_script_path(name: str, media_type: str = "scripts", prefer: str = None) -> str | None:
+    """Return the absolute path to a script file by name, optionally prioritizing a substring."""
     return get_abs_path_by_type(name, media_type=media_type, prefer=prefer)
 
 def get_lua_path(name: str, media_type: str = "lua", prefer: str = None) -> str | None:
+    """Return the absolute path to a Lua file by name, optionally prioritizing a substring."""
     return get_abs_path_by_type(name, media_type=media_type, prefer=prefer)
 
 def get_clothing_path(name: str, media_type: str = "clothing", prefer: str = None) -> str | None:
+    """Return the absolute path to a clothing file by name, optionally prioritizing a substring."""
     return get_abs_path_by_type(name, media_type=media_type, prefer=prefer)
 
 
@@ -311,17 +332,20 @@ def read_file(path: str) -> str:
     return ""
 
 
-def write_file(content:list, rel_path="output.txt", root_path=None, suppress=False):
+def write_file(content:list[str], rel_path:str="output.txt", root_path:str=OUTPUT_LANG_DIR, suppress:bool=False):
     """
     Writes content to a file, creating directories as needed.
 
-    :param list content: A list of strings to write to the file.
-    :param str rel_path: The relative path where the file will be saved. If no file extension is given, the path is treated as a directory.
-    :param str root_path: The root path where the rel_path will be appended. {language_code} will be formatted to current language code.
-    :return: The directory the file is saved to.
+    Args:
+        content (list[str]): A list of strings to write to the file.
+        rel_path (str): Relative path where the file will be saved. If no file extension is given, it's treated as a directory.
+        root_path (str): Root path to prepend to `rel_path`. {language_code} will be formatted to current language code.
+        clear_root (bool): If True, deletes all contents under `root_path` before writing.
+        suppress (bool): If True, suppresses info messages.
+    
+    Returns:
+        Path: Directory where the file was saved.
     """
-    if root_path is None:
-        root_path = os.path.join(OUTPUT_LANG_DIR)
     output_path = Path(root_path.format(language_code=Language.get())) / rel_path
     output_dir = output_path.parent if output_path.suffix else output_path
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -329,14 +353,13 @@ def write_file(content:list, rel_path="output.txt", root_path=None, suppress=Fal
     if output_path.suffix:
         with open(output_path, 'w', encoding='utf-8') as file:
             file.write("\n".join(content))
-
         if not suppress:
             echo.info(f"File saved to '{output_path}'")
-        
     else:
         echo.error(f"No file written. '{output_path}' appears to be a directory.")
-    
+
     return output_dir
+
 
 def load_file(rel_path, root_path=None):
     """
@@ -358,6 +381,47 @@ def load_file(rel_path, root_path=None):
         file_str = read_file(path)
         return file_str.splitlines()
     return []
+
+def clear_dir(rel_path: str, root_path: str = OUTPUT_LANG_DIR, suppress: bool = False
+) -> Path:
+    """
+    Delete the contents of a directory at `root_path/rel_path`.
+    Only deletes contents under `PROJECT_ROOT`.
+    
+    Args:
+        rel_path (str): Relative subpath under `root_path` to clear.
+        root_path (str): Root directory format string (may use formatting, like {language_code}).
+        suppress (bool): If True, suppress warning/info messages.
+    
+    Returns:
+        Path: The absolute path to the directory that was cleared.
+    """
+    # Build rel and abs paths
+    root_rel = Path(root_path.format(language_code=Language.get())) / rel_path
+    root_abs = root_rel.resolve()
+
+    # Ensure it's in the project root
+    try:
+        root_abs.relative_to(PROJECT_ROOT)
+    except ValueError:
+        if not suppress:
+            echo.warning(f"Skipping clear: '{root_rel}' is outside project root.")
+        return root_abs
+
+    if not root_abs.exists():
+        raise FileNotFoundError(f"Cannot clear non-existent directory: '{root_rel}'")
+
+    # Delete contents
+    for child in root_abs.iterdir():
+        if child.is_dir():
+            shutil.rmtree(child)
+        else:
+            child.unlink()
+
+    if not suppress:
+        echo.info(f"Cleared contents of '{root_rel}'")
+
+    return root_abs
 
 
 if __name__ == "__main__":

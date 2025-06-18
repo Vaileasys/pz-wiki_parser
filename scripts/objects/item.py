@@ -38,6 +38,7 @@ class Item:
     _instances = {}
     _icon_cache_files = None
     _burn_data = None
+    _forage_clothing_penalties = None
 
     # Define property defaults
     _property_defaults = {
@@ -72,7 +73,7 @@ class Item:
         "WeaponWeight": 1.0,
         "MaxItemSize": 0.0,
         "WeightEmpty": 0.0,
-        "EvolvedRecipe": [],
+        "EvolvedRecipe": {},
         "ResearchableRecipes": [],
         "ResearchableRecipe": [],
         "TeachedRecipes": [],
@@ -388,6 +389,15 @@ class Item:
         """
         raw_data = script_parser.extract_script_data("item")
         cls._items = {k: cls._lower_keys(v) for k, v in raw_data.items()}
+
+    @classmethod
+    def _parse_foraging_penalties(cls):
+        """Extracts clothing penalties from 'forageSystem.lua' and cache."""
+        #TODO: have a separate foraging parser/class that we can extract this type of data from.
+        lua_runtime = lua_helper.load_lua_file("forageSystem.lua", inject_lua=lua_helper.LUA_EVENTS)
+        parsed_data = lua_helper.parse_lua_tables(lua_runtime, tables=["forageSystem.clothingPenalties"])
+        cls._forage_clothing_penalties = parsed_data.get("forageSystem.clothingPenalties", {})
+        #save_cache(cls._forage_clothing_penalties, "forage_clothing_penalties_data.json")
 
     @classmethod
     def fix_item_id(cls, item_id: str) -> str:
@@ -1027,8 +1037,12 @@ class Item:
         return self._wiki_link
     
     @property
-    def icon(self): 
+    def icon(self):
         return self.get_icon()
+    
+    @property
+    def icons(self) -> list[str]:
+        return self.get_icon(format=False, all_icons=True, cycling=False)
     
     ## ------------------------- Script Properties ------------------------- ##
 
@@ -1048,6 +1062,8 @@ class Item:
     def always_welcome_gift(self) -> bool: return bool(self.get_default("AlwaysWelcomeGift"))
     @property
     def tags(self) -> list: return self.get_default("Tags")
+    @property
+    def guid(self) -> str: return self.clothing_item.guid if self.clothing_item else None
 
     # --- Icon/Model/Animation --- #
     @property
@@ -1195,7 +1211,7 @@ class Item:
 
     # --- Recipes/Condition/Replace/Usage --- #
     @property
-    def evolved_recipe(self) -> list: return self.get_default("EvolvedRecipe")
+    def evolved_recipe(self) -> dict: return self.get_default("EvolvedRecipe")
     @property
     def evolved_recipe_name(self) -> str|None: return self.get_default("EvolvedRecipeName")
     @property #TODO: should these be CraftRecipe objects?
@@ -1944,11 +1960,11 @@ class Item:
                     else:
                         models.append(model_value)
 
-        elif self.world_static_models_by_index:
-            models = self.world_static_models_by_index
+        elif self.world_static_models_by_index or self.weapon_sprites_by_index:
+            models = self.world_static_models_by_index or self.weapon_sprites_by_index
 
         if models is None:
-            models = self.world_static_model or self.weapon_sprite or self.static_model
+            models = self.world_static_model or self.weapon_sprite or self.static_model or self.world_object_sprite or ""
 
         if models == '':
             self._models = models
@@ -1977,14 +1993,29 @@ class Item:
             return 1
 
         return self.skill_trained.get_multiplier(self.lvl_skill_trained)
+    
+    @property
+    def foraging_penalty(self) -> float:
+        loc = self.body_location or self.can_be_equipped
+        if not loc:
+            return 0.0
+        
+        if Item._forage_clothing_penalties is None:
+            Item._parse_foraging_penalties()
+        
+        if loc.location_id in Item._forage_clothing_penalties:
+            return Item._forage_clothing_penalties.get(loc.location_id)
+        
+        return 0.0
+    
+    @property
+    def body_parts(self) -> list[str]:
+        return self.get_body_parts(do_link=False, raw_id=True, default=[])
 
 
 if __name__ == "__main__":
-    from scripts.utils import util
-    item = Item("Base.Necklace_Choker_Bone")
-    neck_protection = "-"
-    if item.blood_location:
-        if "Neck" in item.get_body_parts(do_link=False):
-            neck_protection = item.neck_protection_modifier
-            neck_protection = util.convert_percentage(neck_protection, True)
-    print(neck_protection)
+    item = Item("Base.Glasses_Eyepatch_Right")
+    print(item.body_location.location_id)
+    print(item.foraging_penalty)
+
+    print(Item._forage_clothing_penalties)

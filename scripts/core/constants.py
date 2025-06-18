@@ -1,6 +1,8 @@
 import os
+from pathlib import Path
 
 # Root directories
+PROJECT_ROOT = str(Path(__file__).parent.parent.parent.resolve())
 OUTPUT_DIR = os.path.join("output")
 RESOURCE_DIR = os.path.join("resources")
 DATA_DIR = os.path.join("data")
