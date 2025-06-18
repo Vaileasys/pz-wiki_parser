@@ -16,8 +16,12 @@ The script handles:
 
 import os
 from tqdm import tqdm
-from scripts.parser import item_parser
+from scripts.core.constants import ITEM_DIR, PBAR_FORMAT
+from scripts.core.file_loading import write_file
+from scripts.objects.item import Item
+from scripts.utils import echo
 
+ROOT_DIR = os.path.join(ITEM_DIR, "evolved_recipes")
 
 def main():
     """
@@ -37,36 +41,29 @@ def main():
     - List-type recipe values
     - Cooked food variants
     """
-    parsed_item_data = item_parser.get_item_data()
-    output_dir = os.path.join("output", "evolved_recipes")
-    os.makedirs(output_dir, exist_ok=True)
-
-    for item_id, item_data in tqdm(parsed_item_data.items(), desc="Processing Items"):
-        evolved_recipe = item_data.get("EvolvedRecipe", {})
+    for item_id, item in tqdm(Item.all().items(), desc="Processing Items", bar_format=PBAR_FORMAT, unit=" items"):
+        evolved_recipe = item.evolved_recipe
         if not evolved_recipe:
             continue
-        lines = ["{{EvolvedRecipesForItem", f"|id={item_id}"]
+        content = ["{{EvolvedRecipesForItem", f"|id={item_id}"]
 
-        if item_data.get("Spice") == "TRUE" or item_data.get("Spice") == "true":
-            lines.append("|spice=true")
+        if item.spice:
+            content.append("|spice=true")
 
-        for key, value in evolved_recipe.items():
-            if isinstance(value, list):
-                value = '|'.join(value)
-            if isinstance(value, str) and value.endswith('|Cooked'):
-                value = value[:-len('|Cooked')]
-            lines.append(f"|{key.lower()}={value}")
+        for recipe, value in evolved_recipe.items():
+            count, cooked = value
+            param = recipe.lower() if not cooked else f"{recipe.lower()}cooked"
+            content.append(f"|{param}={count}")
 
-        lines.append("}}")
-        output_content = "\n".join(lines)
+        content.append("}}")
 
-        output_file_path = os.path.join(output_dir, f"{item_id}.txt")
-        try:
-            with open(output_file_path, "w") as f:
-                f.write(output_content)
-        except Exception as e:
-            tqdm.write(f"Error writing file for {item_id}: {e}")
+        output_file = f"{item_id}.txt"
+        output_dir = write_file(content, rel_path=output_file, root_path=ROOT_DIR, suppress=True)
+
+    echo.success(f"Evolved recipe files written to '{output_dir}'")
 
 
 if __name__ == '__main__':
+    from scripts.core.language import Language
+    Language.set("en")
     main()

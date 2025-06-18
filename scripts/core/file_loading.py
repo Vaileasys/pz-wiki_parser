@@ -382,22 +382,21 @@ def load_file(rel_path, root_path=None):
         return file_str.splitlines()
     return []
 
-def clear_dir(rel_path: str, root_path: str = OUTPUT_LANG_DIR, suppress: bool = False
+def clear_dir(directory: str = OUTPUT_LANG_DIR, suppress: bool = False
 ) -> Path:
     """
     Delete the contents of a directory at `root_path/rel_path`.
     Only deletes contents under `PROJECT_ROOT`.
     
     Args:
-        rel_path (str): Relative subpath under `root_path` to clear.
-        root_path (str): Root directory format string (may use formatting, like {language_code}).
+        directory (str): Directory to clear (automatically formats `language_code`).
         suppress (bool): If True, suppress warning/info messages.
     
     Returns:
         Path: The absolute path to the directory that was cleared.
     """
     # Build rel and abs paths
-    root_rel = Path(root_path.format(language_code=Language.get())) / rel_path
+    root_rel = Path(directory.format(language_code=Language.get()))
     root_abs = root_rel.resolve()
 
     # Ensure it's in the project root
@@ -409,7 +408,8 @@ def clear_dir(rel_path: str, root_path: str = OUTPUT_LANG_DIR, suppress: bool = 
         return root_abs
 
     if not root_abs.exists():
-        raise FileNotFoundError(f"Cannot clear non-existent directory: '{root_rel}'")
+        echo.warning(f"Cannot clear non-existent directory: '{root_rel}'")
+        return root_abs
 
     # Delete contents
     for child in root_abs.iterdir():
