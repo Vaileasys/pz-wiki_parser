@@ -25,7 +25,8 @@ from scripts.core.language import Language, Translate
 from scripts.core.version import Version
 from scripts.core.cache import load_cache
 from scripts.parser.script_parser import extract_script_data
-from scripts.parser import literature_parser, fluid_parser
+from scripts.parser import literature_parser
+from scripts.objects.fluid import Fluid
 from scripts.parser.item_parser import get_item_data
 from scripts.utils import utility, util
 from scripts.utils import echo
@@ -99,8 +100,6 @@ def fluid_rgb(fluid_id):
 
     Handles:
     - Category-based fluid IDs
-    - Color reference lookups
-    - Tainted water special case
     - RGB value normalization
     """
     try:
@@ -109,41 +108,17 @@ def fluid_rgb(fluid_id):
             match = re.match(r'categories\[(.+?)\]', fluid_id)
             if match:
                 fluid_id = match.group(1)
+        
+        fluid = Fluid(fluid_id)
 
-        fluid_metadata = fluid_parser.get_fluid_data().get(fluid_id)
-        if not fluid_metadata:
+        if not fluid.valid:
             raise ValueError(f"No fluid found for ID: {fluid_id}")
 
-        with open(os.path.join("resources", "color_reference.json"), "r") as color_reference_file:
-            color_reference_data = json.load(color_reference_file)
-
-        fluid_name = utility.get_fluid_name(fluid_metadata)
-        if fluid_id == "TaintedWater":
-            translated_label = Translate.get("ItemNameTaintedWater", "IGUI")
-            fluid_name = translated_label.replace("%1", fluid_name)
-
-        color_reference_key = fluid_metadata.get("ColorReference")
-        numeric_rgb_color = fluid_metadata.get("Color", [0.0, 0.0, 0.0])
-
-        if color_reference_key:
-            if isinstance(color_reference_key, str):
-                rgb_values = color_reference_data["colors"].get(color_reference_key, [0.0, 0.0, 0.0])
-            elif isinstance(color_reference_key, list) and len(color_reference_key) == 1 and isinstance(color_reference_key[0], str):
-                rgb_values = color_reference_data["colors"].get(color_reference_key[0], [0.0, 0.0, 0.0])
-            else:
-                rgb_values = numeric_rgb_color
-        else:
-            rgb_values = numeric_rgb_color
-
-        red_value   = int(float(rgb_values[0]) * 255)
-        green_value = int(float(rgb_values[1]) * 255)
-        blue_value  = int(float(rgb_values[2]) * 255)
-
         return {
-            "name": fluid_name,
-            "R":    red_value,
-            "G":    green_value,
-            "B":    blue_value
+            "name": fluid.name,
+            "R":    fluid.r,
+            "G":    fluid.g,
+            "B":    fluid.b
         }
 
     except Exception as error:
