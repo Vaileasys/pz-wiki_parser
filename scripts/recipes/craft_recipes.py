@@ -28,7 +28,6 @@ from scripts.parser.script_parser import extract_script_data
 from scripts.parser import literature_parser
 from scripts.objects.fluid import Fluid
 from scripts.objects.item import Item
-from scripts.utils import utility, util
 from scripts.utils import echo
 from scripts.items import item_tags
 
@@ -154,7 +153,7 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
         if item_id == "Any fluid container":
             return item_id
         try:
-            return utility.get_name(item_id)
+            return Item(item_id).name
         except Exception:
             return item_id
 
@@ -293,17 +292,18 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
         elif data.get("numbered_list"):
             lines = []
             for itm in data["items"]:
-                icon = utility.get_icon(itm["raw"])
-                link = util.link(utility.get_page(itm["raw"], itm["translated"]), itm["translated"])
+                item_obj = Item(itm["raw"])
+                icon = item_obj.icon
+                link = item_obj.wiki_link
                 if itm.get("is_unit"):
                     # Handle unit items with Unit bar
                     use_delta = get_use_delta(itm["raw"])
                     unit_bar = f"{{{{#invoke:Unit bar|main|{itm['amount']}|{use_delta}}}}}"
 
-                    lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {link} <br>{unit_bar}")
+                    lines.append(f"{icon} {link} <br>{unit_bar}")
                 else:
                     # Regular items
-                    lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {link} <small>×{itm['amount']}</small>")
+                    lines.append(f"{icon} {link} <small>×{itm['amount']}</small>")
             formatted.append(("item","<br>".join(lines),"One of"))
 
         # Simple items
@@ -311,16 +311,17 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
             lines = []
             qty = data.get("amount",1)
             for itm in data["items"]:
-                icon = utility.get_icon(itm["raw"])
-                link = util.link(utility.get_page(itm["raw"], itm["translated"]), itm["translated"])
+                item_obj = Item(itm["raw"])
+                icon = item_obj.icon
+                link = item_obj.wiki_link
                 if itm.get("is_unit"):
                     # Handle unit items with Unit bar
                     use_delta = get_use_delta(itm["raw"])
                     unit_bar = f"{{{{#invoke:Unit bar|main|{qty}|{use_delta}}}}}"
-                    lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {link} <br>{unit_bar}")
+                    lines.append(f"{icon} {link} <br>{unit_bar}")
                 else:
                     # Regular items
-                    lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {link} <small>×{qty}</small>")
+                    lines.append(f"{icon} {link} <small>×{qty}</small>")
             desc = "One of" if len(data["items"])>1 else "Each of"
             formatted.append(("item","<br>".join(lines),desc))
 
@@ -403,18 +404,18 @@ def process_tools(recipe: dict, build_data: dict) -> str:
             for rid in inp["items"]:
                 if rid in EXCLUDED or rid.startswith("Base.*"):
                     continue
-                    
-                name = utility.get_name(rid)
-                page = utility.get_page(rid, name)
-                icon = utility.get_icon(rid)
+                
+                item = Item(rid)
+                wiki_link = item.wiki_link
+                icon = item.icon
                 
                 # Check if this is a unit tool
                 if rid in unit_tool_ids:
                     use_delta = get_use_delta(rid)
                     unit_bar = f"{{{{#invoke:Unit bar|main|{count}|{use_delta}}}}}"
-                    lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {util.link(page, name)} <br>{unit_bar}")
+                    lines.append(f"{icon} {wiki_link} <br>{unit_bar}")
                 else:
-                    lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {util.link(page, name)} <small>×{count}</small>")
+                    lines.append(f"{icon} {wiki_link} <small>×{count}</small>")
 
         if not lines:
             continue
@@ -549,17 +550,13 @@ def process_output_mapper(recipe: dict, mapper_key: str) -> list[str]:
     for raw_output_key in mapper_data.keys():
         if raw_output_key.lower() == "default":
             continue
-
-        icon_filename = utility.get_icon(raw_output_key)
-        if isinstance(icon_filename, list):
-            icon_filename = icon_filename[0] if icon_filename else "Question On.png"
-
-        item_name = utility.get_name(raw_output_key)
-        page_url = utility.get_page(raw_output_key, item_name)
-        link_html = util.link(page_url, item_name)
+        
+        item_obj = Item(raw_output_key)
+        icon = item_obj.get_icon(all_icons=False)
+        wiki_link = item_obj.wiki_link
 
         formatted_lines.append(
-            f"[[File:{icon_filename}|64x64px|class=pixelart]]<br>{link_html} ×{output_amount}"
+            f"{icon}<br>{wiki_link} ×{output_amount}"
         )
 
     return formatted_lines
@@ -701,13 +698,10 @@ def process_products(recipe: dict, build_data: dict) -> str:
         if "items" in out:
             qty = out.get("count", out.get("index", 1))
             for rid in out["items"]:
-                icon = utility.get_icon(rid)
-                if isinstance(icon, list):
-                    icon = icon[0] if icon else "Question On.png"
-                nm = utility.get_name(rid)
-                url = utility.get_page(rid, nm)
-                link = util.link(url, nm)
-                item_lines.append(f"[[File:{icon}|64x64px|class=pixelart]]<br>{link} ×{qty}")
+                item_obj = Item(rid)
+                icon_filename = item_obj.get_icon(False, False, False)
+                wiki_link = item_obj.wiki_link
+                item_lines.append(f"[[File:{icon_filename}|64x64px|class=pixelart]]<br>{wiki_link} ×{qty}")
 
     # Assemble sections
     if item_lines:
@@ -927,7 +921,7 @@ def process_requirements(recipe: dict, literature_data: dict) -> tuple[str, str]
     # Skillbooks that teach this recipe
     for item_id, item in Item.all().items():
         if item.teached_recipes and raw_recipe_name in item.teached_recipes:
-            book_name = utility.get_name(item_id)
+            book_name = item.name
             requirements_work["skillbooks"].append(book_name)
 
     # Schematics from literature spawns
