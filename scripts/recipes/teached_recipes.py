@@ -16,9 +16,11 @@ The script handles:
 
 import os
 from tqdm import tqdm
-from scripts.parser import item_parser
+from scripts.objects.item import Item
+from scripts.objects.craft_recipe import CraftRecipe
 from scripts.parser import metarecipe_parser
-from scripts.utils.utility import get_recipe
+from scripts.core.file_loading import write_file
+from scripts.core.constants import OUTPUT_DIR, PBAR_FORMAT
 from scripts.utils import echo
 
 def main():
@@ -36,15 +38,13 @@ def main():
     The output is saved in the 'output/recipes/teachedrecipes' directory,
     with one file per teaching item.
     """
-    parsed_item_data = item_parser.get_item_data()
     # Load meta recipe data for expansion
     metarecipe_data = metarecipe_parser.get_metarecipe_data()
     
-    teached_dir = os.path.join("output", "recipes", "teachedrecipes")
-    os.makedirs(teached_dir, exist_ok=True)
+    teached_dir = os.path.join(OUTPUT_DIR, "recipes", "teachedrecipes")
 
-    for item_id, item_data in tqdm(parsed_item_data.items(), desc="Processing teached recipes"):
-        teached_recipes = item_data.get("TeachedRecipes")
+    for item_id, item in tqdm(Item.all().items(), desc="Processing teached recipes", bar_format=PBAR_FORMAT, leave=False):
+        teached_recipes = item.teached_recipes
         if not teached_recipes:
             continue
 
@@ -55,22 +55,21 @@ def main():
         # Expand meta recipes
         expanded_recipes = metarecipe_parser.expand_recipe_list(teached_recipes)
 
-        lines = [
-            f"<!-- Bot flag|TeachedRecipes|id={item_id} -->\nReading this item will teach the following recipes:"
+        content = [
+            f"<!-- Bot flag|TeachedRecipes|id={item_id} -->", #TODO: change to 'BOT_FLAG' constant
+            "Reading this item will teach the following recipes:"
         ]
 
         for recipe in expanded_recipes:
-            recipe_link = get_recipe(recipe)
-            lines.append(f"*{recipe_link}")
+            recipe_link = CraftRecipe(recipe).wiki_link
+            content.append(f"*{recipe_link}")
 
-        output_content = "\n".join(lines) + f"\n<!-- Bot flag end|TeachedRecipes|id={item_id} -->"
-        teached_file_path = os.path.join(teached_dir, f"{item_id}_Teached.txt")
+        content.append(f"<!-- Bot flag end|TeachedRecipes|id={item_id} -->") #TODO: change to 'BOT_FLAG_END' constant
+        teached_file = f"{item_id}_Teached.txt"
 
-        try:
-            with open(teached_file_path, "w") as f:
-                f.write(output_content)
-        except Exception as e:
-            tqdm.write(f"Error writing file for {item_id}: {e}")
+        output_file_path = write_file(content, rel_path=teached_file, root_path=teached_dir, suppress=True)
+    
+    echo.success(f"Teached recipes written to '{output_file_path}'")
 
 
 if __name__ == '__main__':

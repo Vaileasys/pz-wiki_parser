@@ -16,7 +16,7 @@ The script handles:
 
 import os
 from tqdm import tqdm
-from scripts.parser import item_parser
+from scripts.objects.item import Item
 from scripts.parser import metarecipe_parser
 from scripts.utils import echo
 
@@ -37,7 +37,6 @@ def main():
     - output/recipes/crafting/
     Each containing one file per researchable item.
     """
-    parsed_item_data = item_parser.get_item_data()
     # Load meta recipe data for expansion
     metarecipe_data = metarecipe_parser.get_metarecipe_data()
 
@@ -46,8 +45,8 @@ def main():
     os.makedirs(research_dir, exist_ok=True)
     os.makedirs(crafting_dir, exist_ok=True)
 
-    for item_id, item_data in tqdm(parsed_item_data.items(), desc="Processing research recipes"):
-        researchable_recipes = item_data.get("ResearchableRecipes")
+    for item_id, item in tqdm(Item.all().items(), desc="Processing research recipes"):
+        researchable_recipes = item.researchable_recipes
         if not researchable_recipes:
             continue
 
