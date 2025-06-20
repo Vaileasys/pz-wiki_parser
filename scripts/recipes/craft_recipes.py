@@ -27,7 +27,7 @@ from scripts.core.cache import load_cache
 from scripts.parser.script_parser import extract_script_data
 from scripts.parser import literature_parser
 from scripts.objects.fluid import Fluid
-from scripts.parser.item_parser import get_item_data
+from scripts.objects.item import Item
 from scripts.utils import utility, util
 from scripts.utils import echo
 from scripts.items import item_tags
@@ -48,32 +48,26 @@ def get_unit_tool_ids() -> list[str]:
     if _unit_tool_ids_cache is not None:
         return _unit_tool_ids_cache
         
-    item_data = get_item_data()
     unit_tool_ids = []
     
-    for item_id, item_info in item_data.items():
-        if item_info.get("Type") == "Drainable":
+    for item_id, item in Item.all().items():
+        if item.type == "Drainable":
             unit_tool_ids.append(item_id)
     
     _unit_tool_ids_cache = unit_tool_ids
     return unit_tool_ids
 
-def get_use_delta(item_id: str, item_data: dict) -> float:
+def get_use_delta(item_id: str) -> float:
     """
     Get the UseDelta value for a unit tool item.
     
     Args:
         item_id (str): The item ID to look up
-        item_data (dict): Dictionary of parsed item data
         
     Returns:
         float: The UseDelta value as a float, or 0.1 as default if not found
     """
-    if not item_id.startswith("Base."):
-        item_id = f"Base.{item_id}"
-        
-    item_info = item_data.get(item_id, {})
-    use_delta = item_info.get("UseDelta")
+    use_delta = Item(item_id).get("UseDelta")
     
     try:
         return float(use_delta) if use_delta else 0.1
@@ -150,8 +144,6 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
     if not isinstance(input_list, list):
         return "''none''"
 
-    # Load item data for UseDelta lookup
-    item_data = get_item_data()
     unit_tool_ids = get_unit_tool_ids()
     
     parsed_ingredients = {"ingredients": {}}
@@ -305,7 +297,7 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
                 link = util.link(utility.get_page(itm["raw"], itm["translated"]), itm["translated"])
                 if itm.get("is_unit"):
                     # Handle unit items with Unit bar
-                    use_delta = get_use_delta(itm["raw"], item_data)
+                    use_delta = get_use_delta(itm["raw"])
                     unit_bar = f"{{{{#invoke:Unit bar|main|{itm['amount']}|{use_delta}}}}}"
 
                     lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {link} <br>{unit_bar}")
@@ -323,7 +315,7 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
                 link = util.link(utility.get_page(itm["raw"], itm["translated"]), itm["translated"])
                 if itm.get("is_unit"):
                     # Handle unit items with Unit bar
-                    use_delta = get_use_delta(itm["raw"], item_data)
+                    use_delta = get_use_delta(itm["raw"])
                     unit_bar = f"{{{{#invoke:Unit bar|main|{qty}|{use_delta}}}}}"
                     lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {link} <br>{unit_bar}")
                 else:
@@ -388,8 +380,6 @@ def process_tools(recipe: dict, build_data: dict) -> str:
 
     groups: list[tuple[str, list[str]]] = []
     
-    # Load item data for UseDelta lookup
-    item_data = get_item_data()
     unit_tool_ids = get_unit_tool_ids()
 
     # Process tools
@@ -420,7 +410,7 @@ def process_tools(recipe: dict, build_data: dict) -> str:
                 
                 # Check if this is a unit tool
                 if rid in unit_tool_ids:
-                    use_delta = get_use_delta(rid, item_data)
+                    use_delta = get_use_delta(rid)
                     unit_bar = f"{{{{#invoke:Unit bar|main|{count}|{use_delta}}}}}"
                     lines.append(f"[[File:{icon}|32x32px|class=pixelart]] {util.link(page, name)} <br>{unit_bar}")
                 else:
@@ -897,7 +887,7 @@ def process_skills(data: dict) -> str:
     return "<br><small>and</small><br>".join(formatted_skills)
 
 
-def process_requirements(recipe: dict, parsed_item_metadata: dict, literature_data: dict) -> tuple[str, str]:
+def process_requirements(recipe: dict, literature_data: dict) -> tuple[str, str]:
     """
     Process recipe requirements into wiki markup.
 
@@ -935,9 +925,9 @@ def process_requirements(recipe: dict, parsed_item_metadata: dict, literature_da
     raw_recipe_name = recipe.get("name", "")
 
     # Skillbooks that teach this recipe
-    for item_identifier, item_details in parsed_item_metadata.items():
-        if "TeachedRecipes" in item_details and raw_recipe_name in item_details["TeachedRecipes"]:
-            book_name = utility.get_name(item_identifier)
+    for item_id, item in Item.all().items():
+        if item.teached_recipes and raw_recipe_name in item.teached_recipes:
+            book_name = utility.get_name(item_id)
             requirements_work["skillbooks"].append(book_name)
 
     # Schematics from literature spawns
@@ -990,7 +980,7 @@ def process_requirements(recipe: dict, parsed_item_metadata: dict, literature_da
     return recipes_string, skills_string
 
 
-def build_tag_to_items_map(parsed_item_data: dict) -> dict[str, list[dict[str, str]]]:
+def build_tag_to_items_map() -> dict[str, list[dict[str, str]]]:
     """
     Build mapping of tags to items.
 
@@ -1412,7 +1402,6 @@ def main():
     else:
         echo.success("Cache ready")
 
-    parsed_item_data = get_item_data()
     literature_data  = literature_parser.get_literature_data()
     processed_recipe_map: dict[str, dict] = {}
 
@@ -1426,7 +1415,7 @@ def main():
                 try:
                     ingredients_markup   = process_ingredients(recipe_data, build_data)
                     tools_markup         = process_tools(recipe_data, build_data)
-                    recipes_markup, skills_markup = process_requirements(recipe_data, parsed_item_data, literature_data)
+                    recipes_markup, skills_markup = process_requirements(recipe_data, literature_data)
                     workstation_markup   = process_workstation(recipe_data, build_data)
                     products_markup      = process_products(recipe_data, build_data)
                     xp_markup            = process_xp(recipe_data, build_data)
@@ -1453,7 +1442,7 @@ def main():
                 try:
                     ingredients_markup   = process_ingredients(recipe_data, build_data)
                     tools_markup         = process_tools(recipe_data, build_data)
-                    recipes_markup, skills_markup = process_requirements(recipe_data, parsed_item_data, literature_data)
+                    recipes_markup, skills_markup = process_requirements(recipe_data, literature_data)
                     workstation_markup   = process_workstation(recipe_data, build_data)
                     products_markup      = process_products(recipe_data, build_data)
                     xp_markup            = process_xp(recipe_data, build_data)
@@ -1483,7 +1472,7 @@ def main():
     try: # Begin outputting
         try:
             echo.info("Mapping item tags")
-            tag_map = build_tag_to_items_map(parsed_item_data)
+            tag_map = build_tag_to_items_map()
         except Exception as exc:
             echo.error(f"Error while mapping item tags: {exc}")
             tag_map = {}
