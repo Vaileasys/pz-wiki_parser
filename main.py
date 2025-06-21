@@ -89,8 +89,9 @@ menu_structure = {
         'name': 'Other',
         'description': '',
         'sub_options': {
-            '1': {'module': 'roomdefine', 'name': 'Room definitions', 'description': 'Create roomdef item page.'},
-            '2': {'module': 'scripts.parser.radio_parser', 'name': 'Radio transcripts', 'description': 'Generate radio transcripts.'},
+            '1': {'module': 'parser.script_parser', 'name': 'Script parser', 'description': 'Parse game scripts.'},
+            '2': {'module': 'roomdefine', 'name': 'Room definitions', 'description': 'Create roomdef item page.'},
+            '3': {'module': 'scripts.parser.radio_parser', 'name': 'Radio transcripts', 'description': 'Generate radio transcripts.'},
         },
     },
 }
@@ -109,7 +110,7 @@ settings_structure = {
     '2': {
         'name': 'Change language',
         'description': 'Change the language to be used for outputs.',
-        'module': 'core.translate'
+        'module': 'core.language'
     },
     '3': {
         'name': 'Clear cache',
@@ -182,14 +183,15 @@ def navigate_menu(menu, is_root=False, title=None):
         if user_input in menu:
             selected = menu[user_input]
             name = selected['name']
+            title = name
             subs = selected.get('sub_options')
 
             # If no sub-options, simply run or show header
-            if not subs:
+            if not subs and not is_root:
                 print_header(title)
 
             if name == 'Settings' and subs is None:
-                navigate_menu(settings_structure)
+                navigate_menu(settings_structure, title=name)
             elif name == 'Clear cache':
                 cache.clear_cache()
             elif name == 'Toggle debug':
@@ -197,11 +199,11 @@ def navigate_menu(menu, is_root=False, title=None):
                 config.set_debug_mode(new_debug)
                 settings_structure['4']['description'] = f'Toggle debug mode, to show or hide debug prints. Current: {new_debug}'
             elif name == 'Run First Time Setup':
+                print_header(title)
                 handle_module('scripts.core.setup')
             elif name == 'Tags':
+                print_header(title)
                 handle_module('scripts.items.item_tags')
-            elif name == 'Script parser':
-                handle_module('scripts.parser.script_parser')
             elif 'module' in selected:
                 handle_module(selected['module'])
             elif subs:

@@ -5,11 +5,11 @@ from pathlib import Path
 from scripts.core.file_loading import get_script_files, read_file
 from scripts.core.language import Translate
 from scripts.core.cache import save_cache, load_cache
-from scripts.utils import echo
-from scripts.parser.recipe_parser import parse_recipe_block, parse_construction_recipe
 from scripts.core.constants import PBAR_FORMAT
 from scripts.core.version import Version
 from scripts.core import config_manager as config
+from scripts.parser.recipe_parser import parse_recipe_block, parse_construction_recipe
+from scripts.utils import echo, color
 
 PREFIX_BLACKLIST = {
     "item": ["MakeUp_", "ZedDmg_", "Wound_", "Bandage_", "F_Hair_", "M_Hair_", "M_Beard_"]
@@ -953,7 +953,7 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
     return dict(sorted(script_dict.items()))
 
 
-def main():
+def main(run_directly=False):
     menu = {
         "1": {"script_type": "item", "desc": "Game items like tools, food, and materials."},
         "2": {"script_type": "fluid", "desc": "Liquids, like water or fuel."},
@@ -961,8 +961,8 @@ def main():
         "4": {"script_type": "template", "desc": "Vehicles and their properties."},
         "5": {"script_type": "evolvedrecipe", "desc": "Recipes that enhance food items with optional ingredients."},
         "6": {"script_type": "uniquerecipe", "desc": "Special one-off recipes with fixed inputs and results."},
-        "7": {"script_type": "craftRecipe", "desc": "Standard crafting recipes for items and upgrades. [uses recipe_parser]"},
-        "8": {"script_type": "entity", "desc": "World objects with buildable or interactive components. [uses recipe_parser]"},
+        "7": {"script_type": "craftRecipe", "desc": f"Standard crafting recipes for items and upgrades. {color.style('[uses recipe_parser]', color.YELLOW)}"},
+        "8": {"script_type": "entity", "desc": f"World objects with buildable or interactive components. {color.style('[uses recipe_parser]', color.YELLOW)}"},
         "9": {"script_type": "energy", "desc": "Energy effects like visual charges or particle trails."},
         "10": {"script_type": "multistagebuild", "desc": "Construction stages for buildable structures."},
         "11": {"script_type": "model", "desc": "3D model definitions for in-game rendering."},
@@ -978,12 +978,12 @@ def main():
     while True:
         for key, value in menu.items():
             print(f"{key}: {value.get('script_type')} - {value.get('desc')}")
-        print("Q: Quit")
+        print("Q: Quit" if run_directly else "B: Back")
         option = input("Enter a script type or select an option.\n> ")
 
         if option in menu:
             script_type = menu[option]["script_type"]
-        elif option.lower() == "q":
+        elif option.lower() == "q" if run_directly else "b":
             break
         else:
             script_type = option
@@ -993,4 +993,4 @@ def main():
         extract_script_data(script_type)
 
 if __name__ == "__main__":
-    main()
+    main(run_directly=True)

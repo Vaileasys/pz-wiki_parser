@@ -266,3 +266,6 @@ class Translate:
         if line.strip().startswith('--'):
             return ''
         return re.split(r'--', line, maxsplit=1)[0].strip()
+
+def main():
+    Language.init()
