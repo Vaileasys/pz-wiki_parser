@@ -1,62 +1,93 @@
+"""
+Category checks.
+
+This module defines a series of category check functions used to classify an object based on their type,
+tags, or other properties. The `find_categories` and `find_all_categories` functions evaluate an item against
+a predefined list of checks and return matching category names.
+
+Typical usage:
+    categories = find_categories(item)              # First matching category
+    all_categories = find_all_categories(item)      # All matching categories
+
+Used by the wiki parser to automatically organise and filter item data.
+"""
 from objects.item import Item
 
 def is_weapon(item: Item) -> bool:
+    """Return True if the item is a weapon."""
     return item.type == "Weapon"
 
 def is_weapon_part(item: Item) -> bool:
+    """Return True if the item is a weapon part."""
     return item.type == "WeaponPart"
 
 def is_ammo(item: Item) -> bool:
+    """Return True if the item is considered ammunition."""
     return (
         item.get("DisplayCategory") == "Ammo"
         or item.has_tag("Ammo", "PistolMagazine", "RifleMagazine")
-    )
+        )
 
 def is_clothing(item: Item) -> bool:
-    return item.type == "Clothing"
+    """Return True if the item is clothing."""
+    return (
+        item.type in ("Clothing", "AlarmClockClothing")
+        or item.can_be_equipped
+        )
 
 def is_container(item: Item) -> bool:
+    """Return True if the item is a container."""
     return item.type == "Container"
 
 def is_fluid_container(item: Item) -> bool:
     return item.fluid_container
 
 def is_food(item: Item) -> bool:
+    """Return True if the item is food or marked as food."""
     return (
         item.type == "Food" 
         or item.get("DisplayCategory") == "Food"
         )
 
 def is_fuel(item: Item) -> bool:
+    """Return True if the item can be used as burnable fuel."""
     return item.burn_time
 
 def is_animal_part(item: Item) -> bool:
+    """Return True if the item is an animal part."""
     return item.get("DisplayCategory") in ("AnimalPart", "AnimalPartWeapon")
 
 def is_appearance(item: Item) -> bool:
+    """Return True if the item is used to modify player appearance."""
     return (
         item.get("DisplayCategory") == "Appearance"
         or item.make_up_type
         or item.id_type in ("Razor", "Scissors", "Hairgel", "Hairspray2")
         or item.has_tag("Razor", "Scissors", "DoHairdo", "SlickHair")
-    )
+        )
 
 def is_camping(item: Item) -> bool:
+    """Return True if the item is used for camping."""
     return item.get("DisplayCategory") in ("Camping")
 
 def is_communication(item: Item) -> bool:
+    """Return True if the item is a communication appliance."""
     return item.get("DisplayCategory") in ("Communications")
 
 def is_cooking(item: Item) -> bool:
+    """Return True if the item is a cooking utensil."""
     return item.get("DisplayCategory") in ("Cooking", "CookingWeapon")
 
 def is_corpse(item: Item) -> bool:
+    """Return True if the item is a corpse."""
     return item.get("DisplayCategory") in ("Corpse")
 
 def is_electronics(item: Item) -> bool:
+    """Return True if the item is an electronic."""
     return item.get("DisplayCategory") in ("Electronics")
 
 def is_fire_source(item: Item) -> bool:
+    """Return True if the item can be used to start a fire."""
     return (
         item.get("DisplayCategory") in ("FireSource")
         or item.has_tag("StartFire")
@@ -64,6 +95,7 @@ def is_fire_source(item: Item) -> bool:
         )
 
 def is_medical(item: Item) -> bool:
+    """Return True if the item is used in or related to first aid."""
     return (
         item.get("DisplayCategory") in ("FirstAid", "FirstAidWeapon")
         or item.can_bandage
@@ -71,9 +103,11 @@ def is_medical(item: Item) -> bool:
         )
 
 def is_vehicle_maintenance(item: Item) -> bool:
+    """Return True if the item is used for vehicle maintenance."""
     return item.get("DisplayCategory") in ("VehicleMaintenance", "VehicleMaintenanceWeapon")
 
 def is_literature(item: Item) -> bool:
+    """Return True if the item is a book, map, or other literature."""
     return (
         item.type in ("Literature", "Map")
         or item.get("DisplayCategory") in ("Literature")
