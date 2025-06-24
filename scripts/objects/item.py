@@ -23,7 +23,6 @@ from scripts.objects.components import FluidContainer, Durability
 from scripts.objects.body_location import BloodLocationList, BloodLocation, BodyLocation
 from scripts.objects.clothing_item import ClothingItem
 from scripts.objects.skill import Skill, SkillBook
-from scripts.objects.craft_recipe import CraftRecipe
 
 class Item:
     """
@@ -101,8 +100,8 @@ class Item:
         "KeepOnDeplete": False,
         "ChanceToSpawnDamaged": 0,
         "MetalValue": 0.0,
-        "DaysFresh": 1000000000,
-        "DaysTotallyRotten": 1000000000,
+        #"DaysFresh": 1000000000,
+        #"DaysTotallyRotten": 1000000000,
         "HungerChange": 0.0,
         "ThirstChange": 0.0,
         "Calories": 0.0,
@@ -435,6 +434,11 @@ class Item:
         if cls._items is None:
             cls._load_items()
         return {item_id: cls(item_id) for item_id in cls._items}
+    
+    @classmethod
+    def items(cls):
+        """Return an iterable of (item_id, Item) pairs."""
+        return cls.all().items()
     
     @classmethod
     def keys(cls):
@@ -930,6 +934,7 @@ class Item:
             return self.blood_location.body_parts.names
     
     def get_recipes(self) -> list[str]:
+        from scripts.objects.craft_recipe import CraftRecipe
         if not self.teached_recipes:
             return []
         
@@ -952,17 +957,50 @@ class Item:
 
     ## ------------------------- Misc Methods ------------------------- ##
 
-    def has_tag(self, tag: str) -> bool:
+    def has_tag(self, *tags: str | list[str]) -> bool:
         """
-        Check if the item has a specific tag.
+        Check if the item has any of the given tags.
 
         Args:
-            tag (str): The tag name to check.
+            *tags (str | list[str]): One or more tags to check. Can be individual strings or a list of strings.
 
         Returns:
-            bool: True if the tag is present, False otherwise.
+            bool: True if any of the tags are present, False otherwise.
         """
-        return bool(self.tags) and tag in self.tags
+        if not self.tags:
+            return False
+
+        # Flatten input in case a list is passed
+        flat_tags = []
+        for tag in tags:
+            if isinstance(tag, list):
+                flat_tags.extend(tag)
+            else:
+                flat_tags.append(tag)
+
+        return any(t in self.tags for t in flat_tags)
+    
+    def has_tags(self, *tags: str | list[str]) -> bool:
+        """
+        Check if the item has all of the given tags.
+
+        Args:
+            *tags (str | list[str]): Tags to check. Accepts multiple strings or a list of strings.
+
+        Returns:
+            bool: True if all tags are present, False otherwise.
+        """
+        if not self.tags:
+            return False
+
+        flat_tags = []
+        for tag in tags:
+            if isinstance(tag, list):
+                flat_tags.extend(tag)
+            else:
+                flat_tags.append(tag)
+
+        return all(t in self.tags for t in flat_tags)
     
     ## ------------------------- Properties ------------------------- ##
 
@@ -1023,12 +1061,18 @@ class Item:
         if self._name is None:
             self._name = self._find_name()
         return self._name
+    @name.setter
+    def name(self, value):
+        self._name = value
 
     @property
     def name_en(self):
         if self._name_en is None:
             self._name_en = self._find_name(language="en")
         return self._name_en
+    @name_en.setter
+    def name_en(self, value):
+        self._name_en = value
 
     @property
     def wiki_link(self):
@@ -1285,9 +1329,9 @@ class Item:
     @property
     def food_type(self) -> str|None: return self.get_default("FoodType")
     @property
-    def days_fresh(self) -> int: return int(self.get_default("DaysFresh"))
+    def days_fresh(self) -> int|None: return self.get_default("DaysFresh")
     @property
-    def days_totally_rotten(self) -> int: return int(self.get_default("DaysTotallyRotten"))
+    def days_totally_rotten(self) -> int|None: return self.get_default("DaysTotallyRotten")
     @property
     def hunger_change(self) -> float: return float(self.get_default("HungerChange"))
     @property
@@ -1660,7 +1704,7 @@ class Item:
 
     # --- Tooltip/Menu --- #
     @property
-    def tooltip(self) -> str|None: return self.get_default("Tooltip", self.get_default("ToolTip"))
+    def tooltip(self) -> str|None: return Translate.get(self.get_default("Tooltip", self.get_default("ToolTip")))
     @property
     def custom_context_menu(self) -> str|None: return self.get_default("CustomContextMenu")
     @property
@@ -1901,6 +1945,9 @@ class Item:
         
         if not self.should_burn: return
 
+        if Item._burn_data is None:
+            Item.load_burn_data()
+        
         fuel_data = Item._burn_data
         campingLightFireType = fuel_data["campingLightFireType"]
         campingLightFireCategory = fuel_data["campingLightFireCategory"]
@@ -2011,6 +2058,12 @@ class Item:
     @property
     def body_parts(self) -> list[str]:
         return self.get_body_parts(do_link=False, raw_id=True, default=[])
+    
+    @property
+    def vehicle_type_name(self) -> int:
+        if not hasattr(self, "_vehicle_type_name"):
+            self._vehicle_type_name = Translate.get(f"IGUI_VehicleType_{self.vehicle_type}")
+        return self._vehicle_type_name
 
 
 if __name__ == "__main__":
