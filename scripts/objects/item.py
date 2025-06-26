@@ -12,12 +12,11 @@ import csv
 from scripts.parser import script_parser
 from scripts.core.file_loading import get_script_path, get_media_dir
 from scripts.core.language import Language, Translate
-from scripts.utils import lua_helper, echo
+from scripts.utils import lua_helper, echo, util
 from scripts.core import logger
 from scripts.core.constants import RESOURCE_DIR
 from scripts.core.cache import load_cache, save_cache
 from scripts.core.version import Version
-from scripts.utils.util import link
 from scripts.core.page_manager import get_pages
 from scripts.objects.components import FluidContainer, Durability
 from scripts.objects.body_location import BloodLocationList, BloodLocation, BodyLocation
@@ -343,8 +342,8 @@ class Item:
         self.data = Item._items.get(item_id, {})
 
         id_parts = item_id.split(".", 1)
-        self._module = id_parts[0]
-        self._id_type = id_parts[1] if len(id_parts) == 2 else None
+        self._module = id_parts[0] if len(id_parts) == 2 else None
+        self._id_type = id_parts[1] if len(id_parts) == 2 else id_parts[0]
 
         self._name = None
         self._name_en = None  # English name
@@ -410,6 +409,9 @@ class Item:
         Returns:
             str: The best-guess full item_id.
         """
+        if item_id is None:
+            item_id = ""
+
         if '.' in item_id:
             return item_id
 
@@ -1002,6 +1004,29 @@ class Item:
 
         return all(t in self.tags for t in flat_tags)
     
+    def has_category(self, *categories: str | list[str]) -> bool:
+        """
+        Check if the item has any of the given categories.
+
+        Args:
+            *categories (str | list[str]): One or more category names to check. Can be individual strings or a list.
+
+        Returns:
+            bool: True if any of the categories are present, False otherwise.
+        """
+        if not self.item_categories:
+            return False
+
+        # Flatten input
+        flat_categories = []
+        for cat in categories:
+            if isinstance(cat, list):
+                flat_categories.extend(cat)
+            else:
+                flat_categories.append(cat)
+
+        return any(cat in self.item_categories for cat in flat_categories)
+    
     ## ------------------------- Properties ------------------------- ##
 
     # --- Core --- #
@@ -1077,7 +1102,7 @@ class Item:
     @property
     def wiki_link(self):
         if self._wiki_link is None:
-            self._wiki_link = link(self.page, self.name)
+            self._wiki_link = util.link(self.page, self.name)
         return self._wiki_link
     
     @property
@@ -2064,6 +2089,17 @@ class Item:
         if not hasattr(self, "_vehicle_type_name"):
             self._vehicle_type_name = Translate.get(f"IGUI_VehicleType_{self.vehicle_type}")
         return self._vehicle_type_name
+    
+    @property
+    def item_categories(self) -> list[str]:
+        from scripts.utils import categories
+        if not hasattr(self, "_item_categories"):
+            self._item_categories = categories.find_all_categories(self)
+        return self._item_categories
+        
+    @property
+    def units(self):
+        return round(1 / self.use_delta, 0)
 
 
 if __name__ == "__main__":
