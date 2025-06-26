@@ -11,7 +11,7 @@ Typical usage:
 
 Used by the wiki parser to automatically organise and filter item data.
 """
-from objects.item import Item
+from scripts.objects.item import Item
 
 def is_weapon(item: Item) -> bool:
     """Return True if the item is a weapon."""
@@ -84,7 +84,10 @@ def is_corpse(item: Item) -> bool:
 
 def is_electronics(item: Item) -> bool:
     """Return True if the item is an electronic."""
-    return item.get("DisplayCategory") in ("Electronics")
+    return (
+        item.get("DisplayCategory") in ("Electronics")
+        or item.has_tag("MiscElectronic")
+        )
 
 def is_fire_source(item: Item) -> bool:
     """Return True if the item can be used to start a fire."""
@@ -113,6 +116,58 @@ def is_literature(item: Item) -> bool:
         or item.get("DisplayCategory") in ("Literature")
         )
 
+def is_fishing(item: Item) -> bool:
+    """Return True if the item is used in fishing."""
+    return (
+        item.get("DisplayCategory") in ("Fishing", "FishingWeapon")
+        or item.has_tag("FishingHook", "FishingLine", "FishingSpear", "FishingRod", "FishingNet")
+        #or item.fishing_lure
+        )
+
+def is_gardening(item: Item) -> bool:
+    """Return True if the item is used in gardening."""
+    return (
+        item.get("DisplayCategory") in ("Gardening", "GardeningWeapon")
+        or item.id_type in ("InsectRepellent", "KnapsackSprayer", "KnapsackSprayer_Stowed")
+        )
+
+def is_household(item: Item) -> bool:
+    """Return True if the item is categorised as a household item."""
+    return (
+        item.get("DisplayCategory") in ("Household", "HouseholdWeapon")
+        or item.has_tag("Write", "Eraser", "CleanStains")
+        )
+
+def is_instrument(item: Item) -> bool:
+    """Return True if the item is an instrument."""
+    return (
+        item.get("DisplayCategory") in ("Instrument", "InstrumentWeapon")
+        or item.shout_type
+        )
+
+def is_junk(item: Item) -> bool:
+    """Return True if the item is classified as junk."""
+    return (
+        item.get("DisplayCategory") in ("Junk", "JunkWeapon")
+        or item.is_dung
+        )
+
+def is_light_source(item: Item) -> bool:
+    """Return True if the item is classified as junk."""
+    return (
+        item.get("DisplayCategory") in ("LightSource")
+        or item.has_tag("Flashlight")
+        or (item.light_distance and item.light_strength)
+        )
+
+def is_material(item: Item) -> bool:
+    """Return True if the item is classified as junk."""
+    return (
+        item.get("DisplayCategory") in ("Material", "MaterialWeapon", "Paint")
+        or "RippedSheets" in item.id_type
+        or item.has_tag("Thread", "HeavyThread", "AnimalBone", "LargeAnimalBone")
+        )
+
 ITEM_CHECKS = [
     (is_weapon, "weapon"),
     (is_weapon_part, "weapon_part"),
@@ -133,6 +188,13 @@ ITEM_CHECKS = [
     (is_medical, "medical"),
     (is_vehicle_maintenance, "vehicle_maintenance"),
     (is_literature, "literature"),
+    (is_fishing, "fishing"),
+    (is_gardening, "gardening"),
+    (is_household, "household"),
+    (is_instrument, "instrument"),
+    (is_junk, "junk"),
+    (is_light_source, "light_source"),
+    (is_material, "material"),
 ]
 
 def find_categories(obj: object, *, do_all: bool = False, checks: list[tuple] = ITEM_CHECKS) -> list[str]:
