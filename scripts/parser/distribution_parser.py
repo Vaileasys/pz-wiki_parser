@@ -1,5 +1,4 @@
 import os
-import json
 import re
 import struct
 import lupa
@@ -63,7 +62,7 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
         distribution_table = lua.globals().distributionTable
 
         def remove_prefixes(name):
-            prefixes = ["Base.", "Farming.", "Radio.", "Camping.", "farming.", "radio.", "camping."]
+            prefixes = ["Base."]
             for prefix in prefixes:
                 if name.startswith(prefix):
                     return name[len(prefix):]
@@ -473,7 +472,7 @@ def parse_attachedweapons(attached_weapon_path, output_path):
 
     # Function to remove specified prefixes
     def remove_prefixes(name):
-        prefixes = "Base."
+        prefixes = ["Base.", "Farming.", "Radio."]
         for prefix in prefixes:
             if name.startswith(prefix):
                 return name[len(prefix):]
