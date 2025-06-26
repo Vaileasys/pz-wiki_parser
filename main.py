@@ -17,8 +17,8 @@ menu_structure = {
         'sub_options': {
             '1': {'module': 'scripts.items.item_infobox', 'name': 'Item infobox', 'description': 'Generates item infoboxes.'},
             '2': {'module': 'scripts.items.item_codesnip', 'name': 'Item codesnips', 'description': 'Generate codesnip files.'},
-            '3': {'module': 'consumables', 'name': 'Consumables', 'description': 'Generate consumables tables.'},
-            '4': {'module': 'distribution', 'name': 'Distributions', 'description': 'Generate distribution files.'},
+            '3': {'module': 'scripts.items.item_consumables', 'name': 'Consumables', 'description': 'Generate consumables tables.'},
+            '4': {'module': 'scripts.items.item_distribution', 'name': 'Distributions', 'description': 'Generate distribution files.'},
             '5': {'module': 'scripts.items.item_container_contents', 'name': 'Container contents', 'description': 'Generate container contents.'},
             '6': {'module': 'scripts.items.item_body_part', 'name': 'Body part', 'description': 'Generates body part templates.'},
             '7': {'module': 'scripts.items.item_article', 'name': 'Item article', 'description': 'Generate articles for items.'},

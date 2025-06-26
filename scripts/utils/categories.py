@@ -62,7 +62,7 @@ def is_appearance(item: Item) -> bool:
     return (
         item.get("DisplayCategory") == "Appearance"
         or item.make_up_type
-        or item.id_type in ("Razor", "Scissors", "Hairgel", "Hairspray2")
+        or (item.id_type and item.id_type in ("Razor", "Scissors", "Hairgel", "Hairspray2"))
         or item.has_tag("Razor", "Scissors", "DoHairdo", "SlickHair")
         )
 
@@ -94,7 +94,7 @@ def is_fire_source(item: Item) -> bool:
     return (
         item.get("DisplayCategory") in ("FireSource")
         or item.has_tag("StartFire")
-        or item.id_type == "PercedWood"
+        or (item.id_type and item.id_type == "PercedWood")
         )
 
 def is_medical(item: Item) -> bool:
