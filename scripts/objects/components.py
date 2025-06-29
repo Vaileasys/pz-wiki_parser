@@ -32,6 +32,44 @@ class FluidContainer:
         """Allow FluidContainer to evaluate as False if empty, True if data exists."""
         return bool(self.data)
 
+    def has_fluid(self, *fluids: Fluid | str | list[Fluid | str]) -> bool:
+        """
+        Check if the item contains any of the given fluids.
+
+        Args:
+            *fluids (Fluid | str | list[Fluid | str]): One or more Fluid objects or fluid ID strings.
+                Accepts individual arguments or a list.
+
+        Returns:
+            bool: True if any of the fluids are present, False otherwise.
+        """
+        if not self.is_valid:
+            return False
+
+        # Ensure the fluid ID list is prepared
+        if not hasattr(self, "_fluid_id_list"):
+            self.fluids  # this presumably sets _fluid_id_list
+
+        # Flatten input
+        flat_fluids = []
+        for f in fluids:
+            if isinstance(f, list):
+                flat_fluids.extend(f)
+            else:
+                flat_fluids.append(f)
+
+        # Normalize to Fluid objects
+        for f in flat_fluids:
+            fluid = f if isinstance(f, Fluid) else Fluid(f)
+            if fluid.id_type in self._fluid_id_list:
+                return True
+
+        return False
+
+    @property
+    def is_valid(self) -> bool:
+        return bool(self.data)
+
     @property
     def container_name(self):
         """Return the translated container name."""
@@ -57,29 +95,34 @@ class FluidContainer:
     @property
     def fluids(self):
         """Return a list of Fluid objects, including mix ratios and optional colors."""
-        fluids_data = self.data.get("Fluids", {})
+        if not self.is_valid:
+            return
+        if not hasattr(self, "_fluids"):
+            fluids_data = self.data.get("Fluids", {})
 
-        if isinstance(fluids_data, dict):
-            fluid_list = fluids_data.get("fluid", [])
-        elif isinstance(fluids_data, list) and not fluids_data:
-            fluid_list = []
-        else:
-            fluid_list = []
+            if isinstance(fluids_data, dict):
+                fluid_list = fluids_data.get("fluid", [])
+            elif isinstance(fluids_data, list) and not fluids_data:
+                fluid_list = []
+            else:
+                fluid_list = []
 
-        final_fluids = []
-        for fluid in fluid_list:
-            fluid_id = fluid[0]
-            mix_ratio = fluid[1] if len(fluid) > 1 else 1.0
+            self._fluids = []
+            self._fluid_id_list = []
+            for fluid in fluid_list:
+                fluid_id = fluid[0]
+                self._fluid_id_list.append(fluid_id)
+                mix_ratio = fluid[1] if len(fluid) > 1 else 1.0
 
-            color = None
-            if len(fluid) >= 5:
-                possible_color = fluid[2:5]
-                if all(isinstance(c, (float, int)) for c in possible_color):
-                    color = possible_color
+                color = None
+                if len(fluid) >= 5:
+                    possible_color = fluid[2:5]
+                    if all(isinstance(c, (float, int)) for c in possible_color):
+                        color = possible_color
 
-            final_fluids.append(Fluid(fluid_id, mix_ratio=mix_ratio, color=color))
+                self._fluids.append(Fluid(fluid_id, mix_ratio=mix_ratio, color=color))
 
-        return final_fluids
+        return self._fluids
     
     @property
     def fluid_proportions(self):
