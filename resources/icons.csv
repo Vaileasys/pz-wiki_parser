@@ -2,9 +2,9 @@ item_id,icon
 Base.BluePen,BluePen
 Base.RedPen,RedPen
 Base.GreenPen,GreenPen
-Radio.RadioReceiver,RadioReceiver
-Radio.RadioTransmitter,RadioTransmitter
-Radio.ElectricWire,ElectricWire
+Base.RadioReceiver,RadioReceiver
+Base.RadioTransmitter,RadioTransmitter
+Base.ElectricWire,ElectricWire
 Base.LightBulbRed,LightBulbRed
 Base.LightBulbGreen,LightBulbGreen
 Base.LightBulbBlue,LightBulbBlue
