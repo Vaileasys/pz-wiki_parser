@@ -1,3 +1,4 @@
+import re
 from scripts.utils import echo
 
 

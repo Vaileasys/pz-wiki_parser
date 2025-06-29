@@ -19,7 +19,13 @@ def load_lua_file(lua_files: str | list[str], lua_runtime: LuaRuntime = None, de
     if not lua_runtime:
         lua_runtime = LuaRuntime(unpack_returned_tuples=True)
         lua_path = os.path.normpath(get_lua_dir()).replace(os.sep, "/")
-        lua_runtime.execute(f"package.path = package.path .. ';{lua_path}/?.lua;{lua_path}/?/init.lua'")
+        extra_paths = [
+            f"{lua_path}/?.lua",
+            f"{lua_path}/shared/?.lua",
+            f"{lua_path}/client/?.lua",
+            f"{lua_path}/server/?.lua",
+        ]
+        lua_runtime.execute("package.path = package.path .. ';" + ";".join(extra_paths) + "'")
 
     if inject_lua:
         lua_runtime.execute("\n\n".join(inject_lua) if isinstance(inject_lua, list) else inject_lua)
