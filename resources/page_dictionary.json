@@ -24,6 +24,12 @@
                 "Base.AnimalGrease"
             ]
         },
+        "Animal's Milk (fluid)": {
+            "categories": [],
+            "fluid_id": [
+                "Base.AnimalMilk"
+            ]
+        },
         "Apple Juice (fluid)": {
             "categories": [],
             "fluid_id": [
@@ -992,6 +998,12 @@
                 "Base.CowLeather_Angus_Fur_Tan_Small"
             ]
         },
+        "Animal (item)": {
+            "categories": [],
+            "item_id": [
+                "Base.Animal"
+            ]
+        },
         "Animal Bone": {
             "categories": [
                 "Animal part"
@@ -1264,6 +1276,14 @@
                 "Base.Apron_WhiteTEXTURE"
             ]
         },
+        "Aramid Thread": {
+            "categories": [
+                "Materials"
+            ],
+            "item_id": [
+                "Base.Thread_Aramid"
+            ]
+        },
         "Armor Schematic": {
             "categories": [
                 "Recipe magazines"
@@ -1435,15 +1455,6 @@
             ]
         },
         "Bacon Strip": {
-            "categories": [
-                "Protein"
-            ],
-            "item_id": [
-                "Base.BaconRashers",
-                "Base.BaconRashers"
-            ]
-        },
-        "Bacon Strips": {
             "categories": [
                 "Protein"
             ],
@@ -4888,9 +4899,7 @@
             ]
         },
         "Boxing Gloves (blue)": {
-            "categories": [
-                "Gloves"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Gloves_BoxingBlue"
             ]
@@ -8487,6 +8496,14 @@
                 "Base.CeramicTeacupUnfired"
             ]
         },
+        "Clay Teacup (Unfired) (glazed)": {
+            "categories": [
+                "Materials"
+            ],
+            "item_id": [
+                "Base.CeramicTeacupGlazedUnfired"
+            ]
+        },
         "Clay Tile (Unfired)": {
             "categories": [
                 "Materials"
@@ -9341,6 +9358,38 @@
             "categories": [],
             "item_id": [
                 "Base.Cow_Skull_Wall"
+            ]
+        },
+        "Cowhide Coat": {
+            "categories": [
+                "Clothing"
+            ],
+            "item_id": [
+                "Base.JacketLong_CowHide",
+                "Base.JacketLong_AngusHide",
+                "Base.JacketLong_HolsteinHide",
+                "Base.JacketLong_SimmentalHide"
+            ]
+        },
+        "Cowhide Jacket": {
+            "categories": [
+                "Clothing"
+            ],
+            "item_id": [
+                "Base.Jacket_CowHide",
+                "Base.Jacket_AngusHide",
+                "Base.Jacket_HolsteinHide",
+                "Base.Jacket_SimmentalHide"
+            ]
+        },
+        "Cowhide Tank Top": {
+            "categories": [
+                "Clothing"
+            ],
+            "item_id": [
+                "Base.Vest_AngusHide",
+                "Base.Vest_HolsteinHide",
+                "Base.Vest_SimmentalHide"
             ]
         },
         "Crackers": {
@@ -10279,6 +10328,14 @@
                 "Base.DeerHide"
             ]
         },
+        "Deer Hide Tank Top": {
+            "categories": [
+                "Clothing"
+            ],
+            "item_id": [
+                "Base.Vest_DeerHide"
+            ]
+        },
         "Deer Leather (Furred)": {
             "categories": [
                 "Tailoring materials"
@@ -10331,6 +10388,14 @@
             "categories": [],
             "item_id": [
                 "Base.DeerDoe_Skull_Wall"
+            ]
+        },
+        "Deerhide Jacket": {
+            "categories": [
+                "Clothing"
+            ],
+            "item_id": [
+                "Base.Jacket_DeerHide"
             ]
         },
         "Dehydrated Meat Stick": {
@@ -13648,6 +13713,14 @@
                 "Base.GasmaskFilter"
             ]
         },
+        "Gas Mask Filter - Crafted": {
+            "categories": [
+                "Accessories"
+            ],
+            "item_id": [
+                "Base.GasmaskFilterCrafted"
+            ]
+        },
         "Gators doc": {
             "categories": [
                 "Home VHS"
@@ -14935,12 +15008,44 @@
                 "Base.Hat_Cowboy"
             ]
         },
+        "Hat - Cowboy (Angus)": {
+            "categories": [
+                "Clothing"
+            ],
+            "item_id": [
+                "Base.Hat_Cowboy_Angus"
+            ]
+        },
+        "Hat - Cowboy (Holstein)": {
+            "categories": [
+                "Clothing"
+            ],
+            "item_id": [
+                "Base.Hat_Cowboy_Holstein"
+            ]
+        },
+        "Hat - Cowboy (Simmental)": {
+            "categories": [
+                "Clothing"
+            ],
+            "item_id": [
+                "Base.Hat_Cowboy_Simmental"
+            ]
+        },
         "Hat - Cowboy (black)": {
             "categories": [
                 "Hats"
             ],
             "item_id": [
                 "Base.Hat_Cowboy_Black"
+            ]
+        },
+        "Hat - Cowboy (cowhide)": {
+            "categories": [
+                "Clothing"
+            ],
+            "item_id": [
+                "Base.Hat_Cowboy_CowHide"
             ]
         },
         "Hat - Cowboy (white)": {
@@ -15493,9 +15598,7 @@
             ]
         },
         "Helmet - Police Motorcycle": {
-            "categories": [
-                "Helmets"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Hat_CrashHelmet_Police"
             ]
@@ -16249,15 +16352,10 @@
                 "Light sources"
             ],
             "item_id": [
-                "Base.Lantern_Hurricane"
-            ]
-        },
-        "Hurricane Lantern (Lit)": {
-            "categories": [
-                "Light sources"
-            ],
-            "item_id": [
-                "Base.Lantern_HurricaneLit"
+                "Base.Lantern_Hurricane",
+                "Base.Lantern_HurricaneLit",
+                "Base.Lantern_Hurricane_Forged",
+                "Base.Lantern_Hurricane_ForgedLit"
             ]
         },
         "Hurricane Lantern - Copper": {
@@ -17780,9 +17878,7 @@
             ]
         },
         "Key Ring - Four-Leaf Clover": {
-            "categories": [
-                "Key rings"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.KeyRing_Clover"
             ]
@@ -19859,6 +19955,14 @@
             ]
         },
         "Macaroni": {
+            "categories": [
+                "Food"
+            ],
+            "item_id": [
+                "Base.Macaroni"
+            ]
+        },
+        "Macaroni (mac and cheese)": {
             "categories": [
                 "Non-perishable food\u200e"
             ],
@@ -29274,6 +29378,12 @@
                 "Base.AmmoStrap_Shells"
             ]
         },
+        "Shells Bandolier (brown)": {
+            "categories": [],
+            "item_id": [
+                "Base.AmmoStrap_Brown_Shells"
+            ]
+        },
         "Shemagh (Face Covering Scarf)": {
             "categories": [
                 "Headwear"
@@ -31230,6 +31340,14 @@
             ],
             "item_id": [
                 "Base.SpearButterKnife"
+            ]
+        },
+        "Spear with Fighting Knife": {
+            "categories": [
+                "Spears"
+            ],
+            "item_id": [
+                "Base.SpearFightingKnife"
             ]
         },
         "Spear with Fork": {
@@ -35465,11 +35583,10 @@
         },
         "Water Bottle": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
-                "Base.WaterBottleEmpty",
-                "Base.WaterBottleFull"
+                "Base.WaterBottle"
             ]
         },
         "Water Bottle (Bourbon)": {
@@ -36650,11 +36767,9 @@
             ]
         },
         "Aaaaah! Painting": {
-            "categories": [
-                "Wall decorations"
-            ],
+            "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingAaaaah"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_94",
@@ -36662,11 +36777,9 @@
             ]
         },
         "Abe Lincoln Painting": {
-            "categories": [
-                "Wall decorations"
-            ],
+            "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingAbeLincoln"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_97",
@@ -36689,7 +36802,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FlagAdmin"
             ],
             "sprite_id": [
                 "location_restaurant_bar_smutz_23"
@@ -36723,7 +36836,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_AirConditioner"
             ],
             "sprite_id": [
                 "rooftop_furniture_21"
@@ -36755,8 +36868,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "location_farm_accesories_01_4",
-                "location_farm_accesories_01_5",
+                "location_farm_accesories_01_6+7",
+                "location_farm_accesories_01_5+4",
                 "location_farm_accesories_01_6",
                 "location_farm_accesories_01_7"
             ]
@@ -36780,7 +36893,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingAppleFacedMan"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_87",
@@ -36792,7 +36905,7 @@
                 "Gravestones"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GraveArched"
             ],
             "sprite_id": [
                 "location_community_cemetary_01_3",
@@ -36967,7 +37080,7 @@
                 "Cooking appliances"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_RedBBQ"
             ],
             "sprite_id": [
                 "appliances_cooking_01_35"
@@ -37065,7 +37178,7 @@
                 "Gravestones"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GraveWorn"
             ],
             "sprite_id": [
                 "location_community_cemetary_01_9",
@@ -37096,20 +37209,6 @@
                 "furniture_seating_outdoor_01_26+27",
                 "furniture_seating_outdoor_01_29+28",
                 "furniture_seating_outdoor_01_30+31"
-            ]
-        },
-        "Bedroom Drawers": {
-            "categories": [
-                "Container tiles"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_storage_01_49",
-                "furniture_storage_01_48",
-                "furniture_storage_01_50",
-                "furniture_storage_01_51"
             ]
         },
         "Beige Canopy": {
@@ -37294,14 +37393,6 @@
                 "location_business_office_generic_01_37+36"
             ]
         },
-        "Big Locker": {
-            "categories": [
-                "Container tiles"
-            ],
-            "item_id": [
-                "Moveables.{TileID}"
-            ]
-        },
         "Big Wall Corner Shelves": {
             "categories": [],
             "item_id": [
@@ -37335,6 +37426,18 @@
                 "location_restaurant_spiffos_03_31+30+29+28"
             ]
         },
+        "Birch Floating Counter": {
+            "categories": [
+                "Counters"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "fixtures_counters_01_27",
+                "fixtures_counters_01_26"
+            ]
+        },
         "Birchwood Bench": {
             "categories": [
                 "Chairs"
@@ -37345,46 +37448,6 @@
             "sprite_id": [
                 "furniture_seating_outdoor_01_32+33",
                 "furniture_seating_outdoor_01_35+34"
-            ]
-        },
-        "Birchwood Corner Counter": {
-            "categories": [
-                "Counters"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "fixtures_counters_01_42",
-                "fixtures_counters_01_44",
-                "fixtures_counters_01_46",
-                "fixtures_counters_01_40"
-            ]
-        },
-        "Birchwood Counter": {
-            "categories": [
-                "Counters"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "fixtures_counters_01_43",
-                "fixtures_counters_01_45",
-                "fixtures_counters_01_47",
-                "fixtures_counters_01_41"
-            ]
-        },
-        "Birchwood Floating Counter": {
-            "categories": [
-                "Counters"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "fixtures_counters_01_27",
-                "fixtures_counters_01_26"
             ]
         },
         "Birchwood Floor": {
@@ -37468,6 +37531,20 @@
             ],
             "sprite_id": [
                 "floors_interior_tilesandwood_01_1"
+            ]
+        },
+        "Black Drawers": {
+            "categories": [
+                "Container tiles"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_storage_01_32",
+                "furniture_storage_01_33",
+                "furniture_storage_01_34",
+                "furniture_storage_01_35"
             ]
         },
         "Black Fancy Chair": {
@@ -37805,7 +37882,7 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "lighting_indoor_01_12",
+                "lighting_indoor_01_12+12+36+44+52",
                 "lighting_indoor_01_36",
                 "lighting_indoor_01_44",
                 "lighting_indoor_01_52"
@@ -38011,6 +38088,17 @@
             ],
             "sprite_id": [
                 "floors_rugs_01_16"
+            ]
+        },
+        "Bordered Square Table": {
+            "categories": [
+                "Tables"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_tables_high_01_15"
             ]
         },
         "Bouquet of Roses": {
@@ -38332,7 +38420,7 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "vegetation_indoor_01_3"
+                "vegetation_indoor_01_1"
             ]
         },
         "Cage Trap": {
@@ -38423,6 +38511,43 @@
                 "location_shop_accessories_01_2"
             ]
         },
+        "Cedar Corner Counter": {
+            "categories": [
+                "Counters"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "fixtures_counters_01_42",
+                "fixtures_counters_01_44",
+                "fixtures_counters_01_46",
+                "fixtures_counters_01_40"
+            ]
+        },
+        "Cedar Counter": {
+            "categories": [
+                "Counters"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "fixtures_counters_01_43",
+                "fixtures_counters_01_45",
+                "fixtures_counters_01_47",
+                "fixtures_counters_01_41"
+            ]
+        },
+        "Cedar Round Table": {
+            "categories": [],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_tables_high_01_14"
+            ]
+        },
         "Center Sign": {
             "categories": [],
             "item_id": [
@@ -38469,6 +38594,18 @@
                 "crafted_02_49",
                 "crafted_02_50",
                 "crafted_02_51"
+            ]
+        },
+        "Cheap Overhead Cabinet": {
+            "categories": [
+                "Counters"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "location_restaurant_spiffos_03_32+33+34+35+40+41+22",
+                "location_restaurant_spiffos_03_36+37+38+39+42+43+23"
             ]
         },
         "Chemical Toilet": {
@@ -38527,7 +38664,7 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "location_community_school_01_56",
+                "location_community_school_01_56+57+58+59+60",
                 "location_community_school_01_57",
                 "location_community_school_01_58",
                 "location_community_school_01_59",
@@ -38584,6 +38721,34 @@
                 "location_entertainment_gallery_01_119+118+117"
             ]
         },
+        "Chrome Fridge": {
+            "categories": [
+                "Fridges"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "appliances_refrigeration_01_9",
+                "appliances_refrigeration_01_8",
+                "appliances_refrigeration_01_11",
+                "appliances_refrigeration_01_10"
+            ]
+        },
+        "Chrome Industrial Sink": {
+            "categories": [
+                "Sinks"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "fixtures_sinks_01_16",
+                "fixtures_sinks_01_17",
+                "fixtures_sinks_01_18",
+                "fixtures_sinks_01_19"
+            ]
+        },
         "Chrome Microwave": {
             "categories": [
                 "Cooking appliances"
@@ -38610,6 +38775,18 @@
                 "fixtures_sinks_01_9",
                 "fixtures_sinks_01_10",
                 "fixtures_sinks_01_11"
+            ]
+        },
+        "Chrome Toaster": {
+            "categories": [
+                "Electronic decorations"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "appliances_cooking_01_33",
+                "appliances_cooking_01_32"
             ]
         },
         "Chrome Window": {
@@ -38839,8 +39016,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "street_decoration_01_29",
-                "street_decoration_01_28"
+                "construction_01_7",
+                "construction_01_6"
             ]
         },
         "Configuration II Painting": {
@@ -38967,8 +39144,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "carpentry_02_72",
-                "carpentry_02_73",
+                "carpentry_02_75+74",
+                "carpentry_02_72+73",
                 "carpentry_02_74",
                 "carpentry_02_75"
             ]
@@ -39116,20 +39293,6 @@
                 "fixtures_counters_01_57"
             ]
         },
-        "Dark Fancy Drawers": {
-            "categories": [
-                "Container tiles"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_storage_01_32",
-                "furniture_storage_01_33",
-                "furniture_storage_01_34",
-                "furniture_storage_01_35"
-            ]
-        },
         "Dark Fancy Wardrobe": {
             "categories": [
                 "Container tiles"
@@ -39218,20 +39381,6 @@
                 "floors_interior_tilesandwood_01_29"
             ]
         },
-        "Dark Industrial Sink": {
-            "categories": [
-                "Sinks"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "fixtures_sinks_01_16",
-                "fixtures_sinks_01_17",
-                "fixtures_sinks_01_18",
-                "fixtures_sinks_01_19"
-            ]
-        },
         "Dark Purple Rug": {
             "categories": [
                 "Floors"
@@ -39303,20 +39452,6 @@
             "sprite_id": [
                 "furniture_shelving_01_34",
                 "furniture_shelving_01_35"
-            ]
-        },
-        "Dark Wooden Chair": {
-            "categories": [
-                "Chairs"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_seating_indoor_02_1",
-                "furniture_seating_indoor_02_0",
-                "furniture_seating_indoor_02_3",
-                "furniture_seating_indoor_02_2"
             ]
         },
         "David the Gnome": {
@@ -39553,7 +39688,7 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "walls_decoration_01_32",
+                "location_restaurant_bar_smutz_8",
                 "walls_decoration_01_33"
             ]
         },
@@ -39787,17 +39922,6 @@
                 "floors_rugs_01_28"
             ]
         },
-        "Fancy Dark Table": {
-            "categories": [
-                "Tables"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_tables_high_01_16"
-            ]
-        },
         "Fancy Distaff": {
             "categories": [],
             "item_id": [
@@ -39805,18 +39929,6 @@
             ],
             "sprite_id": [
                 "crafted_04_68"
-            ]
-        },
-        "Fancy Drawers": {
-            "categories": [],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_storage_01_8",
-                "furniture_storage_01_9",
-                "furniture_storage_01_10",
-                "furniture_storage_01_11"
             ]
         },
         "Fancy Green Rug": {
@@ -39854,18 +39966,6 @@
                 "furniture_tables_low_01_11+10"
             ]
         },
-        "Fancy Low Table": {
-            "categories": [
-                "Tables"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_tables_low_01_2",
-                "furniture_tables_low_01_3"
-            ]
-        },
         "Fancy Metal Crate": {
             "categories": [],
             "item_id": [
@@ -39873,20 +39973,6 @@
             ],
             "sprite_id": [
                 "crafted_05_44"
-            ]
-        },
-        "Fancy Oak Drawers": {
-            "categories": [
-                "Container tiles"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_storage_01_12",
-                "furniture_storage_01_13",
-                "furniture_storage_01_14",
-                "furniture_storage_01_15"
             ]
         },
         "Fancy Oak Wardrobe": {
@@ -39940,31 +40026,6 @@
                 "furniture_seating_outdoor_01_9+8",
                 "furniture_seating_outdoor_01_12+13",
                 "furniture_seating_outdoor_01_15+14"
-            ]
-        },
-        "Fancy Table": {
-            "categories": [
-                "Tables"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_tables_high_01_15"
-            ]
-        },
-        "Fancy Toilet": {
-            "categories": [
-                "Toilets"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "fixtures_bathroom_01_1",
-                "fixtures_bathroom_01_0",
-                "fixtures_bathroom_01_2",
-                "fixtures_bathroom_01_3"
             ]
         },
         "Fancy White Wardrobe": {
@@ -40088,18 +40149,6 @@
                 "crafted_04_44+45",
                 "crafted_04_49+48",
                 "crafted_04_50+51"
-            ]
-        },
-        "Floating Trailer Counter": {
-            "categories": [
-                "Counters"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "location_restaurant_spiffos_03_32+33+34+35+40+41+22",
-                "location_restaurant_spiffos_03_36+37+38+39+42+43+23"
             ]
         },
         "Flood Lights": {
@@ -40247,8 +40296,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "location_shop_fossoil_01_24",
-                "location_shop_fossoil_01_25",
+                "location_shop_fossoil_01_29+30+31",
+                "location_shop_fossoil_01_26+25+24",
                 "location_shop_fossoil_01_26",
                 "location_shop_fossoil_01_29",
                 "location_shop_fossoil_01_30",
@@ -40881,6 +40930,14 @@
                 "floors_interior_tilesandwood_01_21"
             ]
         },
+        "Green Wall Locker": {
+            "categories": [
+                "Container tiles"
+            ],
+            "item_id": [
+                "Moveables.{TileID}"
+            ]
+        },
         "Green Wooden Chair": {
             "categories": [
                 "Chairs"
@@ -40948,8 +41005,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "location_shop_greenes_01_60",
-                "location_shop_greenes_01_61",
+                "location_shop_greenes_01_56+57+58+59",
+                "location_shop_greenes_01_63+62+61+60",
                 "location_shop_greenes_01_62",
                 "location_shop_greenes_01_63",
                 "location_shop_greenes_01_56",
@@ -41170,20 +41227,6 @@
                 "location_community_police_01_32"
             ]
         },
-        "Hanging Toilet": {
-            "categories": [
-                "Toilets"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "fixtures_bathroom_01_9",
-                "fixtures_bathroom_01_8",
-                "fixtures_bathroom_01_11",
-                "fixtures_bathroom_01_10"
-            ]
-        },
         "Hardwood Floor": {
             "categories": [
                 "Floors"
@@ -41239,6 +41282,20 @@
             "sprite_id": [
                 "crafted_04_86+87",
                 "crafted_04_71+70"
+            ]
+        },
+        "Hector Lopez Barbecue": {
+            "categories": [
+                "Cooking appliances"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "appliances_cooking_01_45",
+                "appliances_cooking_01_44",
+                "appliances_cooking_01_47",
+                "appliances_cooking_01_46"
             ]
         },
         "Helianthus Painting": {
@@ -41441,20 +41498,6 @@
                 "location_shop_mall_signs_01_51+50+49"
             ]
         },
-        "Jorge Foreguy Barbecue": {
-            "categories": [
-                "Cooking appliances"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "appliances_cooking_01_37",
-                "appliances_cooking_01_36",
-                "appliances_cooking_01_39",
-                "appliances_cooking_01_38"
-            ]
-        },
         "Kaboom! Arcade Machine": {
             "categories": [
                 "Electronic decorations"
@@ -41533,6 +41576,20 @@
                 "walls_decoration_01_55+54"
             ]
         },
+        "Lamp on Pillar": {
+            "categories": [
+                "Lights"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "carpentry_02_62",
+                "carpentry_02_59",
+                "carpentry_02_61",
+                "carpentry_02_60"
+            ]
+        },
         "Large Bleached Table": {
             "categories": [
                 "Tables"
@@ -41553,8 +41610,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "furniture_tables_high_01_10",
-                "furniture_tables_high_01_11",
+                "furniture_tables_high_01_8+9",
+                "furniture_tables_high_01_11+10",
                 "furniture_tables_high_01_8",
                 "furniture_tables_high_01_9"
             ]
@@ -41597,8 +41654,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "furniture_tables_high_01_2",
-                "furniture_tables_high_01_3",
+                "furniture_tables_high_01_0+0+5+7+8+13+16+21+23+24+29+32+37+38+39+4+6+12+20+22+28+36+3+11+19+27+35+1+1+9+15+17+25+31+33+14+30+2+10+18+26+34",
+                "furniture_tables_high_01_3+2",
                 "furniture_tables_high_01_0",
                 "furniture_tables_high_01_1"
             ]
@@ -41635,10 +41692,10 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "fixtures_bathroom_01_26",
-                "fixtures_bathroom_01_27",
-                "fixtures_bathroom_01_24",
-                "fixtures_bathroom_01_25",
+                "fixtures_bathroom_01_25+24",
+                "fixtures_bathroom_01_26+27",
+                "fixtures_bathroom_01_53+52",
+                "fixtures_bathroom_01_54+55",
                 "fixtures_bathroom_01_54",
                 "fixtures_bathroom_01_55",
                 "fixtures_bathroom_01_52",
@@ -41803,10 +41860,10 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "appliances_cooking_01_40",
-                "appliances_cooking_01_41",
-                "appliances_cooking_01_42",
-                "appliances_cooking_01_43",
+                "appliances_cooking_01_42+43",
+                "appliances_cooking_01_41+40",
+                "appliances_cooking_01_50+51",
+                "appliances_cooking_01_49+48",
                 "appliances_cooking_01_48",
                 "appliances_cooking_01_49",
                 "appliances_cooking_01_50",
@@ -41986,6 +42043,18 @@
                 "appliances_laundry_01_23+22+21+20"
             ]
         },
+        "Laundry Cart": {
+            "categories": [
+                "Bins"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "appliances_laundry_01_25",
+                "appliances_laundry_01_24"
+            ]
+        },
         "Layout I Painting": {
             "categories": [
                 "Wall decorations"
@@ -42073,17 +42142,6 @@
                 "furniture_tables_low_01_17"
             ]
         },
-        "Light Round Table": {
-            "categories": [
-                "Tables"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_tables_high_01_7"
-            ]
-        },
         "Light School Bench": {
             "categories": [
                 "Tables"
@@ -42096,20 +42154,6 @@
                 "location_community_school_01_13",
                 "location_community_school_01_15",
                 "location_community_school_01_14"
-            ]
-        },
-        "Light Wood Drawers": {
-            "categories": [
-                "Container tiles"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_storage_01_46",
-                "furniture_storage_01_47",
-                "furniture_storage_01_44",
-                "furniture_storage_01_45"
             ]
         },
         "Light Wood Restaurant Table": {
@@ -42193,8 +42237,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "location_entertainment_gallery_01_88",
-                "location_entertainment_gallery_01_89",
+                "location_entertainment_gallery_01_26+27",
+                "location_entertainment_gallery_01_89+88",
                 "location_entertainment_gallery_01_26",
                 "location_entertainment_gallery_01_27"
             ]
@@ -42311,18 +42355,6 @@
                 "location_shop_generic_01_47+46+45+44"
             ]
         },
-        "Long Table": {
-            "categories": [
-                "Tables"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_tables_high_01_5",
-                "furniture_tables_high_01_4"
-            ]
-        },
         "Long White Curtain": {
             "categories": [
                 "Curtains"
@@ -42396,6 +42428,18 @@
                 "crafted_02_95"
             ]
         },
+        "Low Mahogany Table": {
+            "categories": [
+                "Tables"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_tables_low_01_2",
+                "furniture_tables_low_01_3"
+            ]
+        },
         "Low Motel Counter": {
             "categories": [
                 "Counters"
@@ -42408,18 +42452,6 @@
                 "location_hospitality_sunstarmotel_02_22",
                 "location_hospitality_sunstarmotel_02_23",
                 "location_hospitality_sunstarmotel_02_20"
-            ]
-        },
-        "Low Plastic Table": {
-            "categories": [
-                "Tables"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_tables_low_01_21",
-                "furniture_tables_low_01_20"
             ]
         },
         "Low Shelves": {
@@ -42453,6 +42485,43 @@
                 "fixtures_bathroom_01_4",
                 "fixtures_bathroom_01_6",
                 "fixtures_bathroom_01_7"
+            ]
+        },
+        "Mahogany Chair": {
+            "categories": [
+                "Chairs"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_seating_indoor_02_1",
+                "furniture_seating_indoor_02_0",
+                "furniture_seating_indoor_02_3",
+                "furniture_seating_indoor_02_2"
+            ]
+        },
+        "Mahogany Drawers": {
+            "categories": [
+                "Container tiles"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_storage_01_12",
+                "furniture_storage_01_13",
+                "furniture_storage_01_14",
+                "furniture_storage_01_15"
+            ]
+        },
+        "Mahogany Stool": {
+            "categories": [],
+            "item_id": [
+                "Moveables.location_restaurant_bar_01_26"
+            ],
+            "sprite_id": [
+                "location_restaurant_bar_01_26"
             ]
         },
         "Mail Box": {
@@ -42653,6 +42722,31 @@
                 "advertising_02_1"
             ]
         },
+        "Maple Drawers": {
+            "categories": [
+                "Container tiles"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_storage_01_46",
+                "furniture_storage_01_47",
+                "furniture_storage_01_44",
+                "furniture_storage_01_45"
+            ]
+        },
+        "Maple Round Table": {
+            "categories": [
+                "Tables"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_tables_high_01_7"
+            ]
+        },
         "March Ridge Road Sign": {
             "categories": [
                 "Signs"
@@ -42756,20 +42850,18 @@
                 "location_community_park_01_23+20+22+21"
             ]
         },
-        "Metal Counter": {
+        "Metal Cabinet": {
             "categories": [
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{TileID}"
-            ]
-        },
-        "Metal Counter Corner": {
-            "categories": [
-                "Container tiles"
+                "Moveables.{sprite_id}"
             ],
-            "item_id": [
-                "Moveables.{TileID}"
+            "sprite_id": [
+                "furniture_storage_02_1",
+                "furniture_storage_02_0",
+                "furniture_storage_02_3",
+                "furniture_storage_02_2"
             ]
         },
         "Metal Crate": {
@@ -42806,37 +42898,12 @@
                 "industry_01_23"
             ]
         },
-        "Metal Locker": {
-            "categories": [
-                "Container tiles"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_storage_02_1",
-                "furniture_storage_02_0",
-                "furniture_storage_02_3",
-                "furniture_storage_02_2"
-            ]
-        },
         "Metal Shelves": {
             "categories": [
                 "Container tiles"
             ],
             "item_id": [
                 "Moveables.{TileID}"
-            ]
-        },
-        "Metal Stool": {
-            "categories": [
-                "Chairs"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "location_community_medical_01_10"
             ]
         },
         "Metal Turnstile": {
@@ -43144,6 +43211,18 @@
                 "street_roadsigns_01_35+34"
             ]
         },
+        "Narrow Mahogany Table": {
+            "categories": [
+                "Tables"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_tables_high_01_5",
+                "furniture_tables_high_01_4"
+            ]
+        },
         "Neon Open Sign": {
             "categories": [
                 "Outdoor lamps"
@@ -43210,34 +43289,6 @@
                 "location_restaurant_bar_01_56"
             ]
         },
-        "Oak Corner Counter": {
-            "categories": [
-                "Counters"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "fixtures_counters_01_50",
-                "fixtures_counters_01_52",
-                "fixtures_counters_01_54",
-                "fixtures_counters_01_48"
-            ]
-        },
-        "Oak Counter": {
-            "categories": [
-                "Counters"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "fixtures_counters_01_51",
-                "fixtures_counters_01_53",
-                "fixtures_counters_01_55",
-                "fixtures_counters_01_49"
-            ]
-        },
         "Oak Employee Bank Counter": {
             "categories": [],
             "item_id": [
@@ -43272,17 +43323,6 @@
             ],
             "item_id": [
                 "Moveables.{TileID}"
-            ]
-        },
-        "Oak Round Table": {
-            "categories": [
-                "Tables"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_tables_high_01_6"
             ]
         },
         "Oak bank Counter": {
@@ -43320,20 +43360,6 @@
                 "floors_interior_tilesandwood_01_41"
             ]
         },
-        "Oakwood Shelves": {
-            "categories": [
-                "Shelves"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_shelving_01_41",
-                "furniture_shelving_01_40",
-                "furniture_shelving_01_42",
-                "furniture_shelving_01_43"
-            ]
-        },
         "Office Desk": {
             "categories": [
                 "Tables"
@@ -43364,7 +43390,7 @@
                 "Cooking appliances"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_AntiqueStove"
             ],
             "sprite_id": [
                 "appliances_cooking_01_16",
@@ -43442,7 +43468,7 @@
                 "trashcontainers_01_13+12"
             ]
         },
-        "Orange Futon": {
+        "Orange Ottoman": {
             "categories": [
                 "Chairs"
             ],
@@ -43454,7 +43480,18 @@
                 "furniture_seating_indoor_01_47"
             ]
         },
-        "Orange Modern Chair": {
+        "Orange Plant": {
+            "categories": [
+                "Vegetation tiles"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "vegetation_groundcover_01_22"
+            ]
+        },
+        "Orange Square Armchair": {
             "categories": [
                 "Chairs"
             ],
@@ -43466,17 +43503,6 @@
                 "furniture_seating_indoor_01_12",
                 "furniture_seating_indoor_01_14",
                 "furniture_seating_indoor_01_15"
-            ]
-        },
-        "Orange Plant": {
-            "categories": [
-                "Vegetation tiles"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "vegetation_groundcover_01_22"
             ]
         },
         "Orange Zippee Floor": {
@@ -43557,6 +43583,20 @@
             ],
             "item_id": [
                 "Moveables.Movable"
+            ]
+        },
+        "Pale Simple Chair": {
+            "categories": [
+                "Chairs"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_seating_indoor_03_56",
+                "furniture_seating_indoor_03_57",
+                "furniture_seating_indoor_03_58",
+                "furniture_seating_indoor_03_59"
             ]
         },
         "Pallet": {
@@ -43792,7 +43832,7 @@
         "Pile o' Crepe Floor": {
             "categories": [],
             "item_id": [
-                "Moveables.location_restaurant_pileocrepe_01_14"
+                "Moveables.{sprite_id}"
             ],
             "sprite_id": [
                 "location_restaurant_pileocrepe_01_14"
@@ -44056,7 +44096,7 @@
                 "location_entertainment_theatre_01_17"
             ]
         },
-        "Popsicle Fridge": {
+        "Popsicle Freezer": {
             "categories": [
                 "Fridges"
             ],
@@ -44356,6 +44396,73 @@
                 "location_business_machinery_01_34"
             ]
         },
+        "Red Oak Chair": {
+            "categories": [
+                "Chairs"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_seating_indoor_02_4",
+                "furniture_seating_indoor_02_5",
+                "furniture_seating_indoor_02_6",
+                "furniture_seating_indoor_02_7"
+            ]
+        },
+        "Red Oak Corner Counter": {
+            "categories": [
+                "Counters"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "fixtures_counters_01_50",
+                "fixtures_counters_01_52",
+                "fixtures_counters_01_54",
+                "fixtures_counters_01_48"
+            ]
+        },
+        "Red Oak Counter": {
+            "categories": [
+                "Counters"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "fixtures_counters_01_51",
+                "fixtures_counters_01_53",
+                "fixtures_counters_01_55",
+                "fixtures_counters_01_49"
+            ]
+        },
+        "Red Oak Round Table": {
+            "categories": [
+                "Tables"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_tables_high_01_6"
+            ]
+        },
+        "Red Oak Shelves": {
+            "categories": [
+                "Shelves"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_shelving_01_41",
+                "furniture_shelving_01_40",
+                "furniture_shelving_01_42",
+                "furniture_shelving_01_43"
+            ]
+        },
         "Red Oven": {
             "categories": [
                 "Cooking appliances"
@@ -44574,6 +44681,34 @@
                 "street_roadsigns_01_45+44"
             ]
         },
+        "Rough Wooden Corner Counter": {
+            "categories": [
+                "Counters"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "fixtures_counters_01_10",
+                "fixtures_counters_01_12",
+                "fixtures_counters_01_14",
+                "fixtures_counters_01_8"
+            ]
+        },
+        "Rough Wooden Counter": {
+            "categories": [
+                "Counters"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "fixtures_counters_01_11",
+                "fixtures_counters_01_13",
+                "fixtures_counters_01_15",
+                "fixtures_counters_01_9"
+            ]
+        },
         "Round Bin": {
             "categories": [
                 "Bins"
@@ -44609,15 +44744,6 @@
                 "lighting_outdoor_01_24",
                 "lighting_outdoor_01_29",
                 "lighting_outdoor_01_28"
-            ]
-        },
-        "Round Table": {
-            "categories": [],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_tables_high_01_14"
             ]
         },
         "Rounded Glass Display Counter": {
@@ -44838,8 +44964,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "location_entertainment_gallery_01_110",
-                "location_entertainment_gallery_01_111",
+                "location_entertainment_gallery_01_22+23",
+                "location_entertainment_gallery_01_111+110",
                 "location_entertainment_gallery_01_22",
                 "location_entertainment_gallery_01_23"
             ]
@@ -44886,32 +45012,6 @@
             "sprite_id": [
                 "location_shop_mall_signs_01_76+77+78+79",
                 "location_shop_mall_signs_01_75+74+73+72"
-            ]
-        },
-        "Shop Dispenser": {
-            "categories": [
-                "Decorations"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "location_shop_accessories_01_11",
-                "location_shop_accessories_01_10"
-            ]
-        },
-        "Shop Display Counter": {
-            "categories": [
-                "Counters"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "location_shop_generic_01_89",
-                "location_shop_generic_01_88",
-                "location_shop_generic_01_90",
-                "location_shop_generic_01_91"
             ]
         },
         "Silhouette Target": {
@@ -45069,18 +45169,6 @@
                 "furniture_storage_02_30"
             ]
         },
-        "Small Chrome Toaster": {
-            "categories": [
-                "Electronic decorations"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "appliances_cooking_01_33",
-                "appliances_cooking_01_32"
-            ]
-        },
         "Small Clothes Rack": {
             "categories": [
                 "Container tiles"
@@ -45128,12 +45216,18 @@
                 "fixtures_windows_curtains_02_15"
             ]
         },
-        "Small Locker": {
+        "Small Maple Cabinet": {
             "categories": [
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{TileID}"
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_storage_01_49",
+                "furniture_storage_01_48",
+                "furniture_storage_01_50",
+                "furniture_storage_01_51"
             ]
         },
         "Small Metal Trough": {
@@ -45173,6 +45267,32 @@
                 "fixtures_windows_curtains_02_31"
             ]
         },
+        "Small Plastic Table": {
+            "categories": [
+                "Tables"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_tables_low_01_21",
+                "furniture_tables_low_01_20"
+            ]
+        },
+        "Small Red Oak Table With Drawer": {
+            "categories": [
+                "Tables"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_storage_01_53",
+                "furniture_storage_01_52",
+                "furniture_storage_01_54",
+                "furniture_storage_01_55"
+            ]
+        },
         "Small Rental Shelves": {
             "categories": [
                 "Shelves"
@@ -45199,20 +45319,6 @@
             ]
         },
         "Small Table": {
-            "categories": [
-                "Tables"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_storage_01_53",
-                "furniture_storage_01_52",
-                "furniture_storage_01_54",
-                "furniture_storage_01_55"
-            ]
-        },
-        "Small Table With Drawer": {
             "categories": [
                 "Tables"
             ],
@@ -45518,6 +45624,17 @@
                 "furniture_seating_indoor_03_3+2"
             ]
         },
+        "Square Dark Table": {
+            "categories": [
+                "Tables"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_tables_high_01_16"
+            ]
+        },
         "Square Gravestone": {
             "categories": [
                 "Gravestones"
@@ -45542,7 +45659,9 @@
             ]
         },
         "Square Wall Clock": {
-            "categories": [],
+            "categories": [
+                "Electronic decorations"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45614,18 +45733,20 @@
                 "walls_decoration_01_16"
             ]
         },
-        "Steel Fridge": {
+        "Steel Counter": {
             "categories": [
-                "Fridges"
+                "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Moveables.{TileID}"
+            ]
+        },
+        "Steel Counter Corner": {
+            "categories": [
+                "Container tiles"
             ],
-            "sprite_id": [
-                "appliances_refrigeration_01_9",
-                "appliances_refrigeration_01_8",
-                "appliances_refrigeration_01_11",
-                "appliances_refrigeration_01_10"
+            "item_id": [
+                "Moveables.{TileID}"
             ]
         },
         "Steel Ladder": {
@@ -45669,6 +45790,32 @@
                 "street_decoration_01_0",
                 "street_decoration_01_3",
                 "street_decoration_01_2"
+            ]
+        },
+        "Store Dispenser": {
+            "categories": [
+                "Decorations"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "location_shop_accessories_01_11",
+                "location_shop_accessories_01_10"
+            ]
+        },
+        "Store Display Counter": {
+            "categories": [
+                "Counters"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "location_shop_generic_01_89",
+                "location_shop_generic_01_88",
+                "location_shop_generic_01_90",
+                "location_shop_generic_01_91"
             ]
         },
         "Streetname Sign": {
@@ -46076,7 +46223,10 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{TileID}"
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "trash_01_0"
             ]
         },
         "Twiggy's Sign": {
@@ -46087,8 +46237,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "signs_one-off_01_45",
-                "signs_one-off_01_46",
+                "signs_one-off_01_37+38+39",
+                "signs_one-off_01_47+46+45",
                 "signs_one-off_01_47",
                 "signs_one-off_01_37",
                 "signs_one-off_01_38",
@@ -46179,8 +46329,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "location_community_school_01_30",
-                "location_community_school_01_31",
+                "location_community_school_01_22+23",
+                "location_community_school_01_31+30",
                 "location_community_school_01_22",
                 "location_community_school_01_23"
             ]
@@ -46527,18 +46677,6 @@
                 "location_military_generic_01_21"
             ]
         },
-        "Washing Bin": {
-            "categories": [
-                "Bins"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "appliances_laundry_01_25",
-                "appliances_laundry_01_24"
-            ]
-        },
         "Washing Machine": {
             "categories": [
                 "Washing machines"
@@ -46649,6 +46787,17 @@
             ],
             "sprite_id": [
                 "vegetation_farm_01_2"
+            ]
+        },
+        "Wheeled Metal Stool": {
+            "categories": [
+                "Chairs"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "location_community_medical_01_10"
             ]
         },
         "White Carpet": {
@@ -46764,6 +46913,18 @@
             "sprite_id": [
                 "location_shop_generic_01_80+81+82",
                 "location_shop_generic_01_85+84+83"
+            ]
+        },
+        "White Drawers": {
+            "categories": [],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_storage_01_8",
+                "furniture_storage_01_9",
+                "furniture_storage_01_10",
+                "furniture_storage_01_11"
             ]
         },
         "White Fancy Chair": {
@@ -46974,20 +47135,6 @@
                 "location_business_office_generic_02_15"
             ]
         },
-        "White Simple Chair": {
-            "categories": [
-                "Chairs"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_seating_indoor_03_56",
-                "furniture_seating_indoor_03_57",
-                "furniture_seating_indoor_03_58",
-                "furniture_seating_indoor_03_59"
-            ]
-        },
         "White Sink": {
             "categories": [
                 "Sinks"
@@ -46996,10 +47143,10 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "fixtures_sinks_01_1",
-                "fixtures_sinks_01_2",
-                "fixtures_sinks_01_3",
-                "fixtures_sinks_01_0"
+                "fixtures_sinks_01_13",
+                "fixtures_sinks_01_12",
+                "fixtures_sinks_01_29",
+                "fixtures_sinks_01_28"
             ]
         },
         "White Smooth Tiles": {
@@ -47077,6 +47224,34 @@
                 "floors_interior_tilesandwood_01_11"
             ]
         },
+        "White Toilet": {
+            "categories": [
+                "Toilets"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "fixtures_bathroom_01_1",
+                "fixtures_bathroom_01_0",
+                "fixtures_bathroom_01_2",
+                "fixtures_bathroom_01_3"
+            ]
+        },
+        "White Urinal": {
+            "categories": [
+                "Toilets"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "fixtures_bathroom_01_9",
+                "fixtures_bathroom_01_8",
+                "fixtures_bathroom_01_11",
+                "fixtures_bathroom_01_10"
+            ]
+        },
         "White Wall Shelves": {
             "categories": [
                 "Shelves"
@@ -47133,7 +47308,10 @@
                 "Windows"
             ],
             "item_id": [
-                "movables_fixtures_windows_01_1"
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "fixtures_windows_01_3+5+7+11+13+15+19+21+23+27+29+31+35+37+39+59+61+63"
             ]
         },
         "Wok & Rolls Sign": {
@@ -47166,18 +47344,6 @@
                 "location_business_machinery_01_27+26"
             ]
         },
-        "Wood Speaker Cabinet": {
-            "categories": [],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "recreational_01_78",
-                "recreational_01_76",
-                "recreational_01_79",
-                "recreational_01_77"
-            ]
-        },
         "Wood Top Workbench": {
             "categories": [
                 "Tables"
@@ -47192,15 +47358,6 @@
                 "location_business_machinery_01_23+22"
             ]
         },
-        "Wooden Bar Stool": {
-            "categories": [],
-            "item_id": [
-                "Moveables.location_restaurant_bar_01_26"
-            ],
-            "sprite_id": [
-                "location_restaurant_bar_01_26"
-            ]
-        },
         "Wooden Bench": {
             "categories": [
                 "Chairs"
@@ -47210,48 +47367,6 @@
             ],
             "sprite_id": [
                 "furniture_seating_indoor_03_66+67"
-            ]
-        },
-        "Wooden Chair": {
-            "categories": [
-                "Chairs"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_seating_indoor_02_4",
-                "furniture_seating_indoor_02_5",
-                "furniture_seating_indoor_02_6",
-                "furniture_seating_indoor_02_7"
-            ]
-        },
-        "Wooden Corner Counter": {
-            "categories": [
-                "Counters"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "fixtures_counters_01_10",
-                "fixtures_counters_01_12",
-                "fixtures_counters_01_14",
-                "fixtures_counters_01_8"
-            ]
-        },
-        "Wooden Counter": {
-            "categories": [
-                "Counters"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "fixtures_counters_01_11",
-                "fixtures_counters_01_13",
-                "fixtures_counters_01_15",
-                "fixtures_counters_01_9"
             ]
         },
         "Wooden Crate": {
@@ -47316,6 +47431,18 @@
                 "location_shop_generic_01_62"
             ]
         },
+        "Wooden Speaker Cabinet": {
+            "categories": [],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "recreational_01_78",
+                "recreational_01_76",
+                "recreational_01_79",
+                "recreational_01_77"
+            ]
+        },
         "Wooden Stool": {
             "categories": [],
             "item_id": [
@@ -47348,7 +47475,7 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "fixtures_windows_01_0",
+                "fixtures_windows_01_1",
                 "fixtures_windows_01_1"
             ]
         },
@@ -47360,7 +47487,7 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "fixtures_windows_01_0",
+                "fixtures_windows_01_1",
                 "fixtures_windows_01_1"
             ]
         },
@@ -47397,20 +47524,6 @@
                 "floors_interior_tilesandwood_01_9"
             ]
         },
-        "Yellow Modern Chair": {
-            "categories": [
-                "Chairs"
-            ],
-            "item_id": [
-                "Moveables.{sprite_id}"
-            ],
-            "sprite_id": [
-                "furniture_seating_indoor_03_29",
-                "furniture_seating_indoor_03_28",
-                "furniture_seating_indoor_03_30",
-                "furniture_seating_indoor_03_31"
-            ]
-        },
         "Yellow Modern Couch": {
             "categories": [
                 "Chairs"
@@ -47436,6 +47549,20 @@
                 "vegetation_groundcover_01_23"
             ]
         },
+        "Yellow Square Armchair": {
+            "categories": [
+                "Chairs"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "furniture_seating_indoor_03_29",
+                "furniture_seating_indoor_03_28",
+                "furniture_seating_indoor_03_30",
+                "furniture_seating_indoor_03_31"
+            ]
+        },
         "Yellow Tiles": {
             "categories": [
                 "Floors"
@@ -47445,6 +47572,14 @@
             ],
             "sprite_id": [
                 "floors_interior_tilesandwood_01_6"
+            ]
+        },
+        "Yellow Wall Locker": {
+            "categories": [
+                "Container tiles"
+            ],
+            "item_id": [
+                "Moveables.{TileID}"
             ]
         },
         "Yummmers Sign": {
@@ -47551,12 +47686,92 @@
         }
     },
     "vehicle": {
+        "Airport Catering Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVanAirportCatering"
+            ]
+        },
+        "Airport Chevalier D6": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpTruckLightsAirport"
+            ]
+        },
+        "Airport Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanSeatsAirportShuttle"
+            ]
+        },
+        "Airport Security Chevalier D6": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpTruckLightsAirportSecurity"
+            ]
+        },
         "Ambulance": {
             "categories": [
                 "Heavy-duty vehicles"
             ],
             "vehicle_id": [
                 "Base.VanAmbulance"
+            ]
+        },
+        "Beckman's Building Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanBeckmans"
+            ]
+        },
+        "Brewster & Harbin Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanBrewsterHarbin"
+            ]
+        },
+        "Bricking It Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanBrickingIt"
+            ]
+        },
+        "Bug Wipers Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.Van_BugWipers"
+            ]
+        },
+        "Builder's Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanBuilder"
+            ]
+        },
+        "Builder's Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanBuilder"
             ]
         },
         "Bulletin Sheriff Chevalier Nyala": {
@@ -47567,12 +47782,156 @@
                 "Base.CarLightsBulletinSheriff"
             ]
         },
+        "Burnt Ambulance": {
+            "categories": [
+                "Burnt vehicles"
+            ],
+            "vehicle_id": [
+                "Base.AmbulanceBurnt"
+            ]
+        },
+        "Burnt Chevalier Cossette": {
+            "categories": [
+                "Burnt vehicles"
+            ],
+            "vehicle_id": [
+                "Base.SportsCarBurnt"
+            ]
+        },
+        "Burnt Chevalier D6": {
+            "categories": [
+                "Burnt vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickupBurnt"
+            ]
+        },
+        "Burnt Chevalier Dart": {
+            "categories": [
+                "Burnt vehicles"
+            ],
+            "vehicle_id": [
+                "Base.SmallCarBurnt"
+            ]
+        },
         "Burnt Chevalier Nyala": {
             "categories": [
                 "Burnt vehicles"
             ],
             "vehicle_id": [
                 "Base.CarNormalBurnt"
+            ]
+        },
+        "Burnt Chevalier Primani": {
+            "categories": [
+                "Burnt vehicles"
+            ],
+            "vehicle_id": [
+                "Base.ModernCar02Burnt"
+            ]
+        },
+        "Burnt Dash Bulldriver": {
+            "categories": [
+                "Burnt vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanBurnt"
+            ]
+        },
+        "Burnt Dash Elite": {
+            "categories": [
+                "Burnt vehicles"
+            ],
+            "vehicle_id": [
+                "Base.ModernCarBurnt"
+            ]
+        },
+        "Burnt Dash Rancher": {
+            "categories": [
+                "Burnt vehicles"
+            ],
+            "vehicle_id": [
+                "Base.OffRoadBurnt"
+            ]
+        },
+        "Burnt Franklin All-Terrain": {
+            "categories": [
+                "Burnt vehicles"
+            ],
+            "vehicle_id": [
+                "Base.SUVBurnt"
+            ]
+        },
+        "Burnt Franklin Valuline": {
+            "categories": [
+                "Burnt vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanBurnt"
+            ]
+        },
+        "Burnt LBMW Radio Van": {
+            "categories": [
+                "Burnt vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanRadioBurnt"
+            ]
+        },
+        "Burnt Masterson Horizon": {
+            "categories": [
+                "Burnt vehicles"
+            ],
+            "vehicle_id": [
+                "Base.SmallCar02Burnt"
+            ]
+        },
+        "Burnt Mercia Lang 4000": {
+            "categories": [
+                "Burnt vehicles"
+            ],
+            "vehicle_id": [
+                "Base.LuxuryCarBurnt"
+            ]
+        },
+        "Burnt Taxi": {
+            "categories": [
+                "Burnt vehicles"
+            ],
+            "vehicle_id": [
+                "Base.TaxiBurnt"
+            ]
+        },
+        "Calloway Landscaping Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanCallowayLandscaping"
+            ]
+        },
+        "Carpenter's Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanLightsCarpenter"
+            ]
+        },
+        "Carpenter's Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanCarpenter"
+            ]
+        },
+        "Cereal Delivery Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_Cereal"
             ]
         },
         "Chevalier Cerise Wagon": {
@@ -47632,6 +47991,38 @@
                 "Base.StepVan"
             ]
         },
+        "Citr8 Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_Citr8"
+            ]
+        },
+        "Coast 2 Coast Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanCoastToCoast"
+            ]
+        },
+        "Complete Repair Shop Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_CompleteRepairShop"
+            ]
+        },
+        "Creature Cruiser": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanSeats_Creature"
+            ]
+        },
         "Dash Bulldriver": {
             "categories": [
                 "Heavy-duty vehicles"
@@ -47654,6 +48045,54 @@
             ],
             "vehicle_id": [
                 "Base.OffRoad"
+            ]
+        },
+        "Deer Valley Power Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanDeerValley"
+            ]
+        },
+        "Fire Department Chevalier D6": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpTruckLightsFire"
+            ]
+        },
+        "Fire Department Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanLightsFire"
+            ]
+        },
+        "Fossoil Chevalier D6": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpTruckLightsFossoil"
+            ]
+        },
+        "Fossoil Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanLightsFossoil"
+            ]
+        },
+        "Fossoil Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanFossoil"
             ]
         },
         "Franklin All-Terrain": {
@@ -47680,12 +48119,316 @@
                 "Base.VanSeats"
             ]
         },
+        "Garden Gods Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanGardenGods"
+            ]
+        },
+        "Gardener's Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanGardener"
+            ]
+        },
+        "Genuine Beer Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_Genuine_Beer"
+            ]
+        },
+        "Helton Metalworking Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanHeltonMetalWorking"
+            ]
+        },
+        "Horse trailer": {
+            "categories": [
+                "Trailers"
+            ],
+            "vehicle_id": [
+                "Base.Trailer_Horsebox"
+            ]
+        },
+        "Huang's Laundry Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_HuangsLaundry"
+            ]
+        },
+        "IGUI VehicleNameModernCar02SmashedFront": {
+            "categories": [
+                "Sports vehicles"
+            ],
+            "vehicle_id": [
+                "Base.ModernCar02SmashedFront"
+            ]
+        },
+        "IGUI VehicleNameModernCar02SmashedLeft": {
+            "categories": [
+                "Sports vehicles"
+            ],
+            "vehicle_id": [
+                "Base.ModernCar02SmashedLeft"
+            ]
+        },
+        "IGUI VehicleNameModernCar02SmashedRear": {
+            "categories": [
+                "Sports vehicles"
+            ],
+            "vehicle_id": [
+                "Base.ModernCar02SmashedRear"
+            ]
+        },
+        "IGUI VehicleNameModernCar02SmashedRight": {
+            "categories": [
+                "Sports vehicles"
+            ],
+            "vehicle_id": [
+                "Base.ModernCar02SmashedRight"
+            ]
+        },
+        "IGUI VehicleNameModernCarSmashedFront": {
+            "categories": [
+                "Sports vehicles"
+            ],
+            "vehicle_id": [
+                "Base.ModernCarSmashedFront"
+            ]
+        },
+        "IGUI VehicleNameModernCarSmashedLeft": {
+            "categories": [
+                "Sports vehicles"
+            ],
+            "vehicle_id": [
+                "Base.ModernCarSmashedLeft"
+            ]
+        },
+        "IGUI VehicleNameModernCarSmashedRear": {
+            "categories": [
+                "Sports vehicles"
+            ],
+            "vehicle_id": [
+                "Base.ModernCarSmashedRear"
+            ]
+        },
+        "IGUI VehicleNameModernCarSmashedRight": {
+            "categories": [
+                "Sports vehicles"
+            ],
+            "vehicle_id": [
+                "Base.ModernCarSmashedRight"
+            ]
+        },
+        "JP Landscaping Chevalier D6": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpTruckJPLandscaping"
+            ]
+        },
+        "John McCoy Woodworking Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanJohnMcCoy"
+            ]
+        },
+        "Jones Fabrication Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanJonesFabrication"
+            ]
+        },
+        "Jorgensen Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_Jorgensen"
+            ]
+        },
+        "KY Herald Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_Heralds"
+            ]
+        },
+        "Kentucky Lumber Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanLightsKentuckyLumber"
+            ]
+        },
+        "Kerr Homes Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanKerrHomes"
+            ]
+        },
+        "Kimbler Konstruction Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanKimbleKonstruction"
+            ]
+        },
+        "Knob Creek Gas Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanKnobCreekGas"
+            ]
+        },
+        "Knox Distillery Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.Van_KnoxDisti"
+            ]
+        },
+        "Knox Telecommunications Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanKnoxCom"
+            ]
+        },
+        "Korshunov's Car Center Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanKorshunovs"
+            ]
+        },
+        "LCPD Chevalier Nyala": {
+            "categories": [
+                "Standard vehicles"
+            ],
+            "vehicle_id": [
+                "Base.CarLightsLouisvilleCounty"
+            ]
+        },
+        "LCPD Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanLightsLouisvilleCounty"
+            ]
+        },
+        "Lectromax Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.Van_LectroMax"
+            ]
+        },
         "Livestock Trailer": {
             "categories": [
                 "Trailers"
             ],
             "vehicle_id": [
                 "Base.Trailer_Livestock"
+            ]
+        },
+        "Louisville Landscaping Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanLouisvilleLandscaping"
+            ]
+        },
+        "Louisville Motorshop Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_LouisvilleMotorShop"
+            ]
+        },
+        "Louisville Police Dash Elite": {
+            "categories": [
+                "Sports vehicles"
+            ],
+            "vehicle_id": [
+                "Base.ModernCarLightsCityLouisvillePD"
+            ]
+        },
+        "Louisville SWAT Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_LouisvilleSWAT"
+            ]
+        },
+        "Mail Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVanMail"
+            ]
+        },
+        "Mail Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanMail"
+            ]
+        },
+        "March Ridge Construction Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanMarchRidgeConstruction"
+            ]
+        },
+        "Marine Bites Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_MarineBites"
+            ]
+        },
+        "Mass GenFac Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.Van_MassGenFac"
             ]
         },
         "Masterson Horizon": {
@@ -47696,6 +48439,62 @@
                 "Base.SmallCar02"
             ]
         },
+        "McCoy Chevalier D6": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpTruckMccoy"
+            ]
+        },
+        "McCoy Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanMccoy"
+            ]
+        },
+        "McCoy Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanMccoy"
+            ]
+        },
+        "Meade Sheriff Dash Elite": {
+            "categories": [
+                "Sports vehicles"
+            ],
+            "vehicle_id": [
+                "Base.ModernCarLightsMeadeSheriff"
+            ]
+        },
+        "Mechanic's Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_Mechanic"
+            ]
+        },
+        "Mechanic's Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanMechanic"
+            ]
+        },
+        "Melting Point Metal Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanMeltingPointMetal"
+            ]
+        },
         "Mercia Lang 4000": {
             "categories": [
                 "Sports vehicles"
@@ -47704,12 +48503,268 @@
                 "Base.CarLuxury"
             ]
         },
+        "Mesmer Wagon": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanSeats_Trippy"
+            ]
+        },
+        "Metalheads Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanMetalheads"
+            ]
+        },
+        "Metalworker's Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanMetalworker"
+            ]
+        },
+        "Metalworker's Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanMetalworker"
+            ]
+        },
+        "Michele's Woodshop Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanMicheles"
+            ]
+        },
+        "Mobile Mechanics Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanMobileMechanics"
+            ]
+        },
+        "Moore Mechanics Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanMooreMechanics"
+            ]
+        },
+        "Muldraugh Police Chevalier Nyala": {
+            "categories": [
+                "Standard vehicles"
+            ],
+            "vehicle_id": [
+                "Base.CarLightsMuldraughPolice"
+            ]
+        },
+        "Old Mill Water Company Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanOldMill"
+            ]
+        },
+        "Penn S. Ham Construction Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanPennSHam"
+            ]
+        },
+        "Platt Auto Repair Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanPlattAuto"
+            ]
+        },
+        "Plonkies Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_Plonkies"
+            ]
+        },
+        "Plugged In Electrics Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanPluggedInElectrics"
+            ]
+        },
+        "Police Chevalier Nyala": {
+            "categories": [
+                "Standard vehicles"
+            ],
+            "vehicle_id": [
+                "Base.CarLightsPolice"
+            ]
+        },
+        "Police Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanLightsPolice"
+            ]
+        },
+        "Prisoner Transport Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanSeats_Prison"
+            ]
+        },
+        "Quantum Vessel": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanSeats_Space"
+            ]
+        },
         "Radio Van": {
             "categories": [
                 "Heavy-duty vehicles"
             ],
             "vehicle_id": [
                 "Base.VanRadio"
+            ]
+        },
+        "Randi's Plants Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_RandisPlants"
+            ]
+        },
+        "Ranger Chevalier D6": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpTruckLightsRanger"
+            ]
+        },
+        "Ranger Chevalier Nyala": {
+            "categories": [
+                "Standard vehicles"
+            ],
+            "vehicle_id": [
+                "Base.CarLightsRanger"
+            ]
+        },
+        "Ranger Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanLightsRanger"
+            ]
+        },
+        "Riverside Fabrication Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanRiversideFabrication"
+            ]
+        },
+        "Rosewoodworking Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanRosewoodworking"
+            ]
+        },
+        "Scarlet Oak Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_Scarlet"
+            ]
+        },
+        "Schwab Sheet Metal Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanSchwabSheetMetal"
+            ]
+        },
+        "South Eastern Hospitality Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_SouthEasternHosp"
+            ]
+        },
+        "South Eastern Paint Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_SouthEasternPaint"
+            ]
+        },
+        "Spiffo Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanSpiffo"
+            ]
+        },
+        "State Trooper Chevalier Nyala": {
+            "categories": [
+                "Standard vehicles"
+            ],
+            "vehicle_id": [
+                "Base.CarLightsKST"
+            ]
+        },
+        "State Trooper Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanLightsStatePolice"
+            ]
+        },
+        "Taxi": {
+            "categories": [
+                "Standard vehicles"
+            ],
+            "vehicle_id": [
+                "Base.CarTaxi"
+            ]
+        },
+        "The Lady Delighter": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanSeats_LadyDelighter"
             ]
         },
         "Trailer": {
@@ -47726,6 +48781,182 @@
             ],
             "vehicle_id": [
                 "Base.TrailerAdvert"
+            ]
+        },
+        "Transit Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.Van_Transit"
+            ]
+        },
+        "Trey Baines Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanTreyBaines"
+            ]
+        },
+        "USL Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_USL"
+            ]
+        },
+        "Uncloggers Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanUncloggers"
+            ]
+        },
+        "Utility Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanUtility"
+            ]
+        },
+        "Valkyrie's Spear": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanSeats_Valkyrie"
+            ]
+        },
+        "Van Yings Wood Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanYingsWood"
+            ]
+        },
+        "Volt Mojo Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.Van_VoltMojo"
+            ]
+        },
+        "WP Carpentry Franklin Valuline": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.VanWPCarpentry"
+            ]
+        },
+        "Welding by Camille Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanWeldingbyCamille"
+            ]
+        },
+        "West Point Police Dash Elite": {
+            "categories": [
+                "Sports vehicles"
+            ],
+            "vehicle_id": [
+                "Base.ModernCarLightsWestPoint"
+            ]
+        },
+        "Wrecked Chevalier Cerise Wagon": {
+            "categories": [
+                "Standard vehicles"
+            ],
+            "vehicle_id": [
+                "Base.CarStationWagonSmashedFront"
+            ]
+        },
+        "Wrecked Chevalier D6": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpTruckLightsSmashedFront"
+            ]
+        },
+        "Wrecked Chevalier Dart": {
+            "categories": [
+                "Standard vehicles"
+            ],
+            "vehicle_id": [
+                "Base.CarSmallSmashedFront"
+            ]
+        },
+        "Wrecked Chevalier Nyala": {
+            "categories": [
+                "Standard vehicles"
+            ],
+            "vehicle_id": [
+                "Base.CarLightsSmashedFront"
+            ]
+        },
+        "Wrecked Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVanMailSmashedFront"
+            ]
+        },
+        "Wrecked Dash Bulldriver": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.PickUpVanLightsSmashedFront"
+            ]
+        },
+        "Wrecked Dash Rancher": {
+            "categories": [
+                "Standard vehicles"
+            ],
+            "vehicle_id": [
+                "Base.OffRoadSmashedFront"
+            ]
+        },
+        "Wrecked Franklin All-Terrain": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.SUVSmashedFront"
+            ]
+        },
+        "Wrecked Masterson Horizon": {
+            "categories": [
+                "Standard vehicles"
+            ],
+            "vehicle_id": [
+                "Base.CarSmall02SmashedFront"
+            ]
+        },
+        "Wrecked Mercia Lang 4000": {
+            "categories": [
+                "Sports vehicles"
+            ],
+            "vehicle_id": [
+                "Base.CarLuxurySmashedFront"
+            ]
+        },
+        "Zippee Chevalier Step Van": {
+            "categories": [
+                "Heavy-duty vehicles"
+            ],
+            "vehicle_id": [
+                "Base.StepVan_Zippee"
             ]
         }
     }
