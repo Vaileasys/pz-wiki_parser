@@ -2,7 +2,58 @@ from scripts.utils import echo
 from scripts.parser import script_parser
 from scripts.core.file_loading import get_script_path
 from scripts.core.language import Translate
+from scripts.objects.item import Item
 from scripts.utils.util import link, to_bool
+
+
+class CraftRecipeInput:
+    def __init__(self, data: dict, recipe: "CraftRecipe"):
+        self.data = data
+        self.recipe = recipe
+
+    @property
+    def items(self) -> list[str]:
+        return self.data.get("items")
+
+    @property
+    def count(self) -> int:
+        return int(self.data.get("count", 1))
+
+    @property
+    def mode(self) -> int:
+        return int(self.data.get("mode"))
+
+    @property
+    def flags(self) -> list[str]:
+        return int(self.data.get("flags"))
+
+    @property
+    def tags(self) -> list[str]:
+        return self.data.get("tags")
+
+    def __repr__(self):
+        return f"<CraftRecipeInput {recipe.recipe_id}>"
+    
+
+class CraftRecipeOutput:
+    def __init__(self, data: dict, recipe: "CraftRecipe"):
+        self.data = data
+        self.recipe = recipe
+
+    @property
+    def items(self) -> list[str]:
+        return self.data.get("items", [])
+
+    @property
+    def mapper(self) -> str | None:
+        return self.data.get("mapper")
+
+    @property
+    def count(self) -> int:
+        return int(self.data.get("count", 1))
+
+    def __repr__(self):
+        return f"<CraftRecipeOutput {recipe.recipe_id}>"
 
 
 class CraftRecipe:
@@ -85,6 +136,69 @@ class CraftRecipe:
             bool: True if the tag is present, False otherwise.
         """
         return tag in self.tags
+    
+    @property
+    def input_items(self) -> list[str]:
+        """
+        Return a list of item IDs used as inputs for this recipe.
+
+        Includes normal inputs and items linked via tags.
+        """
+        from scripts.items.item_tags import get_tag_data
+
+        if not hasattr(self, "_input_items"):
+            items = set()
+
+            for input in self.inputs:
+                if input.items:
+                    for item in input.items:
+                        if isinstance(item, str):
+                            items.update(input.items)
+                        elif isinstance(item, dict):
+                            it = item.get("raw_item")
+                            if it:
+                                items.add()
+                        else:
+                            raise f"Error getting input items for {self.recipe_id}: 'input.items' is not a string or dict"
+
+                if input.tags:
+                    all_tags = get_tag_data()
+                    for tag in input.tags:
+                        tagged_items = all_tags.get(tag, [])
+                        for item in tagged_items:
+                            item_id = item.get("item_id")
+                            if item_id:
+                                items.add(item_id)
+
+            self._input_items = list(items)
+
+        return self._input_items
+    
+    @property
+    def output_items(self) -> list[str]:
+        """
+        Return a list of item IDs produced by this recipe.
+
+        Includes normal outputs and mapped outputs.
+        """
+        if not hasattr(self, "_output_items"):
+            items = set()
+
+            for output in self.outputs:
+                if output.items:
+                    items.update(output.items)
+
+            if self.item_mappers:
+                for mapper in self.item_mappers.values():
+                    for key, value in mapper.items():
+                        if key == "default":
+                            items.add(value)
+                        else:
+                            items.add(key)
+
+            self._output_items = list(items)
+            
+        return self._output_items
 
     ## ---------------- Properties ---------------- ##
 
@@ -114,28 +228,22 @@ class CraftRecipe:
 
     @property
     def wiki_link(self):
-        from scripts.objects.item import Item
         if self._wiki_link is not None:
             return self._wiki_link
 
-        # Try to resolve an item from outputs
         try:
             if self.outputs:
                 output = self.outputs[0]
 
-                if "items" in output:
-                    product_id = output["items"][0]
+                product_id = None
+                if output.items:
+                    product_id = output.items[0]
 
-                elif "mapper" in output:
-                    mapper = output["mapper"]
-                    mapper_data = self.item_mappers.get(mapper, {})
-
+                elif output.mapper:
+                    mapper_data = self.item_mappers.get(output.mapper, {})
                     product_id = mapper_data.get("default")
                     if product_id is None and mapper_data:
                         product_id = next(iter(mapper_data.values()))
-
-                else:
-                    product_id = None
 
                 if product_id:
                     item = Item(product_id)
@@ -145,21 +253,32 @@ class CraftRecipe:
         except Exception as e:
             echo.warning(f"Failed to resolve wiki_link for {self.recipe_id}: {e}")
 
-        # Fallback to using the recipe name itself
         self._wiki_link = self.name
         return self._wiki_link
 
     @property
     def category(self):
-        return self.data.get("category", "")
+        return self.data.get("category", "Miscellaneous")
+    
+    @property
+    def category_link(self):
+        if not hasattr(self, "_category_link"):
+            if self.category:
+                self._category_link = link(f"{self.category} (crafting)", self.category)
+            else:
+                self._category_link = ""
+
+        return self._category_link
 
     @property
-    def inputs(self):
-        return self.data.get("inputs", {})
+    def inputs(self) -> list[CraftRecipeInput]:
+        raw_inputs = self.data.get("inputs", [])
+        return [CraftRecipeInput(input_data, self) for input_data in raw_inputs]
 
     @property
-    def outputs(self):
-        return self.data.get("outputs", {})
+    def outputs(self) -> list[CraftRecipeOutput]:
+        raw_outputs = self.data.get("outputs", [])
+        return [CraftRecipeOutput(output_data, self) for output_data in raw_outputs]
 
     @property
     def item_mappers(self):
@@ -252,7 +371,11 @@ class CraftRecipe:
     def skill_base_health(self) -> float | None:
         return self.data.get("skillBaseHealth")
 
+
+
 if __name__ == "__main__":
-    recipe = CraftRecipe("MakeBoneForearmArmor")
-    outputs = recipe.meta_recipe
-    print(recipe.name)
+    recipe = CraftRecipe("MakeForearmBulletproofVestArmor")
+    print(recipe.output_items)
+    inputs = recipe.inputs
+    #for input in inputs:
+    #    print(input.items)
