@@ -157,6 +157,31 @@ def to_bool(value):
     return str(value).lower() in ('true', 't', '1', 'yes', 'y', 'on')
 
 
+def flip_data(data: dict) -> dict:
+    """
+    Flip a flat dictionary so that values become keys, and keys become values.
+    If multiple keys share the same value, they are grouped in a list.
+
+    Args:
+        data (dict): A flat dictionary to flip. All values must be hashable.
+
+    Returns:
+        dict: A new dictionary with values as keys and lists of original keys as values.
+
+    Raises:
+        TypeError: If 'data' is not a dictionary or a value is unhashable.
+    """
+    if not isinstance(data, dict):
+        raise TypeError("Input must be a dictionary.")
+    
+    flipped = {}
+    for key, value in data.items():
+        if value not in flipped:
+            flipped[value] = []
+        flipped[value].append(key)
+    return flipped
+
+
 def deep_getattr(obj: object, attr_path: str, default=None):
     """
     Access nested attributes on an object using dot‑notation.
@@ -176,6 +201,85 @@ def deep_getattr(obj: object, attr_path: str, default=None):
         if obj is default:
             return default
     return obj
+
+
+def calculate_drain_rate(use_delta: float, unit: str = "hour", tick_minutes: int = 1, as_percentage: bool = False) -> str | float:
+    """
+    Calculates how much of a drainable item is consumed over time.
+
+    Args:
+        use_delta (float): Radio UseDelta value from item script (e.g., 0.014 for 1.4% per hour).
+        as_percentage (bool): Return as a percentage string (default False).
+        unit (str): Time unit to calculate ('minute', 'hour', 'day').
+        as_percentage (bool): Return as a percentage string (default False).
+
+    Returns:
+        str | float: Battery drain over the given time unit.
+    """
+    unit_minutes = {"minute": 1, "hour": 60, "day": 1440}
+    if unit not in unit_minutes:
+        raise ValueError(f"Invalid unit '{unit}'.")
+
+    # Adjust per-minute drain to reflect tick duration
+    per_tick = use_delta * (tick_minutes / 60)
+    drain_fraction = per_tick * (unit_minutes[unit] / tick_minutes)
+
+    if as_percentage:
+        return convert_percentage(drain_fraction, start_zero=True, decimals=1)
+
+    return round(drain_fraction, 3)
+
+
+def convert_unit(value: float, unit: str, start_prefix: str = "", force_prefix: str = None) -> str:
+    """
+    Convert a value from a given SI prefix (default: base) to the most appropriate SI prefix
+    between milli (m) and Mega (M), or force it to a specific one.
+
+    Args:
+        value (float): The numeric value to convert.
+        unit (str): The unit to append after the converted value.
+        start_prefix (str, optional): The starting SI prefix (default ""). One of: "m", "", "k", "M".
+        force_prefix (str, optional): If set, force output to this SI prefix. Skips automatic scaling.
+
+    Returns:
+        str: A human-readable string with the chosen prefix and unit.
+    """
+    prefixes = ["m", "", "k", "M"]
+    factors = {"m": 0.001, "": 1, "k": 1_000, "M": 1_000_000}
+
+    if start_prefix not in prefixes:
+        raise ValueError(f"Invalid start prefix '{start_prefix}'. Use one of: {', '.join(prefixes)}")
+    if force_prefix and force_prefix not in prefixes:
+        raise ValueError(f"Invalid force prefix '{force_prefix}'. Use one of: {', '.join(prefixes)}")
+
+    base_value = value * factors[start_prefix]
+
+    if force_prefix:
+        scaled = base_value / factors[force_prefix]
+        return f"{convert_int(scaled)} {force_prefix}{unit}"
+
+    start_index = prefixes.index(start_prefix)
+
+    for prefix in reversed(prefixes[:start_index + 3]):
+        factor = factors[prefix]
+        if abs(base_value) >= factor or prefix == "m":
+            scaled = base_value / factor
+            return f"{convert_int(scaled)} {prefix}{unit}"
+
+    return f"{base_value} {prefixes[start_index]}{unit}"
+
+
+def split_camel_case(text: str) -> str:
+    """
+    Add spaces between words in a camel case string.
+
+    Args:
+        text (str): A camelCase or PascalCase string.
+
+    Returns:
+        str: The string with spaces added between words.
+    """
+    return re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', text)
 
 
 def tick(text: str = None, link: str = None):
@@ -209,6 +313,33 @@ def cross(text: str = None, link: str = None):
     link = f"|link={link}{Language.get_subpage()}" if link else ""
     text = "|" + text if text else ""
     return f"[[File:UI_Cross.png|32px{link}{text}]]"
+
+def rgb(red: int | float = 0, green: int | float = 0, blue: int | float = 0):
+    """
+    Return an rgb template string with the given colour values.
+
+    Each colour component can be specified as either:
+      - An int (0–255), representing the raw RGB value.
+      - A float (0.0–1.0), representing a normalised fraction which will be scaled to 0–255.
+
+    Args:
+        red (int | float): Red component (default: 0).
+        green (int | float): Green component (default: 0).
+        blue (int | float): Blue component (default: 0).
+
+    Returns:
+        str: A string formatted as '{{rgb|R, G, B}}' where R, G, and B are integers.
+    """
+    def convert(value):
+        if isinstance(value, float):
+            return round(value * 255)
+        return int(value)
+    
+    r = convert(red)
+    g = convert(green)
+    b = convert(blue)
+    return f"{{{{rgb|{r}, {g}, {b}}}}}"
+    
 
 
 ## ------------------------- Infobox helpers ------------------------- ##
