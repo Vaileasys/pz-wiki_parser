@@ -421,11 +421,29 @@ def build_tables(category_items, index):
         f.write("foraging = {amount, level, snow, rain, day, night, biome_table, months_table, bonus_table, malus_table}\n")
         f.write("--]]\n\n")
         f.write("local data = {\n")
-    
-    # Function to estimate lines for an item
-    def estimate_item_lines(item_data):
-        return 5
-    
+
+
+    def effective_chance_calc(rolls, chance):
+        """
+        Calculate the overall spawn chance (%) over `rolls` attempts,
+        given per‐roll `chance`, a loot rarity modifier, luck multiplier,
+        raw zombie density, zombie population loot effect, and a global loot multiplier.
+        """
+        loot_rarity = 0.6  # apocalypse default
+        luck_multiplier = 1  # apocalypse default
+        density = 0.1536470651626587  # median of various locations, mostly towns and residential sections
+        pop_loot_effect = 10  # apocalypse default
+        global_multiplier = 1  # apocalypse default
+
+        density_factor = density * pop_loot_effect
+        threshold = (chance * 100 * loot_rarity * luck_multiplier + density_factor) * global_multiplier
+
+        # per‐roll probability
+        probability = threshold / 10000
+
+        # probability of at least one success in 'rolls' tries
+        return round((1 - (1 - probability) ** rolls) * 100, 2)
+
     # Function to write items to file
     def write_items_to_file(f, items_to_write):
         # Sort items by item_id
@@ -443,13 +461,7 @@ def build_tables(category_items, index):
                     chance = container.get("Chance", 0)
                     rolls = container.get("Rolls", 0)
                     
-                    # Calculate effective chance
-                    loot_rarity = 0.4
-                    luck_multiplier = 1
-                    density = 0.06280941113673441
-                    
-                    effective_chance = round((1 - (1 - (math.floor(
-                        (1 + (100 * chance * loot_rarity * luck_multiplier) + (10 * density))) / 10000)) ** rolls) * 100, 2)
+                    effective_chance = effective_chance_calc(rolls, chance)
                     
                     container_data.append((effective_chance, room, container_name))
                 
@@ -469,8 +481,7 @@ def build_tables(category_items, index):
                     chance = vehicle.get("Chance", 0)
                     rolls = vehicle.get("Rolls", 0)
                     
-                    effective_chance = round((1 - (1 - (math.floor(
-                        (1 + (100 * chance * 0.4 * 1) + (10 * 0.06280941113673441))) / 10000)) ** rolls) * 100, 2)
+                    effective_chance = effective_chance_calc(rolls, chance)
                     
                     vehicle_data.append((effective_chance, type_, container))
                 
@@ -582,7 +593,7 @@ def build_tables(category_items, index):
         estimated_lines = 0
         
         for item_id, item_data in items.items():
-            item_lines = estimate_item_lines(item_data)
+            item_lines = 5
             
             # If adding this item would exceed line limit, write current file and start new one
             if estimated_lines + item_lines > 3250 and current_items:
