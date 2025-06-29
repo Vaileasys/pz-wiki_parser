@@ -154,7 +154,7 @@ class Translate:
         "ItemName_", "IG_UI_", "Recipes_", "Tooltip_",
         "EvolvedRecipeName_", "Fluids_", "Wiki_", "UI_",
         "Print_Text_", "Print_Media_", "Recorded_Media_", "Stash_",
-        "ContextMenu_"
+        "ContextMenu_", "Farming_"
     )
 
 

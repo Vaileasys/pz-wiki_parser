@@ -10,6 +10,9 @@ DOCS_DIR = os.path.join("docs")
 
 LUA_PATH = os.path.join(RESOURCE_DIR, "lua")
 
+# Resource directories
+TABLES_DIR = os.path.join(RESOURCE_DIR, "tables")
+
 # Output directories
 LOGGING_DIR = os.path.join(OUTPUT_DIR, "logging")
 

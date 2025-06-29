@@ -10,7 +10,8 @@ from scripts.core.file_loading import get_script_path
 from scripts.core.language import Translate
 from scripts.parser import script_parser
 from scripts.objects.item import Item
-from scripts.utils.util import link
+from scripts.utils import util, echo
+
 
 class EvolvedRecipe:
     """
@@ -172,7 +173,11 @@ class EvolvedRecipe:
     @property
     def page(self):
         if not hasattr(self, "_page"):
-            self._page = self.result_item.page
+            try:
+                self._page = self.result_item.page
+            except:
+                echo.error(f"Couldn't find a page for {self}: ResultItem is '{self.get("ResultItem")}'")
+                self._page = "Evolved recipes"
         return self._page
 
     @property
@@ -181,7 +186,7 @@ class EvolvedRecipe:
 
     @property
     def display_name(self):
-        return "ContextMenu_EvolvedRecipe_" + self.recipe_id
+        return "ContextMenu_EvolvedRecipe_" + self.recipe_id.replace("_", " ")
 
     @property
     def name(self):
@@ -198,7 +203,7 @@ class EvolvedRecipe:
     @property
     def wiki_link(self):
         if not hasattr(self, "_wiki_link"):
-            self._wiki_link = link(self.page, self.name)
+            self._wiki_link = util.link(self.page, self.name)
         return self._wiki_link
     
     @property
@@ -262,5 +267,3 @@ class EvolvedRecipe:
             dict[str, dict[str, Item | float | bool]]: Items compatible with this recipe.
         """
         return self._items_list
-
-print(EvolvedRecipe("Soup").result_item.name)

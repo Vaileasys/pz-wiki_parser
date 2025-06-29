@@ -10,6 +10,7 @@ from scripts.utils import echo
 def load_json(path:str) -> dict:
     """Load JSON data from a file. Returns empty dict on failure."""
     if not os.path.exists(path):
+        echo.warning(f"Failed to load JSON from {path} – path does not exist")
         return {}
     try:
         with open(path, 'r', encoding='utf-8') as file:

@@ -95,7 +95,7 @@ def format_link(name:str, page:str=None) -> str:
         return f"[[{page}|{name}]]"
 
 
-def convert_percentage(value: str | int | float, start_zero=True, percentage=False, default=None) -> str:
+def convert_percentage(value: str | int | float, start_zero=True, percentage=False, default=None, decimals: int = 0) -> str:
     """Converts a numeric value to a percentage string.
 
     Args:
@@ -111,23 +111,21 @@ def convert_percentage(value: str | int | float, start_zero=True, percentage=Fal
     """
     if not value or value == '-':
         return default if default is not None else '-'
-    
+
     try:
         value = float(value)
     except (ValueError, TypeError):
         return default if default is not None else '-'
-    
+
     if not percentage:
         if not start_zero:
             value -= 1
         value *= 100
 
-    value = int(round(value))
-
-    if value == 0:
+    if round(value, decimals) == 0:
         return default if default is not None else '0%'
-    
-    return f"{value}%"
+
+    return f"{value:.{decimals}f}%"
 
 
 def convert_int(value: int | float) -> int | float:
@@ -191,7 +189,8 @@ def tick(text: str = None, link: str = None):
     Returns:
         str: Formatted wiki string for the tick icon.
     """
-    link = f"|link=" + link if link else ""
+    from scripts.core.language import Language
+    link = f"|link={link}{Language.get_subpage()}" if link else ""
     text = "|" + text if text else ""
     return f"[[File:UI_Tick.png|32px{link}{text}]]"
 
@@ -206,7 +205,8 @@ def cross(text: str = None, link: str = None):
     Returns:
         str: Formatted wiki string for the cross icon.
     """
-    link = f"|link=" + link if link else ""
+    from scripts.core.language import Language
+    link = f"|link={link}{Language.get_subpage()}" if link else ""
     text = "|" + text if text else ""
     return f"[[File:UI_Cross.png|32px{link}{text}]]"
 
