@@ -37202,7 +37202,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BeachChair"
             ],
             "sprite_id": [
                 "furniture_seating_outdoor_01_25+24",
@@ -37250,7 +37250,7 @@
                 "Curtains"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BeigeCurtain"
             ],
             "sprite_id": [
                 "fixtures_windows_curtains_01_60",
@@ -37286,7 +37286,7 @@
         "Beige Rotary Phone": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BeigeRotaryPhone"
             ],
             "sprite_id": [
                 "location_business_office_generic_02_0",
@@ -37362,7 +37362,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingBejaminFranklin"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_92",
@@ -37374,7 +37374,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingBetty"
             ],
             "sprite_id": [
                 "walls_decoration_01_49",
@@ -37477,7 +37477,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_Birdbath"
             ],
             "sprite_id": [
                 "vegetation_ornamental_01_50"
@@ -37499,7 +37499,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BlackCashRegister"
             ],
             "sprite_id": [
                 "location_shop_accessories_01_20",
@@ -37513,7 +37513,7 @@
                 "Curtains"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BlackCurtain"
             ],
             "sprite_id": [
                 "fixtures_windows_curtains_01_76",
@@ -37538,7 +37538,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_DarkFancyDrawers"
             ],
             "sprite_id": [
                 "furniture_storage_01_32",
@@ -37552,7 +37552,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FancyBlackChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_03_40",
@@ -37590,7 +37590,7 @@
                 "Tables"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BlackLowModernTable"
             ],
             "sprite_id": [
                 "furniture_tables_low_01_18",
@@ -37600,7 +37600,7 @@
         "Black Modern Phone": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BlackModernPhone"
             ],
             "sprite_id": [
                 "location_business_office_generic_02_23",
@@ -37614,7 +37614,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_OfficeChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_01_49",
@@ -37626,7 +37626,7 @@
         "Black Rotary Phone": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BlackRotaryPhone"
             ],
             "sprite_id": [
                 "location_business_office_generic_02_4",
@@ -37722,7 +37722,7 @@
                 "Washing machines"
             ],
             "item_id": [
-                "Moveables.appliances_laundry_01_0"
+                "Base.Mov_BlueComboWasherDryer"
             ]
         },
         "Blue Comfy Chair": {
@@ -37730,7 +37730,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BlueComfyChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_03_24",
@@ -37788,7 +37788,7 @@
                 "Curtains"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BlueCurtain"
             ],
             "sprite_id": [
                 "fixtures_windows_curtains_01_28",
@@ -37825,7 +37825,7 @@
                 "Fridges"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BlueFridge"
             ],
             "sprite_id": [
                 "appliances_refrigeration_01_5",
@@ -37923,7 +37923,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PosterPieBlue"
             ],
             "sprite_id": [
                 "location_restaurant_pie_01_62",
@@ -37947,7 +37947,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BluePlasticChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_02_12",
@@ -37961,7 +37961,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BlueRattanChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_02_40",
@@ -38017,7 +38017,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BlueWallLocker"
             ],
             "sprite_id": [
                 "furniture_storage_02_4",
@@ -38095,7 +38095,7 @@
                 "Tables"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FancyTable"
             ],
             "sprite_id": [
                 "furniture_tables_high_01_15"
@@ -38201,7 +38201,7 @@
         "Brazier": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_Brazier"
             ],
             "sprite_id": [
                 "crafted_02_42",
@@ -38260,7 +38260,7 @@
                 "Curtains"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BrownCurtain"
             ],
             "sprite_id": [
                 "fixtures_windows_curtains_01_44",
@@ -38286,7 +38286,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BrownComfyChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_02_45",
@@ -38314,7 +38314,7 @@
                 "Tables"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BrownLowTable"
             ],
             "sprite_id": [
                 "furniture_tables_low_01_12",
@@ -38377,7 +38377,7 @@
                 "Fridges"
             ],
             "item_id": [
-                "Moveables.{TileID}"
+                "Base.Mov_TrailerFridge"
             ]
         },
         "Bunk Beds": {
@@ -38454,7 +38454,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingCalvinist"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_93",
@@ -38476,7 +38476,7 @@
         "Cardboard Box": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_CardboardBox"
             ],
             "sprite_id": [
                 "trashcontainers_01_25",
@@ -38502,7 +38502,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_CashRegister"
             ],
             "sprite_id": [
                 "location_shop_accessories_01_0",
@@ -38516,7 +38516,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BirchCornerCounter"
             ],
             "sprite_id": [
                 "fixtures_counters_01_42",
@@ -38530,7 +38530,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BirchCounter"
             ],
             "sprite_id": [
                 "fixtures_counters_01_43",
@@ -38542,7 +38542,7 @@
         "Cedar Round Table": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_RoundTable"
             ],
             "sprite_id": [
                 "furniture_tables_high_01_14"
@@ -38562,7 +38562,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SecurityTerminal2"
             ],
             "sprite_id": [
                 "appliances_com_01_53",
@@ -38601,7 +38601,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FloatingTrailerCounter"
             ],
             "sprite_id": [
                 "location_restaurant_spiffos_03_32+33+34+35+40+41+22",
@@ -38613,7 +38613,7 @@
                 "Toilets"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ChemicalToilet"
             ],
             "sprite_id": [
                 "fixtures_bathroom_02_5",
@@ -38625,7 +38625,7 @@
         "Chest Freezer": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ChestFreezer"
             ],
             "sprite_id": [
                 "appliances_refrigeration_01_49",
@@ -38714,7 +38714,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingChromaticAccident"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_56+57+58",
@@ -38726,7 +38726,7 @@
                 "Fridges"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SteelFridge"
             ],
             "sprite_id": [
                 "appliances_refrigeration_01_9",
@@ -38740,7 +38740,7 @@
                 "Sinks"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_DarkIndustrialSink"
             ],
             "sprite_id": [
                 "fixtures_sinks_01_16",
@@ -38754,7 +38754,7 @@
                 "Cooking appliances"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_Microwave2"
             ],
             "sprite_id": [
                 "appliances_cooking_01_29",
@@ -38768,7 +38768,7 @@
                 "Sinks"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ChromeSink"
             ],
             "sprite_id": [
                 "fixtures_sinks_01_8",
@@ -38782,7 +38782,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_Toaster"
             ],
             "sprite_id": [
                 "appliances_cooking_01_33",
@@ -38794,7 +38794,7 @@
                 "Windows"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WindowChrome"
             ],
             "sprite_id": [
                 "fixtures_windows_01_33"
@@ -38819,7 +38819,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_Projector"
             ],
             "sprite_id": [
                 "appliances_com_01_85",
@@ -38876,7 +38876,7 @@
                 "Signs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SignCitrus"
             ],
             "sprite_id": [
                 "location_shop_accessories_01_26",
@@ -38896,7 +38896,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ClothesStand"
             ],
             "sprite_id": [
                 "location_shop_generic_01_52"
@@ -38955,7 +38955,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_CoffeeMaker"
             ],
             "sprite_id": [
                 "appliances_cooking_01_57",
@@ -38981,7 +38981,7 @@
                 "Shelves"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ComicsShopShelves"
             ],
             "sprite_id": [
                 "location_shop_generic_01_0",
@@ -39049,7 +39049,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_CorkBoard"
             ],
             "sprite_id": [
                 "location_business_office_generic_01_15",
@@ -39256,7 +39256,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_DarkBlueChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_03_48",
@@ -39270,7 +39270,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_DarkCornerCounter"
             ],
             "sprite_id": [
                 "fixtures_counters_01_58",
@@ -39284,7 +39284,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_DarkCounter"
             ],
             "sprite_id": [
                 "fixtures_counters_01_59",
@@ -39459,7 +39459,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GardenGnome"
             ],
             "sprite_id": [
                 "vegetation_ornamental_01_49",
@@ -39483,7 +39483,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_HuntingTrophy"
             ],
             "sprite_id": [
                 "camping_01_17",
@@ -39521,7 +39521,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingDesertLandscape"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_20+21",
@@ -39533,7 +39533,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_DesktopComputer"
             ],
             "sprite_id": [
                 "appliances_com_01_73",
@@ -39609,7 +39609,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_DegreeDoctor"
             ],
             "sprite_id": [
                 "location_community_medical_01_13",
@@ -39621,7 +39621,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_Doghouse"
             ],
             "sprite_id": [
                 "location_farm_accesories_01_8",
@@ -39660,7 +39660,7 @@
                 "Vegetation tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_HaystackDouble"
             ],
             "sprite_id": [
                 "vegetation_farm_01_10"
@@ -39671,7 +39671,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ArcadeMachine1"
             ],
             "sprite_id": [
                 "recreational_01_17",
@@ -39685,7 +39685,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PosterDroids"
             ],
             "sprite_id": [
                 "location_restaurant_bar_smutz_8",
@@ -39732,7 +39732,7 @@
         "Drum Stool": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_DrumStool"
             ],
             "sprite_id": [
                 "recreational_01_62"
@@ -39785,7 +39785,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PalletEmpty"
             ],
             "sprite_id": [
                 "construction_01_5"
@@ -39819,7 +39819,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_Espresso"
             ],
             "sprite_id": [
                 "appliances_cooking_01_60",
@@ -39853,7 +39853,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ExtractorHood"
             ],
             "sprite_id": [
                 "appliances_cooking_01_68",
@@ -39947,7 +39947,7 @@
                 "Sinks"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FancyHangingSink"
             ],
             "sprite_id": [
                 "fixtures_sinks_01_25",
@@ -40005,7 +40005,7 @@
                 "Outdoor lamps"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FancyOutdoorLamp"
             ],
             "sprite_id": [
                 "lighting_outdoor_01_35",
@@ -40100,7 +40100,7 @@
                 "Vegetation tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_Fern"
             ],
             "sprite_id": [
                 "vegetation_groundcover_01_20"
@@ -40130,7 +40130,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FitnessContraption"
             ],
             "sprite_id": [
                 "recreational_sports_01_41+40",
@@ -40156,7 +40156,7 @@
                 "Lights"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_LightConstruction"
             ],
             "sprite_id": [
                 "lighting_outdoor_01_48",
@@ -40181,7 +40181,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingFlowersOnTable"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_101",
@@ -40193,7 +40193,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FoldingChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_01_61",
@@ -40309,7 +40309,7 @@
                 "Cooking appliances"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_DeepFryer"
             ],
             "sprite_id": [
                 "appliances_cooking_01_52",
@@ -40439,7 +40439,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingGeorgeWashington"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_90",
@@ -40541,7 +40541,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GreyChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_01_53",
@@ -40577,7 +40577,7 @@
                 "Curtains"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GrayCurtain"
             ],
             "sprite_id": [
                 "fixtures_windows_curtains_01_84",
@@ -40617,7 +40617,7 @@
                 "Bins"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GrayGarbageBin"
             ],
             "sprite_id": [
                 "trashcontainers_01_19",
@@ -40643,7 +40643,7 @@
                 "Curtains"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GrayLongCurtain"
             ],
             "sprite_id": [
                 "fixtures_windows_curtains_01_92",
@@ -40668,7 +40668,7 @@
                 "Cooking appliances"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GreyOven"
             ],
             "sprite_id": [
                 "appliances_cooking_01_4",
@@ -40746,7 +40746,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GreenComfyChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_01_8",
@@ -40774,7 +40774,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GreenCornerCounter"
             ],
             "sprite_id": [
                 "fixtures_counters_01_66",
@@ -40788,7 +40788,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GreenCounter"
             ],
             "sprite_id": [
                 "fixtures_counters_01_67",
@@ -40802,7 +40802,7 @@
                 "Curtains"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GreenCurtain"
             ],
             "sprite_id": [
                 "fixtures_windows_curtains_01_68",
@@ -40838,7 +40838,7 @@
                 "Fridges"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GreenFridge"
             ],
             "sprite_id": [
                 "appliances_refrigeration_01_13",
@@ -40863,7 +40863,7 @@
                 "Cooking appliances"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GreenOven"
             ],
             "sprite_id": [
                 "appliances_cooking_01_0",
@@ -40877,7 +40877,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PosterPieGreen"
             ],
             "sprite_id": [
                 "location_restaurant_pie_01_61",
@@ -40935,7 +40935,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{TileID}"
+                "Base.Mov_GreenWallLocker"
             ]
         },
         "Green Wooden Chair": {
@@ -40943,7 +40943,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GreenChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_01_56",
@@ -41038,7 +41038,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GreyComfyChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_03_5",
@@ -41137,7 +41137,7 @@
         "Guitar Amplifier": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GuitarAmplifier"
             ],
             "sprite_id": [
                 "recreational_01_73",
@@ -41149,7 +41149,7 @@
         "Guitar Speaker Cabinet": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BlackSpeakerCabinet"
             ],
             "sprite_id": [
                 "recreational_01_83",
@@ -41289,7 +41289,7 @@
                 "Cooking appliances"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BlackBBQ"
             ],
             "sprite_id": [
                 "appliances_cooking_01_45",
@@ -41303,7 +41303,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingHelianthus"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_82",
@@ -41339,7 +41339,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_HotdogMachine"
             ],
             "sprite_id": [
                 "location_shop_fossoil_01_11",
@@ -41377,7 +41377,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_TVCamera"
             ],
             "sprite_id": [
                 "appliances_com_01_45",
@@ -41391,7 +41391,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PinkFlamingo"
             ],
             "sprite_id": [
                 "vegetation_ornamental_01_25",
@@ -41405,7 +41405,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingLibrary"
             ],
             "sprite_id": [
                 "walls_decoration_01_56",
@@ -41417,7 +41417,7 @@
                 "Fridges"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_IndustrialFridge"
             ],
             "sprite_id": [
                 "appliances_refrigeration_01_23",
@@ -41431,7 +41431,7 @@
                 "Cooking appliances"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_IndustrialOven"
             ],
             "sprite_id": [
                 "appliances_cooking_01_20",
@@ -41443,7 +41443,7 @@
         "Industrial Sink": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_IndustrialSink"
             ],
             "sprite_id": [
                 "fixtures_sinks_01_4",
@@ -41468,7 +41468,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingIslandBeach"
             ],
             "sprite_id": [
                 "walls_decoration_01_44+45"
@@ -41479,7 +41479,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingJohnAdams"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_91",
@@ -41503,7 +41503,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ArcadeMachine2"
             ],
             "sprite_id": [
                 "recreational_01_21",
@@ -41541,7 +41541,7 @@
         "Kick Drum": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_KickDrum"
             ],
             "sprite_id": [
                 "recreational_01_67",
@@ -41569,7 +41569,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingLakeside"
             ],
             "sprite_id": [
                 "walls_decoration_01_52+53",
@@ -41745,7 +41745,7 @@
                 "Sinks"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_LargeIndustrialSink"
             ],
             "sprite_id": [
                 "fixtures_sinks_01_32",
@@ -41829,7 +41829,7 @@
                 "Mirrors"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_MirrorLarge"
             ],
             "sprite_id": [
                 "walls_decoration_01_4",
@@ -42048,7 +42048,7 @@
                 "Bins"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WashingBin"
             ],
             "sprite_id": [
                 "appliances_laundry_01_25",
@@ -42234,7 +42234,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingLillysWaterpond"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_26+27",
@@ -42276,7 +42276,7 @@
                 "Curtains"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_LongBeigeCurtain"
             ],
             "sprite_id": [
                 "fixtures_windows_curtains_01_4",
@@ -42360,7 +42360,7 @@
                 "Curtains"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_LongWhiteCurtain"
             ],
             "sprite_id": [
                 "fixtures_windows_curtains_01_12",
@@ -42433,7 +42433,7 @@
                 "Tables"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FancyLowTable"
             ],
             "sprite_id": [
                 "furniture_tables_low_01_2",
@@ -42478,7 +42478,7 @@
                 "Toilets"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_LowToilet"
             ],
             "sprite_id": [
                 "fixtures_bathroom_01_5",
@@ -42492,7 +42492,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_DarkWoodenChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_02_1",
@@ -42506,7 +42506,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FancyChestnutDrawers"
             ],
             "sprite_id": [
                 "furniture_storage_01_12",
@@ -42518,7 +42518,7 @@
         "Mahogany Stool": {
             "categories": [],
             "item_id": [
-                "Moveables.location_restaurant_bar_01_26"
+                "Base.Mov_WoodenStool"
             ],
             "sprite_id": [
                 "location_restaurant_bar_01_26"
@@ -42529,7 +42529,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_Mailbox"
             ],
             "sprite_id": [
                 "street_decoration_01_18",
@@ -42670,7 +42670,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingManWithOneEar"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_86",
@@ -42727,7 +42727,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BirchDrawers"
             ],
             "sprite_id": [
                 "furniture_storage_01_46",
@@ -42741,7 +42741,7 @@
                 "Tables"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_LightRoundTable"
             ],
             "sprite_id": [
                 "furniture_tables_high_01_7"
@@ -42763,7 +42763,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingMargarite"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_96",
@@ -42820,7 +42820,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_CabinetMedical"
             ],
             "sprite_id": [
                 "fixtures_bathroom_01_29",
@@ -42855,7 +42855,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_MetalLocker"
             ],
             "sprite_id": [
                 "furniture_storage_02_1",
@@ -42883,7 +42883,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_OrangeBarrel"
             ],
             "sprite_id": [
                 "crafted_01_24",
@@ -42911,7 +42911,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_MetalTurnstile"
             ],
             "sprite_id": [
                 "fixtures_escalators_01_52",
@@ -42923,7 +42923,7 @@
                 "Shelves"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_MetalWallShelves"
             ],
             "sprite_id": [
                 "furniture_shelving_01_29",
@@ -42977,7 +42977,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_MilitaryCrate"
             ],
             "sprite_id": [
                 "location_military_generic_01_0"
@@ -42988,7 +42988,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_MilitaryLocker"
             ],
             "sprite_id": [
                 "location_military_generic_01_23",
@@ -43002,7 +43002,7 @@
                 "Fridges"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FridgeMini"
             ],
             "sprite_id": [
                 "appliances_refrigeration_01_24",
@@ -43030,7 +43030,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_MobileBloodbag"
             ],
             "sprite_id": [
                 "location_community_medical_01_24",
@@ -43044,7 +43044,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_MobileCounter"
             ],
             "sprite_id": [
                 "location_community_medical_01_50",
@@ -43058,7 +43058,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ModernCornerCounter"
             ],
             "sprite_id": [
                 "fixtures_counters_01_2",
@@ -43072,7 +43072,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ModernCounter"
             ],
             "sprite_id": [
                 "fixtures_counters_01_3",
@@ -43086,7 +43086,7 @@
                 "Outdoor lamps"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ModernOutdoorLamp"
             ],
             "sprite_id": [
                 "lighting_outdoor_01_33",
@@ -43100,7 +43100,7 @@
                 "Cooking appliances"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ModernOven"
             ],
             "sprite_id": [
                 "appliances_cooking_01_12",
@@ -43126,7 +43126,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingElisa"
             ],
             "sprite_id": [
                 "walls_decoration_01_47",
@@ -43150,7 +43150,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ConcreteMixer"
             ],
             "sprite_id": [
                 "construction_01_7",
@@ -43185,7 +43185,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingMountNeverRest"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_64+65+66",
@@ -43216,7 +43216,7 @@
                 "Tables"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_LongTable"
             ],
             "sprite_id": [
                 "furniture_tables_high_01_5",
@@ -43228,7 +43228,7 @@
                 "Outdoor lamps"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_NeonOpenSign"
             ],
             "sprite_id": [
                 "lighting_outdoor_01_43",
@@ -43242,7 +43242,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingNightWithStars"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_30+31",
@@ -43254,7 +43254,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingNomadAboveTheGloom"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_24+25",
@@ -43402,7 +43402,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_Jukebox"
             ],
             "sprite_id": [
                 "recreational_01_0",
@@ -43414,7 +43414,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PosterOmega"
             ],
             "sprite_id": [
                 "walls_decoration_01_51",
@@ -43473,7 +43473,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_OrangeFuton"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_01_46",
@@ -43496,7 +43496,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_OrangeModernChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_01_13",
@@ -43521,7 +43521,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PosterMedical"
             ],
             "sprite_id": [
                 "location_community_medical_01_12",
@@ -43544,7 +43544,7 @@
                 "Outdoor lamps"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_OvalOutdoorLamp"
             ],
             "sprite_id": [
                 "lighting_outdoor_01_41",
@@ -43558,7 +43558,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PinballMachine"
             ],
             "sprite_id": [
                 "recreational_01_25+24",
@@ -43570,7 +43570,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PosterPaws"
             ],
             "sprite_id": [
                 "location_entertainment_theatre_01_80",
@@ -43590,7 +43590,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WhiteSimpleChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_03_56",
@@ -43648,7 +43648,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_TowelDispenser"
             ],
             "sprite_id": [
                 "fixtures_bathroom_01_17",
@@ -43700,7 +43700,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PayPhones"
             ],
             "sprite_id": [
                 "street_decoration_01_38",
@@ -43712,7 +43712,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PinkFlamingo2"
             ],
             "sprite_id": [
                 "vegetation_ornamental_01_41",
@@ -43820,7 +43820,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PileOCrepeChair"
             ],
             "sprite_id": [
                 "location_restaurant_pileocrepe_01_40",
@@ -43866,7 +43866,7 @@
                 "Curtains"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PinkCurtain"
             ],
             "sprite_id": [
                 "fixtures_windows_curtains_01_36",
@@ -43880,7 +43880,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PosterPiePink"
             ],
             "sprite_id": [
                 "location_restaurant_pie_01_60",
@@ -43991,7 +43991,7 @@
                 "Fridges"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PlainFridge"
             ],
             "sprite_id": [
                 "appliances_refrigeration_01_29",
@@ -44003,7 +44003,7 @@
         "Plastic Chair": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PlasticChair"
             ],
             "sprite_id": [
                 "furniture_seating_outdoor_01_16",
@@ -44090,7 +44090,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PopcornMachine"
             ],
             "sprite_id": [
                 "location_entertainment_theatre_01_17"
@@ -44101,7 +44101,7 @@
                 "Fridges"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PopsicleFreezer"
             ],
             "sprite_id": [
                 "appliances_refrigeration_01_20",
@@ -44127,7 +44127,7 @@
         "Property Sign": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SignArmy"
             ],
             "sprite_id": [
                 "location_military_generic_01_26",
@@ -44139,7 +44139,7 @@
                 "Bins"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PublicGarbageBin"
             ],
             "sprite_id": [
                 "trashcontainers_01_21"
@@ -44150,7 +44150,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PublicMailBox"
             ],
             "sprite_id": [
                 "street_decoration_01_9",
@@ -44186,7 +44186,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PurpleRattanChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_01_32",
@@ -44225,7 +44225,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PurpleWoodenChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_03_44",
@@ -44253,7 +44253,7 @@
                 "Vegetation tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_RaisedPlantbed"
             ],
             "sprite_id": [
                 "vegetation_indoor_01_8"
@@ -44276,7 +44276,7 @@
                 "Bins"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_RecycleBin"
             ],
             "sprite_id": [
                 "trashcontainers_01_16"
@@ -44296,7 +44296,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_RedChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_01_40",
@@ -44350,7 +44350,7 @@
                 "Fridges"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_RedFridge"
             ],
             "sprite_id": [
                 "appliances_refrigeration_01_33",
@@ -44387,7 +44387,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_CabinetTool"
             ],
             "sprite_id": [
                 "location_business_machinery_01_33",
@@ -44401,7 +44401,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WoodenChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_02_4",
@@ -44415,7 +44415,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_OakCornerCounter"
             ],
             "sprite_id": [
                 "fixtures_counters_01_50",
@@ -44429,7 +44429,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_OakCounter"
             ],
             "sprite_id": [
                 "fixtures_counters_01_51",
@@ -44443,7 +44443,7 @@
                 "Tables"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_OakRoundTable"
             ],
             "sprite_id": [
                 "furniture_tables_high_01_6"
@@ -44454,7 +44454,7 @@
                 "Shelves"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_OakShelves"
             ],
             "sprite_id": [
                 "furniture_shelving_01_41",
@@ -44468,7 +44468,7 @@
                 "Cooking appliances"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_RedOven"
             ],
             "sprite_id": [
                 "appliances_cooking_01_8",
@@ -44482,7 +44482,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PosterPieRed"
             ],
             "sprite_id": [
                 "location_restaurant_pie_01_63",
@@ -44504,7 +44504,7 @@
         "Red Rotary Phone": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_RedRotaryPhone"
             ],
             "sprite_id": [
                 "location_business_office_generic_02_8",
@@ -44544,7 +44544,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_RedWoodenChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_02_8",
@@ -44581,7 +44581,7 @@
                 "Signs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SignRestricted"
             ],
             "sprite_id": [
                 "location_military_generic_01_19+20",
@@ -44617,7 +44617,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingRiverside"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_102",
@@ -44627,7 +44627,7 @@
         "Road Block": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_RoadBarrier"
             ],
             "sprite_id": [
                 "construction_01_9",
@@ -44639,7 +44639,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_RoadCone"
             ],
             "sprite_id": [
                 "street_decoration_01_26"
@@ -44686,7 +44686,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WoodenCornerCounter"
             ],
             "sprite_id": [
                 "fixtures_counters_01_10",
@@ -44700,7 +44700,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WoodenCounter"
             ],
             "sprite_id": [
                 "fixtures_counters_01_11",
@@ -44714,7 +44714,7 @@
                 "Bins"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_BinRound"
             ],
             "sprite_id": [
                 "trashcontainers_01_20"
@@ -44725,7 +44725,7 @@
                 "Gravestones"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GraveRound"
             ],
             "sprite_id": [
                 "location_community_cemetary_01_1",
@@ -44737,7 +44737,7 @@
                 "Outdoor lamps"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_RoundOutdoorLamp"
             ],
             "sprite_id": [
                 "lighting_outdoor_01_25",
@@ -44782,7 +44782,7 @@
         "Sale Sign": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SaleSign"
             ],
             "sprite_id": [
                 "location_shop_generic_01_70",
@@ -44806,7 +44806,7 @@
         "Salt Lick": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SaltLick"
             ],
             "sprite_id": [
                 "location_farm_accesories_01_12"
@@ -44817,7 +44817,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SatelliteDish"
             ],
             "sprite_id": [
                 "appliances_com_01_21",
@@ -44923,7 +44923,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SecurityTerminal"
             ],
             "sprite_id": [
                 "security_01_1",
@@ -44937,7 +44937,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SecurityWallMonitors"
             ],
             "sprite_id": [
                 "security_01_5",
@@ -44961,7 +44961,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingShesGotIt"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_22+23",
@@ -45082,7 +45082,7 @@
                 "Vegetation tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_HaystackSingle"
             ],
             "sprite_id": [
                 "vegetation_farm_01_8"
@@ -45093,7 +45093,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingSirBrakefire"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_85",
@@ -45105,7 +45105,7 @@
                 "Windows"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WindowSlider"
             ],
             "sprite_id": [
                 "fixtures_windows_01_57"
@@ -45116,7 +45116,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SodaMachineLarge"
             ],
             "sprite_id": [
                 "location_shop_zippee_01_57",
@@ -45146,7 +45146,7 @@
                 "Curtains"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SmallBordeauxCurtain"
             ],
             "sprite_id": [
                 "fixtures_windows_curtains_02_20",
@@ -45160,7 +45160,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SmallChest"
             ],
             "sprite_id": [
                 "furniture_storage_02_29",
@@ -45207,7 +45207,7 @@
                 "Curtains"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SmallGreenCurtain"
             ],
             "sprite_id": [
                 "fixtures_windows_curtains_02_12",
@@ -45221,7 +45221,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SmallPineCabinet"
             ],
             "sprite_id": [
                 "furniture_storage_01_49",
@@ -45244,7 +45244,7 @@
                 "Mirrors"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_MirrorSmall"
             ],
             "sprite_id": [
                 "walls_decoration_01_11",
@@ -45258,7 +45258,7 @@
                 "Curtains"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SmallPearlCurtain"
             ],
             "sprite_id": [
                 "fixtures_windows_curtains_02_28",
@@ -45272,7 +45272,7 @@
                 "Tables"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PlasticLowTable"
             ],
             "sprite_id": [
                 "furniture_tables_low_01_21",
@@ -45284,7 +45284,7 @@
                 "Tables"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SmallTable"
             ],
             "sprite_id": [
                 "furniture_storage_01_53",
@@ -45337,7 +45337,7 @@
                 "Curtains"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SmallWhiteCurtain"
             ],
             "sprite_id": [
                 "fixtures_windows_curtains_02_4",
@@ -45351,7 +45351,7 @@
                 "Mirrors"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_MirrorSmallWide"
             ],
             "sprite_id": [
                 "walls_decoration_01_0+1",
@@ -45374,7 +45374,7 @@
         "Snare Drum": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SnareDrum"
             ],
             "sprite_id": [
                 "recreational_01_66",
@@ -45629,7 +45629,7 @@
                 "Tables"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FancyDarkTable"
             ],
             "sprite_id": [
                 "furniture_tables_high_01_16"
@@ -45640,7 +45640,7 @@
                 "Gravestones"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_GraveSquare"
             ],
             "sprite_id": [
                 "location_community_cemetary_01_5",
@@ -45663,7 +45663,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SquareWallClock"
             ],
             "sprite_id": [
                 "walls_decoration_01_104",
@@ -45687,7 +45687,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_Microphone"
             ],
             "sprite_id": [
                 "appliances_com_01_71",
@@ -45701,7 +45701,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_StandingVault"
             ],
             "sprite_id": [
                 "location_business_bank_01_43",
@@ -45715,7 +45715,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FireHydrant"
             ],
             "sprite_id": [
                 "street_decoration_01_12"
@@ -45726,7 +45726,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FlagUSA"
             ],
             "sprite_id": [
                 "walls_decoration_01_17",
@@ -45738,7 +45738,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{TileID}"
+                "Base.Mov_SteelCounter"
             ]
         },
         "Steel Counter Corner": {
@@ -45746,7 +45746,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{TileID}"
+                "Base.Mov_SteelCornerCounter"
             ]
         },
         "Steel Ladder": {
@@ -45783,7 +45783,7 @@
                 "Signs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_StopSign"
             ],
             "sprite_id": [
                 "street_decoration_01_1",
@@ -45797,7 +45797,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_NapkinDispenser"
             ],
             "sprite_id": [
                 "location_shop_accessories_01_11",
@@ -45809,7 +45809,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ShopDisplayCounter"
             ],
             "sprite_id": [
                 "location_shop_generic_01_89",
@@ -45885,7 +45885,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_DegreeSurgeon"
             ],
             "sprite_id": [
                 "location_community_medical_01_30",
@@ -45905,7 +45905,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SodaMachine"
             ],
             "sprite_id": [
                 "location_shop_accessories_01_9",
@@ -45963,7 +45963,7 @@
                 "Mirrors"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_MirrorTall"
             ],
             "sprite_id": [
                 "walls_decoration_01_8",
@@ -46022,7 +46022,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PosterElement"
             ],
             "sprite_id": [
                 "location_entertainment_theatre_01_81",
@@ -46073,7 +46073,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingThomasJefferson"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_98",
@@ -46085,7 +46085,7 @@
                 "Windows"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WindowTiled"
             ],
             "sprite_id": [
                 "fixtures_windows_01_17"
@@ -46117,7 +46117,7 @@
         "Tom Drum": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_TomDrum"
             ],
             "sprite_id": [
                 "recreational_01_68",
@@ -46167,7 +46167,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_TrailerCounter"
             ],
             "sprite_id": [
                 "location_trailer_02_19",
@@ -46209,7 +46209,7 @@
                 "Shelves"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_TrapezoidShopShelves"
             ],
             "sprite_id": [
                 "location_shop_generic_01_93",
@@ -46262,7 +46262,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingTwoFrame"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_75",
@@ -46314,7 +46314,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FlagUSALarge"
             ],
             "sprite_id": [
                 "location_military_knox_01_8+9+10",
@@ -46326,7 +46326,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_MapUSA"
             ],
             "sprite_id": [
                 "location_community_school_01_22+23",
@@ -46338,7 +46338,7 @@
         "Upright Coffin": {
             "categories": [],
             "item_id": [
-                "Base.Mov_FlatCoffin"
+                "Base.Mov_UprightCoffin"
             ],
             "sprite_id": [
                 "crafted_04_52",
@@ -46379,7 +46379,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ShoppingBaskets"
             ],
             "sprite_id": [
                 "location_shop_greenes_01_38",
@@ -46580,7 +46580,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingVioletta"
             ],
             "sprite_id": [
                 "location_entertainment_gallery_01_95",
@@ -46618,7 +46618,7 @@
                 "Electronic decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WallClock"
             ],
             "sprite_id": [
                 "location_community_school_01_33",
@@ -46632,7 +46632,7 @@
                 "Baths and showers"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WallShower"
             ],
             "sprite_id": [
                 "fixtures_bathroom_01_31",
@@ -46670,7 +46670,7 @@
                 "Signs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_SignWarning"
             ],
             "sprite_id": [
                 "location_military_generic_01_29",
@@ -46698,7 +46698,7 @@
                 "Water sources"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WaterDispenser"
             ],
             "sprite_id": [
                 "location_business_office_generic_01_48",
@@ -46712,7 +46712,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_PaintingGreen"
             ],
             "sprite_id": [
                 "walls_decoration_01_34",
@@ -46748,7 +46748,7 @@
                 "Decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_ScaleMedical"
             ],
             "sprite_id": [
                 "location_community_medical_01_8",
@@ -46794,7 +46794,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_MetalStool"
             ],
             "sprite_id": [
                 "location_community_medical_01_10"
@@ -46841,7 +46841,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WhiteCornerCounter"
             ],
             "sprite_id": [
                 "fixtures_counters_01_74",
@@ -46855,7 +46855,7 @@
                 "Counters"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WhiteCounter"
             ],
             "sprite_id": [
                 "fixtures_counters_01_75",
@@ -46883,7 +46883,7 @@
                 "Curtains"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WhiteCurtain"
             ],
             "sprite_id": [
                 "fixtures_windows_curtains_01_52",
@@ -46918,7 +46918,7 @@
         "White Drawers": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WhiteFancyDrawers"
             ],
             "sprite_id": [
                 "furniture_storage_01_8",
@@ -46932,7 +46932,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FancyWhiteChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_01_36",
@@ -46960,7 +46960,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WhiteFileCabinet"
             ],
             "sprite_id": [
                 "location_business_office_generic_01_33",
@@ -46985,7 +46985,7 @@
                 "Fridges"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WhiteFridge"
             ],
             "sprite_id": [
                 "appliances_refrigeration_01_1",
@@ -46999,7 +46999,7 @@
                 "Sinks"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WhiteHangingSink"
             ],
             "sprite_id": [
                 "fixtures_sinks_01_15",
@@ -47013,7 +47013,7 @@
                 "Fridges"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WhiteIndustrialFridge"
             ],
             "sprite_id": [
                 "appliances_refrigeration_01_41",
@@ -47041,7 +47041,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WhiteComfyChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_02_21",
@@ -47080,7 +47080,7 @@
                 "Cooking appliances"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_Microwave"
             ],
             "sprite_id": [
                 "appliances_cooking_01_24",
@@ -47092,7 +47092,7 @@
         "White Modern Phone": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WhiteModernPhone"
             ],
             "sprite_id": [
                 "location_business_office_generic_02_19",
@@ -47126,7 +47126,7 @@
         "White Rotary Phone": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WhiteRotaryPhone"
             ],
             "sprite_id": [
                 "location_business_office_generic_02_12",
@@ -47165,7 +47165,7 @@
                 "Sinks"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WhiteSink"
             ],
             "sprite_id": [
                 "fixtures_sinks_01_13",
@@ -47207,7 +47207,7 @@
                 "Windows"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WindowWhiteTiled"
             ],
             "sprite_id": [
                 "fixtures_windows_01_9"
@@ -47229,7 +47229,7 @@
                 "Toilets"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_FancyToilet"
             ],
             "sprite_id": [
                 "fixtures_bathroom_01_1",
@@ -47243,7 +47243,7 @@
                 "Toilets"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_Urinal"
             ],
             "sprite_id": [
                 "fixtures_bathroom_01_9",
@@ -47283,7 +47283,7 @@
                 "Windows"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WindowWhite"
             ],
             "sprite_id": [
                 "fixtures_windows_01_25"
@@ -47294,7 +47294,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WhiteWoodenChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_02_57",
@@ -47337,7 +47337,7 @@
                 "Wall decorations"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WoodPegboard"
             ],
             "sprite_id": [
                 "location_business_machinery_01_24+25",
@@ -47398,7 +47398,7 @@
                 "Mirrors"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_MirrorWood"
             ],
             "sprite_id": [
                 "walls_decoration_01_6",
@@ -47434,7 +47434,7 @@
         "Wooden Speaker Cabinet": {
             "categories": [],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WoodSpeakerCabinet"
             ],
             "sprite_id": [
                 "recreational_01_78",
@@ -47472,7 +47472,7 @@
                 "Walls"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_WindowWooden"
             ],
             "sprite_id": [
                 "fixtures_windows_01_1",
@@ -47554,7 +47554,7 @@
                 "Chairs"
             ],
             "item_id": [
-                "Moveables.{sprite_id}"
+                "Base.Mov_YellowModernChair"
             ],
             "sprite_id": [
                 "furniture_seating_indoor_03_29",
@@ -47579,7 +47579,7 @@
                 "Container tiles"
             ],
             "item_id": [
-                "Moveables.{TileID}"
+                "Base.Mov_YellowWallLocker"
             ]
         },
         "Yummmers Sign": {
