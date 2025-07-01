@@ -310,6 +310,21 @@ class Item:
         k.lower(): v for k, v in _property_defaults.items()
     }
 
+    _material_map = {
+        "Cotton": "Base.RippedSheets",
+        "Leather": "Base.LeatherStrips",
+        "Denim": "Base.DenimStrips",
+        "Aluminum": "Base.AluminumFragments",
+        "Brass": "Base.BrassIngot",
+        "Copper": "Base.CopperIngot",
+        "Gold": "Base.GoldBar",
+        "Iron": "Base.IronIngot",
+        "Silver": "Base.SilverBar",
+        "Steel": "Base.SteelIngot"
+    }
+
+    _material_map_flipped = util.flip_data(_material_map)
+
     def __new__(cls, item_id: str):
         """
         Return an existing Item instance if one already exists for the given ID.
@@ -715,7 +730,7 @@ class Item:
             icons = [icons]
 
         icon_list = [
-            f"[[File:{icon}|32x32px|link={self.page}{Language.get_subpage()}|{self.name}]]"
+            f"[[File:{icon}|32x32px|link={self.page}{Language.get_subpage()}|{custom_name or self.name}]]"
             for icon in icons
         ]
 
@@ -882,6 +897,9 @@ class Item:
             or None if no valid skill is found.
         """
         skill_list = self.categories or self.subcategory
+
+        if self.has_tag("PistolMagazine", "RifleMagazine"):
+            skill_list = "Reloading"
 
         if not skill_list:
             return None
@@ -1262,7 +1280,7 @@ class Item:
 
     # --- Weight/Container --- #
     @property
-    def weight(self) -> float: return float(self.get_default("Weight"))
+    def weight(self) -> float | int: return util.convert_int(float(self.get_default("Weight")))
     @property
     def capacity(self) -> int: return int(self.get_default("Capacity"))
     @property
@@ -1270,13 +1288,13 @@ class Item:
     @property
     def accept_item_function(self) -> str|None: return self.get_default("AcceptItemFunction")
     @property
-    def weight_modifier(self) -> float: return float(self.get_default("WeightModifier"))
+    def weight_modifier(self) -> float | int: return util.convert_int(float(self.get_default("WeightModifier")))
     @property
-    def weapon_weight(self) -> float: return float(self.get_default("WeaponWeight"))
+    def weapon_weight(self) -> float | int: return util.convert_int(float(self.get_default("WeaponWeight")))
     @property
-    def max_item_size(self) -> float: return float(self.get_default("MaxItemSize"))
+    def max_item_size(self) -> float | int: return util.convert_int(float(self.get_default("MaxItemSize")))
     @property
-    def weight_empty(self) -> float: return float(self.get_default("WeightEmpty"))
+    def weight_empty(self) -> float | int: return util.convert_int(float(self.get_default("WeightEmpty")))
 
     # --- Recipes/Condition/Replace/Usage --- #
     @property
@@ -1288,11 +1306,11 @@ class Item:
     @property #TODO: should these be CraftRecipe objects?
     def teached_recipes(self) -> list: return self.get_default("TeachedRecipes")
     @property
-    def sharpness(self) -> float: return float(self.get_default("Sharpness"))
+    def sharpness(self) -> float | int: return util.convert_int(float(self.get_default("Sharpness")))
     @property
-    def head_condition(self) -> float: return float(self.get_default("HeadCondition"))
+    def head_condition(self) -> float | int: return util.convert_int(float(self.get_default("HeadCondition")))
     @property
-    def head_condition_lower_chance_multiplier(self) -> float: return float(self.get_default("HeadConditionLowerChanceMultiplier"))
+    def head_condition_lower_chance_multiplier(self) -> float | int: return util.convert_int(float(self.get_default("HeadConditionLowerChanceMultiplier")))
     @property
     def condition_lower_chance_one_in(self) -> int: return int(self.get_default("ConditionLowerChanceOneIn"))
     @property
@@ -1308,7 +1326,7 @@ class Item:
     @property
     def consolidate_option(self) -> str|None: return self.get_default("ConsolidateOption")
     @property
-    def use_delta(self) -> float: return float(self.get_default("UseDelta"))
+    def use_delta(self) -> float | int: return util.convert_int(float(self.get_default("UseDelta")))
     @property
     def use_while_equipped(self) -> bool: return bool(self.get_default("UseWhileEquipped"))
     @property
@@ -1326,7 +1344,7 @@ class Item:
     @property
     def can_be_reused(self) -> bool: return bool(self.get_default("CanBeReused"))
     @property
-    def head_condition_max(self) -> float: return float(self.get_default("HeadConditionMax"))
+    def head_condition_max(self) -> float | int: return util.convert_int(float(self.get_default("HeadConditionMax")))
     @property
     def disappear_on_use(self) -> bool: return bool(self.get_default("DisappearOnUse"))
     @property
@@ -1348,7 +1366,7 @@ class Item:
     @property
     def chance_to_spawn_damaged(self) -> int: return int(self.get_default("ChanceToSpawnDamaged"))
     @property
-    def metal_value(self) -> float: return float(self.get_default("MetalValue"))
+    def metal_value(self) -> float | int: return util.convert_int(float(self.get_default("MetalValue")))
 
     # --- Food --- #
     @property
@@ -1358,17 +1376,17 @@ class Item:
     @property
     def days_totally_rotten(self) -> int|None: return self.get_default("DaysTotallyRotten")
     @property
-    def hunger_change(self) -> float: return float(self.get_default("HungerChange"))
+    def hunger_change(self) -> float | int: return util.convert_int(float(self.get_default("HungerChange")))
     @property
-    def thirst_change(self) -> float: return float(self.get_default("ThirstChange"))
+    def thirst_change(self) -> float | int: return util.convert_int(float(self.get_default("ThirstChange")))
     @property
-    def calories(self) -> float: return float(self.get_default("Calories"))
+    def calories(self) -> float | int: return util.convert_int(float(self.get_default("Calories")))
     @property
-    def carbohydrates(self) -> float: return float(self.get_default("Carbohydrates"))
+    def carbohydrates(self) -> float | int: return util.convert_int(float(self.get_default("Carbohydrates")))
     @property
-    def lipids(self) -> float: return float(self.get_default("Lipids"))
+    def lipids(self) -> float | int: return util.convert_int(float(self.get_default("Lipids")))
     @property
-    def proteins(self) -> float: return float(self.get_default("Proteins"))
+    def proteins(self) -> float | int: return util.convert_int(float(self.get_default("Proteins")))
     @property
     def is_cookable(self) -> bool: return bool(self.get_default("IsCookable"))
     @property
@@ -1406,15 +1424,15 @@ class Item:
 
     # --- Effects/Medical --- #
     @property
-    def unhappy_change(self) -> float: return float(self.get_default("UnhappyChange"))
+    def unhappy_change(self) -> float | int: return util.convert_int(float(self.get_default("UnhappyChange")))
     @property
-    def boredom_change(self) -> float: return float(self.get_default("BoredomChange"))
+    def boredom_change(self) -> float | int: return util.convert_int(float(self.get_default("BoredomChange")))
     @property
-    def stress_change(self) -> float: return float(self.get_default("StressChange"))
+    def stress_change(self) -> float | int: return util.convert_int(float(self.get_default("StressChange")))
     @property
     def reduce_food_sickness(self) -> int: return int(self.get_default("ReduceFoodSickness"))
     @property
-    def endurance_change(self) -> float: return float(self.get_default("EnduranceChange"))
+    def endurance_change(self) -> float | int: return util.convert_int(float(self.get_default("EnduranceChange")))
     @property
     def poison_power(self) -> int: return int(self.get_default("PoisonPower"))
     @property
@@ -1422,15 +1440,15 @@ class Item:
     @property
     def alcoholic(self) -> bool: return bool(self.get_default("Alcoholic"))
     @property
-    def bandage_power(self) -> float: return float(self.get_default("BandagePower"))
+    def bandage_power(self) -> float | int: return util.convert_int(float(self.get_default("BandagePower")))
     @property
     def can_bandage(self) -> bool: return bool(self.get_default("CanBandage"))
     @property
-    def alcohol_power(self) -> float: return float(self.get_default("AlcoholPower"))
+    def alcohol_power(self) -> float | int: return util.convert_int(float(self.get_default("AlcoholPower")))
     @property
-    def reduce_infection_power(self) -> float: return float(self.get_default("ReduceInfectionPower"))
+    def reduce_infection_power(self) -> float | int: return util.convert_int(float(self.get_default("ReduceInfectionPower")))
     @property
-    def fatigue_change(self) -> float: return float(self.get_default("FatigueChange"))
+    def fatigue_change(self) -> float | int: return util.convert_int(float(self.get_default("FatigueChange")))
     @property
     def flu_reduction(self) -> int: return int(self.get_default("FluReduction"))
     @property
@@ -1446,21 +1464,21 @@ class Item:
     @property
     def explosion_sound(self) -> str|None: return self.get_default("ExplosionSound")
     @property
-    def knockdown_mod(self) -> float: return float(self.get_default("KnockdownMod"))
+    def knockdown_mod(self) -> float | int: return util.convert_int(float(self.get_default("KnockdownMod")))
     @property
-    def max_damage(self) -> float: return float(self.get_default("MaxDamage"))
+    def max_damage(self) -> float | int: return util.convert_int(float(self.get_default("MaxDamage")))
     @property
     def max_hit_count(self) -> int: return int(self.get_default("MaxHitCount"))
     @property
-    def max_range(self) -> float: return float(self.get_default("MaxRange"))
+    def max_range(self) -> float | int: return util.convert_int(float(self.get_default("MaxRange")))
     @property
-    def min_damage(self) -> float: return float(self.get_default("MinDamage"))
+    def min_damage(self) -> float | int: return util.convert_int(float(self.get_default("MinDamage")))
     @property
-    def minimum_swing_time(self) -> float: return float(self.get_default("MinimumSwingTime"))
+    def minimum_swing_time(self) -> float | int: return util.convert_int(float(self.get_default("MinimumSwingTime")))
     @property
-    def swing_amount_before_impact(self) -> float: return float(self.get_default("SwingAmountBeforeImpact"))
+    def swing_amount_before_impact(self) -> float | int: return util.convert_int(float(self.get_default("SwingAmountBeforeImpact")))
     @property
-    def swing_time(self) -> float: return float(self.get_default("SwingTime"))
+    def swing_time(self) -> float | int: return util.convert_int(float(self.get_default("SwingTime")))
     @property
     def trigger_explosion_timer(self) -> int: return int(self.get_default("TriggerExplosionTimer"))
     @property
@@ -1476,7 +1494,7 @@ class Item:
     @property
     def sound_radius(self) -> int: return int(self.get_default("SoundRadius"))
     @property
-    def reload_time_modifier(self) -> float: return float(self.get_default("ReloadTimeModifier"))
+    def reload_time_modifier(self) -> float | int: return util.convert_int(float(self.get_default("ReloadTimeModifier")))
     @property
     def mount_on(self) -> list: return self.get_default("MountOn")
     @property
@@ -1484,23 +1502,23 @@ class Item:
     @property
     def attachment_type(self) -> str|None: return self.get_default("AttachmentType")
     @property
-    def base_speed(self) -> float: return float(self.get_default("BaseSpeed"))
+    def base_speed(self) -> float | int: return util.convert_int(float(self.get_default("BaseSpeed")))
     @property
     def categories(self) -> list: return self.get_default("Categories")
     @property
-    def crit_dmg_multiplier(self) -> float: return float(self.get_default("CritDmgMultiplier"))
+    def crit_dmg_multiplier(self) -> float | int: return util.convert_int(float(self.get_default("CritDmgMultiplier")))
     @property
-    def critical_chance(self) -> float: return float(self.get_default("CriticalChance"))
+    def critical_chance(self) -> float | int: return util.convert_int(float(self.get_default("CriticalChance")))
     @property
     def door_damage(self) -> int: return int(self.get_default("DoorDamage"))
     @property
     def knock_back_on_no_death(self) -> bool: return bool(self.get_default("KnockBackOnNoDeath"))
     @property
-    def min_angle(self) -> float: return float(self.get_default("MinAngle"))
+    def min_angle(self) -> float | int: return util.convert_int(float(self.get_default("MinAngle")))
     @property
-    def min_range(self) -> float: return float(self.get_default("MinRange"))
+    def min_range(self) -> float | int: return util.convert_int(float(self.get_default("MinRange")))
     @property
-    def push_back_mod(self) -> float: return float(self.get_default("PushBackMod"))
+    def push_back_mod(self) -> float | int: return util.convert_int(float(self.get_default("PushBackMod")))
     @property
     def splat_blood_on_no_death(self) -> bool: return bool(self.get_default("SplatBloodOnNoDeath"))
     @property
@@ -1510,11 +1528,11 @@ class Item:
     @property
     def tree_damage(self) -> int: return int(self.get_default("TreeDamage"))
     @property
-    def weapon_length(self) -> float: return float(self.get_default("WeaponLength"))
+    def weapon_length(self) -> float | int: return util.convert_int(float(self.get_default("WeaponLength")))
     @property
-    def projectile_spread_modifier(self) -> float: return float(self.get_default("ProjectileSpreadModifier"))
+    def projectile_spread_modifier(self) -> float | int: return util.convert_int(float(self.get_default("ProjectileSpreadModifier")))
     @property
-    def max_range_modifier(self) -> float: return float(self.get_default("MaxRangeModifier"))
+    def max_range_modifier(self) -> float | int: return util.convert_int(float(self.get_default("MaxRangeModifier")))
     @property
     def angle_falloff(self) -> bool: return bool(self.get_default("AngleFalloff"))
     @property
@@ -1522,9 +1540,9 @@ class Item:
     @property
     def insert_all_bullets_reload(self) -> bool: return bool(self.get_default("InsertAllBulletsReload"))
     @property
-    def projectile_spread(self) -> float: return float(self.get_default("ProjectileSpread"))
+    def projectile_spread(self) -> float | int: return util.convert_int(float(self.get_default("ProjectileSpread")))
     @property
-    def projectile_weight_center(self) -> float: return float(self.get_default("ProjectileWeightCenter"))
+    def projectile_weight_center(self) -> float | int: return util.convert_int(float(self.get_default("ProjectileWeightCenter")))
     @property
     def rack_after_shoot(self) -> bool: return bool(self.get_default("RackAfterShoot"))
     @property
@@ -1540,13 +1558,13 @@ class Item:
     @property
     def noise_range(self) -> int: return int(self.get_default("NoiseRange"))
     @property
-    def aiming_time_modifier(self) -> float: return float(self.get_default("AimingTimeModifier"))
+    def aiming_time_modifier(self) -> float | int: return util.convert_int(float(self.get_default("AimingTimeModifier")))
     @property
     def hit_chance_modifier(self) -> int: return int(self.get_default("HitChanceModifier"))
     @property
     def noise_duration(self) -> int: return int(self.get_default("NoiseDuration"))
     @property
-    def recoil_delay_modifier(self) -> float: return float(self.get_default("RecoilDelayModifier"))
+    def recoil_delay_modifier(self) -> float | int: return util.convert_int(float(self.get_default("RecoilDelayModifier")))
     @property
     def remote_controller(self) -> bool: return bool(self.get_default("RemoteController"))
     @property
@@ -1594,9 +1612,9 @@ class Item:
     @property
     def magazine_type(self) -> str|None: return self.get_default("MagazineType")
     @property
-    def min_sight_range(self) -> float: return float(self.get_default("MinSightRange"))
+    def min_sight_range(self) -> float | int: return util.convert_int(float(self.get_default("MinSightRange")))
     @property
-    def max_sight_range(self) -> float: return float(self.get_default("MaxSightRange"))
+    def max_sight_range(self) -> float | int: return util.convert_int(float(self.get_default("MaxSightRange")))
     @property
     def model_weapon_part(self) -> str|None: return self.get_default("ModelWeaponPart")
     @property
@@ -1672,7 +1690,7 @@ class Item:
         loc = self.get_default("CanBeEquipped")
         return BodyLocation(loc) if loc else None
     @property
-    def run_speed_modifier(self) -> float: return float(self.get_default("RunSpeedModifier"))
+    def run_speed_modifier(self) -> float | int: return util.convert_int(float(self.get_default("RunSpeedModifier")))
     @property
     def blood_location(self) -> BloodLocationList|None:
         value = self.get_default("BloodLocation")
@@ -1685,19 +1703,19 @@ class Item:
     @property
     def chance_to_fall(self) -> int: return int(self.get_default("ChanceToFall"))
     @property
-    def insulation(self) -> float: return float(self.get_default("Insulation"))
+    def insulation(self) -> float | int: return util.convert_int(float(self.get_default("Insulation")))
     @property
-    def wind_resistance(self) -> float: return float(self.get_default("WindResistance"))
+    def wind_resistance(self) -> float | int: return util.convert_int(float(self.get_default("WindResistance")))
     @property
     def fabric_type(self) -> str|None: return self.get_default("FabricType")
     @property
-    def scratch_defense(self) -> float: return float(self.get_default("ScratchDefense"))
+    def scratch_defense(self) -> float | int: return util.convert_int(float(self.get_default("ScratchDefense")))
     @property
-    def discomfort_modifier(self) -> float: return float(self.get_default("DiscomfortModifier"))
+    def discomfort_modifier(self) -> float | int: return util.convert_int(float(self.get_default("DiscomfortModifier")))
     @property
-    def water_resistance(self) -> float: return float(self.get_default("WaterResistance"))
+    def water_resistance(self) -> float | int: return util.convert_int(float(self.get_default("WaterResistance")))
     @property
-    def bite_defense(self) -> float: return float(self.get_default("BiteDefense"))
+    def bite_defense(self) -> float | int: return util.convert_int(float(self.get_default("BiteDefense")))
     @property
     def attachment_replacement(self) -> str|None: return self.get_default("AttachmentReplacement")
     @property
@@ -1709,23 +1727,23 @@ class Item:
     @property
     def replace_in_primary_hand(self) -> str|None: return self.get_default("ReplaceInPrimaryHand")
     @property
-    def corpse_sickness_defense(self) -> float: return float(self.get_default("CorpseSicknessDefense"))
+    def corpse_sickness_defense(self) -> float | int: return util.convert_int(float(self.get_default("CorpseSicknessDefense")))
     @property
-    def hearing_modifier(self) -> float: return float(self.get_default("HearingModifier"))
+    def hearing_modifier(self) -> float | int: return util.convert_int(float(self.get_default("HearingModifier")))
     @property
-    def neck_protection_modifier(self) -> float: return float(self.get_default("NeckProtectionModifier"))
+    def neck_protection_modifier(self) -> float | int: return util.convert_int(float(self.get_default("NeckProtectionModifier")))
     @property
     def visual_aid(self) -> bool: return bool(self.get_default("VisualAid"))
     @property
-    def vision_modifier(self) -> float: return float(self.get_default("VisionModifier"))
+    def vision_modifier(self) -> float | int: return util.convert_int(float(self.get_default("VisionModifier")))
     @property
     def attachments_provided(self) -> list: return self.get_default("AttachmentsProvided")
     @property
-    def combat_speed_modifier(self) -> float: return float(self.get_default("CombatSpeedModifier"))
+    def combat_speed_modifier(self) -> float | int: return util.convert_int(float(self.get_default("CombatSpeedModifier")))
     @property
-    def bullet_defense(self) -> float: return float(self.get_default("BulletDefense"))
+    def bullet_defense(self) -> float | int: return util.convert_int(float(self.get_default("BulletDefense")))
     @property
-    def stomp_power(self) -> float: return float(self.get_default("StompPower"))
+    def stomp_power(self) -> float | int: return util.convert_int(float(self.get_default("StompPower")))
 
     # --- Tooltip/Menu --- #
     @property
@@ -1751,7 +1769,7 @@ class Item:
     @property
     def media_category(self) -> str|None: return self.get_default("MediaCategory")
     @property
-    def base_volume_range(self) -> float: return float(self.get_default("BaseVolumeRange"))
+    def base_volume_range(self) -> float | int: return util.convert_int(float(self.get_default("BaseVolumeRange")))
     @property
     def is_high_tier(self) -> bool: return bool(self.get_default("IsHighTier"))
     @property
@@ -1779,29 +1797,29 @@ class Item:
     @property
     def light_distance(self) -> int: return int(self.get_default("LightDistance"))
     @property
-    def light_strength(self) -> float: return float(self.get_default("LightStrength"))
+    def light_strength(self) -> float | int: return util.convert_int(float(self.get_default("LightStrength")))
     @property
     def torch_cone(self) -> bool: return bool(self.get_default("TorchCone"))
     @property
-    def torch_dot(self) -> float: return float(self.get_default("TorchDot"))
+    def torch_dot(self) -> float | int: return util.convert_int(float(self.get_default("TorchDot")))
 
     # --- Vehicle Parts --- #
     @property
     def vehicle_part_model(self) -> str|None: return self.get_default("VehiclePartModel")
     @property
-    def brake_force(self) -> float: return float(self.get_default("brakeForce"))
+    def brake_force(self) -> float | int: return util.convert_int(float(self.get_default("brakeForce")))
     @property
-    def engine_loudness(self) -> float: return float(self.get_default("EngineLoudness"))
+    def engine_loudness(self) -> float | int: return util.convert_int(float(self.get_default("EngineLoudness")))
     @property
-    def condition_lower_standard(self) -> float: return float(self.get_default("ConditionLowerStandard"))
+    def condition_lower_standard(self) -> float | int: return util.convert_int(float(self.get_default("ConditionLowerStandard")))
     @property
-    def condition_lower_offroad(self) -> float: return float(self.get_default("ConditionLowerOffroad"))
+    def condition_lower_offroad(self) -> float | int: return util.convert_int(float(self.get_default("ConditionLowerOffroad")))
     @property
-    def suspension_damping(self) -> float: return float(self.get_default("SuspensionDamping"))
+    def suspension_damping(self) -> float | int: return util.convert_int(float(self.get_default("SuspensionDamping")))
     @property
-    def suspension_compression(self) -> float: return float(self.get_default("SuspensionCompression"))
+    def suspension_compression(self) -> float | int: return util.convert_int(float(self.get_default("SuspensionCompression")))
     @property
-    def wheel_friction(self) -> float: return float(self.get_default("WheelFriction"))
+    def wheel_friction(self) -> float | int: return util.convert_int(float(self.get_default("WheelFriction")))
     @property
     def vehicle_type(self) -> int: return int(self.get_default("VehicleType"))
     @property
@@ -1859,9 +1877,9 @@ class Item:
     @property
     def fire_fuel_ratio(self) -> float: return float(self.get_default("FireFuelRatio"))
     @property
-    def rain_factor(self) -> float: return float(self.get_default("RainFactor"))
+    def rain_factor(self) -> float | int: return util.convert_int(float(self.get_default("RainFactor")))
     @property
-    def wet_cooldown(self) -> float: return float(self.get_default("WetCooldown"))
+    def wet_cooldown(self) -> float | int: return util.convert_int(float(self.get_default("WetCooldown")))
     @property
     def origin_x(self) -> float: return float(self.get_default("OriginX"))
     @property
@@ -1930,7 +1948,29 @@ class Item:
         if total_weight.is_integer():
             return int(total_weight)
         else:
-            return total_weight  
+            return total_weight
+        
+    @property
+    def weapons(self) -> list["Item"]:
+        if not hasattr(self, "_weapons"):
+            self._weapons = []
+            if self.mount_on:
+                self._weapons.extend([Item(weapon) for weapon in self.mount_on])
+                
+
+            if self.gun_type:
+                self._weapons.append(Item(self.gun_type))
+            
+            if self.raw_display_category == "Ammo":
+                for item_id, item in Item.items():
+                    if (item.ammo_type or item.ammo_box) and item.type == "Weapon":
+                        if Item(item.ammo_type) == self:
+                            self._weapons.append(item)
+                        elif Item(item.ammo_box) == self:
+                            self._weapons.append(item)
+
+
+        return self._weapons
     
     @property
     def burn_time(self) -> str|None:
@@ -2100,6 +2140,47 @@ class Item:
     @property
     def units(self):
         return round(1 / self.use_delta, 0)
+
+    @property
+    def material_item(self):
+        if self.fabric_type:
+            mat = self.fabric_type
+        elif self.has_tag("SmeltableIronLarge", "SmeltableIronMedium", "SmeltableIronMediumPlus", "SmeltableIronSmall", "IronSource", "IronOre"):
+            mat = "Iron"
+        elif self.has_tag("SmeltableSteelLarge", "SmeltableSteelMedium", "SmeltableSteelMediumPlus", "SmeltableSteelSmall", "SteelMaterial"):
+            mat = "Steel"
+        elif self.has_tag("GoldScrap", "SmallGoldScrap", "SmallerGoldScrap", "SmallestGoldScrap", "TinyGoldScrap"):
+            mat = "Gold"
+        elif self.has_tag("Aluminum", "ScrapAluminum", "ScrapAluminumLarge"):
+            mat = "Aluminum"
+        elif self.has_tag("SilverScrap", "SmallSilverScrap", "SmallerSilverScrap", "SmallestSilverScrap", "TinySilverScrap"):
+            mat = "Silver"
+        elif self.has_tag("Brass", "ScrapBrass"): #Not yet in the game (42.10.0)
+            mat = "Brass"
+        elif self.has_tag("ScrapLargeCopper", "ScrapSmallCopper", "CopperOre", "CopperSource"):
+            mat = "Copper"
+        else:
+            mat = None
+        
+        if not mat:
+            return None
+        
+        if mat not in Item._material_map:
+            echo.warning(f"Found a material '{mat}' not in 'MATERIAL_MAP' for {self.item_id}.")
+            return None
+        return Item(Item._material_map.get(mat))
+    
+    @property
+    def material(self):
+        mat = self.material_item
+        if not self.material_item:
+            return None
+        
+        if mat.item_id not in Item._material_map_flipped:
+            echo.warning(f"Found a material '{mat.item_id}' not in 'MATERIAL_MAP_FLIPPED' for {self.item_id}.")
+            return None
+        
+        return mat.get_icon(custom_name=Item._material_map_flipped.get(mat.item_id)[0])
 
 
 if __name__ == "__main__":

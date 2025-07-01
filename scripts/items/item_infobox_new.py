@@ -14,9 +14,7 @@ import os
 from tqdm import tqdm
 from scripts.core import logger
 from scripts.core.version import Version
-from scripts.core.cache import save_cache
-from scripts.utils import echo, color
-from scripts.utils.util import enumerate_params, check_zero, convert_int, convert_percentage
+from scripts.utils import echo, color, util
 from scripts.objects.item import Item
 from scripts.objects.craft_recipe import CraftRecipe
 from scripts.objects.attachment import AttachmentType, HotbarSlot
@@ -48,7 +46,7 @@ def generate_item_data(item: Item):
     param["icon"] = item.icons
     param["icon_name"] = [item.name for _ in item.icons]
     param["category"] = item.display_category
-    param["weight"] = convert_int(item.weight)
+    param["weight"] = item.weight
     param["capacity"] = item.capacity
     param["container_name"] = item.fluid_container.container_name if item.fluid_container else None
     param["vehicle_type"] = item.vehicle_type
@@ -57,48 +55,52 @@ def generate_item_data(item: Item):
     param["weight_reduction"] = item.weight_reduction
     param["max_units"] = item.use_delta if item.type == "Drainable" else None
     param["fluid_capacity"] = item.fluid_container.capacity if item.fluid_container else None
-    param["equipped"] = item.body_location.name if item.body_location else item.can_be_equipped.name if item.can_be_equipped else None
+    if item.type == "Weapon" or item.two_hand_weapon:
+        if not item.two_hand_weapon:
+            param["equipped"] = "One-handed"
+        else:
+            param["equipped"] = "Two-handed"
+    param["body_location"] = item.body_location.wiki_link if item.body_location else item.can_be_equipped.wiki_link if item.can_be_equipped else None
     param["attachment_type"] = AttachmentType(item.attachment_type).wiki_link if item.attachment_type else None
-    param["attachments_provided"] = [HotbarSlot(a).wiki_link for a in item.attachments_provided] if item.attachments_provided else None
+    param["attachments_provided"] = "<br>".join([HotbarSlot(a).wiki_link for a in item.attachments_provided]) if item.attachments_provided else None
     #param["function"] = None
-    param["weapon"] = [Item(i).icon for i in item.mount_on] if item.mount_on else None
-    param["part_type"] = item.part_type
+    param["weapon"] = [f"{weapon.icon} {weapon.wiki_link}" for weapon in item.weapons] if item.weapons else None
+    param["part_type"] = "Magazine" if item.has_tag("PistolMagazine", "RifleMagazine") else item.part_type
     param["skill_type"] = item.skill.wiki_link if item.skill else None
-    param["ammo_type"] = item.ammo_type
-    param["clip_size"] = item.clip_size
-    #param["material"] = item.  #TODO
-    #param["material_value"] = item.  #TODO
+    param["ammo_type"] = f"{Item(item.ammo_type).icon} {Item(item.ammo_type).wiki_link}"  if item.ammo_type else None
+    param["clip_size"] = item.max_ammo if (item.has_tag("PistolMagazine", "RifleMagazine") or item.type == "Weapon") else item.clip_size
+    param["material"] = item.material
     param["can_boil_water"] = item.has_tag("Cookable") or item.has_tag("CookableMicrowave")
     param["writable"] = item.can_be_write
-    param["recipes"] = item.teached_recipes
-    param["researchable_recipes"] = [CraftRecipe(r).wiki_link for r in item.researchable_recipes] if item.researchable_recipes else None
+    param["recipes"] = "<br>".join([CraftRecipe(rec).wiki_link for rec in item.teached_recipes])
+    param["researchable_recipes"] = [CraftRecipe(rec).wiki_link for rec in item.researchable_recipes] if item.researchable_recipes else None
     param["skill_trained"] = item.skill_trained.wiki_link if item.skill_trained else None
-    param["foraging_change"] = check_zero(convert_int(item.foraging_penalty))
+    param["foraging_change"] = item.foraging_penalty
     #param["page_number"] = (item.page_to_write or item.number_of_pages) if (item.page_to_write or item.number_of_pages) > 0 else None
     param["packaged"] = item.packaged
     param["rain_factor"] = item.fluid_container.rain_factor if item.fluid_container else None
     param["days_fresh"] = item.get("DaysFresh")
     param["days_rotten"] = item.get("DaysTotallyRotten")
-    param["cant_be_frozen"] = item.cant_be_frozen
+    param["cant_be_frozen"] = item.cant_be_frozen if item.get("DaysFresh") else None
     param["feed_type"] = item.animal_feed_type
     param["condition_max"] = item.get("ConditionMax")
     param["condition_lower_chance"] = item.get("ConditionLowerChanceOneIn")
     param["run_speed"] = item.get("RunSpeedModifier")
     param["stomp_power"] = item.stomp_power if str(item.body_location) == "Shoes" else None
     param["combat_speed"] = item.combat_speed_modifier if item.combat_speed_modifier != 1.0 else None
-    param["scratch_defense"] = item.scratch_defense
-    param["bite_defense"] = item.bite_defense
+    param["scratch_defense"] = item.scratch_defense if item.scratch_defense else None
+    param["bite_defense"] = item.bite_defense if item.bite_defense else None
     param["bullet_defense"] = item.bullet_defense
-    param["neck_protection"] = convert_percentage(item.neck_protection_modifier, True) if ("Neck" in item.body_parts or item.neck_protection_modifier < 1.0) else None
+    param["neck_protection"] = util.convert_percentage(item.neck_protection_modifier, True) if ("Neck" in item.body_parts or item.neck_protection_modifier < 1.0) else None
     param["insulation"] = item.insulation
     param["wind_resistance"] = item.wind_resistance
     param["water_resistance"] = item.water_resistance
     param["discomfort_mod"] = item.discomfort_modifier
-    param["endurance_mod"] = item.get("EnduranceMod")
+    param["endurance_mod"] = util.format_positive(item.endurance_mod - 1.0) if item.get("EnduranceMod") else None
     param["light_distance"] = item.light_distance
     param["light_strength"] = item.light_strength
     param["torch_cone"] = item.torch_cone
-    param["wet_cooldown"] = check_zero(convert_int(item.wet_cooldown))
+    param["wet_cooldown"] = item.wet_cooldown
     param["burn_time"] = item.burn_time
     param["sensor_range"] = item.sensor_range
     param["two_way"] = item.two_way
@@ -134,10 +136,11 @@ def generate_item_data(item: Item):
     param["sound_radius"] = item.sound_radius
     param["base_speed"] = item.base_speed if item.type == "Weapon" else None
     param["push_back"] = item.push_back_mod if item.type == "Weapon" else None
+    param["knockdown"] = item.knockdown_mod if item.type == "Weapon" else None
     param["aiming_time"] = item.aiming_time or item.aiming_time_modifier
     param["reload_time"] = item.reload_time or item.aiming_time_modifier
-    param["crit_chance"] = convert_int(item.critical_chance) if item.type == "Weapon" else None
-    param["crit_multiplier"] = check_zero(convert_int(item.crit_dmg_multiplier))
+    param["crit_chance"] = item.critical_chance if item.type == "Weapon" else None
+    param["crit_multiplier"] = util.check_zero(item.crit_dmg_multiplier)
     #param["angle_mod"] = item.projectile_spread_modifier  # 'AngleModifier' removed in b42
     param["kill_move"] = item.close_kill_move.replace('_', ' ') if isinstance(item.close_kill_move, str) else item.close_kill_move
     param["weight_mod"] = item.weight_modifier
@@ -147,27 +150,27 @@ def generate_item_data(item: Item):
     param["effect_timer"] = item.explosion_timer
 
     #-------------- NUTRITION --------------#
-    param["hunger_change"] = check_zero(convert_int(item.hunger_change))
-    param["thirst_change"] = check_zero(convert_int(item.thirst_change))
-    param["calories"] = check_zero(convert_int(item.calories))
-    param["carbohydrates"] = check_zero(convert_int(item.carbohydrates))
-    param["proteins"] = check_zero(convert_int(item.proteins))
-    param["lipids"] = check_zero(convert_int(item.lipids))
+    param["hunger_change"] = util.check_zero(item.hunger_change)
+    param["thirst_change"] = util.check_zero(item.thirst_change)
+    param["calories"] = util.check_zero(item.calories)
+    param["carbohydrates"] = util.check_zero(item.carbohydrates)
+    param["proteins"] = util.check_zero(item.proteins)
+    param["lipids"] = util.check_zero(item.lipids)
 
     #-------------- EFFECT --------------#
-    param["unhappy_change"] = check_zero(convert_int(item.unhappy_change))
-    param["boredom_change"] = check_zero(convert_int(item.boredom_change))
-    param["stress_change"] = check_zero(convert_int(item.stress_change))
-    param["fatigue_change"] = check_zero(convert_int(item.fatigue_change))
-    param["endurance_change"] = check_zero(convert_int(item.endurance_change))
-    param["flu_change"] = check_zero(convert_int(item.flu_reduction))
-    param["pain_change"] = check_zero(convert_int(item.pain_reduction))
-    param["sick_change"] = check_zero(convert_int(item.reduce_food_sickness))
-    param["alcoholic"] = check_zero(item.alcoholic)
-    param["alcohol_power"] = check_zero(item.alcohol_power)
-    param["reduce_infection_power"] = check_zero(item.reduce_infection_power)
-    param["bandage_power"] = check_zero(item.bandage_power)
-    param["poison_power"] = check_zero(item.poison_power)
+    param["unhappy_change"] = util.check_zero(item.unhappy_change)
+    param["boredom_change"] = util.check_zero(item.boredom_change)
+    param["stress_change"] = util.check_zero(item.stress_change)
+    param["fatigue_change"] = util.check_zero(item.fatigue_change)
+    param["endurance_change"] = util.check_zero(item.endurance_change)
+    param["flu_change"] = util.check_zero(item.flu_reduction)
+    param["pain_change"] = util.check_zero(item.pain_reduction)
+    param["sick_change"] = util.check_zero(item.reduce_food_sickness)
+    param["alcoholic"] = util.check_zero(item.alcoholic)
+    param["alcohol_power"] = util.check_zero(item.alcohol_power)
+    param["reduce_infection_power"] = util.check_zero(item.reduce_infection_power)
+    param["bandage_power"] = util.check_zero(item.bandage_power)
+    param["poison_power"] = util.check_zero(item.poison_power)
 
     #-------------- COOKING --------------#
     param["cook_minutes"] = item.minutes_to_cook if item.is_cookable else None
@@ -244,7 +247,7 @@ def merge_items(page_data: dict) -> dict:
 
     primary_id = item_ids[0]
     if len(item_ids) == 1:
-        return enumerate_params(page_data[primary_id])
+        return util.enumerate_params(page_data[primary_id])
 
     merged_params = dict(page_data[primary_id])
 
@@ -274,7 +277,7 @@ def merge_items(page_data: dict) -> dict:
 
     merged_params = join_keys(merged_params)
 
-    return enumerate_params(merged_params)
+    return util.enumerate_params(merged_params)
 
 
 def process_pages(pages: dict) -> None:
@@ -323,7 +326,7 @@ def process_items(item_id_list: list) -> None:
             item = Item(item_id)
             pbar.set_postfix_str(f'Processing: {item.type} ({item_id[:30]})')
             infobox_data = generate_item_data(item)
-            infobox_data = enumerate_params(infobox_data)
+            infobox_data = util.enumerate_params(infobox_data)
             content = build_infobox(infobox_data)
             output_dir = write_file(content, item_id + ".txt", root_path=ROOT_PATH, suppress=True)
             pbar.update(1)

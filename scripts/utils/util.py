@@ -132,18 +132,18 @@ def convert_percentage(value: str | int | float, start_zero=True, percentage=Fal
 def convert_int(value: int | float) -> int | float:
     """Converts a value to an integer if it has no decimal (isn't float-like)."""
 
-    # Try to convert string to a float.
+    if isinstance(value, (int, float)):
+        return int(value) if value == int(value) else float(value)
+
     if isinstance(value, str):
         try:
-            value = float(value)
+            num = float(value)
+            return int(num) if num == int(num) else num
         except ValueError:
-            return str(value)
-
-    # Convert to an int if it's not float-like.
-    if isinstance(value, (int, float)) and value == int(value):
-        return str(int(value))
+            pass
 
     return str(value)
+
 
 def to_bool(value):
     """
