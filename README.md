@@ -30,6 +30,7 @@ Additionally, several Python modules are required for some of the scripts to fun
 3. **Using pip (manual)**:
    * `pip install tqdm`
    * `pip install lupa`
+   * `pip install pillow`
 
 ---
 
@@ -62,10 +63,6 @@ If the first time setup fails, you will have to add the resources manually by fo
 # Resources
 These steps are only required if any of the first time set up failed.
 
-### Scripts
-1. Find your `scripts` folder in the media folder of your Project Zomboid install location.
-2. Copy the entire `scripts` folder into the `resources` folder of this project.
-
 ### Lua
 Add the following Lua files to `resources`, all are found within `ProjectZomboid\projectzomboid\media\lua\`:
 
@@ -75,21 +72,15 @@ Add the following Lua files to `resources`, all are found within `ProjectZomboid
 4. `server\Vehicles\VehicleDistributions.lua`
 5. `shared\Definitions\AttachedWeaponDefinitions.lua`
 
-### Translations
-You can get the translation files from [Project Zomboid Translations](https://github.com/TheIndieStone/ProjectZomboidTranslations/).
 
-Download the entire folder and place it into the `resources` folder, naming it "Translate." Each language should be in its respective subfolder within the "Translate" folder.
-
-Add the game's icons to a folder called "icons" (ensure 'Item_' prefix is removed). Icons can be extracted with TileZed. This is only relevant for some modules.
-
-_`icons.csv` and `item_id_dictionary.csv` are included with the package. The latest version of `item_id_dictionary.csv` can be found [here](https://drive.google.com/file/d/1Gjl7WJMm7qYaJ5S_J2FtM1iTlyfLI-z8/view)._
+_`texture_names.json` and `page_name_dictionary.json` are included with the package. `texture_names.json` can be updated with the **Update textures** tool script._
 
 ---
 
 # Configuration
 The parser allows you to adjust various settings using the `config.ini` file, or through the program's [main menu](./Main Menu). Below are the details on how to configure and customize the parser.
 
-The config file is managed by `config_manager.py`.
+The config file is managed by `config.py`.
 
 
 ### Config File: `config.ini`
@@ -106,6 +97,7 @@ To make changes to the `config.ini` file, open the file and adjust the values yo
 * `default_language`: The default language the parser should use, you can still specify other languages when running modules.
 * `version`: The version of your project zomboid installation, or resource files.
 * `game_directory`: The root directory where the game is installed. This path should point to the folder containing the game executable.
+* `debug_mode`: Whether to show debug messages in the terminal.
 
 
 # Usage
@@ -132,39 +124,44 @@ pz-wiki_parser/
 │   ├── core/
 │   └── parser/
 ├── output/
-│   ├── distributions/
 │   ├── codesnips/
+│   ├── distributions/
 │   ├── recorded_media/
-│   ├── radio/
 │   ├── logging/
 │   └── language_code/
-│       ├── consumables/
-│       ├── fixing/
-│       ├── infoboxes/
-│       └── articles/
-├── resources/
-    ├── Translate/
+│       ├── fluid/
+│       ├── item/
+│       ├── tiles/
+│       └── vehicle/
+└── resources/
     ├── icons/
+    ├── tables/
     ├── lua/
     ├── radio/
-    ├── scripts/
-    ├── item_id_dictionary.csv
+    ├── Translate/
+    ├── color_reference.json
     └── icons.csv
+    ├── page_dictionary.json
+    └── texture_names.json
 ```
 
 ---
 
 ## `Scripts/`
-The scripts folder contains the main modules that can be executed or utilized by the parser. It is split into two subdirectories: core and parser.
+The scripts folder contains the main modules that can be executed or utilized by the parser. There are three main subdirectories: core, parser, utils and objects.
 
 `core/`: This directory contains the essential modules that form the backbone of the parser. These modules are not standalone and are used internally by other components to perform key operations such as configuration management, logging, and version control.
 
 Modules in core:
-* Handle configuration settings (config_manager).
-* Provide utility functions and logging support.
+* Handle configuration settings (config).
+* Provide logging support.
 * Ensure proper language translation through the `translate` module.
 
 * `parser/`: This folder contains parser file parsers, which are used to create data files, and limited output.
+
+* `utils/`: Contains general-purpose helper functions and utilities used to support common tasks.
+
+* `objects/`: Defines structured classes that represent parsed game data, providing clean access to item properties, recipes, and other in-game concepts.
 
 ---
 
@@ -195,14 +192,20 @@ The resources folder contains essential data and files needed for the parser to 
 
 `Translate/`: This folder contains the translation files needed to localize the parser’s outputs. It allows the parser generate content in multiple languages, and lookup item names. This should be included in the setup.
 
-`icons/`:  Stores the `.png` icons used by files.
+`icons/`:  Stores the `.png` icons used by the icon update tool.
 
 `lua/`: Contains Lua scripts, from the game installation. This should be included in the setup.
 
 `radio/`: Stores the radio data. This should be included in the setup.
 
-`scripts/`: Contains the scripts parsed by the parser. This should be included in the setup.
+`scripts/`: Contains the txt scripts parsed by the parser. This should be included in the setup.
 
-`item_id_dictionary.csv`: A CSV file containing a list of items and their corresponding IDs currently on the wiki. This should be included in your repo. Otherwise, can be found [here](https://drive.google.com/file/d/1Gjl7WJMm7qYaJ5S_J2FtM1iTlyfLI-z8/view)
+`tables/`: Contains the table maps for the various list scripts. This should be included in your repo.
 
-`icons.csv`: PLACEHOLDER
+`color_reference`: A JSON file containing RGB color references, taken from Colors.class in the game's files. This should be included in your repo.
+
+`icons.csv`: A CSV file containing custom icon maps. These icons use RGB tints in-game.
+
+`page_dictionary.json`: A JSON file containing a list of items and their corresponding IDs currently on the wiki. This should be included in your repo.
+
+`texture_names.json`: A map of textures from the game's files. Used as a reference for various scripts and checking for new textures upon each game release. This should be included in your repo.
