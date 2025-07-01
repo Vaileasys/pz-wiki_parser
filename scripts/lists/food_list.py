@@ -1,6 +1,6 @@
 from tqdm import tqdm
 from scripts.parser import item_parser, evolvedrecipe_parser
-from scripts.recipes import legacy_recipe_parser
+from scripts.objects.craft_recipe import CraftRecipe
 from scripts.core.language import Language
 from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
 from scripts.utils import utility, lua_helper, table_helper, util
@@ -239,29 +239,16 @@ def main():
     global table_map
     language_code = Language.get()
     evolvedrecipe_data = evolvedrecipe_parser.get_evolvedrecipe_data()
-    recipes_data = legacy_recipe_parser.get_recipe_data()["recipes"]
     table_map, column_headings = table_helper.get_table_data(TABLE_PATH)
     #parse_foraging()
 
     cooking_recipe_data = {}
-    i = 0
-    for recipe in recipes_data:
-        is_mapper = False
-        if recipe.get("category") == "Cooking" and recipe.get("xpAward"):
-            cooking_recipe_data[recipe.get("name", i)] = recipe
-            outputs = recipe.get("outputs", [])
-            for p in outputs:
-                products = p.get("items")
-                if products:
-                    recipe_products.extend(products)
-                if "mapper" in p:
-                    is_mapper = True
-            if is_mapper:
-                item_mappers = recipe.get("itemMappers", {})
-                for key, value in item_mappers.items():
-                    recipe_products.extend(list(value.keys()))
-
-        i += 1
+    for recipe_id in CraftRecipe.keys():
+        recipe = CraftRecipe(recipe_id)
+        if recipe.category == "Cooking" and recipe.xp_award:
+            cooking_recipe_data[recipe_id] = recipe.data
+            # Get output items directly from the CraftRecipe object
+            recipe_products.extend(recipe.output_items)
     
     save_cache(cooking_recipe_data, "cooking_recipe_data.json")
     save_cache({"recipes": recipe_products}, "recipe_products_data.json")

@@ -49,7 +49,6 @@ menu_structure = {
             '3': {'module': 'scripts.recipes.teached_recipes', 'name': 'Teached recipes', 'description': 'Process teached recipes.'},
             '4': {'module': 'scripts.recipes.evolvedrecipe', 'name': 'Evolved recipes', 'description': 'Process evolved recipes.'},
             '5': {'module': 'scripts.items.item_fixing', 'name': 'Fixing', 'description': 'Generates fixing recipes.'},
-            '6': {'module': 'scripts.recipes.legacy_recipe_output', 'name': 'Legacy recipe parser', 'description': 'Process recipes.'},
         }
     },
     '5': {

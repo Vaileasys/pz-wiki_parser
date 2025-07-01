@@ -1,9 +1,10 @@
 from tqdm import tqdm
+
 from scripts.parser import item_parser, stash_parser
-from scripts.recipes import legacy_recipe_parser
 from scripts.core.language import Language, Translate
 from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
 from scripts.utils import utility, util, table_helper
+from scripts.objects.craft_recipe import CraftRecipe
 
 TABLE_PATH = f"{RESOURCE_DIR}/tables/literature_table.json"
 
@@ -66,7 +67,6 @@ def get_list_type(item_id, item_data, special_data):
 
 # Get list of recipes an item teaches.
 def get_recipes(item_data):
-
     if item_data.get("OnCreate"):
         return "''Randomized''"
     else:
@@ -79,7 +79,7 @@ def get_recipes(item_data):
         recipes = []
 
         for recipe in recipes_raw:
-            recipes.append(utility.get_recipe(recipe))
+            recipes.append(CraftRecipe(recipe).wiki_link)
         
         recipes_output = "<br>".join(recipes)
     return recipes_output
@@ -341,7 +341,6 @@ def process_map(map_region, map_id, map_data):
 def get_items():
     literature_dict = {}
     parsed_item_data = item_parser.get_item_data()
-    legacy_recipe_parser.get_recipe_data() # Call early so print doesn't interrupt progress bars
     parsed_stash_data = stash_parser.get_stash_data()
 
     # Get items

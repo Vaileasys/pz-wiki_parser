@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from scripts.parser import item_parser
-from scripts.recipes import legacy_recipe_parser
 from scripts.core import logger, config_manager as config
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
@@ -732,43 +731,3 @@ def get_fluid_name(fluid_data, lang=None):
     else:
         name = Translate.get(display_name, 'FluidID', lang)
     return name
-
-# TODO: this is a WIP
-def get_recipe(recipe_id):
-    recipe_name = Translate.get(recipe_id, None, "en")
-    if recipe_name == recipe_id:
-        recipe_name = Translate.get(recipe_id, "TeachedRecipes")
-    
-    try:
-        parsed_recipe_data = legacy_recipe_parser.get_recipe_data()
-        for recipe in parsed_recipe_data["recipes"]:
-            if recipe.get("name") == recipe_id:
-    #                echo(recipe_name)
-                outputs = recipe.get("outputs")[0]
-                items = outputs.get("items") #FIXME: traps are not currently listed in the item_id_dictionary, as they use infobox_tile.
-                if items is None:
-                    mapper = outputs.get("mapper")
-                    if mapper is not None:
-                        product_id = recipe.get("itemMappers").get(mapper).get("default")
-                    elif outputs.get("displayName") is not None:
-                        # TODO: Check how this gets translated - this is for building. e.g. 'Metal_Counter_Lvl1'
-                        product = f"[[{outputs.get('displayName')}|{recipe_name}]]"
-                        return product
-                else:
-                    product_id = items[0]
-                product_page = get_page(product_id)
-#                if product_page == "Unknown" and product_id is not None:
-#                    echo(f"Couldn't find page: {product_id}")
-                if product_page != "Unknown":
-                    product = f"[[{product_page}|{recipe_name}]]"
-                    return product
-    #                if "[" not in recipe_name:
-    #                    echo(f"No link for: {recipe_name}")
-
-                return recipe_name
-    #        if "[" not in recipe_name:
-    #            echo(f"No link for: {recipe_name}")
-    except:
-        echo.error(f"Failed getting recipe for {recipe_id}")
-
-    return recipe_name
