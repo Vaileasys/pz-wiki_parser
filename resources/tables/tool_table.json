@@ -1,0 +1,23 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "types",
+            "category",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "weapon": "! Weapon",
+        "categories": "! Categories",
+        "types": "! Types",
+        "category": "! Category",
+        "item_id": "! Item ID"
+    }
+}

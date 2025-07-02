@@ -1,0 +1,163 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ],
+        "trunk_lid": [
+            "icon",
+            "name",
+            "weight",
+            "vehicle_type",
+            "tools",
+            "skill",
+            "recipe",
+            "item_id"
+        ],
+        "hood": [
+            "icon",
+            "name",
+            "weight",
+            "vehicle_type",
+            "tools",
+            "skill",
+            "recipe",
+            "item_id"
+        ],
+        "battery": [
+            "icon",
+            "name",
+            "weight",
+            "vehicle_type",
+            "tools",
+            "skill",
+            "recipe",
+            "item_id"
+        ],
+        "gas_tank": [
+            "icon",
+            "name",
+            "weight",
+            "vehicle_type",
+            "capacity",
+            "tools",
+            "skill",
+            "recipe",
+            "item_id"
+        ],
+        "glove_box": [
+            "icon",
+            "name",
+            "weight",
+            "vehicle_type",
+            "capacity",
+            "item_id"
+        ],
+        "seat": [
+            "icon",
+            "name",
+            "weight",
+            "vehicle_type",
+            "capacity",
+            "tools",
+            "skill",
+            "recipe",
+            "item_id"
+        ],
+        "trunk": [
+            "icon",
+            "name",
+            "weight",
+            "vehicle_type",
+            "capacity",
+            "item_id"
+        ],
+        "brake": [
+            "icon",
+            "name",
+            "weight",
+            "vehicle_type",
+            "brake_force",
+            "tools",
+            "skill",
+            "recipe",
+            "item_id"
+        ],
+        "muffler": [
+            "icon",
+            "name",
+            "weight",
+            "vehicle_type",
+            "engine_loudness",
+            "degradation_standard",
+            "degradation_offroad",
+            "tools",
+            "skill",
+            "recipe",
+            "item_id"
+        ],
+        "suspension": [
+            "icon",
+            "name",
+            "weight",
+            "vehicle_type",
+            "dampening",
+            "compression",
+            "tools",
+            "skill",
+            "recipe",
+            "item_id"
+        ],
+        "tire": [
+            "icon",
+            "name",
+            "weight",
+            "vehicle_type",
+            "wheel_friction",
+            "tools",
+            "skill",
+            "recipe",
+            "item_id"
+        ],
+        "window": [
+            "icon",
+            "name",
+            "weight",
+            "vehicle_type",
+            "tools",
+            "skill",
+            "recipe",
+            "item_id"
+        ],
+        "door": [
+            "icon",
+            "name",
+            "weight",
+            "vehicle_type",
+            "tools",
+            "skill",
+            "recipe",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=Heavy load|Encumbrance]]",
+        "vehicle_type": "! [[File:ToyCar.png|24px|link=|Vehicle type]]",
+        "brake_force": "! Brake force",
+        "capacity": "! Capacity",
+        "dampening": "! Dampening",
+        "compression": "! Compression",
+        "degradation_standard": "! Depgradation<br>(standard)",
+        "degradation_offroad": "! Depgradation<br>(off-road)",
+        "engine_loudness": "! Engine loudness",
+        "wheel_friction": "! Friction",
+        "tools": "! Tools",
+        "skill": "! Skill",
+        "recipe": "! Recipe",
+        "item_id": "! Item ID"
+    }
+}

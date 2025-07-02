@@ -1,0 +1,60 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "item_id"
+        ],
+        "clothing": [
+            "icon",
+            "name",
+            "weight",
+            "body_location",
+            "item_id"
+        ],
+        "container": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "body_location",
+            "item_id"
+        ],
+        "dice": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ],
+        "fluid_container": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "item_id"
+        ],
+        "literature": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ],
+        "specimen": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "body_location": "! Body location",
+        "weapon": "! Weapon",
+        "capacity": "! Capacity",
+        "item_id": "! Item ID"
+    }
+}

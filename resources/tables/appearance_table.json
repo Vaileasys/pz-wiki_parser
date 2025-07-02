@@ -1,0 +1,22 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "type",
+            "mirror",
+            "capacity",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "type": "! Type",
+        "mirror": "! Mirror",
+        "capacity": "! Capacity",
+        "item_id": "! Item ID"
+    }
+}

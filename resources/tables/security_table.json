@@ -1,0 +1,20 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "type",
+            "lock_unlock",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "type": "! Type",
+        "lock_unlock": "! Lock/unlock",
+        "item_id": "! Item ID"
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "play_sound",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "weapon": "! Weapon",
+        "play_sound": "! Plays sound",
+        "item_id": "! Item ID"
+    }
+}

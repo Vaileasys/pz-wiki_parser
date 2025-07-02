@@ -1,0 +1,139 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ],
+        "bone": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "item_id"
+        ],
+        "clay": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "item_id"
+        ],
+        "cotton": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "item_id"
+        ],
+        "denim": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "item_id"
+        ],
+        "fibre": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "item_id"
+        ],
+        "glass": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "item_id"
+        ],
+        "iron": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "metal_size",
+            "capacity",
+            "item_id"
+        ],
+        "leather": [
+            "icon",
+            "name",
+            "weight",
+            "leather_type",
+            "leather_size",
+            "item_id"
+        ],
+        "other": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "item_id"
+        ],
+        "paint": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "item_id"
+        ],
+        "repair": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "item_id"
+        ],
+        "steel": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "metal_size",
+            "capacity",
+            "item_id"
+        ],
+        "stone": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "item_id"
+        ],
+        "tool_head": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "item_id"
+        ],
+        "wallpaper": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "item_id"
+        ],
+        "wood": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "weapon": "! Weapon",
+        "leather_type": "! Type",
+        "leather_size": "! Size",
+        "metal_size": "! Size",
+        "capacity": "! Capacity",
+        "product": "! Product",
+        "item_id": "! Item ID"
+    }
+}

@@ -1,0 +1,84 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ],
+        "herb": [
+            "icon",
+            "name",
+            "weight",
+            "hunger",
+            "fresh",
+            "rotten",
+            "effect",
+            "item_id"
+        ],
+        "poultice": [
+            "icon",
+            "name",
+            "weight",
+            "effect",
+            "item_id"
+        ],
+        "pharmaceutical": [
+            "icon",
+            "name",
+            "weight",
+            "effect",
+            "item_id"
+        ],
+        "disinfectant": [
+            "icon",
+            "name",
+            "weight",
+            "alcohol_power",
+            "effect",
+            "item_id"
+        ],
+        "bandage": [
+            "icon",
+            "name",
+            "weight",
+            "bandage_power",
+            "effect",
+            "item_id"
+        ],
+        "tools": [
+            "icon",
+            "name",
+            "weight",
+            "effect",
+            "item_id"
+        ],
+        "other": [
+            "icon",
+            "name",
+            "weight",
+            "effect",
+            "item_id"
+        ],
+        "package": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "hunger": "! [[File:Status_Hunger_32.png|link=|Hunger]]",
+        "fresh": "! [[File:Apple.png|32px|link=|Fresh (days)]]",
+        "rotten": "! [[File:AppleRotten.png|32px|link=|Rotten (days)]]",
+        "effect": "! Effect",
+        "alcohol_power": "! Alcohol power",
+        "bandage_power": "! Bandage power",
+        "capacity": "! Capacity",
+        "item_id": "! Item ID"
+    }
+}

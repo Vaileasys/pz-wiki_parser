@@ -1,0 +1,47 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "volume_range",
+            "frequency_min",
+            "frequency_max",
+            "item_id"
+        ],
+        "radio": [
+            "icon",
+            "name",
+            "weight",
+            "volume_range",
+            "frequency_min",
+            "frequency_max",
+            "battery_drain",
+            "item_id"
+        ],
+        "two_way": [
+            "icon",
+            "name",
+            "weight",
+            "mic_range",
+            "volume_range",
+            "frequency_min",
+            "frequency_max",
+            "transmit_range",
+            "battery_drain",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "mic_range": "! Mic. range<br>(meters)",
+        "volume_range": "! Volume range<br>(meters)",
+        "frequency_min": "! Min. freq.",
+        "frequency_max": "! Max. freq.",
+        "transmit_range": "! Transmit range<br>(meters)",
+        "battery_drain": "! Drain rate<br>(per hour)",
+        "item_id": "! Item ID"
+    }
+}

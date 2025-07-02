@@ -1,0 +1,46 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "item_id"
+        ],
+        "knife": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "knife_type",
+            "item_id"
+        ],
+        "other": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "capacity",
+            "item_id"
+        ],
+        "evolved_recipe": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "capacity",
+            "evolved_recipe",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "weapon": "! Weapon",
+        "knife_type": "! Knife type",
+        "capacity": "! Capacity",
+        "evolved_recipe": "! Evolved recipe",
+        "item_id": "! Item ID"
+    }
+}

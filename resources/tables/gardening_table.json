@@ -1,0 +1,74 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ],
+        "seed": [
+            "icon",
+            "name",
+            "weight",
+            "sprite",
+            "product",
+            "water",
+            "grow_time",
+            "sow_months",
+            "best_months",
+            "poor_months",
+            "item_id"
+        ],
+        "seed_packet": [
+            "icon",
+            "name",
+            "weight",
+            "seed",
+            "product",
+            "teached_recipes",
+            "item_id"
+        ],
+        "tool": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "dirt",
+            "dung",
+            "plow",
+            "scythe",
+            "cut_plant",
+            "item_id"
+        ],
+        "other": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "cure",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "capacity": "! Capacity",
+        "cure": "! Cure",
+        "seed": "! Contents",
+        "product": "! Product",
+        "teached_recipes": "! Recipes",
+        "water": "! [[File:WaterDrop.png|link=Water (fluid)|Minimum water]]",
+        "grow_time": "! Grow time",
+        "sow_months": "! Sow months",
+        "best_months": "! Best months",
+        "poor_months": "! Poor months",
+        "weapon": "! Weapon",
+        "dirt": "! Pick-up Dirt",
+        "dung": "! Pick-up Dung",
+        "plow": "! Plow",
+        "scythe": "! Scythe",
+        "cut_plant": "! Cut plants",
+        "item_id": "! Item ID"
+    }
+}

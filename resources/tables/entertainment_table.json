@@ -1,0 +1,16 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "item_id": "! Item ID"
+    }
+}

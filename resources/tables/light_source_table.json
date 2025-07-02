@@ -1,0 +1,30 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ],
+        "light_source": [
+            "icon",
+            "name",
+            "weight",
+            "distance",
+            "strength",
+            "battery",
+            "capacity",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "distance": "! Light distance",
+        "strength": "! Light strength",
+        "battery": "! [[File:Battery.png|link=|Contains a battery]]",
+        "capacity": "! Capacity",
+        "item_id": "! Item ID"
+    }
+}

@@ -1,0 +1,31 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "capacity",
+            "item_id"
+        ],
+        "writing": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "color",
+            "eraser",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "weapon": "! Weapon",
+        "capacity": "! Capacity",
+        "color": "! Color",
+        "eraser": "! Eraser",
+        "item_id": "! Item ID"
+    }
+}

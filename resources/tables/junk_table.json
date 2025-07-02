@@ -1,0 +1,48 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "capacity",
+            "item_id"
+        ],
+        "broken": [
+            "icon",
+            "name",
+            "weight",
+            "weapon",
+            "original",
+            "item_id"
+        ],
+        "dung": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ],
+        "literature": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ],
+        "smoking": [
+            "icon",
+            "name",
+            "weight",
+            "capacity",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "weapon": "! Weapon",
+        "original": "! Original",
+        "capacity": "! Capacity",
+        "item_id": "! Item ID"
+    }
+}

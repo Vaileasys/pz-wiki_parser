@@ -1,0 +1,24 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "units",
+            "tick_rate",
+            "light_distance",
+            "light_strength",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "units": "! Units",
+        "tick_rate": "! Tick rate",
+        "light_distance": "! Light distance",
+        "light_strength": "! Light strength",
+        "item_id": "! Item ID"
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "sprite",
+            "weight",
+            "strength",
+            "mouse",
+            "rat",
+            "squirrel",
+            "rabbit",
+            "bird",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "sprite": "! Sprite",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "strength": "! Strength",
+        "mouse": "! [[File:Mouse.png|Chance to catch]]",
+        "rat": "! [[File:Rat.png|Chance to catch]]",
+        "squirrel": "! [[File:Squirrel.png|Chance to catch]]",
+        "rabbit": "! [[File:Rabbit.png|Chance to catch]]",
+        "bird": "! [[File:Bird.png|Chance to catch]]",
+        "item_id": "! Item ID"
+    }
+}

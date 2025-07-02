@@ -1,0 +1,44 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ],
+        "gear": [
+            "icon",
+            "name",
+            "weight",
+            "type",
+            "weapon",
+            "item_id"
+        ],
+        "tackle": [
+            "icon",
+            "name",
+            "weight",
+            "type",
+            "tooltip",
+            "item_id"
+        ],
+        "other": [
+            "icon",
+            "name",
+            "weight",
+            "type",
+            "weapon",
+            "tooltip",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "type": "! Type",
+        "weapon": "! Weapon",
+        "tooltip": "! Tooltip",
+        "item_id": "! Item ID"
+    }
+}

@@ -1,0 +1,34 @@
+{
+    "map": {
+        "default": [
+            "icon",
+            "name",
+            "weight",
+            "item_id"
+        ],
+        "appliance": [
+            "icon",
+            "name",
+            "weight",
+            "dismantle",
+            "item_id"
+        ],
+        "generator": [
+            "icon",
+            "name",
+            "weight",
+            "degradation",
+            "sound_radius",
+            "item_id"
+        ]
+    },
+    "headings": {
+        "icon": "! Icon",
+        "name": "! Name",
+        "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "dismantle": "! Dismantle",
+        "degradation": "! Degradation chance",
+        "sound_radius": "! Sound radius (tiles)",
+        "item_id": "! Item ID"
+    }
+}
