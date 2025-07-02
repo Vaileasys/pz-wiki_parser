@@ -17,11 +17,11 @@ def process_item(item: Item):
     columns = table_map.get(table_type) if table_map.get(table_type) is not None else table_map.get("default")
     heading = table_type
 
-    capacity = convert_int(item.fluid_container.capacity) + "L"
+    capacity = f"{item.fluid_container.capacity} L"
 
     rain_factor = check_zero(convert_int(item.fluid_container.rain_factor), default="-")
 
-    boilable = tick(link="Heat source", text="Can be boiled in an oven or campfire") if item.has_tag("Cookable") else cross(link="Heat source", text="Can be boiled in an oven or campfire")
+    boilable = tick(link="Heat source", text="Can be boiled in an oven or campfire") if item.has_tag("Cookable") else cross(link="Heat source", text="Can't be boiled in an oven or campfire")
     boilable_microwave = tick(link="White Microwave", text="Can be boiled in a microwave") if item.has_tag("CookableMicrowave") else cross(link="White Microwave", text="Can't be boiled in a microwave")
     coffee_maker = tick(link="Espresso Deluxe", text="Can be used in an espresso machine") if item.has_tag("CoffeeMaker") else cross(link="Espresso Deluxe", text="Can't be used in an espresso machine")
 
@@ -69,7 +69,7 @@ def find_items() -> dict:
         for item_id in Item.keys():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
             item = Item(item_id)
-            if item.fluid_container:
+            if item.has_category("fluid_container"):
                 heading, item_content = process_item(item)
 
                 # Add heading to dict if it hasn't been added yet.
@@ -94,7 +94,7 @@ def main():
 
     items = find_items()
 
-    create_tables("fluid_container", items, table_map=table_map, columns=column_headings, root_path=ROOT_PATH, combine_tables=False)
+    create_tables("fluid_container", items, table_map=table_map, columns=column_headings, root_path=ROOT_PATH, combine_tables=False, suppress=True)
 
 
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
+import os
 from tqdm import tqdm
 from scripts.core.language import Language, Translate
 from scripts.utils import table_helper, echo
@@ -5,9 +6,9 @@ from scripts.utils.util import format_positive, convert_int
 from scripts.objects.item import Item
 from scripts.objects.fixing import Fixing
 from scripts.objects.craft_recipe import CraftRecipe
-from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
+from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 
-TABLE_PATH = f"{RESOURCE_DIR}/tables/weapon_table.json"
+TABLE_PATH = os.path.join(TABLES_DIR, "weapon_table.json")
 
 box_types = {}
 table_map = {}
@@ -223,13 +224,13 @@ def generate_data(item_id, table_type):
         endurance_mod = format_positive(item.endurance_mod - 1.0)
         item_dict["endurance_mod"] = "-" if endurance_mod == "0" else endurance_mod
     item_dict["hit_chance"] = (str(convert_int(item.hit_chance)) or '-') + '%' if "hit_chance" in columns else None
-    item_dict["hit_chance_mod"] = '+' + str(convert_int(item.aiming_perk_hit_chance_modifier)) + '%' if "hit_chance_mod" in columns else None
+    item_dict["hit_chance_mod"] = f"+{convert_int(item.aiming_perk_hit_chance_modifier)}%" if "hit_chance_mod" in columns else None
     if "crit_chance" in columns:
-        item_dict["crit_chance"] = str(convert_int(item.critical_chance)) + "%" if item.critical_chance else "-"
+        item_dict["crit_chance"] = f"{convert_int(item.critical_chance)}%" if item.critical_chance else "-"
     if "crit_multiplier" in columns:
-        item_dict["crit_multiplier"] = str(convert_int(item.crit_dmg_multiplier)) + "×" if item.crit_dmg_multiplier else "-"
+        item_dict["crit_multiplier"] = f"{convert_int(item.crit_dmg_multiplier)}×" if item.crit_dmg_multiplier else "-"
     if "crit_chance_mod" in columns:
-        item_dict["crit_chance_mod"] = "+" + str(item.aiming_perk_crit_modifier) + "%" if item.aiming_perk_crit_modifier else "-"
+        item_dict["crit_chance_mod"] = f"+{item.aiming_perk_crit_modifier}%" if item.aiming_perk_crit_modifier else "-"
     if "sound_radius" in columns: #FIXME: check item.noise_radius
         sound_radius = item.get('SoundRadius', item.get_default('NoiseRange'))
         if sound_radius <= 0 and item.explosion_sound is not None:
@@ -371,9 +372,9 @@ def find_boxes():
         recipe = CraftRecipe(recipe_id)
         output = recipe.outputs[0]
 
-        mapper = output.get("mapper")
-        count = output.get("count")
-        items = output.get("items")
+        mapper = output.mapper
+        count = output.count
+        items = output.items
 
         if mapper == "ammoTypes":
             item_mappers = recipe.item_mappers.get(mapper, {})
@@ -385,7 +386,7 @@ def find_boxes():
                 }
         
         elif items:
-            box_types[recipe.inputs[0].get("items")[0]] = {
+            box_types[recipe.inputs[0].items[0]] = {
                 "type": AMMO_RECIPES.get(recipe_id),
                 "contents": items[0],
                 "quantity": count

@@ -1,12 +1,13 @@
+import os
 from tqdm import tqdm
-
 from scripts.parser import item_parser, stash_parser
 from scripts.core.language import Language, Translate
-from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
+from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.utils import utility, util, table_helper
 from scripts.objects.craft_recipe import CraftRecipe
 
-TABLE_PATH = f"{RESOURCE_DIR}/tables/literature_table.json"
+TABLE_PATH = os.path.join(TABLES_DIR, "literature_table.json")
+
 
 table_map = None
 table_type_map = None
@@ -393,7 +394,7 @@ def main():
         for item_type, table_type in table_type_map.items()
     }
 
-    table_helper.create_tables("literature", items, columns=column_headings, table_map=mapped_table)
+    table_helper.create_tables("literature", items, columns=column_headings, table_map=mapped_table, suppress=True)
                 
 
 if __name__ == "__main__":

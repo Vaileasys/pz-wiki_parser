@@ -2,12 +2,12 @@ import os
 from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.objects.item import Item
-from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
+from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.utils.table_helper import get_table_data, create_tables
 from scripts.utils.util import tick, cross
 from scripts.utils import echo
 
-TABLE_PATH = os.path.join(RESOURCE_DIR, "tables", "fuel_table.json")
+TABLE_PATH = os.path.join(TABLES_DIR, "fuel_table.json")
 
 table_map = {}
 

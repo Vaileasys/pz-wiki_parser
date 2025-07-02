@@ -1,11 +1,12 @@
+import os
 from tqdm import tqdm
 from scripts.objects.item import Item
 from scripts.objects.attachment import HotbarSlot
-from scripts.core.constants import PBAR_FORMAT, RESOURCE_DIR
+from scripts.core.constants import PBAR_FORMAT, TABLES_DIR
 from scripts.utils import table_helper
 from scripts.utils.util import convert_int, convert_percentage, tick, cross
 
-TABLE_PATH = f"{RESOURCE_DIR}/tables/clothing_table.json"
+TABLE_PATH = os.path.join(TABLES_DIR, "clothing_table.json")
 
 table_types = {}
 body_location_map = {}
@@ -140,7 +141,7 @@ def find_items():
         for item_id in Item.all():
             item = Item(item_id)
             pbar.set_postfix_str(f'Processing: {item.type} ({item_id[:30]})')
-            if item.type in ("Clothing", "AlarmClockClothing") or item.can_be_equipped:
+            if item.has_category("clothing"):
                 # filter out blacklisted items and 'Reverse' variants
                 if not item.id_type.startswith(blacklist) and not item.id_type.endswith("_Reverse"):
                     if item.obsolete:
@@ -177,7 +178,7 @@ def main():
         key: table_types[value["table"]]
         for key, value in body_location_map.items()
     }
-    table_helper.create_tables("clothing", clothing_items, columns=column_headings, table_map=table_map)
+    table_helper.create_tables("clothing", clothing_items, columns=column_headings, table_map=table_map, suppress=True)
 
 
 if __name__ == "__main__":

@@ -1,12 +1,13 @@
+import os
 from tqdm import tqdm
 from scripts.parser import item_parser, evolvedrecipe_parser
 from scripts.objects.craft_recipe import CraftRecipe
 from scripts.core.language import Language
-from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
+from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.utils import utility, lua_helper, table_helper, util
 from scripts.core.cache import save_cache
 
-TABLE_PATH = f"{RESOURCE_DIR}/tables/food_table.json"
+TABLE_PATH = os.path.join(TABLES_DIR, "food_table.json")
 
 evolvedrecipe_products = []
 recipe_products = []

@@ -1,17 +1,17 @@
 # List for item containers (bags, etc.)
-
+import os
 import random
 from tqdm import tqdm
 from scripts.core.version import Version
 from scripts.core.language import Language
 from scripts.objects.item import Item
 from scripts.objects.attachment import HotbarSlot
-from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT
+from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.utils import table_helper, echo
 from scripts.utils.util import convert_int, convert_percentage, link, check_zero
 from scripts.core.cache import save_cache, load_cache
 
-TABLE_PATH = f"{RESOURCE_DIR}/tables/container_table.json"
+TABLE_PATH = os.path.join(TABLES_DIR, "container_table.json")
 
 table_map = None
 table_type_map = None
@@ -222,7 +222,7 @@ def find_items():
     with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
         for item_id, item in Item.all().items():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
-            if item.type == "Container":
+            if item.has_category("container"):
                 table_type, item_data = process_item(item)
 
                 # Add heading to dict if it hasn't been added yet.
@@ -252,7 +252,7 @@ def main():
         for item_type, table_type in table_type_map.items()
     }
     
-    table_helper.create_tables("container", items, columns=column_headings, table_map=mapped_table)
+    table_helper.create_tables("container", items, columns=column_headings, table_map=mapped_table, suppress=True)
                 
 
 if __name__ == "__main__":
