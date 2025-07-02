@@ -60,19 +60,12 @@ menu_structure = {
         'name': 'Lists',
         'description': 'Generate lists for articles',
         'sub_options': {
-            '1': {'module': 'lists.item_list', 'name': 'Item list', 'description': 'Returns all items in a list organised by DisplayCategory.'},
-            '2': {'module': 'lists.weapon_list', 'name': 'Weapon list', 'description': 'Return all weapons in a list with stats organised by their skill.'},
-            '3': {'module': 'lists.clothing_list', 'name': 'Clothing list', 'description': 'Return all clothing in a list with stats organised by body location.'},
-            '4': {'module': 'lists.container_list', 'name': 'Container list', 'description': 'Generate container tables.'},
-            '5': {'module': 'lists.fluid_container_list', 'name': 'Fluid container list', 'description': 'Generate fluid container tables.'},
-            '6': {'module': 'lists.food_list', 'name': 'Food list', 'description': 'Generate food and nutrition pages.'},
-            '7': {'module': 'lists.fuel_list', 'name': 'Fuel list', 'description': 'Generate fuel tables.'},
-            '8': {'module': 'lists.literature_list', 'name': 'Literature list', 'description': 'Generate literature tables.'},
-            '9': {'module': 'lists.recmedia_list', 'name': 'Recorded media list', 'description': 'Generate recorded media tables.'},
-            '10': {'module': 'lists.body_locations_list', 'name': 'BodyLocation list', 'description': 'Generate a BloodLocation table.'},
-            '11': {'module': 'lists.body_parts_list', 'name': 'BloodLocation/Body part list', 'description': 'Generate a BloodLocation/body part table.'},
-            '12': {'module': 'lists.attachment_list', 'name': 'Attachment list', 'description': 'Generate AttachmentType and AttachmentsProvided tables.'},
-            '14': {'module': 'scripts.parser.outfit_parser', 'name': 'Outfit list', 'description': 'Parse outfit xml files.'},
+            '1': {'module': 'items.item_lists', 'name': 'Item lists', 'description': 'Generate item lists.'},
+            '2': {'module': 'lists.recmedia_list', 'name': 'Recorded media list', 'description': 'Generate recorded media tables.'},
+            '3': {'module': 'lists.body_locations_list', 'name': 'BodyLocation list', 'description': 'Generate a BloodLocation table.'},
+            '4': {'module': 'lists.body_parts_list', 'name': 'BloodLocation/Body part list', 'description': 'Generate a BloodLocation/body part table.'},
+            '5': {'module': 'lists.attachment_list', 'name': 'Attachment list', 'description': 'Generate AttachmentType and AttachmentsProvided tables.'},
+            '6': {'module': 'scripts.parser.outfit_parser', 'name': 'Outfit list', 'description': 'Parse outfit xml files.'},
         },
     },
     '7': {
@@ -209,7 +202,7 @@ def navigate_menu(menu, is_root=False, title=None):
             elif subs:
                 navigate_menu(subs, title=name)
         else:
-            echo.error("Invalid input. Please try again.")
+            echo.write("[!] Invalid input. Please try again.", color.error)
 
 def check_first_run():
     is_first_run = config.get_first_time_run()
