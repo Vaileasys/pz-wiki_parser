@@ -54,7 +54,7 @@ def generate_item_data(item: Item):
     #-------------- PROPERTIES --------------#
     param["weight_reduction"] = item.weight_reduction
     param["max_units"] = item.use_delta if item.type == "Drainable" else None
-    param["fluid_capacity"] = item.fluid_container.capacity if item.fluid_container else None
+    param["fluid_capacity"] = util.convert_unit(item.fluid_container.capacity, unit="L") if item.fluid_container else None
     if item.type == "Weapon" or item.two_hand_weapon:
         if not item.two_hand_weapon:
             param["equipped"] = "One-handed"
@@ -67,16 +67,16 @@ def generate_item_data(item: Item):
     param["weapon"] = [f"{weapon.icon} {weapon.wiki_link}" for weapon in item.weapons] if item.weapons else None
     param["part_type"] = "Magazine" if item.has_tag("PistolMagazine", "RifleMagazine") else item.part_type
     param["skill_type"] = item.skill.wiki_link if item.skill else None
-    param["ammo_type"] = f"{Item(item.ammo_type).icon} {Item(item.ammo_type).wiki_link}"  if item.ammo_type else None
+    param["ammo_type"] = f"{Item(item.ammo_type).icon} {Item(item.ammo_type).wiki_link}" if item.ammo_type else None
     param["clip_size"] = item.max_ammo if (item.has_tag("PistolMagazine", "RifleMagazine") or item.type == "Weapon") else item.clip_size
-    param["material"] = item.material
+    param["material"] = "Metal" if not item.material and item.metal_value > 0 else item.material
     param["can_boil_water"] = item.has_tag("Cookable") or item.has_tag("CookableMicrowave")
     param["writable"] = item.can_be_write
-    param["recipes"] = "<br>".join([CraftRecipe(rec).wiki_link for rec in item.teached_recipes])
+    param["recipes"] = "<br>".join([CraftRecipe(rec).wiki_link for rec in item.teached_recipes]) if len(item.teached_recipes) < 5 else "''See [[#Learned recipes|Learned recipes]]''"
     param["researchable_recipes"] = [CraftRecipe(rec).wiki_link for rec in item.researchable_recipes] if item.researchable_recipes else None
     param["skill_trained"] = item.skill_trained.wiki_link if item.skill_trained else None
     param["foraging_change"] = item.foraging_penalty
-    #param["page_number"] = (item.page_to_write or item.number_of_pages) if (item.page_to_write or item.number_of_pages) > 0 else None
+    param["page_number"] = (item.page_to_write or item.number_of_pages) if (item.page_to_write or item.number_of_pages) > 0 else None
     param["packaged"] = item.packaged
     param["rain_factor"] = item.fluid_container.rain_factor if item.fluid_container else None
     param["days_fresh"] = item.get("DaysFresh")
@@ -134,7 +134,7 @@ def generate_item_data(item: Item):
     param["max_range_mod"] = item.max_sight_range if item.type == "Weapon" else None
     param["recoil_delay"] = item.recoil_delay or item.recoil_delay_modifier
     param["sound_radius"] = item.sound_radius
-    param["base_speed"] = item.base_speed if item.type == "Weapon" else None
+    param["base_speed"] = item.base_speed if item.type == "Weapon" and not item.has_tag("Firearm") else None
     param["push_back"] = item.push_back_mod if item.type == "Weapon" else None
     param["knockdown"] = item.knockdown_mod if item.type == "Weapon" else None
     param["aiming_time"] = item.aiming_time or item.aiming_time_modifier

@@ -798,7 +798,7 @@ class Item:
 
         # Translate units
         hours_unit = Translate.get("IGUI_Gametime_hour") if hours == 1 else Translate.get("IGUI_Gametime_hours")
-        minutes_unit = Translate.get("IGUI_Gametime_minute") if int(minutes) == 1 else Translate.get("IGUI_Gametime_minutes")
+        minutes_unit = Translate.get("IGUI_Gametime_minute") if minutes == 1 else Translate.get("IGUI_Gametime_minutes")
 
         # Remove decimal where appropriate
         if minutes % 1 == 0:
