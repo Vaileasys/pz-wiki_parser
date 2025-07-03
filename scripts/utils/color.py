@@ -3,11 +3,6 @@ ANSI terminal styling helpers for coloured and formatted text output.
 
 Includes basic styles, colours, and helper functions like `error()`, `warning()`, and `info()`.
 """
-import sys
-
-# Detect if terminal supports ANSI
-ENABLE_COLORS = sys.stdout.isatty()
-
 # Text styles
 RESET       = "\033[0m"
 BOLD        = "\033[1m"
@@ -63,8 +58,6 @@ BG_BRIGHT_WHITE   = "\033[107m"
 
 def style(text: str, *styles: str) -> str:
     """Apply one or more styles to a string."""
-    if not ENABLE_COLORS:
-        return text
     return f"{''.join(styles)}{text}{RESET}"
 
 ## ------------------- Preset Styles ------------------- ##
