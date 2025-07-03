@@ -2181,6 +2181,12 @@ class Item:
             return None
         
         return mat.get_icon(custom_name=Item._material_map_flipped.get(mat.item_id)[0])
+    
+    @property 
+    def foraging(self):
+        from scripts.objects.foraging import Foraging
+        instance = Foraging(self.id_type)
+        return instance if instance.valid else None
 
 
 if __name__ == "__main__":
