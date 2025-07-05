@@ -11,8 +11,7 @@ mechanics, generating separate tables for each process with relevant drop rates 
 """
 
 import os
-from scripts.utils import utility
-from scripts.core.language import Translate
+from scripts.objects.item import Item
 from scripts.utils import echo
 
 def generate_scrapping_tables(tiles: dict, definitions: dict, lang_code: str) -> dict:
@@ -115,18 +114,18 @@ def _generate_disassembly_section(generic: dict, definitions: dict) -> str:
     for mat in materials:
         for entry in scrap_items:
             if entry.get('material') == mat:
-                ret    = entry.get('returnItem', '')
+                item_id = entry.get('returnItem', '')
                 tries  = entry.get('maxAmount', '')
                 chance = entry.get('chancePerRoll', '')
                 max_a  = entry.get('maxAmount', '')
-                page_id = ret if ret.startswith('Base.') else f"Base.{ret}"
-
-                display_name = Translate.get(page_id, 'DisplayName')
-                page_link    = utility.get_page(page_id, display_name)
+                
+                item = Item(item_id)
+                icon = item.icon
+                page_link = item.wiki_link
 
                 lines += [
                     '|-',
-                    f'| [[{page_link}]]',
+                    f'| {icon} {page_link}',
                     f'| {tries}',
                     f'| {chance}',
                     f'| {max_a}',
@@ -139,17 +138,17 @@ def _generate_disassembly_section(generic: dict, definitions: dict) -> str:
         ui = sd.get('unusableItem')
         if ui:
             keys = ui.keys() if isinstance(ui, dict) else [ui]
-            for k in keys:
-                page_id    = k if k.startswith('Base.') else f"Base.{k}"
-                display_name = Translate.get(page_id, 'DisplayName')
-                page_link    = utility.get_page(page_id, display_name)
-                unusables.append(page_link)
+            for item_id in keys:
+                item = Item(item_id)
+                icon = item.icon
+                page_link    = item.wiki_link
+                unusables.append(f"{icon} {page_link}")
 
     if unusables:
         lines.append('|-')
         lines.append(f'! colspan="4" | {on_fail}')
         for link in unusables:
-            lines += ['|-', f'| colspan="4" | [[{link}]]']
+            lines += ['|-', f'| colspan="4" | {link}']
 
     lines.append('|}')
     return "\n".join(lines) + "\n\n"
@@ -191,16 +190,16 @@ def _generate_breakage_section(generic: dict, definitions: dict) -> str:
     for mat in materials:
         items = material_defs.get(mat, [])
         for entry in items:
-            ret    = entry.get('returnItem', '')
+            item_id = entry.get('returnItem', '')
             max_a  = entry.get('maxAmount', '')
             chance = entry.get('chancePerRoll', '')
-            page_id     = ret if ret.startswith('Base.') else f"Base.{ret}"
-            display_name = Translate.get(page_id, 'DisplayName')
-            page_link    = utility.get_page(page_id, display_name)
+            item = Item(item_id)
+            page_link = item.wiki_link
+            icon = item.icon
 
             lines += [
                 '|-',
-                f'| [[{page_link}]]',
+                f'| {icon} {page_link}',
                 f'| {max_a}',
                 f'| {chance}',
             ]
