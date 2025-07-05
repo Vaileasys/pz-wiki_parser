@@ -41,7 +41,7 @@ def save_cache(data: dict, data_file: str, data_dir=DATA_DIR, suppress=False):
         suppress (bool, optional): Suppress displaying warnings/print statements. Defaults to False.
     """
     if not data_file.endswith(".json"):
-        data_file + ".json"
+        data_file += ".json"
     data_file_path = os.path.join(data_dir, data_file)
     os.makedirs(os.path.dirname(data_file_path), exist_ok=True)
 
