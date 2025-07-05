@@ -1,3 +1,9 @@
+"""
+Generates wiki-formatted tables for Project Zomboid.
+
+This module loads item data, builds structured tables with translations and formatting,
+and writes them as individual or combined output files for use on the PZwiki.
+"""
 import os
 from pathlib import Path
 from scripts.core.language import Translate
@@ -14,7 +20,14 @@ TABLE_WRAP_AFTER = '\n</div>'
 
 def get_table_data(path:str, extra_keys:str|list=None):
     """
-    Get table data from a json file.
+    Loads table data and optionally extracts extra keys from the JSON file.
+
+    Args:
+        path (str): Path to the JSON file.
+        extra_keys (str | list, optional): Single key or list of keys to extract additional data.
+
+    Returns:
+        tuple: (map, headings[, extra_data]) depending on whether extra_keys is provided.
     """
     data = load_json(path)
     map = data.get("map")
@@ -41,12 +54,15 @@ def get_table_data(path:str, extra_keys:str|list=None):
 
 def get_column_headings(table_type:str, table_map:dict, columns:dict):
     """
-    Returns the list of column headings for a given table type.
+    Builds the list of column headings for a given table type.
 
-    :param str table_type: The type of table to retrieve headings for.
-    :param dict table_map: A mapping of table types to lists of column keys.
-    :param dict columns: A mapping of column keys to their translated heading text.
-    :return list: A list of translated column headings, or an empty list if the table type is not found.
+    Args:
+        table_type (str): Table type to look up.
+        table_map (dict): Mapping of table types to their column keys.
+        columns (dict): Translated heading strings by key.
+
+    Returns:
+        list[str]: Formatted wiki heading strings.
     """
     column_def = table_map.get(table_type) or table_map.get("default")
 
@@ -65,8 +81,17 @@ def get_column_headings(table_type:str, table_map:dict, columns:dict):
 
 def generate_column_headings(column_def: dict, headings: dict) -> list:
     """
-    Generates wiki-style headings with rowspan/colspan markup from a nested dict.
-    Supports attributes like 'style', 'class', etc., applied directly to each field.
+    Generates multi-row wiki headings from a nested column definition.
+
+    Supports attributes like 'style' and 'class' on child headings,
+    as well as colspan/rowspan for structured table layouts.
+
+    Args:
+        column_def (dict): Column layout with optional attributes and nesting.
+        headings (dict): Mapping of keys to translated headings.
+
+    Returns:
+        list[str]: Formatted wiki markup for table headers.
     """
     top_row = []
     sub_row = []
@@ -118,21 +143,29 @@ def generate_table(
         table_before: str = None,
         table_after: str = None,
         do_bot_flag: bool = True,
+        bot_flag_type: str = "table",
         do_horizontal_scroll: bool = True
         ) -> list:
     """
-    Generates a wiki-formatted table from data and headings.
+    Generates a full wiki-formatted table for the given data and headings.
 
-    :param str table_type: The category of the table, used in comments and naming.
-    :param dict data: A list of dictionaries representing table rows.
-    :param list column_headings: A list of formatted column header strings.
-    :param str table_header: The initial wiki table header. Defaults to DEF_TABLE_HEADER.
-    :param str table_footer: The closing wiki table footer. Defaults to DEF_TABLE_FOOTER.
-    :param str table_before: A string to be added before the table. Defaults to empty string.
-    :param str table_after: A string to be added after the table. Defaults to empty string.
-    :param bool do_bot_flag: Determines whether to add the bot flag comment. Defaults to True.
-    :param bool do_horizontal_scroll: Determines whether to add the horizontal scrolling wrapper. Defaults to True.
-    :return list: A list of strings forming the complete table content.
+    Args:
+        table_type (str): Used in comments and IDs.
+        data (dict): List of dicts representing table rows.
+        column_headings (list): Header rows for the table.
+        table_header (str): Starting wiki markup for the table.
+        table_footer (str): Closing wiki markup.
+        caption_top (str): Optional caption shown above the table.
+        caption_bottom (str): Optional caption shown below the table.
+        caption (str): Optional centered caption (overrides top/bottom).
+        table_before (str): Content before the table.
+        table_after (str): Content after the table.
+        do_bot_flag (bool): Whether to include bot flag markers.
+        bot_flag_type (str): Type used in bot flag comment.
+        do_horizontal_scroll (bool): Wraps table in a scrollable container.
+
+    Returns:
+        list[str]: The full table as a list of wiki lines.
     """
     
     content = []
@@ -143,8 +176,8 @@ def generate_table(
     table_before = "" if table_before is None else table_before
     table_after = "" if table_after is None else table_after
 
-    bot_flag_start = BOT_FLAG.format(type="table", id=table_type.replace(" ", "_")) if do_bot_flag else ''
-    bot_flag_end = BOT_FLAG_END.format(type="table", id=table_type.replace(" ", "_")) if do_bot_flag else ''
+    bot_flag_start = BOT_FLAG.format(type=bot_flag_type, id=table_type.replace(" ", "_")) if do_bot_flag else ''
+    bot_flag_end = BOT_FLAG_END.format(type=bot_flag_type, id=table_type.replace(" ", "_")) if do_bot_flag else ''
 
     content.append(bot_flag_start + table_wrap_before + table_before + table_header)
 
@@ -177,8 +210,13 @@ def generate_table(
 
 def process_notes(data_list):
     """
-    Extracts notes from the first element of the list if present.
-    Returns a tuple: (notes, data)
+    Extracts notes from the first entry in a data list, if present.
+
+    Args:
+        data_list (list): List of data dictionaries.
+
+    Returns:
+        tuple: (caption str, remaining data list)
     """
     if data_list and isinstance(data_list[0], dict) and "notes" in data_list[0]:
         notes = data_list[0]["notes"]
@@ -205,21 +243,30 @@ def create_tables(
         combine_tables: bool = True,
         root_path: str = os.path.join(ITEM_DIR, "lists"),
         do_bot_flag: bool = True,
+        bot_flag_type: str = "table",
         suppress: bool = False
         ):
     """
     Creates and writes individual and/or combined item tables for each table type.
 
-    :param str item_type: The main category name for grouping the output.
-    :param dict all_data: A dictionary mapping table types to lists of item data.
-    :param dict columns: A mapping of column keys to translated heading strings.
-    :param dict table_map: A mapping of table types to their expected column keys. Defaults to empty dictionary.
-    :param str|None table_header: Custom table header to use. Defaults to DEF_TABLE_HEADER.
-    :param bool combine_tables: If True, combines all tables into one file. Defaults to True.
-    :param str root_path: The root path where the files will be written. {language_code} will be formatted to current language code.
-    :param bool do_bot_flag: Determines whether to add the bot flag comment. Defaults to True.
-    :param bool suppress: Suppresses terminal prints when creating files. Note: will still print final folder location.
-    :return: None
+    Args:
+        item_type (str): The main category name for grouping the output.
+        all_data (dict[str, list]): A dictionary mapping table types to lists of item data.
+        columns (dict[str, str]): A mapping of column keys to translated heading strings.
+        table_map (dict[str, list[str]]): A mapping of table types to their expected column keys. Defaults to empty dictionary.
+        table_header (str): Custom table header to use. Defaults to DEF_TABLE_HEADER.
+        table_footer (str): Custom table footer to use. Defaults to DEF_TABLE_FOOTER.
+        caption (str | None): A shared table caption (centered, overrides caption_top and caption_bottom).
+        caption_top (str | None): Caption to appear above the table.
+        caption_bottom (str | None): Caption to appear below the table if no top or center caption is set.
+        combine_tables (bool): If True, combines all tables into one file. Defaults to True.
+        root_path (str): Root path where files will be written. `{language_code}` will be formatted to the current language code.
+        do_bot_flag (bool): Whether to add the bot flag comment to the output. Defaults to True.
+        bot_flag_type (str): The identifier used in bot flag comments. Defaults to "table".
+        suppress (bool): If True, suppresses terminal output except for final success message.
+
+    Returns:
+        None
     """
 
     all_tables = []
@@ -244,7 +291,7 @@ def create_tables(
 
         column_headings = get_column_headings(table_type, table_map, columns)
 
-        content.extend(generate_table(table_type, data, column_headings, table_header, table_footer, caption_bottom=local_caption_bottom, caption_top=local_caption_top, caption=local_caption, do_bot_flag=do_bot_flag))
+        content.extend(generate_table(table_type, data, column_headings, table_header, table_footer, caption_bottom=local_caption_bottom, caption_top=local_caption_top, caption=local_caption, do_bot_flag=do_bot_flag, bot_flag_type=bot_flag_type))
         rel_path = os.path.join(item_type, table_type + ".txt")
         output_dir = write_file(content, rel_path=rel_path, root_path=root_path, suppress=suppress)
 
