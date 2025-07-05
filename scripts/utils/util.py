@@ -73,28 +73,6 @@ def link(page:str, name:str=None, anchor:str=None) -> str:
     else:
         return f"[[{full_page}|{name}]]"
 
-# @Deprecated
-def format_link(name:str, page:str=None) -> str:
-    """
-    Returns a wiki link in the format [[Page|Name]], including a language suffix for non-English languages.
-
-    :param name: The display text of the link.
-    :param page: The target page (optional). Defaults to `name`.
-    :return: The formatted wiki link.
-    """
-    from scripts.core.language import Language
-
-    echo.deprecated("'format_link()' is deprecated, use link() instead.")
-    language_code = Language.get()
-    
-    if language_code != "en":
-        return f"[[{page or name}/{language_code}|{name}]]"
-    
-    if page is None or page == name:
-        return f"[[{name}]]"
-    else:
-        return f"[[{page}|{name}]]"
-
 
 def convert_percentage(value: str | int | float, start_zero=True, percentage=False, default=None, decimals: int = 0) -> str:
     """Converts a numeric value to a percentage string.

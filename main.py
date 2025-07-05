@@ -73,9 +73,7 @@ menu_structure = {
         'description': 'Data analysis and generate reports.',
         'sub_options': {
             '1': {'module': 'tools.update_icons', 'name': 'Update icons', 'description': "Updates 'texture_names.json' (used for various scripts) adding new icons into a folder. Ensure .pack icons are added manually to 'resources/icons/'."},
-            '2': {'module': 'tools.vehicle_render_data', 'name': 'Vehicle render data', 'description': 'Generate a JSON file with vehicle mesh and texture data, which can be used in blender.'},
-            '3': {'module': 'tools.item_dict', 'name': 'Item dictionary', 'description': 'Generate a list of items with their item ID and compare with another version.'},
-            '4': {'module': 'tools.compare_item_lists', 'name': 'Compare item lists', 'description': "Generates a list of unique items comparing 'PZwiki:Item_list' versions."}
+            '2': {'module': 'tools.vehicle_render_data', 'name': 'Vehicle render data', 'description': 'Generate a JSON file with vehicle mesh and texture data, which can be used in blender.'}
         },
     },
     '8': {
