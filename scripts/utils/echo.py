@@ -122,7 +122,7 @@ def debug(message: str):
     debug_mode = config.get_debug_mode()
 
     if debug_mode:
-        _message(message, "[Debug]", "95")
+        _message(message, "[Debug]", color.debug)
 
 def deprecated(message: str):
     """
