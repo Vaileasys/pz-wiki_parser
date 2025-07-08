@@ -656,7 +656,7 @@ def parse_key_value_line(line: str, data: dict, block_id: str = "Unknown", scrip
 
         # Conflict between single values
         elif existing != processed:
-            echo.warning(f"[{block_id}] Duplicate key '{key}'. Replacing '{existing}' with '{processed}'")
+            echo.debug(f"[{block_id}] Duplicate key '{key}'. Replacing '{color.style(existing, color.RED)}' with '{color.style(processed, color.GREEN)}'")
             data[key] = processed
 
     else:
