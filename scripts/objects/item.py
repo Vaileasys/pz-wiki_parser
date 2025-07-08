@@ -2184,8 +2184,8 @@ class Item:
     
     @property 
     def foraging(self):
-        from scripts.objects.foraging import Foraging
-        instance = Foraging(self.id_type)
+        from scripts.objects.forage import ForagingItem
+        instance = ForagingItem(self.id_type)
         return instance if instance.valid else None
 
 
