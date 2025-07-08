@@ -382,8 +382,7 @@ def load_file(rel_path, root_path=None):
         return file_str.splitlines()
     return []
 
-def clear_dir(directory: str = OUTPUT_LANG_DIR, suppress: bool = False
-) -> Path:
+def clear_dir(directory: str = OUTPUT_LANG_DIR, suppress: bool = False) -> Path:
     """
     Delete the contents of a directory at `root_path/rel_path`.
     Only deletes contents under `PROJECT_ROOT`.
@@ -399,6 +398,11 @@ def clear_dir(directory: str = OUTPUT_LANG_DIR, suppress: bool = False
     root_rel = Path(directory.format(language_code=Language.get()))
     root_abs = root_rel.resolve()
 
+    if not root_abs.exists():
+        if not suppress:
+            echo.info(f"Directory does not exist: '{root_rel}'")
+        return root_abs
+    
     # Ensure it's in the project root
     try:
         root_abs.relative_to(PROJECT_ROOT)

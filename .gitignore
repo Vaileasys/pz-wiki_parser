@@ -9,7 +9,6 @@ data/
 resources/*
 !resources/
 !resources/icons.csv
-!resources/item_id_dictionary.csv
 !resources/page_dictionary.json
 !resources/color_reference.json
 !resources/texture_names.json
@@ -26,6 +25,14 @@ resources/Translate/*/*
 !resources/Translate/EN/Wiki_EN.json
 !resources/Translate/TR/
 !resources/Translate/TR/Wiki_TR.json
+
+## Lua
+!resources/lua/
+!resources/lua/stubs/
+!resources/lua/stubs/**
+
+resources/lua/*
+!resources/lua/stubs/
 
 # Misc
 config.ini

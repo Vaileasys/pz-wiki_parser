@@ -9,6 +9,7 @@ DATA_DIR = os.path.join("data")
 DOCS_DIR = os.path.join("docs")
 
 LUA_PATH = os.path.join(RESOURCE_DIR, "lua")
+LUA_STUB_PATH = os.path.join(LUA_PATH, "stubs")
 
 # Resource directories
 TABLES_DIR = os.path.join(RESOURCE_DIR, "tables")
@@ -23,6 +24,7 @@ FLUID_DIR = os.path.join(OUTPUT_LANG_DIR, "fluid")
 TAGS_DIR = os.path.join(OUTPUT_LANG_DIR, "tags")
 FIXING_DIR = os.path.join(OUTPUT_LANG_DIR, "fixing")
 RECIPES_DIR = os.path.join(OUTPUT_LANG_DIR, "recipes")
+FORAGING_DIR = os.path.join(OUTPUT_LANG_DIR, "foraging")
 
 # TQDM progress bar format - 'bar_format' variable
 PBAR_FORMAT = "{l_bar}{bar:30}{r_bar}"

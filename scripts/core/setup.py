@@ -153,11 +153,7 @@ def copy_lua_files(media_dir: str) -> None:
         'SpecialItemData_Misc.lua': None,
         'SpecialItemData_Photos.lua': None,
         'PrintMediaDefinitions.lua': None,
-        'camping_fuel.lua': None,
         'MainCreationMethods.lua': None,
-        'ISHotbarAttachDefinition.lua': None,
-        'AttachedLocations.lua': None,
-        'recorded_media.lua': None,
         'ISMoveableDefinitions.lua': None,
         # stashes
         'BrandenburgStashDesc.lua': 'stashes',
@@ -170,17 +166,6 @@ def copy_lua_files(media_dir: str) -> None:
         'RosewoodStashDesc.lua': 'stashes',
         'WorldStashDesc.lua': 'stashes',
         'WpStashDesc.lua': 'stashes',
-        # animal
-        'ChickenDefinitions.lua': 'animal',
-        'CowDefinitions.lua': 'animal',
-        'DeerDefinitions.lua': 'animal',
-        'MouseDefinitions.lua': 'animal',
-        'PigDefinitions.lua': 'animal',
-        'RabbitDefinitions.lua': 'animal',
-        'RaccoonDefinitions.lua': 'animal',
-        'RatDefinitions.lua': 'animal',
-        'SheepDefinitions.lua': 'animal',
-        'TurkeyDefinitions.lua': 'animal',
     }
 
     destination_dir = Path(LUA_PATH)
