@@ -22,6 +22,10 @@ from scripts.objects.components import FluidContainer, Durability
 from scripts.objects.body_location import BloodLocationList, BloodLocation, BodyLocation
 from scripts.objects.clothing_item import ClothingItem
 from scripts.objects.skill import Skill, SkillBook
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from scripts.objects.vehicle_part import VehiclePartItem
 
 class Item:
     """
@@ -2187,11 +2191,35 @@ class Item:
         from scripts.objects.forage import ForagingItem
         instance = ForagingItem(self.id_type)
         return instance if instance.valid else None
+    
+    @property
+    def vehicle_part(self) -> "VehiclePartItem | None":
+        """
+        Return a VehiclePartItem view of this item if it is used
+        in any vehicle part; otherwise None.
+        """
+        from scripts.objects.vehicle_part import VehiclePartItem
+
+        if not hasattr(self, "_vehicle_part"):
+            # Remove the vehicle-type from the item id
+            base_id = (
+                self.item_id.removesuffix(f"{self.vehicle_type}")
+                if self.get("VehicleType", 0)
+                else self.item_id
+            )
+            self.part_item_id = base_id # For vehicle part checking
+
+            self._vehicle_part = (
+                VehiclePartItem.from_item(self)
+                if VehiclePartItem.has_part(base_id)
+                else None
+            )
+
+        return self._vehicle_part
 
 
 if __name__ == "__main__":
-    item = Item("Base.Glasses_Eyepatch_Right")
-    print(item.body_location.location_id)
-    print(item.foraging_penalty)
-
-    print(Item._forage_clothing_penalties)
+    from scripts.objects.vehicle_part import VehiclePartItem
+    item = Item("Base.CarBattery1")
+    print(item.vehicle_part.uninstall.skills)
+   

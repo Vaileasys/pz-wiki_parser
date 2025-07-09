@@ -8,6 +8,7 @@ from scripts.utils import echo
 from scripts.utils.lua_helper import load_lua_file, parse_lua_tables
 from scripts.core.cache import save_cache
 from scripts.utils.util import link
+from scripts.objects.vehicle_part import VehicleParts
 
 class Vehicle:
     _vehicles = None # Shared cache for all vehicles
@@ -887,6 +888,13 @@ class Vehicle:
         if Vehicle._mechanics_overlay is None:
             Vehicle._load_mechanics_overlay()
         return Vehicle._mechanics_overlay.get("CarList").get(self.vehicle_id, {}).get("imgPrefix")
+    
+
+    ## ---- Properties ---- ##
+    @property
+    def parts(self) -> VehicleParts:
+        """Return a list of part names."""
+        return VehicleParts(self.data.get("part", {}), self)
 
 
 if __name__ == "__main__":

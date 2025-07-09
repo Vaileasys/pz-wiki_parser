@@ -48,7 +48,7 @@ SCRIPT_CONFIGS = {
     },
     "template": {
         "list_keys": ["template"],
-        "list_keys_semicolon": ["requireInstalled", "leftCol", "rightCol", "itemType"],
+        "list_keys_semicolon": ["requireInstalled", "requireUninstalled", "leftCol", "rightCol", "itemType"],
         "list_keys_space": ["offset", "rotate", "extents", "extentsOffset", "centerOfMassOffset", "shadowOffset", "physicsChassisShape", "xywh", "angle"],
         "dict_keys_colon": ["skills"],
     },

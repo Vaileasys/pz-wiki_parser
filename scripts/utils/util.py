@@ -1,5 +1,4 @@
 import re
-from scripts.utils import echo
 
 
 def capitalize(value):
@@ -159,6 +158,28 @@ def flip_data(data: dict) -> dict:
             flipped[value] = []
         flipped[value].append(key)
     return flipped
+
+
+def deep_merge(base: dict, override: dict) -> dict:
+    """
+    Recursively merge two dictionaries, preserving existing keys.
+
+    Args:
+        base (dict): The base dictionary.
+        override (dict): The dictionary with overriding values.
+
+    Returns:
+        dict: A new dictionary with combined contents.
+    """
+    result = dict(base)
+
+    for key, value in override.items():
+        if key in result and isinstance(result[key], dict) and isinstance(value, dict):
+            result[key] = deep_merge(result[key], value)
+        elif key not in result:
+            result[key] = value
+
+    return result
 
 
 def deep_getattr(obj: object, attr_path: str, default=None):

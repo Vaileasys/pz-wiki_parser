@@ -11,11 +11,13 @@ Main functions:
 """
 
 import os
+import re
 from tqdm import tqdm
 from scripts.core import logger
 from scripts.core.version import Version
 from scripts.utils import echo, color, util
 from scripts.objects.item import Item
+from scripts.objects.skill import Skill
 from scripts.objects.craft_recipe import CraftRecipe
 from scripts.objects.attachment import AttachmentType, HotbarSlot
 from scripts.core import page_manager
@@ -41,7 +43,7 @@ def generate_item_data(item: Item):
     """
     param = {}
     #-------------- GENERAL --------------#
-    param["name"] = item.name
+    param["name"] = re.sub(r'\([^()]*\)', lambda m: f'<br><span style="font-size:88%">{m.group(0)}</span>', item.name)
     param["model"] = item.models
     param["icon"] = item.icons
     param["icon_name"] = [item.name for _ in item.icons]
@@ -55,11 +57,11 @@ def generate_item_data(item: Item):
     param["weight_reduction"] = item.weight_reduction
     param["max_units"] = item.use_delta if item.type == "Drainable" else None
     param["fluid_capacity"] = util.convert_unit(item.fluid_container.capacity, unit="L") if item.fluid_container else None
-    if item.type == "Weapon" or item.two_hand_weapon:
-        if not item.two_hand_weapon:
-            param["equipped"] = "One-handed"
-        else:
-            param["equipped"] = "Two-handed"
+    param["equipped"] = (
+        "Two-handed" if item.type == "Weapon" and item.two_hand_weapon
+        else "One-handed" if item.type == "Weapon"
+        else param.get("equipped")
+    )
     param["body_location"] = item.body_location.wiki_link if item.body_location else item.can_be_equipped.wiki_link if item.can_be_equipped else None
     param["attachment_type"] = AttachmentType(item.attachment_type).wiki_link if item.attachment_type else None
     param["attachments_provided"] = "<br>".join([HotbarSlot(a).wiki_link for a in item.attachments_provided]) if item.attachments_provided else None
@@ -106,8 +108,8 @@ def generate_item_data(item: Item):
     param["two_way"] = item.two_way
     param["mic_range"] = item.mic_range
     param["transmit_range"] = item.transmit_range
-    param["min_channel"] = item.min_channel if item.type == "Radio" else None
-    param["max_channel"] = item.max_channel if item.type == "Radio" else None
+    param["min_channel"] = util.convert_unit(item.min_channel, "Hz", "k", "M") if item.type == "Radio" else None
+    param["max_channel"] = util.convert_unit(item.max_channel, "Hz", "k", "M") if item.type == "Radio" else None
     param["max_capacity"] = item.get("MaxCapacity")
     param["brake_force"] = item.brake_force
     param["engine_loudness"] = item.engine_loudness
@@ -116,10 +118,16 @@ def generate_item_data(item: Item):
     param["suspension_damping"] = item.suspension_damping
     param["suspension_compression"] = item.suspension_compression
     param["wheel_friction"] = item.wheel_friction
-    param["chance_damaged"] = item.chance_to_spawn_damaged
-    #param["mechanics_tool"] =  #TODO
-    #param["recommended_level"] =  #TODO
-    #param["required_recipe"] =  #TODO
+    param["chance_damaged"] = item.chance_to_spawn_damaged     
+    param["mechanics_tool"] = "<br>".join(item.vehicle_part.install.formatted_items) if item.vehicle_part else None
+    if item.vehicle_part:
+        skills = []
+        for skill_id, level in item.vehicle_part.install.skills.items():
+            skills.append(f"{Skill(skill_id).wiki_link} {level}")
+        param["recommended_level"] = "<br>".join(skills)
+    param["required_recipe"] = (item.vehicle_part.install.recipes 
+                                  if item.vehicle_part 
+                                  else None)
 
     #-------------- PERFORMANCE --------------#
     #param["damage_type"] = None
@@ -392,40 +400,61 @@ def prepare_pages(item_id_list: list) -> dict:
 
 def select_item() -> list:
     """
-    Prompts the user to input an item ID and returns it if valid.
+    Prompts the user to input one or more item IDs (semicolon-separated) and returns the valid ones.
 
     Returns:
-        list: A list containing the selected item ID.
+        list[str]: A list of valid item IDs.
     """
     while True:
-        query_id = input("Enter an item ID:\n> ")
-        if Item.exists(query_id):
-            item = Item(query_id)
-            echo.success(f"Found item_id: '{item.item_id}' ({item.name})")
-            return [item.item_id]
-        print(f"Couldn't find item ID '{query_id}'. Try again.")
+        query = input("Enter one or more item IDs (separated by semicolons):\n> ")
+        item_ids = [item_id.strip() for item_id in query.split(';') if item_id.strip()]
+        valid_items = []
+        invalid_items = []
+
+        for item_id in item_ids:
+            if Item.exists(item_id):
+                item = Item(item_id)
+                echo.success(f"Found item_id: '{item.item_id}' ({item.name})")
+                valid_items.append(item.item_id)
+            else:
+                invalid_items.append(item_id)
+
+        if valid_items:
+            if invalid_items:
+                print(f"Some IDs weren't found and were skipped: {', '.join(invalid_items)}")
+            return valid_items
+
+        print("Couldn't find any of the IDs. Try again.")
 
 
-def select_page() -> dict:
+def select_page() -> dict[str, dict[str, list[str]]]:
     """
-    Prompts the user to input a page name and returns the page and its item IDs if valid.
+    Prompts the user to input one or more page names (semicolon-separated) and returns a
+    dictionary of valid pages and their associated item IDs.
 
     Returns:
-        dict: A dictionary with the page name and its item IDs.
+        dict: A dictionary mapping page names to their valid item IDs.
     """
     while True:
-        query = input("Enter a page name:\n> ")
+        query = input("Enter one or more page names (separated by semicolons):\n> ")
+        page_names = [name.strip() for name in query.split(';') if name.strip()]
+        valid_pages = {}
 
-        if query in pages_dict:
-            # Page exists
-            item_ids = pages_dict[query].get("item_id")
-            if item_ids:
-                for item_id in item_ids:
-                    if Item.exists(item_id):
-                        # Page has valid item ids
-                        return {query: {"item_id": item_ids}}
-            print(f"Couldn't find any valid items for the page '{query}'. Try again.")
-        print(f"Couldn't find page '{query}'. Try again.")
+        for name in page_names:
+            if name in pages_dict:
+                item_ids = pages_dict[name].get("item_id")
+                valid_ids = [item_id for item_id in item_ids if Item.exists(item_id)] if item_ids else []
+                if valid_ids:
+                    valid_pages[name] = {"item_id": valid_ids}
+                else:
+                    print(f"No valid item IDs found for page '{name}'. Skipping.")
+            else:
+                print(f"Page '{name}' not found. Skipping.")
+
+        if valid_pages:
+            return valid_pages
+
+        print("None of the entered pages had valid item IDs. Try again.")
 
 
 def choose_process(run_directly: bool):
@@ -442,8 +471,8 @@ def choose_process(run_directly: bool):
     options = [
         "1: All: Pages - Generate infoboxes based on page, merging data from each Item ID. " + WIP,
         "2: All: Item IDs - Generate infoboxes for every item (no infobox merging). ",
-        "3: Single: Page - Choose a specific page to generate an infobox for. " + WIP,
-        "4: Single: Item ID - Choose a specific Item ID to generate an infobox for. "
+        "3: Select: Page - Choose one or more pages to generate an infobox for. " + WIP,
+        "4: Select: Item ID - Choose one or more Item IDs to generate an infobox for. "
     ]
     options.append("Q: Quit" if run_directly else "B: Back")
 
@@ -497,3 +526,24 @@ def main(run_directly: bool = False):
 
 if __name__ == "__main__":
     main(run_directly=True)
+
+    # Testing - exports all infoboxes to a single txt file
+#    from scripts.core.file_loading import load_file
+#    from pathlib import Path
+#    from scripts.core.language import Language
+
+#    query_path = Path(ROOT_PATH.format(language_code=Language.get()))
+#    content = ['<div style="display: flex; flex-wrap: wrap;">']
+#    for file in query_path.iterdir():
+#        if file.is_file():
+#            lines = load_file(file.name, ROOT_PATH)
+#            content.append("<div>")
+#            content.extend(lines)
+#            content.append("</div>")
+#    content.append("</div>")
+
+#    write_file(content)
+
+
+    # Test query string:
+    # Base.NormalCarSeat1;Base.SmallGasTank1;Base.OldTire1;Base.RadioBlack;Base.HamRadio2;Base.CarBattery1;Base.OldBrake1;Base.OldCarMuffler1;Base.RearCarDoor1;Base.RearWindow1;Base.RearWindshield1;Base.BigTrunk1;Base.LightbarYellow;Base.LightBulb;Base.ModernSuspension3;Base.HoodOrnament_Spiffo;Base.EngineParts
