@@ -1459,7 +1459,6 @@
                 "Protein"
             ],
             "item_id": [
-                "Base.BaconRashers",
                 "Base.BaconRashers"
             ]
         },
@@ -3969,7 +3968,6 @@
                 "Hats"
             ],
             "item_id": [
-                "Base.Hat_BonnieHat_CamoGreen",
                 "Base.Hat_BonnieHat_CamoGreen"
             ]
         },
@@ -4392,7 +4390,6 @@
                 "Hats"
             ],
             "item_id": [
-                "Base.Animal_BowtieGold",
                 "Base.Animal_BowtieGold"
             ]
         },
@@ -7496,7 +7493,6 @@
                 "Cooking"
             ],
             "item_id": [
-                "Base.CeramicTeacup",
                 "Base.CeramicTeacup"
             ]
         },
@@ -11475,7 +11471,6 @@
                 "Farming tools"
             ],
             "item_id": [
-                "Base.GardeningSprayEmpty",
                 "Base.GardeningSprayEmpty"
             ]
         },
@@ -13636,7 +13631,6 @@
                 "Farming tools"
             ],
             "item_id": [
-                "Base.GardeningSprayEmpty",
                 "Base.GardeningSprayEmpty"
             ]
         },
@@ -13719,6 +13713,78 @@
             ],
             "item_id": [
                 "Base.GasmaskFilterCrafted"
+            ]
+        },
+        "Gas Tank - Big (Heavy-Duty Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.BigGasTank2"
+            ]
+        },
+        "Gas Tank - Big (Sports Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.BigGasTank3"
+            ]
+        },
+        "Gas Tank - Big (Standard Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.BigGasTank1"
+            ]
+        },
+        "Gas Tank - Regular (Heavy-Duty Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.NormalGasTank2"
+            ]
+        },
+        "Gas Tank - Regular (Sports Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.NormalGasTank3"
+            ]
+        },
+        "Gas Tank - Regular (Standard Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.NormalGasTank1"
+            ]
+        },
+        "Gas Tank - Small (Heavy-Duty Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.SmallGasTank2"
+            ]
+        },
+        "Gas Tank - Small (Sports Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.SmallGasTank3"
+            ]
+        },
+        "Gas Tank - Small (Standard Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.SmallGasTank1"
             ]
         },
         "Gators doc": {
@@ -14615,7 +14681,6 @@
                 "Base.RifleCase3",
                 "Base.RifleCase4",
                 "Base.ShotgunCase1",
-                "Base.ShotgunCase2",
                 "Base.ShotgunCase2"
             ]
         },
@@ -17151,7 +17216,6 @@
                 "Jackets"
             ],
             "item_id": [
-                "Base.Suit_JacketTINT",
                 "Base.Suit_JacketTINT"
             ]
         },
@@ -21869,7 +21933,6 @@
         "Metal Spearhead": {
             "categories": [],
             "item_id": [
-                "Base.SpearHead",
                 "Base.SpearHead"
             ]
         },
@@ -22676,6 +22739,78 @@
             ],
             "item_id": [
                 "Base.BakingTray_Muffin_Recipe"
+            ]
+        },
+        "Muffler - Old (Heavy-Duty Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.OldCarMuffler2"
+            ]
+        },
+        "Muffler - Old (Sports Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.OldCarMuffler3"
+            ]
+        },
+        "Muffler - Old (Standard Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.OldCarMuffler1"
+            ]
+        },
+        "Muffler - Performance (Heavy-Duty Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.ModernCarMuffler2"
+            ]
+        },
+        "Muffler - Performance (Sports Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.ModernCarMuffler3"
+            ]
+        },
+        "Muffler - Performance (Standard Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.ModernCarMuffler1"
+            ]
+        },
+        "Muffler - Regular (Heavy-Duty Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.NormalCarMuffler2"
+            ]
+        },
+        "Muffler - Regular (Sports Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.NormalCarMuffler3"
+            ]
+        },
+        "Muffler - Regular (Standard Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.NormalCarMuffler1"
             ]
         },
         "Mug": {
@@ -31266,7 +31401,6 @@
                 "Long blunt weapons"
             ],
             "item_id": [
-                "Base.SpadeForged",
                 "Base.SpadeForged"
             ]
         },
@@ -31547,7 +31681,6 @@
                 "Short blade weapons"
             ],
             "item_id": [
-                "Base.SpearHead",
                 "Base.SpearHead"
             ]
         },
@@ -32753,6 +32886,54 @@
             ],
             "item_id": [
                 "Base.KnifeSushi"
+            ]
+        },
+        "Suspension - Performance (Heavy-Duty Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.ModernSuspension2"
+            ]
+        },
+        "Suspension - Performance (Sports Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.ModernSuspension3"
+            ]
+        },
+        "Suspension - Performance (Standard Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.ModernSuspension1"
+            ]
+        },
+        "Suspension - Regular (Heavy-Duty Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.NormalSuspension2"
+            ]
+        },
+        "Suspension - Regular (Sports Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.NormalSuspension3"
+            ]
+        },
+        "Suspension - Regular (Standard Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.NormalSuspension1"
             ]
         },
         "Suspicious Package": {
@@ -34216,6 +34397,78 @@
                 "Base.Caviar"
             ]
         },
+        "Tire - Old (Heavy-Duty Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.OldTire2"
+            ]
+        },
+        "Tire - Old (Sports Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.OldTire3"
+            ]
+        },
+        "Tire - Old (Standard Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.OldTire1"
+            ]
+        },
+        "Tire - Performance (Heavy-Duty Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.ModernTire2"
+            ]
+        },
+        "Tire - Performance (Sports Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.ModernTire2"
+            ]
+        },
+        "Tire - Performance (Standard Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.ModernTire1"
+            ]
+        },
+        "Tire - Regular (Heavy-Duty Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.NormalTire2"
+            ]
+        },
+        "Tire - Regular (Sports Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.NormalTire2"
+            ]
+        },
+        "Tire - Regular (Standard Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.NormalTire1"
+            ]
+        },
         "Tire Body Armor": {
             "categories": [
                 "Protective gear"
@@ -34843,6 +35096,118 @@
             ],
             "item_id": [
                 "Base.Bag_TrumpetCase"
+            ]
+        },
+        "Trunk - Big (Heavy-Duty Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.BigTrunk2"
+            ]
+        },
+        "Trunk - Big (Sports Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.BigTrunk3"
+            ]
+        },
+        "Trunk - Big (Standard Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.BigTrunk1"
+            ]
+        },
+        "Trunk - Regular (Heavy-Duty Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.NormalTrunk2"
+            ]
+        },
+        "Trunk - Regular (Sports Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.NormalTrunk3"
+            ]
+        },
+        "Trunk - Regular (Standard Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.NormalTrunk1"
+            ]
+        },
+        "Trunk - Small (Heavy-Duty Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.SmallTrunk2"
+            ]
+        },
+        "Trunk - Small (Heavy-Duty Vehicle) (6-seater)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.VanSeatsTrunk2"
+            ]
+        },
+        "Trunk - Small (Sports Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.SmallTrunk3"
+            ]
+        },
+        "Trunk - Small (Standard Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.SmallTrunk1"
+            ]
+        },
+        "Trunk Lid": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.TrunkDoor1"
+            ]
+        },
+        "Trunk Lid (Heavy-Duty Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.TrunkDoor2"
+            ]
+        },
+        "Trunk Lid (Sports Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.TrunkDoor3"
+            ]
+        },
+        "Trunk Lid (Standard Vehicle)": {
+            "categories": [
+                "Vehicle parts"
+            ],
+            "item_id": [
+                "Base.TrunkDoor1"
             ]
         },
         "Trunks": {
