@@ -238,7 +238,7 @@ def generate_article_templates():
 
 ## -------------------- TAG DATA -------------------- ##
 
-def get_tag_data():
+def get_tag_data() -> dict[str, list[dict[str, str]]]:
     """Retrieve tag data, generating it if not already.
 
     Returns:
@@ -284,6 +284,45 @@ def generate_tags_dict():
             
         save_cache(tags_dict, CACHE_JSON)
     return tags_dict
+
+
+## -------------------- TAG CLASS -------------------- ##
+
+#TODO: finish, combining other functions to it.
+class Tag:
+    _data = None
+
+    @classmethod
+    def load(cls) -> dict[str, list[dict[str, str]]]:
+        if not cls._data:
+            cls._data = get_tag_data()
+        return cls._data
+    
+    @classmethod
+    def exists(cls, tag: str) -> bool:
+        return tag in cls.load()
+    
+    def __init__(self, tag: str):
+        self.id = tag
+        self.data: list[dict[str, str]] = Tag.load().get(tag, {})
+    
+    @property
+    def items(self) -> list[Item]:
+        if not hasattr(self, "_items"):
+            self._items = [Item(item.get("item_id")) for item in self.data]
+        return self._items
+    
+    @property
+    def page(self) -> str:
+        return f"{self.id} (tag)"
+    
+    @property
+    def wiki_link(self) -> str:
+        return util.link(self.page, self.id)
+    
+    @property
+    def template(self) -> str:
+        return f"{{{{Tag {self.id}}}}}"
 
 
 ## -------------------- MAIN/MENU -------------------- ##
