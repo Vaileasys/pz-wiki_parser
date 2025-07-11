@@ -1059,26 +1059,53 @@ def main():
     6. Creates an index file
     """
     file_paths = {
-        "proceduraldistributions": DATA_DIR + "/distributions/proceduraldistributions.json",
-        "foraging": DATA_DIR + "/distributions/foraging.json",
-        "vehicle_distributions": DATA_DIR + "/distributions/vehicle_distributions.json",
-        "clothing": DATA_DIR + "/distributions/clothing.json",
-        "attached_weapons": DATA_DIR + "/distributions/attached_weapons.json",
-        "stories": DATA_DIR + "/distributions/stories.json",
-        "distributions": DATA_DIR + "/distributions/distributions.json"
+        "proceduraldistributions": os.path.join(DATA_DIR, "distributions", "proceduraldistributions.json"),
+        "foraging": os.path.join(DATA_DIR, "distributions", "foraging.json"),
+        "vehicle_distributions": os.path.join(DATA_DIR, "distributions", "vehicle_distributions.json"),
+        "clothing": os.path.join(DATA_DIR, "distributions", "clothing.json"),
+        "attached_weapons": os.path.join(DATA_DIR, "distributions", "attached_weapons.json"),
+        "stories": os.path.join(DATA_DIR, "distributions", "stories.json"),
+        "distributions": os.path.join(DATA_DIR, "distributions", "distributions.json")
     }
 
-    # Step 4: Load and categorize items
-    # Pre-categorize items before building tables
-    category_items = {}
-    index = {}
+    # Parse distribution data
+    print("Parsing distribution data...")
+    distribution_parser.main()
+    
+    # Process item list and build JSON data
+    print("Processing item list...")
+    item_list = process_json(file_paths)
 
-    # Step 3: Combine items that share the same wiki page
+    print("Building item JSON data...")
+    procedural_data = load_cache(file_paths["proceduraldistributions"])
+    distribution_data = load_cache(file_paths["distributions"])
+    vehicle_data = load_cache(file_paths["vehicle_distributions"])
+    foraging_data = load_cache(file_paths["foraging"])
+    attached_weapons_data = load_cache(file_paths["attached_weapons"])
+    clothing_data = load_cache(file_paths["clothing"])
+    stories_data = load_cache(file_paths["stories"])
+
+    build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, 
+                   attached_weapons_data, clothing_data, stories_data)
+
+    # Load all_items and combine items by page
+    print("Loading and combining items by page...")
     all_items = load_cache(os.path.join(DATA_DIR, "distributions", "all_items.json"))
     combined_items = combine_items_by_page(all_items)
     save_cache(combined_items, "combined_items.json", cache_path)
 
+    # Initialize language before categorization
+    print("Initializing language...")
+    from scripts.core.language import Language
+    Language.set("en")  # Set to english to avoid user input
+    from scripts.core.language import Translate
+    Translate.load()
+
+    # Categorize items
     print("Categorizing items...")
+    category_items = {}
+    index = {}
+    
     for item_id, item_data in tqdm.tqdm(combined_items.items(), desc="Categorizing items"):
         # Check if item has any distribution data
         has_data = (
@@ -1134,32 +1161,11 @@ def main():
             index["misc"].append(item_id)
             print(f"Error processing {item_id}: {e}")
 
-    # Step 1: Parse distribution data
-    print("Parsing distribution data...")
-    distribution_parser.main()
-    
-    # Step 2: Process item list and build JSON data
-    print("Processing item list...")
-    item_list = process_json(file_paths)
-
-    print("Building item JSON data...")
-    procedural_data = load_cache(file_paths["proceduraldistributions"])
-    distribution_data = load_cache(file_paths["distributions"])
-    vehicle_data = load_cache(file_paths["vehicle_distributions"])
-    foraging_data = load_cache(file_paths["foraging"])
-    attached_weapons_data = load_cache(file_paths["attached_weapons"])
-    clothing_data = load_cache(file_paths["clothing"])
-    stories_data = load_cache(file_paths["stories"])
-
-    build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, 
-                   attached_weapons_data, clothing_data, stories_data)
-
-    
-    # Step 5: Generate Lua data files by category
+    # Generate Lua data files by category
     print("Generating Lua data files...")
     build_tables(category_items, index)
 
-    # Step 6: Calculate missing items
+    # Calculate missing items
     print("Calculating missing items...")
     itemname_path = os.path.join("resources", "Translate", "EN", "ItemName_EN.txt")
     itemlist_path = os.path.join("output", "distributions", "Item_list.txt")

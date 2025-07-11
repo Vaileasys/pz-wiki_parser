@@ -2064,6 +2064,7 @@ class Item:
 
                     parent_dir = full_path.parent
                     filename_lower = full_path.name.lower()
+                    file_match = None
 
                     if parent_dir.exists():
                         for file in parent_dir.iterdir():
