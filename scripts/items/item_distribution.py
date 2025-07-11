@@ -218,50 +218,162 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
     def get_vehicle_info(item_name):
         vehicles_info = []
         unique_entries = set()
-
+        
+        # Define known container types to look for at the end of strings
+        container_types_suffix = [
+            "GloveBox", "TruckBed", 
+            "SeatFront", "SeatRear", "Seat",
+            "EmptySeat", "DriverSeat"
+        ]
+        
+        # Define container types that appear at the beginning
+        container_types_prefix = [
+            "Trunk"
+        ]
+        
+        # Define special vehicle prefixes that should be kept together as a unit
+        # but will still need proper word splitting for display
+        special_vehicles = [
+            "PrisonGuard", "PoliceState", "PoliceSheriff", "PoliceDetective", "PoliceSWAT",
+            "ArmyLight", "ArmyHeavy", "BadTeens", "PackRat",
+            "StepVan_Plonkies", "StepVan_AirportCatering", "VanSeats_AirportShuttle",
+            "StepVan_MarineBites", "StepVan_Zippee", "StepVan_Soda", "StepVan_Beer",
+            "StepVan_Chips", "StepVan_Windows", "Van_Beer", "StepVan_Genuine_Beer",
+            "StepVan_Cereal", "Van_Locksmith", "StepVan_Florist", "Van_CraftSupplies",
+            "MobileLibrary", "PickUpTruckLights_Airport", "MetalWelder", "MassGenFac",
+            "ConstructionWorker", "KnoxDistillery"
+        ]
+        
+        # Special case abbreviations that should be kept as-is
+        abbreviations = ["SWAT", "NNN"]
+        
+        # Helper function to split camel case strings
+        def split_camel_case(name):
+            # Special cases
+            if name == "PoliceSWAT":
+                return "Police SWAT"
+            elif name == "Mass Gen Fac":
+                return "Mass-Genfac"
+                
+            # Handle abbreviations first
+            for abbr in abbreviations:
+                if abbr in name:
+                    # Replace abbreviation with a placeholder that won't be split
+                    placeholder = f"___{abbr}___"
+                    name = name.replace(abbr, placeholder)
+            
+            # Split camel case
+            result = re.sub(r'([a-z])([A-Z])', r'\1 \2', name)
+            
+            # Restore abbreviations
+            for abbr in abbreviations:
+                placeholder = f"___{abbr}___"
+                result = result.replace(placeholder, abbr)
+                
+            return result
+        
+        # Helper function to format names with proper spacing
+        def format_name(name, is_special_with_underscore=False):
+            # Special handling for underscore-containing special vehicles
+            if is_special_with_underscore and "_" in name:
+                parts = name.split("_")
+                # Put words after underscore first, then the part before underscore
+                name = parts[1] + " " + parts[0]
+            
+            # Replace underscores with spaces
+            name = name.replace("_", " ")
+            
+            # Split camel case
+            name = split_camel_case(name)
+            
+            # Ensure abbreviations have spaces after them
+            for abbr in abbreviations:
+                # Replace abbreviation followed by a letter with abbreviation + space + letter
+                name = re.sub(f'({abbr})([a-zA-Z])', r'\1 \2', name)
+            
+            # Trim any excess whitespace and return
+            return name.strip()
+        
         for label, details in vehicle_data.items():
-            type_parts = re.findall(r'[A-Z][^A-Z]*', label)
-
-            # Various parsing conditions
-            if type_parts and type_parts[0] == "Mc" and len(type_parts) > 1:
-                vehicle_type = type_parts[0] + type_parts[1]
-                container = ' '.join(type_parts[2:])
-            elif len(type_parts) > 2 and ' '.join(type_parts[:2]) == "Metal Welder":
-                vehicle_type = ' '.join(type_parts[:2])
-                container = ' '.join(type_parts[2:])
-            elif len(type_parts) > 3 and ' '.join(type_parts[:3]) == "Mass Gen Fac":
-                vehicle_type = ' '.join(type_parts[:3])
-                container = ' '.join(type_parts[3:])
-            elif len(type_parts) > 2 and ' '.join(type_parts[:2]) == "Construction Worker":
-                vehicle_type = ' '.join(type_parts[:2])
-                container = ' '.join(type_parts[2:])
-            elif type_parts and (type_parts[0] == "Glove" or ' '.join(type_parts[:2]) == "Glove box"):
-                vehicle_type = "All"
-                container = ' '.join(type_parts)
-            elif type_parts and type_parts[0] == "Trunk":
-                vehicle_type = ' '.join(type_parts[1:])
-                container = type_parts[0]
+            # Skip the "version" entry which isn't a vehicle
+            if label == "version":
+                continue
+                
+            # Default values
+            vehicle_type = label
+            container = "Unknown"
+            is_special_with_underscore = False
+            
+            # First check for container types at the end
+            suffix_match = False
+            for suffix in container_types_suffix:
+                if label.endswith(suffix):
+                    container = suffix
+                    # Vehicle type is everything before the container suffix
+                    vehicle_type = label[:-len(suffix)]
+                    suffix_match = True
+                    break
+            
+            # If found a suffix, now check if the vehicle type is a special vehicle
+            if suffix_match:
+                special_vehicle_match = False
+                for special in special_vehicles:
+                    if vehicle_type == special:
+                        is_special_with_underscore = "_" in special
+                        special_vehicle_match = True
+                        break
+            # If no suffix found, check for container types at the beginning
             else:
-                vehicle_type = type_parts[0] if type_parts else "Unknown"
-                container = ' '.join(type_parts[1:]) if len(type_parts) > 1 else "Unknown"
-
-            # Adjust container and type per rules
-            if container.lower() == "glovebox":
+                prefix_match = False
+                for prefix in container_types_prefix:
+                    if label.startswith(prefix):
+                        container = prefix
+                        # Vehicle type is everything after the container prefix
+                        vehicle_type = label[len(prefix):]
+                        prefix_match = True
+                        break
+                
+                # If no container type found, check if this is a special vehicle
+                if not prefix_match:
+                    special_vehicle_match = False
+                    for special in special_vehicles:
+                        if label == special:
+                            vehicle_type = special
+                            is_special_with_underscore = "_" in special
+                            container = "Base"  # Marking as base entry
+                            special_vehicle_match = True
+                            break
+                    
+                    # If not a special vehicle and no container, this might be a base vehicle type
+                    if not special_vehicle_match:
+                        # Check if this is a base entry (like "Police", "Nurse", etc.)
+                        # by looking for corresponding entries with containers
+                        is_base_entry = any(entry.startswith(label) and entry != label for entry in vehicle_data.keys())
+                        if is_base_entry:
+                            vehicle_type = label
+                            container = "Base"  # Marking as base entry
+            
+            # Format the vehicle type and container names for readability
+            vehicle_type = format_name(vehicle_type, is_special_with_underscore)
+            
+            # Format the container name to be more readable
+            if container == "GloveBox":
                 container = "Glove Box"
-
-            if vehicle_type == "Pick" and container.startswith("Up Truck Lights_ Airport"):
-                vehicle_type = "Pick Up Truck Lights Airport"
-            elif vehicle_type == "Pick":
-                vehicle_type = "Pick Up Truck"
-
-            if container.startswith("Up Truck Lights_ Airport"):
-                container = container.replace("Up Truck Lights_ Airport", "", 1).strip()
-            elif container.startswith("Up Truck"):
-                container = container.replace("Up Truck", "", 1).strip()
-
+            elif container == "TruckBed":
+                container = "Truck Bed"
+            elif container == "SeatFront":
+                container = "Front Seat"
+            elif container == "SeatRear":
+                container = "Rear Seat"
+            elif container == "Trunk":
+                container = "Trunk"
+            else:
+                container = format_name(container)
+            
+            # Process items in this vehicle container
             rolls = details.get("rolls", 0)
             items = details.get("items", {})
-
+            
             if item_name in items:
                 chance = items[item_name]
                 entry_tuple = (vehicle_type, container, chance, rolls)
@@ -273,7 +385,8 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
                         "Rolls": rolls
                     })
                     unique_entries.add(entry_tuple)
-
+            
+            # Process junk items
             junk_items = details.get("junk", {}).get("items", {})
             if item_name in junk_items:
                 chance = junk_items[item_name]
@@ -286,7 +399,7 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
                         "Rolls": rolls
                     })
                     unique_entries.add(entry_tuple)
-
+        
         return vehicles_info
 
     def get_foraging_info(item_name):
@@ -466,8 +579,8 @@ def build_tables(category_items, index):
                     container_data.append((effective_chance, room, container_name))
                 
                 if container_data:
-                    # Sort by effective chance (descending)
-                    container_data.sort(key=lambda x: x[0], reverse=True)
+                    # Sort by effective chance (descending) first, then alphabetically by room and container
+                    container_data.sort(key=lambda x: (-x[0], x[1], x[2]))
                     container_lines = [f'{{"{room}", "{container_name}", {effective_chance}}}' 
                                      for effective_chance, room, container_name in container_data]
                     sections.append(f"    container = {{{','.join(container_lines)}}}")
@@ -486,8 +599,8 @@ def build_tables(category_items, index):
                     vehicle_data.append((effective_chance, type_, container))
                 
                 if vehicle_data:
-                    # Sort by effective chance (descending)
-                    vehicle_data.sort(key=lambda x: x[0], reverse=True)
+                    # Sort by effective chance (descending) first, then alphabetically by type and container
+                    vehicle_data.sort(key=lambda x: (-x[0], x[1], x[2]))
                     vehicle_lines = [f'{{"{type_}", "{container}", {effective_chance}}}' 
                                    for effective_chance, type_, container in vehicle_data]
                     sections.append(f"    vehicle = {{{','.join(vehicle_lines)}}}")
@@ -495,7 +608,8 @@ def build_tables(category_items, index):
             # Stories data
             if item_data.get("Stories"):
                 story_lines = []
-                stories = sorted(item_data["Stories"], key=lambda x: x["id"])  # Sort by story ID A to Z
+                # Sort by story ID A to Z
+                stories = sorted(item_data["Stories"], key=lambda x: (x["id"], x["link"]))
                 for story in stories:
                     story_lines.append(f'{{"{story["id"]}", "{story["link"]}"}}')
                 
@@ -512,8 +626,8 @@ def build_tables(category_items, index):
                     weapon_data.append((days, outfit, chance))  # Restructure for sorting
                 
                 if weapon_data:
-                    # Sort by days survived (ascending)
-                    weapon_data.sort(key=lambda x: x[0])
+                    # Sort by days survived (ascending), then by outfit name and chance
+                    weapon_data.sort(key=lambda x: (x[0], x[1], -x[2]))
                     weapon_lines = [f'{{"{outfit}", {days}, {chance}}}' 
                                   for days, outfit, chance in weapon_data]
                     sections.append(f"    embedded = {{{','.join(weapon_lines)}}}")
@@ -528,8 +642,8 @@ def build_tables(category_items, index):
                     clothing_data.append((outfit, probability, guid))  # Restructure for sorting
                 
                 if clothing_data:
-                    # Sort by outfit name A to Z
-                    clothing_data.sort(key=lambda x: x[0])
+                    # Sort by probability (descending) first, then by outfit name A to Z
+                    clothing_data.sort(key=lambda x: (-x[1], x[0], x[2]))
                     clothing_lines = [f'{{"{outfit}", {probability}, "{guid}"}}' 
                                     for outfit, probability, guid in clothing_data]
                     sections.append(f"    outfit = {{{','.join(clothing_lines)}}}")
@@ -580,6 +694,9 @@ def build_tables(category_items, index):
                 sections.append(f"    foraging = {{{', '.join(foraging_props)}}}")
             
             if sections:
+                # Sort sections alphabetically by their type (container, vehicle, etc.)
+                # This ensures consistent ordering of sections
+                sections.sort(key=lambda x: x.split()[0])
                 f.write(f"  [\"{item_id}\"] = {{\n")
                 f.write(',\n'.join(sections))
                 f.write("\n  },\n")
@@ -587,12 +704,17 @@ def build_tables(category_items, index):
     # Write each category to separate Lua files
     new_index = {}
     
-    for category, items in tqdm.tqdm(category_items.items(), desc="Writing Lua files"):
+    # Sort categories alphabetically
+    sorted_categories = sorted(category_items.keys())
+    
+    for category in tqdm.tqdm(sorted_categories, desc="Writing Lua files"):
+        items = category_items[category]
         current_items = {}
         current_file_number = 1
         estimated_lines = 0
         
-        for item_id, item_data in items.items():
+        # Sort items alphabetically by item_id
+        for item_id, item_data in sorted(items.items()):
             item_lines = 5
             
             # If adding this item would exceed line limit, write current file and start new one
