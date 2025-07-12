@@ -29,6 +29,26 @@ def get_vehicle_part_class(part_name: str) -> type["VehiclePart"]:
         return VehicleGasTank
     if part_name.startswith("Window") or part_name.startswith("Windshield"):
         return VehicleWindow
+    if part_name.startswith("Headlight"):
+        return VehicleHeadlight
+    if part_name.startswith("Suspension"):
+        return VehicleSuspension
+    if part_name.startswith("Brake"):
+        return VehicleBrake
+    if part_name.startswith("Muffler"):
+        return VehicleMuffler
+    if part_name.startswith("Tire"):
+        return VehicleTire
+    if part_name.startswith("Door"):
+        return VehicleDoor
+    if part_name.startswith("Battery"):
+        return VehicleBattery
+    if part_name.startswith("Engine"):
+        return VehicleEngine
+    if part_name.startswith("Lightbar"):
+        return VehicleLightbar
+    if part_name.startswith("HoodOrnament"):
+        return VehicleHoodOrnament
     if part_name == "TruckBed":
         return VehicleTruckBed
     #TODO: finish defining classes
@@ -48,12 +68,12 @@ class VehiclePartItem(Item):
     @classmethod
     def build_item_part_map(cls):
         from scripts.objects.vehicle import Vehicle
-        all_vehicles = Vehicle.all()
         cls._item_to_parts.clear()
-        for vehicle_id, vehicle in all_vehicles.items():
+
+        for vehicle in Vehicle.all().values():
             for part in vehicle.parts.all():
-                for id_ in part.items:
-                    cls._item_to_parts.setdefault(id_, []).append(part)
+                for item_id in part.items:
+                    cls._item_to_parts.setdefault(item_id, []).append(part)
 
     @classmethod
     def has_part(cls, item_id: str) -> bool:
@@ -101,9 +121,49 @@ class VehiclePart:
     Used as the parent class for more specific part types.
     """
     def __init__(self, part_type: str, vehicle_id: str, data: dict):
-        self.part_type = part_type
+        self.id = part_type
         self.vehicle_id = vehicle_id
         self.data = data
+
+    @property
+    def name(self) -> str: #TODO
+        from scripts.core.language import Translate
+        if not hasattr(self, "_name"):
+            self._name = Translate.get("IGUI_VehiclePart" + self.id, default=self.id)
+        return self._name
+    
+    @property
+    def common_name(self) -> str:
+        if not hasattr(self, "_common_name"):
+            self._common_name = self.name.replace("Left", "").replace("Right", "").strip()
+        return self._common_name
+
+    @property
+    def page(self) -> str:
+        if not hasattr(self, "_page"):
+            self._page = self.common_name
+        return self._page
+
+    @property
+    def wiki_link(self) -> str:
+        if not hasattr(self, "_wiki_link"):
+            self._wiki_link = util.link(self.page, self.name)
+        return self._wiki_link
+
+    @property
+    def common_link(self) -> str:
+        if not hasattr(self, "_common_link"):
+            self._common_link = util.link(self.page, self.common_name)
+        return self._common_link
+    
+    @property
+    def position(self) -> str:
+        if "Rear" in self.id:
+            return "Rear"
+        if "Front" in self.id:
+            return "Front"
+        if "Middle" in self.id:
+            return "Middle"
 
     @property
     def container(self) -> dict:
@@ -151,18 +211,27 @@ class VehiclePart:
 
 class VehicleSeat(VehiclePart):
     @property
+    def page(self) -> str:
+        return "Car Seat"
+
+    @property
     def seat_position(self) -> str | None:
         return self.container.get("seat")
 
 class VehicleDoor(VehiclePart):
-    #TODO: fill with part specific methods/properties
-    pass
+    @property
+    def page(self) -> str:
+        return "Car Seat"
 
 class VehicleTrunkDoor(VehiclePart):
     #TODO: fill with part specific methods/properties
     pass
 
 class VehicleTire(VehiclePart):
+    @property
+    def page(self) -> str:
+        return "Tire"
+    
     @property
     def wheel(self) -> str| None:
         return self.data.get("wheel")
@@ -176,24 +245,29 @@ class VehicleTire(VehiclePart):
         return int(self.data.get("contentType"))
     
 class VehicleBrake(VehiclePart):
-    #TODO: fill with part specific methods/properties
-    pass
+    @property
+    def page(self) -> str:
+        return "Brake"
 
 class VehicleSuspension(VehiclePart):
-    #TODO: fill with part specific methods/properties
-    pass
+    @property
+    def page(self) -> str:
+        return "Suspension"
 
 class VehicleEngine(VehiclePart):
-    #TODO: fill with part specific methods/properties
-    pass
+    @property
+    def page(self) -> str:
+        return "Engine"
 
 class VehicleBattery(VehiclePart):
-    #TODO: fill with part specific methods/properties
-    pass
+    @property
+    def page(self) -> str:
+        return "Car Battery"
 
 class VehicleMuffler(VehiclePart):
-    #TODO: fill with part specific methods/properties
-    pass
+    @property
+    def page(self) -> str:
+        return "Muffler"
 
 class VehicleGasTank(VehiclePart):
     @property
@@ -205,14 +279,32 @@ class VehicleGasTank(VehiclePart):
         return int(self.data.get("contentType"))
 
 class VehicleRadio(VehiclePart):
-    #TODO: fill with part specific methods/properties
-    pass
+    @property
+    def page(self) -> str:
+        return "Radio"
 
 class VehicleGloveBox(VehiclePart):
-    #TODO: fill with part specific methods/properties
-    pass
+    @property
+    def page(self) -> str:
+        return "Glove Box"
 
 class VehicleWindow(VehiclePart):
+    @property
+    def is_windshield(self) -> str:
+        return self.id.startswith("Windshield")
+
+    @property
+    def page(self) -> str:
+        if not hasattr(self, "_page"):
+            if not self.is_windshield:
+                if self.position == "Middle":
+                    self._page = "Rear Window"
+                else:
+                    self._page = self.common_name
+            else:
+                self._page = self.common_name
+        return self._page
+
     @property
     def parent(self) -> str | None:
         return self.window.get("parent")
@@ -226,30 +318,41 @@ class VehicleWindow(VehiclePart):
         return self.window.get("openable", False)
 
 class VehicleHeadlight(VehiclePart):
-    #TODO: fill with part specific methods/properties
-    pass
-
-class VehicleTaillight(VehiclePart):
-    #TODO: fill with part specific methods/properties
-    pass
+    @property
+    def page(self) -> str:
+        if self.position == "Rear":
+            return "Taillight"
+        return "Headlight"
 
 class VehicleLightbar(VehiclePart):
-    #TODO: fill with part specific methods/properties
-    pass
+    @property
+    def page(self) -> str:
+        return "Lightbar"
 
 class VehicleHeater(VehiclePart):
-    #TODO: fill with part specific methods/properties
-    pass
+    @property
+    def page(self) -> str:
+        return "Heater"
 
 class VehiclePassengerCompartment(VehiclePart):
     #TODO: fill with part specific methods/properties
     pass
 
 class VehicleEngineDoor(VehiclePart):
-    #TODO: fill with part specific methods/properties
-    pass
+    @property
+    def page(self) -> str:
+        return "Hood"
+
+class VehicleHoodOrnament(VehiclePart):
+    @property
+    def page(self) -> str:
+        return "Hood Ornament"
 
 class VehicleTruckBed(VehiclePart):
+    @property
+    def page(self) -> str:
+        return "Trunk"
+    
     @property
     def condition_affects_capacity(self) -> bool:
         return self.container.get("conditionAffectsCapacity", False)
@@ -289,9 +392,9 @@ class PartInstallUninstall:
             objs = self.get_item_objects()
             for obj in objs:
                 if isinstance(obj, Tag):
-                    items.append(f"{obj.template}{obj.wiki_link}")
+                    items.append(f"{obj.template} {obj.wiki_link}")
                 elif isinstance(obj, Item):
-                    items.append(f"{obj.icon}{obj.wiki_link}")
+                    items.append(f"{obj.icon} {obj.wiki_link}")
             
             self._formatted_items = items
         
@@ -359,6 +462,41 @@ class VehicleParts:
     Holds and processes all parts for a single vehicle, including wildcard merging
     and access to common components like seats, door, etc.
     """
+    _part_injection = {
+        "Engine": {
+            "itemType": ["Base.EngineParts"],
+            "install": {
+                "items": {
+                    "1": {
+                        "tags": "Wrench",
+                        "count": 1,
+                        "keep": True,
+                        "equip": "primary"
+                    }
+                },
+                "skills": {"Mechanics": 5},
+            },
+            "uninstall": {
+                "items": {
+                    "1": {
+                        "tags": "Wrench",
+                        "count": 1,
+                        "keep": True,
+                        "equip": "primary"
+                    }
+                },
+                "skills": {"Mechanics": 5},
+            }
+        },
+        "lightbar": {
+            "itemType": [
+                "Base.LightbarBlue", 
+                "Base.LightbarRed", 
+                "Base.LightbarRedBlue", 
+                "Base.LightbarYellow"
+            ]
+        }
+    }
 
     def __init__(self, parts_raw: dict, vehicle: "Vehicle"):
         self.vehicle = vehicle
@@ -383,6 +521,11 @@ class VehicleParts:
             if name.startswith(prefix):
                 data = util.deep_merge(base, data)
                 break
+
+        # Inject hardcoded parts
+        override = VehicleParts._part_injection.get(name)
+        if override:
+            data = util.deep_merge(data, override)
 
         # Use subclass based on name
         cls = get_vehicle_part_class(name)
@@ -458,10 +601,6 @@ class VehicleParts:
         return [p for p in self.parts_starting_with("Headlight") if isinstance(p, VehicleHeadlight)]
 
     @property
-    def taillights(self) -> list[VehicleTaillight]:
-        return [p for p in self.parts_starting_with("HeadlightRear") if isinstance(p, VehicleTaillight)]
-
-    @property
     def windows(self) -> list[VehicleWindow]:
         return [p for p in self.parts_starting_with("Window") if isinstance(p, VehicleWindow)]
 
@@ -480,3 +619,7 @@ class VehicleParts:
     @property
     def suspensions(self) -> list[VehicleSuspension]:
         return [p for p in self.parts_starting_with("Suspension") if isinstance(p, VehicleSuspension)]
+
+    @property
+    def hood_ornaments(self) -> list[VehicleHoodOrnament]:
+        return [p for p in self.parts_starting_with("HoodOrnament") if isinstance(p, VehicleHoodOrnament)]

@@ -51,7 +51,8 @@ def generate_item_data(item: Item):
     param["weight"] = item.weight
     param["capacity"] = item.capacity
     param["container_name"] = item.fluid_container.container_name if item.fluid_container else None
-    param["vehicle_type"] = item.vehicle_type
+    param["vehicle_type"] = item.vehicle_type_name if item.get("VehicleType") else None
+    param["vehicle_part_type"] = "<br>".join(set(part.common_link for part in item.vehicle_part_types)) if item.vehicle_part_types else None
 
     #-------------- PROPERTIES --------------#
     param["weight_reduction"] = item.weight_reduction
@@ -118,7 +119,7 @@ def generate_item_data(item: Item):
     param["suspension_damping"] = item.suspension_damping
     param["suspension_compression"] = item.suspension_compression
     param["wheel_friction"] = item.wheel_friction
-    param["chance_damaged"] = item.chance_to_spawn_damaged     
+    param["chance_damaged"] = item.chance_to_spawn_damaged
     param["mechanics_tool"] = "<br>".join(item.vehicle_part.install.formatted_items) if item.vehicle_part else None
     if item.vehicle_part:
         skills = []
@@ -126,8 +127,8 @@ def generate_item_data(item: Item):
             skills.append(f"{Skill(skill_id).wiki_link} {level}")
         param["recommended_level"] = "<br>".join(skills)
     param["required_recipe"] = (item.vehicle_part.install.recipes 
-                                  if item.vehicle_part 
-                                  else None)
+                                if item.vehicle_part 
+                                else None)
 
     #-------------- PERFORMANCE --------------#
     #param["damage_type"] = None
@@ -375,7 +376,7 @@ def prepare_pages(item_id_list: list) -> dict:
             if not page_data:
                 pages_dict[page] = {"item_id": [item_id]}
                 logger.write(
-                    message=f"'{item_id}' missing from page dict, added to '{page}' [new].",
+                    message=f"'{item_id}' missing from page dict, added to '{color.style(page, color.GREEN)}' {color.style('[new]', color.YELLOW)}.",
                     print_bool=True,
                     category="warning",
                     file_name="missing_pages_log.txt"
@@ -386,7 +387,7 @@ def prepare_pages(item_id_list: list) -> dict:
                 if item_id not in id_list:
                     id_list.append(item_id)
                     logger.write(
-                        message=f"'{item_id}' missing from page dict, added to '{page}'.",
+                        message=f"'{item_id}' missing from page dict, added to '{color.style(page, color.GREEN)}'.",
                         print_bool=True,
                         category="warning",
                         file_name="missing_pages_log.txt"

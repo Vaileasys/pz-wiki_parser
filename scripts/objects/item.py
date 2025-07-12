@@ -25,7 +25,7 @@ from scripts.objects.skill import Skill, SkillBook
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from scripts.objects.vehicle_part import VehiclePartItem
+    from scripts.objects.vehicle_part import VehiclePartItem, VehiclePart
 
 class Item:
     """
@@ -2216,6 +2216,17 @@ class Item:
             )
 
         return self._vehicle_part
+    
+    @property
+    def vehicle_part_types(self) -> list["VehiclePart"]:        
+        if not hasattr(self, "_vehicle_part_types"):
+            if self.vehicle_part:
+                # Convert list to set and back to remove duplicates
+                self._vehicle_part_types = list(set(self.vehicle_part.vehicle_parts))
+            else:
+                self._vehicle_part_types = None
+        
+        return self._vehicle_part_types
 
 
 if __name__ == "__main__":
