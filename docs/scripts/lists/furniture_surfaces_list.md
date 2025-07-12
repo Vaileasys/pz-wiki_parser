@@ -1,4 +1,4 @@
-[Previous Folder](../items/item_article.md) | [Previous File](furniture_list.md) | [Next File](hotbar_slots.md) | [Next Folder](../objects/body_location.md) | [Back to Index](../../index.md)
+[Previous Folder](../items/lists/item_list.md) | [Previous File](furniture_list.md) | [Next File](hotbar_slots.md) | [Next Folder](../objects/attachment.md) | [Back to Index](../../index.md)
 
 # furniture_surfaces_list.py
 
@@ -10,4 +10,4 @@
 ### [`generate_surface_list(named_tiles_data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/furniture_surfaces_list.py#L62)
 
 
-[Previous Folder](../items/item_article.md) | [Previous File](furniture_list.md) | [Next File](hotbar_slots.md) | [Next Folder](../objects/body_location.md) | [Back to Index](../../index.md)
+[Previous Folder](../items/lists/item_list.md) | [Previous File](furniture_list.md) | [Next File](hotbar_slots.md) | [Next Folder](../objects/attachment.md) | [Back to Index](../../index.md)

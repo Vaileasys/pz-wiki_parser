@@ -1,4 +1,4 @@
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_article.md) | [Next File](tiles_codesnip.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_article.md) | [Next File](tiles_codesnip.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)
 
 # tiles_batch.py
 
@@ -55,4 +55,4 @@ This function:
 
 
 
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_article.md) | [Next File](tiles_codesnip.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_article.md) | [Next File](tiles_codesnip.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)

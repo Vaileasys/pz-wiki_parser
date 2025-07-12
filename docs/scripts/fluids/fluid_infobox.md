@@ -1,4 +1,4 @@
-[Previous Folder](../core/cache.md) | [Previous File](fluid_article.md) | [Next Folder](../items/item_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../core/cache.md) | [Previous File](fluid_article.md) | [Next Folder](../foraging/foraging_category_infobox.md) | [Back to Index](../../index.md)
 
 # fluid_infobox.py
 
@@ -20,4 +20,4 @@ Generate a fluid's infobox parameters
 
 
 
-[Previous Folder](../core/cache.md) | [Previous File](fluid_article.md) | [Next Folder](../items/item_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../core/cache.md) | [Previous File](fluid_article.md) | [Next Folder](../foraging/foraging_category_infobox.md) | [Back to Index](../../index.md)

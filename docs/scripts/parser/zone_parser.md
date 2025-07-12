@@ -1,4 +1,4 @@
-[Previous Folder](../objects/body_location.md) | [Previous File](tiles_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/attachment.md) | [Previous File](tiles_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
 
 # zone_parser.py
 
@@ -33,4 +33,4 @@ Load data from the Lua file and organize by type and name.
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/zone_parser.py#L95)
 
 
-[Previous Folder](../objects/body_location.md) | [Previous File](tiles_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/attachment.md) | [Previous File](tiles_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)

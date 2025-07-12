@@ -1,4 +1,4 @@
-[Previous Folder](../core/cache.md) | [Next File](fluid_infobox.md) | [Next Folder](../items/item_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../core/cache.md) | [Next File](fluid_infobox.md) | [Next Folder](../foraging/foraging_category_infobox.md) | [Back to Index](../../index.md)
 
 # fluid_article.py
 
@@ -29,4 +29,4 @@ Gets similar fluids based on a calculated score.
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_article.py#L267)
 
 
-[Previous Folder](../core/cache.md) | [Next File](fluid_infobox.md) | [Next Folder](../items/item_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../core/cache.md) | [Next File](fluid_infobox.md) | [Next Folder](../foraging/foraging_category_infobox.md) | [Back to Index](../../index.md)

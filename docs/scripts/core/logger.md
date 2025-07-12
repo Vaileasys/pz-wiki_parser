@@ -1,4 +1,4 @@
-[Previous Folder](../consumables.md) | [Previous File](language.md) | [Next File](page_manager.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../roomdefine.md) | [Previous File](language.md) | [Next File](page_manager.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
 
 # logger.py
 
@@ -15,4 +15,4 @@ Used to log important info to a log file
 
 
 
-[Previous Folder](../consumables.md) | [Previous File](language.md) | [Next File](page_manager.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../roomdefine.md) | [Previous File](language.md) | [Next File](page_manager.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)

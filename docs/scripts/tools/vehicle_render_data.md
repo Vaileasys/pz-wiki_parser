@@ -1,4 +1,4 @@
-[Previous Folder](../tiles/named_furniture_filter.md) | [Previous File](update_icons.md) | [Next Folder](../utils/echo.md) | [Back to Index](../../index.md)
+[Previous Folder](../tiles/named_furniture_filter.md) | [Previous File](update_icons.md) | [Next Folder](../utils/categories.md) | [Back to Index](../../index.md)
 
 # vehicle_render_data.py
 
@@ -8,4 +8,4 @@
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/vehicle_render_data.py#L163)
 
 
-[Previous Folder](../tiles/named_furniture_filter.md) | [Previous File](update_icons.md) | [Next Folder](../utils/echo.md) | [Back to Index](../../index.md)
+[Previous Folder](../tiles/named_furniture_filter.md) | [Previous File](update_icons.md) | [Next Folder](../utils/categories.md) | [Back to Index](../../index.md)

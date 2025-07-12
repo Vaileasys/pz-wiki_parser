@@ -1,4 +1,4 @@
-[Previous Folder](../parser/distribution_container_parser.md) | [Previous File](legacy_recipe_parser.md) | [Next File](teached_recipes.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)
+[Previous Folder](../parser/distribution_container_parser.md) | [Previous File](evolvedrecipe.md) | [Next File](teached_recipes.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)
 
 # researchrecipes.py
 
@@ -35,4 +35,4 @@ Each containing one file per researchable item.
 
 
 
-[Previous Folder](../parser/distribution_container_parser.md) | [Previous File](legacy_recipe_parser.md) | [Next File](teached_recipes.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)
+[Previous Folder](../parser/distribution_container_parser.md) | [Previous File](evolvedrecipe.md) | [Next File](teached_recipes.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)

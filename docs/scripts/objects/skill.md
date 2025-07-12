@@ -1,4 +1,4 @@
-[Previous Folder](../lists/body_locations_list.md) | [Previous File](item.md) | [Next File](vehicle.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../lists/attachment_list.md) | [Previous File](profession.md) | [Next File](trap.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
 
 # skill.py
 
@@ -105,4 +105,4 @@ Wiki link for the associated skill.
 
 
 
-[Previous Folder](../lists/body_locations_list.md) | [Previous File](item.md) | [Next File](vehicle.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../lists/attachment_list.md) | [Previous File](profession.md) | [Next File](trap.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)

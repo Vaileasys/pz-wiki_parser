@@ -1,4 +1,4 @@
-[Previous Folder](../utils/echo.md) | [Previous File](vehicle_list.md) | [Next File](vehicle_parts.md) | [Back to Index](../../index.md)
+[Previous Folder](../utils/categories.md) | [Previous File](vehicle_list.md) | [Next File](vehicle_parts.md) | [Back to Index](../../index.md)
 
 # vehicle_list2.py
 
@@ -14,4 +14,4 @@ Checks if the value should be a dash instead of None or the usual returned value
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/vehicles/vehicle_list2.py#L127)
 
 
-[Previous Folder](../utils/echo.md) | [Previous File](vehicle_list.md) | [Next File](vehicle_parts.md) | [Back to Index](../../index.md)
+[Previous Folder](../utils/categories.md) | [Previous File](vehicle_list.md) | [Next File](vehicle_parts.md) | [Back to Index](../../index.md)

@@ -1,4 +1,4 @@
-[Previous Folder](../lists/body_locations_list.md) | [Previous File](body_location.md) | [Next File](components.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../lists/attachment_list.md) | [Previous File](body_location.md) | [Next File](components.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
 
 # clothing_item.py
 
@@ -94,4 +94,4 @@ Returns a debug representation of the decal list.
 ##### [`dimensions`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/clothing_item.py#L235)
 
 
-[Previous Folder](../lists/body_locations_list.md) | [Previous File](body_location.md) | [Next File](components.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../lists/attachment_list.md) | [Previous File](body_location.md) | [Next File](components.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)

@@ -1,4 +1,4 @@
-[Previous Folder](../consumables.md) | [Previous File](cache.md) | [Next File](constants.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../roomdefine.md) | [Previous File](cache.md) | [Next File](constants.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
 
 # config_manager.py
 
@@ -157,4 +157,4 @@ Used to fully reset the config system.
 
 
 
-[Previous Folder](../consumables.md) | [Previous File](cache.md) | [Next File](constants.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../roomdefine.md) | [Previous File](cache.md) | [Next File](constants.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)

@@ -1,4 +1,4 @@
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_batch.md) | [Next File](tiles_infobox.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_batch.md) | [Next File](tiles_infobox.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)
 
 # tiles_codesnip.py
 
@@ -36,4 +36,4 @@ sprite_name -> codesnip wikitext.
 
 
 
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_batch.md) | [Next File](tiles_infobox.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_batch.md) | [Next File](tiles_infobox.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)

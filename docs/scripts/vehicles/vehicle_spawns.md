@@ -1,4 +1,4 @@
-[Previous Folder](../utils/echo.md) | [Previous File](vehicle_parts.md) | [Back to Index](../../index.md)
+[Previous Folder](../utils/categories.md) | [Previous File](vehicle_parts.md) | [Back to Index](../../index.md)
 
 # vehicle_spawns.py
 
@@ -28,4 +28,4 @@ Parses tables in ProfessionVehicles.lua
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/vehicles/vehicle_spawns.py#L162)
 
 
-[Previous Folder](../utils/echo.md) | [Previous File](vehicle_parts.md) | [Back to Index](../../index.md)
+[Previous Folder](../utils/categories.md) | [Previous File](vehicle_parts.md) | [Back to Index](../../index.md)

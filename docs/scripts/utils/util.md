@@ -1,4 +1,4 @@
-[Previous Folder](../tools/compare_item_lists.md) | [Previous File](table_helper.md) | [Next File](utility.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../tools/update_icons.md) | [Previous File](table_helper.md) | [Next File](utility.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
 
 # util.py
 
@@ -22,23 +22,16 @@ Formats a number with '+' if positive, trimming trailing zeros. Returns original
 :return: Formatted string with '+' prefix if positive, or original value as a string if invalid.
 :rtype: str
 
-### [`link(page: str, name: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L54)
+### [`link(page: str, name: str, anchor: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L54)
 
-Returns a wiki link in the format [[Page|Name]], including a language suffix for non-English languages.
+Returns a wiki link in the format [[Page#Anchor|Name]], including a language suffix for non-English languages.
 
 :param page: The target page
 :param name: The display text of the link (optional). Defaults to `page`.
+:param anchor: The section anchor within the page (optional).
 :return: The formatted wiki link.
 
-### [`format_link(name: str, page: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L72)
-
-Returns a wiki link in the format [[Page|Name]], including a language suffix for non-English languages.
-
-:param name: The display text of the link.
-:param page: The target page (optional). Defaults to `name`.
-:return: The formatted wiki link.
-
-### [`convert_percentage(value: str | int | float, start_zero, percentage)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L94)
+### [`convert_percentage(value: str | int | float, start_zero, percentage, default, decimals: int)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L76)
 
 Converts a numeric value to a percentage string.
 
@@ -51,17 +44,19 @@ Converts a numeric value to a percentage string.
       - _If False, assumes the value starts from 100% (e.g., 1.5 -> 150%). Defaults to True._
   - **percentage (bool, optional)**:
       - _If True, the value is already a percentage and will not be scaled. Defaults to False._
+  - **default (str)**:
+      - _The value to return for invalid input or when the percentage rounds to 0._
 
 <ins>**Returns:**</ins>
   - **str:**
       - The formatted percentage as a string with a '%' sign.
       - Returns '-' for invalid inputs.
 
-### [`convert_int(value: int | float)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L125)
+### [`convert_int(value: int | float)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L109)
 
 Converts a value to an integer if it has no decimal (isn't float-like).
 
-### [`to_bool(value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L141)
+### [`to_bool(value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L125)
 
 Convert a value to boolean by checking common 'true' strings.
 
@@ -72,7 +67,101 @@ Convert a value to boolean by checking common 'true' strings.
   - **bool:**
       - True if the value matches a 'true' string; False otherwise.
 
-### [`tick(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L154)
+### [`flip_data(data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L138)
+
+Flip a flat dictionary so that values become keys, and keys become values.
+
+If multiple keys share the same value, they are grouped in a list.
+
+<ins>**Args:**</ins>
+  - **data (dict)**:
+      - _A flat dictionary to flip. All values must be hashable._
+
+<ins>**Returns:**</ins>
+  - **dict:**
+      - A new dictionary with values as keys and lists of original keys as values.
+
+<ins>**Raises:**</ins>
+  - **TypeError:**
+      - If 'data' is not a dictionary or a value is unhashable.
+
+### [`deep_merge(base: dict, override: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L163)
+
+Recursively merge two dictionaries, preserving existing keys.
+
+
+<ins>**Args:**</ins>
+  - **base (dict)**:
+      - _The base dictionary._
+  - **override (dict)**:
+      - _The dictionary with overriding values._
+
+<ins>**Returns:**</ins>
+  - **dict:**
+      - A new dictionary with combined contents.
+
+### [`deep_getattr(obj: object, attr_path: str, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L185)
+
+Access nested attributes on an object using dot‑notation.
+
+
+<ins>**Args:**</ins>
+
+<ins>**Returns:**</ins>
+  - The value found at the end of the attribute path, or `default` if any intermediate attribute is missing or `None`.
+
+### [`calculate_drain_rate(use_delta: float, unit: str, tick_minutes: int, as_percentage: bool)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L206)
+
+Calculates how much of a drainable item is consumed over time.
+
+
+<ins>**Args:**</ins>
+  - **use_delta (float)**:
+      - _Radio UseDelta value from item script (e.g., 0.014 for 1.4% per hour)._
+  - **as_percentage (bool)**:
+      - _Return as a percentage string (default False)._
+  - **unit (str)**:
+      - _Time unit to calculate ('minute', 'hour', 'day')._
+  - **as_percentage (bool)**:
+      - _Return as a percentage string (default False)._
+
+<ins>**Returns:**</ins>
+  - str | float: Battery drain over the given time unit.
+
+### [`convert_unit(value: float, unit: str, start_prefix: str, force_prefix: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L233)
+
+Convert a value from a given SI prefix (default: base) to the most appropriate SI prefix
+
+between milli (m) and Mega (M), or force it to a specific one.
+
+<ins>**Args:**</ins>
+  - **value (float)**:
+      - _The numeric value to convert._
+  - **unit (str)**:
+      - _The unit to append after the converted value._
+  - **start_prefix (str, optional)**:
+      - _The starting SI prefix (default ""). One of: "m", "", "k", "M"._
+  - **force_prefix (str, optional)**:
+      - _If set, force output to this SI prefix. Skips automatic scaling._
+
+<ins>**Returns:**</ins>
+  - **str:**
+      - A human-readable string with the chosen prefix and unit.
+
+### [`split_camel_case(text: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L272)
+
+Add spaces between words in a camel case string.
+
+
+<ins>**Args:**</ins>
+  - **text (str)**:
+      - _A camelCase or PascalCase string._
+
+<ins>**Returns:**</ins>
+  - **str:**
+      - The string with spaces added between words.
+
+### [`tick(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L285)
 
 Return a wiki-formatted tick/check icon, optionally with text and link.
 
@@ -87,7 +176,7 @@ Return a wiki-formatted tick/check icon, optionally with text and link.
   - **str:**
       - Formatted wiki string for the tick icon.
 
-### [`cross(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L169)
+### [`cross(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L301)
 
 Return a wiki-formatted cross icon, optionally with text and link.
 
@@ -102,7 +191,27 @@ Return a wiki-formatted cross icon, optionally with text and link.
   - **str:**
       - Formatted wiki string for the cross icon.
 
-### [`enumerate_params(parameters)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L187)
+### [`rgb(red: int | float, green: int | float, blue: int | float)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L317)
+
+Return an rgb template string with the given colour values.
+
+Each colour component can be specified as either:
+- An int (0–255), representing the raw RGB value.
+- A float (0.0–1.0), representing a normalised fraction which will be scaled to 0–255.
+
+<ins>**Args:**</ins>
+  - **red (int | float)**:
+      - _Red component (default: 0)._
+  - **green (int | float)**:
+      - _Green component (default: 0)._
+  - **blue (int | float)**:
+      - _Blue component (default: 0)._
+
+<ins>**Returns:**</ins>
+  - **str:**
+      - A string formatted as '{{rgb|R, G, B}}' where R, G, and B are integers.
+
+### [`enumerate_params(parameters)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L347)
 
 Expand list values in a dict into numbered keys for infobox use.
 
@@ -116,7 +225,7 @@ Expand list values in a dict into numbered keys for infobox use.
   - **dict:**
       - New dictionary with expanded numbered keys.
 
-### [`check_zero(value: int | float, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L212)
+### [`check_zero(value: int | float, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L372)
 
 Return 'default' if the numeric value is zero, else return the value.
 
@@ -133,4 +242,4 @@ Return 'default' if the numeric value is zero, else return the value.
 
 
 
-[Previous Folder](../tools/compare_item_lists.md) | [Previous File](table_helper.md) | [Next File](utility.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../tools/update_icons.md) | [Previous File](table_helper.md) | [Next File](utility.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)

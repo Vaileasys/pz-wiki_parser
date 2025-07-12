@@ -1,4 +1,4 @@
-[Previous Folder](../fluids/fluid_article.md) | [Next File](item_body_part.md) | [Next Folder](../lists/body_locations_list.md) | [Back to Index](../../index.md)
+[Previous Folder](../foraging/foraging_category_infobox.md) | [Next File](item_body_part.md) | [Next Folder](lists/item_list.md) | [Back to Index](../../index.md)
 
 # item_article.py
 
@@ -41,4 +41,4 @@ article_name as the value.
 ### [`main(run_directly)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L671)
 
 
-[Previous Folder](../fluids/fluid_article.md) | [Next File](item_body_part.md) | [Next Folder](../lists/body_locations_list.md) | [Back to Index](../../index.md)
+[Previous Folder](../foraging/foraging_category_infobox.md) | [Next File](item_body_part.md) | [Next Folder](lists/item_list.md) | [Back to Index](../../index.md)

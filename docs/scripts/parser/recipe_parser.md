@@ -1,4 +1,4 @@
-[Previous Folder](../objects/body_location.md) | [Previous File](radio_parser.md) | [Next File](script_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/attachment.md) | [Previous File](radio_parser.md) | [Next File](regions_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
 
 # recipe_parser.py
 
@@ -37,4 +37,4 @@ when the information exists anywhere in the file‑set.
 
 
 
-[Previous Folder](../objects/body_location.md) | [Previous File](radio_parser.md) | [Next File](script_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/attachment.md) | [Previous File](radio_parser.md) | [Next File](regions_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)

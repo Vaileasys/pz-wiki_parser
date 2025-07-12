@@ -1,4 +1,4 @@
-[Previous Folder](../fluids/fluid_article.md) | [Previous File](item_body_part.md) | [Next File](item_container_contents.md) | [Next Folder](../lists/body_locations_list.md) | [Back to Index](../../index.md)
+[Previous Folder](../foraging/foraging_category_infobox.md) | [Previous File](item_body_part.md) | [Next File](item_consumables.md) | [Next Folder](lists/item_list.md) | [Back to Index](../../index.md)
 
 # item_codesnip.py
 
@@ -11,4 +11,4 @@
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_codesnip.py#L59)
 
 
-[Previous Folder](../fluids/fluid_article.md) | [Previous File](item_body_part.md) | [Next File](item_container_contents.md) | [Next Folder](../lists/body_locations_list.md) | [Back to Index](../../index.md)
+[Previous Folder](../foraging/foraging_category_infobox.md) | [Previous File](item_body_part.md) | [Next File](item_consumables.md) | [Next Folder](lists/item_list.md) | [Back to Index](../../index.md)

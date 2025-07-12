@@ -1,4 +1,4 @@
-[Previous Folder](../objects/body_location.md) | [Previous File](stash_parser.md) | [Next File](zone_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/attachment.md) | [Previous File](stash_parser.md) | [Next File](zone_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
 
 # tiles_parser.py
 
@@ -59,4 +59,4 @@ It has been converted to python for use in the wiki parser.
 ##### [`read_tile_definitions(path: str, file_num: int)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/tiles_parser.py#L421)
 
 
-[Previous Folder](../objects/body_location.md) | [Previous File](stash_parser.md) | [Next File](zone_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/attachment.md) | [Previous File](stash_parser.md) | [Next File](zone_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)

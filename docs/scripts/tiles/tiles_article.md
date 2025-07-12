@@ -1,4 +1,4 @@
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](named_furniture_filter.md) | [Next File](tiles_batch.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](named_furniture_filter.md) | [Next File](tiles_batch.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)
 
 # tiles_article.py
 
@@ -109,4 +109,4 @@ Generate and save wiki articles for all tile groups.
 
 
 
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](named_furniture_filter.md) | [Next File](tiles_batch.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](named_furniture_filter.md) | [Next File](tiles_batch.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)

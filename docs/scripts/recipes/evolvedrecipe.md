@@ -1,4 +1,4 @@
-[Previous Folder](../parser/distribution_container_parser.md) | [Previous File](craft_recipes.md) | [Next File](legacy_recipe_format.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)
+[Previous Folder](../parser/distribution_container_parser.md) | [Previous File](craft_recipes.md) | [Next File](researchrecipes.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)
 
 # evolvedrecipe.py
 
@@ -17,7 +17,7 @@ The script handles:
 
 ## Functions
 
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/evolvedrecipe.py#L22)
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/evolvedrecipe.py#L26)
 
 Main execution function for evolved recipes generation.
 
@@ -36,4 +36,4 @@ Special handling is included for:
 
 
 
-[Previous Folder](../parser/distribution_container_parser.md) | [Previous File](craft_recipes.md) | [Next File](legacy_recipe_format.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)
+[Previous Folder](../parser/distribution_container_parser.md) | [Previous File](craft_recipes.md) | [Next File](researchrecipes.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)

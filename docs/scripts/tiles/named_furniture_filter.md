@@ -1,4 +1,4 @@
-[Previous Folder](../recipes/craft_recipes.md) | [Next File](tiles_article.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Next File](tiles_article.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)
 
 # named_furniture_filter.py
 
@@ -50,4 +50,4 @@ This function:
 
 
 
-[Previous Folder](../recipes/craft_recipes.md) | [Next File](tiles_article.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Next File](tiles_article.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)

@@ -1,4 +1,4 @@
-[Previous Folder](../utils/echo.md) | [Previous File](vehicle_article.md) | [Next File](vehicle_list.md) | [Back to Index](../../index.md)
+[Previous Folder](../utils/categories.md) | [Previous File](vehicle_article.md) | [Next File](vehicle_list.md) | [Back to Index](../../index.md)
 
 # vehicle_infobox.py
 
@@ -14,4 +14,4 @@
 
 
 
-[Previous Folder](../utils/echo.md) | [Previous File](vehicle_article.md) | [Next File](vehicle_list.md) | [Back to Index](../../index.md)
+[Previous Folder](../utils/categories.md) | [Previous File](vehicle_article.md) | [Next File](vehicle_list.md) | [Back to Index](../../index.md)

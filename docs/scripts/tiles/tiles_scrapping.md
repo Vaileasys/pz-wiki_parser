@@ -1,4 +1,4 @@
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_infobox.md) | [Next File](tiles_stitcher.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_infobox.md) | [Next File](tiles_stitcher.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)
 
 # tiles_scrapping.py
 
@@ -13,7 +13,7 @@ mechanics, generating separate tables for each process with relevant drop rates 
 
 ## Functions
 
-### [`generate_scrapping_tables(tiles: dict, definitions: dict, lang_code: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L18)
+### [`generate_scrapping_tables(tiles: dict, definitions: dict, lang_code: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L17)
 
 Generate scrapping and breakage tables for tiles in the specified language.
 
@@ -32,7 +32,7 @@ Generate scrapping and breakage tables for tiles in the specified language.
       - The function creates MediaWiki-formatted tables for both scrapping and breakage mechanics,
       - saving them to separate files in the output directory.
 
-### [`_generate_disassembly_section(generic: dict, definitions: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L76)
+### [`_generate_disassembly_section(generic: dict, definitions: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L75)
 
 Generate a MediaWiki table for disassembly (scrapping) information.
 
@@ -48,7 +48,7 @@ Generate a MediaWiki table for disassembly (scrapping) information.
       - MediaWiki-formatted table showing disassembly materials, chances, and quantities.
       - Returns empty string if no materials are defined.
 
-### [`_generate_breakage_section(generic: dict, definitions: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L158)
+### [`_generate_breakage_section(generic: dict, definitions: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L157)
 
 Generate a MediaWiki table for breakage (destruction) information.
 
@@ -66,4 +66,4 @@ Generate a MediaWiki table for breakage (destruction) information.
 
 
 
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_infobox.md) | [Next File](tiles_stitcher.md) | [Next Folder](../tools/compare_item_lists.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_infobox.md) | [Next File](tiles_stitcher.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)

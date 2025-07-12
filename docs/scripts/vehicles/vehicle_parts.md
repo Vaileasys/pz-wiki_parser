@@ -1,4 +1,4 @@
-[Previous Folder](../utils/echo.md) | [Previous File](vehicle_list2.md) | [Next File](vehicle_spawns.md) | [Back to Index](../../index.md)
+[Previous Folder](../utils/categories.md) | [Previous File](vehicle_list2.md) | [Next File](vehicle_spawns.md) | [Back to Index](../../index.md)
 
 # vehicle_parts.py
 
@@ -9,4 +9,4 @@
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/vehicles/vehicle_parts.py#L119)
 
 
-[Previous Folder](../utils/echo.md) | [Previous File](vehicle_list2.md) | [Next File](vehicle_spawns.md) | [Back to Index](../../index.md)
+[Previous Folder](../utils/categories.md) | [Previous File](vehicle_list2.md) | [Next File](vehicle_spawns.md) | [Back to Index](../../index.md)

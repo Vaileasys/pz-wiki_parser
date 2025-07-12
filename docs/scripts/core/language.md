@@ -1,6 +1,10 @@
-[Previous Folder](../consumables.md) | [Previous File](file_loading.md) | [Next File](logger.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../roomdefine.md) | [Previous File](file_loading.md) | [Next File](logger.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
 
 # language.py
+
+## Functions
+
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L270)
 
 ## Classes
 
@@ -23,23 +27,23 @@
 
 ### `Translate`
 #### Static Methods
-##### [`_remove_comments(line: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L264)
+##### [`_remove_comments(line: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L265)
 #### Class Methods
-##### [`get(property_value, property_key, lang_code, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L163)
+##### [`get(property_value, property_key, lang_code, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L164)
 
 Get a translation for a given value, using optional prefix logic.
 
-##### [`get_wiki(value: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L179)
+##### [`get_wiki(value: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L180)
 
 Translate all wiki-style placeholders (<< >>) inside a string.
 
-##### [`load()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L188)
+##### [`load()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L189)
 
 Force-load all translation data, bypassing lazy init.
 
-##### [`_ensure_loaded()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L198)
-##### [`_cache()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L203)
-##### [`_parse(wiki_code, game_code)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L220)
+##### [`_ensure_loaded()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L199)
+##### [`_cache()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L204)
+##### [`_parse(wiki_code, game_code)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L221)
 
 
-[Previous Folder](../consumables.md) | [Previous File](file_loading.md) | [Next File](logger.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../roomdefine.md) | [Previous File](file_loading.md) | [Next File](logger.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)

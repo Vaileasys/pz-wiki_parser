@@ -1,4 +1,4 @@
-[Previous Folder](../utils/echo.md) | [Next File](vehicle_infobox.md) | [Back to Index](../../index.md)
+[Previous Folder](../utils/categories.md) | [Next File](vehicle_infobox.md) | [Back to Index](../../index.md)
 
 # vehicle_article.py
 
@@ -15,4 +15,4 @@
 ### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/vehicles/vehicle_article.py#L185)
 
 
-[Previous Folder](../utils/echo.md) | [Next File](vehicle_infobox.md) | [Back to Index](../../index.md)
+[Previous Folder](../utils/categories.md) | [Next File](vehicle_infobox.md) | [Back to Index](../../index.md)

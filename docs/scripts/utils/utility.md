@@ -1,11 +1,11 @@
-[Previous Folder](../tools/compare_item_lists.md) | [Previous File](util.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../tools/update_icons.md) | [Previous File](util.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
 
 # utility.py
 
 ## Functions
 
-### [`get_item_data_from_id(item_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L23)
-### [`fix_item_id(item_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L29)
+### [`get_item_data_from_id(item_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L21)
+### [`fix_item_id(item_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L30)
 
 Checks if an item_id is formatted correctly (i.e., 'module.item_name'). 
 
@@ -19,25 +19,25 @@ It will then return the full item_id.
 Given `item_id = "Cooked"` and `item_parser.get_item_data()` contains a key like `"Food.Cooked"`,
 this function will return `"Food.Cooked"`.
 
-### [`get_clothing_xml_value(item_data, xml_value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L57)
-### [`get_model(item_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L92)
-### [`get_body_parts(item_data, link, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L151)
+### [`get_clothing_xml_value(item_data, xml_value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L58)
+### [`get_model(item_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L93)
+### [`get_body_parts(item_data, link, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L152)
 
 Gets body parts for an item and returns as a list.
 
 :returns: Translated body parts.
 :rtype: body_parts (list)
 
-### [`get_skill_type_mapping(item_data, item_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L206)
-### [`get_burn_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L247)
+### [`get_skill_type_mapping(item_data, item_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L207)
+### [`get_burn_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L248)
 
 Returns burn time data from camping_fuel.lua.
 
-### [`get_burn_time(item_id, item_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L273)
-### [`save_cache(data: dict, data_file: str, data_dir, suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L346)
-### [`load_cache(cache_file, cache_name, get_version, backup_old, suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L351)
-### [`clear_cache(cache_path, cache_name, suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L360)
-### [`get_name(item_id, item_data, language)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L366)
+### [`get_burn_time(item_id, item_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L274)
+### [`save_cache(data: dict, data_file: str, data_dir, suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L347)
+### [`load_cache(cache_file, cache_name, get_version, backup_old, suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L352)
+### [`clear_cache(cache_path, cache_name, suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L361)
+### [`get_name(item_id, item_data: dict, language)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L367)
 
 Gets an item name if it has a special case, otherwise translates the DisplayName.
 
@@ -54,7 +54,7 @@ Gets an item name if it has a special case, otherwise translates the DisplayName
   - **str:**
       - The items name as it is displayed in-game.
 
-### [`get_item_id_data(suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L456)
+### [`get_item_id_data(suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L457)
 
 Loads item_id_dictionary.csv into memory, mapping each page name to a list of item IDs found in its infobox.
 
@@ -62,8 +62,8 @@ Loads item_id_dictionary.csv into memory, mapping each page name to a list of it
 :return: Returns all page names and the item IDs in the page's infobox.
 :rtype: item_id_dict_data (dict)
 
-### [`get_page(item_id, name)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L499)
-### [`find_icon(item_id, all_icons)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L511)
+### [`get_page(item_id, name)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L500)
+### [`find_icon(item_id, all_icons)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L512)
 
 Retrieves the icon associated with a given item_id. Can return a single icon (string) (default) or multiple icons (list),
 
@@ -73,7 +73,7 @@ depending on the 'get_all_icons' parameter.
 :return: The icon (or list of icons) associated with the item_id. Returns the default icon ("Question_On") if no specific icon is found.
 :rtype: icon (list[str])
 
-### [`get_icon(item_id, format, all_icons, cycling, custom_name)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L637)
+### [`get_icon(item_id, format, all_icons, cycling, custom_name)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L638)
 
 Retrieves the icon(s) associated with a given item_id, with optional formatting and cycling through multiple icons.
 
@@ -92,9 +92,8 @@ This option will force all_icons to be True. Defaults to False.
 returns either a single icon (str).
 :rtype: icon_result (str)
 
-### [`get_guid(item_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L712)
-### [`get_fluid_name(fluid_data, lang)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L722)
-### [`get_recipe(recipe_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L735)
+### [`get_guid(item_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L713)
+### [`get_fluid_name(fluid_data, lang)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L723)
 
 
-[Previous Folder](../tools/compare_item_lists.md) | [Previous File](util.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../tools/update_icons.md) | [Previous File](util.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)

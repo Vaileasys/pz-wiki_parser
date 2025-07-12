@@ -1,4 +1,4 @@
-[Previous Folder](../tools/compare_item_lists.md) | [Next File](lua_helper.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../tools/update_icons.md) | [Previous File](color.md) | [Next File](lua_helper.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
 
 # echo.py
 
@@ -6,7 +6,7 @@ Console logging utilities with coloured output, warning control, and tqdm suppor
 
 ## Functions
 
-### [`_message(message: str, prefix: str, colour_code: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L11)
+### [`_message(message: str, prefix: str, style_func)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L12)
 
 Print a coloured message with optional warning metadata.
 
@@ -16,8 +16,8 @@ Print a coloured message with optional warning metadata.
       - _The message text to display._
   - **prefix (str)**:
       - _Label prefix (e.g., "[Info]", "[Warning]")._
-  - **colour_code (str)**:
-      - _ANSI colour code for the prefix._
+  - **style_func (callable)**:
+      - _A function that applies styling (e.g., color.info)._
   - **emit_warning (bool, optional)**:
       - _Whether to append stack info for warnings._
   - **warnings_level (int, optional)**:
@@ -34,7 +34,7 @@ Enable or disable warning output filtering by level.
   - **ignore (bool)**:
       - _Whether to suppress warnings below the level._
 
-### [`write(message: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L63)
+### [`write(message: str, style_func)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L63)
 
 Print a standard message safely, supporting tqdm progress bars.
 
@@ -42,8 +42,10 @@ Print a standard message safely, supporting tqdm progress bars.
 <ins>**Args:**</ins>
   - **message (str)**:
       - _The message text to print._
+  - **style_func (callable, optional)**:
+      - _A colour/style function (e.g. color.info)._
 
-### [`info(message: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L75)
+### [`info(message: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L78)
 
 Print an informational message in cyan.
 
@@ -52,7 +54,7 @@ Print an informational message in cyan.
   - **message (str)**:
       - _The message text to display._
 
-### [`warning(message: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L84)
+### [`warning(message: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L87)
 
 Print a warning message in yellow with warning context.
 
@@ -61,7 +63,7 @@ Print a warning message in yellow with warning context.
   - **message (str)**:
       - _The warning text to display._
 
-### [`error(message: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L93)
+### [`error(message: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L96)
 
 Print an error message in red with error context.
 
@@ -70,7 +72,7 @@ Print an error message in red with error context.
   - **message (str)**:
       - _The error text to display._
 
-### [`success(message: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L102)
+### [`success(message: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L105)
 
 Print a success message in green.
 
@@ -79,7 +81,7 @@ Print a success message in green.
   - **message (str)**:
       - _The success message to display._
 
-### [`debug(message: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L111)
+### [`debug(message: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L114)
 
 Print a debug message in magenta if debug mode is enabled.
 
@@ -88,7 +90,7 @@ Print a debug message in magenta if debug mode is enabled.
   - **message (str)**:
       - _The debug text to display._
 
-### [`deprecated(message: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L124)
+### [`deprecated(message: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L127)
 
 Print a deprecation warning in magenta with warning context.
 
@@ -97,16 +99,6 @@ Print a deprecation warning in magenta with warning context.
   - **message (str)**:
       - _The deprecation message to display._
 
-### [`echo(message)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L137)
-
-Safely prints a standard message with tqdm support.
-
-### [`echo_info(message)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L145)
-### [`echo_warning(message)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L148)
-### [`echo_error(message)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L151)
-### [`echo_success(message)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L154)
-### [`echo_debug(message)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L157)
-### [`echo_deprecated(message)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L164)
 
 
-[Previous Folder](../tools/compare_item_lists.md) | [Next File](lua_helper.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../tools/update_icons.md) | [Previous File](color.md) | [Next File](lua_helper.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)

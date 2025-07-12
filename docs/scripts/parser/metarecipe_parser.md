@@ -1,4 +1,4 @@
-[Previous Folder](../objects/body_location.md) | [Previous File](literature_parser.md) | [Next File](movable_definitions_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/attachment.md) | [Previous File](literature_parser.md) | [Next File](movable_definitions_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
 
 # metarecipe_parser.py
 
@@ -63,4 +63,4 @@ This function:
 
 
 
-[Previous Folder](../objects/body_location.md) | [Previous File](literature_parser.md) | [Next File](movable_definitions_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/attachment.md) | [Previous File](literature_parser.md) | [Next File](movable_definitions_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
