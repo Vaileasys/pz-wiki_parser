@@ -5,10 +5,11 @@ def capitalize(value):
     """
     Safely perform the capitalize method if a value is not a string. Lists will also be capitalized, provided their values are strings.
 
-    :param value: The string or list of strings to capitalize.
-    :type value: str
-    :return: Capitalized values if a string or list, otherwise None.
-    :rtype: str | list | None
+    Args:
+        value: The string or list of strings to capitalize.
+
+    Returns:
+        str | list | None: Capitalized values if a string or list, otherwise None.
     """
     if isinstance(value, str):
         value = [value]
@@ -37,11 +38,12 @@ def capitalize(value):
 def format_positive(value):
     """
     Formats a number with '+' if positive, trimming trailing zeros. Returns original value as string if invalid.
-    
-    :param value: The value to format.
-    :type value: float | int | str | any
-    :return: Formatted string with '+' prefix if positive, or original value as a string if invalid.
-    :rtype: str
+
+    Args:
+        value: The value to format.
+
+    Returns:
+        str: Formatted string with '+' prefix if positive, or original value as a string if invalid.
     """
     try:
         value = float(value)
@@ -55,10 +57,13 @@ def link(page:str, name:str=None, anchor:str=None) -> str:
     """
     Returns a wiki link in the format [[Page#Anchor|Name]], including a language suffix for non-English languages.
 
-    :param page: The target page
-    :param name: The display text of the link (optional). Defaults to `page`.
-    :param anchor: The section anchor within the page (optional).
-    :return: The formatted wiki link.
+    Args:
+        page: The target page
+        name: The display text of the link (optional). Defaults to `page`.
+        anchor: The section anchor within the page (optional).
+
+    Returns:
+        str: The formatted wiki link.
     """
     from scripts.core.language import Language
 

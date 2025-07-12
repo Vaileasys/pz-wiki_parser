@@ -8,30 +8,35 @@
 
 Safely perform the capitalize method if a value is not a string. Lists will also be capitalized, provided their values are strings.
 
-:param value: The string or list of strings to capitalize.
-:type value: str
-:return: Capitalized values if a string or list, otherwise None.
-:rtype: str | list | None
 
-### [`format_positive(value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L37)
+<ins>**Args:**</ins>
+
+<ins>**Returns:**</ins>
+  - str | list | None: Capitalized values if a string or list, otherwise None.
+
+### [`format_positive(value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L38)
 
 Formats a number with '+' if positive, trimming trailing zeros. Returns original value as string if invalid.
 
-:param value: The value to format.
-:type value: float | int | str | any
-:return: Formatted string with '+' prefix if positive, or original value as a string if invalid.
-:rtype: str
 
-### [`link(page: str, name: str, anchor: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L54)
+<ins>**Args:**</ins>
+
+<ins>**Returns:**</ins>
+  - **str:**
+      - Formatted string with '+' prefix if positive, or original value as a string if invalid.
+
+### [`link(page: str, name: str, anchor: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L56)
 
 Returns a wiki link in the format [[Page#Anchor|Name]], including a language suffix for non-English languages.
 
-:param page: The target page
-:param name: The display text of the link (optional). Defaults to `page`.
-:param anchor: The section anchor within the page (optional).
-:return: The formatted wiki link.
 
-### [`convert_percentage(value: str | int | float, start_zero, percentage, default, decimals: int)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L76)
+<ins>**Args:**</ins>
+
+<ins>**Returns:**</ins>
+  - **str:**
+      - The formatted wiki link.
+
+### [`convert_percentage(value: str | int | float, start_zero, percentage, default, decimals: int)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L81)
 
 Converts a numeric value to a percentage string.
 
@@ -52,11 +57,11 @@ Converts a numeric value to a percentage string.
       - The formatted percentage as a string with a '%' sign.
       - Returns '-' for invalid inputs.
 
-### [`convert_int(value: int | float)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L109)
+### [`convert_int(value: int | float)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L114)
 
 Converts a value to an integer if it has no decimal (isn't float-like).
 
-### [`to_bool(value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L125)
+### [`to_bool(value)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L130)
 
 Convert a value to boolean by checking common 'true' strings.
 
@@ -67,7 +72,7 @@ Convert a value to boolean by checking common 'true' strings.
   - **bool:**
       - True if the value matches a 'true' string; False otherwise.
 
-### [`flip_data(data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L138)
+### [`flip_data(data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L143)
 
 Flip a flat dictionary so that values become keys, and keys become values.
 
@@ -85,7 +90,7 @@ If multiple keys share the same value, they are grouped in a list.
   - **TypeError:**
       - If 'data' is not a dictionary or a value is unhashable.
 
-### [`deep_merge(base: dict, override: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L163)
+### [`deep_merge(base: dict, override: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L168)
 
 Recursively merge two dictionaries, preserving existing keys.
 
@@ -100,7 +105,7 @@ Recursively merge two dictionaries, preserving existing keys.
   - **dict:**
       - A new dictionary with combined contents.
 
-### [`deep_getattr(obj: object, attr_path: str, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L185)
+### [`deep_getattr(obj: object, attr_path: str, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L190)
 
 Access nested attributes on an object using dot‑notation.
 
@@ -110,7 +115,7 @@ Access nested attributes on an object using dot‑notation.
 <ins>**Returns:**</ins>
   - The value found at the end of the attribute path, or `default` if any intermediate attribute is missing or `None`.
 
-### [`calculate_drain_rate(use_delta: float, unit: str, tick_minutes: int, as_percentage: bool)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L206)
+### [`calculate_drain_rate(use_delta: float, unit: str, tick_minutes: int, as_percentage: bool)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L211)
 
 Calculates how much of a drainable item is consumed over time.
 
@@ -128,7 +133,7 @@ Calculates how much of a drainable item is consumed over time.
 <ins>**Returns:**</ins>
   - str | float: Battery drain over the given time unit.
 
-### [`convert_unit(value: float, unit: str, start_prefix: str, force_prefix: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L233)
+### [`convert_unit(value: float, unit: str, start_prefix: str, force_prefix: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L238)
 
 Convert a value from a given SI prefix (default: base) to the most appropriate SI prefix
 
@@ -148,7 +153,7 @@ between milli (m) and Mega (M), or force it to a specific one.
   - **str:**
       - A human-readable string with the chosen prefix and unit.
 
-### [`split_camel_case(text: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L272)
+### [`split_camel_case(text: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L277)
 
 Add spaces between words in a camel case string.
 
@@ -161,7 +166,7 @@ Add spaces between words in a camel case string.
   - **str:**
       - The string with spaces added between words.
 
-### [`tick(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L285)
+### [`tick(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L290)
 
 Return a wiki-formatted tick/check icon, optionally with text and link.
 
@@ -176,7 +181,7 @@ Return a wiki-formatted tick/check icon, optionally with text and link.
   - **str:**
       - Formatted wiki string for the tick icon.
 
-### [`cross(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L301)
+### [`cross(text: str, link: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L306)
 
 Return a wiki-formatted cross icon, optionally with text and link.
 
@@ -191,7 +196,7 @@ Return a wiki-formatted cross icon, optionally with text and link.
   - **str:**
       - Formatted wiki string for the cross icon.
 
-### [`rgb(red: int | float, green: int | float, blue: int | float)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L317)
+### [`rgb(red: int | float, green: int | float, blue: int | float)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L322)
 
 Return an rgb template string with the given colour values.
 
@@ -211,7 +216,7 @@ Each colour component can be specified as either:
   - **str:**
       - A string formatted as '{{rgb|R, G, B}}' where R, G, and B are integers.
 
-### [`enumerate_params(parameters)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L347)
+### [`enumerate_params(parameters)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L352)
 
 Expand list values in a dict into numbered keys for infobox use.
 
@@ -225,7 +230,7 @@ Expand list values in a dict into numbered keys for infobox use.
   - **dict:**
       - New dictionary with expanded numbered keys.
 
-### [`check_zero(value: int | float, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L372)
+### [`check_zero(value: int | float, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L377)
 
 Return 'default' if the numeric value is zero, else return the value.
 
