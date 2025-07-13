@@ -118,5 +118,10 @@
         "position": "end",
         "name": "melted",
         "priority": 1
+    },
+    "Lit": {
+        "position": "end",
+        "name": "lit",
+        "priority": 1
     }
 }
