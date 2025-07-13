@@ -1,11 +1,11 @@
 {
     "Left": {
-        "position": "both",
+        "position": "contains",
         "name": "left",
         "priority": 1
     },
     "Right": {
-        "position": "both",
+        "position": "contains",
         "name": "right",
         "priority": 2
     },
@@ -20,32 +20,32 @@
         "priority": 2
     },
     "_L_": {
-        "position": "both",
+        "position": "contains",
         "name": "left",
         "priority": 1
     },
     "_R_": {
-        "position": "both",
+        "position": "contains",
         "name": "right",
         "priority": 2
     },
     "_Left_RingFinger_": {
-        "position": "both",
+        "position": "contains",
         "name": "left ring finger",
         "priority": 1
     },
     "_Left_MiddleFinger_": {
-        "position": "both",
+        "position": "contains",
         "name": "left middle finger",
         "priority": 2
     },
     "_Right_RingFinger_": {
-        "position": "both",
+        "position": "contains",
         "name": "right ring finger",
         "priority": 3
     },
     "_Right_MiddleFinger_": {
-        "position": "both",
+        "position": "contains",
         "name": "right middle finger",
         "priority": 4
     },
@@ -55,12 +55,12 @@
         "priority": 1
     },
     "DOWN": {
-        "position": "end",
+        "position": "contains",
         "name": "down",
         "priority": 1
     },
     "UP": {
-        "position": "end",
+        "position": "contains",
         "name": "up",
         "priority": 2
     },
@@ -75,12 +75,12 @@
         "priority": 1
     },
     "Front": {
-        "position": "end",
+        "position": "contains",
         "name": "front",
         "priority": 1
     },
     "Back": {
-        "position": "end",
+        "position": "contains",
         "name": "back",
         "priority": 2
     },
@@ -112,6 +112,11 @@
     "Break": {
         "position": "end",
         "name": "broken",
+        "priority": 1
+    },
+    "Melted": {
+        "position": "end",
+        "name": "melted",
         "priority": 1
     }
 }

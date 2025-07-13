@@ -1141,14 +1141,15 @@ class Item:
     @property
     def type(self) -> str: return self.get_default("Type")
     @property
+    def raw_display_category(self) -> str: return self.get_default("DisplayCategory")
+    @property
     def display_category(self) -> str:
         if not hasattr(self, '_display_category'):
-            self._display_category = Translate.get("IGUI_ItemCat_" + self.get_default("DisplayCategory"))
+            from scripts.utils import categories
+            self._display_category = categories.get_cat_link(self.raw_display_category)
         return self._display_category
     @property
     def display_name(self) -> str: return self.get_default("DisplayName")
-    @property
-    def raw_display_category(self) -> str: return self.get_default("DisplayCategory")
     @property
     def always_welcome_gift(self) -> bool: return bool(self.get_default("AlwaysWelcomeGift"))
     @property
@@ -2115,6 +2116,10 @@ class Item:
     def foraging_penalty(self) -> float:
         loc = self.body_location or self.can_be_equipped
         if not loc:
+            return 0.0
+        
+        # Hardcoded exceptions in foragSystem.doGlassesCheck
+        if self.item_id in ("Base.Glasses_Normal", "Base.Glasses_Reading"):
             return 0.0
         
         if Item._forage_clothing_penalties is None:

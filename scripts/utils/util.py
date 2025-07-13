@@ -55,7 +55,7 @@ def format_positive(value):
 
 def link(page:str, name:str=None, anchor:str=None) -> str:
     """
-    Returns a wiki link in the format [[Page#Anchor|Name]], including a language suffix for non-English languages.
+    Returns a wiki link in the format `[[Page#Anchor|Name]]`, including a language suffix for non-English languages.
 
     Args:
         page: The target page
@@ -192,9 +192,9 @@ def deep_getattr(obj: object, attr_path: str, default=None):
     Access nested attributes on an object using dot‑notation.
 
     Args:
-        obj: The object to fetch attributes from.
-        attr_path: A string of attribute names separated by '.', e.g. "fluid_container.capacity" - the path to the desired value.
-        default: A fallback value returned if any attribute in the path doesn't exist or its value is `None`.
+        obj (object): The object to fetch attributes from.
+        attr_path (str): A string of attribute names separated by '.', e.g. "fluid_container.capacity" - the path to the desired value.
+        default (str | int | float, optional): A fallback value returned if any attribute in the path doesn't exist or its value is `None`.
 
     Returns:
         The value found at the end of the attribute path, or `default` if any intermediate attribute is missing or `None`.
@@ -349,13 +349,15 @@ def rgb(red: int | float = 0, green: int | float = 0, blue: int | float = 0):
 
 ## ------------------------- Infobox helpers ------------------------- ##
 
-def enumerate_params(parameters):
+def enumerate_params(parameters: dict, whitelist: list[str] = None, blacklist: list[str] = None, separator: str = "<br>") -> dict:
     """
     Expand list values in a dict into numbered keys for infobox use.
 
     Args:
         parameters (dict): Dictionary of parameter names and values.
-            List values will be split into numbered keys.
+        whitelist (list[str], optional): Only keys in this list will be enumerated. If None, all keys are considered.
+        blacklist (list[str], optional): Keys in this list will be excluded from enumeration.
+        separator (str, optional): String to use for joining non-enumerated list values. Defaults to "<br>".
 
     Returns:
         dict: New dictionary with expanded numbered keys.
@@ -365,12 +367,25 @@ def enumerate_params(parameters):
         # Remove key-value pairs if they have no value
         if not value:
             continue
-        if isinstance(value, list):
+
+        is_list = isinstance(value, list)
+        if is_list:
+            # Remove falsy items
+            value = [v for v in value if v]
+            if not value:
+                continue
+        is_whitelisted = whitelist is None or key in whitelist
+        is_blacklisted = blacklist is not None and key in blacklist
+
+        if is_list and is_whitelisted and not is_blacklisted:
             new_parameters[key] = value[0]
             for i, v in enumerate(value[1:], start=2):
                 new_parameters[f"{key}{i}"] = v
+        elif is_list:
+            new_parameters[key] = separator.join(str(v) for v in value)
         else:
             new_parameters[key] = value
+
     return new_parameters
 
 

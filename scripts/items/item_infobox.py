@@ -22,13 +22,16 @@ from scripts.objects.craft_recipe import CraftRecipe
 from scripts.objects.attachment import AttachmentType, HotbarSlot
 from scripts.core import page_manager
 from scripts.core.file_loading import write_file, clear_dir
-from scripts.core.constants import ITEM_DIR, PBAR_FORMAT
+from scripts.core.constants import ITEM_DIR, PBAR_FORMAT, RESOURCE_DIR
 
 ROOT_PATH = os.path.join(ITEM_DIR, "infoboxes")
 
 processed_items = []
 multi_id_page_dict = {} # Item ids that share a page: {'item_id': 'page'}
 pages_dict = {} # Unprocessed item page dict from the raw page dict
+all_descriptors = None
+
+numbered_params = ["model", "icon", "icon_name", "weight", "body_location", "weapon", "tag", "guid", "item_id"]
 
 
 def generate_item_data(item: Item):
@@ -56,7 +59,7 @@ def generate_item_data(item: Item):
 
     #-------------- PROPERTIES --------------#
     param["weight_reduction"] = item.weight_reduction
-    param["max_units"] = item.use_delta if item.type == "Drainable" else None
+    param["max_units"] = item.use_delta if item.get("UseDelta") or item.type == "Drainable" else None
     param["fluid_capacity"] = util.convert_unit(item.fluid_container.capacity, unit="L") if item.fluid_container else None
     param["equipped"] = (
         "Two-handed" if item.type == "Weapon" and item.two_hand_weapon
@@ -64,8 +67,9 @@ def generate_item_data(item: Item):
         else param.get("equipped")
     )
     param["body_location"] = item.body_location.wiki_link if item.body_location else item.can_be_equipped.wiki_link if item.can_be_equipped else None
-    param["attachment_type"] = AttachmentType(item.attachment_type).wiki_link if item.attachment_type else None
+    param["attachment_type"] = "<br>".join([HotbarSlot(slot).wiki_link for slot in AttachmentType(item.attachment_type).slots]) if item.attachment_type else None
     param["attachments_provided"] = "<br>".join([HotbarSlot(a).wiki_link for a in item.attachments_provided]) if item.attachments_provided else None
+    # Unused
     #param["function"] = None
     param["weapon"] = [f"{weapon.icon} {weapon.wiki_link}" for weapon in item.weapons] if item.weapons else None
     param["part_type"] = "Magazine" if item.has_tag("PistolMagazine", "RifleMagazine") else item.part_type
@@ -76,21 +80,22 @@ def generate_item_data(item: Item):
     param["can_boil_water"] = item.has_tag("Cookable") or item.has_tag("CookableMicrowave")
     param["writable"] = item.can_be_write
     param["recipes"] = "<br>".join([CraftRecipe(rec).wiki_link for rec in item.teached_recipes]) if len(item.teached_recipes) < 5 else "''See [[#Learned recipes|Learned recipes]]''"
-    param["researchable_recipes"] = [CraftRecipe(rec).wiki_link for rec in item.researchable_recipes] if item.researchable_recipes else None
+    # Unused
+    #param["researchable_recipes"] = [CraftRecipe(rec).wiki_link for rec in item.researchable_recipes] if item.researchable_recipes else None
     param["skill_trained"] = item.skill_trained.wiki_link if item.skill_trained else None
-    param["foraging_change"] = item.foraging_penalty
+    param["foraging_change"] = f"-{util.convert_int(item.foraging_penalty)}%" if item.foraging_penalty else None
     param["page_number"] = (item.page_to_write or item.number_of_pages) if (item.page_to_write or item.number_of_pages) > 0 else None
     param["packaged"] = item.packaged
     param["rain_factor"] = item.fluid_container.rain_factor if item.fluid_container else None
-    param["days_fresh"] = item.get("DaysFresh")
-    param["days_rotten"] = item.get("DaysTotallyRotten")
+    param["days_fresh"] = f'{item.days_fresh} {get_translation("day" if item.days_fresh == 1 else "days")}' if item.get("DaysFresh") else None
+    param["days_rotten"] = f'{item.days_totally_rotten} {get_translation("day" if item.days_totally_rotten == 1 else "days")}' if item.get("DaysTotallyRotten") else None
     param["cant_be_frozen"] = item.cant_be_frozen if item.get("DaysFresh") else None
     param["feed_type"] = item.animal_feed_type
     param["condition_max"] = item.get("ConditionMax")
     param["condition_lower_chance"] = item.get("ConditionLowerChanceOneIn")
     param["run_speed"] = item.get("RunSpeedModifier")
     param["stomp_power"] = item.stomp_power if str(item.body_location) == "Shoes" else None
-    param["combat_speed"] = item.combat_speed_modifier if item.combat_speed_modifier != 1.0 else None
+    param["combat_speed"] = util.convert_percentage(item.combat_speed_modifier) if item.combat_speed_modifier != 1.0 else None
     param["scratch_defense"] = item.scratch_defense if item.scratch_defense else None
     param["bite_defense"] = item.bite_defense if item.bite_defense else None
     param["bullet_defense"] = item.bullet_defense
@@ -131,6 +136,7 @@ def generate_item_data(item: Item):
                                 else None)
 
     #-------------- PERFORMANCE --------------#
+    # Unused
     #param["damage_type"] = None
     param["min_damage"] = item.min_damage if item.type == "Weapon" else None
     param["max_damage"] = item.max_damage if item.type == "Weapon" else None
@@ -150,6 +156,7 @@ def generate_item_data(item: Item):
     param["reload_time"] = item.reload_time or item.aiming_time_modifier
     param["crit_chance"] = item.critical_chance if item.type == "Weapon" else None
     param["crit_multiplier"] = util.check_zero(item.crit_dmg_multiplier)
+    # Unused
     #param["angle_mod"] = item.projectile_spread_modifier  # 'AngleModifier' removed in b42
     param["kill_move"] = item.close_kill_move.replace('_', ' ') if isinstance(item.close_kill_move, str) else item.close_kill_move
     param["weight_mod"] = item.weight_modifier
@@ -161,10 +168,10 @@ def generate_item_data(item: Item):
     #-------------- NUTRITION --------------#
     param["hunger_change"] = util.check_zero(item.hunger_change)
     param["thirst_change"] = util.check_zero(item.thirst_change)
-    param["calories"] = util.check_zero(item.calories)
-    param["carbohydrates"] = util.check_zero(item.carbohydrates)
-    param["proteins"] = util.check_zero(item.proteins)
-    param["lipids"] = util.check_zero(item.lipids)
+    param["calories"] = str(item.get("Calories")) if item.get("Calories") is not None else None
+    param["carbohydrates"] = str(item.get("Carbohydrates")) if item.get("Carbohydrates") is not None else None
+    param["proteins"] = str(item.get("Proteins")) if item.get("Proteins") is not None else None
+    param["lipids"] = str(item.get("Lipids")) if item.get("Lipids") is not None else None
 
     #-------------- EFFECT --------------#
     param["unhappy_change"] = util.check_zero(item.unhappy_change)
@@ -182,24 +189,49 @@ def generate_item_data(item: Item):
     param["poison_power"] = util.check_zero(item.poison_power)
 
     #-------------- COOKING --------------#
-    param["cook_minutes"] = item.minutes_to_cook if item.is_cookable else None
-    param["burn_minutes"] = item.minutes_to_burn if item.is_cookable else None
+    param["cook_minutes"] = f'{item.minutes_to_cook} {get_translation("minute" if item.minutes_to_cook == 1 else "minutes")}' if item.is_cookable else None
+    param["burn_minutes"] = f'{item.minutes_to_burn} {get_translation("minute" if item.minutes_to_burn == 1 else "minutes")}' if item.is_cookable else None
     param["dangerous_uncooked"] = item.dangerous_uncooked
     param["bad_microwaved"] = item.bad_in_microwave
     param["good_hot"] = item.good_hot
     param["bad_cold"] = item.bad_cold
     param["spice"] = item.spice
-    param["evolved_recipe"] = item.evolved_recipe_name
+    # Not needed? this is just the recipe/ingredient name. The fallback is the item's name.
+    #param["evolved_recipe"] = item.evolved_recipe_name 
 
     #-------------- TECHNICAL --------------#
-    param["tag"] = item.tags
+    from scripts.items.item_tags import Tag
+    param["tag"] = [Tag(tag).wiki_link for tag in item.tags] if item.tags else None
     param["guid"] = item.guid
-    param["clothing_item"] = item.clothing_item
+    param["clothing_item"] = util.link("ClothingItem", item.clothing_item) if item.clothing_item else None
     param["item_id"] = item.item_id
 
     param["infobox_version"] = Version.get()
     
     return param
+
+translations_cache = {}
+def get_translation(translation_key: str):
+    from scripts.core.language import Translate
+
+    translation_keys = {
+        "day": "IGUI_Gametime_day",
+        "days": "IGUI_Gametime_days",
+        "minute": "IGUI_Gametime_minute",
+        "minutes": "IGUI_Gametime_minutes"
+    }
+
+    global translations_cache
+    if translation_key in translations_cache:
+        return translations_cache.get(translation_key)
+
+    if translation_key in translation_keys:
+        translation = Translate.get(translation_keys.get(translation_key, translation_key))
+        translations_cache[translation_key] = translation
+
+        return translation
+    
+    return ""
 
 
 def build_infobox(infobox_data: dict) -> list[str]:
@@ -212,6 +244,8 @@ def build_infobox(infobox_data: dict) -> list[str]:
     Returns:
         list[str]: A list of lines forming the infobox template.
     """
+    if not infobox_data:
+        return None
     content = []
     content.append("{{Infobox item")
     for key, value in infobox_data.items():
@@ -238,55 +272,119 @@ def join_keys(params: dict) -> dict: #TODO: missing keys to join
     return params
 
 
+def get_descriptor(item_id: str) -> str | None:
+    """
+    Returns a short label for the item, based on patterns in its ID.
+
+    Matches are defined in 'item_descriptors.json' using start, end, or contains rules.
+
+    Args:
+        item_id (str): Full item ID.
+
+    Returns:
+        str | None: Descriptor if matched, otherwise None.
+    """
+    from scripts.core.cache import load_json
+    global all_descriptors
+
+    if not item_id:
+        return None
+
+    if not all_descriptors:
+        all_descriptors = load_json(os.path.join(RESOURCE_DIR, "item_descriptors.json"))
+    
+    descriptor = None
+    item = Item(item_id)
+    item_type = item.id_type
+    
+    for key, value in all_descriptors.items():
+        position = value.get("position")
+        name = value.get("name")
+
+        if position == "start" and item_type.startswith(key):
+            descriptor = name
+            break
+        elif position == "end" and item_type.endswith(key):
+            descriptor = name
+            break
+        elif position == "contains" and key in item_type:
+            descriptor = name
+            break
+    
+    return descriptor
+
+
 def merge_items(page_data: dict) -> dict:
     """
-    Merges parameters across multiple item variants into a single infobox entry.
+    Merges parameters from multiple item variants into a single infobox-ready dictionary.
+
+    Identical values shared across all items are included once without a descriptor.
+
+    Keys listed in `DESCRIPTOR_KEYS` will trigger descriptor formatting if their values differ between items.
+    Keys listed in `SKIP_KEYS` are only included from the first (primary) item.
 
     Args:
         page_data (dict): Mapping of item_id to parameter dictionaries.
 
     Returns:
-        dict: Merged and enumerated infobox-ready parameters.
+        dict: Merged dictionary of parameters with values enumerated and descriptors applied where needed.
     """
-    SKIP_KEYS = ["name"] # Keys that should not be combined
+    SKIP_KEYS = ["name"]
+    DESCRIPTOR_KEYS = ["category", "weight", "combat_speed", "days_fresh", "days_rotten", "tag", "clothing_item", "body_location", "guid"]
 
     item_ids = list(page_data.keys())
     if not item_ids:
         return {}
 
-    primary_id = item_ids[0]
     if len(item_ids) == 1:
-        return util.enumerate_params(page_data[primary_id])
+        return util.enumerate_params(page_data[item_ids[0]], whitelist=numbered_params)
 
-    merged_params = dict(page_data[primary_id])
+    primary_id = item_ids[0]
+    total_items = len(item_ids)
 
-    for item_id in item_ids[1:]:
+    # Track which items each value appears in for each key
+    key_sources: dict[str, dict[str, set[str]]] = {}  # key -> value -> set of item_ids
+
+    for item_id in item_ids:
         params = page_data[item_id]
         for key, value in params.items():
-            if not value or key in SKIP_KEYS:
+            if item_id != primary_id and key in SKIP_KEYS:
                 continue
+            values = value if isinstance(value, list) else [value]
+            for val in values:
+                if not val:
+                    continue
+                key_sources.setdefault(key, {}).setdefault(val, set()).add(item_id)
 
-            if key not in merged_params or not merged_params[key]:
-                merged_params[key] = value
-                continue
+    # Build merged output - apply descriptors only if values differ
+    merged_params = {}
+    for key, val_map in key_sources.items():
+        use_descriptor = key in DESCRIPTOR_KEYS and len(val_map) > 1
 
-            # Merge lists
-            if isinstance(merged_params[key], list) and isinstance(value, list):
-                merged_params[key].extend(value)
-            elif isinstance(merged_params[key], list):
-                merged_params[key].append(value)
-            elif isinstance(value, list):
-                merged_params[key] = [merged_params[key]] + value
-            elif merged_params[key] != value:
-                merged_params[key] = [merged_params[key], value]
+        entries = []
+        seen_displays = set()
 
-            # Remove duplicates
-            if isinstance(merged_params[key], list):
-                merged_params[key] = list(dict.fromkeys(merged_params[key]))
+        for val, ids in val_map.items():
+            if not use_descriptor or len(ids) == total_items:
+                # Value is shared by all items - no descriptor
+                display = val
+                if display not in seen_displays:
+                    seen_displays.add(display)
+                    entries.append(display)
+            else:
+                # Value appears in a subset of items - add descriptor per item
+                for item_id in sorted(ids):
+                    descriptor = get_descriptor(item_id)
+                    display = f"{val} <small>({descriptor})</small>" if descriptor else val
+                    if display not in seen_displays:
+                        seen_displays.add(display)
+                        entries.append(display)
 
+        merged_params[key] = entries if len(entries) > 1 else (entries[0] if entries else None)
+
+    # Post-process and enumerate list entries
     merged_params = join_keys(merged_params)
-
-    return util.enumerate_params(merged_params)
+    return util.enumerate_params(merged_params, numbered_params)
 
 
 def process_pages(pages: dict) -> None:
@@ -306,9 +404,13 @@ def process_pages(pages: dict) -> None:
             for item_id in item_ids:
                 item = Item(item_id)
                 if not item.valid:
+                    echo.warning(f"Item ID '{item_id}' not found in the parsed data. Skipping.")
                     continue
                 item_params = generate_item_data(item)
                 page_data[item_id] = item_params
+            
+            if not page_data:
+                continue
             
             param = merge_items(page_data)
             content = build_infobox(param)
@@ -335,7 +437,7 @@ def process_items(item_id_list: list) -> None:
             item = Item(item_id)
             pbar.set_postfix_str(f'Processing: {item.type} ({item_id[:30]})')
             infobox_data = generate_item_data(item)
-            infobox_data = util.enumerate_params(infobox_data)
+            infobox_data = util.enumerate_params(infobox_data, numbered_params)
             content = build_infobox(infobox_data)
             output_dir = write_file(content, item_id + ".txt", root_path=ROOT_PATH, suppress=True)
             pbar.update(1)

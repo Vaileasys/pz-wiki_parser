@@ -13,6 +13,122 @@ Used by the wiki parser to automatically organise and filter item data.
 """
 from scripts.objects.item import Item
 
+# DisplayCategory page map
+category_page_map = {
+    "Ammo": "Ammo",
+    "Food": "Food",
+    "Container": "Container",
+    "Bag": "Container",
+    "Furniture": "Furniture",
+    "Clothing": "Clothing",
+    "Accessory": "Clothing",
+    "ProtectiveGear": "Clothing",
+    "Ears": "Clothing",
+    "Tail": "Clothing",
+    "AnimalPart": "Animal part",
+    "AnimalPartWeapon": "Animal part",
+    "Appearance": "Appearance",
+    "Camping": "Camping",
+    "Cartography": "Map",
+    "Communications": "Communications",
+    "Cooking": "Cooking",
+    "CookingWeapon": "Cooking",
+    "Corpse": "Corpse",
+    "Entertainment": "Entertainment",
+    "Electronics": "Electronics",
+    "Explosives": "Explosive",
+    "FireSource": "Fire source",
+    "Literature": "Literature",
+    "SkillBook": "Literature",
+    "Fishing": "Fishing",
+    "FishingWeapon": "Fishing",
+    "Gardening": "Gardening",
+    "GardeningWeapon": "Gardening",
+    "Household": "Household",
+    "HouseholdWeapon": "Household",
+    "Instrument": "Instrument",
+    "InstrumentWeapon": "Instrument",
+    "Junk": "Junk",
+    "JunkWeapon": "Junk",
+    "LightSource": "Light source",
+    "Material": "Material",
+    "MaterialWeapon": "Material",
+    "Paint": "Material",
+    "FirstAid": "Medical",
+    "FirstAidWeapon": "Medical",
+    "Memento": "Memento",
+    "Animal": "Memento",
+    "Fox": "Memento",
+    "Bug": "Memento",
+    "Bunny": "Memento",
+    "Duck": "Memento",
+    "Bear": "Memento",
+    "Frog": "Memento",
+    "Badger": "Memento",
+    "Squirrel": "Memento",
+    "Beaver": "Memento",
+    "Mole": "Memento",
+    "Hedgehog": "Memento",
+    "Dog": "Memento",
+    "Raccoon": "Memento",
+    "Teddy Bear": "Memento",
+    "Spider": "Memento",
+    "Security": "Security",
+    "Sports": "Sport",
+    "SportsWeapon": "Sport",
+    "Tool": "Tool",
+    "ToolWeapon": "Tool",
+    "Trapping": "Trap",
+    "VehicleMaintenance": "Vehicle maintenance",
+    "VehicleMaintenanceWeapon": "Vehicle maintenance",
+    "Weapon": "Weapon",
+    "WeaponCrafted": "Weapon",
+    "WeaponImprovised": "Weapon",
+    "BrokenWeapon": "Weapon",
+    "WaterContainer": "Fluid container",
+    "Water": "Fluid container",
+    "WeaponPart": "Weapon part",
+    "Hidden": "Debug"
+}
+
+def get_cat_link(display_category: str) -> str:
+    """
+    Returns a formatted link string for a given display category.
+
+    Translates the raw DisplayCategory value, splits it by "/", and converts each
+    part into a wiki link using `display_category_map`. Falls back to plain text
+    if a link can't be found.
+
+    Args:
+        display_category (str): The raw DisplayCategory value from item data.
+
+    Returns:
+        str: A slash-separated string of wiki links or plain text.
+    """
+    from scripts.core.language import Translate
+    from scripts.utils import util
+
+    cat_name = Translate.get("IGUI_ItemCat_" + (display_category or "Unknown"))
+    name_parts = [part.strip() for part in cat_name.split("/")]
+
+    links = []
+    for part in name_parts:
+        match = next(
+            (key for key, val in category_page_map.items()
+             if Translate.get("IGUI_ItemCat_" + key) == part),
+            None
+            )
+
+        if match:
+            links.append(util.link(category_page_map[match], part))
+        else:
+            from scripts.utils import echo
+            echo.warning(f"No category found for '{display_category}'")
+            links.append(part)
+
+    return " / ".join(links)
+
+
 def is_ammo(item: Item) -> bool:
     """Return True if the item is considered ammunition."""
     return (item.get("DisplayCategory") == "Ammo"
