@@ -53,13 +53,16 @@ def load_lua_file(lua_files: str | list[str], lua_runtime: LuaRuntime = None, de
     return lua_runtime
 
 
-def lua_to_python(lua_data: object) -> object:
+def lua_to_python(lua_data: object, _depth: int = 0) -> object:
     """
     Converts Lua data to its Python equivalent (dict, list, or basic value).
 
     :param lua_data: The Lua data to convert. Can be a basic type (int, float, bool, str, None), Lua table (converted to Python dict or list), or a Lua function (converted to a string).
     :return: The corresponding Python data structure (dict, list, basic type, or string).
     """
+    if _depth > 20:
+        return "<Max recursion reached>"
+    
     try:
         # Return basic values
         if isinstance(lua_data, (float, int, bool, str, type(None))):
@@ -67,7 +70,8 @@ def lua_to_python(lua_data: object) -> object:
 
         # Determine whether it's a list (array) or dict (table)
         if type(lua_data).__name__ == '_LuaTable':
-            keys = list(lua_data.keys())
+            # Skip keys starting with `__`
+            keys = [k for k in lua_data.keys() if not (isinstance(k, str) and k.startswith("__"))]
             is_array = all(isinstance(k, int) for k in keys)
 
             if is_array:
@@ -78,14 +82,17 @@ def lua_to_python(lua_data: object) -> object:
                 function_items = {}
 
                 for k in keys:
-                    value = lua_data[k]
-                    python_key = lua_to_python(k)
+                    try:
+                        value = lua_data[k]
+                        python_key = lua_to_python(k, _depth=_depth + 1)
 
-                    if type(value).__name__ == '_LuaFunction':
-                        function_items[python_key] = str(value)
-                    else:
-                        regular_items[python_key] = lua_to_python(value)
-
+                        if type(value).__name__ == '_LuaFunction':
+                            function_items[python_key] = str(value)
+                        else:
+                            regular_items[python_key] = lua_to_python(value, _depth=_depth + 1)
+                    except Exception as e:
+                        echo.error(f"Error converting key {k!r}: {e}")
+                        continue
                 # Merge dicts, adding regular items first
                 return {**regular_items, **function_items}
 
