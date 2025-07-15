@@ -94,7 +94,7 @@ def generate_item_data(item: Item):
     param["condition_max"] = item.get("ConditionMax")
     param["condition_lower_chance"] = item.get("ConditionLowerChanceOneIn")
     param["run_speed"] = item.get("RunSpeedModifier")
-    param["stomp_power"] = item.stomp_power if str(item.body_location).__contains__("Shoes") else None
+    param["stomp_power"] = item.stomp_power if (item.body_location.location_id == "Shoes" if item.body_location else False) else None
     param["combat_speed"] = util.convert_percentage(item.combat_speed_modifier) if item.combat_speed_modifier != 1.0 else None
     param["scratch_defense"] = item.scratch_defense if item.scratch_defense else None
     param["bite_defense"] = item.bite_defense if item.bite_defense else None
