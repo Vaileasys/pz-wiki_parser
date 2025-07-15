@@ -838,6 +838,10 @@ def combine_items_by_page(all_items):
     # Build a mapping of item IDs to their pages and primary IDs
     item_to_page_info = {}
     
+    # Special case: Items that should not be combined
+    # Why Is It When Something Happens, It's Always You Three
+    do_not_combine = {"VHS_Retail", "VHS_Home", "Disc_Retail"}
+    
     for page_name, page_data in flattened_page_dict.items():
         item_ids = page_data.get("item_id", [])
         if not item_ids or len(item_ids) == 1:
@@ -854,6 +858,10 @@ def combine_items_by_page(all_items):
             # Remove "Base." prefix to match distribution data format
             item_id = item_id_full.replace("Base.", "") if item_id_full.startswith("Base.") else item_id_full
             
+            # Skip mapping if this is a do-not-combine item
+            if item_id in do_not_combine:
+                continue
+            
             item_to_page_info[item_id] = {
                 "page": page_name,
                 "primary_id": primary_id,
@@ -866,6 +874,12 @@ def combine_items_by_page(all_items):
     for item_id, item_data in all_items.items():
         # Skip already processed items
         if item_id in processed_items:
+            continue
+            
+        # Skip if this is a do-not-combine item
+        if item_id in do_not_combine:
+            combined_items[item_id] = item_data
+            processed_items.add(item_id)
             continue
             
         # Check if this item has a page mapping
