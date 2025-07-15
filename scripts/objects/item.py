@@ -26,6 +26,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from scripts.objects.vehicle_part import VehiclePartItem, VehiclePart
+    from scripts.objects.fish import Fish
 
 class Item:
     """
@@ -2233,6 +2234,14 @@ class Item:
                 self._vehicle_part_types = None
         
         return self._vehicle_part_types
+    
+    @property
+    def fish(self) -> "Fish | None":
+        from scripts.objects.fish import Fish
+        if Fish.exists(self.item_id):
+            return Fish(self.item_id)
+        else:
+            return None
 
 
 if __name__ == "__main__":

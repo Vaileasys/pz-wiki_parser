@@ -27,6 +27,17 @@ def generate_data(item: Item):
         item_dict["weapon"] = weapon
     item_dict["tooltip"] = (item.tooltip or "-") if "tooltip" in columns else None
 
+    item_dict["max_weight"] = item.fish.max_weight if item.fish and "max_weight" in columns else None
+    item_dict["trophy_weight"] = item.fish.trophy_weight if item.fish and "trophy_weight" in columns else None
+    item_dict["max_length"] = f"{item.fish.max_length} cm" if item.fish and "max_length" in columns else None
+    item_dict["trophy_length"] = f"{item.fish.trophy_length} cm" if item.fish and "trophy_length" in columns else None
+    item_dict["is_predator"] = item.fish.is_predator if item.fish and "is_predator" in columns else None
+    if "is_predator" in columns and item.fish:
+        if item.fish.is_predator:
+            predator = util.tick(text="Must be reeling to be caught (line tension)")
+        else:
+            predator = util.cross(text="Can be caught without reeling (line tension)")
+        item_dict["is_predator"] = predator
     item_dict["item_id"] = item.item_id if "item_id" in columns else None
 
     # Remove any values that are None
@@ -72,6 +83,8 @@ def find_table_type(item: Item):
         return "tackle"
     if item.has_tag("FishingSpear", "FishingRod", "FishingNet") or item.id_type in ("FishingRodBreak", "BrokenFishingNet"):
         return "gear"
+    if item.fish:
+        return "fish"
     return "other"    
 
 def process_items() -> dict:

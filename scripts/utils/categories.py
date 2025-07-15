@@ -207,7 +207,8 @@ def is_literature(item: Item) -> bool:
 def is_fishing(item: Item) -> bool:
     """Return True if the item is used in fishing."""
     return (item.get("DisplayCategory") in ("Fishing", "FishingWeapon")
-            or item.has_tag("FishingHook", "FishingLine", "FishingSpear", "FishingRod", "FishingNet"))
+            or item.has_tag("FishingHook", "FishingLine", "FishingSpear", "FishingRod", "FishingNet")
+            or item.fish)
             #or item.fishing_lure
 
 def is_gardening(item: Item) -> bool:

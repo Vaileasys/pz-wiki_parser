@@ -22,6 +22,16 @@
             "tooltip",
             "item_id"
         ],
+        "fish": [
+            "icon",
+            "name",
+            "max_weight",
+            "trophy_weight",
+            "max_length",
+            "trophy_length",
+            "is_predator",
+            "item_id"
+        ],
         "other": [
             "icon",
             "name",
@@ -39,6 +49,11 @@
         "type": "! Type",
         "weapon": "! Weapon",
         "tooltip": "! Tooltip",
+        "max_weight": "! Max weight",
+        "trophy_weight": "! Trophy weight",
+        "max_length": "! Max length",
+        "trophy_length": "! Trophy length",
+        "is_predator": "! Predator",
         "item_id": "! Item ID"
     }
 }
