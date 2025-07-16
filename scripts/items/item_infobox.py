@@ -20,6 +20,7 @@ from scripts.objects.item import Item
 from scripts.objects.skill import Skill
 from scripts.objects.craft_recipe import CraftRecipe
 from scripts.objects.attachment import AttachmentType, HotbarSlot
+from scripts.objects.recorded_media import RecMedia
 from scripts.core import page_manager
 from scripts.core.file_loading import write_file, clear_dir
 from scripts.core.constants import ITEM_DIR, PBAR_FORMAT, RESOURCE_DIR
@@ -204,11 +205,27 @@ def generate_item_data(item: Item):
     param["tag"] = [Tag(tag).wiki_link for tag in item.tags] if item.tags else None
     param["guid"] = item.guid
     param["clothing_item"] = util.link("ClothingItem", item.clothing_item) if item.clothing_item else None
+    param["rm_guid"] = None
     param["item_id"] = item.item_id
 
     param["infobox_version"] = Version.get()
     
     return param
+
+
+def post_process_rm(data: dict, page: str):
+    """Post processing of generated item data to add recorded media properties."""
+    rm_id = RecMedia.get_id_from_page(page)
+    rm = RecMedia(rm_id)
+
+    #TODO: add more params and don't hardcode 'boredom_change'
+    data["name"] = rm.name
+    data["icon_name"] = rm.name
+    data["boredom_change"] = "-5 per line"
+    data["rm_guid"] = rm.id
+
+    return data
+
 
 translations_cache = {}
 def get_translation(translation_key: str):
@@ -407,6 +424,10 @@ def process_pages(pages: dict) -> None:
                     echo.warning(f"Item ID '{item_id}' not found in the parsed data. Skipping.")
                     continue
                 item_params = generate_item_data(item)
+
+                if item.media_category:
+                    post_process_rm(item_params, page_name)
+
                 page_data[item_id] = item_params
             
             if not page_data:
@@ -446,6 +467,45 @@ def process_items(item_id_list: list) -> None:
 
 
 ## ------------------- Initialisation/Preparation ------------------- ##
+def prepare_media_pages(rm_id) -> set:
+    rec_list = RecMedia.get_item_dict().get(rm_id)
+
+    with tqdm(total=len(rec_list), desc="Getting media pages", unit=" pages", bar_format=PBAR_FORMAT, unit_scale=True, leave=False) as pbar:
+        for rm_id in rec_list:
+            pbar.set_postfix_str(f'Processing RM id: {rm_id[:30]}')
+
+            if not RecMedia.exists(rm_id):
+                echo.warning(f"'{rm_id}' could not be found as a 'RecMedia', please check '{rm_id}' media results.")
+                continue
+
+            page = RecMedia(rm_id).page
+            page_data:dict = pages_dict.get(page)
+
+            if not page_data:
+                pages_dict[page] = {"rm_id": [rm_id]} #NOTE: this modifies the global variable
+                logger.write(
+                    message=f"'{rm_id}' missing from page dict, added to '{color.style(page, color.GREEN)}' {color.style('[new]', color.YELLOW)}.",
+                    print_bool=True,
+                    category="warning",
+                    file_name="missing_pages_log.txt"
+                )
+
+            else:
+                #TODO: add rm_id to infobox/page dict
+                #id_list:list = page_data.setdefault("rm_id", [])
+                id_list:list = [] #temp: replace with above
+                if rm_id not in id_list:
+                    id_list.append(rm_id)
+                    logger.write(
+                        message=f"'{rm_id}' missing from page dict, added to '{color.style(page, color.GREEN)}'.",
+                        print_bool=True,
+                        category="warning",
+                        file_name="missing_pages_log.txt"
+                    )
+            pbar.update(1)
+
+    return 
+
 def prepare_pages(item_id_list: list) -> dict:
     """
     Prepares and validates the item-to-page mappings for later infobox generation.
@@ -468,12 +528,19 @@ def prepare_pages(item_id_list: list) -> dict:
         for item_id in item_id_list:
             pbar.set_postfix_str(f'Processing item id: {item_id[:30]}')
 
-            if item_id in seen_items:
+            is_media = True if item_id in RecMedia.get_item_dict() else False
+
+            if item_id in seen_items and not is_media:
                 continue
 
             seen_items.add(item_id)
+
+            if is_media:
+                prepare_media_pages(item_id) # Gets the media pages and adds them to the page dict
+                continue
+
             page = Item(item_id).page
-            page_data = pages_dict.get(page)
+            page_data:dict = pages_dict.get(page)
 
             if not page_data:
                 pages_dict[page] = {"item_id": [item_id]}
@@ -485,7 +552,7 @@ def prepare_pages(item_id_list: list) -> dict:
                 )
 
             else:
-                id_list = page_data.setdefault("item_id", [])
+                id_list:list = page_data.setdefault("item_id", [])
                 if item_id not in id_list:
                     id_list.append(item_id)
                     logger.write(
