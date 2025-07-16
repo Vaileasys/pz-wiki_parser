@@ -11,7 +11,7 @@ TABLE_PATH = f"{RESOURCE_DIR}/tables/recmedia_table.json"
 recmedia_data = {}
 table_map = {}
 
-def generate_data(guid, rm_data):
+def generate_data(guid: str, rm_data: dict):
     """Generates all data for the recmedia item, for table generation."""
     table_type = rm_data.get("TableType")
     media_category = rm_data.get("category")
@@ -72,7 +72,7 @@ def generate_data(guid, rm_data):
 
     item["title"] = link(page, full_title) if "title" in columns else None
     item["author"] = rm_data.get("author", empty_string) if "author" in columns else None
-    item["production"] = rm_data.get("extra", empty_string) if "production" in columns else None
+    item["production"] = f'<div style="text-wrap: white-space: nowrap; overflow: auto;"><div style="white-space: normal; display: inline-block;">{rm_data.get("extra", empty_string)}</div></div>' if "production" in columns else None
     if "cover" in columns:
         item["cover"] = style_wrap + rm_data.get("extra") if rm_data.get("extra") else empty_string
     item["lines"] = style_center + str(len(lines)) if "lines" in columns else None
