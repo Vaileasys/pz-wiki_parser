@@ -8,6 +8,7 @@ from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache, load_cache
 from scripts.utils.categories import find_all_categories
 from scripts.objects.item import Item
+from scripts.objects.fish import Fish
 
 cache_path = os.path.join(DATA_DIR, "distributions")
 
@@ -116,6 +117,19 @@ def process_json(file_paths):
                     item_list.add(item)
                     count += 1
 
+        elif file_key == "fishing":
+            for fish_item_id, fish_data in data.items():
+                # Skip non-item entries like "version"
+                if fish_item_id == "version" or not isinstance(fish_data, dict):
+                    continue
+                # Only process items that have fishing-related data structure
+                if not ("lure" in fish_data or "isRiver" in fish_data or "isLake" in fish_data):
+                    continue
+                # Remove "Base." prefix if present to match other item processing
+                item_name = fish_item_id.replace("Base.", "") if fish_item_id.startswith("Base.") else fish_item_id
+                item_list.add(item_name)
+                count += 1
+
         cleaned_item_list = set()
         for item in item_list:
             if '.' in item:
@@ -140,7 +154,7 @@ def process_json(file_paths):
 
 
 def build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, attached_weapons_data,
-                    clothing_data, stories_data):
+                    clothing_data, stories_data, fishing_data):
     def get_container_info(item_name):
         containers_info = []
         unique_entries = set()
@@ -488,6 +502,37 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
         else:
             return "Randomized stories"
 
+    def get_fishing_info(item_name):
+        fishing_info = {}
+
+        fish_data = None
+        if item_name in fishing_data:
+            fish_data = fishing_data[item_name]
+        elif f"Base.{item_name}" in fishing_data:
+            fish_data = fishing_data[f"Base.{item_name}"]
+        
+        if fish_data:
+            # Extract lure information
+            lures = []
+            if "lure" in fish_data:
+                for lure_name, chance in fish_data["lure"].items():
+                    lures.append({
+                        "name": lure_name,
+                        "chance": chance
+                    })
+            
+            # Extract isRiver and isLake booleans
+            is_river = fish_data.get("isRiver", False)
+            is_lake = fish_data.get("isLake", False)
+            
+            fishing_info = {
+                "lures": lures,
+                "isRiver": is_river,
+                "isLake": is_lake
+            }
+        
+        return fishing_info
+
     all_items = {}
     for item in tqdm.tqdm(item_list, desc="Building item data"):
         item_name = item_name_changes.get(item, item)
@@ -498,7 +543,8 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
             "Foraging": get_foraging_info(item_name),
             "AttachedWeapon": get_attached_weapon_info(item_name),
             "Clothing": get_clothing_info(item_name, clothing_data),
-            "Stories": get_story_info(item_name)
+            "Stories": get_story_info(item_name),
+            "Fishing": get_fishing_info(item_name)
         }
 
     save_cache(all_items, "all_items.json", cache_path)
@@ -532,6 +578,7 @@ def build_tables(category_items, index):
         f.write("embedded = {outfit, days_survived, chance}\n")
         f.write("outfit = {outfit_name, probability, guid}\n")
         f.write("foraging = {amount, level, snow, rain, day, night, biome_table, months_table, bonus_table, malus_table}\n")
+        f.write("fishing = {lure_link, chance}\n")
         f.write("--]]\n\n")
         f.write("local data = {\n")
 
@@ -692,6 +739,33 @@ def build_tables(category_items, index):
                     foraging_props.append('{}')
                 
                 sections.append(f"    foraging = {{{', '.join(foraging_props)}}}")
+            
+            # Fishing data
+            if item_data.get("Fishing") and item_data["Fishing"]:
+                fishing = item_data["Fishing"]
+                fishing_data = []
+                
+                # Add lures with their chances as objects
+                lures = fishing.get("lures", [])
+                for lure in lures:
+                    lure_name = lure.get("name", "")
+                    lure_chance = lure.get("chance", 0)
+                    
+                    # Convert lure name to wiki link using Item class
+                    try:
+                        lure_item = Item(lure_name)
+                        lure_link = lure_item.wiki_link
+                        fishing_data.append((lure_chance, lure_link))
+                    except Exception:
+                        # Fallback if item doesn't exist
+                        fishing_data.append((lure_chance, lure_name))
+                
+                if fishing_data:
+                    # Sort by chance (descending) first, then alphabetically by lure name
+                    fishing_data.sort(key=lambda x: (-x[0], x[1]))
+                    fishing_lines = [f'{{"{lure_link}", {lure_chance}}}' 
+                                   for lure_chance, lure_link in fishing_data]
+                    sections.append(f"    fishing = {{{','.join(fishing_lines)}}}")
             
             if sections:
                 # Sort sections alphabetically by their type (container, vehicle, etc.)
@@ -916,7 +990,8 @@ def combine_items_by_page(all_items):
                         "Foraging": {},
                         "AttachedWeapon": [],
                         "Clothing": [],
-                        "Stories": []
+                        "Stories": [],
+                        "Fishing": {}
                     }
             
             # Combine data from secondary item into primary item
@@ -958,6 +1033,24 @@ def combine_items_by_page(all_items):
                 if not combined_items[primary_id].get("Stories"):
                     combined_items[primary_id]["Stories"] = []
                 combined_items[primary_id]["Stories"].extend(secondary_data["Stories"])
+                
+            # Combine fishing data
+            if secondary_data.get("Fishing") and secondary_data["Fishing"]:
+                if not combined_items[primary_id].get("Fishing"):
+                    combined_items[primary_id]["Fishing"] = {}
+                
+                # If primary item doesn't have fishing data or secondary has more lures, use secondary's data
+                if (not combined_items[primary_id]["Fishing"] or 
+                    (secondary_data["Fishing"].get("lures") and 
+                     len(secondary_data["Fishing"].get("lures", [])) > 
+                     len(combined_items[primary_id]["Fishing"].get("lures", [])))):
+                    combined_items[primary_id]["Fishing"] = secondary_data["Fishing"]
+                
+                # Ensure isRiver and isLake are set if either item has them as true
+                if secondary_data["Fishing"].get("isRiver", False):
+                    combined_items[primary_id]["Fishing"]["isRiver"] = True
+                if secondary_data["Fishing"].get("isLake", False):
+                    combined_items[primary_id]["Fishing"]["isLake"] = True
     
     # Second pass: Process any remaining items (those without page mappings)
     for item_id, item_data in all_items.items():
@@ -1043,6 +1136,20 @@ def combine_items_by_page(all_items):
                     story_set.add(story_key)
                     unique_stories.append(story)
             item_data["Stories"] = unique_stories
+            
+        # Remove duplicate fishing lure entries
+        if item_data.get("Fishing") and item_data["Fishing"].get("lures"):
+            unique_lures = []
+            lure_set = set()
+            for lure in item_data["Fishing"]["lures"]:
+                lure_key = (
+                    lure.get("name", ""),
+                    lure.get("chance", 0)
+                )
+                if lure_key not in lure_set:
+                    lure_set.add(lure_key)
+                    unique_lures.append(lure)
+            item_data["Fishing"]["lures"] = unique_lures
     
     # Print statistics
     original_count = len(all_items)
@@ -1079,8 +1186,13 @@ def main():
         "clothing": os.path.join(DATA_DIR, "distributions", "clothing.json"),
         "attached_weapons": os.path.join(DATA_DIR, "distributions", "attached_weapons.json"),
         "stories": os.path.join(DATA_DIR, "distributions", "stories.json"),
-        "distributions": os.path.join(DATA_DIR, "distributions", "distributions.json")
+        "distributions": os.path.join(DATA_DIR, "distributions", "distributions.json"),
+        "fishing": os.path.join(DATA_DIR, "parsed_fish_data.json")
     }
+
+    # Load fishing data
+    Fish.load()
+    fishing_data = load_cache(file_paths["fishing"])
 
     # Parse distribution data
     print("Parsing distribution data...")
@@ -1100,7 +1212,7 @@ def main():
     stories_data = load_cache(file_paths["stories"])
 
     build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, 
-                   attached_weapons_data, clothing_data, stories_data)
+                   attached_weapons_data, clothing_data, stories_data, fishing_data)
 
     # Load all_items and combine items by page
     print("Loading and combining items by page...")
@@ -1128,7 +1240,8 @@ def main():
                 (item_data.get("Stories") and len(item_data["Stories"]) > 0) or
                 (item_data.get("AttachedWeapon") and len(item_data["AttachedWeapon"]) > 0) or
                 (item_data.get("Clothing") and len(item_data["Clothing"]) > 0) or
-                (item_data.get("Foraging") and item_data["Foraging"])
+                (item_data.get("Foraging") and item_data["Foraging"]) or
+                (item_data.get("Fishing") and item_data["Fishing"])
         )
 
         # Only process items that have distribution data
