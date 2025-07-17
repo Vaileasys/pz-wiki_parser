@@ -7,6 +7,7 @@ import scripts.parser.distribution_parser as distribution_parser
 from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache, load_cache
 from scripts.utils.categories import find_all_categories
+from scripts.utils import lua_helper
 from scripts.objects.item import Item
 from scripts.objects.fish import Fish
 
@@ -130,6 +131,54 @@ def process_json(file_paths):
                 item_list.add(item_name)
                 count += 1
 
+        elif file_key == "butchering":
+            # Process butchering data from AnimalPartsDefinitions
+            animals_data = data.get("AnimalPartsDefinitions", {}).get("animals", {})
+            for animal_name, animal_data in animals_data.items():
+                # Process head item
+                if "head" in animal_data:
+                    head_item = animal_data["head"]
+                    head_item = head_item.replace("Base.", "") if head_item.startswith("Base.") else head_item
+                    item_list.add(head_item)
+                    count += 1
+                
+                # Process skull item
+                if "skull" in animal_data:
+                    skull_item = animal_data["skull"]
+                    skull_item = skull_item.replace("Base.", "") if skull_item.startswith("Base.") else skull_item
+                    item_list.add(skull_item)
+                    count += 1
+                
+                # Process feather item
+                if "feather" in animal_data:
+                    feather_item = animal_data["feather"]
+                    feather_item = feather_item.replace("Base.", "") if feather_item.startswith("Base.") else feather_item
+                    item_list.add(feather_item)
+                    count += 1
+                
+                # Process leather item
+                if "leather" in animal_data:
+                    leather_item = animal_data["leather"]
+                    leather_item = leather_item.replace("Base.", "") if leather_item.startswith("Base.") else leather_item
+                    item_list.add(leather_item)
+                    count += 1
+                
+                # Process parts items
+                if "parts" in animal_data:
+                    for part in animal_data["parts"]:
+                        part_item = part.get("item", "")
+                        part_item = part_item.replace("Base.", "") if part_item.startswith("Base.") else part_item
+                        item_list.add(part_item)
+                        count += 1
+                
+                # Process bones items
+                if "bones" in animal_data:
+                    for bone in animal_data["bones"]:
+                        bone_item = bone.get("item", "")
+                        bone_item = bone_item.replace("Base.", "") if bone_item.startswith("Base.") else bone_item
+                        item_list.add(bone_item)
+                        count += 1
+
         cleaned_item_list = set()
         for item in item_list:
             if '.' in item:
@@ -154,7 +203,7 @@ def process_json(file_paths):
 
 
 def build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, attached_weapons_data,
-                    clothing_data, stories_data, fishing_data):
+                    clothing_data, stories_data, fishing_data, butchering_data):
     def get_container_info(item_name):
         containers_info = []
         unique_entries = set()
@@ -533,6 +582,102 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
         
         return fishing_info
 
+    def get_butchering_info(item_name):
+        """
+        Get butchering information for an item by finding which animals produce it.
+        Returns a list of animals and amounts that produce this item.
+        """
+        butchering_matches = []
+        
+        # Process the butchering data to find items
+        animals_data = butchering_data.get("AnimalPartsDefinitions", {}).get("animals", {})
+        
+        for animal_name, animal_data in animals_data.items():
+            # Helper function to calculate amount string
+            def get_amount_string(item_data):
+                if "nb" in item_data:
+                    return str(item_data["nb"])
+                elif "minNb" in item_data and "maxNb" in item_data:
+                    return f"{item_data['minNb']}-{item_data['maxNb']}"
+                elif "maxNb" in item_data:
+                    return str(item_data["maxNb"])
+                elif "minNb" in item_data:
+                    return str(item_data["minNb"])
+                else:
+                    return "1"  # Default amount
+            
+            # Check head item
+            if "head" in animal_data:
+                head_item = animal_data["head"]
+                head_item_clean = head_item.replace("Base.", "") if head_item.startswith("Base.") else head_item
+                if head_item_clean == item_name:
+                    butchering_matches.append({
+                        "animal": animal_name,
+                        "amount": "1",
+                        "type": "head"
+                    })
+            
+            # Check skull item
+            if "skull" in animal_data:
+                skull_item = animal_data["skull"]
+                skull_item_clean = skull_item.replace("Base.", "") if skull_item.startswith("Base.") else skull_item
+                if skull_item_clean == item_name:
+                    butchering_matches.append({
+                        "animal": animal_name,
+                        "amount": "1",
+                        "type": "skull"
+                    })
+            
+            # Check feather item
+            if "feather" in animal_data:
+                feather_item = animal_data["feather"]
+                feather_item_clean = feather_item.replace("Base.", "") if feather_item.startswith("Base.") else feather_item
+                if feather_item_clean == item_name:
+                    butchering_matches.append({
+                        "animal": animal_name,
+                        "amount": "1",
+                        "type": "feather"
+                    })
+            
+            # Check leather item
+            if "leather" in animal_data:
+                leather_item = animal_data["leather"]
+                leather_item_clean = leather_item.replace("Base.", "") if leather_item.startswith("Base.") else leather_item
+                if leather_item_clean == item_name:
+                    butchering_matches.append({
+                        "animal": animal_name,
+                        "amount": "1",
+                        "type": "leather"
+                    })
+            
+            # Check parts items
+            if "parts" in animal_data:
+                for part in animal_data["parts"]:
+                    part_item = part.get("item", "")
+                    part_item_clean = part_item.replace("Base.", "") if part_item.startswith("Base.") else part_item
+                    if part_item_clean == item_name:
+                        amount = get_amount_string(part)
+                        butchering_matches.append({
+                            "animal": animal_name,
+                            "amount": amount,
+                            "type": "parts"
+                        })
+            
+            # Check bones items
+            if "bones" in animal_data:
+                for bone in animal_data["bones"]:
+                    bone_item = bone.get("item", "")
+                    bone_item_clean = bone_item.replace("Base.", "") if bone_item.startswith("Base.") else bone_item
+                    if bone_item_clean == item_name:
+                        amount = get_amount_string(bone)
+                        butchering_matches.append({
+                            "animal": animal_name,
+                            "amount": amount,
+                            "type": "bones"
+                        })
+        
+        return butchering_matches
+
     all_items = {}
     for item in tqdm.tqdm(item_list, desc="Building item data"):
         item_name = item_name_changes.get(item, item)
@@ -544,7 +689,8 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
             "AttachedWeapon": get_attached_weapon_info(item_name),
             "Clothing": get_clothing_info(item_name, clothing_data),
             "Stories": get_story_info(item_name),
-            "Fishing": get_fishing_info(item_name)
+            "Fishing": get_fishing_info(item_name),
+            "Butchering": get_butchering_info(item_name)
         }
 
     save_cache(all_items, "all_items.json", cache_path)
@@ -564,6 +710,73 @@ def build_tables(category_items, index):
     output_dir = os.path.join("output", "distributions", "data_files")
     os.makedirs(output_dir, exist_ok=True)
     
+    # Animal data mapping for butchering information
+    animal_data = {
+        "henleghorn": {"name": "Leghorn Hen", "type": "Chicken"},
+        "rabkittencottontail": {"name": "Cottontail Rabbit Kitten", "type": "Rabbit"},
+        "mousepupsgolden": {"name": "Golden Mouse Pups", "type": "Mouse"},
+        "raccoonkitgrey": {"name": "Grey Raccoon Kit", "type": "Raccoon"},
+        "rabdoeswamp": {"name": "Swamp Rabbit Doe", "type": "Rabbit"},
+        "ramrambouillet": {"name": "Rambouillet Ram", "type": "Sheep"},
+        "ratfemalegrey": {"name": "Grey Female Rat", "type": "Rat"},
+        "chickrhodeisland": {"name": "Rhode Island Chick", "type": "Chicken"},
+        "raccoonboargrey": {"name": "Grey Raccoon Boar", "type": "Raccoon"},
+        "chickleghorn": {"name": "Leghorn Chick", "type": "Chicken"},
+        "turkeypoultmeleagris": {"name": "Meleagris Turkey Poult", "type": "Turkey"},
+        "raccoonsowgrey": {"name": "Grey Raccoon Sow", "type": "Raccoon"},
+        "lambfriesian": {"name": "Friesian Lamb", "type": "Sheep"},
+        "mousefemalewhite": {"name": "White Female Mouse", "type": "Mouse"},
+        "pigletlargeblack": {"name": "Large Black Piglet", "type": "Pig"},
+        "gobblersmeleagris": {"name": "Meleagris Turkey Gobbler", "type": "Turkey"},
+        "mousepupswhite": {"name": "White Mouse Pups", "type": "Mouse"},
+        "cowcalfholstein": {"name": "Holstein Cow Calf", "type": "Cow"},
+        "henrhodeisland": {"name": "Rhode Island Hen", "type": "Chicken"},
+        "mousewhite": {"name": "White Mouse", "type": "Mouse"},
+        "cowholstein": {"name": "Holstein Cow", "type": "Cow"},
+        "mousegolden": {"name": "Golden Mouse", "type": "Mouse"},
+        "cowangus": {"name": "Angus Cow", "type": "Cow"},
+        "cowcalfangus": {"name": "Angus Cow Calf", "type": "Cow"},
+        "sowlandrace": {"name": "Landrace Sow", "type": "Pig"},
+        "sowlargeblack": {"name": "Large Black Sow", "type": "Pig"},
+        "mousefemaledeer": {"name": "Female Deer Mouse", "type": "Mouse"},
+        "cockerelleghorn": {"name": "Leghorn Cockerel", "type": "Chicken"},
+        "ewerambouillet": {"name": "Rambouillet Ewe", "type": "Sheep"},
+        "rabkittenappalachian": {"name": "Appalachian Rabbit Kitten", "type": "Rabbit"},
+        "cockerelrhodeisland": {"name": "Rhode Island Cockerel", "type": "Chicken"},
+        "rabbuckcottontail": {"name": "Cottontail Rabbit Buck", "type": "Rabbit"},
+        "ramfriesian": {"name": "Friesian Ram", "type": "Sheep"},
+        "cowcalfsimmental": {"name": "Simmental Cow Calf", "type": "Cow"},
+        "mousefemalegolden": {"name": "Golden Female Mouse", "type": "Mouse"},
+        "ewesuffolk": {"name": "Suffolk Ewe", "type": "Sheep"},
+        "ratbabywhite": {"name": "White Rat Baby", "type": "Rat"},
+        "ramsuffolk": {"name": "Suffolk Ram", "type": "Sheep"},
+        "fawnwhitetailed": {"name": "White-tailed Deer Fawn", "type": "Deer"},
+        "mousedeer": {"name": "Deer Mouse", "type": "Mouse"},
+        "ratgrey": {"name": "Grey Rat", "type": "Rat"},
+        "turkeyhenmeleagris": {"name": "Meleagris Turkey Hen", "type": "Turkey"},
+        "rabdoecottontail": {"name": "Cottontail Rabbit Doe", "type": "Rabbit"},
+        "boarlandrace": {"name": "Landrace Boar", "type": "Pig"},
+        "rabdoeappalachian": {"name": "Appalachian Rabbit Doe", "type": "Rabbit"},
+        "rabbuckswamp": {"name": "Swamp Rabbit Buck", "type": "Rabbit"},
+        "lambsuffolk": {"name": "Suffolk Lamb", "type": "Sheep"},
+        "lambrambouillet": {"name": "Rambouillet Lamb", "type": "Sheep"},
+        "ratwhite": {"name": "White Rat", "type": "Rat"},
+        "ewefriesian": {"name": "Friesian Ewe", "type": "Sheep"},
+        "doewhitetailed": {"name": "White-tailed Deer Doe", "type": "Deer"},
+        "cowsimmental": {"name": "Simmental Cow", "type": "Cow"},
+        "buckwhitetailed": {"name": "White-tailed Deer Buck", "type": "Deer"},
+        "boarlargeblack": {"name": "Large Black Boar", "type": "Pig"},
+        "ratfemalewhite": {"name": "White Female Rat", "type": "Rat"},
+        "bullangus": {"name": "Angus Bull", "type": "Cow"},
+        "mousepupsdeer": {"name": "Deer Mouse Pups", "type": "Mouse"},
+        "bullholstein": {"name": "Holstein Bull", "type": "Cow"},
+        "rabbuckappalachian": {"name": "Appalachian Rabbit Buck", "type": "Rabbit"},
+        "bullsimmental": {"name": "Simmental Bull", "type": "Cow"},
+        "pigletlandrace": {"name": "Landrace Piglet", "type": "Pig"},
+        "ratbabygrey": {"name": "Grey Rat Baby", "type": "Rat"},
+        "rabkittenswamp": {"name": "Swamp Rabbit Kitten", "type": "Rabbit"}
+    }
+    
     # Function to write file header
     def write_header(f, category, part_number=None):
         f.write("--[[\n")
@@ -579,6 +792,7 @@ def build_tables(category_items, index):
         f.write("outfit = {outfit_name, probability, guid}\n")
         f.write("foraging = {amount, level, snow, rain, day, night, biome_table, months_table, bonus_table, malus_table}\n")
         f.write("fishing = {lure_link, chance}\n")
+        f.write("butchering = {animal_name, amount}\n")
         f.write("--]]\n\n")
         f.write("local data = {\n")
 
@@ -766,6 +980,36 @@ def build_tables(category_items, index):
                     fishing_lines = [f'{{"{lure_link}", {lure_chance}}}' 
                                    for lure_chance, lure_link in fishing_data]
                     sections.append(f"    fishing = {{{','.join(fishing_lines)}}}")
+            
+            # Butchering data
+            if item_data.get("Butchering"):
+                butchering_data = []
+                for butchering in item_data["Butchering"]:
+                    animal_id = butchering.get("animal", "")
+                    amount = butchering.get("amount", "1")
+                    
+                    # Format animal name using the animal_data mapping
+                    if animal_id in animal_data:
+                        animal_info = animal_data[animal_id]
+                        animal_type = animal_info["type"]
+                        animal_name = animal_info["name"]
+                        # Create wiki link format: [[Type|Name]]
+                        # Escape any quotes in the animal names for Lua safety
+                        escaped_type = animal_type.replace('"', '\\"')
+                        escaped_name = animal_name.replace('"', '\\"')
+                        formatted_animal_name = f"[[{escaped_type}|{escaped_name}]]"
+                    else:
+                        # Fallback to old format if animal not found in mapping
+                        formatted_animal_name = animal_id.replace("_", " ").title()
+                    
+                    butchering_data.append((formatted_animal_name, amount))
+                
+                if butchering_data:
+                    # Sort alphabetically by animal name (for wiki links, sort by the display name part)
+                    butchering_data.sort(key=lambda x: x[0])
+                    butchering_lines = [f'{{"{animal_name}", "{amount}"}}' 
+                                      for animal_name, amount in butchering_data]
+                    sections.append(f"    butchering = {{{','.join(butchering_lines)}}}")
             
             if sections:
                 # Sort sections alphabetically by their type (container, vehicle, etc.)
@@ -991,7 +1235,8 @@ def combine_items_by_page(all_items):
                         "AttachedWeapon": [],
                         "Clothing": [],
                         "Stories": [],
-                        "Fishing": {}
+                        "Fishing": {},
+                        "Butchering": []
                     }
             
             # Combine data from secondary item into primary item
@@ -1051,6 +1296,12 @@ def combine_items_by_page(all_items):
                     combined_items[primary_id]["Fishing"]["isRiver"] = True
                 if secondary_data["Fishing"].get("isLake", False):
                     combined_items[primary_id]["Fishing"]["isLake"] = True
+                
+            # Combine butchering data
+            if secondary_data.get("Butchering"):
+                if not combined_items[primary_id].get("Butchering"):
+                    combined_items[primary_id]["Butchering"] = []
+                combined_items[primary_id]["Butchering"].extend(secondary_data["Butchering"])
     
     # Second pass: Process any remaining items (those without page mappings)
     for item_id, item_data in all_items.items():
@@ -1137,19 +1388,34 @@ def combine_items_by_page(all_items):
                     unique_stories.append(story)
             item_data["Stories"] = unique_stories
             
-        # Remove duplicate fishing lure entries
-        if item_data.get("Fishing") and item_data["Fishing"].get("lures"):
-            unique_lures = []
-            lure_set = set()
-            for lure in item_data["Fishing"]["lures"]:
-                lure_key = (
-                    lure.get("name", ""),
-                    lure.get("chance", 0)
-                )
-                if lure_key not in lure_set:
-                    lure_set.add(lure_key)
-                    unique_lures.append(lure)
-            item_data["Fishing"]["lures"] = unique_lures
+                    # Remove duplicate fishing lure entries
+            if item_data.get("Fishing") and item_data["Fishing"].get("lures"):
+                unique_lures = []
+                lure_set = set()
+                for lure in item_data["Fishing"]["lures"]:
+                    lure_key = (
+                        lure.get("name", ""),
+                        lure.get("chance", 0)
+                    )
+                    if lure_key not in lure_set:
+                        lure_set.add(lure_key)
+                        unique_lures.append(lure)
+                item_data["Fishing"]["lures"] = unique_lures
+                
+            # Remove duplicate butchering entries
+            if item_data.get("Butchering"):
+                unique_butchering = []
+                butchering_set = set()
+                for butchering in item_data["Butchering"]:
+                    butchering_key = (
+                        butchering.get("animal", ""),
+                        butchering.get("amount", ""),
+                        butchering.get("type", "")
+                    )
+                    if butchering_key not in butchering_set:
+                        butchering_set.add(butchering_key)
+                        unique_butchering.append(butchering)
+                item_data["Butchering"] = unique_butchering
     
     # Print statistics
     original_count = len(all_items)
@@ -1194,12 +1460,18 @@ def main():
     Fish.load()
     fishing_data = load_cache(file_paths["fishing"])
 
+    # Parse butchering data
+    lua_runtime = lua_helper.load_lua_file("AnimalPartsDefinitions.lua")
+    butchering_data = lua_helper.parse_lua_tables(lua_runtime)
+    save_cache(butchering_data, "butchering_data.json", cache_path)
+
     # Parse distribution data
     print("Parsing distribution data...")
     distribution_parser.main()
     
     # Process item list and build JSON data
     print("Processing item list...")
+    file_paths["butchering"] = os.path.join(DATA_DIR, "distributions", "butchering_data.json")
     item_list = process_json(file_paths)
 
     print("Building item JSON data...")
@@ -1210,9 +1482,10 @@ def main():
     attached_weapons_data = load_cache(file_paths["attached_weapons"])
     clothing_data = load_cache(file_paths["clothing"])
     stories_data = load_cache(file_paths["stories"])
+    butchering_data_loaded = load_cache(file_paths["butchering"])
 
     build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, 
-                   attached_weapons_data, clothing_data, stories_data, fishing_data)
+                   attached_weapons_data, clothing_data, stories_data, fishing_data, butchering_data_loaded)
 
     # Load all_items and combine items by page
     print("Loading and combining items by page...")
@@ -1241,7 +1514,8 @@ def main():
                 (item_data.get("AttachedWeapon") and len(item_data["AttachedWeapon"]) > 0) or
                 (item_data.get("Clothing") and len(item_data["Clothing"]) > 0) or
                 (item_data.get("Foraging") and item_data["Foraging"]) or
-                (item_data.get("Fishing") and item_data["Fishing"])
+                (item_data.get("Fishing") and item_data["Fishing"]) or
+                (item_data.get("Butchering") and len(item_data["Butchering"]) > 0)
         )
 
         # Only process items that have distribution data
