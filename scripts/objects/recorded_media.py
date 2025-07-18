@@ -204,7 +204,7 @@ class RecMedia:
     
     @property
     def wiki_link(self) -> str:
-        util.link(self.page, self.name)
+        return util.link(self.page, self.name)
     
     @property
     def title_id(self) -> str:

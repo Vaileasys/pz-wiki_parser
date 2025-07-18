@@ -161,7 +161,7 @@ class Translate:
     ## ------------------------- Public Methods ------------------------- ##
 
     @classmethod
-    def get(cls, property_value, property_key=None, lang_code=None, default=None):
+    def get(cls, property_value, property_key=None, lang_code=None, default=None) -> str:
         """Get a translation for a given value, using optional prefix logic."""
         if not property_value:
             return property_value
