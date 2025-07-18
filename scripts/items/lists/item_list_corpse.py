@@ -3,21 +3,39 @@ from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
+from scripts.objects.animal import Animal, AnimalBreed
 from scripts.utils import table_helper, echo, util
 
 TABLE_PATH = os.path.join(TABLES_DIR, "corpse_table.json")
 
 table_map = {}
 
-def generate_data(item: Item):
-    table_type = find_table_type(item)
+def generate_data(item: Item, animal: Animal = None, breed: AnimalBreed = None, stage: str = None):
+    table_type = find_table_type(item, stage)
     columns = table_map.get(table_type) if table_map.get(table_type) is not None else table_map.get("default")
 
     item_dict = {}
 
-    item_dict["icon"] = item.icon if "icon" in columns else None
-    item_dict["name"] = item.wiki_link if "name" in columns else None
-    item_dict["weight"] = util.convert_int(item.weight) if "weight" in columns else None
+    if animal:
+        if stage == "skeleton":
+            item_dict["icon"] = breed.skeleton_icons or breed.dead_icons or breed.icons or "-"
+            item_dict["name"] = breed.get_link("skeleton") or "-"
+            item_dict["weight"] = f"{animal.min_weight}–{animal.max_weight}"
+            item_dict["group"] = animal.group_link or "-"
+            item_dict["breed_id"] = breed.breed_id
+            item_dict["animal_id"] = animal.animal_id
+        else: # stage == "dead"
+            item_dict["icon"] = breed.dead_icons or breed.icons or "-"
+            item_dict["name"] = breed.get_link("dead") or "-"
+            item_dict["weight"] = f"{animal.min_weight}–{animal.max_weight}"
+            item_dict["group"] = animal.group_link or "-"
+            item_dict["breed_id"] = breed.breed_id
+            item_dict["animal_id"] = animal.animal_id
+    else:
+        item_dict["icon"] = item.icon if "icon" in columns else None
+        item_dict["name"] = item.wiki_link if "name" in columns else None
+        item_dict["weight"] = util.convert_int(item.weight) if "weight" in columns else None
+
     
     item_dict["item_id"] = item.item_id if "item_id" in columns else None
 
@@ -29,32 +47,52 @@ def generate_data(item: Item):
 
     # Add item_name for sorting
     item_dict["item_name"] = item.name
+    if animal:
+        item_dict["item_name"] = breed.get_name(stage)
     
     return table_type, item_dict
 
 
-def find_table_type(item: Item):    
+def find_table_type(item: Item, stage: str = None):
+    if item.item_id == "Base.CorpseAnimal":
+        return f"animal_{stage}"
     return "corpse"
-    
+
 
 def process_items() -> dict:
     items = {}
     item_count = 0
 
     # Get items
-    with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+    with tqdm(total=Item.count() + Animal.count() - 1, desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
         for item_id, item in Item.items():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
             if item.has_category("corpse"):
-                table_type, item_dict = generate_data(item)
+                if item_id == "Base.CorpseAnimal":
+                    for animal_id, animal in Animal.all().items():
+                        for breed in animal.breeds:
+                            stages = ["dead"] # ["dead", "skeleton"] - skeleton icons are not currently used, and weight is the same as dead
+                            for stage in stages:
+                                table_type, item_dict = generate_data(item, animal, breed, stage)
 
-                # Add table_type to dict if it hasn't been added yet.
-                if table_type not in items:
-                    items[table_type] = []
+                                # Add table_type to dict if it hasn't been added yet.
+                                if table_type not in items:
+                                    items[table_type] = []
 
-                items[table_type].append(item_dict)
+                                items[table_type].append(item_dict)
 
-                item_count += 1
+                        item_count += 1
+
+                else:
+                    table_type, item_dict = generate_data(item)
+
+                    # Add table_type to dict if it hasn't been added yet.
+                    if table_type not in items:
+                        items[table_type] = []
+
+                    items[table_type].append(item_dict)
+
+                    item_count += 1
         
             pbar.update(1)
 

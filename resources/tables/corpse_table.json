@@ -5,12 +5,33 @@
             "name",
             "weight",
             "item_id"
+        ],
+        "animal_dead": [
+            "icon",
+            "name",
+            "weight",
+            "group",
+            "breed_id",
+            "animal_id",
+            "item_id"
+        ],
+        "animal_skeleton": [
+            "icon",
+            "name",
+            "weight",
+            "group",
+            "breed_id",
+            "animal_id",
+            "item_id"
         ]
     },
     "headings": {
         "icon": "! Icon",
         "name": "! Name",
         "weight": "! [[File:Status_HeavyLoad_32.png|32px|link=|Encumbrance]]",
+        "group": "! Group",
+        "breed_id": "! Breed ID",
+        "animal_id": "! Animal ID",
         "item_id": "! Item ID"
     }
 }
