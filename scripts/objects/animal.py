@@ -43,6 +43,16 @@ class Animal:
         """
         Parses Animal data from the provided Lua file and caches it.
         """
+        def _split_commas(obj):
+            """Recursively split strings with commas into lists."""
+            if isinstance(obj, dict):
+                return {k: _split_commas(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [_split_commas(v) for v in obj]
+            elif isinstance(obj, str) and "," in obj:
+                return [s.strip() for s in obj.split(",")]
+            return obj
+        
         lua_copy_table = ("""
             function copyTable(tbl)
                 local copy = {}
@@ -72,6 +82,9 @@ class Animal:
         parsed_data = lua_helper.parse_lua_tables(lua_runtime, tables="AnimalDefinitions")
 
         cls._animal_data:dict = parsed_data.get("AnimalDefinitions", {}).get("animals")
+        
+        # Split any values separated by a comma into a list
+        cls._animal_data = _split_commas(cls._animal_data)
 
         save_cache(cls._animal_data, cls._data_file)
 
@@ -183,9 +196,13 @@ class Animal:
         """
         return self.data.get(key, default)
 
+    def _translate_month(self, month: int):
+        from scripts.core.language import Translate
+        return Translate.get(f"Sandbox_StartMonth_option{month}")
+
     @property
     def is_valid(self) -> bool:
-        return self.animal_id in self._animal_data
+        return self.animal_id in Animal._animal_data
     
     @property
     def data(self) -> dict:
@@ -238,7 +255,7 @@ class Animal:
     @property
     def group_link(self) -> str: return util.link(self.page, self.group_name)
     @property
-    def base_encumbrance(self) -> float | None: return self.get("baseEncumbrance")
+    def base_encumbrance(self) -> float: return self.get("baseEncumbrance", 1.0)
     @property
     def trailer_base_size(self) -> float | None: return self.get("trailerBaseSize")
     @property
@@ -252,9 +269,9 @@ class Animal:
                 self._carcass_item = None
         return self._carcass_item
     @property
-    def min_weight(self) -> float | None: return self.get("minWeight")
+    def min_weight(self) -> float: return self.get("minWeight", 10.0)
     @property
-    def max_weight(self) -> float | None: return self.get("maxWeight")
+    def max_weight(self) -> float: return self.get("maxWeight", 100.0)
     @property
     def min_size(self) -> float | None: return self.get("minSize")
     @property
@@ -262,11 +279,14 @@ class Animal:
     @property
     def animal_size(self) -> float | None: return self.get("animalSize")
     @property
-    def corpse_size(self) -> float | None: return self.get("corpseSize")
+    def corpse_size(self) -> float: return self.get("corpseSize", 1.0)
     @property
-    def collision_size(self) -> float | None: return self.get("collisionSize")
+    def collision_size(self) -> float: return self.get("collisionSize", 0.0)
     @property
     def texture_skeleton_bloody(self) -> str | None: return self.get("textureSkeletonBloody")
+    @property
+    def stage_type(self) -> str:
+        return "baby" if self.is_baby else "female" if self.is_female else "male"
     @property
     def is_baby(self) -> bool:
         return self.animal_id in self._stage_animals.get("baby")
@@ -276,41 +296,144 @@ class Animal:
     @property
     def is_female(self) -> bool:
         return self.animal_id in self._stage_animals.get("female")
+    @property
+    def icon(self) -> str:
+        if not hasattr(self, "_icon"):
+            icons = [breed.icon for breed in self.breeds]
+            if icons == 1:
+                self._icon = "".join(icons)
+            else:
+                self._icon = f'<span class="cycle-img">{"".join(icons)}</span>'
+        return self._icon
+    @property
+    def icon_all(self) -> str:
+        if not hasattr(self, "_icon_all"):
+            icons = [breed.icon for breed in self.breeds]
+            self._icon = "".join(icons)
+        return self._icon
+    @property
+    def icon_dead(self) -> str:
+        if not hasattr(self, "_icon_dead"):
+            icons = [breed.icon_dead for breed in self.breeds]
+            if icons == 1:
+                self._icon_dead = "".join(icons)
+            else:
+                self._icon_dead = f'<span class="cycle-img">{"".join(icons)}</span>'
+        return self._icon_dead
+    @property
+    def icon_dead_all(self) -> str:
+        if not hasattr(self, "_icon_dead_all"):
+            icons = [breed.icon_dead for breed in self.breeds]
+            self._icon_dead_all = "".join(icons)
+        return self._icon_dead_all
+    @property
+    def icon_skeleton(self) -> str:
+        if not hasattr(self, "_icon_skeleton"):
+            icons = [breed.icon_skeleton for breed in self.breeds]
+            if icons == 1:
+                self._icon_skeleton = "".join(icons)
+            else:
+                self._icon_skeleton = f'<span class="cycle-img">{"".join(icons)}</span>'
+        return self._icon_skeleton
+    @property
+    def icon_skeleton_all(self) -> str:
+        if not hasattr(self, "_icon_skeleton_all"):
+            icons = [breed.icon_skeleton for breed in self.breeds]
+            self._icon_skeleton_all = "".join(icons)
+        return self._icon_skeleton_all
+    @property
+    def model(self) -> str:
+        if not hasattr(self, "_model"):
+            models = []
+            for breed in self.breeds:
+                models.extend(breed.model)
+            if models == 1:
+                self._model = "".join(models)
+            else:
+                self._model = f'<span class="cycle-img">{"".join(models)}</span>'
+        return self._model
+    @property
+    def model_all(self) -> str:
+        if not hasattr(self, "_model_all"):
+            models = []
+            for breed in self.breeds:
+                models.extend(breed.model)
+            self._model_all = "".join(models)
+        return self._model_all
 
 
     # --- Physiology and stats --- #
     @property
-    def hunger_multiplier(self) -> float | None: return self.get("hungerMultiplier")
+    def hunger_multiplier(self) -> float: return self.get("hungerMultiplier", 0.0) # Thirst rate per hour
     @property
-    def thirst_multiplier(self) -> float | None: return self.get("thirstMultiplier")
+    def thirst_multiplier(self) -> float: return self.get("thirstMultiplier", 0.0)
     @property
-    def hunger_boost(self) -> float | None: return self.get("hungerBoost")
+    def hunger_boost(self) -> float: return self.get("hungerBoost", 1.0)
     @property
-    def thirst_boost(self) -> float | None: return self.get("thirstBoost")
+    def thirst_boost(self) -> float: return self.get("thirstBoost", 1.0) # Thirst reduced (thirstBoost * 0.2), and fluid consumed (thirstBoost / 0.5L)
     @property
-    def health_loss_multiplier(self) -> float | None: return self.get("healthLossMultiplier")
+    def health_loss_multiplier(self) -> float: return self.get("healthLossMultiplier", 0.05)
     @property
     def max_blood(self) -> int | None: return self.get("maxBlood")
     @property
     def min_blood(self) -> int | None: return self.get("minBlood")
+    @property
+    def min_body_part(self) -> int: return self.get("minBodyPart", 0)
+    @property
+    def daily_water(self) -> str:
+        thirst_increased = self.thirst_multiplier * 24 # Thirst increased per 24 hours
+        thirst_reduction = 0.2 * self.thirst_boost # Thirst reduced per drink
+        fluid_per_drink = 0.5 / self.thirst_boost # Fluid (L) reduced from source per drink
+
+        drinks_needed = thirst_increased / thirst_reduction # Number of drinks needed per 24 hours
+        fluid_needed = drinks_needed * fluid_per_drink
+        
+        # Return early and hardcode the value
+        # Still displays as 0 mL for animals that don't consume any water
+        if 0 < fluid_needed < 0.001:
+            return "<1 mL"
+        return util.convert_unit(round(fluid_needed, 3), unit="L") # Fluid needed in 24 hours (automatically sets the appropriate SI unit)
+    @property
+    def daily_hunger(self) -> float:
+        hunger_increased = self.hunger_multiplier * 24 # Hunger increased per 24 hours
+        hunger_per_unit = 1 * self.hunger_boost # Hunger reduced per unit of food (assumes -1 hungerChange)
+
+        hunger_needed = hunger_increased / hunger_per_unit
+
+        if 0 < hunger_needed < 0.001:
+            return "<0.001"
+
+        return round(hunger_needed, 3)
 
     # --- Behaviour and AI --- #
     @property
     def can_be_pet(self) -> bool: return self.get("canBePet", False)
     @property
-    def can_thump(self) -> bool: return self.get("canThump", False)
+    def can_thump(self) -> bool: return self.get("canThump", True)
     @property
-    def can_be_picked(self) -> bool: return self.get("canBePicked", False)
+    def can_be_picked(self) -> bool: return self.get("canBePicked", True)
     @property
-    def always_flee_humans(self) -> bool: return self.get("alwaysFleeHumans", False)
+    def always_flee_humans(self) -> bool: return self.get("alwaysFleeHumans", True)
+    @property
+    def flee_zombies(self) -> bool: return self.get("fleeZombies", True)
     @property
     def stress_under_rain(self) -> bool: return self.get("stressUnderRain", False)
     @property
     def stress_above_ground(self) -> bool: return self.get("stressAboveGround", False)
     @property
+    def can_climb_fences(self) -> bool: return self.get("canClimbStairs", False)
+    @property
     def sit_randomly(self) -> bool: return self.get("sitRandomly", False)
     @property
     def dont_attack_other_male(self) -> bool: return self.get("dontAttackOtherMale", False)
+    @property
+    def can_be_fed_by_hand(self) -> bool: return self.get("canBeFeedByHand", False)
+    @property
+    def feed_by_hand_type(self) -> list[str]:
+        value = self.get("feedByHandType")
+        if isinstance(value, str):
+            value = [value]
+        return value
     @property
     def knockdown_attack(self) -> bool: return self.get("knockdownAttack", False)
     @property
@@ -320,23 +443,29 @@ class Animal:
     @property
     def can_be_attached(self) -> bool: return self.get("canBeAttached", False)
     @property
-    def attack_dist(self) -> float | None: return self.get("attackDist")
+    def can_be_transported(self) -> bool: return self.get("canBeTransported", False)
     @property
-    def attack_timer(self) -> int | None: return self.get("attackTimer")
+    def attack_dist(self) -> int: return self.get("attackDist", 1)
+    @property
+    def attack_timer(self) -> int: return self.get("attackTimer", 1000)
     @property
     def attack_if_stressed(self) -> bool: return self.get("attackIfStressed", False)
     @property
     def attack_back(self) -> bool: return self.get("attackBack", False)
     @property
-    def base_dmg(self) -> float | None: return self.get("baseDmg")
+    def base_dmg(self) -> float: return self.get("baseDmg", 0.5)
     @property
-    def thirst_hunger_trigger(self) -> float | None: return self.get("thirstHungerTrigger")
+    def thirst_hunger_trigger(self) -> float: return self.get("thirstHungerTrigger", 0.1)
     @property
-    def exit_hutch_time(self) -> int | None: return self.get("exitHutchTime")
+    def enter_hutch_time(self) -> int: return self.get("enterHutchTime", 0)
     @property
-    def enter_hutch_time(self) -> int | None: return self.get("enterHutchTime")
+    def exit_hutch_time(self) -> int: return self.get("exitHutchTime", 0)
     @property
-    def idle_type_nbr(self) -> int | None: return self.get("idleTypeNbr")
+    def idle_type_nbr(self) -> int: return self.get("idleTypeNbr", 0)
+    @property
+    def eating_type_nbr(self) -> int: return self.get("eatingTypeNbr", 0)
+    @property
+    def sitting_type_nbr(self) -> int: return self.get("sittingTypeNbr", 0)
     @property
     def periodic_run(self) -> bool: return self.get("periodicRun", False)
     @property
@@ -350,15 +479,21 @@ class Animal:
     @property
     def eat_from_mother(self) -> bool: return self.get("eatFromMother", False)
     @property
-    def need_mom(self) -> bool: return self.get("needMom", False)
+    def need_mom(self) -> bool: return self.get("needMom", True)
     @property
     def can_climb_stairs(self) -> bool: return self.get("canClimbStairs", False)
     @property
-    def add_tracking_xp(self) -> bool: return self.get("addTrackingXp", False)
+    def add_tracking_xp(self) -> bool: return self.get("addTrackingXp", True)
     @property
-    def wild_flee_time_until_dead_timer(self) -> int | None: return self.get("wildFleeTimeUntilDeadTimer")
+    def wild_flee_time_until_dead_timer(self) -> int: return self.get("wildFleeTimeUntilDeadTimer", 0.0)
     @property
-    def spotting_dist(self) -> float | None: return self.get("spottingDist")
+    def spotting_dist(self) -> int: return self.get("spottingDist", 10)
+    @property
+    def can_be_alerted(self) -> bool: return self.get("canBeAlerted", False)
+    @property
+    def can_be_domesticated(self) -> bool: return self.get("canBeDomesticated", True)
+    @property
+    def litter_eat_together(self) -> bool: return self.get("litterEatTogether", False)
 
     # --- Genetics and breeding --- #
     @property
@@ -367,6 +502,9 @@ class Animal:
     @property
     def stages(self) -> dict:
         return self.get("stages", {})
+    @property
+    def stage(self) -> dict:
+        return self.stages.get(self.animal_id, {})
     @property
     def breeds(self) -> "list[AnimalBreed]":
         if not hasattr(self, "_breeds"):
@@ -377,11 +515,19 @@ class Animal:
             ]
         return self._breeds
     @property
-    def mating_period(self) -> tuple[int | None, int | None]: return (self.get("matingPeriodStart"), self.get("matingPeriodEnd"))
+    def mating_period_start(self) -> int: return self.get("matingPeriodStart", 0) # Zero means no period
     @property
-    def min_age(self) -> int | None: return self.get("minAge")
+    def mating_period_month_start(self) -> str | None: return self._translate_month(self.mating_period_start) if self.mating_period_start else None
     @property
-    def max_age_geriatric(self) -> int | None: return self.get("maxAgeGeriatric")
+    def mating_period_end(self) -> int: return self.get("matingPeriodEnd", 0) # Zero means no period
+    @property
+    def mating_period_month_end(self) -> str | None: return self._translate_month(self.mating_period_end) if self.mating_period_end else None
+    @property
+    def min_age(self) -> int | None:
+        return 0 if self.is_baby else self.get("minAge")
+    @property
+    def max_age(self) -> int | None:
+        return self.stage.get("ageToGrow") if self.is_baby else self.get("maxAgeGeriatric")
     @property
     def min_age_for_baby(self) -> int | None: return self.get("minAgeForBaby")
     @property
@@ -391,29 +537,41 @@ class Animal:
     @property
     def baby_nbr(self) -> str | None: return self.get("babyNbr")
     @property
-    def pregnant_period(self) -> int | None: return self.get("pregnantPeriod")
+    def pregnant_period(self) -> int: return self.get("pregnantPeriod", 0)
     @property
-    def time_before_next_pregnancy(self) -> int | None: return self.get("timeBeforeNextPregnancy")
+    def time_before_next_pregnancy(self) -> int: return self.get("timeBeforeNextPregnancy", 0)
+    @property
+    def can_be_milked(self) -> bool: return self.get("canBeMilked", False)
+    @property
+    def min_milk(self) -> float: return self.get("minMilk", 0.0)
+    @property
+    def max_milk(self) -> float: return self.get("maxMilk", 0.0)
+    @property
+    def min_baby(self) -> int: return self.get("minBaby", 1)
+    @property
+    def max_baby(self) -> int: return self.get("maxBaby", 1)
+    @property
+    def eggs_per_day(self) -> int: return self.get("eggsPerDay", 0)
+    @property
+    def egg_type(self) -> "Item | None":
+        from scripts.objects.item import Item
+        return Item(self.get("eggType")) if self.get("eggType") else None
+    @property
+    def fertilized_time_max(self) -> int: return self.get("fertilizedTimeMax", 0) # Number of hours - divide by 24 for number of days
+    @property
+    def time_to_hatch(self) -> int: return self.get("timeToHatch", 0) # Number of hours - divide by 24 for number of days
 
     # --- Animation and visuals --- #
-    @property
-    def inv_icon(self) -> str | None: return self.get("invIcon")
-    @property
-    def inv_icon_male(self) -> str | None: return self.get("invIconMale")
-    @property
-    def inv_icon_female(self) -> str | None: return self.get("invIconFemale")
-    @property
-    def inv_icon_corpse(self) -> str | None: return self.get("invIconCorpse")
-    @property
-    def inv_icon_skeleton(self) -> str | None: return self.get("invIconSkeleton")
     @property
     def model_script(self) -> str | None: return self.get("modelscript")
     @property
     def anim_set(self) -> str | None: return self.get("animset")
     @property
+    def texture_skinned(self) -> str | None: return self.get("textureSkinned")
+    @property
     def texture_skeleton(self) -> str | None: return self.get("textureSkeleton")
     @property
-    def texture_skinned(self) -> str | None: return self.get("textureSkinned")
+    def texture_skeleton_bloody(self) -> str | None: return self.get("textureSkeletonBloody")
     @property
     def body_model(self) -> str | None: return self.get("bodyModel")
     @property
@@ -423,7 +581,7 @@ class Animal:
     @property
     def body_model_headless(self) -> str | None: return self.get("bodyModelHeadless")
     @property
-    def rope_bone(self) -> str | None: return self.get("ropeBone")
+    def rope_bone(self) -> str: return self.get("ropeBone", "Bip01_Head")
     @property
     def shadow_w(self) -> float | None: return self.get("shadoww")
     @property
@@ -431,17 +589,15 @@ class Animal:
     @property
     def shadow_bm(self) -> float | None: return self.get("shadowbm")
     @property
-    def sitting_type_nbr(self) -> int | None: return self.get("sittingTypeNbr")
-    @property
-    def idle_emote_chance(self) -> int | None: return self.get("idleEmoteChance")
+    def idle_emote_chance(self) -> int: return self.get("idleEmoteChance", 1000)
 
     # --- Sound --- #
     @property
     def sounds(self) -> dict: return self.get("sounds", {})
     @property
-    def idle_sound_radius(self) -> int | None: return self.get("idleSoundRadius")
+    def idle_sound_radius(self) -> float: return self.get("idleSoundRadius", 0.0)
     @property
-    def idle_sound_volume(self) -> int | None: return self.get("idleSoundVolume")
+    def idle_sound_volume(self) -> float: return self.get("idleSoundVolume", 0.0)
 
     # --- Misc --- #
     @property
@@ -455,17 +611,39 @@ class Animal:
                 self._dung = None
         return self._dung
     @property
-    def dung_chance_per_day(self) -> float | None: return self.get("dungChancePerDay")
+    def dung_chance_per_day(self) -> int: return self.get("dungChancePerDay", 50)
     @property
-    def enclosure_size(self) -> float | None: return self.get("minEnclosureSize")
+    def min_enclosure_size(self) -> float | None: return self.get("minEnclosureSize")
     @property
-    def eat_type_trough(self) -> str | None: return self.get("eatTypeTrough")
+    def eat_type_trough(self) -> list[str] | None:
+        value = self.get("eatTypeTrough", [])
+        if isinstance(value, str):
+            value = [value]
+        return value
     @property
-    def hutches(self) -> str | None: return self.get("hutches")
+    def hutches(self) -> list[str]:
+        value = self.get("hutches", [])
+        if isinstance(value, str):
+            value = [value]
+        return value
     @property
-    def wander_mul(self) -> float | None: return self.get("wanderMul")
+    def lured_possible_items(self) -> list[str]:
+        value = self.get("luredPossibleItems", [])
+        if isinstance(value, str):
+            value = [value]
+        return value
     @property
-    def lured_possible_items(self) -> list: return self.get("luredPossibleItems", [])
+    def wander_mul(self) -> float: return self.get("wanderMul", 400.0)
+    @property
+    def max_wool(self) -> float: return self.get("maxWool", 0.0)
+    @property
+    def min_clutch_size(self) -> int: return self.get("minClutchSize", 0) # Number of eggs laid in one season. E.g. Turkey produce 9-17 eggs per year, starting May
+    @property
+    def max_clutch_size(self) -> int: return self.get("maxClutchSize", 0)
+    @property
+    def lay_egg_period_start(self) -> int: return self.get("layEggPeriodStart", 0)
+    @property
+    def lay_egg_period_month_start(self) -> int: return self._translate_month(self.lay_egg_period_start) if self.lay_egg_period_start else None
 
     def __repr__(self):
         return f"<Animal {self.animal_id}>"
@@ -492,10 +670,23 @@ class AnimalBreed:
         """
         return self.data.get(key, default)
     
-    def build_icon(self, icon: str, page: str, name: str, default: str = None) -> str:
-        if not icon:
-            icon = default
-        return f"[[File:{icon.removeprefix("Item_").removesuffix(".png")}.png|32x32px|link={page}|{name}]]"
+    def build_icon(self, image: str, page: str, name: str, default: str = None) -> str:
+        if not image:
+            image = default
+        return f"[[File:{image.removeprefix("Item_").removesuffix(".png")}.png|32x32px|link={page}|{name}]]"
+    
+    def build_model(self, image: list[str] | str, page: str, name: str, default: str = None) -> list[str]:
+        if not image:
+            image = default
+
+        if isinstance(image, str):
+            image = [image]
+        
+        images = []
+        for img in image:
+            images.append(f"[[File:{img.removesuffix(".png").removesuffix("_Body").removesuffix("Body")}_Body.png|64x64px|link={page}|{name}]]")
+
+        return images
     
     def get_name(self, stage: str = None) -> str:
         text = self.name
@@ -534,76 +725,93 @@ class AnimalBreed:
         return self.get_link()
     
     @property
-    def icons(self) -> str:
+    def icon(self) -> str:
         if self.animal.is_baby:
             return self.build_icon(self.inv_icon_baby, self.page, self.name)
         if self.animal.is_male:
             return self.build_icon(self.inv_icon_male, self.page, self.name)
-        if self.animal.is_female:
-            return self.build_icon(self.inv_icon_female, self.page, self.name)
+        # Fallback to female
+        return self.build_icon(self.inv_icon_female, self.page, self.name)
     
     @property
-    def dead_icons(self) -> str:
+    def icon_dead(self) -> str:
         if self.animal.is_baby:
-            return self.build_icon(self.inv_icon_baby_dead, self.page, self.name, default=self.inv_icon_baby)
+            return self.build_icon(self.inv_icon_baby_dead, self.page, self.get_name("dead"), default=self.inv_icon_baby)
         if self.animal.is_male:
-            return self.build_icon(self.inv_icon_male_dead, self.page, self.name, default=self.inv_icon_male)
-        if self.animal.is_female:
-            return self.build_icon(self.inv_icon_female_dead, self.page, self.name, default=self.inv_icon_female)
+            return self.build_icon(self.inv_icon_male_dead, self.page, self.get_name("dead"), default=self.inv_icon_male)
+        # Fallback to female
+        return self.build_icon(self.inv_icon_female_dead, self.page, self.get_name("dead"), default=self.inv_icon_female)
     
     @property
-    def skeleton_icons(self) -> str:
+    def icon_skeleton(self) -> str:
         if self.animal.is_baby:
-            return self.build_icon(self.inv_icon_baby_skel, self.page, self.name, default=self.inv_icon_baby_dead or self.inv_icon_baby)
+            return self.build_icon(self.inv_icon_baby_skel, self.page, self.get_name("skeleton"), default=self.inv_icon_baby_dead or self.inv_icon_baby)
         if self.animal.is_male:
-            return self.build_icon(self.inv_icon_male_skel, self.page, self.name, default=self.inv_icon_male_dead or self.inv_icon_male)
-        if self.animal.is_female:
-            return self.build_icon(self.inv_icon_female_skel, self.page, self.name, default=self.inv_icon_female_dead or self.inv_icon_female)
+            return self.build_icon(self.inv_icon_male_skel, self.page, self.get_name("skeleton"), default=self.inv_icon_male_dead or self.inv_icon_male)
+        # Fallback to female
+        return self.build_icon(self.inv_icon_female_skel, self.page, self.get_name("skeleton"), default=self.inv_icon_female_dead or self.inv_icon_female)
     
     @property
-    def inv_icon_male(self) -> str:
-        return self.get("invIconMale")
+    def inv_icon_male(self) -> str: return self.get("invIconMale")
+    @property
+    def inv_icon_female(self) -> str: return self.get("invIconFemale")
+    @property
+    def inv_icon_baby(self) -> str: return self.get("invIconBaby")
+    @property
+    def inv_icon_male_dead(self) -> str: return self.get("invIconMaleDead")
+    @property
+    def inv_icon_female_dead(self) -> str: return self.get("invIconFemaleDead")
+    @property
+    def inv_icon_baby_dead(self) -> str: return self.get("invIconBabyDead")
+    @property
+    def inv_icon_male_skel(self) -> str: return self.get("invIconMaleSkel")
+    @property
+    def inv_icon_female_skel(self) -> str: return self.get("invIconFemaleSkel")
+    @property
+    def inv_icon_baby_skel(self) -> str: return self.get("invIconBabySkel")
+
+    @property
+    def texture(self) -> list[str] | str: return self.get("texture")
+    @property
+    def texture_male(self) -> list[str] | str: return self.get("textureMale")
+    @property
+    def texture_baby(self) -> list[str] | str: return self.get("texturebaby")
+    @property
+    def rotten_texture(self) -> list[str] | str: return self.get("rottenTexture")
+
+    @property
+    def model(self) -> list[str]:
+        if self.animal.is_baby:
+            textures = self.texture_baby
+            if not textures:
+                textures = self.texture if isinstance(self.texture, list) else [self.texture]
+                textures = [tex + "_" + self.animal.animal_id.capitalize() for tex in textures]
+                
+            return self.build_model(textures, self.page, self.name)
+        
+        if self.animal.is_male:
+            return self.build_model(self.texture_male, self.page, self.name)
+        
+        # Fallback to female
+        return self.build_model(self.texture, self.page, self.name)
     
     @property
-    def inv_icon_female(self) -> str:
-        return self.get("invIconFemale")
-    
+    def forced_genes(self) -> dict | None: return self.get("forcedGenes")
     @property
-    def inv_icon_baby(self) -> str:
-        return self.get("invIconBaby")
-    
+    def parts_id(self) -> str:
+        return self.animal.animal_id + self.breed_id
     @property
-    def inv_icon_male_dead(self) -> str:
-        return self.get("invIconMaleDead")
-    
-    @property
-    def inv_icon_female_dead(self) -> str:
-        return self.get("invIconFemaleDead")
-    
-    @property
-    def inv_icon_baby_dead(self) -> str:
-        return self.get("invIconBabyDead")
-    
-    @property
-    def inv_icon_male_skel(self) -> str:
-        return self.get("invIconMaleSkel")
-    
-    @property
-    def inv_icon_female_skel(self) -> str:
-        return self.get("invIconFemaleSkel")
-    
-    @property
-    def inv_icon_baby_skel(self) -> str:
-        return self.get("invIconBabySkel")
+    def parts(self) -> "AnimalPart":
+        from scripts.objects.animal_part import AnimalPart
+        return AnimalPart(self.parts_id)
 
     def __repr__(self):
         return f"<AnimalBreed {self.animal.animal_id}:{self.breed_id}>"
 
-if __name__ == "__main__":
-#    animal = Animal("cow")
-#    print(animal.wiki_link)
-#    dung = animal.dung
-#    print(f"{dung.icon} {dung.name}")
+
+def animal_report(animal_id: str):
+    import os
+    from scripts.objects.item import Item
     from scripts.core.file_loading import write_file
 
     animals = {}
