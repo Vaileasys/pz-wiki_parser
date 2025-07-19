@@ -18,14 +18,14 @@ def generate_data(item: Item, animal: Animal = None, breed: AnimalBreed = None, 
 
     if animal:
         if stage == "skeleton":
-            item_dict["icon"] = breed.skeleton_icons or breed.dead_icons or breed.icons or "-"
+            item_dict["icon"] = breed.icon_skeleton or breed.icon_dead or breed.icon or "-"
             item_dict["name"] = breed.get_link("skeleton") or "-"
             item_dict["weight"] = f"{animal.min_weight}–{animal.max_weight}"
             item_dict["group"] = animal.group_link or "-"
             item_dict["breed_id"] = breed.breed_id
             item_dict["animal_id"] = animal.animal_id
         else: # stage == "dead"
-            item_dict["icon"] = breed.dead_icons or breed.icons or "-"
+            item_dict["icon"] = breed.icon_dead or breed.icon or "-"
             item_dict["name"] = breed.get_link("dead") or "-"
             item_dict["weight"] = f"{animal.min_weight}–{animal.max_weight}"
             item_dict["group"] = animal.group_link or "-"
