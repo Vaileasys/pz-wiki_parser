@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from scripts.objects.item import Item
+    from scripts.objects.animal_part import AnimalPart
 
 class Animal:
     """Represents a single animal entry."""
@@ -813,24 +814,94 @@ def animal_report(animal_id: str):
     import os
     from scripts.objects.item import Item
     from scripts.core.file_loading import write_file
-
-    animals = {}
-
-    for animal_id, animal in Animal.all().items():
-        if animal.group_name not in animals:
-            animals[animal.group_name] = []
-
-        animals[animal.group_name].append(f"==={animal.name}===")
-        breeds = animal.breeds
-        for breed in breeds:
-            animals[animal.group_name].append(f"===={breed.breed_name}====")
-            animals[animal.group_name].append(f"*{breed.icons} {breed.wiki_link}")
-            animals[animal.group_name].append(f"*{breed.dead_icons} {breed.get_link("dead")}")
-            animals[animal.group_name].append(f"*{breed.skeleton_icons} {breed.get_link("skeleton")}")
+    animal = Animal(animal_id)
+    if not animal.is_valid:
+        return
     
     content = []
-    for group, breed in animals.items():
-        content.append(f"=={group}==")
-        content.extend(breed)
+    content.append(f"=={animal.animal_id}==")
+    content.append("===General===")
+    content.extend([
+        f"*'''Name:''' {animal.wiki_link}",
+        f"*'''Group:''' {animal.group_link}",
+        f"*'''Stage:''' {animal.stage_type.capitalize()}",
+        f"*'''Size:''' {animal.min_size}–{animal.max_size}",
+        f"*'''Trailer size:''' {animal.trailer_base_size}",
+        f"*'''Icons:''' {animal.icon_all} {animal.icon_dead_all} {animal.icon_skeleton_all}",
+        f"*'''Models:''' {''.join([''.join(breed.model) for breed in animal.breeds])}"
+    ])
+    content.append("===Stats===")
+    content.extend([
+        f"*'''Weight:''' {animal.min_weight}–{animal.max_weight}",
+        f"*'''Health:''' {util.convert_int(1 / (animal.health_loss_multiplier or 1))}",
+        f"*'''Daily water:''' {animal.daily_water}",
+        f"*'''Daily hunger:''' {animal.daily_hunger}",
+        f"*'''Thirst rate:''' {util.convert_int(round(animal.thirst_multiplier * 24, 3))} per day",
+        f"*'''Hunger rate:''' {util.convert_int(round(animal.hunger_multiplier * 24, 3))} per day",
+        f"*'''Blood:''' {'–'.join([str(animal.min_blood), str(animal.max_blood)]) if animal.min_blood else 'N/A'}",
+        f"*'''Damage:''' {animal.base_dmg or 'N/A'}",
+        f"*'''Age:''' {animal.min_age}–{animal.max_age}",
+        f"*'''Can be milked:''' {animal.can_be_milked}",
+        f"*'''Milk:''' {'–'.join([str(animal.min_milk), str(animal.max_milk)]) if animal.min_milk else 'N/A'}",
+        f"*'''Wool:''' {'–'.join(["0", str(util.convert_int(animal.max_wool))]) if animal.max_wool else 'N/A'}",
+        f"*'''Dung chance per day:''' {f'{animal.dung_chance_per_day}%' if animal.dung_chance_per_day else 'N/A'}",
+        f"*'''Dung:''' {animal.dung.icon if animal.dung else 'N/A'}"
+    ])
+    content.append("===Behaviour===")
+    content.extend([
+        f"*'''Lure:''' {''.join([Item(item.get("name")).icon for item in animal.lured_possible_items]) or 'N/A'}",
+        f"*'''Eats grass:''' {animal.eat_grass}",
+        f"*'''Trough food:''' {', '.join(animal.eat_type_trough) or 'N/A'}",
+        f"*'''Pet:''' {animal.can_be_pet}",
+        f"*'''Flees humans:''' {animal.always_flee_humans}",
+        f"*'''Flees zombies:''' {animal.flee_zombies}",
+        f"*'''Minimum enclosure size:''' {animal.min_enclosure_size or 'N/A'}",
+        f"*'''Destroys furniture:''' {animal.can_thump}",
+        f"*'''Stressed from rain:''' {animal.stress_under_rain}",
+        f"*'''Stressed above ground:''' {animal.stress_above_ground}",
+        f"*'''Attack if stressed:''' {animal.attack_if_stressed}",
+        f"*'''Attacks back:''' {animal.attack_back}",
+    ])
+    content.append("===Breeding===")
+    content.extend([
+        f"*'''Mate:''' {Animal(animal.mate).wiki_link if animal.mate else 'N/A'}",
+        f"*'''Baby:''' {Animal(animal.baby_type).wiki_link if animal.baby_type else 'N/A'}",
+        f"*'''Baby amount:''' {'–'.join(animal.baby_nbr) if animal.baby_nbr else 'N/A'}",
+        f"*'''Minimum age for baby:''' {animal.min_age_for_baby or 'N/A'}",
+        f"*'''Mating period:''' {'–'.join([animal.mating_period_month_start, animal.mating_period_month_end]) if animal.mating_period_month_start else 'N/A'}",
+        f"*'''Pregnant period:''' {animal.pregnant_period or 'N/A'}",
+        f"*'''Time between pregnancies:''' {animal.time_before_next_pregnancy or 'N/A'}",
+        f"*'''Egg:''' {animal.egg_type.icon if animal.egg_type else 'N/A'}",
+        f"*'''Eggs per day:''' {animal.eggs_per_day or 'N/A'}",
+        f"*'''Eggs per season:''' {'–'.join([str(animal.min_clutch_size), str(animal.max_clutch_size)]) if animal.min_clutch_size else 'N/A'}",
+        f"*'''Laying season start:''' {animal.lay_egg_period_month_start or 'N/A'}",
+    ])
+    content.append("===Genes===")
+    content.extend([
+        '\n'.join("*" + util.split_camel_case(key).capitalize() for key in animal.genes.keys())
+    ])
+    content.append("===Breeds===")
+    for breed in animal.breeds:
+        content.append(f"===={breed.breed_name}====")
+        if breed.forced_genes:
+            content.append("*'''Forced genes:'''")
+            for gene, gene_data in breed.forced_genes.items():
+                content.append(f"**'''{util.split_camel_case(gene).capitalize()}:''' {gene_data.get("minValue", 0)}–{gene_data.get("maxValue", 0)}")
+        if breed.parts:
+            content.append("*'''Parts:'''")
+            for part in breed.parts.all_parts:
+                item = Item(part)
+                content.append(f"**{item.icon} {item.wiki_link}")
     
-    write_file(content)
+    rel_path = os.path.join("animal_reports", f"animal_report_{animal.animal_id}.txt")
+#    write_file(content, rel_path=rel_path)
+    return content
+
+if __name__ == "__main__":
+    from scripts.core.file_loading import write_file
+    content = []
+    for animal_id, animal in Animal.all().items():
+        content.extend(animal_report(animal_id))
+    write_file(content, rel_path="animal_reports.txt")
+
+#    print(Animal("piglet").model)
