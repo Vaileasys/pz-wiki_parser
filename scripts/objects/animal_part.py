@@ -1,5 +1,5 @@
 import os
-from scripts.utils import lua_helper
+from scripts.utils import lua_helper, util
 from scripts.core.language import Translate
 from scripts.core.cache import save_cache, load_cache
 from scripts.core.constants import DATA_DIR
@@ -151,6 +151,15 @@ class AnimalPart:
             cls.load()
         return animal_id in cls._animals_data
     
+    @classmethod
+    def get_breeds(cls, item_id: str) -> "list[AnimalBreed]":
+        breeds = []
+        for part_id, parts in cls.all().items():
+            if item_id in parts.all_parts:
+                breeds.append(parts.breed)
+        
+        return breeds
+    
     def get(self, key: str, default=None):
         """
         Returns a raw value from the animal part data.
@@ -174,16 +183,19 @@ class AnimalPart:
     
     @property
     def skull(self) -> "Item | None":
+        from scripts.objects.item import Item
         item = Item(self.get("skull"))
         return item if item.valid else None
     
     @property
     def leather(self) -> "Item | None":
+        from scripts.objects.item import Item
         item = Item(self.get("leather"))
         return item if item.valid else None
     
     @property
     def head(self) -> "Item | None":
+        from scripts.objects.item import Item
         item = Item(self.get("head"))
         return item if item.valid else None
     
@@ -192,15 +204,31 @@ class AnimalPart:
         return self.get("parts", {})
     
     @property
+    def part_items(self) -> list[str]:
+        if not hasattr(self, "_parts_items"):
+            self._parts_items = []
+            for item in self.parts:
+                self._parts_items.append(item.get("item"))
+        return self._parts_items
+    
+    @property
     def bones(self) -> dict:
         return self.get("bones", {})
+    
+    @property
+    def bone_items(self) -> list[str]:
+        if not hasattr(self, "_bone_items"):
+            self._bone_items = []
+            for item in self.bones:
+                self._bone_items.append(item.get("item"))
+        return self._bone_items
     
     @property
     def no_skeleton(self) -> bool:
         return self.get("noSkeleton", False)
     
     @property
-    def all_parts(self) -> list:
+    def all_parts(self) -> list[str]:
         if not hasattr(self, "_all_parts"):
             parts = set()
             for part, value in self.data.items():
@@ -312,6 +340,10 @@ class AnimalMeat:
     def get_extra_name(self, cut) -> str:
         """Returns the extra name for a specific cut, translating it. E.g., 'PrimeCut', 'MediumCut', 'PoorCut'"""
         return Translate.get(self.get_cut(cut).get("extraName"), default=cut)
+
+    def get_link(self, cut) -> str:
+        """Returns the wiki link for a specific cut. E.g., 'PrimeCut', 'MediumCut', 'PoorCut'"""
+        return util.link(self.item.page, self.get_display_name(cut))
 
     def get_base_chance(self, cut) -> int:
         """Returns the base chance for a specific cut. E.g., 'PrimeCut', 'MediumCut', 'PoorCut'"""
