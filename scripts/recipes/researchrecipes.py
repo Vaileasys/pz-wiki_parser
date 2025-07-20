@@ -58,8 +58,7 @@ def main():
         expanded_recipes = metarecipe_parser.expand_recipe_list(researchable_recipes)
 
         lines = [
-            "The following recipes can be learned by researching this item:",
-            "",
+            "The following recipes can be learned by researching this item.",
             f"{{{{Crafting/sandbox|header=Research recipes|id={item_id}_research"
         ]
         for recipe in expanded_recipes:
