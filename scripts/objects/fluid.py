@@ -4,7 +4,7 @@ from scripts.core.file_loading import get_script_path
 from scripts.core.language import Language, Translate
 from scripts.core.page_manager import get_pages
 from scripts.core import logger
-from scripts.utils.util import link
+from scripts.utils import util
 from scripts.core.cache import load_json
 
 class Fluid:
@@ -199,7 +199,7 @@ class Fluid:
     @property
     def wiki_link(self):
         if self._wiki_link is None:
-            self._wiki_link = link(self.page, self.name)
+            self._wiki_link = util.link(self.page, self.name)
         return self._wiki_link
     
     @property
@@ -286,7 +286,7 @@ class Fluid:
         return self.data.get('ColorReference', None)
 
     @property
-    def color(self):
+    def color(self) -> list[int]:
         """Return the fluid color as [R, G, B] integers (0–255)."""
         if self._color:
             rgb_values = self._color
@@ -300,26 +300,35 @@ class Fluid:
             else:
                 rgb_values = color_
 
-        color_rgb = [int(c * 255) for c in rgb_values]
+        color_rgb = [str(int(c * 255)) for c in rgb_values]
         return color_rgb
 
     @property
-    def r(self):
+    def r(self) -> int:
         return self.color[0]
 
     @property
-    def g(self):
+    def g(self) -> int:
         return self.color[1]
 
     @property
-    def b(self):
+    def b(self) -> int:
         return self.color[2]
 
     @property
-    def rgb(self):
+    def rgb(self) -> str:
         """Return the fluid color as a wiki RGB template string, e.g., '{{rgb|140, 198, 0}}'."""
-        rgb_values = self.color
-        return f"{{{{rgb|{rgb_values[0]}, {rgb_values[1]}, {rgb_values[2]}}}}}"
+        return f"{{{{rgb|{','.join(self.color)}}}}}"
+
+    @property
+    def rgb_name(self) -> str:
+        """Return the fluid color as a wiki RGB template string with the name as the tooltip."""
+        return f"{{{{rgb|{','.join(self.color)}|{self.name}}}}}"
+
+    @property
+    def rgb_link(self) -> str:
+        """Return the fluid color as a wiki RGB template string and link."""
+        return util.link(self.page, self.rgb_name)
     
     # --- Categories --- #
 
