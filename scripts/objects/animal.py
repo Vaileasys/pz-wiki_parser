@@ -11,14 +11,19 @@ if TYPE_CHECKING:
 
 class Animal:
     """Represents a single animal entry."""
-    _animal_data: dict = None
+    _raw_data: dict = None
+    _animals_data: dict = None
+    _breeds_data: dict = None
+    _stages_data: dict = None
+    _genome_data: dict = None
+
     _stage_animals: dict[str, set[str]] = {}
     _instances = {}
     _data_file = "parsed_animal_data.json"
 
     def __new__(cls, animal_id: str):
         """Ensures only one Animal instance exists per animal ID."""
-        if not cls._animal_data:
+        if not cls._animals_data:
             cls.load()
 
         if animal_id in cls._instances:
@@ -33,11 +38,11 @@ class Animal:
         if hasattr(self, 'animal_id'):
             return
 
-        if Animal._animal_data is None:
+        if Animal._animals_data is None:
            Animal.load()
 
         self.animal_id = animal_id
-        self._data = self._animal_data.get(animal_id, {})
+        self._data = self._animals_data.get(animal_id, {})
 
     @classmethod
     def _parse(cls):
@@ -81,50 +86,19 @@ class Animal:
         ]
         lua_runtime = lua_helper.load_lua_file(animal_files, inject_lua=lua_copy_table)
         parsed_data = lua_helper.parse_lua_tables(lua_runtime, tables="AnimalDefinitions")
-
-        cls._animal_data:dict = parsed_data.get("AnimalDefinitions", {}).get("animals")
         
         # Split any values separated by a comma into a list
-        cls._animal_data = _split_commas(cls._animal_data)
+        parsed_data = _split_commas(parsed_data)
 
-        save_cache(cls._animal_data, cls._data_file)
+        cls._raw_data = parsed_data.get("AnimalDefinitions", {})
 
-        return cls._animal_data
-    
-    @classmethod
-    def _init_stages(cls):
-        """Builds and caches sets of baby, male, and female animal IDs."""
-        cls._stage_animals = {
-            "baby": set(),
-            "male": set(),
-            "female": set()
-        }
+        save_cache(cls._raw_data, cls._data_file)
 
-        if not cls._animal_data:
-            return
-
-        for animal_id, data in cls._animal_data.items():
-            baby_type = data.get("babyType")
-            stages = data.get("stages", {})
-
-            if not baby_type or baby_type not in stages:
-                continue
-
-            cls._stage_animals["baby"].add(baby_type)
-
-            stage_data = stages[baby_type]
-            next_female = stage_data.get("nextStage")
-            next_male = stage_data.get("nextStageMale")
-
-            if next_female:
-                cls._stage_animals["female"].add(next_female)
-            if next_male:
-                cls._stage_animals["male"].add(next_male)
-
+        return cls._raw_data
 
 
     @classmethod
-    def load(cls):
+    def load(cls, attribute: str = None):
         """
         Loads Animal data from the cache, re-parsing the Lua file if the data is outdated.
 
@@ -132,7 +106,7 @@ class Animal:
             dict: Raw Animal data.
         """
         from scripts.core.version import Version
-        if cls._animal_data is None:
+        if cls._raw_data is None:
             path = os.path.join(DATA_DIR, cls._data_file)
 
             data, version = load_cache(path, cache_name="animal", get_version=True)
@@ -141,12 +115,17 @@ class Animal:
             if version != Version.get():
                 data = cls._parse()
 
-            cls._animal_data = data
+            cls._raw_data = data
 
-        if not cls._stage_animals:
-            cls._init_stages()
+            cls._animals_data = cls._raw_data.get("animals")
+            cls._breeds_data = cls._raw_data.get("breeds")
+            cls._genome_data = cls._raw_data.get("genome")
+            cls._stages_data = cls._raw_data.get("stages")
+        
+        if attribute is not None and hasattr(cls, attribute):
+            return getattr(cls, attribute)
 
-        return cls._animal_data
+        return cls._animals_data
     
     @classmethod
     def all(cls) -> dict[str, "Animal"]:
@@ -156,9 +135,9 @@ class Animal:
         Returns:
             dict[str, Animal]: Mapping of item ID to Animal instance.
         """
-        if not cls._animal_data:
+        if not cls._animals_data:
             cls.load()
-        return {id: cls(id) for id in cls._animal_data}
+        return {id: cls(id) for id in cls._animals_data}
     
     @classmethod
     def count(cls) -> int:
@@ -168,9 +147,9 @@ class Animal:
         Returns:
             int: Number of unique Animal types.
         """
-        if not cls._animal_data:
+        if not cls._animals_data:
             cls.load()
-        return len(cls._animal_data)
+        return len(cls._animals_data)
     
     @classmethod
     def exists(cls, animal_id: str) -> bool:
@@ -180,9 +159,9 @@ class Animal:
         Returns:
             bool: True if found, False otherwise.
         """
-        if not cls._animal_data:
+        if not cls._animals_data:
             cls.load()
-        return animal_id in cls._animal_data
+        return animal_id in cls._animals_data
     
     def get(self, key: str, default=None):
         """
@@ -203,7 +182,7 @@ class Animal:
 
     @property
     def is_valid(self) -> bool:
-        return self.animal_id in Animal._animal_data
+        return self.animal_id in Animal._animals_data
     
     @property
     def data(self) -> dict:
@@ -285,18 +264,6 @@ class Animal:
     def collision_size(self) -> float: return self.get("collisionSize", 0.0)
     @property
     def texture_skeleton_bloody(self) -> str | None: return self.get("textureSkeletonBloody")
-    @property
-    def stage_type(self) -> str:
-        return "baby" if self.is_baby else "female" if self.is_female else "male"
-    @property
-    def is_baby(self) -> bool:
-        return self.animal_id in self._stage_animals.get("baby")
-    @property
-    def is_male(self) -> bool:
-        return self.animal_id in self._stage_animals.get("male")
-    @property
-    def is_female(self) -> bool:
-        return self.animal_id in self._stage_animals.get("female")
     @property
     def icon(self) -> str:
         if not hasattr(self, "_icon"):
@@ -474,6 +441,11 @@ class Animal:
     @property
     def female(self) -> bool: return self.get("female", False)
     @property
+    def baby(self) -> bool: return True if not self.male or self.female else False # If it's not male or female, we assume it's a baby
+    @property
+    def stage_type(self) -> str:
+        return "female" if self.female else "male" if self.male else "baby" # If it's not male or female, we assume it's a baby
+    @property
     def udder(self) -> bool: return self.get("udder", False)
     @property
     def wild(self) -> bool: return self.get("wild", False)
@@ -509,10 +481,10 @@ class Animal:
     @property
     def breeds(self) -> "list[AnimalBreed]":
         if not hasattr(self, "_breeds"):
-            breed_data = self.get("breeds", {})
+            breed_data: dict = self.get("breeds", {})
             self._breeds = [
-                AnimalBreed(breed_id, data, self)
-                for breed_id, data in breed_data.items()
+                AnimalBreed(breed_id, self.animal_id)
+                for breed_id in breed_data
             ]
         return self._breeds
     @property
@@ -525,10 +497,10 @@ class Animal:
     def mating_period_month_end(self) -> str | None: return self._translate_month(self.mating_period_end) if self.mating_period_end else None
     @property
     def min_age(self) -> int | None:
-        return 0 if self.is_baby else self.get("minAge")
+        return 0 if self.baby else self.get("minAge")
     @property
     def max_age(self) -> int | None:
-        return self.stage.get("ageToGrow") if self.is_baby else self.get("maxAgeGeriatric")
+        return self.stage.get("ageToGrow") if self.baby else self.get("maxAgeGeriatric")
     @property
     def min_age_for_baby(self) -> int | None: return self.get("minAgeForBaby")
     @property
@@ -651,12 +623,44 @@ class Animal:
 
 
 class AnimalBreed:
+    _breeds_data: dict = Animal.load("_breeds_data")
+    _instances: dict = {}
 
-    def __init__(self, breed: str, breed_data: dict, animal: Animal):
-        """Initialise the breed instance."""
-        self.breed_id = breed
-        self.animal = animal
-        self._data = breed_data
+    def __new__(cls, breed_id: str, animal_id: str):
+        """Ensures only one instance exists per animal breed."""
+        id = Animal(animal_id).group + breed_id
+
+        if id in cls._instances:
+            return cls._instances[id]
+
+        instance = super().__new__(cls)
+        cls._instances[breed_id] = instance
+        return instance
+
+    def __init__(self, breed_id: str, animal_id: str):
+        """Initialise the breed instance with its data if not already initialised."""
+        id = Animal(animal_id).group + breed_id
+
+        if hasattr(self, 'id'):
+            return
+
+        self.id = id
+        self.breed_id = breed_id
+        self.animal_id = animal_id
+        self._data = self._breeds_data.get(Animal(animal_id).group, {}).get("breeds", {}).get(breed_id, {})
+    
+    @classmethod
+    def exists(cls, breed_id: str, animal_id: str) -> bool:
+        """
+        Checks if a animal breed with the given ids exists in the parsed data.
+
+        Returns:
+            bool: True if found, False otherwise.
+        """
+        if Animal(animal_id).group not in cls._breeds_data:
+            return False
+        
+        return animal_id in cls._breeds_data.get(breed_id)
     
     def get(self, key: str, default=None):
         """
@@ -700,6 +704,14 @@ class AnimalBreed:
     def get_link(self, stage: str = None) -> str:
         name = self.get_name(stage)
         return util.link(self.page, name)
+
+    @property
+    def is_valid(self) -> bool:
+        return AnimalBreed.exists(self.breed_id, self.animal_id)
+
+    @property
+    def animal(self) -> Animal:
+        return Animal(self.animal_id)
     
     @property
     def data(self) -> dict:
@@ -727,27 +739,27 @@ class AnimalBreed:
     
     @property
     def icon(self) -> str:
-        if self.animal.is_baby:
+        if self.animal.baby:
             return self.build_icon(self.inv_icon_baby, self.page, self.name)
-        if self.animal.is_male:
+        if self.animal.male:
             return self.build_icon(self.inv_icon_male, self.page, self.name)
         # Fallback to female
         return self.build_icon(self.inv_icon_female, self.page, self.name)
     
     @property
     def icon_dead(self) -> str:
-        if self.animal.is_baby:
+        if self.animal.baby:
             return self.build_icon(self.inv_icon_baby_dead, self.page, self.get_name("dead"), default=self.inv_icon_baby)
-        if self.animal.is_male:
+        if self.animal.male:
             return self.build_icon(self.inv_icon_male_dead, self.page, self.get_name("dead"), default=self.inv_icon_male)
         # Fallback to female
         return self.build_icon(self.inv_icon_female_dead, self.page, self.get_name("dead"), default=self.inv_icon_female)
     
     @property
     def icon_skeleton(self) -> str:
-        if self.animal.is_baby:
+        if self.animal.baby:
             return self.build_icon(self.inv_icon_baby_skel, self.page, self.get_name("skeleton"), default=self.inv_icon_baby_dead or self.inv_icon_baby)
-        if self.animal.is_male:
+        if self.animal.male:
             return self.build_icon(self.inv_icon_male_skel, self.page, self.get_name("skeleton"), default=self.inv_icon_male_dead or self.inv_icon_male)
         # Fallback to female
         return self.build_icon(self.inv_icon_female_skel, self.page, self.get_name("skeleton"), default=self.inv_icon_female_dead or self.inv_icon_female)
@@ -782,7 +794,7 @@ class AnimalBreed:
 
     @property
     def model(self) -> list[str]:
-        if self.animal.is_baby:
+        if self.animal.baby:
             textures = self.texture_baby
             if not textures:
                 textures = self.texture if isinstance(self.texture, list) else [self.texture]
@@ -790,7 +802,7 @@ class AnimalBreed:
                 
             return self.build_model(textures, self.page, self.name)
         
-        if self.animal.is_male:
+        if self.animal.male:
             return self.build_model(self.texture_male, self.page, self.name)
         
         # Fallback to female
