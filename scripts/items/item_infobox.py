@@ -47,7 +47,7 @@ def generate_item_data(item: Item):
     """
     param = {}
     #-------------- GENERAL --------------#
-    param["name"] = re.sub(r'\([^()]*\)', lambda m: f'<br><span style="font-size:88%">{m.group(0)}</span>', item.name)
+    param["name"] = re.sub(r'\([^()]*\)', lambda m: f'<br><span style="font-size: 88%;">{m.group(0)}</span>', item.name)
     param["model"] = item.models
     param["icon"] = item.icons
     param["icon_name"] = [item.name for _ in item.icons]
