@@ -625,11 +625,6 @@ def main():
     parse_foraging(forage_definitions_path, cache_path)
     parse_vehicles(vehicle_distributions_path, cache_path)
 
-
-    # Attached weapons
-    lua_runtime = lua_helper.load_lua_file("AttachedWeaponDefinitions.lua")
-    parsed_data = lua_helper.parse_lua_tables(lua_runtime)
-    save_cache(parsed_data, "attached_weapon_definitions.json", cache_path)
     parse_clothing(clothing_file_path, guid_table_path, "clothing.json")
     parse_stories(class_files_directory, "stories.json")
 
