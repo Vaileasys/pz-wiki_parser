@@ -101,14 +101,6 @@ def process_json(file_paths):
                     item_list.update(items)
                     count += len(items)
 
-        elif file_key == "attached_weapons":
-            for weapon_config, details in data.items():
-                weapons = details.get("weapons", [])
-                for weapon in weapons:
-                    weapon = re.sub(r"^Base\.", "", weapon)
-                    item_list.add(weapon)
-                    count += 1
-
         elif file_key == "stories":
             for story_key, items in data.items():
                 for item in items:
@@ -202,8 +194,8 @@ def process_json(file_paths):
     return item_list
 
 
-def build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, attached_weapons_data,
-                    clothing_data, stories_data, fishing_data, butchering_data):
+def build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data,
+                    clothing_data, stories_data, fishing_data, butchering_data, attached_weapons_data):
     def get_container_info(item_name):
         containers_info = []
         unique_entries = set()
@@ -481,31 +473,6 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
 
         return relevant_data
 
-    def get_attached_weapon_info(item_name):
-        attached_weapon_matches = []
-        # Remove "Base." prefix if it exists for comparison
-        item_name_no_prefix = item_name.replace("Base.", "") if item_name.startswith("Base.") else item_name
-
-        for weapon_config, details in attached_weapons_data.items():
-            weapons = details.get("weapons", [])
-            # Check both with and without "Base." prefix
-            if item_name_no_prefix in weapons or item_name in weapons:
-                outfits = details.get("outfit", "Any")
-                day_survived = details.get("daySurvived", 0)
-                chance = details.get("chance", 0)
-
-                if not isinstance(outfits, list):
-                    outfits = [outfits]
-
-                for outfit in outfits:
-                    attached_weapon_matches.append({
-                        "outfit": outfit,
-                        "daySurvived": day_survived,
-                        "chance": chance
-                    })
-
-        return attached_weapon_matches
-
     def get_clothing_info(item_name, clothing_data):
         clothing_matches = []
 
@@ -678,6 +645,155 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
         
         return butchering_matches
 
+    def get_attached_weapon_info(item_name, attached_weapons_data):
+        """
+        Calculate effective spawn chances for attached weapons based on the Java implementation.
+        
+        This function processes both global definitions and outfit-specific definitions,
+        applying the weighted selection algorithm to calculate accurate spawn probabilities.
+        
+        Returns a list of dictionaries with outfit, definition_id, effective_chance, and days_required.
+        """
+        attached_weapon_matches = []
+        
+        # Remove "Base." prefix if it exists for comparison
+        item_name_no_prefix = item_name.replace("Base.", "") if item_name.startswith("Base.") else item_name
+        full_item_name = f"Base.{item_name_no_prefix}"
+        
+        # Extract definitions from the parsed data
+        definitions_data = attached_weapons_data.get("AttachedWeaponDefinitions", {})
+        outfit_definitions_data = definitions_data.get("attachedWeaponCustomOutfit", {})
+        
+        # Load outfit data for link generation
+        from scripts.parser.outfit_parser import get_outfits
+        outfits_data = get_outfits()
+        
+        # Global definitions (not outfit-specific)
+        global_definitions = {}
+        for def_name, def_data in definitions_data.items():
+            if def_name != "attachedWeaponCustomOutfit" and isinstance(def_data, dict):
+                if "weapons" in def_data:
+                    global_definitions[def_name] = def_data
+        
+        # Process global definitions for "Any" outfit
+        global_applicable_defs = []
+        for def_name, def_data in global_definitions.items():
+            weapons = def_data.get("weapons", [])
+            # Check if this definition contains our target item
+            if any(weapon == full_item_name or weapon == item_name_no_prefix for weapon in weapons):
+                global_applicable_defs.append({
+                    "name": def_name,
+                    "chance": def_data.get("chance", 0),
+                    "weapons": weapons,
+                    "days_required": def_data.get("daySurvived", 0),
+                    "id": def_data.get("id", def_name),
+                    "outfit_filter": def_data.get("outfit", [])
+                })
+        
+        # Calculate global "Any" chances
+        if global_applicable_defs:
+            # Filter out definitions that require specific outfits for global calculation
+            truly_global_defs = [d for d in global_applicable_defs if not d["outfit_filter"]]
+            
+            if truly_global_defs:
+                # Variables for global calculation
+                global_base_chance = 0.06  # 6% default sandbox setting
+                total_global_weight = sum(d["chance"] for d in truly_global_defs)
+                
+                for definition in truly_global_defs:
+                    definition_selection_weight = definition["chance"] / total_global_weight if total_global_weight > 0 else 0
+                    item_selection_weight = 1.0 / len(definition["weapons"])
+                    effective_chance_percentage = global_base_chance * definition_selection_weight * item_selection_weight * 100
+                    
+                    attached_weapon_matches.append({
+                        "outfit": "Any",  # Keep "Any" as is - no link needed
+                        "definition_id": definition["id"],
+                        "effective_chance": round(effective_chance_percentage, 2),
+                        "days_required": definition["days_required"]
+                    })
+        
+        # Process outfit-specific definitions
+        for outfit_name, outfit_config in outfit_definitions_data.items():
+            outfit_base_chance = outfit_config.get("chance", 0) / 100.0
+            outfit_weapons = outfit_config.get("weapons", [])
+            outfit_days_required = outfit_config.get("daySurvived", 0)  # Get outfit's required days
+            
+            # Find applicable weapon definitions for this outfit
+            outfit_applicable_defs = []
+            for weapon_def in outfit_weapons:
+                if isinstance(weapon_def, dict) and "weapons" in weapon_def:
+                    weapons = weapon_def.get("weapons", [])
+                    # Check if this definition contains our target item
+                    if any(weapon == full_item_name or weapon == item_name_no_prefix for weapon in weapons):
+                        # Use the higher value between outfit and weapon definition days required
+                        weapon_days = weapon_def.get("daySurvived", 0)
+                        days_required = max(weapon_days, outfit_days_required)
+                        
+                        outfit_applicable_defs.append({
+                            "name": weapon_def.get("id", f"outfit_{outfit_name}"),
+                            "chance": weapon_def.get("chance", 0),
+                            "weapons": weapons,
+                            "days_required": days_required,  # Store the higher value
+                            "id": weapon_def.get("id", f"outfit_{outfit_name}")
+                        })
+            
+            # Calculate outfit-specific chances
+            if outfit_applicable_defs:
+                total_outfit_weight = sum(d["chance"] for d in outfit_applicable_defs)
+                
+                for definition in outfit_applicable_defs:
+                    definition_selection_weight = definition["chance"] / total_outfit_weight if total_outfit_weight > 0 else 0
+                    item_selection_weight = 1.0 / len(definition["weapons"])
+                    effective_chance_percentage = outfit_base_chance * definition_selection_weight * item_selection_weight * 100
+                    
+                    attached_weapon_matches.append({
+                        "outfit": get_outfit_link(outfit_name, outfits_data),  # Convert outfit name to link
+                        "definition_id": definition["id"],
+                        "effective_chance": round(effective_chance_percentage, 2),
+                        "days_required": definition["days_required"]  # Using the higher value we stored earlier
+                    })
+        
+        # Process global definitions that have outfit filters but can also apply to those specific outfits
+        # Collect all unique outfits mentioned in global definitions
+        all_mentioned_outfits = set(outfit_definitions_data.keys())
+        for definition in global_applicable_defs:
+            all_mentioned_outfits.update(definition["outfit_filter"])
+        
+        for outfit_name in all_mentioned_outfits:
+            # Get outfit's required days if it exists in outfit definitions
+            outfit_days_required = outfit_definitions_data.get(outfit_name, {}).get("daySurvived", 0)
+            
+            # Check global definitions that specify this outfit
+            global_for_outfit = [d for d in global_applicable_defs if outfit_name in d["outfit_filter"]]
+            
+            if global_for_outfit:
+                # Check if this outfit has custom definitions
+                if outfit_name in outfit_definitions_data:
+                    # This outfit has custom definitions, skip global processing for it
+                    # (it was already handled in the outfit-specific section above)
+                    continue
+                else:
+                    # This outfit doesn't have custom definitions, use global 6% chance
+                    global_base_chance = 0.06
+                    total_weight = sum(d["chance"] for d in global_for_outfit)
+                    
+                    for definition in global_for_outfit:
+                        definition_selection_weight = definition["chance"] / total_weight if total_weight > 0 else 0
+                        item_selection_weight = 1.0 / len(definition["weapons"])
+                        effective_chance_percentage = global_base_chance * definition_selection_weight * item_selection_weight * 100
+                        
+                        # Use the higher value between outfit and weapon definition days required
+                        days_required = max(definition["days_required"], outfit_days_required)
+                        
+                        attached_weapon_matches.append({
+                            "outfit": get_outfit_link(outfit_name, outfits_data),  # Convert outfit name to link
+                            "definition_id": definition["id"],
+                            "effective_chance": round(effective_chance_percentage, 2),
+                            "days_required": days_required
+                        })
+        
+        return attached_weapon_matches
+
     all_items = {}
     for item in tqdm.tqdm(item_list, desc="Building item data"):
         item_name = item_name_changes.get(item, item)
@@ -686,11 +802,11 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
             "Containers": get_container_info(item_name),
             "Vehicles": get_vehicle_info(item_name),
             "Foraging": get_foraging_info(item_name),
-            "AttachedWeapon": get_attached_weapon_info(item_name),
             "Clothing": get_clothing_info(item_name, clothing_data),
             "Stories": get_story_info(item_name),
             "Fishing": get_fishing_info(item_name),
-            "Butchering": get_butchering_info(item_name)
+            "Butchering": get_butchering_info(item_name),
+            "AttachedWeapons": get_attached_weapon_info(item_name, attached_weapons_data)
         }
 
     save_cache(all_items, "all_items.json", cache_path)
@@ -788,11 +904,11 @@ def build_tables(category_items, index):
         f.write("container = {room, container_name, effective_chance}\n")
         f.write("vehicle = {type, container_name, effective_chance}\n")
         f.write("stories = {id, link}\n")
-        f.write("embedded = {outfit, days_survived, chance}\n")
         f.write("outfit = {outfit_name, probability, guid}\n")
         f.write("foraging = {amount, level, snow, rain, day, night, biome_table, months_table, bonus_table, malus_table}\n")
         f.write("fishing = {lure_link, chance}\n")
         f.write("butchering = {animal_name, amount}\n")
+        f.write("attachedWeapons = {outfit, definition_id, days_required, effective_chance}\n")
         f.write("--]]\n\n")
         f.write("local data = {\n")
 
@@ -877,22 +993,7 @@ def build_tables(category_items, index):
                 if story_lines:
                     sections.append(f"    stories = {{{','.join(story_lines)}}}")
             
-            # Attached weapon data
-            if item_data.get("AttachedWeapon"):
-                weapon_data = []
-                for weapon in item_data["AttachedWeapon"]:
-                    outfit = weapon.get("outfit", "")
-                    days = weapon.get("daySurvived", 0)
-                    chance = weapon.get("chance", 0)
-                    weapon_data.append((days, outfit, chance))  # Restructure for sorting
-                
-                if weapon_data:
-                    # Sort by days survived (ascending), then by outfit name and chance
-                    weapon_data.sort(key=lambda x: (x[0], x[1], -x[2]))
-                    weapon_lines = [f'{{"{outfit}", {days}, {chance}}}' 
-                                  for days, outfit, chance in weapon_data]
-                    sections.append(f"    embedded = {{{','.join(weapon_lines)}}}")
-            
+
             # Clothing data
             if item_data.get("Clothing"):
                 clothing_data = []
@@ -1011,6 +1112,34 @@ def build_tables(category_items, index):
                                       for animal_name, amount in butchering_data]
                     sections.append(f"    butchering = {{{','.join(butchering_lines)}}}")
             
+            # Attached Weapons data
+            if item_data.get("AttachedWeapons"):
+                attached_weapons_data = []
+                for weapon in item_data["AttachedWeapons"]:
+                    outfit = weapon.get("outfit", "Any")
+                    definition_id = weapon.get("definition_id", "Unknown")
+                    effective_chance = weapon.get("effective_chance", 0)
+                    days_required = weapon.get("days_required", 0)
+                    
+                    # Format definition_id for Lua safety
+                    escaped_definition_id = definition_id.replace('"', '\\"')
+                    
+                    attached_weapons_data.append({
+                        "outfit": outfit,  # Outfit links are already created in get_attached_weapon_info
+                        "definition_id": escaped_definition_id,
+                        "effective_chance": effective_chance,
+                        "days_required": days_required
+                    })
+                
+                if attached_weapons_data:
+                    # Sort by outfit, then definition_id
+                    attached_weapons_data.sort(key=lambda x: (x["outfit"], x["definition_id"]))
+                    attached_weapons_lines = [
+                        f'{{"{weapon["outfit"]}", "{weapon["definition_id"]}", {weapon["days_required"]}, {weapon["effective_chance"]}}}'
+                        for weapon in attached_weapons_data
+                    ]
+                    sections.append(f"    attachedWeapons = {{{','.join(attached_weapons_lines)}}}")
+
             if sections:
                 # Sort sections alphabetically by their type (container, vehicle, etc.)
                 # This ensures consistent ordering of sections
@@ -1232,11 +1361,11 @@ def combine_items_by_page(all_items):
                         "Containers": [],
                         "Vehicles": [],
                         "Foraging": {},
-                        "AttachedWeapon": [],
                         "Clothing": [],
                         "Stories": [],
                         "Fishing": {},
-                        "Butchering": []
+                        "Butchering": [],
+                        "AttachedWeapons": [] # Ensure AttachedWeapons is initialized
                     }
             
             # Combine data from secondary item into primary item
@@ -1260,12 +1389,6 @@ def combine_items_by_page(all_items):
                     combined_items[primary_id]["Foraging"] = secondary_data["Foraging"]
                 elif len(secondary_data["Foraging"]) > len(combined_items[primary_id]["Foraging"]):
                     combined_items[primary_id]["Foraging"] = secondary_data["Foraging"]
-            
-            # Combine attached weapon data
-            if secondary_data.get("AttachedWeapon"):
-                if not combined_items[primary_id].get("AttachedWeapon"):
-                    combined_items[primary_id]["AttachedWeapon"] = []
-                combined_items[primary_id]["AttachedWeapon"].extend(secondary_data["AttachedWeapon"])
             
             # Combine clothing data
             if secondary_data.get("Clothing"):
@@ -1302,6 +1425,12 @@ def combine_items_by_page(all_items):
                 if not combined_items[primary_id].get("Butchering"):
                     combined_items[primary_id]["Butchering"] = []
                 combined_items[primary_id]["Butchering"].extend(secondary_data["Butchering"])
+            
+            # Combine Attached Weapons data
+            if secondary_data.get("AttachedWeapons"):
+                if not combined_items[primary_id].get("AttachedWeapons"):
+                    combined_items[primary_id]["AttachedWeapons"] = []
+                combined_items[primary_id]["AttachedWeapons"].extend(secondary_data["AttachedWeapons"])
     
     # Second pass: Process any remaining items (those without page mappings)
     for item_id, item_data in all_items.items():
@@ -1343,21 +1472,6 @@ def combine_items_by_page(all_items):
                     vehicle_set.add(vehicle_key)
                     unique_vehicles.append(vehicle)
             item_data["Vehicles"] = unique_vehicles
-        
-        # Remove duplicate attached weapon entries
-        if item_data.get("AttachedWeapon"):
-            unique_weapons = []
-            weapon_set = set()
-            for weapon in item_data["AttachedWeapon"]:
-                weapon_key = (
-                    str(weapon.get("outfit", "")), 
-                    weapon.get("daySurvived", 0), 
-                    weapon.get("chance", 0)
-                )
-                if weapon_key not in weapon_set:
-                    weapon_set.add(weapon_key)
-                    unique_weapons.append(weapon)
-            item_data["AttachedWeapon"] = unique_weapons
         
         # Remove duplicate clothing entries
         if item_data.get("Clothing"):
@@ -1416,6 +1530,22 @@ def combine_items_by_page(all_items):
                         butchering_set.add(butchering_key)
                         unique_butchering.append(butchering)
                 item_data["Butchering"] = unique_butchering
+
+            # Remove duplicate Attached Weapons entries
+            if item_data.get("AttachedWeapons"):
+                unique_attached_weapons = []
+                attached_weapons_set = set()
+                for weapon in item_data["AttachedWeapons"]:
+                    attached_weapons_key = (
+                        weapon.get("outfit", ""),
+                        weapon.get("definition_id", ""),
+                        weapon.get("effective_chance", 0),
+                        weapon.get("days_required", 0)
+                    )
+                    if attached_weapons_key not in attached_weapons_set:
+                        attached_weapons_set.add(attached_weapons_key)
+                        unique_attached_weapons.append(weapon)
+                item_data["AttachedWeapons"] = unique_attached_weapons
     
     # Print statistics
     original_count = len(all_items)
@@ -1433,6 +1563,46 @@ def combine_items_by_page(all_items):
     return combined_items
 
 
+def translate_outfit_name(outfit_label):
+    """Convert an outfit ID to a readable name, following outfit_parser.py's rules."""
+    # Add spaces before capital letters, but skip if preceded by "KY"
+    name_with_spaces = re.sub(r'(?<!^)(?<!KY)(?=[A-Z])', ' ', outfit_label)
+    name_with_spaces = name_with_spaces.replace('_', ' ')
+    # Ensure only one space between words
+    return re.sub(r'\s+', ' ', name_with_spaces).strip()
+
+def get_outfit_link(outfit_id, outfits_data=None):
+    """
+    Convert an outfit ID to a wiki link. Uses male version by default unless only female exists.
+    Returns link in format [[Name (gender)|Name]] with sentence case display.
+    
+    Args:
+        outfit_id: The outfit identifier (e.g., "ArmyInstructor")
+        outfits_data: Optional dictionary containing outfit data from outfit_parser
+        
+    Returns:
+        A wiki link to the outfit page (e.g., "[[Army Instructor (male)|Army instructor]]")
+    """
+    if outfits_data is None:
+        from scripts.parser.outfit_parser import get_outfits
+        outfits_data = get_outfits()
+    
+    translated_name = translate_outfit_name(outfit_id)
+    
+    # Convert to sentence case for display (first letter capital, rest lowercase)
+    display_name = translated_name[0].upper() + translated_name[1:].lower()
+    
+    # Check if outfit exists in male/female versions
+    in_male = outfit_id in outfits_data.get("MaleOutfits", {})
+    in_female = outfit_id in outfits_data.get("FemaleOutfits", {})
+    
+    # Default to male unless only female exists
+    if in_male or not in_female:
+        return f"[[{translated_name} (male)|{display_name}]]"
+    else:
+        return f"[[{translated_name} (female)|{display_name}]]"
+
+
 def main():
     """
     Main function to process and generate distribution data files.
@@ -1445,12 +1615,17 @@ def main():
     5. Generates Lua data files by category
     6. Creates an index file
     """
+    
+    # Parse attached weapon definitions (not used yet)
+    lua_runtime = lua_helper.load_lua_file("AttachedWeaponDefinitions.lua")
+    parsed_data = lua_helper.parse_lua_tables(lua_runtime)
+    save_cache(parsed_data, "attached_weapon_definitions.json", cache_path)
+
     file_paths = {
         "proceduraldistributions": os.path.join(DATA_DIR, "distributions", "proceduraldistributions.json"),
         "foraging": os.path.join(DATA_DIR, "distributions", "foraging.json"),
         "vehicle_distributions": os.path.join(DATA_DIR, "distributions", "vehicle_distributions.json"),
         "clothing": os.path.join(DATA_DIR, "distributions", "clothing.json"),
-        "attached_weapons": os.path.join(DATA_DIR, "distributions", "attached_weapons.json"),
         "stories": os.path.join(DATA_DIR, "distributions", "stories.json"),
         "distributions": os.path.join(DATA_DIR, "distributions", "distributions.json"),
         "fishing": os.path.join(DATA_DIR, "parsed_fish_data.json")
@@ -1479,13 +1654,13 @@ def main():
     distribution_data = load_cache(file_paths["distributions"])
     vehicle_data = load_cache(file_paths["vehicle_distributions"])
     foraging_data = load_cache(file_paths["foraging"])
-    attached_weapons_data = load_cache(file_paths["attached_weapons"])
     clothing_data = load_cache(file_paths["clothing"])
     stories_data = load_cache(file_paths["stories"])
     butchering_data_loaded = load_cache(file_paths["butchering"])
+    attached_weapons_data = load_cache(os.path.join(DATA_DIR, "distributions", "attached_weapon_definitions.json"))
 
     build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, 
-                   attached_weapons_data, clothing_data, stories_data, fishing_data, butchering_data_loaded)
+                   clothing_data, stories_data, fishing_data, butchering_data_loaded, attached_weapons_data)
 
     # Load all_items and combine items by page
     print("Loading and combining items by page...")
@@ -1504,18 +1679,23 @@ def main():
     print("Categorizing items...")
     category_items = {}
     index = {}
+    processed_items = set()  # Track which items have been assigned to a category
     
     for item_id, item_data in tqdm.tqdm(combined_items.items(), desc="Categorizing items"):
+        # Skip if this item has already been processed
+        if item_id in processed_items:
+            continue
+
         # Check if item has any distribution data
         has_data = (
                 (item_data.get("Containers") and len(item_data["Containers"]) > 0) or
                 (item_data.get("Vehicles") and len(item_data["Vehicles"]) > 0) or
                 (item_data.get("Stories") and len(item_data["Stories"]) > 0) or
-                (item_data.get("AttachedWeapon") and len(item_data["AttachedWeapon"]) > 0) or
                 (item_data.get("Clothing") and len(item_data["Clothing"]) > 0) or
                 (item_data.get("Foraging") and item_data["Foraging"]) or
                 (item_data.get("Fishing") and item_data["Fishing"]) or
-                (item_data.get("Butchering") and len(item_data["Butchering"]) > 0)
+                (item_data.get("Butchering") and len(item_data["Butchering"]) > 0) or
+                (item_data.get("AttachedWeapons") and len(item_data["AttachedWeapons"]) > 0)
         )
 
         # Only process items that have distribution data
@@ -1533,6 +1713,7 @@ def main():
 
                 category_items["misc"][item_id] = item_data
                 index["misc"].append(item_id)
+                processed_items.add(item_id)
                 continue
 
             # Try to get the item object to find its categories
@@ -1543,7 +1724,7 @@ def main():
             if not categories:
                 categories = ["misc"]
 
-            # Add item to each of its categories
+            # Add item to the first matching category only
             for category in categories:
                 if category not in category_items:
                     category_items[category] = {}
@@ -1551,6 +1732,8 @@ def main():
 
                 category_items[category][item_id] = item_data
                 index[category].append(item_id)
+                processed_items.add(item_id)
+                break  # Stop after first category match
 
         except Exception as e:
             # If there's an error (item not found, etc.), put in "misc" category
@@ -1560,6 +1743,7 @@ def main():
 
             category_items["misc"][item_id] = item_data
             index["misc"].append(item_id)
+            processed_items.add(item_id)
             print(f"Error processing {item_id}: {e}")
 
     # Generate Lua data files by category
