@@ -667,6 +667,16 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
         # Load outfit data for link generation
         from scripts.parser.outfit_parser import get_outfits
         outfits_data = get_outfits()
+
+        def get_days_from_outfit_name(outfit_name):
+            """Helper function to determine days required based on outfit name"""
+            if "Early" in outfit_name:
+                return 10
+            elif "Mid" in outfit_name:
+                return 30
+            elif "Late" in outfit_name:
+                return 90
+            return 0  # Default if no time period found
         
         # Global definitions (not outfit-specific)
         global_definitions = {}
@@ -681,11 +691,16 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
             weapons = def_data.get("weapons", [])
             # Check if this definition contains our target item
             if any(weapon == full_item_name or weapon == item_name_no_prefix for weapon in weapons):
+                # Check if definition name contains time period
+                days_required = get_days_from_outfit_name(def_name)
+                if days_required == 0:  # If no time period in name, use original value
+                    days_required = def_data.get("daySurvived", 0)
+                
                 global_applicable_defs.append({
                     "name": def_name,
                     "chance": def_data.get("chance", 0),
                     "weapons": weapons,
-                    "days_required": def_data.get("daySurvived", 0),
+                    "days_required": days_required,
                     "id": def_data.get("id", def_name),
                     "outfit_filter": def_data.get("outfit", [])
                 })
@@ -716,7 +731,11 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
         for outfit_name, outfit_config in outfit_definitions_data.items():
             outfit_base_chance = outfit_config.get("chance", 0) / 100.0
             outfit_weapons = outfit_config.get("weapons", [])
-            outfit_days_required = outfit_config.get("daySurvived", 0)  # Get outfit's required days
+            
+            # Check outfit name for time period
+            outfit_days_required = get_days_from_outfit_name(outfit_name)
+            if outfit_days_required == 0:  # If no time period in name, use original value
+                outfit_days_required = outfit_config.get("daySurvived", 0)
             
             # Find applicable weapon definitions for this outfit
             outfit_applicable_defs = []
@@ -725,8 +744,12 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
                     weapons = weapon_def.get("weapons", [])
                     # Check if this definition contains our target item
                     if any(weapon == full_item_name or weapon == item_name_no_prefix for weapon in weapons):
+                        # Check weapon definition name for time period
+                        weapon_days = get_days_from_outfit_name(weapon_def.get("id", ""))
+                        if weapon_days == 0:  # If no time period in name, use original value
+                            weapon_days = weapon_def.get("daySurvived", 0)
+                        
                         # Use the higher value between outfit and weapon definition days required
-                        weapon_days = weapon_def.get("daySurvived", 0)
                         days_required = max(weapon_days, outfit_days_required)
                         
                         outfit_applicable_defs.append({
@@ -760,8 +783,10 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
             all_mentioned_outfits.update(definition["outfit_filter"])
         
         for outfit_name in all_mentioned_outfits:
-            # Get outfit's required days if it exists in outfit definitions
-            outfit_days_required = outfit_definitions_data.get(outfit_name, {}).get("daySurvived", 0)
+            # Check outfit name for time period
+            outfit_days_required = get_days_from_outfit_name(outfit_name)
+            if outfit_days_required == 0:  # If no time period in name, use original value
+                outfit_days_required = outfit_definitions_data.get(outfit_name, {}).get("daySurvived", 0)
             
             # Check global definitions that specify this outfit
             global_for_outfit = [d for d in global_applicable_defs if outfit_name in d["outfit_filter"]]
@@ -782,8 +807,13 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
                         item_selection_weight = 1.0 / len(definition["weapons"])
                         effective_chance_percentage = global_base_chance * definition_selection_weight * item_selection_weight * 100
                         
-                        # Use the higher value between outfit and weapon definition days required
-                        days_required = max(definition["days_required"], outfit_days_required)
+                        # Check definition name for time period
+                        def_days = get_days_from_outfit_name(definition["id"])
+                        if def_days == 0:  # If no time period in name, use original value
+                            def_days = definition["days_required"]
+                        
+                        # Use the higher value between outfit and definition days required
+                        days_required = max(def_days, outfit_days_required)
                         
                         attached_weapon_matches.append({
                             "outfit": get_outfit_link(outfit_name, outfits_data),  # Convert outfit name to link
