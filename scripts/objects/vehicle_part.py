@@ -135,7 +135,7 @@ class VehiclePart:
     @property
     def common_name(self) -> str:
         if not hasattr(self, "_common_name"):
-            self._common_name = self.name.replace("Left", "").replace("Right", "").strip()
+            self._common_name = self.name.replace("Left ", "").replace("Left", "").replace("Right ", "").replace("Right", "").strip()
         return self._common_name
 
     @property
@@ -221,7 +221,7 @@ class VehicleSeat(VehiclePart):
 class VehicleDoor(VehiclePart):
     @property
     def page(self) -> str:
-        return "Car Seat"
+        return "Car Door"
 
 class VehicleTrunkDoor(VehiclePart):
     #TODO: fill with part specific methods/properties

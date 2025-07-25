@@ -56,7 +56,7 @@ def generate_item_data(item: Item):
     param["capacity"] = item.capacity
     param["container_name"] = item.fluid_container.container_name if item.fluid_container else None
     param["vehicle_type"] = item.vehicle_type_name if item.get("VehicleType") else None
-    param["vehicle_part_type"] = "<br>".join(set(part.common_link for part in item.vehicle_part_types)) if item.vehicle_part_types else None
+    param["vehicle_part"] = "<br>".join(set(part.common_link for part in item.vehicle_part_types)) if item.vehicle_part_types else None
 
     #-------------- PROPERTIES --------------#
     param["weight_reduction"] = item.weight_reduction
