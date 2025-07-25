@@ -1,391 +1,521 @@
 {
     "fluid": {
         "Acid (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Acid"
             ]
         },
         "Alcohol (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Alcohol"
             ]
         },
         "Animal Blood (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.AnimalBlood"
             ]
         },
         "Animal Grease (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.AnimalGrease"
             ]
         },
         "Animal's Milk (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.AnimalMilk"
             ]
         },
         "Apple Juice (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.JuiceApple"
             ]
         },
         "Beer (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Beer"
             ]
         },
         "Bleach (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Bleach"
             ]
         },
         "Blood (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Blood"
             ]
         },
         "Blueberry Soda (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.SodaBlueberry"
             ]
         },
         "Brandy (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Brandy"
             ]
         },
         "Bubblegum Soda (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.SodaBubblegum"
             ]
         },
         "Champagne (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Champagne"
             ]
         },
         "Chocolate Milk (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.MilkChocolate"
             ]
         },
         "Cider (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Cider"
             ]
         },
         "Cleaning Liquid (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.CleaningLiquid"
             ]
         },
         "Coffee (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Coffee"
             ]
         },
         "Coffee Liqueur (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.CoffeeLiqueur"
             ]
         },
         "Cola (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Cola"
             ]
         },
         "Cologne (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Cologne"
             ]
         },
         "Cow's Milk (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.CowMilk"
             ]
         },
         "Cranberry Juice (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.JuiceCranberry"
             ]
         },
         "Curacao (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Curacao"
             ]
         },
         "Diet Cola (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.ColaDiet"
             ]
         },
         "Dye (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Dye"
             ]
         },
         "FLUID TEST (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Test"
             ]
         },
         "Fluid Filter A (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.FilterTestA"
             ]
         },
         "Fluid Filter B (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.FilterTestB"
             ]
         },
         "Fluid Filter C (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.FilterTestC"
             ]
         },
         "Fruitpunch Juice (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.JuiceFruitpunch"
             ]
         },
         "Gasoline (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Petrol"
             ]
         },
         "Gin (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Gin"
             ]
         },
         "Ginger Ale (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.GingerAle"
             ]
         },
         "Grape Juice (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.JuiceGrape"
             ]
         },
         "Grape Soda (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.SodaGrape"
             ]
         },
         "Grenadine (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Grenadine"
             ]
         },
         "Hair Dye (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.HairDye"
             ]
         },
         "Honey (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Honey"
             ]
         },
         "Lemon Juice (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.JuiceLemon"
             ]
         },
         "Lime Soda (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.SodaLime"
             ]
         },
         "Mead (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Mead"
             ]
         },
         "Orange Juice (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.JuiceOrange"
             ]
         },
         "Orange Soda (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.SodaPop"
             ]
         },
         "Perfume (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Perfume"
             ]
         },
         "Pineapple Soda (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.SodaPineapple"
             ]
         },
         "Port (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Port"
             ]
         },
         "Potent Poison (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.PoisonPotent"
             ]
         },
         "Rum (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Rum"
             ]
         },
         "Scotch (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Scotch"
             ]
         },
         "Seltzer Water (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.CarbonatedWater"
             ]
         },
         "Sheep's Milk (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.SheepMilk"
             ]
         },
         "Sherry (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Sherry"
             ]
         },
         "Simple Syrup (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.SimpleSyrup"
             ]
         },
         "Spiffo's Juice (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.SpiffoJuice"
             ]
         },
         "Strawberry Soda (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.SodaStrewberry"
             ]
         },
         "Substance RTMS-M1A1 (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.SecretFlavoring"
             ]
         },
         "Tea (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Tea"
             ]
         },
         "Tequila (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Tequila"
             ]
         },
         "Tomato Juice (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.JuiceTomato"
             ]
         },
         "Vermouth (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Vermouth"
             ]
         },
         "Vodka (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Vodka"
             ]
         },
         "Water (Tainted) (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.TaintedWater"
             ]
         },
         "Water (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Water"
             ]
         },
         "Whiskey (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Whiskey"
             ]
         },
         "Wine (fluid)": {
-            "categories": [],
+            "categories": [
+                "Fluids"
+            ],
             "fluid_id": [
                 "Base.Wine"
             ]
@@ -817,7 +947,9 @@
             ]
         },
         "Amethyst": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Amethyst"
             ]
@@ -999,7 +1131,9 @@
             ]
         },
         "Animal (item)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Animal"
             ]
@@ -1061,7 +1195,9 @@
             ]
         },
         "Animal Corpse": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.CorpseAnimal"
             ]
@@ -1075,7 +1211,9 @@
             ]
         },
         "Animal Sinew": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.AnimalSinew"
             ]
@@ -1169,13 +1307,17 @@
             ]
         },
         "Antlers": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Antlers_Wall"
             ]
         },
         "Aphids Spray": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.GardeningSprayAphids"
             ]
@@ -1424,7 +1566,7 @@
         },
         "Backpack Sprayer": {
             "categories": [
-                "type=Baggage"
+                "Wearable containers"
             ],
             "item_id": [
                 "Base.KnapsackSprayer"
@@ -1432,7 +1574,7 @@
         },
         "Backpack Sprayer (Stowed)": {
             "categories": [
-                "type=Baggage"
+                "Wearable containers"
             ],
             "item_id": [
                 "Base.KnapsackSprayer_Stowed"
@@ -1835,7 +1977,7 @@
         },
         "Bare Hands": {
             "categories": [
-                "type=Weapon"
+                "Melee weapons"
             ],
             "item_id": [
                 "Base.BareHands"
@@ -1898,7 +2040,9 @@
             ]
         },
         "Baseball Bat (crafted)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.BaseballBat_Crafted"
             ]
@@ -2452,7 +2596,9 @@
             ]
         },
         "Beer Bottle (empty)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.BeerEmpty"
             ]
@@ -2515,7 +2661,7 @@
         },
         "Bellows": {
             "categories": [
-                "type=Tool"
+                "Tools"
             ],
             "item_id": [
                 "Base.Bellows"
@@ -2702,14 +2848,14 @@
                 "Fruit"
             ],
             "item_id": [
-                "Base.BerryBlack",
                 "Base.BerryBlue",
                 "Base.BerryGeneric1",
                 "Base.BerryGeneric2",
                 "Base.BerryGeneric3",
                 "Base.BerryGeneric4",
                 "Base.BerryGeneric5",
-                "Base.BerryPoisonIvy"
+                "Base.BerryPoisonIvy",
+                "Base.BerryBlack"
             ]
         },
         "Berries (beautyberry)": {
@@ -3180,7 +3326,9 @@
             ]
         },
         "Blank Key": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Key_Blank"
             ]
@@ -3518,7 +3666,9 @@
             ]
         },
         "Bone Whistle": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Whistle_Bone"
             ]
@@ -4221,12 +4371,13 @@
                 "Water containers"
             ],
             "item_id": [
-                "Base.Bowl",
-                "Base.WaterBowl"
+                "Base.Bowl"
             ]
         },
         "Bowl (ceramic)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.ClayBowl"
             ]
@@ -4276,7 +4427,6 @@
                 "Prepared food"
             ],
             "item_id": [
-                "Base.Oatmeal",
                 "Base.Oatmeal"
             ]
         },
@@ -4285,7 +4435,6 @@
                 "Evolved recipes"
             ],
             "item_id": [
-                "Base.Oatmeal",
                 "Base.Oatmeal"
             ]
         },
@@ -4302,7 +4451,8 @@
                 "Prepared food"
             ],
             "item_id": [
-                "Base.SoupBowl"
+                "Base.SoupBowl",
+                "Base.SoupBowlClay"
             ]
         },
         "Bowl with Seed Paste": {
@@ -4315,7 +4465,7 @@
         },
         "Bowling Ball Bag": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.Bag_BowlingBallBag"
@@ -4666,7 +4816,9 @@
             ]
         },
         "Box of Capgun Caps": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.CapGunCapBox"
             ]
@@ -5186,7 +5338,6 @@
                 "Grains"
             ],
             "item_id": [
-                "Base.Bread",
                 "Base.Bread"
             ]
         },
@@ -5195,7 +5346,6 @@
                 "Evolved recipes"
             ],
             "item_id": [
-                "Base.Bread",
                 "Base.Bread"
             ]
         },
@@ -5257,14 +5407,16 @@
         },
         "Briefcase": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.Briefcase"
             ]
         },
         "Briefcase (money)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Briefcase_Money"
             ]
@@ -5367,7 +5519,8 @@
         },
         "Brochure": {
             "categories": [
-                "Junk"
+                "Junk",
+                "Literature"
             ],
             "item_id": [
                 "Base.Brochure"
@@ -5690,13 +5843,15 @@
                 "Water containers"
             ],
             "item_id": [
-                "Base.Bucket",
                 "Base.BucketEmpty",
-                "Base.BucketWaterDebug"
+                "Base.BucketWaterDebug",
+                "Base.Bucket"
             ]
         },
         "Bucket (forged)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.BucketForged"
             ]
@@ -5921,7 +6076,9 @@
             ]
         },
         "Bull Skull - Jawless": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Bull_Skull_Wall"
             ]
@@ -5988,7 +6145,9 @@
             ],
             "item_id": [
                 "Base.Vambrace_BodyArmour_Right",
-                "Base.Vambrace_BodyArmour_Left"
+                "Base.Vambrace_BodyArmour_Left",
+                "Base.Vambrace_BodyArmour_Right_Desert",
+                "Base.Vambrace_BodyArmour_Left_Desert"
             ]
         },
         "Bulletproof Vest Forearm Armor (civilian)": {
@@ -6006,7 +6165,9 @@
             ],
             "item_id": [
                 "Base.GreaveBodyArmour_Right",
-                "Base.GreaveBodyArmour_Left"
+                "Base.GreaveBodyArmour_Left",
+                "Base.GreaveBodyArmour_Right_Desert",
+                "Base.GreaveBodyArmour_Left_Desert"
             ]
         },
         "Bulletproof Vest Shin Armor (civilian)": {
@@ -6024,7 +6185,9 @@
             ],
             "item_id": [
                 "Base.ThighBodyArmour_L",
-                "Base.ThighBodyArmour_R"
+                "Base.ThighBodyArmour_R",
+                "Base.ThighBodyArmour_R_Desert",
+                "Base.ThighBodyArmour_L_Desert"
             ]
         },
         "Bulletproof Vest Thigh Armor (civilian)": {
@@ -6041,7 +6204,8 @@
                 "Accessories"
             ],
             "item_id": [
-                "Base.AmmoStrap_Bullets"
+                "Base.AmmoStrap_Bullets",
+                "Base.AmmoStrap_Brown_Bullets"
             ]
         },
         "Bullets Bandolier (.223)": {
@@ -6181,7 +6345,9 @@
             ]
         },
         "Burlap Neck Guard": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Gorget_Burlap"
             ]
@@ -6340,7 +6506,7 @@
         },
         "CD Player": {
             "categories": [
-                "type=Electric"
+                "Electronics"
             ],
             "item_id": [
                 "Base.CDplayer"
@@ -6863,7 +7029,9 @@
             ]
         },
         "Canteen (military)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.CanteenMilitary",
                 "Base.CanteenMilitaryFull"
@@ -6878,7 +7046,9 @@
             ]
         },
         "Capgun Cap": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.CapGunCap"
             ]
@@ -7132,7 +7302,9 @@
             ]
         },
         "Carved Bucket": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.BucketCarved"
             ]
@@ -7154,7 +7326,9 @@
             ]
         },
         "Carving Fork": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.CarvingFork2"
             ]
@@ -8513,8 +8687,7 @@
                 "Household"
             ],
             "item_id": [
-                "Base.CleaningLiquid2",
-                "Base.CleaningLiquid"
+                "Base.CleaningLiquid2"
             ]
         },
         "Clipboard": {
@@ -8635,8 +8808,7 @@
                 "Miscellaneous food"
             ],
             "item_id": [
-                "Base.Coffee2",
-                "Base.Coffee"
+                "Base.Coffee2"
             ]
         },
         "Coffee Liqueur": {
@@ -8840,7 +9012,9 @@
             ]
         },
         "Cookie Jar - Teddy Bear": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.CookieJar_Bear"
             ]
@@ -8882,8 +9056,7 @@
                 "Water containers"
             ],
             "item_id": [
-                "Base.Pot",
-                "Base.WaterPot"
+                "Base.Pot"
             ]
         },
         "Cooking Pot (forged)": {
@@ -9087,7 +9260,9 @@
             ]
         },
         "Corn (Dried)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.CornSeed"
             ]
@@ -9351,7 +9526,9 @@
             ]
         },
         "Cow Skull - Jawless": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Cow_Skull_Wall"
             ]
@@ -10303,7 +10480,9 @@
             ]
         },
         "Debug Yardstick": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.YardstickDEBUG"
             ]
@@ -10381,7 +10560,9 @@
             ]
         },
         "Deer Skull - Jawless": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.DeerDoe_Skull_Wall"
             ]
@@ -10459,7 +10640,9 @@
             ]
         },
         "Denim Neck Guard": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Gorget_Denim"
             ]
@@ -11010,7 +11193,9 @@
             ]
         },
         "Drinking Glass": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.DrinkingGlass"
             ]
@@ -11073,10 +11258,26 @@
         },
         "Duffel Bag": {
             "categories": [
-                "type=Baggage"
+                "Wearable containers"
             ],
             "item_id": [
-                "''See [[#Variants|Variants]]''"
+                "Base.Bag_WeaponBag",
+                "Base.Bag_InmateEscapedBag",
+                "Base.Bag_MoneyBag",
+                "Base.Bag_WorkerBag",
+                "Base.Bag_DuffelBag",
+                "Base.Bag_BreakdownBag",
+                "Base.Bag_DuffelBagTINT",
+                "Base.Bag_ShotgunBag",
+                "Base.Bag_ShotgunSawnoffBag",
+                "Base.Bag_ShotgunDblBag",
+                "Base.Bag_ShotgunDblSawnoffBag",
+                "Base.Bag_BurglarBag",
+                "Base.Bag_BaseballBag",
+                "Base.Bag_TennisBag",
+                "Base.Bag_FoodCanned",
+                "Base.Bag_FoodSnacks",
+                "Base.Bag_ToolBag"
             ]
         },
         "Duffel Bag (military)": {
@@ -11375,7 +11576,17 @@
             ],
             "item_id": [
                 "Base.ElbowPad_Right",
-                "Base.ElbowPad_Left"
+                "Base.ElbowPad_Left",
+                "Base.ElbowPad_Right_Leather",
+                "Base.ElbowPad_Left_Leather",
+                "Base.ElbowPad_Right_Sport",
+                "Base.ElbowPad_Left_Sport",
+                "Base.ElbowPad_Right_Tactical",
+                "Base.ElbowPad_Left_Tactical",
+                "Base.ElbowPad_Right_TINT",
+                "Base.ElbowPad_Left_TINT",
+                "Base.ElbowPad_Right_Workman",
+                "Base.ElbowPad_Left_Workman"
             ]
         },
         "Electric Bass": {
@@ -11611,7 +11822,9 @@
             ]
         },
         "Empty Seed Packet - Flax": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.FlaxBagSeed_Empty"
             ]
@@ -11817,7 +12030,9 @@
             ]
         },
         "Empty Seed Packet - Spinach": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.SpinachBagSeed_Empty"
             ]
@@ -11839,7 +12054,9 @@
             ]
         },
         "Empty Seed Packet - Sunflower": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.SunflowerBagSeed_Empty"
             ]
@@ -11861,7 +12078,9 @@
             ]
         },
         "Empty Seed Packet - Tobacco": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.TobaccoBagSeed_Empty"
             ]
@@ -12189,7 +12408,9 @@
             ]
         },
         "Feeding Bottle": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.FeedingBottle"
             ]
@@ -12256,30 +12477,6 @@
             ],
             "item_id": [
                 "Base.KnifeFillet"
-            ]
-        },
-        "Filter Fluid A": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
-                "Base.BottleFilterA"
-            ]
-        },
-        "Filter Fluid B": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
-                "Base.BottleFilterB"
-            ]
-        },
-        "Filter Fluid C": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
-                "Base.BottleFilterC"
             ]
         },
         "Final Regards": {
@@ -12411,7 +12608,9 @@
             ]
         },
         "Firewood": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Firewood"
             ]
@@ -12425,7 +12624,9 @@
             ]
         },
         "Firewood with Nails": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Firewood_Nails"
             ]
@@ -12811,7 +13012,8 @@
         },
         "Flier: Nolan's Used Cars": {
             "categories": [
-                "Junk"
+                "Junk",
+                "Literature"
             ],
             "item_id": [
                 "Base.Flier_Nolans"
@@ -12819,7 +13021,7 @@
         },
         "Flight Case": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.Flightcase"
@@ -13131,7 +13333,9 @@
             ]
         },
         "Framepack": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Bag_CraftedFramepack_Large2"
             ]
@@ -13355,7 +13559,7 @@
         },
         "Fudgee Pop": {
             "categories": [
-                "Sweets\u200e"
+                "Sweets"
             ],
             "item_id": [
                 "Base.FudgeePop"
@@ -13363,7 +13567,7 @@
         },
         "Fudgee Pop (Melted)": {
             "categories": [
-                "Sweets\u200e"
+                "Sweets"
             ],
             "item_id": [
                 "Base.FudgeePop_Melted"
@@ -13475,7 +13679,9 @@
             ]
         },
         "Gaiter": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Gaiter_Right",
                 "Base.Gaiter_Left"
@@ -13679,8 +13885,7 @@
                 "Mechanics tools"
             ],
             "item_id": [
-                "Base.PetrolCan",
-                "Base.EmptyPetrolCan"
+                "Base.PetrolCan"
             ]
         },
         "Gas Mask": {
@@ -14350,7 +14555,9 @@
             ]
         },
         "Golf Tee": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.GolfTee"
             ]
@@ -14508,7 +14715,9 @@
             ]
         },
         "Green Peas (Dried)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.GreenpeasSeed"
             ]
@@ -14627,14 +14836,16 @@
         },
         "Guitar Case": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.Guitarcase"
             ]
         },
         "Guitar Pick": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.GuitarPick"
             ]
@@ -14673,7 +14884,7 @@
         },
         "Gun Case": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.RifleCase1",
@@ -14681,7 +14892,12 @@
                 "Base.RifleCase3",
                 "Base.RifleCase4",
                 "Base.ShotgunCase1",
-                "Base.ShotgunCase2"
+                "Base.ShotgunCase2",
+                "Base.Bag_RifleCase",
+                "Base.Bag_RifleCase_Police",
+                "Base.Bag_RifleCase_Police2",
+                "Base.Bag_RifleCase_Police3",
+                "Base.Bag_ShotgunCase_Police"
             ]
         },
         "Gun Case - Military": {
@@ -14944,7 +15160,7 @@
         },
         "Handbag": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.Handbag"
@@ -14960,7 +15176,7 @@
         },
         "Handgun Case": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.PistolCase1",
@@ -15036,7 +15252,9 @@
             ]
         },
         "Harmonica": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Harmonica"
             ]
@@ -15831,7 +16049,9 @@
             ]
         },
         "Hide Mask": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Hat_HockeyMask_Hide"
             ]
@@ -15868,14 +16088,6 @@
                 "Base.Vest_Hide"
             ]
         },
-        "Hide Tent": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.HideTent"
-            ]
-        },
         "Hide Tent (Packed)": {
             "categories": [
                 "Camping"
@@ -15885,7 +16097,9 @@
             ]
         },
         "Hide Wallet": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Wallet_Hide"
             ]
@@ -15931,7 +16145,9 @@
             ]
         },
         "Hobby Horse": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.HobbyHorse"
             ]
@@ -15942,7 +16158,13 @@
             ],
             "item_id": [
                 "Base.Shinpad_HockeyGoalie_L",
-                "Base.Shinpad_HockeyGoalie_R"
+                "Base.Shinpad_HockeyGoalie_R",
+                "Base.Shinpad_HockeyGoalie_L_Blue",
+                "Base.Shinpad_HockeyGoalie_R_Blue",
+                "Base.Shinpad_HockeyGoalie_L_Red",
+                "Base.Shinpad_HockeyGoalie_R_Red",
+                "Base.Shinpad_HockeyGoalie_L_White",
+                "Base.Shinpad_HockeyGoalie_R_White"
             ]
         },
         "Hockey Mask": {
@@ -16277,7 +16499,7 @@
         },
         "Hot Cuppa": {
             "categories": [
-                "type=Food"
+                "Removed items"
             ],
             "item_id": [
                 "Base.Mugfulll",
@@ -16569,7 +16791,6 @@
                 "Evolved recipes"
             ],
             "item_id": [
-                "Base.ConeIcecreamToppings",
                 "Base.ConeIcecreamToppings"
             ]
         },
@@ -16578,7 +16799,6 @@
                 "Sweets"
             ],
             "item_id": [
-                "Base.ConeIcecreamToppings",
                 "Base.ConeIcecreamToppings"
             ]
         },
@@ -17864,11 +18084,7 @@
                 "Security"
             ],
             "item_id": [
-                "Base.Key1",
-                "Base.Key2",
-                "Base.Key3",
-                "Base.Key4",
-                "Base.Key5"
+                "Base.Key1"
             ]
         },
         "Key Lime Pie Slice": {
@@ -17936,7 +18152,9 @@
             ]
         },
         "Key Ring - Forged": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.KeyRing_Forged"
             ]
@@ -17948,7 +18166,9 @@
             ]
         },
         "Key Ring - Gold": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.KeyRing_Forged_Gold"
             ]
@@ -18042,7 +18262,9 @@
             ]
         },
         "Key Ring - Silver": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.KeyRing_Forged_Silver"
             ]
@@ -18197,7 +18419,17 @@
             ],
             "item_id": [
                 "Base.Kneepad_Right",
-                "Base.Kneepad_Left"
+                "Base.Kneepad_Left",
+                "Base.Kneepad_Right_Leather",
+                "Base.Kneepad_Left_Leather",
+                "Base.Kneepad_Right_Workman",
+                "Base.Kneepad_Left_Workman",
+                "Base.Kneepad_Right_Sport",
+                "Base.Kneepad_Left_Sport",
+                "Base.Kneepad_Right_Tactical",
+                "Base.Kneepad_Left_Tactical",
+                "Base.Kneepad_Right_TINT",
+                "Base.Kneepad_Left_TINT"
             ]
         },
         "Knitting Needles": {
@@ -18325,7 +18557,12 @@
                 "Removed items"
             ],
             "item_id": [
-                "Base.Lamp"
+                "Base.Mov_Lamp1",
+                "Base.Mov_Lamp2",
+                "Base.Mov_Lamp3",
+                "Base.Mov_Lamp4",
+                "Base.Mov_Lamp5",
+                "Base.Mov_Lamp6"
             ]
         },
         "Landrace Pig Leather (Furred)": {
@@ -18489,19 +18726,25 @@
             ]
         },
         "Large Crafted Framepack": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Bag_CraftedFramepack_Large"
             ]
         },
         "Large Crystal": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Crystal_Large"
             ]
         },
         "Large Framepack": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Bag_CraftedFramepack_Large3"
             ]
@@ -18940,7 +19183,9 @@
             ]
         },
         "Leather Strip Neck Guard": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Gorget_LeatherWrap"
             ]
@@ -19411,7 +19656,9 @@
             ]
         },
         "Lighter - Improvised Battery": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Lighter_Battery"
             ]
@@ -19875,7 +20122,7 @@
         },
         "Lunchbag": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.Lunchbag"
@@ -19883,7 +20130,7 @@
         },
         "Lunchbox": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.Lunchbox",
@@ -20329,11 +20576,17 @@
             ],
             "item_id": [
                 "Base.ThighMagazine_L",
-                "Base.ThighMagazine_R"
+                "Base.ThighMagazine_R",
+                "Base.GreaveMagazine_Right",
+                "Base.GreaveMagazine_Left",
+                "Base.VambraceMagazine_Right",
+                "Base.VambraceMagazine_Left"
             ]
         },
         "Magazine: Alpine Explorers": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.TailoringMag9"
             ]
@@ -20427,7 +20680,9 @@
             ]
         },
         "Magazine: Cowboy Living": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.TailoringMag5"
             ]
@@ -20513,13 +20768,17 @@
             ]
         },
         "Magazine: Fun in the Woods!": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.TailoringMag7"
             ]
         },
         "Magazine: Get Stuffed": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.HuntingMag4"
             ]
@@ -20573,7 +20832,9 @@
             ]
         },
         "Magazine: Herbal Remedy Growing": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.FarmingMag9"
             ]
@@ -20587,7 +20848,9 @@
             ]
         },
         "Magazine: Homespun": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.TailoringMag10"
             ]
@@ -20674,7 +20937,9 @@
             ]
         },
         "Magazine: Leather Crafts": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.TailoringMag4"
             ]
@@ -20752,7 +21017,9 @@
             ]
         },
         "Magazine: Outdoor Gear, Done Right": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.TailoringMag8"
             ]
@@ -20782,7 +21049,9 @@
             ]
         },
         "Magazine: Real Gladiators": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.TailoringMag6"
             ]
@@ -20893,7 +21162,9 @@
             ]
         },
         "Magazine: The Cheapskate's John Spiral - Homemade Explosives": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.EngineerMagazine3"
             ]
@@ -21167,8 +21438,7 @@
                 "Long blunt weapons"
             ],
             "item_id": [
-                "Base.CraftedFishingRod",
-                "Base.CraftedFishingRodTwineLine"
+                "Base.CraftedFishingRod"
             ]
         },
         "Makeshift Ham Radio": {
@@ -21564,7 +21834,9 @@
             ]
         },
         "Matchbox": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Matchbox"
             ]
@@ -21882,7 +22154,9 @@
             ]
         },
         "Metal Drum (item)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.MetalDrum"
             ]
@@ -21931,7 +22205,9 @@
             ]
         },
         "Metal Spearhead": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.SpearHead"
             ]
@@ -22819,13 +23095,8 @@
             ],
             "item_id": [
                 "Base.Mugl",
-                "Base.MugRed",
                 "Base.MugWhite",
                 "Base.MugSpiffo",
-                "Base.WaterMug",
-                "Base.WaterMugRed",
-                "Base.WaterMugWhite",
-                "Base.WaterMugSpiffo",
                 "Base.TestMug"
             ]
         },
@@ -22838,7 +23109,9 @@
             ]
         },
         "Mug of Water": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.TestWaterMug"
             ]
@@ -23424,7 +23697,8 @@
                 "Prepared food"
             ],
             "item_id": [
-                "Base.EggOmelette"
+                "Base.EggOmelette",
+                "Base.OmeletteRecipeForged"
             ]
         },
         "Omelette (crafted)": {
@@ -24008,7 +24282,8 @@
                 "Miscellaneous food"
             ],
             "item_id": [
-                "Base.Pancakes"
+                "Base.Pancakes",
+                "Base.PancakesCraft"
             ]
         },
         "Pancakes (crafted)": {
@@ -24296,7 +24571,7 @@
         },
         "Paper Bag": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.PaperBag"
@@ -24304,7 +24579,7 @@
         },
         "Paper Bag (Jay's)": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.Paperbag_Jays"
@@ -24312,7 +24587,7 @@
         },
         "Paper Bag (Spiffo's)": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.Paperbag_Spiffos"
@@ -24908,7 +25183,9 @@
                 "Grains"
             ],
             "item_id": [
-                "Base.Pasta"
+                "Base.Pasta",
+                "Base.PastaPanCopper",
+                "Base.PastaPotForged"
             ]
         },
         "Pasta (crafted pan)": {
@@ -25048,7 +25325,9 @@
             ]
         },
         "Pencil Case (gaming)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.PencilCase_Gaming"
             ]
@@ -25110,7 +25389,9 @@
             ]
         },
         "Pest Flies Spray": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.GardeningSprayCigarettes"
             ]
@@ -25404,7 +25685,9 @@
             ]
         },
         "Pig Skull - Jawless": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Pig_Skull_Wall"
             ]
@@ -25651,7 +25934,7 @@
         },
         "Plastic Bag": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.Plasticbag",
@@ -25667,11 +25950,10 @@
         },
         "Plastic Cup": {
             "categories": [
-                "type=Default"
+                "Water containers"
             ],
             "item_id": [
-                "Base.PlasticCup",
-                "Base.PlasticCupWater"
+                "Base.PlasticCup"
             ]
         },
         "Plastic Fork": {
@@ -25779,7 +26061,9 @@
             ]
         },
         "Plumpabug the Aphid": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Plushabug"
             ]
@@ -25918,7 +26202,9 @@
             ]
         },
         "Poppies": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Poppies"
             ]
@@ -25932,13 +26218,17 @@
             ]
         },
         "Poppy Pods": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.PoppyPods"
             ]
         },
         "Poppy Pods (Dried)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.PoppyPodsDried"
             ]
@@ -26012,7 +26302,8 @@
                 "Removed items"
             ],
             "item_id": [
-                "Base.PotOfSoup"
+                "Base.PotOfSoup",
+                "Base.PotForgedSoupRecipe"
             ]
         },
         "Potato": {
@@ -26088,26 +26379,32 @@
             ]
         },
         "Pouch (dice)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.DiceBag"
             ]
         },
         "Pouch (gem)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.GemBag"
             ]
         },
         "Pouch (seed farming)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.SeedBag_Farming"
             ]
         },
         "Pouch (seed)": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.SeedBag"
@@ -26453,7 +26750,7 @@
         },
         "Purse": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.Purse"
@@ -26846,7 +27143,9 @@
             ]
         },
         "Rag Neck Guard": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Gorget_Rag"
             ]
@@ -27416,7 +27715,12 @@
                 "Grains"
             ],
             "item_id": [
-                "Base.Rice"
+                "Base.Rice",
+                "Base.SugarBeetPulpPot",
+                "Base.SugarBeetSyrupPot",
+                "Base.SugarBeetSugarPot",
+                "Base.RicePanCopper",
+                "Base.RicePotForged"
             ]
         },
         "Rice (crafted pan)": {
@@ -27828,7 +28132,9 @@
             ]
         },
         "Rubber Spider": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.RubberSpider"
             ]
@@ -28047,7 +28353,8 @@
                 "Evolved recipes"
             ],
             "item_id": [
-                "farming.Salad"
+                "Base.Salad",
+                "Base.SaladClay"
             ]
         },
         "Salami": {
@@ -29223,7 +29530,9 @@
             ]
         },
         "Set of Maintenance Books": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.BookMaintenanceSet"
             ]
@@ -29309,7 +29618,9 @@
             ]
         },
         "Sewing Pattern": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.SewingPattern"
             ]
@@ -29411,7 +29722,9 @@
             ]
         },
         "Sheep Skull - Jawless": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Sheep_Skull_Wall"
             ]
@@ -29501,8 +29814,7 @@
                 "Literature"
             ],
             "item_id": [
-                "Base.SheetPaper2",
-                "Base.SheetPaper"
+                "Base.SheetPaper2"
             ]
         },
         "Shells Bandolier": {
@@ -29514,7 +29826,9 @@
             ]
         },
         "Shells Bandolier (brown)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.AmmoStrap_Brown_Shells"
             ]
@@ -29573,7 +29887,15 @@
             ],
             "item_id": [
                 "Base.ShinKneeGuard_L",
-                "Base.ShinKneeGuard_R"
+                "Base.ShinKneeGuard_R",
+                "Base.ShinKneeGuard_L_Baseball",
+                "Base.ShinKneeGuard_R_Baseball",
+                "Base.ShinKneeGuard_L_IceHockey",
+                "Base.ShinKneeGuard_R_IceHockey",
+                "Base.ShinKneeGuard_L_Protective",
+                "Base.ShinKneeGuard_R_Protective",
+                "Base.ShinKneeGuard_L_TINT",
+                "Base.ShinKneeGuard_R_TINT"
             ]
         },
         "Shirt - Denim": {
@@ -29998,7 +30320,9 @@
             ]
         },
         "Silver Coin": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.SilverCoin"
             ]
@@ -30196,7 +30520,9 @@
             ]
         },
         "Simple Framepack": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Bag_TarpFramepack_Large"
             ]
@@ -30732,7 +31058,9 @@
             ]
         },
         "Slug Repellent": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.SlugRepellent"
             ]
@@ -30866,7 +31194,9 @@
             ]
         },
         "Small Crafted Framepack": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Bag_CraftedFramepack_Small"
             ]
@@ -30956,7 +31286,20 @@
                 "Container items"
             ],
             "item_id": [
-                "Base.Bag_ProtectiveCaseSmall"
+                "Base.Bag_ProtectiveCaseSmall",
+                "Base.Bag_ProtectiveCaseSmall_Armorer",
+                "Base.Bag_ProtectiveCaseSmall_Electronics",
+                "Base.Bag_ProtectiveCaseSmall_Survivalist",
+                "Base.Bag_ProtectiveCaseSmall_WalkieTalkie",
+                "Base.Bag_ProtectiveCaseSmall_WalkieTalkiePolice",
+                "Base.Bag_ProtectiveCaseSmall_FirstAid",
+                "Base.Bag_ProtectiveCaseSmall_Pistol1",
+                "Base.Bag_ProtectiveCaseSmall_Pistol2",
+                "Base.Bag_ProtectiveCaseSmall_Pistol3",
+                "Base.Bag_ProtectiveCaseSmall_Revolver1",
+                "Base.Bag_ProtectiveCaseSmall_Revolver2",
+                "Base.Bag_ProtectiveCaseSmall_Revolver3",
+                "Base.Bag_ProtectiveCaseSmall_KeyCutting"
             ]
         },
         "Small Protective Case - Military": {
@@ -31008,7 +31351,9 @@
             ]
         },
         "Small Simple Framepack": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Bag_TarpFramepack_Small"
             ]
@@ -31022,7 +31367,9 @@
             ]
         },
         "Small Tarp Backpack": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Bag_CrudeTarpBag"
             ]
@@ -31281,7 +31628,11 @@
             ],
             "item_id": [
                 "Base.Shinpad_L",
-                "Base.Shinpad_R"
+                "Base.Shinpad_R",
+                "Base.Shinpad_L_Blue",
+                "Base.Shinpad_R_Blue",
+                "Base.Shinpad_L_White",
+                "Base.Shinpad_R_White"
             ]
         },
         "Sordid Client": {
@@ -32179,13 +32530,17 @@
             ]
         },
         "Stag Skull - Jawless": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.DeerStag_Skull_Wall"
             ]
         },
         "Stairs Piece": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Stairs"
             ]
@@ -32335,7 +32690,9 @@
             ]
         },
         "Steel Knuckle": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "camping.SteelKnuckle"
             ]
@@ -32798,7 +33155,7 @@
         },
         "Suitcase": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.Suitcase"
@@ -32813,13 +33170,17 @@
             ]
         },
         "Sunflower Head": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.SunflowerHead"
             ]
         },
         "Sunflower Head (Dried)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.SunflowerHeadDried"
             ]
@@ -33629,19 +33990,25 @@
             ]
         },
         "Tarp Chest Rig": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Bag_ChestRig_Tarp"
             ]
         },
         "Tarp Fanny Pack - Back": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Bag_FannyPackBack_Tarp"
             ]
         },
         "Tarp Fanny Pack - Front": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Bag_FannyPackFront_Tarp"
             ]
@@ -33679,13 +34046,17 @@
             ]
         },
         "Tarp Sack": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Bag_TarpSack"
             ]
         },
         "Tarp Sling Bag": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Bag_TarpSlingBag"
             ]
@@ -33731,13 +34102,17 @@
             ]
         },
         "Teddy Bear (burlap)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.ToyBear_Crafted_Burlap"
             ]
         },
         "Teddy Bear (cotton)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.ToyBear_Crafted_Cotton"
             ]
@@ -33839,7 +34214,9 @@
             ]
         },
         "Tent Kit": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.CampingTentKit2"
             ]
@@ -34434,7 +34811,8 @@
                 "Vehicle parts"
             ],
             "item_id": [
-                "Base.ModernTire2"
+                "Base.ModernTire2",
+                "Base.ModernTire3"
             ]
         },
         "Tire - Performance (Standard Vehicle)": {
@@ -34458,7 +34836,8 @@
                 "Vehicle parts"
             ],
             "item_id": [
-                "Base.NormalTire2"
+                "Base.NormalTire2",
+                "Base.NormalTire3"
             ]
         },
         "Tire - Regular (Standard Vehicle)": {
@@ -34698,7 +35077,7 @@
         },
         "Toolbox": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.Toolbox"
@@ -34802,7 +35181,7 @@
         },
         "Tote Bag": {
             "categories": [
-                "type=Baggage"
+                "Handheld containers"
             ],
             "item_id": [
                 "Base.Tote"
@@ -34817,13 +35196,17 @@
             ]
         },
         "Tote Bag (clothing)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Tote_Clothing"
             ]
         },
         "Tote Bag (dancer)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Bag_Dancer"
             ]
@@ -34837,13 +35220,17 @@
             ]
         },
         "Toy Cap Pistol": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Revolver_CapGun"
             ]
         },
         "Toy Cap Rifle": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Rifle_CapGun"
             ]
@@ -34913,19 +35300,25 @@
             ]
         },
         "Trailer Trunk (Heavy-Duty Vehicle)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.TrailerTrunk2"
             ]
         },
         "Trailer Trunk (Sports Vehicle)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.TrailerTrunk3"
             ]
         },
         "Trailer Trunk (Standard Vehicle)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.TrailerTrunk1"
             ]
@@ -35251,7 +35644,9 @@
             ]
         },
         "Tuning Fork": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.TuningFork"
             ]
@@ -35385,7 +35780,9 @@
             ]
         },
         "Twig Broom": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Broom_Twig"
             ]
@@ -35460,7 +35857,7 @@
                 "Base.ClosedUmbrellaRed",
                 "Base.ClosedUmbrellaWhite",
                 "Base.ClosedUmbrellaTINTED",
-                "Base.ClosedUmbrellaWhite"
+                "Base.UmbrellaTINTED"
             ]
         },
         "Uncle Billy's Kentucky Moonshine": {
@@ -35573,7 +35970,6 @@
                 "Entertainment"
             ],
             "item_id": [
-                "Base.VHS",
                 "Base.VHS_Retail",
                 "Base.VHS_Home"
             ]
@@ -36008,7 +36404,9 @@
             ]
         },
         "Water Drop": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.WaterDrop"
             ]
@@ -36264,7 +36662,9 @@
             ]
         },
         "Whistle": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.Whistle"
             ]
@@ -36622,13 +37022,17 @@
             ]
         },
         "Wooden Bucket": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.BucketWood"
             ]
         },
         "Wooden Bucket (large)": {
-            "categories": [],
+            "categories": [
+                "Items"
+            ],
             "item_id": [
                 "Base.BucketLargeWood"
             ]
@@ -37132,7 +37536,9 @@
             ]
         },
         "Aaaaah! Painting": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_PaintingAaaaah"
             ],
@@ -37208,7 +37614,9 @@
             ]
         },
         "Amphora": {
-            "categories": [],
+            "categories": [
+                "Building"
+            ],
             "sprite_id": [
                 "crafted_04_32",
                 "crafted_04_34"
@@ -37339,7 +37747,9 @@
             ]
         },
         "Bank Counter": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -37406,7 +37816,9 @@
             ]
         },
         "Bar Stool": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -37470,7 +37882,9 @@
             ]
         },
         "Barg-n-Clothes Sign 2": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.location_shop_mall_signs_01_136"
             ],
@@ -37649,7 +38063,9 @@
             ]
         },
         "Beige Rotary Phone": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_BeigeRotaryPhone"
             ],
@@ -37711,7 +38127,9 @@
             ]
         },
         "Bench Grinder": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_BenchGrinder"
             ],
@@ -37759,7 +38177,9 @@
             ]
         },
         "Big Wall Corner Shelves": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -37927,7 +38347,9 @@
             ]
         },
         "Black Grand Piano": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -37963,7 +38385,9 @@
             ]
         },
         "Black Modern Phone": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_BlackModernPhone"
             ],
@@ -37989,7 +38413,9 @@
             ]
         },
         "Black Rotary Phone": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_BlackRotaryPhone"
             ],
@@ -38060,7 +38486,9 @@
             ]
         },
         "Blue Cheap Sleeping Bag": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.SleepingBag_Cheap_Blue"
             ],
@@ -38131,7 +38559,9 @@
             ]
         },
         "Blue Cubicle": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38140,7 +38570,9 @@
             ]
         },
         "Blue Cubicle Corner": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38200,7 +38632,9 @@
             ]
         },
         "Blue Hospital Curtain A": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38210,7 +38644,9 @@
             ]
         },
         "Blue Hospital Curtain B": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38220,7 +38656,9 @@
             ]
         },
         "Blue Hospital Curtain C": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38230,7 +38668,9 @@
             ]
         },
         "Blue Hospital Curtain D": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38254,7 +38694,9 @@
             ]
         },
         "Blue Magazine Shelf": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38296,7 +38738,9 @@
             ]
         },
         "Blue Plaid Sleeping Bag": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.SleepingBag_BluePlaid"
             ],
@@ -38501,7 +38945,9 @@
             ]
         },
         "Bowling Rack": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38518,7 +38964,9 @@
             ]
         },
         "Branch Cross": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38530,7 +38978,9 @@
             ]
         },
         "Branch Shelves": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38542,7 +38992,9 @@
             ]
         },
         "Branch Stool": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38552,7 +39004,9 @@
             ]
         },
         "Branch Workbench": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38564,7 +39018,9 @@
             ]
         },
         "Brazier": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_Brazier"
             ],
@@ -38589,7 +39045,9 @@
             ]
         },
         "Brick Planter": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38635,7 +39093,9 @@
             ]
         },
         "Brown High Quality Sleeping Bag": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.SleepingBag_HighQuality_Brown"
             ],
@@ -38769,7 +39229,9 @@
             ]
         },
         "Butter Churn": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38827,7 +39289,9 @@
             ]
         },
         "Camo Sleeping Bag": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.SleepingBag_Camo"
             ],
@@ -38839,7 +39303,9 @@
             ]
         },
         "Cardboard Box": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_CardboardBox"
             ],
@@ -38905,7 +39371,9 @@
             ]
         },
         "Cedar Round Table": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_RoundTable"
             ],
@@ -38914,7 +39382,9 @@
             ]
         },
         "Center Sign": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38951,7 +39421,9 @@
             ]
         },
         "Charcoal Burner": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38988,7 +39460,9 @@
             ]
         },
         "Chest Freezer": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_ChestFreezer"
             ],
@@ -39227,7 +39701,9 @@
             ]
         },
         "Circular Target": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39306,7 +39782,9 @@
             ]
         },
         "Coffee Low Sign": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39354,7 +39832,9 @@
             ]
         },
         "Complex Loom": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39530,7 +40010,9 @@
             ]
         },
         "Crafted Oven": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39550,7 +40032,9 @@
             ]
         },
         "Crude Hand Press": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39560,7 +40044,9 @@
             ]
         },
         "Crude Metal Corner Counter": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39572,7 +40058,9 @@
             ]
         },
         "Crude Metal Counter": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39584,7 +40072,9 @@
             ]
         },
         "Crude Metal Wall Shelves": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39596,7 +40086,9 @@
             ]
         },
         "Crude Tall Locker": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39605,7 +40097,9 @@
             ]
         },
         "Crude Wall Locker": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40095,7 +40589,9 @@
             ]
         },
         "Drum Stool": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_DrumStool"
             ],
@@ -40104,7 +40600,9 @@
             ]
         },
         "Electric Blower Forge": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_ElectricBlowerForge"
             ],
@@ -40125,7 +40623,9 @@
             ]
         },
         "Employee Bank Counter": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40137,7 +40637,9 @@
             ]
         },
         "Empty Military Barrier": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40157,7 +40659,9 @@
             ]
         },
         "Empty Water Dispenser": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40288,7 +40792,9 @@
             ]
         },
         "Fancy Distaff": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40332,7 +40838,9 @@
             ]
         },
         "Fancy Metal Crate": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40505,7 +41013,9 @@
             ]
         },
         "Flat Coffin": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_FlatCoffin"
             ],
@@ -40644,7 +41154,9 @@
             ]
         },
         "Fossoil Low Shelves": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40730,7 +41242,9 @@
             ]
         },
         "Gas2Go Low Shelves": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40780,7 +41294,9 @@
             ]
         },
         "Generic Shop Gun Shelves": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40790,7 +41306,9 @@
             ]
         },
         "Generic Shop Shelves": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41043,7 +41561,9 @@
             ]
         },
         "Gray Smooth Tiles": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.floors_interior_tilesandwood_01_18"
             ],
@@ -41052,7 +41572,9 @@
             ]
         },
         "Gray Tiles": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.floors_interior_tilesandwood_01_30"
             ],
@@ -41061,7 +41583,9 @@
             ]
         },
         "Green 2 Cheap Sleeping Bag": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.SleepingBag_Cheap_Green2"
             ],
@@ -41095,7 +41619,9 @@
             ]
         },
         "Green Cheap Sleeping Bag": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.SleepingBag_Cheap_Green"
             ],
@@ -41250,7 +41776,9 @@
             ]
         },
         "Green Plaid Sleeping Bag": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.SleepingBag_GreenPlaid"
             ],
@@ -41273,7 +41801,9 @@
             ]
         },
         "Green Sleeping Bag": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.SleepingBag_Green"
             ],
@@ -41340,7 +41870,9 @@
             ]
         },
         "Greene's Grocery Display Counter": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41381,7 +41913,9 @@
             ]
         },
         "Grey Cubicle": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41390,7 +41924,9 @@
             ]
         },
         "Grey Cubicle Corner": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41445,7 +41981,9 @@
             ]
         },
         "Grey Squares": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41454,7 +41992,9 @@
             ]
         },
         "Grinding Slab": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41463,7 +42003,9 @@
             ]
         },
         "Grindstone": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41500,7 +42042,9 @@
             ]
         },
         "Guitar Amplifier": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_GuitarAmplifier"
             ],
@@ -41512,7 +42056,9 @@
             ]
         },
         "Guitar Speaker Cabinet": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_BlackSpeakerCabinet"
             ],
@@ -41524,7 +42070,9 @@
             ]
         },
         "Gym Mat": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_GymnMat"
             ],
@@ -41559,7 +42107,9 @@
             ]
         },
         "Hair Studio Sign": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41569,7 +42119,9 @@
             ]
         },
         "Hand Press": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41640,7 +42192,9 @@
             ]
         },
         "Heckle Comb": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41676,7 +42230,9 @@
             ]
         },
         "Hide Sleeping Bag": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.SleepingBag_Hide"
             ],
@@ -41806,7 +42362,9 @@
             ]
         },
         "Industrial Sink": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_IndustrialSink"
             ],
@@ -41892,7 +42450,9 @@
             ]
         },
         "Key Duplicator": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_KeyDuplicator"
             ],
@@ -41904,7 +42464,9 @@
             ]
         },
         "Kick Drum": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_KickDrum"
             ],
@@ -42068,7 +42630,9 @@
             ]
         },
         "Large Drying Rack": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42132,7 +42696,9 @@
             ]
         },
         "Large Low Shelves": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.furniture_shelving_01_23"
             ],
@@ -42181,7 +42747,9 @@
             ]
         },
         "Large Metal Trough": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42317,7 +42885,9 @@
             ]
         },
         "Large Simple Drying Rack": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42387,7 +42957,9 @@
             ]
         },
         "Large Wooden Table": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42548,7 +43120,9 @@
             ]
         },
         "LightCharcoal Burner": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42609,7 +43183,9 @@
             ]
         },
         "Log Bench": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42651,7 +43227,9 @@
             ]
         },
         "Long Branch Low Table": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42785,7 +43363,9 @@
             ]
         },
         "Low Hide Covered Stool": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42820,7 +43400,9 @@
             ]
         },
         "Low Shelves": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42830,7 +43412,9 @@
             ]
         },
         "Low Stool": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42881,7 +43465,9 @@
             ]
         },
         "Mahogany Stool": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_WoodenStool"
             ],
@@ -42997,7 +43583,9 @@
             ]
         },
         "Mama McFudgington's Sign": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.location_shop_mall_signs_01_64"
             ],
@@ -43195,7 +43783,9 @@
             ]
         },
         "Medium Drying Rack": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -43475,7 +44065,9 @@
             ]
         },
         "Modern Pottery Wheel": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -43523,7 +44115,9 @@
             ]
         },
         "Motel Counter": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -43655,7 +44249,9 @@
             ]
         },
         "Oak Employee Bank Counter": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -43691,7 +44287,9 @@
             ]
         },
         "Oak bank Counter": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -43965,7 +44563,9 @@
             ]
         },
         "Pallet": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44051,7 +44651,9 @@
             ]
         },
         "Patient Chair": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44117,7 +44719,9 @@
             ]
         },
         "Picnic Table": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.camping_01_12"
             ],
@@ -44195,7 +44799,9 @@
             ]
         },
         "Pile o' Crepe Floor": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44366,7 +44972,9 @@
             ]
         },
         "Plastic Chair": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_PlasticChair"
             ],
@@ -44490,7 +45098,9 @@
             ]
         },
         "Property Sign": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_SignArmy"
             ],
@@ -44648,7 +45258,9 @@
             ]
         },
         "Red Carpet": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44671,7 +45283,9 @@
             ]
         },
         "Red Comfy Couch": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44736,7 +45350,9 @@
             ]
         },
         "Red Magazine Shelf": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44855,7 +45471,9 @@
             ]
         },
         "Red Plaid Sleeping Bag": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.SleepingBag_RedPlaid"
             ],
@@ -44867,7 +45485,9 @@
             ]
         },
         "Red Rotary Phone": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_RedRotaryPhone"
             ],
@@ -44933,7 +45553,9 @@
             ]
         },
         "Rest Area South Road Sign": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44966,7 +45588,9 @@
             ]
         },
         "Ripple Comb": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44990,7 +45614,9 @@
             ]
         },
         "Road Block": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_RoadBarrier"
             ],
@@ -45023,7 +45649,9 @@
             ]
         },
         "Rocking Chair": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45124,7 +45752,9 @@
             ]
         },
         "Rug": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45145,7 +45775,9 @@
             ]
         },
         "Sale Sign": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_SaleSign"
             ],
@@ -45169,7 +45801,9 @@
             ]
         },
         "Salt Lick": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_SaltLick"
             ],
@@ -45202,7 +45836,9 @@
             ]
         },
         "Scarecrow": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_Scarecrow"
             ],
@@ -45211,7 +45847,9 @@
             ]
         },
         "Scutching Board": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45380,7 +46018,9 @@
             ]
         },
         "Silhouette Target": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45404,7 +46044,9 @@
             ]
         },
         "Simple Distaff": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45413,7 +46055,9 @@
             ]
         },
         "Simple Loom": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45423,7 +46067,9 @@
             ]
         },
         "Simple Pottery Wheel": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45433,7 +46079,9 @@
             ]
         },
         "Simple Small Drying Rack": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45489,7 +46137,9 @@
             ]
         },
         "Small Animal Trough": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45558,7 +46208,9 @@
             ]
         },
         "Small Drying Rack": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45596,7 +46248,9 @@
             ]
         },
         "Small Metal Trough": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45737,7 +46391,9 @@
             ]
         },
         "Snare Drum": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_SnareDrum"
             ],
@@ -45757,7 +46413,9 @@
             ]
         },
         "Softening Beam": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45779,7 +46437,9 @@
             ]
         },
         "Spiffo Spiffo Sleeping Bag": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.SleepingBag_Spiffo"
             ],
@@ -45966,7 +46626,9 @@
             ]
         },
         "Spinning Wheel": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46038,7 +46700,9 @@
             ]
         },
         "Stag Antlers": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Antlers_Wall"
             ],
@@ -46135,7 +46799,9 @@
             ]
         },
         "Stone Quern": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46338,7 +47004,9 @@
             ]
         },
         "Tannin Barrel": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46480,7 +47148,9 @@
             ]
         },
         "Tom Drum": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_TomDrum"
             ],
@@ -46635,7 +47305,9 @@
             ]
         },
         "Type A Blue Cubicle": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46645,7 +47317,9 @@
             ]
         },
         "Type A Gray Cubicle": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46655,7 +47329,9 @@
             ]
         },
         "Type B Blue Cubicle": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46665,7 +47341,9 @@
             ]
         },
         "Type B Gray Cubicle": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46701,7 +47379,9 @@
             ]
         },
         "Upright Coffin": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_UprightCoffin"
             ],
@@ -46763,7 +47443,9 @@
             ]
         },
         "Victorian 1 Chair": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46775,7 +47457,9 @@
             ]
         },
         "Victorian 1 Mirror": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46787,7 +47471,9 @@
             ]
         },
         "Victorian 2 Chair": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46799,7 +47485,9 @@
             ]
         },
         "Victorian 3 Chair": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46811,7 +47499,9 @@
             ]
         },
         "Victorian 4 Chair": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46823,7 +47513,9 @@
             ]
         },
         "Victorian 5 Chair": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46835,7 +47527,9 @@
             ]
         },
         "Victorian 6 Chair": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46847,7 +47541,9 @@
             ]
         },
         "Victorian C1 Couch": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46859,7 +47555,9 @@
             ]
         },
         "Victorian C2 Couch": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46871,7 +47569,9 @@
             ]
         },
         "Victorian C3 Couch": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46883,7 +47583,9 @@
             ]
         },
         "Victorian C4 Couch": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46895,7 +47597,9 @@
             ]
         },
         "Victorian C5 Couch": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46907,7 +47611,9 @@
             ]
         },
         "Victorian C6 Couch": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47281,7 +47987,9 @@
             ]
         },
         "White Drawers": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_WhiteFancyDrawers"
             ],
@@ -47455,7 +48163,9 @@
             ]
         },
         "White Modern Phone": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_WhiteModernPhone"
             ],
@@ -47489,7 +48199,9 @@
             ]
         },
         "White Rotary Phone": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_WhiteRotaryPhone"
             ],
@@ -47797,7 +48509,9 @@
             ]
         },
         "Wooden Speaker Cabinet": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Base.Mov_WoodSpeakerCabinet"
             ],
@@ -47809,7 +48523,9 @@
             ]
         },
         "Wooden Stool": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47990,7 +48706,9 @@
             ]
         },
         "Zippee Display Counter": {
-            "categories": [],
+            "categories": [
+                "Tiles"
+            ],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -49146,6 +49864,14 @@
             ],
             "vehicle_id": [
                 "Base.TrailerAdvert"
+            ]
+        },
+        "Trailer (cover)": {
+            "categories": [
+                "Trailers"
+            ],
+            "vehicle_id": [
+                "Base.TrailerCover"
             ]
         },
         "Transit Franklin Valuline": {
