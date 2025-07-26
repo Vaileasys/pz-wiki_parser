@@ -1645,11 +1645,6 @@ def main():
     5. Generates Lua data files by category
     6. Creates an index file
     """
-    
-    # Parse attached weapon definitions (not used yet)
-    lua_runtime = lua_helper.load_lua_file("AttachedWeaponDefinitions.lua")
-    parsed_data = lua_helper.parse_lua_tables(lua_runtime)
-    save_cache(parsed_data, "attached_weapon_definitions.json", cache_path)
 
     file_paths = {
         "proceduraldistributions": os.path.join(DATA_DIR, "distributions", "proceduraldistributions.json"),
@@ -1669,6 +1664,11 @@ def main():
     lua_runtime = lua_helper.load_lua_file("AnimalPartsDefinitions.lua")
     butchering_data = lua_helper.parse_lua_tables(lua_runtime)
     save_cache(butchering_data, "butchering_data.json", cache_path)
+
+    # Parse attached weapons
+    lua_runtime = lua_helper.load_lua_file("AttachedWeaponDefinitions.lua")
+    parsed_data = lua_helper.parse_lua_tables(lua_runtime)
+    save_cache(parsed_data, "attached_weapon_definitions.json", cache_path)
 
     # Parse distribution data
     print("Parsing distribution data...")
