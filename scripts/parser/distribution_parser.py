@@ -6,8 +6,6 @@ from lupa import LuaRuntime
 import xml.etree.ElementTree as ET
 from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache
-from scripts.utils import lua_helper
-
 
 cache_path = os.path.join(DATA_DIR, "distributions")
 
@@ -430,7 +428,6 @@ def parse_clothing(clothing_file_path, guid_table_path, output_file):
 
     :param clothing_file_path: The path to the clothing XML file
     :param guid_table_path: The path to the GUID table XML file
-    :param output_file_path: The path to the output JSON file
     :return: None
     """
 
@@ -508,7 +505,6 @@ def parse_stories(class_files_directory, output_file):
     constants. It then saves the collected constants to a JSON file at the specified output path.
 
     :param class_files_directory: The path to the directory containing the .class files
-    :param output_path: The path to the output JSON file
     :return: None
     """
 

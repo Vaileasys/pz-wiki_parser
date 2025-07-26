@@ -1,9 +1,8 @@
-import json
 import os
 import re
-import math
 import tqdm
 import scripts.parser.distribution_parser as distribution_parser
+from scripts.core import page_manager
 from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache, load_cache
 from scripts.utils.categories import find_all_categories
@@ -105,7 +104,6 @@ def process_json(file_paths):
             for story_key, items in data.items():
                 for item in items:
                     # Update item name if found in the dictionary
-                    original_item = item
                     item = load_item_dictionary(item)
                     item_list.add(item)
                     count += 1
@@ -483,7 +481,6 @@ def build_item_json(item_list, procedural_data, distribution_data, vehicle_data,
             for outfit_name, outfit_details in gender_outfits_data.items():
                 items = outfit_details.get("Items", {})
 
-                outfit_name_original = outfit_name
                 outfit_name = outfit_name.replace("_", "")
                 outfit_name = re.sub(r'(?<!^)(?=[A-Z])', ' ', outfit_name)
 
@@ -1294,8 +1291,6 @@ def combine_items_by_page(all_items):
     Returns:
         dict: Updated dictionary with combined items
     """
-    from scripts.objects.item import Item
-    from scripts.core import page_manager
     
     # Initialize page_manager
     page_manager.init()
@@ -1580,7 +1575,6 @@ def combine_items_by_page(all_items):
     # Print statistics
     original_count = len(all_items)
     combined_count = len(combined_items)
-    combined_pages_count = len([item for item in item_mapping.values()])
     
     print(f"Original item count: {original_count}")
     print(f"Combined item count: {combined_count}")
