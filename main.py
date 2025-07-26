@@ -73,7 +73,8 @@ menu_structure = {
         'description': 'Data analysis and generate reports.',
         'sub_options': {
             '1': {'module': 'tools.update_icons', 'name': 'Update icons', 'description': "Updates 'texture_names.json' (used for various scripts) adding new icons into a folder. Ensure .pack icons are added manually to 'resources/icons/'."},
-            '2': {'module': 'tools.vehicle_render_data', 'name': 'Vehicle render data', 'description': 'Generate a JSON file with vehicle mesh and texture data, which can be used in blender.'}
+            '2': {'module': 'tools.vehicle_render_data', 'name': 'Vehicle render data', 'description': 'Generate a JSON file with vehicle mesh and texture data, which can be used in blender.'},
+            '3': {'module': 'scripts.core.runner', 'name': 'External processes', 'description': "Run external processes, such as ZomboidDecompiler and pywikibot (requires setup)."}
         },
     },
     '8': {
@@ -115,7 +116,7 @@ settings_structure = {
         'name': 'Run First Time Setup',
         'description': 'Run the initial setup again.',
         'module': 'setup'
-    },
+    }
 }
 
 def print_header(heading: str):
@@ -201,6 +202,7 @@ def navigate_menu(menu, is_root=False, title=None):
                 navigate_menu(subs, title=name)
         else:
             echo.write("[!] Invalid input. Please try again.", color.error)
+
 
 def check_first_run():
     is_first_run = config.get_first_time_run()

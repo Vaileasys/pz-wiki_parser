@@ -4,6 +4,7 @@ parsed_data.txt
 output/
 logging/
 data/
+logs/
 
 # Resources
 resources/*
