@@ -1,6 +1,6 @@
 import configparser
 import os
-from scripts.utils.util import to_bool
+from scripts.utils import util
 
 CONFIG_FILE = 'config.ini'
 CONFIG_DEFAULTS = {
@@ -8,8 +8,10 @@ CONFIG_DEFAULTS = {
         "first_time_run": 'false',
         "default_language": 'en',
         "version": '42.8.1',
+        "debug_mode": 'false',
         "game_directory": 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\ProjectZomboid',
-        "debug_mode": 'false'
+        "zomboid_decompiler": '', # path for the ZomboidDecompiler.bat
+        "pywikibot": '', # path for the pywikibot main/run python file
     }
 }
 
@@ -54,7 +56,7 @@ def _update_missing_entries():
 
 def _bool_to_config(value):
     if not isinstance(value, bool):
-        value = to_bool(value)
+        value = util.to_bool(value)
     return "true" if value else "false"
 
 
@@ -104,8 +106,7 @@ def get_debug_mode():
     Returns:
         bool: Debug mode status.
     """
-    _ensure_loaded()
-    return to_bool(_data['Settings']['debug_mode'])
+    return util.to_bool(get(key='debug_mode', section='Settings'))
 
 
 def get_first_time_run():
@@ -115,41 +116,57 @@ def get_first_time_run():
     Returns:
         bool: First time run status.
     """
-    _ensure_loaded()
-    return to_bool(_data['Settings']['first_time_run'])
+    return util.to_bool(get(key='first_time_run', section='Settings'))
 
 
-def get_default_language():
+def get_default_language() -> str:
     """
     Get the `default_language` setting.
 
     Returns:
         str: Default language code.
     """
-    _ensure_loaded()
-    return _data['Settings']['default_language']
+    return get(key='default_language', section='Settings')
 
 
-def get_version():
+def get_version() -> str:
     """
     Get the `version` setting.
 
     Returns:
         str: Configured version string.
     """
-    _ensure_loaded()
-    return _data['Settings']['version']
+    return get(key='version', section='Settings')
 
 
-def get_game_directory():
+def get_game_directory() -> str:
     """
     Get the `game_directory` setting.
 
     Returns:
         str: Path to the game directory.
     """
-    _ensure_loaded()
-    return _data['Settings']['game_directory']
+    return get(key='game_directory', section='Settings')
+
+
+def get_zomboid_decompiler() -> str:
+    """
+    Get the `zomboid_decompiler` setting.
+
+    Returns:
+        str: Path to the zomboid decompiler.
+    """
+    return get(key='zomboid_decompiler', section='Settings')
+
+
+def get_pywikibot() -> str:
+    """
+    Get the `pywikibot` setting.
+
+    Returns:
+        str: Path to the pywikibot.
+    """
+    return get(key='pywikibot', section='Settings')
 
 
 def set(key, value, section='Settings'):
@@ -221,6 +238,26 @@ def set_game_directory(value):
         value (str): New game directory path.
     """
     set('game_directory', value)
+
+
+def set_zomboid_decompiler(value):
+    """
+    Set the `zomboid_decompiler` setting.
+
+    Args:
+        value (str): New zomboid decompiler path.
+    """
+    set('zomboid_decompiler', value)
+
+
+def set_pywikibot(value):
+    """
+    Set the `pywikibot` setting.
+
+    Args:
+        value (str): New pywikibot path.
+    """
+    set('pywikibot', value)
 
 
 def main():
