@@ -6,6 +6,7 @@ from lupa import LuaRuntime
 import xml.etree.ElementTree as ET
 from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache
+from scripts.utils import lua_helper
 
 
 cache_path = os.path.join(DATA_DIR, "distributions")
@@ -423,80 +424,6 @@ def parse_vehicles(vehicle_distributions_path, output_path):
     
     save_cache(vehicle_distributions, 'vehicle_distributions.json', output_path)
 
-
-def parse_attachedweapons(attached_weapon_path, output_path):
-    """
-    Parses a Lua file containing attached weapon definitions and converts it into a JSON format.
-
-    This function reads a Lua file specified by the `attached_weapon_path`, executes the Lua code
-    within a Lua runtime to retrieve the 'AttachedWeaponDefinitions' table, and converts this table
-    into a Python dictionary. It specifically extracts entries that contain a 'chance' field,
-    which are considered weapon definitions. The resulting dictionary is then written to a JSON
-    file at the specified `output_path`.
-
-    Args:
-        attached_weapon_path (str): The file path to the Lua file containing attached weapon definitions.
-        output_path (str): The directory where the output JSON file ('attached_weapons.json') will be saved.
-
-    Raises:
-        Exception: If there is an error executing Lua code or processing the Lua tables.
-    """
-    with open(attached_weapon_path, 'r') as file:
-        lua_code = file.read()
-
-    # Prepare the Lua environment
-    lua = LuaRuntime(unpack_returned_tuples=True)
-    lua.execute('AttachedWeaponDefinitions = AttachedWeaponDefinitions or {}')
-    lua.execute(lua_code)
-    attached_weapon_definitions = lua.eval('AttachedWeaponDefinitions')
-
-    # Function to convert Lua table to Python dictionary or list
-    def lua_table_to_python(obj):
-        if lupa.lua_type(obj) == 'table':
-            # Get all keys in the Lua table
-            keys = list(obj.keys())
-            # Check if all keys are consecutive integers starting from 1
-            if all(isinstance(key, int) for key in keys):
-                min_key = min(keys)
-                max_key = max(keys)
-                expected_keys = list(range(1, max_key + 1))
-                # If the keys are consecutive integers, treat the table as a list
-                if sorted(keys) == expected_keys:
-                    return [lua_table_to_python(obj[i]) for i in expected_keys]
-            # Otherwise, treat it as a dictionary
-            return {str(k): lua_table_to_python(v) for k, v in obj.items()}
-        elif isinstance(obj, (str, int, float, bool)):
-            return obj
-        else:
-            return str(obj)
-
-    # Function to remove specified prefixes
-    def remove_prefixes(name):
-        prefixes = ["Base.", "Farming.", "Radio."]
-        for prefix in prefixes:
-            if name.startswith(prefix):
-                return name[len(prefix):]
-        return name
-
-    # Convert the Lua table to a Python dictionary
-    attached_weapon_definitions_dict = lua_table_to_python(attached_weapon_definitions)
-
-    # Extract weapon definitions (entries with a 'chance' field) and remove prefixes
-    weapon_definitions = {}
-    for key, value in attached_weapon_definitions_dict.items():
-        if isinstance(value, dict) and 'chance' in value:
-            # Remove prefixes from the main key
-            cleaned_key = remove_prefixes(key)
-            # If the entry has a 'weapons' list, clean each entry within that list
-            if 'weapons' in value and isinstance(value['weapons'], list):
-                value['weapons'] = [remove_prefixes(weapon) for weapon in value['weapons']]
-            # Add to the final dictionary
-            weapon_definitions[cleaned_key] = value
-
-    # Write the weapon definitions to the JSON file
-    save_cache(weapon_definitions, 'attached_weapons.json', output_path)
-
-
 def parse_clothing(clothing_file_path, guid_table_path, output_file):
     """
     Parse the clothing XML file and generate a JSON file containing outfit data with item probabilities.
@@ -681,7 +608,6 @@ def parse_stories(class_files_directory, output_file):
 
 def main():
     # File paths
-    attached_weapon_path = os.path.join("resources", "lua", "AttachedWeaponDefinitions.lua")
     distributions_lua_path = os.path.join("resources", "lua", "Distributions.lua")
     forage_definitions_path = os.path.join("resources", "lua", "forageDefinitions.lua")
     procedural_distributions_path = os.path.join("resources", "lua", "ProceduralDistributions.lua")
@@ -691,14 +617,14 @@ def main():
     class_files_directory = os.path.join("resources", "Java")
 
     # Call the init function to check if all files exist
-    init(attached_weapon_path, distributions_lua_path, forage_definitions_path,
+    init(distributions_lua_path, forage_definitions_path,
          procedural_distributions_path, vehicle_distributions_path, clothing_file_path, guid_table_path)
 
     # Parse files into json
     parse_container_files(distributions_lua_path, procedural_distributions_path, cache_path)
     parse_foraging(forage_definitions_path, cache_path)
     parse_vehicles(vehicle_distributions_path, cache_path)
-    parse_attachedweapons(attached_weapon_path, cache_path)
+
     parse_clothing(clothing_file_path, guid_table_path, "clothing.json")
     parse_stories(class_files_directory, "stories.json")
 
