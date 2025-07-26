@@ -5,12 +5,13 @@ import sys
 
 from scripts.utils import echo, color
 from scripts.core import config_manager as cfg
+from scripts.core.constants import OUTPUT_DIR
 
 is_windows = platform.system() == "Windows"
 is_zombdec = bool(cfg.get_zomboid_decompiler())
 is_pwb = bool(cfg.get_pywikibot())
 
-def run_batch_file(batch_path: str, name: str = None):
+def run_batch_file(batch_path: str, name: str = None, args: list[str] = None):
     if not is_windows:
         echo.error("Batch files can only be run on Windows.")
         return
@@ -19,7 +20,11 @@ def run_batch_file(batch_path: str, name: str = None):
         name = Path(batch_path).name
     echo.info(f"Running {name}...")
 
-    result = subprocess.run([batch_path], shell=True, capture_output=True, text=True)
+    command = [batch_path]
+    if args:
+        command += args
+
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
 
     print(result.stdout)
     if result.stderr:
@@ -51,27 +56,6 @@ def run_zomboid_decompiler():
         return True
     
     if not is_zombdec:
-        print("ZomboidDecompiler has not been setup yet. Ensure you have downloaded the ZomboidDecompiler:\nhttps://github.com/demiurgeQuantified/ZomboidDecompiler")
-        choice = input("Enter the path to the ZomboidDecompiler batch (.bat) file:\n> ").strip()
-
-        if not choice:
-            print("No path detected. Returning to previous menu.")
-            return True
-
-        cfg.set_zomboid_decompiler(choice)
-    
-    run_batch_file(cfg.get_zomboid_decompiler())
-
-    return False
-
-
-def run_zomboid_decompiler():
-    print(color.style("ZomboidDecompiler", color.BLUE))
-    if not is_windows:
-        print("This process can only be run on Windows. Please manually run the Zomboid Decompiler:\nhttps://github.com/demiurgeQuantified/ZomboidDecompiler")
-        return True
-    
-    if not is_zombdec:
         print("ZomboidDecompiler has not been set up yet. Ensure you have downloaded the ZomboidDecompiler:\nhttps://github.com/demiurgeQuantified/ZomboidDecompiler")
         choice = input("Enter the path to the ZomboidDecompiler batch (.bat) file:\n> ").strip()
 
@@ -81,9 +65,12 @@ def run_zomboid_decompiler():
 
         cfg.set_zomboid_decompiler(choice)
     
-    run_batch_file(cfg.get_zomboid_decompiler())
+    game_path = Path(cfg.get_game_directory())
+    output_path = Path(OUTPUT_DIR) / "ZomboidDecompiler"
+    
+    run_batch_file(cfg.get_zomboid_decompiler(),args=[str(game_path), str(output_path)])
 
-    echo.success(f"ZomboidDecompiler process completed. Decompiled files should be found in \"{Path(cfg.get_zomboid_decompiler()).parent / 'output'}\"")
+    echo.success(f"ZomboidDecompiler process completed. Decompiled files should be found in \"{output_path}\"")
 
     return False
     
