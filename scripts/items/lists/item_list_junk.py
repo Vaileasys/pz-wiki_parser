@@ -99,7 +99,7 @@ def main():
 
     items = process_items()
 
-    table_helper.create_tables("junk", items, table_map=table_map, columns=column_headings, suppress=True)
+    table_helper.create_tables("junk", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="junk_item_list", combine_tables=False)
 
 if __name__ == "__main__":
     main()

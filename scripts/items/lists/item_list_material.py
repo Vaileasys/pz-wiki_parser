@@ -231,7 +231,7 @@ def main():
 
     items = process_items()
 
-    table_helper.create_tables("material", items, table_map=table_map, columns=column_headings, suppress=True)
+    table_helper.create_tables("material", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="material_item_list", combine_tables=False)
 
 if __name__ == "__main__":
     main()

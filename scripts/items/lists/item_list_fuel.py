@@ -80,7 +80,7 @@ def main():
 
     items = find_items()
 
-    create_tables("fuel", items, table_map=table_map, columns=column_headings, suppress=True)
+    create_tables("fuel", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="fuel_item_list", combine_tables=False)
 
 if __name__ == "__main__":
     main()

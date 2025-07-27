@@ -96,7 +96,7 @@ def main():
     table_map, column_headings = table_helper.get_table_data(TABLE_PATH)
     items = process_items()
 
-    table_helper.create_tables("trapping", items, table_map=table_map, columns=column_headings, suppress=True)
+    table_helper.create_tables("trapping", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="trapping_item_list", combine_tables=False)
 
 if __name__ == "__main__":
     main()

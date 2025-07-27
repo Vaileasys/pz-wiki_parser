@@ -1,5 +1,5 @@
 import math
-from core.language import Translate
+from scripts.core.language import Translate
 from scripts.utils import lua_helper
 from scripts.core.cache import save_cache, load_cache
 from scripts.core.version import Version

@@ -39,7 +39,8 @@ def generate_data(item: Item):
     item_dict["weight"] = convert_int(item.weight) if "weight" in columns else None
 
     if "body_location" in columns:
-        item_dict["body_location"] = item.body_location.wiki_link if item.body_location else '-'
+        body_location = item.body_location or item.can_be_equipped
+        item_dict["body_location"] = body_location.wiki_link if body_location else '-'
 
     if "display_time" in columns:
         if item.type == 'AlarmClockClothing':
@@ -107,7 +108,8 @@ def generate_data(item: Item):
             lower_chance = convert_percentage(1 / int(item.condition_lower_chance_one_in), True)
         else:
             lower_chance = "-"
-        notes = "Note: Clothing that can get holes only lose condition when a hole is added, which depends on the body part hit and whether it already has a hole. There is no fixed 'chance' like in other items."
+        if not item.body_location.location_id:
+            notes = "Note: Clothing that can get holes only lose condition when a hole is added, which depends on the body part hit and whether it already has a hole. There is no fixed 'chance' like in other items."
         item_dict["condition_lower_chance"] = lower_chance
 
     if "condition_loss" in columns:
@@ -178,7 +180,7 @@ def main():
         key: table_types[value["table"]]
         for key, value in body_location_map.items()
     }
-    table_helper.create_tables("clothing", clothing_items, columns=column_headings, table_map=table_map, suppress=True)
+    table_helper.create_tables("clothing", clothing_items, columns=column_headings, table_map=table_map, suppress=True, bot_flag_type="clothing_item_list", combine_tables=False)
 
 
 if __name__ == "__main__":

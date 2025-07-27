@@ -139,7 +139,7 @@ def process_items():
 
         items[table_type].append(generate_data(guid, rm_data))
 
-    table_helper.create_tables("recmedia", items, table_map=table_map, columns=column_headings, table_header=TABLE_HEADER, suppress=True)
+    table_helper.create_tables("recmedia", items, table_map=table_map, columns=column_headings, table_header=TABLE_HEADER, suppress=True, bot_flag_type="recmedia_item_list", combine_tables=False)
 
 
 ## -------------------- PARSER -------------------- ##

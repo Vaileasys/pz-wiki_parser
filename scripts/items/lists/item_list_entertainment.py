@@ -70,11 +70,10 @@ def main():
     Language.get()
     global table_map
     table_map, column_headings = table_helper.get_table_data(TABLE_PATH)
-    print(table_map)
 
     items = process_items()
 
-    table_helper.create_tables("entertainment", items, table_map=table_map, columns=column_headings, suppress=True)
+    table_helper.create_tables("entertainment", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="entertainment_item_list", combine_tables=False)
 
 if __name__ == "__main__":
     main()

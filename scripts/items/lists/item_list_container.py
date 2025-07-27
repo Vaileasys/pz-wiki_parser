@@ -252,7 +252,7 @@ def main():
         for item_type, table_type in table_type_map.items()
     }
     
-    table_helper.create_tables("container", items, columns=column_headings, table_map=mapped_table, suppress=True)
+    table_helper.create_tables("container", items, columns=column_headings, table_map=mapped_table, suppress=True, bot_flag_type="container_item_list", combine_tables=False)
                 
 
 if __name__ == "__main__":
