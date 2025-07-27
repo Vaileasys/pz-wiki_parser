@@ -1,10 +1,11 @@
 import os
 from tqdm import tqdm
-from scripts.parser import item_parser, stash_parser
+from scripts.parser import stash_parser
 from scripts.core.language import Language, Translate
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
-from scripts.utils import utility, util, table_helper
-from scripts.objects.craft_recipe import CraftRecipe
+from scripts.utils import table_helper
+from scripts.objects.item import Item
+from scripts.objects.skill import Skill
 
 TABLE_PATH = os.path.join(TABLES_DIR, "literature_table.json")
 
@@ -13,7 +14,7 @@ table_map = None
 table_type_map = None
 
 # Get the list type, for mapping the section/table
-def get_list_type(item_id, item_data, special_data):
+def get_list_type(item: Item, special_data):
     TYPE_MAPPING = {
         "ComicBook": "Miscellaneous", # Included so it doesn't get added to 'Hardcover books'
         "PhotoBook": "Miscellaneous", # Included so it doesn't get added to 'Hardcover books'
@@ -33,23 +34,22 @@ def get_list_type(item_id, item_data, special_data):
     if "map_id" in special_data:
         return "Annotated maps"
 
-    item_type = item_data["Type"]
-    display_category = item_data.get("DisplayCategory", item_type)
+    display_category = item.raw_display_category or item.type
 
     # Map/Cartography
-    if item_type == "Map":
+    if item.type == "Map":
         return "Maps"
     
     # Writable
-    if "CanBeWrite" in item_data:
+    if item.can_be_write:
         return "Writable"
     
     # Skill Books & Recipes
     if display_category == "SkillBook":
         schematics = ["Schematic", "Recipe"]
-        if "TeachedRecipes" in item_data:
+        if item.teached_recipes:
             return "Recipe magazines"
-        elif any(keyword in item_data.get("OnCreate", "") for keyword in schematics) or any(keyword in item_id for keyword in schematics):
+        elif any(keyword in (item.on_create or "") for keyword in schematics) or any(keyword in item.item_id for keyword in schematics):
             return "Schematics"
         else:
             return "Skill books"
@@ -59,7 +59,7 @@ def get_list_type(item_id, item_data, special_data):
     
     # Leisure. Map to the correct heading.
     for key, value in TYPE_MAPPING.items():
-        if key in item_id:
+        if key in item.item_id:
             return value
     
     # Default
@@ -67,68 +67,55 @@ def get_list_type(item_id, item_data, special_data):
 
 
 # Get list of recipes an item teaches.
-def get_recipes(item_data):
-    if item_data.get("OnCreate"):
+def get_recipes(item: Item):
+    if item.on_create:
         return "''Randomized''"
     else:
-        recipes_raw = item_data.get('TeachedRecipes')
-        if recipes_raw is None:
+        recipes = item.get_recipes()
+        if not recipes:
             return "-"
-        elif isinstance(recipes_raw, str):
-            recipes_raw = [recipes_raw]
-
-        recipes = []
-
-        for recipe in recipes_raw:
-            recipes.append(CraftRecipe(recipe).wiki_link)
         
-        recipes_output = "<br>".join(recipes)
-    return recipes_output
+    return "<br>".join(recipes)
 
 
 # Get the skill for an item return a formatted link
-def get_skills(item_id, item_data):
+def get_skills(item: Item):
     SKILL_MAP = {
         "Armor": None,
-        "BagSeed": "Agriculture",
+        "BagSeed": "Farming",
         "Cooking": "Cooking",
         "Electronics": "Electricity",
         "Engineer": "Electricity",
-        "Farming": "Agriculture",
+        "Farming": "Farming",
         "Fishing": "Fishing",
         "Glassmaking": "Glassmaking",
-        "Hemp": "Agriculture",
-        "Herbalist": "Foraging",
+        "Hemp": "Farming",
+        "Herbalist": "PlantScavenging",
         "Hunting": "Trapping",
         "Key": None,
         "Knitting": "Tailoring",
         "Mechanic": "Mechanics",
-        "Metalwork": "Welding",
+        "Metalwork": "MetalWelding",
         "PrimitiveTool": None,
         "Radio": "Electricity",
-        "Smithing": "Metalworking",
+        "Smithing": "MetalWelding",
         "Trick": None,
         "Weapon": None
     }
 
-    skill = item_data.get('SkillTrained')
+    if item.skill_trained:
+        return item.skill_trained.wiki_link
+    
+    skill = None
 
     # Map the item id to a skill in SKILL_MAP
-    if not skill:
-        for key, value in SKILL_MAP.items():
-            if key in item_id:
-                skill = value
+    for key, value in SKILL_MAP.items():
+        if key in item.item_id:
+            skill = value
+            break
 
-    # Translate skill and format link
-    if skill is not None:
-        if skill == "FirstAid":
-            skill = "Doctor" # So it can be translating correctly
-        skill_en = Translate.get(skill, "SkillTrained", "en")
-        if Language.get() != "en":
-            skill_translated = Translate.get(skill, "SkillTrained")
-        else:
-            skill_translated = skill_en
-        return util.link(skill_en, skill_translated)
+    if skill:
+        return Skill(skill).wiki_link
     
     return "-"
 
@@ -157,8 +144,8 @@ def get_region(region_key):
 
 
 # Process items, returning the heading and row data.
-def process_item(item_id, item_data, special_data={}):
-    heading = get_list_type(item_id, item_data, special_data)
+def process_item(item: Item, special_data={}):
+    heading = get_list_type(item, special_data)
     columns = table_map.get(table_type_map[heading], table_map["generic"])
     language_code = Language.get()
     map_data = {}
@@ -173,93 +160,91 @@ def process_item(item_id, item_data, special_data={}):
         name_ref = map_id # set name ref (used for sorting)
         page_name =  f"{item_name} ({region})" # set page name
     else:
-        item_name = utility.get_name(item_id, item_data) # set item name
+        item_name = item.name # set item name
         name_ref = item_name # set item ref (used for sorting)
-        page_name = utility.get_page(item_id, item_name) # set page name
+        page_name = item.page # set page name
         
     containers_data = map_data.get("containers", [])
 
-    item = {}
+    item_dict = {}
 
     if "icon" in columns:
         if map_data:
-            icon = utility.get_icon(item_id)
+            raw_icon = item.get_icon(False, False, False)
             if language_code != "en":
-                icon = f"[[File:{icon}|32x32px|link={page_name}/{language_code}|{item_name}]]"
+                icon = f"[[File:{raw_icon}|32x32px|link={page_name}/{language_code}|{item_name}]]"
             else:
-                icon = f"[[File:{icon}|32x32px|link={page_name}|{item_name}]]"
+                icon = f"[[File:{raw_icon}|32x32px|link={page_name}|{item_name}]]"
         else:
-            icon = utility.get_icon(item_id, True, True, True)
-        item["icon"] = icon
+            icon = item.icon
+        item_dict["icon"] = icon
 
     if "name" in columns:
         item_link = f"[[{page_name}]]"
         if language_code != "en":
             item_link = f"[[{page_name}/{language_code}|{item_name}]]"
-        item["name"] = item_link
+        item_dict["name"] = item_link
     
     if "map_id" in columns:
-        item["map_id"] = special_data.get("map_id", "-")
+        item_dict["map_id"] = special_data.get("map_id", "-")
 
     if "weight" in columns:
-        item["weight"] = item_data.get('Weight', '1')
+        item_dict["weight"] = item.weight
     
     if "unhappy" in columns:
-        item["unhappy"] = item_data.get('UnhappyChange', '-')
+        item_dict["unhappy"] = item.unhappy_change or '-'
 
     if "stress" in columns:
-        item["stress"] = item_data.get('StressChange', '-')
+        item_dict["stress"] = item.stress_change or '-'
 
     if "boredom" in columns:
-        item["boredom"] = item_data.get('BoredomChange', '-')
+        item_dict["boredom"] = item.boredom_change or '-'
 
     if "recipes" in columns:
-        recipes = get_recipes(item_data)
-        item["recipes"] = recipes
+        recipes = get_recipes(item)
+        item_dict["recipes"] = recipes
 
     if "pages" in columns:
-        item["pages"] = item_data.get('PageToWrite', item_data.get('NumberOfPages', '-'))
+        item_dict["pages"] = item.page_to_write or item.number_of_pages or '-'
 
     if "multiplier" in columns:
-        skill_level = int(item_data.get("LvlSkillTrained", 1))
-        levels_trained = int(item_data.get("NumLevelsTrained", 2))
-        item["multiplier"] = str(skill_level * levels_trained)
+        item_dict["multiplier"] = item.skill_multiplier or '-'
 
     if "skill" in columns:
-        skill = get_skills(item_id, item_data)
-        item["skill"] = skill
+        skill = get_skills(item)
+        item_dict["skill"] = skill
 
     if "levels" in columns:
-        skill_level_min = int(item_data.get("LvlSkillTrained", 1))
-        levels_trained = int(item_data.get("NumLevelsTrained", 2))
+        skill_level_min = int(item.lvl_skill_trained or 1)
+        levels_trained = int(item.num_levels_trained)
         skill_level_max = skill_level_min + levels_trained - 1
-        item["levels"] = f"{skill_level_min}–{skill_level_max}"
+        item_dict["levels"] = f"{skill_level_min}–{skill_level_max}"
 
     if "region" in columns:
         if map_id:
             region = get_region(map_id)
         else:
-            region = get_region(item_id.split(".")[1])
+            region = get_region(item.id_type)
         if region == "World":
             region = "Knox Country"
 
         if region is None:
-            item["region"] = "Unknown"
+            item_dict["region"] = "Unknown"
 
         else:
             if language_code != "en":
                 region = f"[[{region}/{language_code}]]"
             else:
                 region = f"[[{region}]]"
-            item["region"] = region
+            item_dict["region"] = region
 
     if "coords" in columns:
         xcoord = map_data.get("buildingX", 0)
         ycoord = map_data.get("buildingY", 0)
         if None not in (xcoord, ycoord) and 0 not in (xcoord, ycoord):
-            item["coords"] = f"{{{{Coordinates|{xcoord}x{ycoord}}}}}"
+            item_dict["coords"] = f"{{{{Coordinates|{xcoord}x{ycoord}}}}}"
         else:
-            item["coords"] = "Unknown"
+            item_dict["coords"] = "Unknown"
 
     if "container" in columns:
         containers_list = []
@@ -275,12 +260,13 @@ def process_item(item_id, item_data, special_data={}):
                 containers_list.append(container_sprite_str)
             else:
                 # Item
-                container_icon = utility.get_icon(container["containerItem"], True, True, True)
+                container_item = Item(container["containerItem"])
+                container_icon = container_item.icon
                 containers_list.append(container_icon)
         containers = "".join(containers_list)
         if not containers:
             containers = "-"
-        item["container"] = containers
+        item_dict["container"] = containers
 
     if "container_coords" in columns:
         coordinates_list = []
@@ -299,30 +285,30 @@ def process_item(item_id, item_data, special_data={}):
         container_coords = "".join(coordinates_list)
         if not container_coords:
             container_coords = "-"
-        item["container_coords"] = container_coords
+        item_dict["container_coords"] = container_coords
 
     if "loot_table" in columns:
         loot_table = map_data.get("spawnTable", "-")
         if not loot_table:
             loot_table = "-"
-        item["loot_table"] = loot_table
+        item_dict["loot_table"] = loot_table
     
     if "spawn_on_zed" in columns:
-        item["spawn_on_zed"]
+        item_dict["spawn_on_zed"]
 
     if "item_id" in columns:
-        item["item_id"] = f"{{{{ID|{item_id}}}}}"
+        item_dict["item_id"] = item.item_id
     
     # Remove any values that are None
-    item = {k: v for k, v in item.items() if v is not None}
+    item_dict = {k: v for k, v in item_dict.items() if v is not None}
 
     # Ensure column order is correct
-    item = {key: item[key] for key in columns if key in item}
+    item_dict = {key: item_dict[key] for key in columns if key in item_dict}
 
     # Add item_name for sorting
-    item["item_name"] = name_ref
+    item_dict["item_name"] = name_ref
 
-    return heading, item
+    return heading, item_dict
 
 
 def process_map(map_region, map_id, map_data):
@@ -332,37 +318,36 @@ def process_map(map_region, map_id, map_data):
         "map_data": map_data,
     }
     item_id = map_data["item"]
-    item_data = utility.get_item_data_from_id(item_id)
-    heading, item = process_item(item_id, item_data, special_data)
+    item = Item(item_id)
+    heading, item_dict = process_item(item, special_data)
 
-    return heading, item
+    return heading, item_dict
 
 
 # Get necessary literature items and process them
 def get_items():
     literature_dict = {}
-    parsed_item_data = item_parser.get_item_data()
     parsed_stash_data = stash_parser.get_stash_data()
 
     # Get items
-    with tqdm(total=len(parsed_item_data), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items") as pbar:
-        for item_id, item_data in parsed_item_data.items():
-            pbar.set_postfix_str(f'Processing: {item_data.get("Type", "Unknown")} ({item_id[:30]})')
-            if item_data.get("Type") in ("Literature", "Map") or item_data.get("DisplayCategory") == "Literature":
-                heading, item = process_item(item_id, item_data)
+    with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items") as pbar:
+        for item_id, item in Item.items():
+            pbar.set_postfix_str(f'Processing: {item.type} ({item_id[:30]})')
+            if item.type in ("Literature", "Map") or item.raw_display_category == "Literature":
+                heading, item_dict = process_item(item)
 
                 # Add heading to dict if it hasn't been added yet.
                 if heading not in literature_dict:
                     literature_dict[heading] = []
 
-                literature_dict[heading].append(item)
+                literature_dict[heading].append(item_dict)
 
             pbar.update(1)
 
         pbar.bar_format = f"Items processed."
     
     # Get annotated maps
-    with tqdm(total=len(parsed_item_data), desc="Processing annotated maps", bar_format=PBAR_FORMAT, unit=" items") as pbar:
+    with tqdm(total=Item.count(), desc="Processing annotated maps", bar_format=PBAR_FORMAT, unit=" items") as pbar:
         for map_region, region_data in parsed_stash_data.items():
             for map_id, map_data in region_data.items():
                 pbar.set_postfix_str(f"Processing: Map ({map_id[:30]})")
@@ -394,7 +379,7 @@ def main():
         for item_type, table_type in table_type_map.items()
     }
 
-    table_helper.create_tables("literature", items, columns=column_headings, table_map=mapped_table, suppress=True)
+    table_helper.create_tables("literature", items, columns=column_headings, table_map=mapped_table, suppress=True, bot_flag_type="literature_item_list", combine_tables=False)
                 
 
 if __name__ == "__main__":

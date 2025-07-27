@@ -286,7 +286,7 @@ class Item:
         "ConditionAffectsCapacity": False,
         "CanBeWrite": False,
         "PageToWrite": 0,
-        "LvlSkillTrained": -1,
+        "LvlSkillTrained": 0,
         "NumLevelsTrained": 1,
         "NumberOfPages": -1,
         "SkillTrained": "",

@@ -217,10 +217,7 @@ class CraftRecipe:
     @property
     def name(self):
         if self._name is None:
-            if self.recipe_id in CraftRecipe._recipes:
-                self._name = Translate.get(self.recipe_id, default=Translate.get("Recipe_" + self.recipe_id))
-            else:
-                self._name = self.recipe_id
+            self._name = Translate.get(self.recipe_id, default=Translate.get("Recipe_" + self.recipe_id, default=self.recipe_id))
         return self._name
 
     @property
