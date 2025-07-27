@@ -198,7 +198,7 @@ def generate_table(
         content.extend(item_content)
 
     if caption_bottom and not caption_top and not caption:
-        content.extend(['|-', f'|+ style="caption-side:bottom; font-weight:normal; border: none;" | {caption_bottom}'])
+        content.extend(['|-', f'|+ style="caption-side:bottom; font-weight:normal; border: none;" | <div style="text-wrap: white-space: nowrap; overflow: auto;"><div style="white-space: normal; display: inline-block;">{caption_bottom}</div></div>'])
     
     content.append(table_footer + table_after + table_after_after + bot_flag_end)
 
