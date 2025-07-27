@@ -1,5 +1,5 @@
 import os
-from scripts.utils import lua_helper, util
+from scripts.utils import lua_helper, util, echo
 from scripts.core.cache import save_cache, load_cache
 from scripts.core.language import Translate
 from scripts.core.constants import DATA_DIR
@@ -7,7 +7,9 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from scripts.objects.item import Item
+    from scripts.objects.fluid import Fluid
     from scripts.objects.animal_part import AnimalPart
+
 
 class Animal:
     """Represents a single animal entry."""
@@ -314,7 +316,7 @@ class Animal:
         if not hasattr(self, "_model"):
             models = []
             for breed in self.breeds:
-                models.extend(breed.model)
+                models.extend(breed.models)
             if models == 1:
                 self._model = "".join(models)
             else:
@@ -325,7 +327,7 @@ class Animal:
         if not hasattr(self, "_model_all"):
             models = []
             for breed in self.breeds:
-                models.extend(breed.model)
+                models.extend(breed.models)
             self._model_all = "".join(models)
         return self._model_all
 
@@ -441,10 +443,12 @@ class Animal:
     @property
     def female(self) -> bool: return self.get("female", False)
     @property
-    def baby(self) -> bool: return True if not self.male or self.female else False # If it's not male or female, we assume it's a baby
+    def baby(self) -> bool: return not self.male and not self.female # If it's not male or female, we assume it's a baby
     @property
-    def stage_type(self) -> str:
-        return "female" if self.female else "male" if self.male else "baby" # If it's not male or female, we assume it's a baby
+    def gender(self) -> str:
+        gender = "Female" if self.female else "Male" if self.male else "Baby" # If it's not male or female, we assume it's a baby
+        translation = Translate.get("IGUI_Animal_" + gender, default=gender)
+        return translation
     @property
     def udder(self) -> bool: return self.get("udder", False)
     @property
@@ -483,7 +487,7 @@ class Animal:
         if not hasattr(self, "_breeds"):
             breed_data: dict = self.get("breeds", {})
             self._breeds = [
-                AnimalBreed(breed_id, self.animal_id)
+                AnimalBreed(self.animal_id, breed_id)
                 for breed_id in breed_data
             ]
         return self._breeds
@@ -625,8 +629,9 @@ class Animal:
 class AnimalBreed:
     _breeds_data: dict = Animal.load("_breeds_data")
     _instances: dict = {}
+    _animal_keys: dict[str, dict[str, str]] = {}
 
-    def __new__(cls, breed_id: str, animal_id: str):
+    def __new__(cls, animal_id: str, breed_id: str):
         """Ensures only one instance exists per animal breed."""
         id = Animal(animal_id).group + breed_id
 
@@ -637,30 +642,68 @@ class AnimalBreed:
         cls._instances[breed_id] = instance
         return instance
 
-    def __init__(self, breed_id: str, animal_id: str):
+    def __init__(self, animal_id: str, breed_id: str):
         """Initialise the breed instance with its data if not already initialised."""
         id = Animal(animal_id).group + breed_id
 
         if hasattr(self, 'id'):
             return
 
-        self.id = id
-        self.breed_id = breed_id
-        self.animal_id = animal_id
+        self.id = id # A concatenation of the animal group and breed id. Used to lookup a specific breed in _breeds_data
+        self.breed_id = breed_id # The raw key for a specific breed, inside an animal def
+        self.animal_id = animal_id # The raw key for a specific animal stage
+        self.animal_key = animal_id + breed_id # A concatenation of the animal id and breed id. Used as a bot flag on the wiki and to lookup animal part defs
         self._data = self._breeds_data.get(Animal(animal_id).group, {}).get("breeds", {}).get(breed_id, {})
     
     @classmethod
-    def exists(cls, breed_id: str, animal_id: str) -> bool:
+    def exists(cls, animal_id: str, breed_id: str) -> bool:
         """
         Checks if a animal breed with the given ids exists in the parsed data.
 
         Returns:
             bool: True if found, False otherwise.
         """
-        if Animal(animal_id).group not in cls._breeds_data:
+        group = Animal(animal_id).group
+        
+        if group not in cls._breeds_data:
             return False
         
-        return animal_id in cls._breeds_data.get(breed_id)
+        
+        return breed_id in cls._breeds_data.get(group, {}).get("breeds")
+    
+    @classmethod
+    def build_animal_keys(cls):
+        for animal_id, animal in Animal.all().items():
+            for breed in animal.breeds:
+                animal_key = animal_id + breed.breed_id
+                cls._animal_keys[animal_key] = {"animal_id": animal_id, "breed_id": breed.breed_id}
+    
+    @classmethod
+    def get_animal_keys(cls) -> dict:
+        if not cls._animal_keys:
+            cls.build_animal_keys()
+        return cls._animal_keys
+    
+    @classmethod
+    def key_exists(cls, animal_key) -> bool:
+        return animal_key in cls.get_animal_keys()
+    
+    @classmethod
+    def from_key(cls, animal_key) -> "AnimalBreed":
+        if not cls.key_exists(animal_key):
+            echo.warning(f"Animal key '{animal_key}' could not be found. Was it misspelt?")
+            return
+        
+        key_data:dict = cls.get_animal_keys().get(animal_key)
+        
+        animal_id = key_data.get("animal_id")
+        breed_id = key_data.get("breed_id")
+
+        return AnimalBreed(animal_id, breed_id)
+    
+    @classmethod
+    def all(cls) -> "dict[str, AnimalBreed]":
+        return {id: cls.from_key(id) for id in cls.get_animal_keys()}
     
     def get(self, key: str, default=None):
         """
@@ -675,12 +718,12 @@ class AnimalBreed:
         """
         return self.data.get(key, default)
     
-    def build_icon(self, image: str, page: str, name: str, default: str = None) -> str:
+    def format_icon(self, image: str, page: str, name: str, default: str = None) -> str:
         if not image:
             image = default
-        return f"[[File:{image.removeprefix("Item_").removesuffix(".png")}.png|32x32px|link={page}|{name}]]"
+        return f"[[File:{image}|32x32px|link={page}|{name}]]"
     
-    def build_model(self, image: list[str] | str, page: str, name: str, default: str = None) -> list[str]:
+    def format_models(self, image: list[str] | str, page: str, name: str, default: str = None) -> list[str]:
         if not image:
             image = default
 
@@ -689,7 +732,7 @@ class AnimalBreed:
         
         images = []
         for img in image:
-            images.append(f"[[File:{img.removesuffix(".png").removesuffix("_Body").removesuffix("Body")}_Body.png|64x64px|link={page}|{name}]]")
+            images.append(f"[[File:{img}|64x64px|link={page}|{name}]]")
 
         return images
     
@@ -707,7 +750,7 @@ class AnimalBreed:
 
     @property
     def is_valid(self) -> bool:
-        return AnimalBreed.exists(self.breed_id, self.animal_id)
+        return AnimalBreed.exists(self.animal_id, self.breed_id)
 
     @property
     def animal(self) -> Animal:
@@ -722,6 +765,10 @@ class AnimalBreed:
         return self.breed_name + " " + self.animal.name
     
     @property
+    def name_en(self) -> str:
+        return self.breed_name_en + " " + self.animal.name_en
+    
+    @property
     def breed_name(self) -> str:
         return Translate.get("IGUI_Breed_" + self.breed_id, default=self.breed_id)
     
@@ -731,7 +778,7 @@ class AnimalBreed:
     
     @property
     def page(self) -> str: #TODO: get from page dict?
-        return self.animal.page
+        return self.name_en
     
     @property
     def wiki_link(self) -> str:
@@ -739,30 +786,54 @@ class AnimalBreed:
     
     @property
     def icon(self) -> str:
+        return self.format_icon(self.icon_file, self.page, self.name)
+    
+    @property
+    def icons(self) -> list[str]:
+        icons = set()
+        icons.update([self.icon, self.icon_dead, self.icon_skeleton])
+        return list(icons)
+    
+    @property
+    def icon_file(self) -> str:
         if self.animal.baby:
-            return self.build_icon(self.inv_icon_baby, self.page, self.name)
+            return self.inv_icon_baby.removeprefix("Item_").removesuffix(".png") + ".png"
         if self.animal.male:
-            return self.build_icon(self.inv_icon_male, self.page, self.name)
+            return self.inv_icon_male.removeprefix("Item_").removesuffix(".png") + ".png"
         # Fallback to female
-        return self.build_icon(self.inv_icon_female, self.page, self.name)
+        return self.inv_icon_female.removeprefix("Item_").removesuffix(".png") + ".png"
+    
+    @property
+    def icon_files(self) -> list[str]:
+        icons = []
+        icons.extend([self.icon_file, self.icon_dead_file, self.icon_skeleton_file])
+        return icons
     
     @property
     def icon_dead(self) -> str:
+        return self.format_icon(self.icon_dead_file, self.page, self.get_name("dead"), default=self.icon_file)
+    
+    @property
+    def icon_dead_file(self) -> str:
         if self.animal.baby:
-            return self.build_icon(self.inv_icon_baby_dead, self.page, self.get_name("dead"), default=self.inv_icon_baby)
+            return self.inv_icon_baby_dead.removeprefix("Item_").removesuffix(".png") + ".png"
         if self.animal.male:
-            return self.build_icon(self.inv_icon_male_dead, self.page, self.get_name("dead"), default=self.inv_icon_male)
+            return self.inv_icon_male_dead.removeprefix("Item_").removesuffix(".png") + ".png"
         # Fallback to female
-        return self.build_icon(self.inv_icon_female_dead, self.page, self.get_name("dead"), default=self.inv_icon_female)
+        return self.inv_icon_female_dead.removeprefix("Item_").removesuffix(".png") + ".png"
     
     @property
     def icon_skeleton(self) -> str:
+        return self.format_icon(self.icon_skeleton_file, self.page, self.get_name("skeleton"), default=self.icon_dead_file or self.icon_file)
+    
+    @property
+    def icon_skeleton_file(self) -> str:
         if self.animal.baby:
-            return self.build_icon(self.inv_icon_baby_skel, self.page, self.get_name("skeleton"), default=self.inv_icon_baby_dead or self.inv_icon_baby)
+            return self.inv_icon_baby_skel.removeprefix("Item_").removesuffix(".png") + ".png" if self.inv_icon_baby_skel else None
         if self.animal.male:
-            return self.build_icon(self.inv_icon_male_skel, self.page, self.get_name("skeleton"), default=self.inv_icon_male_dead or self.inv_icon_male)
+            return self.inv_icon_male_skel.removeprefix("Item_").removesuffix(".png") + ".png" if self.inv_icon_male_skel else None
         # Fallback to female
-        return self.build_icon(self.inv_icon_female_skel, self.page, self.get_name("skeleton"), default=self.inv_icon_female_dead or self.inv_icon_female)
+        return self.inv_icon_female_skel.removeprefix("Item_").removesuffix(".png") + ".png" if self.inv_icon_female_skel else None
     
     @property
     def inv_icon_male(self) -> str: return self.get("invIconMale")
@@ -793,23 +864,26 @@ class AnimalBreed:
     def rotten_texture(self) -> list[str] | str: return self.get("rottenTexture")
 
     @property
-    def model(self) -> list[str]:
+    def models(self) -> list[str]:
+        return self.format_models(self.model_files, self.page, self.name)
+
+    @property
+    def model_files(self) -> list[str]:
         if self.animal.baby:
             textures = self.texture_baby
             if not textures:
                 textures = self.texture if isinstance(self.texture, list) else [self.texture]
-                textures = [tex + "_" + self.animal.animal_id.capitalize() for tex in textures]
-                
-            return self.build_model(textures, self.page, self.name)
+                textures = [tex + "_" + self.animal.animal_id for tex in textures]
         
-        if self.animal.male:
-            return self.build_model(self.texture_male, self.page, self.name)
+        elif self.animal.male:
+            textures = self.texture_male if isinstance(self.texture_male, list) else [self.texture_male]
         
-        # Fallback to female
-        return self.build_model(self.texture, self.page, self.name)
+        else:
+            # Fallback to female
+            textures = self.texture if isinstance(self.texture, list) else [self.texture]
+
+        return [tex.removesuffix(".png").removesuffix("_Body").removesuffix("Body") + "_Body.png" for tex in textures]
     
-    @property
-    def forced_genes(self) -> dict | None: return self.get("forcedGenes")
     @property
     def parts_id(self) -> str:
         return self.animal.animal_id + self.breed_id
@@ -817,6 +891,64 @@ class AnimalBreed:
     def parts(self) -> "AnimalPart":
         from scripts.objects.animal_part import AnimalPart
         return AnimalPart(self.parts_id)
+    @property
+    def milk_type(self) -> "Fluid | None":
+        from scripts.objects.fluid import Fluid
+        return Fluid(self.get("milkType")) if self.get("milkType") else None
+    
+    ## ------------ Gene effects ------------ ##
+
+    @property
+    def forced_genes(self) -> dict | None: return self.get("forcedGenes", {})
+
+    @property
+    def min_milk(self) -> float:
+        gene:dict = self.forced_genes.get("maxMilk")
+        if not gene:
+            return self.animal.min_milk
+        return self.animal.min_milk * gene.get("maxValue", 1.0)
+    @property
+    def max_milk(self) -> float:
+        gene:dict = self.forced_genes.get("maxMilk")
+        if not gene:
+            return self.animal.max_milk
+        return self.animal.max_milk * gene.get("maxValue", 1.0)
+    @property
+    def milk_inc(self) -> list[float]:
+        gene:dict = self.forced_genes.get("milkInc")
+        if not gene:
+            return 0.5 # default value
+        return [gene.get("minValue"), gene.get("maxValue")]
+    @property
+    def meat_ratio(self) -> list[float]:
+        gene:dict = self.forced_genes.get("meatRatio")
+        if not gene:
+            return [1.0, 1.0]
+        return [gene.get("minValue"), gene.get("maxValue")]
+    @property
+    def min_weight(self) -> float:
+        gene:dict = self.forced_genes.get("maxWeight")
+        if not gene:
+            return self.animal.min_weight
+        return self.animal.min_weight * gene.get("minValue", 1.0)
+    @property
+    def max_weight(self) -> float:
+        gene:dict = self.forced_genes.get("maxWeight")
+        if not gene:
+            return self.animal.max_weight
+        return self.animal.max_weight * gene.get("maxValue", 1.0)
+    @property
+    def max_wool(self) -> float:
+        gene:dict = self.forced_genes.get("maxWool")
+        if not gene:
+            return self.animal.max_wool
+        return [self.animal.max_wool * gene.get("minValue"), self.animal.max_wool * gene.get("maxValue")]
+    @property
+    def wool_inc(self) -> list[float]:
+        gene:dict = self.forced_genes.get("milkInc")
+        if not gene:
+            return 0.5 # default value
+        return [gene.get("minValue"), gene.get("maxValue")]
 
     def __repr__(self):
         return f"<AnimalBreed {self.animal.animal_id}:{self.breed_id}>"
@@ -836,11 +968,11 @@ def animal_report(animal_id: str):
     content.extend([
         f"*'''Name:''' {animal.wiki_link}",
         f"*'''Group:''' {animal.group_link}",
-        f"*'''Stage:''' {animal.stage_type.capitalize()}",
+        f"*'''Stage:''' {animal.gender.capitalize()}",
         f"*'''Size:''' {animal.min_size}–{animal.max_size}",
         f"*'''Trailer size:''' {animal.trailer_base_size}",
         f"*'''Icons:''' {animal.icon_all} {animal.icon_dead_all} {animal.icon_skeleton_all}",
-        f"*'''Models:''' {''.join([''.join(breed.model) for breed in animal.breeds])}"
+        f"*'''Models:''' {''.join([''.join(breed.models) for breed in animal.breeds])}"
     ])
     content.append("===Stats===")
     content.extend([

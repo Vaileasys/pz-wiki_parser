@@ -1,5 +1,5 @@
 import os
-from scripts.utils import lua_helper, util
+from scripts.utils import lua_helper, util, echo
 from scripts.core.language import Translate
 from scripts.core.cache import save_cache, load_cache
 from scripts.core.constants import DATA_DIR
@@ -200,7 +200,7 @@ class AnimalPart:
         return item if item.valid else None
     
     @property
-    def parts(self) -> dict:
+    def parts(self) -> dict[dict[str, str|int]]:
         return self.get("parts", {})
     
     @property
@@ -212,7 +212,7 @@ class AnimalPart:
         return self._parts_items
     
     @property
-    def bones(self) -> dict:
+    def bones(self) -> dict[dict[str, str|int]]:
         return self.get("bones", {})
     
     @property
@@ -259,6 +259,9 @@ class AnimalPart:
         if not hasattr(self, "_breed"):
             self.animal # Runs the animal property which populates self._breed
         return self._breed
+
+    def __repr__(self):
+        return f"<AnimalPart {self.parts_id}>"
 
 
 class AnimalMeat:
@@ -324,45 +327,46 @@ class AnimalMeat:
             Any: Value from the raw data or default.
         """
         return self.data.get(key, default)
-    
-    def get_cut(self, cut) -> dict:
-        """Returns a specific cut of meat. E.g., 'PrimeCut', 'MediumCut', 'PoorCut'"""
-        return self.variants.get(cut, {})
 
-    def get_display_name(self, cut) -> int:
+    def get_display_name(self, cut: "AnimalMeatVariant") -> int:
         """Returns the display name for a specific cut. E.g., 'PrimeCut', 'MediumCut', 'PoorCut'"""
         return f"{self.get_base_name(cut)} {self.get_extra_name(cut)}"
 
-    def get_base_name(self, cut) -> str:
+    def get_base_name(self, cut: "AnimalMeatVariant") -> str:
         """Returns the base name for a specific cut, translating it. E.g., 'PrimeCut', 'MediumCut', 'PoorCut'"""
-        return Translate.get(self.get_cut(cut).get("baseName"), default=cut)
+        return Translate.get(cut.base_name, default=cut.type)
 
-    def get_extra_name(self, cut) -> str:
+    def get_extra_name(self, cut: "AnimalMeatVariant") -> str:
         """Returns the extra name for a specific cut, translating it. E.g., 'PrimeCut', 'MediumCut', 'PoorCut'"""
-        return Translate.get(self.get_cut(cut).get("extraName"), default=cut)
+        return Translate.get(cut.extra_name, default=cut)
 
-    def get_link(self, cut) -> str:
+    def get_link(self, cut: "AnimalMeatVariant") -> str:
         """Returns the wiki link for a specific cut. E.g., 'PrimeCut', 'MediumCut', 'PoorCut'"""
         return util.link(self.item.page, self.get_display_name(cut))
 
-    def get_base_chance(self, cut) -> int:
+    def get_base_chance(self, cut: "AnimalMeatVariant") -> int:
         """Returns the base chance for a specific cut. E.g., 'PrimeCut', 'MediumCut', 'PoorCut'"""
-        return self.get_cut(cut).get("baseChance", 100)
+        return cut.base_chance
 
-    def get_hunger_boost(self, cut) -> int:
+    def get_hunger_boost(self, cut: "AnimalMeatVariant") -> int:
         """Returns the hunger boost for a specific cut. E.g., 'PrimeCut', 'MediumCut', 'PoorCut'"""
-        return self.get_cut(cut).get("hungerBoost", 1)
+        return cut.hunger_boost
 
-    def get_hunger(self, cut) -> int:
+    def get_hunger(self, cut: "AnimalMeatVariant") -> int:
         """Returns the base hunger for a specific cut. E.g., 'PrimeCut', 'MediumCut', 'PoorCut'"""
         return self.item.hunger_change * self.get_hunger_boost(cut)
+
 
     @property
     def is_valid(self) -> bool: return self.item_id in AnimalPart._meat_data
     @property
     def data(self) -> dict: return self._data
     @property
-    def variants(self) -> dict: return self.get("variants")
+    def variants(self) -> list["AnimalMeatVariant"]:
+        return [
+            AnimalMeatVariant(cut, data)
+            for cut, data in self.get("variants", {}).items()
+        ]
     
     @property
     def item(self) -> "Item":
@@ -410,6 +414,40 @@ class AnimalMeat:
             
             self._animals = list(animals)
         return self._animals
+    
+    def __repr__(self):
+        return f"<AnimalMeat {self.item_id}>"
+
+
+class AnimalMeatVariant:
+    def __init__(self, cut_type: str, data: dict):
+        self.type = cut_type
+        self.data = data
+    
+    @property
+    def base_chance(self) -> int: return self.data.get("baseChance", 100)
+    @property
+    def extra_name(self) -> int: return self.data.get("extraName")
+    @property
+    def hunger_boost(self) -> int: return self.data.get("hungerBoost", 1)
+    @property
+    def base_name(self) -> int: return self.data.get("baseName")
+    @property
+    def item(self) -> "Item":
+        from scripts.objects.item import Item
+        return Item(self.data.get("item"))
+    @property
+    def name(self) -> str:
+        from scripts.core.language import Translate
+        return f"{Translate.get(self.base_name)} {Translate.get(self.extra_name)}"
+    @property
+    def wiki_link(self) -> str:
+        return util.link(self.item.page, self.name)
+    
+    def __repr__(self):
+        return f"<AnimalMeatVariant {self.type}>"
+
+
 
 
 if __name__ == "__main__":
