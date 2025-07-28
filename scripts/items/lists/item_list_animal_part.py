@@ -140,8 +140,6 @@ def main():
     table_map, column_headings = table_helper.get_table_data(TABLE_PATH)
 
     items = find_items()
-    from scripts.core import cache
-    cache.save_cache(items, "temp.json")
 
     table_helper.create_tables("animal_part", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="animal_part_item_list", combine_tables=False)
 
