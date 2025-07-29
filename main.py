@@ -165,7 +165,8 @@ def handle_module(module_name, user_input=None):
 def navigate_menu(menu, is_root=False, title=None):
     while True:
         if is_root:
-            title = f"Main Menu (Game version: {config.get_version()})"
+            from scripts.core.version import Version
+            title = f"Main Menu (Game version: {Version.get()})"
         display_menu(menu, is_root, title)
         user_input = input("> ").strip().upper()
 
@@ -225,6 +226,10 @@ def main():
         Language.set(sys.argv[1])
 
     check_first_run()
+    
+    from scripts.core.version import Version
+    Version.update() # Checks if there was a version change
+
     navigate_menu(menu_structure, is_root=True)
 
 if __name__ == "__main__":

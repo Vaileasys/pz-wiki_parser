@@ -2,10 +2,8 @@ import os
 import json
 import re
 from scripts.core.constants import DATA_DIR
-from scripts.core.version import Version
 from scripts.core import config_manager as config
 from scripts.utils import echo
-from scripts.core.cache import save_cache, load_cache
 
 LANGUAGE_CODES = {
     'ar': {"encoding": "CP1252", "language": "Arabic"},
@@ -202,6 +200,8 @@ class Translate:
 
     @classmethod
     def _cache(cls):
+        from scripts.core.version import Version
+        from scripts.core.cache import save_cache, load_cache
 
         cache_path = os.path.join(DATA_DIR, cls._CACHE_JSON)
         cls._translations, cache_version = load_cache(cache_path, "translation", get_version=True)

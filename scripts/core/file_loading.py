@@ -11,8 +11,6 @@ from pathlib import Path
 from scripts.core import config_manager as config
 from scripts.core.constants import OUTPUT_LANG_DIR, PROJECT_ROOT
 from scripts.core.language import Language
-from scripts.core.version import Version
-from scripts.core.cache import save_cache, load_cache
 from scripts.utils import echo
 
 _game_file_map_cache = {}
@@ -114,6 +112,8 @@ def map_dir(base_dir, extension=None, media_type="scripts", suppress=False, excl
 
 
 def map_game_files(suppress=False):
+    from scripts.core.version import Version
+    from scripts.core.cache import save_cache, load_cache
     """
     Maps script and lua files, then saves to cache.
 
