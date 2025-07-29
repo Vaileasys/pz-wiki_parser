@@ -27,6 +27,9 @@ RECIPES_DIR = os.path.join(OUTPUT_LANG_DIR, "recipes")
 FORAGING_DIR = os.path.join(OUTPUT_LANG_DIR, "foraging")
 ANIMAL_DIR = os.path.join(OUTPUT_LANG_DIR, "animal")
 
+# Data directories
+CACHE_DIR = os.path.join(DATA_DIR, "cache")
+
 # TQDM progress bar format - 'bar_format' variable
 PBAR_FORMAT = "{l_bar}{bar:30}{r_bar}"
 
