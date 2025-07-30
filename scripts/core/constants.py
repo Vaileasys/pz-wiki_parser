@@ -29,6 +29,7 @@ ANIMAL_DIR = os.path.join(OUTPUT_LANG_DIR, "animal")
 
 # Data directories
 CACHE_DIR = os.path.join(DATA_DIR, "cache")
+SNAPSHOT_DIR = os.path.join(DATA_DIR, "snapshots")
 
 # TQDM progress bar format - 'bar_format' variable
 PBAR_FORMAT = "{l_bar}{bar:30}{r_bar}"
