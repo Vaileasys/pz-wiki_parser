@@ -128,7 +128,7 @@ class Version:
         """Loads version from config and checks for changes."""
         cls.set(config.get_version())
         current = _scan_game([SCRIPTS_DIR])
-        previous = _load_snapshot(cls._version)
+        previous = _load_snapshot(cls._version, name="scripts")
 
         if current != previous:
             print(color.warning("Detected a potential version change."))
