@@ -1,5 +1,5 @@
 import os
-from scripts.utils import lua_helper, util
+from scripts.utils import lua_helper, util, media_helper
 from scripts.core.cache import save_cache, load_cache
 from scripts.core.language import Translate
 from scripts.core.constants import DATA_DIR
@@ -173,6 +173,25 @@ class RecMedia:
             Any: Value from the raw data or default.
         """
         return self.data.get(key, default)
+    
+    def get_speaker_lines(self) -> list[tuple[str, "RecMediaLine"]]:
+        """
+        Returns a list of (speaker, RecMediaLine) tuples based on color-coded speaker identity.
+        """
+        speaker_map = {}
+        speaker_counter = 1
+        result = []
+
+        for line in self.lines:
+            color = line.color
+            if color not in speaker_map:
+                speaker_map[color] = f"Speaker {speaker_counter}"
+                speaker_counter += 1
+
+            speaker = speaker_map[color]
+            result.append((speaker, line))
+
+        return result
 
     @property
     def is_valid(self) -> bool:
@@ -247,21 +266,58 @@ class RecMedia:
         return int(self.get("spawning", 0))
     
     @property
-    def lines(self) -> dict:
-        return self.get("lines", {})
+    def lines(self) -> list["RecMediaLine"]:
+        return [RecMediaLine(line) for line in self.get("lines", [])]
 
     def __repr__(self):
         return f"<RecMedia {self.id}>"
     
-if __name__ == "__main__":
-    #recmedia = RecMedia("89108e07-fc70-4eec-a267-790d6f4b9831")
-    #print(f"name: {recmedia.name}")
-    #print(f"title: {recmedia.title}")
-    #print(f"subtitle: {recmedia.subtitle}")
-    #print(f"author: {recmedia.author}")
-    #print(f"extra: {recmedia.extra}")
-    #print(f"category: {recmedia.category}")
-    media_items = RecMedia.get_media_items()
-    print("\n".join([item.item_id for item in media_items]))
 
-    RecMedia.get_item_dict()
+class RecMediaLine:
+    """Represents a single line of recorded media content."""
+
+    def __init__(self, data: dict):
+        self.data = data
+
+    @property
+    def text_id(self) -> str:
+        return self.data.get("text", "")
+
+    @property
+    def text(self) -> str:
+        from scripts.core.language import Translate
+        return Translate.get(self.text_id).replace("[img=music]", "♫")
+
+    @property
+    def color(self) -> tuple[float, float, float]:
+        return (
+            self.data.get("r", 0.0),
+            self.data.get("g", 0.0),
+            self.data.get("b", 0.0)
+        )
+
+    @property
+    def codes(self) -> dict[str, str | int | float]:
+        return media_helper.parse_code_effects(self.data.get("codes", ""))
+
+    def __repr__(self):
+        return f"<RecMediaLine text_id={self.text_id!r}>"
+
+if __name__ == "__main__":
+    recmedia = RecMedia("f74df7fc-20ae-4600-b2d2-f504d9355440")
+    print(f"name: {recmedia.name}")
+    print(f"title: {recmedia.title}")
+    print(f"subtitle: {recmedia.subtitle}")
+    print(f"author: {recmedia.author}")
+    print(f"extra: {recmedia.extra}")
+    print(f"category: {recmedia.category}")
+    print(f"lines:")
+    for speaker, line in recmedia.get_speaker_lines():
+        codes = [f"{media_helper.get_code_name(code)}: {util.format_positive(value)}"
+                 for code, value in line.codes.items()]
+
+        print(f"  {speaker}: {line.text} ({', '.join(codes)})")
+    #media_items = RecMedia.get_media_items()
+    #print("\n".join([item.item_id for item in media_items]))
+
+    #RecMedia.get_item_dict()

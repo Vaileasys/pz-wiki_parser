@@ -21,7 +21,8 @@ menu_structure = {
             '4': {'module': 'scripts.items.item_distribution', 'name': 'Distributions', 'description': 'Generate distribution files.'},
             '5': {'module': 'scripts.items.item_container_contents', 'name': 'Container contents', 'description': 'Generate container contents.'},
             '6': {'module': 'scripts.items.item_body_part', 'name': 'Body part', 'description': 'Generates body part templates.'},
-            '7': {'module': 'scripts.items.item_article', 'name': 'Item article', 'description': 'Generate articles for items.'},
+            '7': {'module': 'scripts.items.item_recmedia_transcript', 'name': 'Recorded media transcripts', 'description': 'Generate transcripts for recorded media items (VHS/CD).'},
+            '8': {'module': 'scripts.items.item_article', 'name': 'Item article', 'description': 'Generate articles for items.'},
         },
     },
     '2': {
