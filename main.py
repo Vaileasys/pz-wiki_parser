@@ -30,7 +30,8 @@ menu_structure = {
         'description': '',
         'sub_options': {
             '1': {'module': 'scripts.fluids.fluid_infobox', 'name': 'Fluid infobox', 'description': 'Generates fluid infoboxes.'},
-            '2': {'module': 'scripts.fluids.fluid_article', 'name': 'Fluid article', 'description': 'Generate articles for fluids.'},
+            "2": {"module": "scripts.fluids.fluid_compatibility", "name": "Fluid compatibility", "description": "Generate fluid compatibility table.",},
+            '3': {'module': 'scripts.fluids.fluid_article', 'name': 'Fluid article', 'description': 'Generate articles for fluids.'},
         },
     },
     '3': {
