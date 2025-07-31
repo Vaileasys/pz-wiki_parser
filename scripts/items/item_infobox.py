@@ -29,7 +29,7 @@ ROOT_PATH = os.path.join(ITEM_DIR, "infoboxes")
 
 processed_items = []
 multi_id_page_dict = {} # Item ids that share a page: {'item_id': 'page'}
-pages_dict = {} # Unprocessed item page dict from the raw page dict
+pages_dict: dict = {} # Unprocessed item page dict from the raw page dict
 all_descriptors = None
 
 numbered_params = ["model", "icon", "icon_name", "weight", "body_location", "weapon", "tag", "guid", "item_id"]
@@ -482,7 +482,7 @@ def prepare_media_pages(rm_id) -> set:
             page_data:dict = pages_dict.get(page)
 
             if not page_data:
-                pages_dict[page] = {"rm_id": [rm_id]} #NOTE: this modifies the global variable
+                pages_dict[page] = {"rm_guid": [rm_id]} #NOTE: this modifies the global variable
                 logger.write(
                     message=f"'{rm_id}' missing from page dict, added to '{color.style(page, color.GREEN)}' {color.style('[new]', color.YELLOW)}.",
                     print_bool=True,
@@ -491,9 +491,7 @@ def prepare_media_pages(rm_id) -> set:
                 )
 
             else:
-                #TODO: add rm_id to infobox/page dict
-                #id_list:list = page_data.setdefault("rm_id", [])
-                id_list:list = [] #temp: replace with above
+                id_list: list = page_data.setdefault("rm_guid", [])
                 if rm_id not in id_list:
                     id_list.append(rm_id)
                     logger.write(

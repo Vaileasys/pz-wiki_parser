@@ -3,6 +3,7 @@ from scripts.utils import lua_helper, util, media_helper
 from scripts.core.cache import save_cache, load_cache
 from scripts.core.language import Translate
 from scripts.core.constants import DATA_DIR
+from scripts.core import page_manager
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -13,6 +14,7 @@ class RecMedia:
     _raw_data = None
     _instances = {}
     _data_file = "parsed_recmedia_data.json"
+    
 
     def __new__(cls, guid: str):
         """Ensures only one RecMedia instance exists per recorded media ID."""
@@ -36,6 +38,7 @@ class RecMedia:
 
         self.id = guid
         self._data = self._raw_data.get(guid, {})
+        self._has_page = None # Page defined (bool)
 
     @classmethod
     def _parse(cls):
@@ -216,10 +219,18 @@ class RecMedia:
     
     @property
     def page(self) -> str: # TODO: get from page dict
-        page = Translate.get(self.title_id, "en")
-        if self.category == "Retail-VHS" and self.subtitle_id:
-            page += " " + Translate.get(self.subtitle_id, "en")
-        return page
+        if not hasattr(self, "_page") or self._has_page is None:
+            pages = page_manager.get_pages(query_id=self.id, id_type="rm_guid")
+            if pages:
+                self._page = pages[0]
+                self._has_page = True
+            else:
+                self._page = Translate.get(self.title_id, "en")
+                if self.category == "Retail-VHS" and self.subtitle_id:
+                    self._page += " " + Translate.get(self.subtitle_id, "en")
+                self._has_page = False
+
+        return self._page
     
     @property
     def wiki_link(self) -> str:
