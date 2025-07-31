@@ -1,521 +1,391 @@
 {
     "fluid": {
         "Acid (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Acid"
             ]
         },
         "Alcohol (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Alcohol"
             ]
         },
         "Animal Blood (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.AnimalBlood"
             ]
         },
         "Animal Grease (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.AnimalGrease"
             ]
         },
         "Animal's Milk (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.AnimalMilk"
             ]
         },
         "Apple Juice (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.JuiceApple"
             ]
         },
         "Beer (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Beer"
             ]
         },
         "Bleach (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Bleach"
             ]
         },
         "Blood (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Blood"
             ]
         },
         "Blueberry Soda (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.SodaBlueberry"
             ]
         },
         "Brandy (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Brandy"
             ]
         },
         "Bubblegum Soda (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.SodaBubblegum"
             ]
         },
         "Champagne (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Champagne"
             ]
         },
         "Chocolate Milk (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.MilkChocolate"
             ]
         },
         "Cider (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Cider"
             ]
         },
         "Cleaning Liquid (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.CleaningLiquid"
             ]
         },
         "Coffee (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Coffee"
             ]
         },
         "Coffee Liqueur (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.CoffeeLiqueur"
             ]
         },
         "Cola (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Cola"
             ]
         },
         "Cologne (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Cologne"
             ]
         },
         "Cow's Milk (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.CowMilk"
             ]
         },
         "Cranberry Juice (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.JuiceCranberry"
             ]
         },
         "Curacao (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Curacao"
             ]
         },
         "Diet Cola (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.ColaDiet"
             ]
         },
         "Dye (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Dye"
             ]
         },
         "FLUID TEST (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Test"
             ]
         },
         "Fluid Filter A (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.FilterTestA"
             ]
         },
         "Fluid Filter B (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.FilterTestB"
             ]
         },
         "Fluid Filter C (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.FilterTestC"
             ]
         },
         "Fruitpunch Juice (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.JuiceFruitpunch"
             ]
         },
         "Gasoline (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Petrol"
             ]
         },
         "Gin (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Gin"
             ]
         },
         "Ginger Ale (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.GingerAle"
             ]
         },
         "Grape Juice (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.JuiceGrape"
             ]
         },
         "Grape Soda (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.SodaGrape"
             ]
         },
         "Grenadine (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Grenadine"
             ]
         },
         "Hair Dye (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.HairDye"
             ]
         },
         "Honey (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Honey"
             ]
         },
         "Lemon Juice (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.JuiceLemon"
             ]
         },
         "Lime Soda (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.SodaLime"
             ]
         },
         "Mead (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Mead"
             ]
         },
         "Orange Juice (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.JuiceOrange"
             ]
         },
         "Orange Soda (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.SodaPop"
             ]
         },
         "Perfume (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Perfume"
             ]
         },
         "Pineapple Soda (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.SodaPineapple"
             ]
         },
         "Port (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Port"
             ]
         },
         "Potent Poison (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.PoisonPotent"
             ]
         },
         "Rum (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Rum"
             ]
         },
         "Scotch (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Scotch"
             ]
         },
         "Seltzer Water (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.CarbonatedWater"
             ]
         },
         "Sheep's Milk (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.SheepMilk"
             ]
         },
         "Sherry (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Sherry"
             ]
         },
         "Simple Syrup (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.SimpleSyrup"
             ]
         },
         "Spiffo's Juice (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.SpiffoJuice"
             ]
         },
         "Strawberry Soda (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.SodaStrewberry"
             ]
         },
         "Substance RTMS-M1A1 (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.SecretFlavoring"
             ]
         },
         "Tea (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Tea"
             ]
         },
         "Tequila (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Tequila"
             ]
         },
         "Tomato Juice (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.JuiceTomato"
             ]
         },
         "Vermouth (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Vermouth"
             ]
         },
         "Vodka (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Vodka"
             ]
         },
         "Water (Tainted) (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.TaintedWater"
             ]
         },
         "Water (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Water"
             ]
         },
         "Whiskey (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Whiskey"
             ]
         },
         "Wine (fluid)": {
-            "categories": [
-                "Fluids"
-            ],
+            "categories": [],
             "fluid_id": [
                 "Base.Wine"
             ]
@@ -584,6 +454,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "6bf936ee-53d7-47b7-b3a7-c3ea0b88d44b"
             ]
         },
         "3D Glasses": {
@@ -608,6 +481,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "ae29b686-4d07-48d4-b67e-7fdc842c287a"
             ]
         },
         "9mm Bullet Mold": {
@@ -632,6 +508,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "7c8a1990-f45c-49eb-ac3b-e5332fefb5d1"
             ]
         },
         "A Truck Full of Love": {
@@ -640,6 +519,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "01424d67-7587-47d4-8f0e-bdbf7df48510"
             ]
         },
         "ALICE Belt and Suspenders": {
@@ -672,6 +554,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "dc19ba88-190a-43d0-9788-442bc2fad653"
             ]
         },
         "Ace Pilot": {
@@ -680,6 +565,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "037fc8e4-9cac-4817-a4ae-4972c405b68c"
             ]
         },
         "Acorn": {
@@ -840,6 +728,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "991bce00-11e3-4152-ad22-32660217c8cc"
             ]
         },
         "Albert Wellen QC S2.01": {
@@ -848,6 +739,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "d8779c82-0cff-423d-944f-16c4f468a556"
             ]
         },
         "Albert Wellen QC S2.02": {
@@ -856,6 +750,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "4467d917-1e90-4901-8531-e148f1fc40c7"
             ]
         },
         "Albert Wellen QC S2.03": {
@@ -864,6 +761,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "23c075cf-bd66-4bfd-9b6f-b94e4a063055"
             ]
         },
         "Albert Wellen QC S2.04": {
@@ -872,6 +772,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "ce2d2ae4-b097-49ac-952e-f34fd18d6d86"
             ]
         },
         "Albert Wellen QC S2.05": {
@@ -880,6 +783,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "53015c80-6096-4c1c-adef-e6da20db518e"
             ]
         },
         "Alcohol Wipes": {
@@ -896,6 +802,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "d46ebbd8-2eb1-48c5-b18c-71d61febd36c"
             ]
         },
         "Alligator Gar": {
@@ -936,6 +845,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "d0ee8b5a-4e37-4952-9e7b-58db9436ef9a"
             ]
         },
         "Alva Richards (Pierce Daniels)": {
@@ -944,12 +856,13 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "ff18eec0-59c4-43ce-92c4-4349bd4dee63"
             ]
         },
         "Amethyst": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Amethyst"
             ]
@@ -1131,9 +1044,7 @@
             ]
         },
         "Animal (item)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Animal"
             ]
@@ -1195,9 +1106,7 @@
             ]
         },
         "Animal Corpse": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.CorpseAnimal"
             ]
@@ -1211,9 +1120,7 @@
             ]
         },
         "Animal Sinew": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.AnimalSinew"
             ]
@@ -1307,17 +1214,13 @@
             ]
         },
         "Antlers": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Antlers_Wall"
             ]
         },
         "Aphids Spray": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.GardeningSprayAphids"
             ]
@@ -1554,6 +1457,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "37912243-f832-4a64-99cb-71ac909ded01"
             ]
         },
         "Backgammon Board": {
@@ -1566,7 +1472,7 @@
         },
         "Backpack Sprayer": {
             "categories": [
-                "Wearable containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.KnapsackSprayer"
@@ -1574,7 +1480,7 @@
         },
         "Backpack Sprayer (Stowed)": {
             "categories": [
-                "Wearable containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.KnapsackSprayer_Stowed"
@@ -1778,6 +1684,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "f3e24301-7b24-4daf-ab00-e9502d8dfb22"
             ]
         },
         "Ballincoolin S1.02": {
@@ -1786,6 +1695,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "1a5d1e8a-67a0-4526-a216-92641fe98009"
             ]
         },
         "Ballincoolin S1.03": {
@@ -1794,6 +1706,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "b2575483-a742-46b3-939a-6f3690ecb8a0"
             ]
         },
         "Ballincoolin S1.04": {
@@ -1802,6 +1717,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "0ee453da-77c9-4ce3-a0c8-2d9d981be645"
             ]
         },
         "Ballincoolin S1.05": {
@@ -1810,6 +1728,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "8812702d-9d7e-46e3-a8d7-3a580b5fb107"
             ]
         },
         "Baloney": {
@@ -1977,7 +1898,7 @@
         },
         "Bare Hands": {
             "categories": [
-                "Melee weapons"
+                "type=Weapon"
             ],
             "item_id": [
                 "Base.BareHands"
@@ -2021,6 +1942,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "6d1dd169-6942-4055-8e30-c38a7a7bb4e8"
             ]
         },
         "Baseball": {
@@ -2040,9 +1964,7 @@
             ]
         },
         "Baseball Bat (crafted)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.BaseballBat_Crafted"
             ]
@@ -2425,6 +2347,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "f33ce778-8d37-4fba-889d-d736434aad22"
             ]
         },
         "Basil": {
@@ -2529,6 +2454,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "c5678180-fa6f-429e-90c8-39cfacb7f0ba"
             ]
         },
         "Bauman and Triskel April 15": {
@@ -2537,6 +2465,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "a5d4c1aa-647c-4eeb-8a97-222d6182cfc0"
             ]
         },
         "Bauman and Triskel April 8": {
@@ -2545,6 +2476,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "50d79409-cfe5-4ced-8e5a-2eec36aef61c"
             ]
         },
         "Bayonet": {
@@ -2561,6 +2495,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "33ecc070-9725-4459-9f14-1e0d609dd59b"
             ]
         },
         "Beef": {
@@ -2596,9 +2533,7 @@
             ]
         },
         "Beer Bottle (empty)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.BeerEmpty"
             ]
@@ -2661,7 +2596,7 @@
         },
         "Bellows": {
             "categories": [
-                "Tools"
+                "type=Tool"
             ],
             "item_id": [
                 "Base.Bellows"
@@ -2841,6 +2776,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "b6355549-6cad-454d-a29b-03882c44e1dd"
             ]
         },
         "Berries": {
@@ -2959,6 +2897,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "c0a6fc65-9aae-4abc-b8dc-dcc20c94847c"
             ]
         },
         "Beta Blockers": {
@@ -3003,6 +2944,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "87844aba-b48f-43e8-b3b6-d8d041179138"
             ]
         },
         "Bible Readings - Revelation": {
@@ -3011,6 +2955,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "0607ad40-fa78-4e00-8bfc-b0bd2f62e554"
             ]
         },
         "Bible Readings - Sermon on the Mount": {
@@ -3019,6 +2966,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "09cfd631-b1a0-426c-aa55-2a25f67c761c"
             ]
         },
         "Bible Readings - The Crucifixion": {
@@ -3027,6 +2977,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "d8a54f2b-3288-473b-b570-29441d2d62dc"
             ]
         },
         "Bible Readings - Tower of Babel": {
@@ -3035,6 +2988,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "6fed2f1b-d9c5-4120-9f54-7134c3b6ffdb"
             ]
         },
         "Big Hiking Backpack": {
@@ -3203,6 +3159,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "47c6a97e-2ca0-4614-b3b6-1403a59ab42d"
             ]
         },
         "Black Pig Leather (Furred)": {
@@ -3326,9 +3285,7 @@
             ]
         },
         "Blank Key": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Key_Blank"
             ]
@@ -3387,6 +3344,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "53c7fa63-ec5d-40de-8875-a0f474ef49a6"
             ]
         },
         "Blower Fan": {
@@ -3666,9 +3626,7 @@
             ]
         },
         "Bone Whistle": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Whistle_Bone"
             ]
@@ -4375,9 +4333,7 @@
             ]
         },
         "Bowl (ceramic)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.ClayBowl"
             ]
@@ -4465,7 +4421,7 @@
         },
         "Bowling Ball Bag": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.Bag_BowlingBallBag"
@@ -4816,9 +4772,7 @@
             ]
         },
         "Box of Capgun Caps": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.CapGunCapBox"
             ]
@@ -5379,6 +5333,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "929a2ae1-a7f1-4fe5-9b4e-7779a4483091"
             ]
         },
         "Brent's 21st": {
@@ -5387,6 +5344,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "05b31204-ed9f-4fee-b181-070c85f6dd18"
             ]
         },
         "Brick": {
@@ -5407,16 +5367,14 @@
         },
         "Briefcase": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.Briefcase"
             ]
         },
         "Briefcase (money)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Briefcase_Money"
             ]
@@ -5519,8 +5477,7 @@
         },
         "Brochure": {
             "categories": [
-                "Junk",
-                "Literature"
+                "Junk"
             ],
             "item_id": [
                 "Base.Brochure"
@@ -5820,6 +5777,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "0fd06ed7-6757-4ae9-b4b7-6ef8316a5c4b"
             ]
         },
         "Brussels Sprouts": {
@@ -5836,6 +5796,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "f26f41b1-eca0-4d68-97e5-0b38a82a1c42"
             ]
         },
         "Bucket": {
@@ -5849,9 +5812,7 @@
             ]
         },
         "Bucket (forged)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.BucketForged"
             ]
@@ -6076,9 +6037,7 @@
             ]
         },
         "Bull Skull - Jawless": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Bull_Skull_Wall"
             ]
@@ -6345,9 +6304,7 @@
             ]
         },
         "Burlap Neck Guard": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Gorget_Burlap"
             ]
@@ -6486,6 +6443,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "6cdf2185-d266-4e3f-918f-a1c6e87b0e27"
             ]
         },
         "CCCW": {
@@ -6494,6 +6454,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "f7da5304-8466-402a-937d-21c92f411811"
             ]
         },
         "CD": {
@@ -6506,7 +6469,7 @@
         },
         "CD Player": {
             "categories": [
-                "Electronics"
+                "type=Electric"
             ],
             "item_id": [
                 "Base.CDplayer"
@@ -6766,6 +6729,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "1f452ba8-52b0-4150-8890-541127fe5fee"
             ]
         },
         "Can of Water": {
@@ -7029,9 +6995,7 @@
             ]
         },
         "Canteen (military)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.CanteenMilitary",
                 "Base.CanteenMilitaryFull"
@@ -7046,9 +7010,7 @@
             ]
         },
         "Capgun Cap": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.CapGunCap"
             ]
@@ -7131,6 +7093,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "1f906205-c751-4157-add7-dd79e6b1f823"
             ]
         },
         "Carmina Burana": {
@@ -7139,6 +7104,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "8c12c79d-08f6-44a8-9848-5f3913a370a2"
             ]
         },
         "Carpentry Chisel": {
@@ -7302,9 +7270,7 @@
             ]
         },
         "Carved Bucket": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.BucketCarved"
             ]
@@ -7326,9 +7292,7 @@
             ]
         },
         "Carving Fork": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.CarvingFork2"
             ]
@@ -7379,6 +7343,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "07b0cd73-7563-4699-9fb4-99316a0fc0bd"
             ]
         },
         "Carzone E2": {
@@ -7387,6 +7354,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "7b192b30-ea36-4395-a5e4-ac2d825d3b91"
             ]
         },
         "Carzone E3": {
@@ -7395,6 +7365,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "313fa630-d448-44ab-b1f0-7cff1d1db830"
             ]
         },
         "Cashbox": {
@@ -8248,6 +8221,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "aae2426f-fff8-49fa-a271-7c3a0d443b17"
             ]
         },
         "Christmas Garland": {
@@ -8440,6 +8416,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "c8a61e36-af9e-4643-b5d7-9e21ddb4f158"
             ]
         },
         "Cities of the World - Paris": {
@@ -8448,6 +8427,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "78e173e7-021a-46cc-b02f-47bd52595522"
             ]
         },
         "Cities of the World - Seoul": {
@@ -8456,6 +8438,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "53c1d840-a65b-4472-ae21-e6055cb73dbc"
             ]
         },
         "Claw Hammer": {
@@ -8849,6 +8834,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "2aba6585-8eba-47fc-8069-34ad9fd595e9"
             ]
         },
         "Cologne": {
@@ -8873,6 +8861,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "8c150873-8bd1-4316-ae3f-a37742ccfa20"
             ]
         },
         "Combination Padlock": {
@@ -8985,6 +8976,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "2221f0f4-4937-4c35-81b3-6267c8b47bcf"
             ]
         },
         "Constant Worship": {
@@ -8993,6 +8987,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "598421e1-4c61-4310-94e1-b2ecd0b6bea3"
             ]
         },
         "Constant Worship - Vol 2": {
@@ -9001,6 +8998,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "504ed5e2-f901-422e-b810-c338d983f1e1"
             ]
         },
         "Cookie Jar": {
@@ -9012,9 +9012,7 @@
             ]
         },
         "Cookie Jar - Teddy Bear": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.CookieJar_Bear"
             ]
@@ -9260,9 +9258,7 @@
             ]
         },
         "Corn (Dried)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.CornSeed"
             ]
@@ -9369,6 +9365,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "05f702e8-3c94-4cb4-a93e-b07f88bb5b17"
             ]
         },
         "Cosmetic Glasses": {
@@ -9526,9 +9525,7 @@
             ]
         },
         "Cow Skull - Jawless": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Cow_Skull_Wall"
             ]
@@ -9963,6 +9960,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "8dfedf9e-3322-4ddf-bed0-e11e5e77ee7e"
             ]
         },
         "Crispy Rice Square": {
@@ -10213,6 +10213,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "d7715bdb-f363-47cb-8c04-6a156906fcfc"
             ]
         },
         "D&M's Wedding": {
@@ -10221,6 +10224,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "983acfd3-0ee6-48a8-82fc-aa25a34b5c20"
             ]
         },
         "D-E Magazine": {
@@ -10245,6 +10251,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "109373b7-1720-4d95-acd7-062da3f61d2b"
             ]
         },
         "DEBUG DUMMY ITEM": {
@@ -10261,6 +10270,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "71c5af9d-2d25-4ce7-b2c6-df29b59932d5"
             ]
         },
         "Dad's shows": {
@@ -10269,6 +10281,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "3ce70040-2776-4403-9f16-759cf1ce86d9"
             ]
         },
         "Daikon": {
@@ -10293,6 +10308,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "538cdb4f-b2ec-4eb0-ab73-b0fc65b70114"
             ]
         },
         "Dangly Earrings - Diamond": {
@@ -10357,6 +10375,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "9a18b23e-e597-449e-adbd-81dacae59b93"
             ]
         },
         "Dark Blue Denim Fabric Roll": {
@@ -10381,6 +10402,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "1fd47a18-db73-473e-8f80-8379db58b297"
             ]
         },
         "Dating Agency (Male)": {
@@ -10389,6 +10413,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "c80427f6-3671-4915-929c-7f98a0391f03"
             ]
         },
         "Dead Bird": {
@@ -10437,6 +10464,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "31a726b7-0ee6-408b-8599-95c80aa8a6c5"
             ]
         },
         "Dead Wrong S2.01": {
@@ -10445,6 +10475,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "932853dc-0a71-4671-bf48-c5bfd126f367"
             ]
         },
         "Dead Wrong S2.02": {
@@ -10453,6 +10486,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "8b07e425-fe72-44b5-8635-db6ab6128bb7"
             ]
         },
         "Dead Wrong S2.03": {
@@ -10461,6 +10497,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "145c607e-0358-4a20-8d6b-49278af92272"
             ]
         },
         "Dead Wrong S2.04": {
@@ -10469,6 +10508,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "38cc7ba3-a100-475d-83a3-9c17525c1dd7"
             ]
         },
         "Dead Wrong S2.05": {
@@ -10477,12 +10519,13 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "26d31e43-e3a0-4758-95e9-afdd6d90e013"
             ]
         },
         "Debug Yardstick": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.YardstickDEBUG"
             ]
@@ -10560,9 +10603,7 @@
             ]
         },
         "Deer Skull - Jawless": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.DeerDoe_Skull_Wall"
             ]
@@ -10640,9 +10681,7 @@
             ]
         },
         "Denim Neck Guard": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Gorget_Denim"
             ]
@@ -10678,6 +10717,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "768e8dd5-99cf-40e0-b832-6f24e5baa771"
             ]
         },
         "Dented Unlabeled Can of Food": {
@@ -10842,6 +10884,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "25df99f3-2866-498e-8016-9b005df1d250"
             ]
         },
         "Dish Towel": {
@@ -10907,6 +10952,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "526534f0-0bcd-4cca-a30c-5bc37c359fbe"
             ]
         },
         "Dog Goblin III": {
@@ -10915,6 +10963,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "092a6643-cc78-4b99-bd8f-deb68814078d"
             ]
         },
         "Dog Goblin IV": {
@@ -10923,6 +10974,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "77facb85-3606-460c-ac75-f82a31ce25f1"
             ]
         },
         "Dog Tag": {
@@ -11046,6 +11100,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "13d6ca10-6a8d-4222-b3d6-e1ce37199394"
             ]
         },
         "Draw Plate": {
@@ -11193,9 +11250,7 @@
             ]
         },
         "Drinking Glass": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.DrinkingGlass"
             ]
@@ -11258,7 +11313,7 @@
         },
         "Duffel Bag": {
             "categories": [
-                "Wearable containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.Bag_WeaponBag",
@@ -11326,6 +11381,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "01940222-8880-4757-be51-9b919bfc0f5c"
             ]
         },
         "Dying Strike Official Soundtrack": {
@@ -11334,6 +11392,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "8e86efde-b60f-43f3-81d1-23454a526ffe"
             ]
         },
         "ELIJAH 1ST BDAY": {
@@ -11342,6 +11403,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "5de29f96-9d01-4422-9f61-f999f5816e4b"
             ]
         },
         "Eagle Down": {
@@ -11350,6 +11414,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "c6224369-5973-4ec9-817c-76d2aa07f553"
             ]
         },
         "Ear Muffs": {
@@ -11822,9 +11889,7 @@
             ]
         },
         "Empty Seed Packet - Flax": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.FlaxBagSeed_Empty"
             ]
@@ -12030,9 +12095,7 @@
             ]
         },
         "Empty Seed Packet - Spinach": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SpinachBagSeed_Empty"
             ]
@@ -12054,9 +12117,7 @@
             ]
         },
         "Empty Seed Packet - Sunflower": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SunflowerBagSeed_Empty"
             ]
@@ -12078,9 +12139,7 @@
             ]
         },
         "Empty Seed Packet - Tobacco": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.TobaccoBagSeed_Empty"
             ]
@@ -12147,6 +12206,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "a8c4eccf-53d9-42ad-8091-b9e562621c8f"
             ]
         },
         "Entrenching Tool": {
@@ -12179,6 +12241,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "c3b9fd54-f013-48b9-ac55-1b4a11efa340"
             ]
         },
         "Every Reason Tape!!": {
@@ -12187,6 +12252,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "e502be90-8631-43d4-9ebd-d28f9401484c"
             ]
         },
         "Ewe Head (black)": {
@@ -12219,6 +12287,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "ccfd97d7-6b57-432c-bca7-f9a271f8012f"
             ]
         },
         "Exposure Survival E2": {
@@ -12227,6 +12298,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "6f1be5b5-d871-4ebf-bc44-2657f7c89bb5"
             ]
         },
         "Exposure Survival E3": {
@@ -12235,6 +12309,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "7402fb83-b5b3-4b08-99f9-82bc67f4572b"
             ]
         },
         "Exposure Survival E4": {
@@ -12243,6 +12320,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "a628a723-ac78-4bcb-927a-f84ad8c6c286"
             ]
         },
         "Exposure Survival E5": {
@@ -12251,6 +12331,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "1123df57-5e9b-4d61-88f1-7561949132e3"
             ]
         },
         "Exposure Survival E6": {
@@ -12259,6 +12342,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "75928dcd-c613-4a1e-afb5-20c4c671b835"
             ]
         },
         "Exposure Survival E7": {
@@ -12267,6 +12353,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "2dcd687b-ac76-4b33-b0b7-79ddfba2feb4"
             ]
         },
         "Exposure Survival E8": {
@@ -12275,6 +12364,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "f74df7fc-20ae-4600-b2d2-f504d9355440"
             ]
         },
         "Extinguisher": {
@@ -12316,6 +12408,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "a3151ce8-1470-41af-81e8-a14a90345b80"
             ]
         },
         "Fancy Plate": {
@@ -12408,9 +12503,7 @@
             ]
         },
         "Feeding Bottle": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.FeedingBottle"
             ]
@@ -12485,6 +12578,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "8f0ee6af-7365-4104-bd0d-380d8617980c"
             ]
         },
         "Fingerless Gloves - Leather": {
@@ -12608,9 +12704,7 @@
             ]
         },
         "Firewood": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Firewood"
             ]
@@ -12624,9 +12718,7 @@
             ]
         },
         "Firewood with Nails": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Firewood_Nails"
             ]
@@ -13012,8 +13104,7 @@
         },
         "Flier: Nolan's Used Cars": {
             "categories": [
-                "Junk",
-                "Literature"
+                "Junk"
             ],
             "item_id": [
                 "Base.Flier_Nolans"
@@ -13021,7 +13112,7 @@
         },
         "Flight Case": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.Flightcase"
@@ -13033,6 +13124,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "a3c8a7a1-220b-448e-9225-e98b9a0da1eb"
             ]
         },
         "Flint": {
@@ -13154,6 +13248,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "40d70c31-55a6-4a51-9957-611a190ecead"
             ]
         },
         "Foraging I: \"A Feast in the Forest\"": {
@@ -13266,6 +13363,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "21b95697-6235-4b8a-a1d9-a9ddc0cd1154"
             ]
         },
         "Foundation Makeup": {
@@ -13322,6 +13422,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "0b953c0d-04cc-4dda-b3c1-5317ff899bec"
             ]
         },
         "Frame": {
@@ -13333,9 +13436,7 @@
             ]
         },
         "Framepack": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Bag_CraftedFramepack_Large2"
             ]
@@ -13346,6 +13447,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "473bb1b2-3fd0-4d4b-8e8f-42d3bd01b929"
             ]
         },
         "Freddy The Fox": {
@@ -13362,6 +13466,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "6cf66309-e56f-42e3-9178-595a41555143"
             ]
         },
         "Freshwater Drum": {
@@ -13443,6 +13550,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "7053a51c-d55e-43a6-bffa-52536d7fda16"
             ]
         },
         "Frog": {
@@ -13668,6 +13778,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "70b48d90-55fc-49f0-99e8-b7f7746d011c"
             ]
         },
         "Gaff Hook": {
@@ -13679,9 +13792,7 @@
             ]
         },
         "Gaiter": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Gaiter_Right",
                 "Base.Gaiter_Left"
@@ -13998,6 +14109,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "43ac5750-24fc-483b-9458-ed8dd7f0e8cb"
             ]
         },
         "Gavel": {
@@ -14054,6 +14168,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "34ba6ab4-915f-4903-a9f8-aec78611c226"
             ]
         },
         "Get Your Feet Wet": {
@@ -14062,6 +14179,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "69e6e2d6-51db-4f05-bcda-59d8fb82010a"
             ]
         },
         "Ghillie Suit - Pants": {
@@ -14302,6 +14422,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "0bac9338-28c4-4a72-94fe-9d47cf956f7b"
             ]
         },
         "Glove Box (Heavy-Duty Vehicle)": {
@@ -14518,6 +14641,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "ec1c89d4-8b80-4cc6-af2e-e7ee6e029e34"
             ]
         },
         "Golf Bag": {
@@ -14555,9 +14681,7 @@
             ]
         },
         "Golf Tee": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.GolfTee"
             ]
@@ -14568,6 +14692,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "7ac03fdf-560e-4496-8de4-53903404c0f2"
             ]
         },
         "Grady v King": {
@@ -14576,6 +14703,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "541b5fff-7f01-402a-8e8a-98cfd0c90916"
             ]
         },
         "Graham Crackers": {
@@ -14592,6 +14722,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "fa4b520c-dbe3-49da-a543-154d06e32f66"
             ]
         },
         "Grandma's 80th": {
@@ -14600,6 +14733,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "d9c2da55-e946-42ff-82d5-5c65b5c4271e"
             ]
         },
         "Granny Nani": {
@@ -14608,6 +14744,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "00a8b565-a566-44f3-b6d2-7a1ae2eafb0c"
             ]
         },
         "Granola Bar": {
@@ -14715,9 +14854,7 @@
             ]
         },
         "Green Peas (Dried)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.GreenpeasSeed"
             ]
@@ -14836,16 +14973,14 @@
         },
         "Guitar Case": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.Guitarcase"
             ]
         },
         "Guitar Pick": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.GuitarPick"
             ]
@@ -14884,7 +15019,7 @@
         },
         "Gun Case": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.RifleCase1",
@@ -14940,6 +15075,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "ba9a65a7-c471-436d-a2cd-3ceb75af6bca"
             ]
         },
         "Habanero": {
@@ -14990,20 +15128,15 @@
                 "Base.HairDryer"
             ]
         },
-        "Hair Dye": {
-            "categories": [
-                "Appearance"
-            ],
-            "item_id": [
-                "''See [[#Variants|Variants]]''"
-            ]
-        },
         "Hair Dyeing at Home": {
             "categories": [
                 "Home VHS"
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "0b26734a-f962-4539-8dda-3822b759173d"
             ]
         },
         "Hair Gel": {
@@ -15160,7 +15293,7 @@
         },
         "Handbag": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.Handbag"
@@ -15176,7 +15309,7 @@
         },
         "Handgun Case": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.PistolCase1",
@@ -15225,6 +15358,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "5c60fc4b-8e0f-40c0-8292-da9265414402"
             ]
         },
         "Happy Face Pillow": {
@@ -15252,9 +15388,7 @@
             ]
         },
         "Harmonica": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Harmonica"
             ]
@@ -15650,6 +15784,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "cee92348-75a3-404c-b0e6-7124f7346e22"
             ]
         },
         "Headphones": {
@@ -15698,6 +15835,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "1fadc63a-ff45-4da3-82bd-a842a45cb446"
             ]
         },
         "Helmet - Airforce": {
@@ -15972,6 +16112,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "5764c415-d689-41c5-9fbd-da320c352af7"
             ]
         },
         "Hide Apron": {
@@ -16049,9 +16192,7 @@
             ]
         },
         "Hide Mask": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Hat_HockeyMask_Hide"
             ]
@@ -16088,6 +16229,14 @@
                 "Base.Vest_Hide"
             ]
         },
+        "Hide Tent": {
+            "categories": [
+                "Camping"
+            ],
+            "item_id": [
+                "Base.HideTent"
+            ]
+        },
         "Hide Tent (Packed)": {
             "categories": [
                 "Camping"
@@ -16097,9 +16246,7 @@
             ]
         },
         "Hide Wallet": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Wallet_Hide"
             ]
@@ -16145,9 +16292,7 @@
             ]
         },
         "Hobby Horse": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.HobbyHorse"
             ]
@@ -16349,6 +16494,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "d778665f-21b1-475e-a530-7233c95c2d0f"
             ]
         },
         "Hominid Skull Fossil": {
@@ -16487,6 +16635,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "afa6734b-6fc8-443d-806e-2e21d6feb860"
             ]
         },
         "Hospital Gown": {
@@ -16499,7 +16650,7 @@
         },
         "Hot Cuppa": {
             "categories": [
-                "Removed items"
+                "type=Food"
             ],
             "item_id": [
                 "Base.Mugfulll",
@@ -16694,6 +16845,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "4edd74be-d4ff-403a-aab8-4484744580a6"
             ]
         },
         "I Swear": {
@@ -16702,6 +16856,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "21d0cf8f-d5a4-4efb-ab23-0d5265d9a679"
             ]
         },
         "I'll Look After You": {
@@ -16710,6 +16867,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "b3e9c731-c5dc-4c9b-b87a-939b4e99f2c2"
             ]
         },
         "ID Card": {
@@ -16758,6 +16918,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "deed9448-1498-43ce-ba7d-dcf12a8ccfbb"
             ]
         },
         "Ice Axe": {
@@ -17243,6 +17406,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "5c8893b0-9be3-4a42-8b11-9eb847e37bad"
             ]
         },
         "JS-2000 Shotgun": {
@@ -17501,6 +17667,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "279c63c0-1499-451b-9369-12d517e718fc"
             ]
         },
         "Janie's tape": {
@@ -17509,6 +17678,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "d64b9df2-f069-4f0c-9891-02fc13715e88"
             ]
         },
         "Jar": {
@@ -17781,6 +17953,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "b50eed6f-f12d-465e-bbd5-1fd88d6bb8f8"
             ]
         },
         "Jerrycan of Gas": {
@@ -17893,6 +18068,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "ca8cb8d3-c126-41a7-bb66-292c617205cd"
             ]
         },
         "Journal": {
@@ -17973,6 +18151,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "f0ba882b-cda2-4003-873e-078e757acd56"
             ]
         },
         "Kafka Animated - A Message from the Emperor": {
@@ -17981,6 +18162,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "4dabc4a1-9013-455f-a60f-f592ddab4818"
             ]
         },
         "Kale": {
@@ -18037,6 +18221,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "2b918617-dd19-42c4-8955-808f57fe5891"
             ]
         },
         "Kentucky Furlongs (5.2.92)": {
@@ -18045,6 +18232,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "78f8be75-5819-4edb-a7a5-a953537da19a"
             ]
         },
         "Ketchup": {
@@ -18152,9 +18342,7 @@
             ]
         },
         "Key Ring - Forged": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.KeyRing_Forged"
             ]
@@ -18166,9 +18354,7 @@
             ]
         },
         "Key Ring - Gold": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.KeyRing_Forged_Gold"
             ]
@@ -18262,9 +18448,7 @@
             ]
         },
         "Key Ring - Silver": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.KeyRing_Forged_Silver"
             ]
@@ -18315,6 +18499,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "00cf0d94-726c-49c9-9e09-55012b581d49"
             ]
         },
         "Kidney Beans (Dried)": {
@@ -18462,6 +18649,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "f7c3cb91-4e4f-4bb6-aaed-c17ab4ae3e97"
             ]
         },
         "LSU Ice Hockey Jersey": {
@@ -18726,25 +18916,19 @@
             ]
         },
         "Large Crafted Framepack": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Bag_CraftedFramepack_Large"
             ]
         },
         "Large Crystal": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Crystal_Large"
             ]
         },
         "Large Framepack": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Bag_CraftedFramepack_Large3"
             ]
@@ -19183,9 +19367,7 @@
             ]
         },
         "Leather Strip Neck Guard": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Gorget_LeatherWrap"
             ]
@@ -19461,6 +19643,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "7c17de42-23e6-4100-a4bb-64941b782480"
             ]
         },
         "Letter Opener": {
@@ -19656,9 +19841,7 @@
             ]
         },
         "Lighter - Improvised Battery": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Lighter_Battery"
             ]
@@ -19717,6 +19900,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "415f5cf6-fef1-495a-ad50-fb9b7773d178"
             ]
         },
         "Lives Taken": {
@@ -19725,6 +19911,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "9822e2c7-b5c2-4600-bf2c-3c1543e6fa70"
             ]
         },
         "Lobster": {
@@ -20078,6 +20267,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "2655efff-166a-4bec-914f-893860760eb9"
             ]
         },
         "Loretta": {
@@ -20086,6 +20278,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "e08ca516-30b5-4584-a6be-c975869e6f79"
             ]
         },
         "Loupe": {
@@ -20102,6 +20297,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "d544e324-b554-42e2-a36e-de7e09b32a2c"
             ]
         },
         "Lug Wrench": {
@@ -20122,7 +20320,7 @@
         },
         "Lunchbag": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.Lunchbag"
@@ -20130,7 +20328,7 @@
         },
         "Lunchbox": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.Lunchbox",
@@ -20223,6 +20421,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "60238f85-cf09-4f82-9324-2394c2422c94"
             ]
         },
         "MSR700 Magazine": {
@@ -20584,9 +20785,7 @@
             ]
         },
         "Magazine: Alpine Explorers": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.TailoringMag9"
             ]
@@ -20680,9 +20879,7 @@
             ]
         },
         "Magazine: Cowboy Living": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.TailoringMag5"
             ]
@@ -20768,17 +20965,13 @@
             ]
         },
         "Magazine: Fun in the Woods!": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.TailoringMag7"
             ]
         },
         "Magazine: Get Stuffed": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.HuntingMag4"
             ]
@@ -20832,9 +21025,7 @@
             ]
         },
         "Magazine: Herbal Remedy Growing": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.FarmingMag9"
             ]
@@ -20848,9 +21039,7 @@
             ]
         },
         "Magazine: Homespun": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.TailoringMag10"
             ]
@@ -20937,9 +21126,7 @@
             ]
         },
         "Magazine: Leather Crafts": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.TailoringMag4"
             ]
@@ -21017,9 +21204,7 @@
             ]
         },
         "Magazine: Outdoor Gear, Done Right": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.TailoringMag8"
             ]
@@ -21049,9 +21234,7 @@
             ]
         },
         "Magazine: Real Gladiators": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.TailoringMag6"
             ]
@@ -21162,9 +21345,7 @@
             ]
         },
         "Magazine: The Cheapskate's John Spiral - Homemade Explosives": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.EngineerMagazine3"
             ]
@@ -21335,6 +21516,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "2d94b3c1-1860-4406-859c-ab2b5fcb64e2"
             ]
         },
         "Magnesium Firestarter": {
@@ -21487,6 +21671,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "e50928ac-f472-43d9-bae0-2c27e3187567"
             ]
         },
         "Mango": {
@@ -21711,6 +21898,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "4d2ed157-ca09-47aa-bde5-8acb4db6bf5b"
             ]
         },
         "Marshmallows": {
@@ -21834,9 +22024,7 @@
             ]
         },
         "Matchbox": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Matchbox"
             ]
@@ -21847,6 +22035,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "68785929-d79c-4170-9fc8-5289bbf05388"
             ]
         },
         "Mayonnaise": {
@@ -22031,6 +22222,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "6597509e-d8e7-4b21-9eec-c008436cb09b"
             ]
         },
         "Medium Handle": {
@@ -22154,9 +22348,7 @@
             ]
         },
         "Metal Drum (item)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.MetalDrum"
             ]
@@ -22205,9 +22397,7 @@
             ]
         },
         "Metal Spearhead": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SpearHead"
             ]
@@ -22785,6 +22975,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "70339435-c441-4518-8040-b6e47ed58e77"
             ]
         },
         "Modjeska": {
@@ -22809,6 +23002,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "d3b8c97d-d3a7-4268-88bc-7e4a6bf24d6e"
             ]
         },
         "Molly june 30": {
@@ -22817,6 +23013,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "a0d8bbf2-50ae-4e9e-b314-abd8214d8182"
             ]
         },
         "Molotov Cocktail": {
@@ -22833,6 +23032,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "a0c98d75-decb-4aab-9d91-c29f20d0ba2b"
             ]
         },
         "Moments in American History - Gettysburg Address": {
@@ -22841,6 +23043,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "d069e31c-a1ad-4f05-8363-4c4d978ad207"
             ]
         },
         "Moments in American History - The Constitution": {
@@ -22849,6 +23054,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "c214d739-ffef-492d-be6d-96511100c437"
             ]
         },
         "Moments in American History - The Moon Landing": {
@@ -22857,6 +23065,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "86f5f6a0-7d09-490e-8f04-c23adfdc6c50"
             ]
         },
         "Moments in American History - Watergate": {
@@ -22865,6 +23076,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "881a12c2-ef70-4a10-8732-cad03393a315"
             ]
         },
         "Money": {
@@ -22889,6 +23103,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "18a00063-b838-4aaa-8991-7acc16554a08"
             ]
         },
         "Moon Madness": {
@@ -22897,6 +23114,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "d93fca54-eb8f-45d2-bfd5-f3c92a7e91e7"
             ]
         },
         "Mop": {
@@ -22921,6 +23141,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "1dc05702-0af2-4087-b120-02376b3e39ad"
             ]
         },
         "Mother Earth": {
@@ -22929,6 +23152,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "e721ba21-b725-4ae5-8a73-99cf138bf76d"
             ]
         },
         "Mother's Boy": {
@@ -22937,6 +23163,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "9ec23879-13eb-4b6a-ab44-e9038952104f"
             ]
         },
         "Motion Sensor": {
@@ -23109,9 +23338,7 @@
             ]
         },
         "Mug of Water": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.TestWaterMug"
             ]
@@ -23122,6 +23349,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "f37bdc33-7ac0-497b-be9b-82a5a330dbdb"
             ]
         },
         "Muldraugh AV Club": {
@@ -23130,6 +23360,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "ffe28381-b743-4300-8c5a-89b4c4983d05"
             ]
         },
         "Muldraugh v west point soccer": {
@@ -23138,6 +23371,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "88bbe9fa-dc06-4891-beb4-de538bbdee3e"
             ]
         },
         "Multi-Color Pen": {
@@ -23209,6 +23445,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "ec7fd24e-be0c-4198-ab32-484c35442398"
             ]
         },
         "NPK Fertilizer": {
@@ -23361,6 +23600,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "89e6d4e0-5b21-44f6-a884-2cebed3937bf"
             ]
         },
         "Newspaper": {
@@ -23426,6 +23668,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "fe4ede3c-a153-4e46-aebe-9681d14fe196"
             ]
         },
         "Nof vid": {
@@ -23434,6 +23679,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "1c6745f6-70b8-49e8-9087-b1bbb9263985"
             ]
         },
         "Noise Generator with Long-Range Sensor": {
@@ -23586,6 +23834,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "1559a55a-bfc9-4cfc-967b-e26b860894c6"
             ]
         },
         "Oatmeal Cookie": {
@@ -23602,6 +23853,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "67c1dc61-ea6b-4369-8762-15d74f70b934"
             ]
         },
         "Oil Press": {
@@ -23674,6 +23928,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "d84ea32b-e666-470f-91fb-0b4c70a06665"
             ]
         },
         "Omega Department S3 E2": {
@@ -23682,6 +23939,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "9796fc1d-5602-4413-9a9a-846f3a4b00f1"
             ]
         },
         "Omega Department ghost town": {
@@ -23690,6 +23950,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "42229010-855b-40a6-b9a0-be9d0f02925f"
             ]
         },
         "Omelette": {
@@ -23715,6 +23978,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "75f556df-888a-4fad-9524-c7351a65ec5b"
             ]
         },
         "Onigiri": {
@@ -23763,6 +24029,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "47058bd4-a7ff-4472-ad00-93972d18ea5b"
             ]
         },
         "Opened Jar of Fish Roe": {
@@ -23779,6 +24048,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "e311d6ae-9271-40fc-be4b-fba27317d5fc"
             ]
         },
         "Orange": {
@@ -23851,6 +24123,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "732847fd-53aa-4d17-9d5e-dcd6756e200d"
             ]
         },
         "Our Wedding 19.1.88": {
@@ -23859,6 +24134,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "d620fd0a-d70c-43e5-9017-d7617b642fd0"
             ]
         },
         "Our world 9": {
@@ -23867,6 +24145,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "2f44d58f-f8dc-498f-9890-cf1eeb1bbd62"
             ]
         },
         "Oven Mitt": {
@@ -23883,6 +24164,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "c654d451-19bc-4135-85d7-96a5c455a75a"
             ]
         },
         "Overalls": {
@@ -24571,7 +24855,7 @@
         },
         "Paper Bag": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.PaperBag"
@@ -24579,7 +24863,7 @@
         },
         "Paper Bag (Jay's)": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.Paperbag_Jays"
@@ -24587,7 +24871,7 @@
         },
         "Paper Bag (Spiffo's)": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.Paperbag_Spiffos"
@@ -25111,6 +25395,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "9fd2da4a-9130-4fac-a49e-8811b8968939"
             ]
         },
         "Parking Ticket": {
@@ -25325,9 +25612,7 @@
             ]
         },
         "Pencil Case (gaming)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.PencilCase_Gaming"
             ]
@@ -25389,9 +25674,7 @@
             ]
         },
         "Pest Flies Spray": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.GardeningSprayCigarettes"
             ]
@@ -25402,6 +25685,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "b8c1d37d-ffe9-4794-8059-3d8bbd59d369"
             ]
         },
         "Philosophical Quotes - Confucius": {
@@ -25410,6 +25696,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "4bea3e0c-b8c6-4477-b8e1-c10e4f40ca56"
             ]
         },
         "Philosophical Quotes - Machiavelli": {
@@ -25418,6 +25707,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "9831f1dc-dacf-4f73-9a53-be0236b5f073"
             ]
         },
         "Philosophical Quotes - Rumi": {
@@ -25426,6 +25718,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "37fc2a5f-b309-426d-85d2-c161cffc45f9"
             ]
         },
         "Philosophical Quotes - The Art of War": {
@@ -25434,6 +25729,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "14755483-faeb-488a-86e1-3cef433b1de2"
             ]
         },
         "Philosophical Quotes - The Buddha": {
@@ -25442,6 +25740,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "bddec6d5-fb00-4aba-aa66-5c3fa4011ae9"
             ]
         },
         "Phonebook": {
@@ -25685,9 +25986,7 @@
             ]
         },
         "Pig Skull - Jawless": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Pig_Skull_Wall"
             ]
@@ -25934,7 +26233,7 @@
         },
         "Plastic Bag": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.Plasticbag",
@@ -25950,7 +26249,7 @@
         },
         "Plastic Cup": {
             "categories": [
-                "Water containers"
+                "type=Default"
             ],
             "item_id": [
                 "Base.PlasticCup"
@@ -26034,6 +26333,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "9401186f-f19c-452d-a753-819c58c0d529"
             ]
         },
         "Pleistocene Land": {
@@ -26042,6 +26344,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "ab77e300-a0be-4c54-a514-50d44b543489"
             ]
         },
         "Pliers": {
@@ -26061,9 +26366,7 @@
             ]
         },
         "Plumpabug the Aphid": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Plushabug"
             ]
@@ -26202,9 +26505,7 @@
             ]
         },
         "Poppies": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Poppies"
             ]
@@ -26218,17 +26519,13 @@
             ]
         },
         "Poppy Pods": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.PoppyPods"
             ]
         },
         "Poppy Pods (Dried)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.PoppyPodsDried"
             ]
@@ -26379,32 +26676,26 @@
             ]
         },
         "Pouch (dice)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.DiceBag"
             ]
         },
         "Pouch (gem)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.GemBag"
             ]
         },
         "Pouch (seed farming)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SeedBag_Farming"
             ]
         },
         "Pouch (seed)": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.SeedBag"
@@ -26496,6 +26787,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "e502259c-f1ea-418c-b407-0e52849a6110"
             ]
         },
         "Prescription Aviator Glasses": {
@@ -26577,6 +26871,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "2000971d-6dd0-4a40-a02c-b16b465a0986"
             ]
         },
         "Processed Cheese": {
@@ -26750,7 +27047,7 @@
         },
         "Purse": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.Purse"
@@ -26770,6 +27067,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "879430cc-34e5-452f-b905-42a9b40e66b7"
             ]
         },
         "Quagga Cakes": {
@@ -26786,6 +27086,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "9dd008c0-ed51-411b-a3e5-c3b10bd4ff66"
             ]
         },
         "Quicklime": {
@@ -26802,6 +27105,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "14fca23a-86ca-44b3-8342-264791175421"
             ]
         },
         "RPG Manual": {
@@ -27143,9 +27449,7 @@
             ]
         },
         "Rag Neck Guard": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Gorget_Rag"
             ]
@@ -27260,6 +27564,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "cfe80cda-e58c-4129-9732-421b8f5317a3"
             ]
         },
         "Rangers v. Hurricanes 8.12.92": {
@@ -27268,6 +27575,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "6c75473d-2de5-4438-a17d-5a9ca4cc6da7"
             ]
         },
         "Rangers v. Mothballs 12.8.90": {
@@ -27276,6 +27586,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "da6d1396-0e8d-4587-ac01-6343bd408706"
             ]
         },
         "Raps for Christ": {
@@ -27284,6 +27597,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "5b80fd14-9667-4bbf-b466-b9b160c195e3"
             ]
         },
         "Raspberry Shortbread Cookie": {
@@ -27428,6 +27744,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "a7daa3b8-81c0-4b6b-82e2-a0229c6860f9"
             ]
         },
         "Receipt": {
@@ -27700,6 +28019,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "17596597-5bae-4814-927c-c8673b7739af"
             ]
         },
         "Reverend Quigley": {
@@ -27708,6 +28030,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "47d28904-d6d0-47a5-81b9-3c2cb819cc9a"
             ]
         },
         "Rice": {
@@ -27833,6 +28158,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "83134f2e-d17c-4dac-80ed-db9487327614"
             ]
         },
         "Riverside vs West Point footie": {
@@ -27841,6 +28169,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "e4afaa47-795e-4124-9cf4-770a8045e6dd"
             ]
         },
         "Roasted Vegetables": {
@@ -27865,6 +28196,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "49329116-0be0-437a-975e-f11028afa0ab"
             ]
         },
         "Rock Candy": {
@@ -27881,6 +28215,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "fcb1279d-3a42-4be4-b104-d03679af5480"
             ]
         },
         "Rodent Meat": {
@@ -27897,6 +28234,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "9354e364-698c-428c-a7ea-b38de6bf61fb"
             ]
         },
         "Rolled Cigarette": {
@@ -28049,6 +28389,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "1c93b0d3-e8fc-4e74-817c-7e97a8e43b3b"
             ]
         },
         "Round Cosmetic Glasses": {
@@ -28132,9 +28475,7 @@
             ]
         },
         "Rubber Spider": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.RubberSpider"
             ]
@@ -28161,6 +28502,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "1e75a2c7-2d95-4399-a3f8-74e7561ccce3"
             ]
         },
         "Rye Seeds": {
@@ -28209,6 +28553,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "cda6e1e8-92ba-4f46-a500-b3b32180c3bf"
             ]
         },
         "SWAT Bulletproof Vest Forearm Armor": {
@@ -28427,6 +28774,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "8cb5271e-368a-4676-bfc2-64687167f1a1"
             ]
         },
         "Santa Hat": {
@@ -28467,6 +28817,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "7f455072-e0ca-4486-8b21-b426cf2957bb"
             ]
         },
         "Satchel": {
@@ -28499,6 +28852,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "1d57ab8f-61e9-4bb1-9d6f-d3d9d1146ea1"
             ]
         },
         "Saucepan": {
@@ -28651,6 +29007,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "872b1ecd-60fa-4994-b770-0020c2ddba54"
             ]
         },
         "Scissors": {
@@ -28935,6 +29294,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "fad2c5af-1968-43d5-aa35-ab8fa6555f22"
             ]
         },
         "Security Pass Key Ring": {
@@ -29530,9 +29892,7 @@
             ]
         },
         "Set of Maintenance Books": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.BookMaintenanceSet"
             ]
@@ -29618,9 +29978,7 @@
             ]
         },
         "Sewing Pattern": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SewingPattern"
             ]
@@ -29722,9 +30080,7 @@
             ]
         },
         "Sheep Skull - Jawless": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Sheep_Skull_Wall"
             ]
@@ -29826,9 +30182,7 @@
             ]
         },
         "Shells Bandolier (brown)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.AmmoStrap_Brown_Shells"
             ]
@@ -30282,6 +30636,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "ec6b7830-297c-486d-a0e9-1a48ece936c1"
             ]
         },
         "Shrimp": {
@@ -30320,9 +30677,7 @@
             ]
         },
         "Silver Coin": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SilverCoin"
             ]
@@ -30485,6 +30840,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "3297434d-f2b0-47cf-b00c-038a937ddce5"
             ]
         },
         "Simon's Fitness Club E2": {
@@ -30493,6 +30851,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "f87aee3b-2749-4c76-a1be-471c8a9229b3"
             ]
         },
         "Simon's Fitness Club E3": {
@@ -30501,6 +30862,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "d27e7cd9-537e-4c5c-aabc-c37a7abbb214"
             ]
         },
         "Simon's Fitness Club E4": {
@@ -30509,6 +30873,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "ebd9a190-456a-4ffe-b9f5-eeaedca68661"
             ]
         },
         "Simon's Fitness Club E5": {
@@ -30517,12 +30884,13 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "98406d57-3f55-4f36-afc4-b78554acc0aa"
             ]
         },
         "Simple Framepack": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Bag_TarpFramepack_Large"
             ]
@@ -31046,6 +31414,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "254ce9f9-2f49-497c-8914-c64f28bf8bce"
             ]
         },
         "Slug": {
@@ -31058,9 +31429,7 @@
             ]
         },
         "Slug Repellent": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SlugRepellent"
             ]
@@ -31194,9 +31563,7 @@
             ]
         },
         "Small Crafted Framepack": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Bag_CraftedFramepack_Small"
             ]
@@ -31351,9 +31718,7 @@
             ]
         },
         "Small Simple Framepack": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Bag_TarpFramepack_Small"
             ]
@@ -31367,9 +31732,7 @@
             ]
         },
         "Small Tarp Backpack": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Bag_CrudeTarpBag"
             ]
@@ -31556,6 +31919,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "27d9ab7b-ab9a-464a-b392-ca0e451fa7d8"
             ]
         },
         "Soccer Ball": {
@@ -31641,6 +32007,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "1ef8dff0-952f-49db-9312-2e363764160e"
             ]
         },
         "Soup": {
@@ -31705,6 +32074,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "a3189d19-73db-41f8-8865-ef478eebd58a"
             ]
         },
         "Space Crew S3.02": {
@@ -31713,6 +32085,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "30ef3e9e-6270-441c-acbb-77191dbe073b"
             ]
         },
         "Space Crew S3.03": {
@@ -31721,6 +32096,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "074d0c6d-f387-4472-b41b-fe73ce2132da"
             ]
         },
         "Space Crew S3.04": {
@@ -31729,6 +32107,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "4a0838f5-b881-4c94-9dfa-66b655870395"
             ]
         },
         "Space Crew S3.05": {
@@ -31737,6 +32118,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "e34b5a15-f058-495f-b16e-482c704d3b52"
             ]
         },
         "Spade": {
@@ -32185,6 +32569,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "a3167c3e-6f13-4b2a-8414-8eb4d4201556"
             ]
         },
         "Spiked Articulated Metal Shin Armor": {
@@ -32479,6 +32866,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "0454442e-ce08-4d01-bba5-6a8822bf86d1"
             ]
         },
         "Squash": {
@@ -32530,17 +32920,13 @@
             ]
         },
         "Stag Skull - Jawless": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.DeerStag_Skull_Wall"
             ]
         },
         "Stairs Piece": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Stairs"
             ]
@@ -32690,9 +33076,7 @@
             ]
         },
         "Steel Knuckle": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "camping.SteelKnuckle"
             ]
@@ -32815,6 +33199,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "8904b5c7-86f6-4b49-a163-cf37d4421895"
             ]
         },
         "Stockings - Black": {
@@ -32983,6 +33370,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "be64169e-3ed9-4cf8-90fa-b36283f9c2eb"
             ]
         },
         "Strangely True S2.01": {
@@ -32991,6 +33381,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "9b8500f2-2288-4497-b85a-eacbda615a03"
             ]
         },
         "Strangely True S2.02": {
@@ -32999,6 +33392,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "4b60b0ce-0ee2-4d4b-b31e-c6cfd0b8bd01"
             ]
         },
         "Strangely True S2.03": {
@@ -33007,6 +33403,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "7e713c4c-5ae5-4c16-89ff-6ff5191401b3"
             ]
         },
         "Strangely True S2.04": {
@@ -33015,6 +33414,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "8e792270-84c1-4fc3-b4b8-2a500c522347"
             ]
         },
         "Strangely True S2.05": {
@@ -33023,6 +33425,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "1f13efd4-42db-4889-9695-9b74d39dcdf7"
             ]
         },
         "Straw": {
@@ -33155,7 +33560,7 @@
         },
         "Suitcase": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.Suitcase"
@@ -33170,17 +33575,13 @@
             ]
         },
         "Sunflower Head": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SunflowerHead"
             ]
         },
         "Sunflower Head (Dried)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SunflowerHeadDried"
             ]
@@ -33207,6 +33608,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "626e33bb-7fab-4c22-a803-14027f36e916"
             ]
         },
         "Surgical Cap": {
@@ -33231,6 +33635,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "9fcadfea-5b3b-4c72-ac30-d03839a3e86d"
             ]
         },
         "Survival Schematic": {
@@ -33810,6 +34217,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "f2906e97-2690-47e3-a44b-0a33c8438240"
             ]
         },
         "TV Dinner": {
@@ -33834,6 +34244,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "c23539e8-c5eb-4f58-850f-18522250c470"
             ]
         },
         "Tacklebox": {
@@ -33890,6 +34303,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "af941537-39ac-42fb-8c7a-ed346ded282e"
             ]
         },
         "Tailoring I: \"Basic Clothing Repair\"": {
@@ -33946,6 +34362,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "7bdb6cb5-1d76-4928-a784-d0ec97a98fd3"
             ]
         },
         "Tank Top": {
@@ -33990,25 +34409,19 @@
             ]
         },
         "Tarp Chest Rig": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Bag_ChestRig_Tarp"
             ]
         },
         "Tarp Fanny Pack - Back": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Bag_FannyPackBack_Tarp"
             ]
         },
         "Tarp Fanny Pack - Front": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Bag_FannyPackFront_Tarp"
             ]
@@ -34046,17 +34459,13 @@
             ]
         },
         "Tarp Sack": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Bag_TarpSack"
             ]
         },
         "Tarp Sling Bag": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Bag_TarpSlingBag"
             ]
@@ -34102,17 +34511,13 @@
             ]
         },
         "Teddy Bear (burlap)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.ToyBear_Crafted_Burlap"
             ]
         },
         "Teddy Bear (cotton)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.ToyBear_Crafted_Cotton"
             ]
@@ -34131,6 +34536,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "24e06bf8-5bd5-417e-8727-13f26da706c5"
             ]
         },
         "Tennis Ball": {
@@ -34214,9 +34622,7 @@
             ]
         },
         "Tent Kit": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.CampingTentKit2"
             ]
@@ -34259,6 +34665,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "e6fd44a9-1774-4204-ab45-9b316301aa2b"
             ]
         },
         "The Cook Show E2": {
@@ -34267,6 +34676,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "a754fdaf-5bac-40cd-9a69-da90e8a0cac7"
             ]
         },
         "The Cook Show E3": {
@@ -34275,6 +34687,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "7933a371-a8a6-4c31-8886-7a97d89f2c7e"
             ]
         },
         "The Cook Show E4": {
@@ -34283,6 +34698,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "4cc3b806-4630-4dfc-a935-efa700fbd7fb"
             ]
         },
         "The Cook Show E5": {
@@ -34291,6 +34709,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "2695eb00-ee79-4b39-833a-1023a28ce397"
             ]
         },
         "The Cook Show E6": {
@@ -34299,6 +34720,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "01b3d832-602c-4566-b8d6-c2b74a4a0b00"
             ]
         },
         "The Cook Show E7": {
@@ -34307,6 +34731,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "2c2a052d-097c-4507-85f4-7fda90f3e3d1"
             ]
         },
         "The Crying of the Foxes": {
@@ -34315,6 +34742,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "d006671e-9d60-4634-8cda-27a28abbc164"
             ]
         },
         "The Danger in Your Bed": {
@@ -34323,6 +34753,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "462ca6e0-fd5e-4bf9-9748-12b3480ece26"
             ]
         },
         "The Depth of Your Love": {
@@ -34331,6 +34764,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "c7ff45aa-14f2-4335-b08e-5ed9bfda83bb"
             ]
         },
         "The Dog Goblin": {
@@ -34339,6 +34775,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "21411665-0ce7-4200-83a1-43ae2e6cbbb3"
             ]
         },
         "The Janitor": {
@@ -34347,6 +34786,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "75c5a4a9-4e4b-4825-9db7-a371899e58b1"
             ]
         },
         "The Magical Woodland E1": {
@@ -34355,6 +34797,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "05f9056b-914e-4810-9a6a-9267249e9bcf"
             ]
         },
         "The Magical Woodland E2": {
@@ -34363,6 +34808,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "03885118-50f5-4b05-b586-07d512a40cbe"
             ]
         },
         "The Magical Woodland E3": {
@@ -34371,6 +34819,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "b5a52c62-47f7-4715-9665-24e6826d88e0"
             ]
         },
         "The Magical Woodland E4": {
@@ -34379,6 +34830,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "fd334e37-e3db-43b7-afd8-010f4e9042f9"
             ]
         },
         "The Magical Woodland E5": {
@@ -34387,6 +34841,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "38580dcf-3da0-469a-b35f-57c2720de3b1"
             ]
         },
         "The Metamorphosis - Audio Book": {
@@ -34395,6 +34852,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "e1164c65-4d03-4112-b6be-866af2700963"
             ]
         },
         "The Moderators S2.01": {
@@ -34403,6 +34863,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "a2ed359c-9462-4159-9aba-10e859ae71bb"
             ]
         },
         "The Moderators S2.02": {
@@ -34411,6 +34874,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "3a6e9627-47fd-40d5-b7ff-f0d9ff78f4ff"
             ]
         },
         "The Moderators S2.03": {
@@ -34419,6 +34885,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "22b33878-8089-4bc7-81c0-c0825ba0d85e"
             ]
         },
         "The Moderators S2.04": {
@@ -34427,6 +34896,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "c79ef837-974d-448e-9e0c-9e563cac847f"
             ]
         },
         "The Moderators S2.05": {
@@ -34435,6 +34907,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "255cccad-36c7-435d-b01e-cf9d7811382e"
             ]
         },
         "The Omega Department S3.01": {
@@ -34443,6 +34918,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "26437711-f5e5-47a7-b958-438e3202449a"
             ]
         },
         "The Omega Department S3.02": {
@@ -34451,6 +34929,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "c30b6008-84c5-413f-836c-ae2f6a0f70b1"
             ]
         },
         "The Omega Department S3.03": {
@@ -34459,6 +34940,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "8b5aafc8-16ad-4a41-8be8-6ca094adb5af"
             ]
         },
         "The Omega Department S3.04": {
@@ -34467,6 +34951,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "ac791ef2-40b8-421c-984b-d8b3258b5833"
             ]
         },
         "The Omega Department S3.05": {
@@ -34475,6 +34962,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "35991256-3806-4d78-a06d-b71c516d193f"
             ]
         },
         "The Omega Department S5.01": {
@@ -34483,6 +34973,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "b6777358-7f94-4104-8c3e-9175dc77faf9"
             ]
         },
         "The Omega Department S5.02": {
@@ -34491,6 +34984,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "23e9dec5-8183-46dc-9f3f-5c5bda49f4ba"
             ]
         },
         "The Omega Department S5.03": {
@@ -34499,6 +34995,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "bd31c750-cb0b-4e80-98e7-4bb71a386d1a"
             ]
         },
         "The Omega Department S5.04": {
@@ -34507,6 +35006,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "6f03e034-4fac-460e-ace6-e86c4e34e791"
             ]
         },
         "The Omega Department S5.05": {
@@ -34515,6 +35017,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "68b564ed-0f80-4f79-a799-67c11797bac6"
             ]
         },
         "The Signs of Satanism": {
@@ -34523,6 +35028,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "7feb80e4-48f6-4ec6-8e17-844c9107695c"
             ]
         },
         "The Thompsons S3.01": {
@@ -34531,6 +35039,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "4638a251-4bbe-4d91-a555-2e46eb790f8c"
             ]
         },
         "The Thompsons S3.02": {
@@ -34539,6 +35050,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "cddde004-4ee4-48dc-8454-83123ad8d534"
             ]
         },
         "The Thompsons S3.03": {
@@ -34547,6 +35061,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "2f5f43fd-8d17-4ef0-ba60-dd4b7591c512"
             ]
         },
         "The Thompsons S3.04": {
@@ -34555,6 +35072,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "cc884f89-a56d-4d8a-9e75-24c417c14276"
             ]
         },
         "The Thompsons S3.05": {
@@ -34563,6 +35083,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "a84da6ea-c350-4304-8746-a84acc059d10"
             ]
         },
         "Thigh Guard": {
@@ -34604,6 +35127,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "fc734b68-487c-46fa-8b73-ddb1450366e0"
             ]
         },
         "Thyme": {
@@ -34716,6 +35242,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "eab285a7-1fd2-4748-9911-0dacfa7b9a40"
             ]
         },
         "Time for Love": {
@@ -34724,6 +35253,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "b8d9e7aa-2a07-4d05-80b8-a4ec3d24b652"
             ]
         },
         "Timer": {
@@ -34937,6 +35469,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "9953e7f7-396c-4400-82d7-0fc24fbfe0b7"
             ]
         },
         "Tissue": {
@@ -35077,7 +35612,7 @@
         },
         "Toolbox": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.Toolbox"
@@ -35181,7 +35716,7 @@
         },
         "Tote Bag": {
             "categories": [
-                "Handheld containers"
+                "type=Baggage"
             ],
             "item_id": [
                 "Base.Tote"
@@ -35196,17 +35731,13 @@
             ]
         },
         "Tote Bag (clothing)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Tote_Clothing"
             ]
         },
         "Tote Bag (dancer)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Bag_Dancer"
             ]
@@ -35220,17 +35751,13 @@
             ]
         },
         "Toy Cap Pistol": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Revolver_CapGun"
             ]
         },
         "Toy Cap Rifle": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Rifle_CapGun"
             ]
@@ -35297,28 +35824,25 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "c915eb17-87d3-416a-9906-9228eae1aa92"
             ]
         },
         "Trailer Trunk (Heavy-Duty Vehicle)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.TrailerTrunk2"
             ]
         },
         "Trailer Trunk (Sports Vehicle)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.TrailerTrunk3"
             ]
         },
         "Trailer Trunk (Standard Vehicle)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.TrailerTrunk1"
             ]
@@ -35329,6 +35853,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "8c204a6e-f1a2-4dd5-a91a-7358acb0d677"
             ]
         },
         "Trapping I: \"Basic Pest Control\"": {
@@ -35425,6 +35952,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "db7deaf2-ddbe-42c8-8fd3-9725d8fdeff3"
             ]
         },
         "Trends in Commodities": {
@@ -35433,6 +35963,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "a5b3ba72-99ab-4813-8dcb-aa269d2e8f84"
             ]
         },
         "Tritium Pistol Sights": {
@@ -35644,9 +36177,7 @@
             ]
         },
         "Tuning Fork": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.TuningFork"
             ]
@@ -35780,9 +36311,7 @@
             ]
         },
         "Twig Broom": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Broom_Twig"
             ]
@@ -35866,6 +36395,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "e3e2d8d9-25a7-4428-87ea-79ea69502fea"
             ]
         },
         "Underpants": {
@@ -35963,6 +36495,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "c7b841fa-89dd-453d-a3f2-e0846a230a70"
             ]
         },
         "VHS": {
@@ -36164,6 +36699,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "a8abf964-1598-43a8-874a-3c10148e8b16"
             ]
         },
         "Wallet": {
@@ -36284,6 +36822,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "5a504f00-584b-4330-9752-b213784097c7"
             ]
         },
         "Wasabi": {
@@ -36300,6 +36841,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "c1d3824b-0e65-4315-90ba-6b8faa4f823f"
             ]
         },
         "Washington High S5.01": {
@@ -36308,6 +36852,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "d8644aea-9694-4234-b40f-a0d780c644e9"
             ]
         },
         "Washington High S5.02": {
@@ -36316,6 +36863,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "3633446b-54f4-463b-9305-45d9c0876d36"
             ]
         },
         "Washington High S5.03": {
@@ -36324,6 +36874,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "c36c34f8-4c6c-4bec-852c-120c20ca9984"
             ]
         },
         "Washington High S5.04": {
@@ -36332,6 +36885,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "47d9170a-fe9d-42f6-8a20-def16f3955b7"
             ]
         },
         "Washington High S5.05": {
@@ -36340,6 +36896,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "b9d78079-738f-4304-906e-8c4d5a5a1f25"
             ]
         },
         "Water Bottle": {
@@ -36404,9 +36963,7 @@
             ]
         },
         "Water Drop": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.WaterDrop"
             ]
@@ -36499,6 +37056,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "a97a0024-144f-4c24-b414-cf77f3d49159"
             ]
         },
         "Welder Mask": {
@@ -36643,6 +37203,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "e9353f2a-3976-4485-96bc-8c758f5fc56f"
             ]
         },
         "Whetstone": {
@@ -36662,9 +37225,7 @@
             ]
         },
         "Whistle": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Whistle"
             ]
@@ -36739,6 +37300,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "b7b8d081-f2a4-4529-b551-53c739cd5219"
             ]
         },
         "Wild Eggs": {
@@ -36923,6 +37487,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "dedd4e83-6e3b-4f4f-9c9b-72a5ed08969d"
             ]
         },
         "Woodcraft E2": {
@@ -36931,6 +37498,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "c2d01da8-8e04-4889-8676-bb633e98df2d"
             ]
         },
         "Woodcraft E3": {
@@ -36939,6 +37509,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "3e9c5cf0-bf40-40eb-bcd7-4fd6c5ae58ca"
             ]
         },
         "Woodcraft E4": {
@@ -36947,6 +37520,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "0627a89a-a32b-4e80-9926-815aa9d22b2b"
             ]
         },
         "Woodcraft E5": {
@@ -36955,6 +37531,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "2bf49f71-0d46-43aa-bbfd-f311e5bda9b2"
             ]
         },
         "Woodcraft E6": {
@@ -36963,6 +37542,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "968591cd-d4aa-4ef1-9632-7771a1f5b9ab"
             ]
         },
         "Woodcraft E7": {
@@ -36971,6 +37553,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "01dedfea-62eb-4ae6-a4bc-5e629b7ba54b"
             ]
         },
         "Wooden Bar Cast Mold": {
@@ -37022,17 +37607,13 @@
             ]
         },
         "Wooden Bucket": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.BucketWood"
             ]
         },
         "Wooden Bucket (large)": {
-            "categories": [
-                "Items"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.BucketLargeWood"
             ]
@@ -37334,6 +37915,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "2b27a1eb-c3e3-42ad-9da5-a077789ca019"
             ]
         },
         "Xmas '91": {
@@ -37342,6 +37926,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "afb8c0f4-884a-4ef7-8321-d518242dbea1"
             ]
         },
         "Xmas Play": {
@@ -37350,6 +37937,9 @@
             ],
             "item_id": [
                 "Base.VHS_Home"
+            ],
+            "rm_guid": [
+                "8903add4-d1a8-4be8-a5f3-c96b2467b6c3"
             ]
         },
         "Yarn": {
@@ -37398,6 +37988,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "620997ad-5f62-4498-b589-8bcd412a7cc1"
             ]
         },
         "You Love Me Too": {
@@ -37406,6 +37999,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "226a3c97-cb71-4cb9-9621-260973b3c67e"
             ]
         },
         "You're Gone": {
@@ -37414,6 +38010,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "4ec05fe5-a783-4c82-9dd8-147be943d662"
             ]
         },
         "Your Smile. Your Kiss.": {
@@ -37422,6 +38021,9 @@
             ],
             "item_id": [
                 "Base.Disc_Retail"
+            ],
+            "rm_guid": [
+                "89108e07-fc70-4eec-a267-790d6f4b9831"
             ]
         },
         "Yoyo": {
@@ -37438,6 +38040,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "b68b207a-026e-4af2-9227-38277df51e41"
             ]
         },
         "Z-Squad S2.02": {
@@ -37446,6 +38051,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "4255a86b-d9f7-45e3-bf9f-060c8a35858d"
             ]
         },
         "Z-Squad S2.03": {
@@ -37454,6 +38062,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "4f3f30d6-df77-4e85-b1cb-4ca7e67addd9"
             ]
         },
         "Z-Squad S2.04": {
@@ -37462,6 +38073,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "72f5baec-e382-48ca-817a-594c619d35c8"
             ]
         },
         "Z-Squad S2.05": {
@@ -37470,6 +38084,9 @@
             ],
             "item_id": [
                 "Base.VHS_Retail"
+            ],
+            "rm_guid": [
+                "ac4302bc-c9c1-433a-a8cd-4609d0bde968"
             ]
         },
         "Zip Ties": {
@@ -37536,9 +38153,7 @@
             ]
         },
         "Aaaaah! Painting": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_PaintingAaaaah"
             ],
@@ -37614,9 +38229,7 @@
             ]
         },
         "Amphora": {
-            "categories": [
-                "Building"
-            ],
+            "categories": [],
             "sprite_id": [
                 "crafted_04_32",
                 "crafted_04_34"
@@ -37747,9 +38360,7 @@
             ]
         },
         "Bank Counter": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -37816,9 +38427,7 @@
             ]
         },
         "Bar Stool": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -37882,9 +38491,7 @@
             ]
         },
         "Barg-n-Clothes Sign 2": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.location_shop_mall_signs_01_136"
             ],
@@ -38063,9 +38670,7 @@
             ]
         },
         "Beige Rotary Phone": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_BeigeRotaryPhone"
             ],
@@ -38127,9 +38732,7 @@
             ]
         },
         "Bench Grinder": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_BenchGrinder"
             ],
@@ -38177,9 +38780,7 @@
             ]
         },
         "Big Wall Corner Shelves": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38347,9 +38948,7 @@
             ]
         },
         "Black Grand Piano": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38385,9 +38984,7 @@
             ]
         },
         "Black Modern Phone": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_BlackModernPhone"
             ],
@@ -38413,9 +39010,7 @@
             ]
         },
         "Black Rotary Phone": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_BlackRotaryPhone"
             ],
@@ -38486,9 +39081,7 @@
             ]
         },
         "Blue Cheap Sleeping Bag": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SleepingBag_Cheap_Blue"
             ],
@@ -38559,9 +39152,7 @@
             ]
         },
         "Blue Cubicle": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38570,9 +39161,7 @@
             ]
         },
         "Blue Cubicle Corner": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38632,9 +39221,7 @@
             ]
         },
         "Blue Hospital Curtain A": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38644,9 +39231,7 @@
             ]
         },
         "Blue Hospital Curtain B": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38656,9 +39241,7 @@
             ]
         },
         "Blue Hospital Curtain C": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38668,9 +39251,7 @@
             ]
         },
         "Blue Hospital Curtain D": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38694,9 +39275,7 @@
             ]
         },
         "Blue Magazine Shelf": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38738,9 +39317,7 @@
             ]
         },
         "Blue Plaid Sleeping Bag": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SleepingBag_BluePlaid"
             ],
@@ -38945,9 +39522,7 @@
             ]
         },
         "Bowling Rack": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38964,9 +39539,7 @@
             ]
         },
         "Branch Cross": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38978,9 +39551,7 @@
             ]
         },
         "Branch Shelves": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -38992,9 +39563,7 @@
             ]
         },
         "Branch Stool": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39004,9 +39573,7 @@
             ]
         },
         "Branch Workbench": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39018,9 +39585,7 @@
             ]
         },
         "Brazier": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_Brazier"
             ],
@@ -39045,9 +39610,7 @@
             ]
         },
         "Brick Planter": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39093,9 +39656,7 @@
             ]
         },
         "Brown High Quality Sleeping Bag": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SleepingBag_HighQuality_Brown"
             ],
@@ -39229,9 +39790,7 @@
             ]
         },
         "Butter Churn": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39289,9 +39848,7 @@
             ]
         },
         "Camo Sleeping Bag": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SleepingBag_Camo"
             ],
@@ -39303,9 +39860,7 @@
             ]
         },
         "Cardboard Box": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_CardboardBox"
             ],
@@ -39371,9 +39926,7 @@
             ]
         },
         "Cedar Round Table": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_RoundTable"
             ],
@@ -39382,9 +39935,7 @@
             ]
         },
         "Center Sign": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39421,9 +39972,7 @@
             ]
         },
         "Charcoal Burner": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39460,9 +40009,7 @@
             ]
         },
         "Chest Freezer": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_ChestFreezer"
             ],
@@ -39701,9 +40248,7 @@
             ]
         },
         "Circular Target": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39782,9 +40327,7 @@
             ]
         },
         "Coffee Low Sign": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -39832,9 +40375,7 @@
             ]
         },
         "Complex Loom": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40010,9 +40551,7 @@
             ]
         },
         "Crafted Oven": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40032,9 +40571,7 @@
             ]
         },
         "Crude Hand Press": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40044,9 +40581,7 @@
             ]
         },
         "Crude Metal Corner Counter": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40058,9 +40593,7 @@
             ]
         },
         "Crude Metal Counter": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40072,9 +40605,7 @@
             ]
         },
         "Crude Metal Wall Shelves": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40086,9 +40617,7 @@
             ]
         },
         "Crude Tall Locker": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40097,9 +40626,7 @@
             ]
         },
         "Crude Wall Locker": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40589,9 +41116,7 @@
             ]
         },
         "Drum Stool": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_DrumStool"
             ],
@@ -40600,9 +41125,7 @@
             ]
         },
         "Electric Blower Forge": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_ElectricBlowerForge"
             ],
@@ -40623,9 +41146,7 @@
             ]
         },
         "Employee Bank Counter": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40637,9 +41158,7 @@
             ]
         },
         "Empty Military Barrier": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40659,9 +41178,7 @@
             ]
         },
         "Empty Water Dispenser": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40792,9 +41309,7 @@
             ]
         },
         "Fancy Distaff": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -40838,9 +41353,7 @@
             ]
         },
         "Fancy Metal Crate": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41013,9 +41526,7 @@
             ]
         },
         "Flat Coffin": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_FlatCoffin"
             ],
@@ -41154,9 +41665,7 @@
             ]
         },
         "Fossoil Low Shelves": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41242,9 +41751,7 @@
             ]
         },
         "Gas2Go Low Shelves": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41294,9 +41801,7 @@
             ]
         },
         "Generic Shop Gun Shelves": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41306,9 +41811,7 @@
             ]
         },
         "Generic Shop Shelves": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41561,9 +42064,7 @@
             ]
         },
         "Gray Smooth Tiles": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.floors_interior_tilesandwood_01_18"
             ],
@@ -41572,9 +42073,7 @@
             ]
         },
         "Gray Tiles": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.floors_interior_tilesandwood_01_30"
             ],
@@ -41583,9 +42082,7 @@
             ]
         },
         "Green 2 Cheap Sleeping Bag": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SleepingBag_Cheap_Green2"
             ],
@@ -41619,9 +42116,7 @@
             ]
         },
         "Green Cheap Sleeping Bag": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SleepingBag_Cheap_Green"
             ],
@@ -41776,9 +42271,7 @@
             ]
         },
         "Green Plaid Sleeping Bag": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SleepingBag_GreenPlaid"
             ],
@@ -41801,9 +42294,7 @@
             ]
         },
         "Green Sleeping Bag": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SleepingBag_Green"
             ],
@@ -41870,9 +42361,7 @@
             ]
         },
         "Greene's Grocery Display Counter": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41913,9 +42402,7 @@
             ]
         },
         "Grey Cubicle": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41924,9 +42411,7 @@
             ]
         },
         "Grey Cubicle Corner": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41981,9 +42466,7 @@
             ]
         },
         "Grey Squares": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -41992,9 +42475,7 @@
             ]
         },
         "Grinding Slab": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42003,9 +42484,7 @@
             ]
         },
         "Grindstone": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42042,9 +42521,7 @@
             ]
         },
         "Guitar Amplifier": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_GuitarAmplifier"
             ],
@@ -42056,9 +42533,7 @@
             ]
         },
         "Guitar Speaker Cabinet": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_BlackSpeakerCabinet"
             ],
@@ -42070,9 +42545,7 @@
             ]
         },
         "Gym Mat": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_GymnMat"
             ],
@@ -42107,9 +42580,7 @@
             ]
         },
         "Hair Studio Sign": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42119,9 +42590,7 @@
             ]
         },
         "Hand Press": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42192,9 +42661,7 @@
             ]
         },
         "Heckle Comb": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42230,9 +42697,7 @@
             ]
         },
         "Hide Sleeping Bag": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SleepingBag_Hide"
             ],
@@ -42362,9 +42827,7 @@
             ]
         },
         "Industrial Sink": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_IndustrialSink"
             ],
@@ -42450,9 +42913,7 @@
             ]
         },
         "Key Duplicator": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_KeyDuplicator"
             ],
@@ -42464,9 +42925,7 @@
             ]
         },
         "Kick Drum": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_KickDrum"
             ],
@@ -42630,9 +43089,7 @@
             ]
         },
         "Large Drying Rack": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42696,9 +43153,7 @@
             ]
         },
         "Large Low Shelves": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.furniture_shelving_01_23"
             ],
@@ -42747,9 +43202,7 @@
             ]
         },
         "Large Metal Trough": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42885,9 +43338,7 @@
             ]
         },
         "Large Simple Drying Rack": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -42957,9 +43408,7 @@
             ]
         },
         "Large Wooden Table": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -43120,9 +43569,7 @@
             ]
         },
         "LightCharcoal Burner": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -43183,9 +43630,7 @@
             ]
         },
         "Log Bench": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -43227,9 +43672,7 @@
             ]
         },
         "Long Branch Low Table": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -43363,9 +43806,7 @@
             ]
         },
         "Low Hide Covered Stool": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -43400,9 +43841,7 @@
             ]
         },
         "Low Shelves": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -43412,9 +43851,7 @@
             ]
         },
         "Low Stool": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -43465,9 +43902,7 @@
             ]
         },
         "Mahogany Stool": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_WoodenStool"
             ],
@@ -43583,9 +44018,7 @@
             ]
         },
         "Mama McFudgington's Sign": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.location_shop_mall_signs_01_64"
             ],
@@ -43783,9 +44216,7 @@
             ]
         },
         "Medium Drying Rack": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44065,9 +44496,7 @@
             ]
         },
         "Modern Pottery Wheel": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44115,9 +44544,7 @@
             ]
         },
         "Motel Counter": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44249,9 +44676,7 @@
             ]
         },
         "Oak Employee Bank Counter": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44287,9 +44712,7 @@
             ]
         },
         "Oak bank Counter": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44563,9 +44986,7 @@
             ]
         },
         "Pallet": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44651,9 +45072,7 @@
             ]
         },
         "Patient Chair": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44719,9 +45138,7 @@
             ]
         },
         "Picnic Table": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.camping_01_12"
             ],
@@ -44799,9 +45216,7 @@
             ]
         },
         "Pile o' Crepe Floor": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -44972,9 +45387,7 @@
             ]
         },
         "Plastic Chair": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_PlasticChair"
             ],
@@ -45098,9 +45511,7 @@
             ]
         },
         "Property Sign": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_SignArmy"
             ],
@@ -45258,9 +45669,7 @@
             ]
         },
         "Red Carpet": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45283,9 +45692,7 @@
             ]
         },
         "Red Comfy Couch": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45350,9 +45757,7 @@
             ]
         },
         "Red Magazine Shelf": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45471,9 +45876,7 @@
             ]
         },
         "Red Plaid Sleeping Bag": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SleepingBag_RedPlaid"
             ],
@@ -45485,9 +45888,7 @@
             ]
         },
         "Red Rotary Phone": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_RedRotaryPhone"
             ],
@@ -45553,9 +45954,7 @@
             ]
         },
         "Rest Area South Road Sign": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45588,9 +45987,7 @@
             ]
         },
         "Ripple Comb": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45614,9 +46011,7 @@
             ]
         },
         "Road Block": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_RoadBarrier"
             ],
@@ -45649,9 +46044,7 @@
             ]
         },
         "Rocking Chair": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45752,9 +46145,7 @@
             ]
         },
         "Rug": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -45775,9 +46166,7 @@
             ]
         },
         "Sale Sign": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_SaleSign"
             ],
@@ -45801,9 +46190,7 @@
             ]
         },
         "Salt Lick": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_SaltLick"
             ],
@@ -45836,9 +46223,7 @@
             ]
         },
         "Scarecrow": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_Scarecrow"
             ],
@@ -45847,9 +46232,7 @@
             ]
         },
         "Scutching Board": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46018,9 +46401,7 @@
             ]
         },
         "Silhouette Target": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46044,9 +46425,7 @@
             ]
         },
         "Simple Distaff": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46055,9 +46434,7 @@
             ]
         },
         "Simple Loom": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46067,9 +46444,7 @@
             ]
         },
         "Simple Pottery Wheel": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46079,9 +46454,7 @@
             ]
         },
         "Simple Small Drying Rack": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46137,9 +46510,7 @@
             ]
         },
         "Small Animal Trough": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46208,9 +46579,7 @@
             ]
         },
         "Small Drying Rack": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46248,9 +46617,7 @@
             ]
         },
         "Small Metal Trough": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46391,9 +46758,7 @@
             ]
         },
         "Snare Drum": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_SnareDrum"
             ],
@@ -46413,9 +46778,7 @@
             ]
         },
         "Softening Beam": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46437,9 +46800,7 @@
             ]
         },
         "Spiffo Spiffo Sleeping Bag": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.SleepingBag_Spiffo"
             ],
@@ -46626,9 +46987,7 @@
             ]
         },
         "Spinning Wheel": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -46700,9 +47059,7 @@
             ]
         },
         "Stag Antlers": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Antlers_Wall"
             ],
@@ -46799,9 +47156,7 @@
             ]
         },
         "Stone Quern": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47004,9 +47359,7 @@
             ]
         },
         "Tannin Barrel": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47148,9 +47501,7 @@
             ]
         },
         "Tom Drum": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_TomDrum"
             ],
@@ -47305,9 +47656,7 @@
             ]
         },
         "Type A Blue Cubicle": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47317,9 +47666,7 @@
             ]
         },
         "Type A Gray Cubicle": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47329,9 +47676,7 @@
             ]
         },
         "Type B Blue Cubicle": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47341,9 +47686,7 @@
             ]
         },
         "Type B Gray Cubicle": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47379,9 +47722,7 @@
             ]
         },
         "Upright Coffin": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_UprightCoffin"
             ],
@@ -47443,9 +47784,7 @@
             ]
         },
         "Victorian 1 Chair": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47457,9 +47796,7 @@
             ]
         },
         "Victorian 1 Mirror": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47471,9 +47808,7 @@
             ]
         },
         "Victorian 2 Chair": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47485,9 +47820,7 @@
             ]
         },
         "Victorian 3 Chair": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47499,9 +47832,7 @@
             ]
         },
         "Victorian 4 Chair": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47513,9 +47844,7 @@
             ]
         },
         "Victorian 5 Chair": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47527,9 +47856,7 @@
             ]
         },
         "Victorian 6 Chair": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47541,9 +47868,7 @@
             ]
         },
         "Victorian C1 Couch": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47555,9 +47880,7 @@
             ]
         },
         "Victorian C2 Couch": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47569,9 +47892,7 @@
             ]
         },
         "Victorian C3 Couch": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47583,9 +47904,7 @@
             ]
         },
         "Victorian C4 Couch": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47597,9 +47916,7 @@
             ]
         },
         "Victorian C5 Couch": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47611,9 +47928,7 @@
             ]
         },
         "Victorian C6 Couch": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -47987,9 +48302,7 @@
             ]
         },
         "White Drawers": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_WhiteFancyDrawers"
             ],
@@ -48163,9 +48476,7 @@
             ]
         },
         "White Modern Phone": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_WhiteModernPhone"
             ],
@@ -48199,9 +48510,7 @@
             ]
         },
         "White Rotary Phone": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_WhiteRotaryPhone"
             ],
@@ -48509,9 +48818,7 @@
             ]
         },
         "Wooden Speaker Cabinet": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Base.Mov_WoodSpeakerCabinet"
             ],
@@ -48523,9 +48830,7 @@
             ]
         },
         "Wooden Stool": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
@@ -48706,9 +49011,7 @@
             ]
         },
         "Zippee Display Counter": {
-            "categories": [
-                "Tiles"
-            ],
+            "categories": [],
             "item_id": [
                 "Moveables.{sprite_id}"
             ],
