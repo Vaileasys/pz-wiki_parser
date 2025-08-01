@@ -5644,7 +5644,8 @@
         },
         "Brochure": {
             "categories": [
-                "Junk"
+                "Junk",
+                "Literature"
             ],
             "item_id": [
                 "Base.Brochure"
@@ -13324,7 +13325,8 @@
         },
         "Flier: Nolan's Used Cars": {
             "categories": [
-                "Junk"
+                "Junk",
+                "Literature"
             ],
             "item_id": [
                 "Base.Flier_Nolans"
