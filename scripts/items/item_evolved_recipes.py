@@ -1,18 +1,4 @@
 #!/usr/bin/env python3
-"""
-Project Zomboid Wiki Evolved Recipes Information Display
-
-This script displays comprehensive information about evolved recipes in Project Zomboid.
-It uses the EvolvedRecipe object to show detailed information about each recipe including
-properties, compatible items, and recipe mechanics.
-
-The script displays:
-- Basic recipe information (name, ID, script type)
-- Recipe properties (cookable, hidden, max items, etc.)
-- Result and base items
-- Compatible ingredients with their properties
-- Recipe mechanics and settings
-"""
 
 import os
 from tqdm import tqdm
@@ -72,6 +58,14 @@ def format_recipe_info(recipe):
     # Template and Sound
     if recipe.template:
         lines.append(f"**Template:** {recipe.template}")
+        # Check if template recipe exists and show its info
+        if EvolvedRecipe.exists(recipe.template):
+            template_recipe = EvolvedRecipe(recipe.template)
+            lines.append(
+                f"**Template Recipe:** {template_recipe.name} ({recipe.template})"
+            )
+        else:
+            lines.append(f"**Template Recipe:** Unknown ({recipe.template})")
     if recipe.add_sound:
         lines.append(f"**Add Sound:** {recipe.add_sound}")
     lines.append("")
@@ -79,7 +73,10 @@ def format_recipe_info(recipe):
     # Compatible Items
     if recipe.items_list:
         lines.append("**Compatible Items:**")
-        for item_id, item_data in recipe.items_list.items():
+
+        # Simply list all compatible items, as the template inheritance is now handled
+        # at the data level in the EvolvedRecipe._load_evolved_recipes method
+        for item_id, item_data in sorted(recipe.items_list.items()):
             item = item_data["item"]
             hunger = item_data["hunger"]
             cooked = item_data["cooked"]
@@ -140,11 +137,13 @@ def main():
     cookable_count = sum(1 for r in recipes.values() if r.cookable)
     hidden_count = sum(1 for r in recipes.values() if r.hidden)
     spice_count = sum(1 for r in recipes.values() if r.can_add_spices_empty)
+    template_count = sum(1 for r in recipes.values() if r.template)
 
     summary_lines.append("**Statistics:**")
     summary_lines.append(f"- Cookable Recipes: {cookable_count}")
     summary_lines.append(f"- Hidden Recipes: {hidden_count}")
     summary_lines.append(f"- Can Add Spices Empty: {spice_count}")
+    summary_lines.append(f"- Recipes with Templates: {template_count}")
     summary_lines.append("")
 
     # Recipe list
@@ -173,10 +172,3 @@ def main():
 
     echo.success(f"Evolved recipe information written to '{ROOT_DIR}'")
     echo.info(f"Summary file: {os.path.join(ROOT_DIR, summary_file)}")
-
-
-if __name__ == "__main__":
-    from scripts.core.language import Language
-
-    Language.set("en")
-    main()

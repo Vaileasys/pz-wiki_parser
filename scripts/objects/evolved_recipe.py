@@ -39,6 +39,7 @@ class EvolvedRecipe:
         The underlying script data is parsed from `evolvedrecipe` script blocks,
         and item links are created based on references from the `Item` class.
     """
+
     _recipes = None
     _instances = {}
 
@@ -53,19 +54,19 @@ class EvolvedRecipe:
         instance = super().__new__(cls)
         cls._instances[recipe_id] = instance
         return instance
-    
+
     def __init__(self, recipe_id: str):
         """Initialise an EvolvedRecipe instance using the provided recipe ID."""
         if hasattr(self, "recipe_id"):
             return
-        
-        if '.' in recipe_id:
-            self.recipe_id = recipe_id.split('.', 1)
+
+        if "." in recipe_id:
+            self.recipe_id = recipe_id.split(".", 1)
         else:
             self.recipe_id = recipe_id
 
-        self.data:dict = EvolvedRecipe._recipes.get(recipe_id, {})
-        
+        self.data: dict = EvolvedRecipe._recipes.get(recipe_id, {})
+
         self._items_list = {}
 
     def __getitem__(self, key):
@@ -77,30 +78,56 @@ class EvolvedRecipe:
         return key in self.data
 
     def __repr__(self):
-        return f'<EvolvedRecipe {self.recipe_id}>'
+        return f"<EvolvedRecipe {self.recipe_id}>"
 
     @classmethod
     def _load_evolved_recipes(cls):
         """Internal method to load all evolved recipes from script data and map associated items."""
         raw_data = script_parser.extract_script_data("evolvedrecipe")
         cls._recipes = {}
+        # First, build the recipe data dictionary
         for full_id, data in raw_data.items():
             if full_id == "version":
                 continue
             id_type = full_id.split(".", 1)[-1]
             cls._recipes[id_type] = data
 
+        # Create a mapping of template names to derived recipes
+        template_to_recipes = {}
+        for recipe_id, data in cls._recipes.items():
+            template_name = data.get("Template")
+            if template_name:
+                if template_name not in template_to_recipes:
+                    template_to_recipes[template_name] = []
+                template_to_recipes[template_name].append(recipe_id)
+
+        # Process item associations
         for item in Item.all().values():
             for recipe_id, value in item.evolved_recipe.items():
                 hunger, cooked = value
-                recipe = cls(recipe_id)
 
-                recipe._items_list[item.item_id] = {
-                    "item": item,
-                    "hunger": hunger,
-                    "cooked": cooked,
-                    "spice": item.spice
-                }
+                # Add to the directly referenced recipe
+                if cls.exists(recipe_id):
+                    recipe = cls(recipe_id)
+                    recipe._items_list[item.item_id] = {
+                        "item": item,
+                        "hunger": hunger,
+                        "cooked": cooked,
+                        "spice": item.spice,
+                    }
+
+                # Add to any recipes that use this recipe as a template
+                if recipe_id in template_to_recipes:
+                    for derived_recipe_id in template_to_recipes[recipe_id]:
+                        derived_recipe = cls(derived_recipe_id)
+                        # Only add if not already directly associated
+                        if item.item_id not in derived_recipe._items_list:
+                            derived_recipe._items_list[item.item_id] = {
+                                "item": item,
+                                "hunger": hunger,
+                                "cooked": cooked,
+                                "spice": item.spice,
+                            }
 
     @classmethod
     def all(cls):
@@ -176,7 +203,9 @@ class EvolvedRecipe:
             try:
                 self._page = self.result_item.page
             except:
-                echo.error(f"Couldn't find a page for {self}: ResultItem is '{self.get("ResultItem")}'")
+                echo.error(
+                    f"Couldn't find a page for {self}: ResultItem is '{self.get('ResultItem')}'"
+                )
                 self._page = "Evolved recipes"
         return self._page
 
@@ -205,7 +234,7 @@ class EvolvedRecipe:
         if not hasattr(self, "_wiki_link"):
             self._wiki_link = util.link(self.page, self.name)
         return self._wiki_link
-    
+
     @property
     def max_items(self):
         return self.get("MaxItems", 0)
@@ -251,11 +280,14 @@ class EvolvedRecipe:
     @property
     def minimum_water(self) -> float:
         return self.get("MinimumWater", 0.0)
-    
+
     @property
     def items_list(self) -> dict:
         """
         Return a dictionary of items that can be used in this evolved recipe.
+
+        This includes both directly associated items and items inherited from the template
+        recipe (if this recipe has a template parameter).
 
         Each key is an item ID (str), and each value is a dictionary containing:
             - "item" (Item): The `Item` object reference.
