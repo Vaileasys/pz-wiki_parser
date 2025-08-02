@@ -197,7 +197,7 @@ menu_structure = {
                 "description": "Parse game scripts.",
             },
             "2": {
-                "module": "roomdefine",
+                "module": "scripts.misc.room_define",
                 "name": "Room definitions",
                 "description": "Create roomdef item page.",
             },
@@ -205,6 +205,11 @@ menu_structure = {
                 "module": "scripts.parser.radio_parser",
                 "name": "Radio transcripts",
                 "description": "Generate radio transcripts.",
+            },
+            "4": {
+                "module": "scripts.misc.spawn_points",
+                "name": "Spawn points",
+                "description": "Parse spawn points file.",
             },
         },
     },
