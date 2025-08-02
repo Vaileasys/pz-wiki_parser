@@ -55,11 +55,6 @@ menu_structure = {
                 "name": "Item article",
                 "description": "Generate articles for items.",
             },
-            "9": {
-                "module": "scripts.items.item_evolved_recipes",
-                "name": "Evolved recipes info",
-                "description": "Display comprehensive information about evolved recipes.",
-            },
         },
     },
     "2": {
@@ -119,7 +114,7 @@ menu_structure = {
                 "description": "Process teached recipes.",
             },
             "4": {
-                "module": "scripts.recipes.evolvedrecipe",
+                "module": "scripts.recipes.evolved_recipes",
                 "name": "Evolved recipes",
                 "description": "Process evolved recipes.",
             },
