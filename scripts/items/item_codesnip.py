@@ -58,7 +58,7 @@ def process_file(file_path, version, output_dir):
 
 def main():
     game_version = Version.get()
-    output_dir = os.path.join("output", "codesnips")
+    output_dir = os.path.join("output", "en", "item", "codesnips")
     resources_dir = os.path.join("resources", "scripts")
 
     if not os.path.exists(output_dir):

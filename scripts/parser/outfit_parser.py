@@ -238,9 +238,10 @@ def main():
     """Main function to process XML files, generate JSON, and create articles."""
     guid_table_path = os.path.join("resources", "fileGuidTable.xml")
     outfits_xml_path = os.path.join("resources", "clothing", "clothing.xml")
-    json_output_dir = os.path.join("output", "outfits", "json")
-    articles_output_dir = os.path.join("output", "outfits", "articles")
-    name_table_output = os.path.join("output", "outfits", "name_table.txt")
+    json_output_dir = os.path.join("data", "cache")
+
+    articles_output_dir = os.path.join("output", "en", "outfits", "articles")
+    name_table_output = os.path.join("output", "en", "outfits", "name_table.txt")
 
     os.makedirs(json_output_dir, exist_ok=True)
     outfits_json_path = os.path.join(json_output_dir, "outfits.json")

@@ -18,7 +18,7 @@ TABLE_CAPTION = '|+ style="white-space:nowrap; border:none; font-weight:normal; 
 TABLE_FOOTER = "|}"
 
 distribution_data = distribution_container_parser.get_distribution_data()
-output_dir = Path(OUTPUT_LANG_DIR.format(language_code=Language.get())) / "container_contents"
+output_dir = Path(OUTPUT_LANG_DIR.format(language_code=Language.get())) / "item" / "container_contents"
 
 
 def get_probabilities(container_data):

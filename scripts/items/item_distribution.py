@@ -182,8 +182,8 @@ def process_json(file_paths):
     for file_key, count in item_counts.items():
         print(f"Total items found in {file_key}: {count}")
 
-    os.makedirs(os.path.join("output", "distributions"), exist_ok=True)
-    with open(os.path.join("output", "distributions", "Item_list.txt"), "w") as output_file:
+    os.makedirs(os.path.join("output", "en", "item", "distributions"), exist_ok=True)
+    with open(os.path.join("output", "en", "item", "distributions", "Item_list.txt"), "w") as output_file:
         for item in sorted(item_list):
             output_file.write(item + "\n")
 
@@ -850,7 +850,7 @@ def build_tables(category_items, index):
         
     Output files to data_files directory with category-based filenames.
     """
-    output_dir = os.path.join("output", "distributions", "data_files")
+    output_dir = os.path.join("output", "en", "item", "distributions", "data_files")
     os.makedirs(output_dir, exist_ok=True)
     
     # Animal data mapping for butchering information
@@ -1777,8 +1777,8 @@ def main():
     # Calculate missing items
     print("Calculating missing items...")
     itemname_path = os.path.join("resources", "Translate", "EN", "ItemName_EN.txt")
-    itemlist_path = os.path.join("output", "distributions", "Item_list.txt")
-    missing_items_path = os.path.join("output", "distributions", "missing_items.txt")
+    itemlist_path = os.path.join("output", "en", "item", "distributions", "Item_list.txt")
+    missing_items_path = os.path.join("output", "en", "item", "distributions", "missing_items.txt")
 
     calculate_missing_items(itemname_path, itemlist_path, missing_items_path)
     print("Script completed successfully.")

@@ -191,7 +191,7 @@ def get_item(item_id):
 def write_to_file(data):
     i = 0
     language_code = Language.get()
-    output_dir = os.path.join("output", language_code, "body_parts")
+    output_dir = os.path.join("output", language_code, "item", "body_parts")
     os.makedirs(output_dir, exist_ok=True)
 
     for item_id, body_parts in data.items():

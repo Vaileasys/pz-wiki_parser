@@ -10,7 +10,7 @@ from scripts.core.constants import ITEM_DIR
 from scripts.objects.item import Item
 from scripts.utils import util, echo
 
-ROOT_DIR = os.path.join(ITEM_DIR, "consumables")
+ROOT_DIR = os.path.join(ITEM_DIR, "consumable_properties")
 
 
 def get_variant(item: Item, variant: str = None):
