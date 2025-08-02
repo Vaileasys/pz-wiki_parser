@@ -12,6 +12,7 @@ CONFIG_DEFAULTS = {
         "game_directory": 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\ProjectZomboid',
         "zomboid_decompiler": '', # path for the ZomboidDecompiler.bat
         "pywikibot": '', # path for the pywikibot main/run python file
+        "max_workers": '' # number of max workers for multithreading
     }
 }
 
@@ -169,6 +170,16 @@ def get_pywikibot() -> str:
     return get(key='pywikibot', section='Settings')
 
 
+def get_max_workers():
+    """
+    Get the `max_workers` setting.
+
+    Returns:
+        str: Number of max workers.
+    """
+    return util.convert_int(get(key='max_workers', section='Settings'))
+
+
 def set(key, value, section='Settings'):
     """
     Update a config value and write it to the config file.
@@ -258,6 +269,16 @@ def set_pywikibot(value):
         value (str): New pywikibot path.
     """
     set('pywikibot', value)
+
+
+def set_max_workers(value):
+    """
+    Set the `max_workers` setting.
+
+    Args:
+        value (str): New number of max workers.
+    """
+    set('max_workers', value)
 
 
 def main():
