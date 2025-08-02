@@ -190,6 +190,11 @@ menu_structure = {
                 "name": "External processes",
                 "description": "Run external processes, such as ZomboidDecompiler and pywikibot (requires setup).",
             },
+            "4": {
+                "module": "scripts.tools.diff",
+                "name": "Version differences",
+                "description": "Generate a diff between 2 versions of the game, showing line-by-line differences.",
+            },
         },
     },
     "8": {

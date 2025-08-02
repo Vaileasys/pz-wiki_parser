@@ -16,6 +16,7 @@ TABLES_DIR = os.path.join(RESOURCE_DIR, "tables")
 
 # Output directories
 LOGGING_DIR = os.path.join(OUTPUT_DIR, "logging")
+DIFF_DIR = os.path.join(OUTPUT_DIR, "diffs")
 
 OUTPUT_LANG_DIR = os.path.join(OUTPUT_DIR, "{language_code}") # Assign a language code with 'OUTPUT_LANG_DIR.format(language_code=Language.get())'
 VEHICLE_DIR = os.path.join(OUTPUT_LANG_DIR, "vehicle")

@@ -5,7 +5,7 @@ from pathlib import Path
 from scripts.core.file_loading import get_script_files, read_file
 from scripts.core.language import Translate
 from scripts.core.cache import save_cache, load_cache
-from scripts.core.constants import PBAR_FORMAT
+from scripts.core.constants import CACHE_DIR, PBAR_FORMAT, DIFF_DIR
 from scripts.core.version import Version
 from scripts.core import config_manager as config
 from scripts.parser.recipe_parser import parse_recipe_block, parse_construction_recipe
@@ -430,6 +430,69 @@ def parse_item_mapper(lines: list[str], block_id: str = "Unknown") -> dict:
         mapper[input_] = output
 
     return mapper
+
+
+## ------------------------- Compare version changes ------------------------- ##
+
+def compare_script_versions(script_type: str = None):
+    """
+    Compares current script data against the cached version(s).
+    If script_type is empty, runs for all cached types.
+    """
+    def run_comparison(stype: str):
+        old_data, old_version = load_cache(f"parsed_{stype}_data.json", f"{stype}", get_version=True)
+        if not old_data:
+            echo.warning(f"No previous version found for '{stype}'. Skipping.")
+            return
+
+        new_data = extract_script_data(stype, use_cache=False, cache_result=False)
+
+        result = {
+            "Added": [],
+            "Removed": [],
+            "Changes": {}
+        }
+
+        old_ids = set(old_data.keys())
+        new_ids = set(new_data.keys())
+
+        result["New"] = sorted(list(new_ids - old_ids))
+        result["Removed"] = sorted(list(old_ids - new_ids))
+
+        for key in sorted(old_ids & new_ids):
+            old_entry = old_data[key]
+            new_entry = new_data[key]
+
+            changes = {}
+            all_keys = set(old_entry.keys()) | set(new_entry.keys())
+            for prop in all_keys:
+                old_val = old_entry.get(prop)
+                new_val = new_entry.get(prop)
+                if old_val != new_val:
+                    changes[prop] = {"old": old_val, "new": new_val}
+
+            if changes:
+                result["Changes"][key] = changes
+
+        # Don't save if empty
+        if not result["New"] and not result["Removed"] and not result["Changes"]:
+            echo.info(f"No differences found for '{stype}'. Skipping diff file.")
+            return
+
+        diff_filename = f"diff_{stype}_{old_version}_to_{Version.get()}.json"
+        save_cache(result, diff_filename, data_dir=DIFF_DIR)
+        echo.success(f"Saved diff for '{stype}' → {diff_filename}")
+
+    # Run for one type
+    if script_type:
+        run_comparison(script_type)
+        return
+
+    # Run for all existing parsed_*_data.json files
+    for path in Path(CACHE_DIR).glob("parsed_*_data.json"):
+        match = re.match(r"parsed_(.+?)_data\.json", path.name)
+        if match:
+            run_comparison(match.group(1))
 
 
 ## ------------------------- Process Values ------------------------- ##
@@ -955,6 +1018,7 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
 
 def main(run_directly=False):
     menu = {
+        "0": {"script_type": "", "desc": "Run all available script types."},
         "1": {"script_type": "item", "desc": "Game items like tools, food, and materials."},
         "2": {"script_type": "fluid", "desc": "Liquids, like water or fuel."},
         "3": {"script_type": "vehicle", "desc": "Vehicles and their properties."},
@@ -977,7 +1041,7 @@ def main(run_directly=False):
 
     while True:
         for key, value in menu.items():
-            print(f"{key}: {value.get('script_type')} - {value.get('desc')}")
+            print(f"{key}: {value.get('script_type') or 'ALL'} - {value.get('desc')}")
         print("Q: Quit" if run_directly else "B: Back")
         option = input("Enter a script type or select an option.\n> ")
 
@@ -988,9 +1052,16 @@ def main(run_directly=False):
         else:
             script_type = option
 
-        echo.info(f"Processing '{script_type}'...")
-
-        extract_script_data(script_type)
+        if script_type == "":
+            echo.info("Processing all script types...")
+            for key, value in menu.items():
+                stype = value["script_type"]
+                if stype:  # Skip "0"
+                    echo.info(f"Processing '{stype}'...")
+                    extract_script_data(stype)
+        else:
+            echo.info(f"Processing '{script_type}'...")
+            extract_script_data(script_type)
 
 if __name__ == "__main__":
     main(run_directly=True)

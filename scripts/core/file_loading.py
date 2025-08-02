@@ -8,6 +8,9 @@ Provides utilities for mapping, locating, reading, and writing game-related file
 import os
 import shutil
 from pathlib import Path
+import hashlib
+import json
+
 from scripts.core import config_manager as config
 from scripts.core.constants import OUTPUT_LANG_DIR, PROJECT_ROOT
 from scripts.core.language import Language
@@ -183,6 +186,7 @@ def get_game_file_map() -> dict:
         _game_file_map_cache = map_game_files()
     return _game_file_map_cache
 
+
 ## -------------------- Get files -------------------- ##
 
 def get_files_by_type(filenames: str | list[str] = None, media_type: str = "scripts", prefer: str = None, prefix: str = None) -> list[str]:
@@ -305,9 +309,29 @@ def get_clothing_path(name: str, media_type: str = "clothing", prefer: str = Non
     return get_abs_path_by_type(name, media_type=media_type, prefer=prefer)
 
 
+## -------------------- Helpers -------------------- ##
+
+def build_file_map(base_dir: Path, name: str = "unknown") -> dict[str, Path]:
+    """Get a mapping of relative file paths to absolute paths."""
+    print(f"Building file map for {name}...")
+    return {
+        str(f.relative_to(base_dir)): f
+        for f in base_dir.rglob("*")
+        if f.is_file()
+    }
+
+
+def hash_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        while chunk := f.read(8192):
+            h.update(chunk)
+    return h.hexdigest()
+
+
 ## -------------------- General file access -------------------- ##
 
-def load_json(path:str) -> dict:
+def load_json(path: str) -> dict:
     """Load JSON data from a file. Returns empty dict on failure."""
     if not os.path.exists(path):
         echo.warning(f"Failed to load JSON from {path} – path does not exist")
