@@ -160,6 +160,11 @@ menu_structure = {
                 "description": "Generate AttachmentType and AttachmentsProvided tables.",
             },
             "6": {
+                "module": "lists.fluid_list",
+                "name": "Fluid list",
+                "description": "Generate the fluid table.",
+            },
+            "7": {
                 "module": "scripts.parser.outfit_parser",
                 "name": "Outfit list",
                 "description": "Parse outfit xml files.",
