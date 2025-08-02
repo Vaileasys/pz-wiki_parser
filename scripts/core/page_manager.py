@@ -1,7 +1,7 @@
 # Manages accessing and processing the data in the page dictionary.
 
 import os
-from scripts.core.cache import load_json, save_cache
+from scripts.core import cache, file_loading
 from scripts.core.constants import RESOURCE_DIR
 from scripts.utils import echo
 
@@ -134,14 +134,14 @@ def _restructure_id_data() -> None:
             for value in values:
                 _id_data[key].setdefault(value, []).append(page)
 
-    save_cache(_id_data, CACHE_FILE, suppress=True)
+    cache.save_cache(_id_data, CACHE_FILE, suppress=True)
 
 
 def load(filepath=FILE_PATH):
     """Load the page dictionary data from file if not already loaded."""
     global _raw_data
     if _raw_data is None:
-        _raw_data = load_json(filepath)
+        _raw_data = file_loading.load_json(filepath)
 
 
 def init() -> None:

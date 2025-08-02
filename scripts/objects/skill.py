@@ -7,7 +7,7 @@ Skill book data is parsed from `XPSystem_SkillBook.lua`.
 import os
 from scripts.core.constants import RESOURCE_DIR
 from scripts.core.language import Translate
-from scripts.core.cache import load_json, save_cache
+from scripts.core import file_loading
 from scripts.utils.util import link
 from scripts.utils.lua_helper import load_lua_file, parse_lua_tables
 from scripts.utils import echo
@@ -70,7 +70,7 @@ class Skill:
     @classmethod
     def _load_skills(cls):
         """Load skill data from skills.json."""
-        cls._skills = load_json(os.path.join(RESOURCE_DIR, "skills.json"))
+        cls._skills = file_loading.load_json(os.path.join(RESOURCE_DIR, "skills.json"))
 
     @classmethod
     def all(cls):

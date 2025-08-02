@@ -8,9 +8,8 @@ import os
 from pathlib import Path
 from scripts.core.language import Translate
 from scripts.core.constants import ITEM_DIR, BOT_FLAG, BOT_FLAG_END
-from scripts.core.cache import load_json
+from scripts.core import file_loading
 from scripts.utils import echo
-from scripts.core.file_loading import write_file
 
 DEF_TABLE_HEADER = '{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"'
 DEF_TABLE_FOOTER = '|}'
@@ -29,7 +28,7 @@ def get_table_data(path:str, extra_keys:str|list=None):
     Returns:
         tuple: (map, headings[, extra_data]) depending on whether extra_keys is provided.
     """
-    data = load_json(path)
+    data = file_loading.load_json(path)
     map = data.get("map")
     headings = data.get("headings")
 
@@ -293,7 +292,7 @@ def create_tables(
 
         content.extend(generate_table(table_type, data, column_headings, table_header, table_footer, caption_bottom=local_caption_bottom, caption_top=local_caption_top, caption=local_caption, do_bot_flag=do_bot_flag, bot_flag_type=bot_flag_type))
         rel_path = os.path.join(item_type, table_type + ".txt")
-        output_dir = write_file(content, rel_path=rel_path, root_path=root_path, suppress=suppress)
+        output_dir = file_loading.write_file(content, rel_path=rel_path, root_path=root_path, suppress=suppress)
 
         if combine_tables:
             all_tables.extend([f'=={table_type.replace("_", " ").capitalize()}=='])
@@ -301,7 +300,7 @@ def create_tables(
 
     if combine_tables:
         rel_path = os.path.join(item_type, "all_tables.txt")
-        write_file(all_tables, rel_path=rel_path, root_path=root_path, suppress=suppress)
+        file_loading.write_file(all_tables, rel_path=rel_path, root_path=root_path, suppress=suppress)
 
     tables_name = Path(rel_path).parent.name.replace("_", " ").capitalize()
     echo.success(f"{tables_name} tables written to '{output_dir}'")

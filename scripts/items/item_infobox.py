@@ -301,14 +301,14 @@ def get_descriptor(item_id: str) -> str | None:
     Returns:
         str | None: Descriptor if matched, otherwise None.
     """
-    from scripts.core.cache import load_json
+    from scripts.core import file_loading
     global all_descriptors
 
     if not item_id:
         return None
 
     if not all_descriptors:
-        all_descriptors = load_json(os.path.join(RESOURCE_DIR, "item_descriptors.json"))
+        all_descriptors = file_loading.load_json(os.path.join(RESOURCE_DIR, "item_descriptors.json"))
     
     descriptor = None
     item = Item(item_id)

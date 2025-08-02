@@ -5,7 +5,7 @@ from scripts.core.language import Language, Translate
 from scripts.core.page_manager import get_pages
 from scripts.core import logger
 from scripts.utils import util
-from scripts.core.cache import load_json
+from scripts.core import file_loading
 
 class Fluid:
     _fluids = None # Shared cache for all fluids
@@ -74,7 +74,7 @@ class Fluid:
     @classmethod
     def _load_color_reference(cls):
         if cls._color_reference is None:
-            cls._color_reference = load_json(os.path.join("resources", "color_reference.json"))
+            cls._color_reference = file_loading.load_json(os.path.join("resources", "color_reference.json"))
 
     @classmethod
     def fix_fluid_id(cls, fluid_id: str) -> str:

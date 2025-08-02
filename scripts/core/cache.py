@@ -5,30 +5,7 @@ import re
 from scripts.core.constants import CACHE_DIR
 from scripts.core.version import Version
 from scripts.utils import echo
-
-
-def load_json(path:str) -> dict:
-    """Load JSON data from a file. Returns empty dict on failure."""
-    if not os.path.exists(path):
-        echo.warning(f"Failed to load JSON from {path} – path does not exist")
-        return {}
-    try:
-        with open(path, 'r', encoding='utf-8') as file:
-            return json.load(file)
-    except (json.JSONDecodeError, OSError) as e:
-        echo.warning(f"Failed to load JSON from {path} – {e}")
-        return {}
-
-
-def save_json(path:str, data:dict) -> bool:
-    """Save dictionary data to a JSON file. Returns True if successful."""
-    try:
-        with open(path, 'w', encoding='utf-8') as file:
-            json.dump(data, file, ensure_ascii=False, indent=4)
-        return True
-    except OSError as e:
-        echo.error(f"Could not write to {path} – {e}")
-        return False
+from scripts.core import file_loading
 
 
 def save_cache(data: dict, data_file: str, data_dir=CACHE_DIR, suppress=False):
@@ -52,7 +29,7 @@ def save_cache(data: dict, data_file: str, data_dir=CACHE_DIR, suppress=False):
     # Add version number to data. Version can be checked to save time parsing.
     data_copy["version"] = Version.get()
     
-    save_json(data_file_path, data_copy)
+    file_loading.save_json(data_file_path, data_copy)
     
     if not suppress:
         echo.info(f"{cache_name.capitalize()} saved to '{data_file_path}'")
@@ -84,7 +61,7 @@ def load_cache(cache_file, cache_name="data", get_version=False, backup_old=Fals
 
     try:
         if os.path.exists(cache_file):
-            json_cache = load_json(cache_file)
+            json_cache = file_loading.load_json(cache_file)
             
             cache_version = json_cache.get("version")
             # Remove 'version' key before returning.

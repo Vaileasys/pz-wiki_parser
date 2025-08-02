@@ -307,6 +307,32 @@ def get_clothing_path(name: str, media_type: str = "clothing", prefer: str = Non
 
 ## -------------------- General file access -------------------- ##
 
+def load_json(path:str) -> dict:
+    """Load JSON data from a file. Returns empty dict on failure."""
+    if not os.path.exists(path):
+        echo.warning(f"Failed to load JSON from {path} – path does not exist")
+        return {}
+    try:
+        with open(path, 'r', encoding='utf-8') as file:
+            return json.load(file)
+    except (json.JSONDecodeError, OSError) as e:
+        echo.warning(f"Failed to load JSON from {path} – {e}")
+        return {}
+
+
+def save_json(path:str, data:dict) -> bool:
+    """Save dictionary data to a JSON file. Returns True if successful."""
+    try:
+        output_path = Path(path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with output_path.open('w', encoding='utf-8') as file:
+            json.dump(data, file, ensure_ascii=False, indent=4)
+        return True
+    except OSError as e:
+        echo.error(f"Could not write to {path} – {e}")
+        return False
+
+
 def read_file(path: str) -> str:
     """
     Reads the contents of a file as a string.

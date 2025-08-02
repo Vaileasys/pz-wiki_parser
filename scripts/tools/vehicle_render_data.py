@@ -2,7 +2,7 @@
 
 import os
 from scripts.objects.vehicle import Vehicle
-from scripts.core.cache import save_json
+from scripts.core import file_loading
 from scripts.utils import echo
 from scripts.core.constants import OUTPUT_DIR
 
@@ -179,7 +179,7 @@ def main():
 
         vehicle_data[vehicle_id] = add_adjustments(vehicle_id, vehicle_data[vehicle_id])
 
-    save_json(PATH, vehicle_data)
+    file_loading.save_json(PATH, vehicle_data)
     echo.success(f"JSON file saved to '{PATH}'")
 
 if __name__ == "__main__":
