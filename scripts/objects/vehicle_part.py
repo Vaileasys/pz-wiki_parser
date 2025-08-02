@@ -49,7 +49,7 @@ def get_vehicle_part_class(part_name: str) -> type["VehiclePart"]:
         return VehicleLightbar
     if part_name.startswith("HoodOrnament"):
         return VehicleHoodOrnament
-    if part_name == "TruckBed":
+    if part_name in ("TruckBed", "TrailerTrunk", "TrailerAnimalFood", "TrailerAnimalEggs"):
         return VehicleTruckBed
     #TODO: finish defining classes
     return VehiclePart
@@ -349,6 +349,7 @@ class VehicleHoodOrnament(VehiclePart):
         return "Hood Ornament"
 
 class VehicleTruckBed(VehiclePart):
+    #Includes trailer trunks
     @property
     def page(self) -> str:
         return "Trunk"
@@ -360,8 +361,6 @@ class VehicleTruckBed(VehiclePart):
     @property
     def capacity(self) -> bool:
         return self.container.get("capacity", False)
-
-#TODO add Trailer Truck Bed
 
 
 class PartInstallUninstall:
