@@ -30,7 +30,7 @@ category_page_map = {
     "Appearance": "Appearance",
     "Camping": "Camping",
     "Cartography": "Map",
-    "Communications": "Communications",
+    "Communications": "Communication",
     "Cooking": "Cooking",
     "CookingWeapon": "Cooking",
     "Corpse": "Corpse",
