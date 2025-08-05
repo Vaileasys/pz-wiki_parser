@@ -456,7 +456,7 @@ def compare_script_versions(script_type: str = None):
         old_ids = set(old_data.keys())
         new_ids = set(new_data.keys())
 
-        result["New"] = sorted(list(new_ids - old_ids))
+        result["Added"] = sorted(list(new_ids - old_ids))
         result["Removed"] = sorted(list(old_ids - new_ids))
 
         for key in sorted(old_ids & new_ids):
@@ -475,7 +475,7 @@ def compare_script_versions(script_type: str = None):
                 result["Changes"][key] = changes
 
         # Don't save if empty
-        if not result["New"] and not result["Removed"] and not result["Changes"]:
+        if not result["Added"] and not result["Removed"] and not result["Changes"]:
             echo.info(f"No differences found for '{stype}'. Skipping diff file.")
             return
 
