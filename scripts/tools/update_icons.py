@@ -36,6 +36,8 @@ def get_texture_names(textures_dir: Path, folder_key: str = None, prefix_blackli
         # Extract prefix and name
         if "_" in filename:
             prefix, stripped = filename.split("_", 1)
+            if prefix != "Item":
+                stripped = filename
         else:
             prefix, stripped = "Other", filename
 
