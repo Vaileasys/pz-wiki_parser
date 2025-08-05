@@ -11,7 +11,7 @@ OUTPUT_FILE = 'item_list.txt'
 HEADER = "! <<icon>> !! <<name>> !! <<item_id>>"
 
 
-def generate_table(items_data):
+def generate_table(items_data: dict):
     content = []
     
     content.append('{| class="wikitable theme-blue"')
@@ -64,7 +64,7 @@ def generate_item_list():
 
             pbar.set_postfix_str(f"Processing: {item.type} ({item_id[:30]})")
 
-            category = item.display_category
+            category = item.display_category_name
 
             if category not in items_data:
                 items_data[category] = []

@@ -1150,6 +1150,11 @@ class Item:
             self._display_category = categories.get_cat_link(self.raw_display_category)
         return self._display_category
     @property
+    def display_category_name(self) -> str:
+        if not hasattr(self, '_display_category_name'):
+            self._display_category = Translate.get("IGUI_ItemCat_" + (self.raw_display_category or "Unknown"))
+        return self._display_category
+    @property
     def display_name(self) -> str: return self.get_default("DisplayName")
     @property
     def always_welcome_gift(self) -> bool: return bool(self.get_default("AlwaysWelcomeGift"))
