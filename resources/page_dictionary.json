@@ -1577,7 +1577,7 @@
                 "Base.Awl_Stone"
             ]
         },
-        "Axe": {
+        "Axe (item)": {
             "categories": [
                 "Axes"
             ],
@@ -6276,9 +6276,7 @@
             ],
             "item_id": [
                 "Base.Vambrace_BodyArmour_Right",
-                "Base.Vambrace_BodyArmour_Left",
-                "Base.Vambrace_BodyArmour_Right_Desert",
-                "Base.Vambrace_BodyArmour_Left_Desert"
+                "Base.Vambrace_BodyArmour_Left"
             ]
         },
         "Bulletproof Vest Forearm Armor (civilian)": {
@@ -6290,15 +6288,22 @@
                 "Base.Vambrace_BodyArmour_Left_Civ"
             ]
         },
+        "Bulletproof Vest Forearm Armor (desert)": {
+            "categories": [
+                "Protective gear"
+            ],
+            "item_id": [
+                "Base.Vambrace_BodyArmour_Right_Desert",
+                "Base.Vambrace_BodyArmour_Left_Desert"
+            ]
+        },
         "Bulletproof Vest Shin Armor": {
             "categories": [
                 "Protective gear"
             ],
             "item_id": [
                 "Base.GreaveBodyArmour_Right",
-                "Base.GreaveBodyArmour_Left",
-                "Base.GreaveBodyArmour_Right_Desert",
-                "Base.GreaveBodyArmour_Left_Desert"
+                "Base.GreaveBodyArmour_Left"
             ]
         },
         "Bulletproof Vest Shin Armor (civilian)": {
@@ -6310,15 +6315,22 @@
                 "Base.GreaveBodyArmour_Left_Civ"
             ]
         },
+        "Bulletproof Vest Shin Armor (desert)": {
+            "categories": [
+                "Protective gear"
+            ],
+            "item_id": [
+                "Base.GreaveBodyArmour_Right_Desert",
+                "Base.GreaveBodyArmour_Left_Desert"
+            ]
+        },
         "Bulletproof Vest Thigh Armor": {
             "categories": [
                 "Protective gear"
             ],
             "item_id": [
                 "Base.ThighBodyArmour_L",
-                "Base.ThighBodyArmour_R",
-                "Base.ThighBodyArmour_R_Desert",
-                "Base.ThighBodyArmour_L_Desert"
+                "Base.ThighBodyArmour_R"
             ]
         },
         "Bulletproof Vest Thigh Armor (civilian)": {
@@ -6328,6 +6340,15 @@
             "item_id": [
                 "Base.ThighBodyArmour_R_Civ",
                 "Base.ThighBodyArmour_L_Civ"
+            ]
+        },
+        "Bulletproof Vest Thigh Armor (desert)": {
+            "categories": [
+                "Protective gear"
+            ],
+            "item_id": [
+                "Base.ThighBodyArmour_R_Desert",
+                "Base.ThighBodyArmour_L_Desert"
             ]
         },
         "Bullets Bandolier": {
@@ -22315,7 +22336,7 @@
         },
         "Matchbook": {
             "categories": [
-                "Light sources"
+                "Equipment"
             ],
             "item_id": [
                 "Base.Matches"
@@ -30517,14 +30538,6 @@
                 "Base.AmmoStrap_Shells"
             ]
         },
-        "Shells Bandolier (brown)": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
-                "Base.AmmoStrap_Brown_Shells"
-            ]
-        },
         "Shemagh (Face Covering Scarf)": {
             "categories": [
                 "Headwear"
@@ -36511,14 +36524,6 @@
             ],
             "item_id": [
                 "Base.SmallTrunk1"
-            ]
-        },
-        "Trunk Lid": {
-            "categories": [
-                "Vehicle parts"
-            ],
-            "item_id": [
-                "Base.TrunkDoor1"
             ]
         },
         "Trunk Lid (Heavy-Duty Vehicle)": {
