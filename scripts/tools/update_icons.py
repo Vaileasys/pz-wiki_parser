@@ -35,17 +35,13 @@ def get_texture_names(textures_dir: Path, folder_key: str = None, prefix_blackli
 
         # Extract prefix and name
         if "_" in filename:
-            prefix, name = filename.split("_", 1)
-            if prefix != "Item":
-                name = filename
+            prefix, stripped = filename.split("_", 1)
         else:
-            prefix, name = "Other", filename  # Default case
+            prefix, stripped = "Other", filename
 
-        # If prefix is blacklisted, skip it
+        # Skip if blacklisted or not whitelisted
         if prefix in prefix_blacklist:
             continue
-
-        # If a whitelist exists, ensure prefix is included
         if prefix_whitelist and prefix not in prefix_whitelist:
             continue
 
@@ -53,7 +49,7 @@ def get_texture_names(textures_dir: Path, folder_key: str = None, prefix_blackli
         assigned_key = folder_key if folder_key else prefix
 
         # Add texture to the dictionary
-        texture_dict.setdefault(assigned_key, []).append(name)
+        texture_dict.setdefault(assigned_key, []).append((filename, stripped))
 
     for key, texture_list in texture_dict.items():
         # Ensure key exists in the existing dictionary
@@ -61,16 +57,16 @@ def get_texture_names(textures_dir: Path, folder_key: str = None, prefix_blackli
             textures_data[key] = []
 
         new_entries = []
-        for name in texture_list:
-            if name not in textures_data[key]:  # Use name directly
-                textures_data[key].append(name)
-                new_entries.append(name)
+        for full_name, stripped_name in texture_list:
+            if stripped_name not in textures_data[key]:
+                textures_data[key].append(stripped_name)
+                new_entries.append(full_name)
 
         if new_entries:
             new_textures.setdefault(key, []).extend(new_entries)
 
 
-def copy_new_textures(texture_dir):
+def copy_new_textures(texture_dir: Path):
     if new_textures:
         for folder_key, files in new_textures.items():
             prefix_dir:Path = Path(ICON_DIR) / "new_textures" / folder_key
