@@ -55,6 +55,11 @@ menu_structure = {
                 "name": "Item article",
                 "description": "Generate articles for items.",
             },
+            "9": {
+                "module": "scripts.items.item_tags",
+                "name": "Tags",
+                "description": "Manage and generate tags.",
+            },
         },
     },
     "2": {
@@ -96,7 +101,7 @@ menu_structure = {
     },
     "4": {
         "name": "Recipes",
-        "description": "Manage and generate tags.",
+        "description": "Manage and generate recipies.",
         "sub_options": {
             "1": {
                 "module": "scripts.recipes.craft_recipes",
@@ -126,9 +131,40 @@ menu_structure = {
         },
     },
     "5": {
-        "name": "Tags",
-        "description": "Manage and generate tags.",
-        "sub_options": None,
+        "name": "Vehicles",
+        "description": "",
+        "sub_options": {
+            "1": {
+                "module": "scripts.vehicles.vehicle_list",
+                "name": "Vehicle list (base)",
+                "description": "Generate vehicle list for the base vehicle variants.",
+            },
+            "2": {
+                "module": "scripts.vehicles.vehicle_list2",
+                "name": "Vehicle list (variants)",
+                "description": "Generate vehicle list for all variants per base vehicle.",
+            },
+            "3": {
+                "module": "scripts.vehicles.vehicle_infobox",
+                "name": "Vehicle infobox",
+                "description": "Generates vehicle infoboxes.",
+            },
+            "4": {
+                "module": "scripts.vehicles.vehicle_parts",
+                "name": "Vehicle parts",
+                "description": "Generate table of a vehicle's parts.",
+            },
+            "5": {
+                "module": "scripts.vehicles.vehicle_spawns",
+                "name": "Vehicle spawns",
+                "description": "Generate list of vehicle spawns.",
+            },
+            "6": {
+                "module": "scripts.vehicles.vehicle_article",
+                "name": "Vehicle article",
+                "description": "Generate articles for vehicles.",
+            },
+        },
     },
     "6": {
         "name": "Lists",
@@ -334,9 +370,6 @@ def navigate_menu(menu, is_root=False, title=None):
             elif name == "Run First Time Setup":
                 print_header(title)
                 handle_module("scripts.core.setup")
-            elif name == "Tags":
-                print_header(title)
-                handle_module("scripts.items.item_tags")
             elif "module" in selected:
                 handle_module(selected["module"])
             elif subs:
