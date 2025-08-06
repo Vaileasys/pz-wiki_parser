@@ -25,15 +25,13 @@ def generate_table(data):
 
 def generate_data():
     vehicles_data = {}
-    vehicles = Vehicle.all()
 
-    for vehicle_id in vehicles:
+    for vehicle_id, vehicle in Vehicle.all().items():
         vehicle = Vehicle(vehicle_id)
-        name = vehicle.get_name()
-        page = vehicle.get_page()
-        page_link = link(page, name)
+        name = vehicle.name
+        page_link = vehicle.wiki_link
 
-        vtype = "Trailer" if vehicle.is_trailer else vehicle.get_full_parent().get_name()
+        vtype = "Trailer" if vehicle.is_trailer else vehicle.get_full_parent().name
 
         if vtype not in vehicles_data:
             vehicles_data[vtype] = []
@@ -41,7 +39,7 @@ def generate_data():
         processed_vehicle = {
             "name": name,
             "link": page_link,
-            "model": f'[[File:{vehicle.get_model()}|128x128px]]',
+            "model": f'[[File:{vehicle.model}|128x128px]]',
             "vehicle_id": vehicle_id
         }
 

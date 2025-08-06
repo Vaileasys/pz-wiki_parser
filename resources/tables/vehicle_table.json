@@ -62,6 +62,18 @@
             "total_capacity",
             "animal_trailer_size",
             "vehicle_id"
+        ],
+        "Base.Trailer": [
+            "model",
+            "name",
+            "type",
+            "mass",
+            "suspension_stiffness",
+            "protection",
+            "trunk_capacity",
+            "total_capacity",
+            "animal_trailer_size",
+            "vehicle_id"
         ]
     },
     "headings": {

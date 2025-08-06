@@ -22,21 +22,16 @@ def check_dash(value, vehicle: Vehicle, burnt=False, wreck=False):
     else:
         return value
 
-def generate_data(vehicle_id, table_type, section_type="vehicle"):
-    vehicle = Vehicle(vehicle_id)
+def generate_data(vehicle: Vehicle, table_type, section_type="vehicle"):
     
     columns = table_map.get(table_type) if table_map.get(table_type) is not None else table_map.get("default")
     
     vehicle_data = {}
 
-    model = vehicle.get_model(is_single=False, do_format=True) if section_type == "vehicle" else vehicle.get_model(do_format=True)
-
-    name = vehicle.get_name()
-    page = vehicle.get_page()
-    page_link = link(page, name)
+    model = vehicle.get_models()
 
     vehicle_data["model"] = model if "model" in columns else None
-    vehicle_data["name"] = page_link if "name" in columns else None
+    vehicle_data["name"] = vehicle.wiki_link if "name" in columns else None
     vehicle_data["type"] = vehicle.get_vehicle_type() if "type" in columns else None
     vehicle_data["mass"] = convert_int(vehicle.get_mass()) if "mass" in columns else None
     vehicle_data["engine_power"] = check_dash(convert_int(vehicle.get_engine_power()), vehicle, True, True) if "engine_power" in columns else None
@@ -68,7 +63,7 @@ def generate_data(vehicle_id, table_type, section_type="vehicle"):
             vehicle_data["lightbar"] = '[[File:UI_Cross.png|link=|No lightbar and siren]]'
 
 
-    vehicle_data["vehicle_id"] = vehicle_id if "vehicle_id" in columns else None
+    vehicle_data["vehicle_id"] = vehicle.vehicle_id if "vehicle_id" in columns else None
 
     # Remove any values that are None
     vehicle_data = {k: v for k, v in vehicle_data.items() if v is not None}
@@ -77,7 +72,7 @@ def generate_data(vehicle_id, table_type, section_type="vehicle"):
     vehicle_data = {key: vehicle_data[key] for key in columns if key in vehicle_data}
 
     # Add item_name for sorting
-    vehicle_data["item_name"] = name if "name" in columns else None
+    vehicle_data["item_name"] = vehicle.name if "name" in columns else None
 
     return vehicle_data
 
@@ -99,14 +94,11 @@ def find_table_type(vehicle: Vehicle, section_type: str):
 
 def find_vehicles(section_type: str):
     all_vehicle_data = {}
-    vehicles = Vehicle.all()
 
-    for vehicle_id in vehicles:
+    for vehicle_id, vehicle in Vehicle.all().items():
         # Skip blacklisted vehicles
         if vehicle_id in VEHICLE_BLACKLIST:
             continue
-        
-        vehicle = Vehicle(vehicle_id)
 
         # Skip vehicles that aren't parents
         if not vehicle.is_parent and section_type == "vehicle":
@@ -115,7 +107,7 @@ def find_vehicles(section_type: str):
             continue
 
         table_type = find_table_type(vehicle, section_type)
-        vehicle_data = generate_data(vehicle_id, table_type, section_type)
+        vehicle_data = generate_data(vehicle, table_type, section_type)
 
         if table_type not in all_vehicle_data:
             all_vehicle_data[table_type] = []
@@ -137,8 +129,28 @@ def main():
     PARENT_HEADER = '{| class="wikitable theme-red sortable sticky-column mw-collapsible" style="text-align: center;" data-expandtext="{{int:show}}" data-collapsetext="{{int:hide}}"'
     PARENT_CAPTION = 'style="min-width:300px;" | Variants list'
 
-    table_helper.create_tables(veh_type, all_vehicle_data, table_map=table_map, columns=column_headings, root_path=VEHICLE_DIR, suppress=True)
-    table_helper.create_tables(veh_type_parent, all_vehicle_data_parent, table_map=table_map, table_header=PARENT_HEADER, caption=PARENT_CAPTION, columns=column_headings, root_path=VEHICLE_DIR, suppress=True)
+    table_helper.create_tables(
+        veh_type,
+        all_vehicle_data,
+        table_map=table_map,
+        columns=column_headings,
+        root_path=VEHICLE_DIR,
+        bot_flag_type="type_vehicle_list",
+        suppress=True,
+        combine_tables=False
+        )
+    table_helper.create_tables(
+        veh_type_parent,
+        all_vehicle_data_parent,
+        table_map=table_map,
+        table_header=PARENT_HEADER,
+        caption=PARENT_CAPTION,
+        columns=column_headings,
+        root_path=VEHICLE_DIR,
+        bot_flag_type="variant_vehicle_list",
+        suppress=True,
+        combine_tables=False
+        )
 
 if __name__ == "__main__":
     main()

@@ -47,8 +47,8 @@ def generate_data(vehicle_id:str):
             key_rings.append(key_ring_name)
 
         parameters = {
-            "name": vehicle.get_name(),
-            "image": vehicle.get_model(),
+            "name": vehicle.name,
+            "image": vehicle.model,
             "manufacturer": manufacturer,
             "base_model": vehicle.get_full_parent().get_link() if not vehicle.is_trailer and vehicle.get_full_parent().vehicle_id != vehicle_id else None,
             "vehicle_type": vehicle.get_vehicle_type(),

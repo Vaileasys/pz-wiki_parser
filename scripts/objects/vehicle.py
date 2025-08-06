@@ -2,13 +2,14 @@ from __future__ import annotations
 from scripts.parser import script_parser
 from scripts.core.file_loading import get_script_path
 from scripts.core import logger
-from scripts.core.language import Translate
+from scripts.core.language import Translate, Language
 from scripts.objects.item import Item
 from scripts.utils import echo
 from scripts.utils.lua_helper import load_lua_file, parse_lua_tables
 from scripts.core.cache import save_cache
 from scripts.utils.util import link
 from scripts.objects.vehicle_part import VehicleParts
+from scripts.core.page_manager import get_pages
 
 class Vehicle:
     _vehicles = None # Shared cache for all vehicles
@@ -58,11 +59,7 @@ class Vehicle:
 
         self.module, self.id_type = vehicle_id.split(".", 1)
 
-        self.name = None # English name
-        self.page = None # Wiki page
-        self.wiki_link = None # Wiki link with page, name and language code
         self.model = self.id_type + "_Model.png"
-        self.models_all = None
 
         self.mesh_id = None
         self.mesh_path = None
@@ -76,7 +73,6 @@ class Vehicle:
         self.variants = None
         self.manufacturer = None
         self.lore_model = None
-        self.page = None
         self.is_burnt = True if "Burnt" in self.vehicle_id else False
         self.is_wreck = True if "Smashed" in self.vehicle_id else False
         self.vehicle_type = None
@@ -225,7 +221,9 @@ class Vehicle:
             self.find_name()
         return self.name
     
-    def find_name(self) -> str:
+    def find_name(self, lang_code: str = None) -> str:
+        lang_code = Language.get() if not lang_code else lang_code
+
         #car_name = self.get("carModelName", self.id_type) #temp removed
         car_name = self.id_type #temp
         car_model = self.get("carModelName")
@@ -244,7 +242,8 @@ class Vehicle:
                 name = unburnt_name
             burnt_template = Translate.get("IGUI_VehicleNameBurntCar", lang_code="en")
             name = burnt_template.replace("%1", name)
-        self.name = name
+        
+        return name
 
     def find_is_trailer(self) -> None:
         """Determine whether the vehicle is a trailer"""
@@ -438,29 +437,26 @@ class Vehicle:
 
     ## ------------------------- Texture & Model ------------------------- ##
 
-    def get_model(self,*, is_single=True, do_format=False) -> str:
-        """Return the rendered 3D model wiki file name as PNG."""
-        if is_single:
-            model = self.model
-        else:
-            if self.models_all is None:
-                self.find_all_models()
-            model = self.models_all
-        
+    def get_model(self,*, do_format=True) -> str:
+        """Return the rendered 3D model wiki file name as PNG."""        
         if do_format:
-            if is_single:
-                return self.format_model(single=model, page=self.get_page())
-            else:
-                return self.format_model(multi=model, page=self.get_page())
+                return self.format_model(is_single=True)
 
-        return model    
+        return self.model
+    
+    def get_models(self, *, do_format=True) -> str | list[str]:
+        """Return the rendered 3D models as PNGs."""        
+        if do_format:
+            return self.format_model(is_single=False)
+        
+        return self.models_all
 
     def find_all_models(self) -> None:
         """Return all the rendered 3D models including that of all children."""
         # TODO: add special case for advert trailer, getting all textures
         if not self.is_parent:
-            self.models_all = self.model
-            return 
+            self.models_all = [self.model]
+            return self.models_all
         
         models = []
         models.append(self.model)
@@ -470,24 +466,30 @@ class Vehicle:
             child = Vehicle(child_id)
             if child.is_burnt or child.is_wreck:
                 continue
-            model = child.get_model()
-            models.append(model)
+            models.append(child.model)
         self.models_all = models
 
-    @classmethod
-    def format_model(self, *, single: str = None, multi: list[str] = None, page: str = None) -> str:
-        if multi and len(multi) == 1:
-            single = multi[0]
-        models = [single] if single else multi
+        return self.models_all
+
+    def format_model(self, *, is_single: bool = False) -> str:
+        if is_single:
+            models = [self.model]
+        else:
+            if not hasattr(self, "models_all"):
+                self.find_all_models()
+            models = self.models_all
+
         images = []
         for model in models:
-            link = "|link=" + page if page is not None else ""
-            image = f"[[File:{model}|128x128px{link}]]"
+            image = f"[[File:{model}|128x128px|link={self.page}|{self.name}]]"
             images.append(image)
         
-        final_image = "".join(images)
+        
         if len(images) > 1:
+            final_image = "".join(images)
             final_image = f'<span class="cycle-img">{final_image}</span>'
+        else:
+            final_image = images[0]
         
         return final_image
 
@@ -891,6 +893,38 @@ class Vehicle:
     
 
     ## ---- Properties ---- ##
+    @property
+    def name(self):
+        if not hasattr(self, "_name"):
+            self._name = self.find_name()
+        return self._name
+
+    @property
+    def name_en(self):
+        if not hasattr(self, "_name_en"):
+            self._name_en = self.find_name(lang_code="en")
+        return self._name_en
+
+    @property
+    def page(self) -> str:
+        """Return the wiki page for this vehicle."""
+        if not hasattr(self, "_page"):
+            pages = get_pages(self.vehicle_id, id_type="vehicle_id")
+            if pages:
+                self._page = pages[0]
+                #self._has_page = True
+            else:
+                self._page = self.name_en
+                #self._has_page = False
+        return self._page
+    
+    @property
+    def wiki_link(self) -> str:
+        """Return the wiki link for this vehicle."""
+        if not hasattr(self, "_wiki_link"):
+            self._wiki_link = link(self.page, self.name)
+        return self._wiki_link
+    
     @property
     def parts(self) -> VehicleParts:
         """Return a list of part names."""
