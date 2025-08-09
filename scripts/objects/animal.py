@@ -2,7 +2,7 @@ import os
 from scripts.utils import lua_helper, util, echo
 from scripts.core.cache import save_cache, load_cache
 from scripts.core.language import Translate
-from scripts.core.constants import DATA_DIR
+from scripts.core.constants import CACHE_DIR
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -109,7 +109,7 @@ class Animal:
         """
         from scripts.core.version import Version
         if cls._raw_data is None:
-            path = os.path.join(DATA_DIR, cls._data_file)
+            path = os.path.join(CACHE_DIR, cls._data_file)
 
             data, version = load_cache(path, cache_name="animal", get_version=True)
 
@@ -704,6 +704,10 @@ class AnimalBreed:
     @classmethod
     def all(cls) -> "dict[str, AnimalBreed]":
         return {id: cls.from_key(id) for id in cls.get_animal_keys()}
+    
+    @classmethod
+    def count(cls) -> int:
+        return len(cls.all())
     
     def get(self, key: str, default=None):
         """

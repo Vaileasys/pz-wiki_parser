@@ -2,7 +2,7 @@ import os
 from scripts.utils import lua_helper, util, echo
 from scripts.core.language import Translate
 from scripts.core.cache import save_cache, load_cache
-from scripts.core.constants import DATA_DIR
+from scripts.core.constants import CACHE_DIR
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -98,7 +98,7 @@ class AnimalPart:
         """
         from scripts.core.version import Version
         if cls._raw_data is None:
-            path = os.path.join(DATA_DIR, cls._data_file)
+            path = os.path.join(CACHE_DIR, cls._data_file)
 
             data, version = load_cache(path, cache_name="animal parts", get_version=True)
 

@@ -2,7 +2,7 @@ import os
 from scripts.utils import lua_helper, util, media_helper
 from scripts.core.cache import save_cache, load_cache
 from scripts.core.language import Translate
-from scripts.core.constants import DATA_DIR
+from scripts.core.constants import CACHE_DIR
 from scripts.core import page_manager
 from typing import TYPE_CHECKING
 
@@ -65,7 +65,7 @@ class RecMedia:
         if cls._raw_data is not None:
             return cls._raw_data
         
-        path = os.path.join(DATA_DIR, cls._data_file)
+        path = os.path.join(CACHE_DIR, cls._data_file)
 
         data, version = load_cache(path, cache_name="recorded media", get_version=True)
 
