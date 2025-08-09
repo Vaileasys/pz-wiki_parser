@@ -6,7 +6,7 @@ from scripts.core.file_loading import write_file
 from scripts.utils.util import link
 from scripts.utils import echo
 from scripts.core.language import Translate, Language
-from scripts.core.constants import PBAR_FORMAT
+from scripts.core.constants import PBAR_FORMAT, BOT_FLAG, BOT_FLAG_END
 
 TABLE_HEADER = '{| class="wikitable theme-red sortable mw-collapsible" data-expandtext="{{int:show}}" data-collapsetext="{{int:hide}}"'
 TABLE_CAPTION = '|+ style="min-width:300px;" | Parts list'
@@ -18,7 +18,7 @@ TABLE_HEADINGS = (
     '! Tools',
     '! Items'
     )
-REL_DIR = os.path.join("vehicle", "mechanics")
+REL_DIR = os.path.join("vehicle", "vehicle_parts")
 
 def process_vehicle(vehicle_id):
     vehicle = Vehicle(vehicle_id)
@@ -97,10 +97,13 @@ def process_vehicle(vehicle_id):
 def generate_table(vehicle_id, rows):
     vehicle = Vehicle(vehicle_id)
     content = []
-    mechanic_overlay = vehicle.get_mechanics_overlay()
+    #mechanic_overlay = vehicle.get_mechanics_overlay()
+    mechanic_overlay = False # Temporary since we only need this for new pages
     if mechanic_overlay:
         content.append(f"[[File:{mechanic_overlay}base.png|thumb|Vehicle mechanics UI for the {vehicle.get_name()}.]]")
-    content.append('<div class="scroll-x">')
+    bot_flag = BOT_FLAG.format(type="vehicle_parts", id=vehicle_id)
+    bot_flag_end = BOT_FLAG_END.format(type="vehicle_parts", id=vehicle_id)
+    content.append(bot_flag + '<div class="scroll-x">')
     content.append(TABLE_HEADER)
     content.append(TABLE_CAPTION)
     content.extend(TABLE_HEADINGS)
@@ -112,7 +115,7 @@ def generate_table(vehicle_id, rows):
             content.append(f'| {cell}')
     
     content.append('|}')
-    content.append('</div>')
+    content.append('</div>' + bot_flag_end)
     return content
 
 

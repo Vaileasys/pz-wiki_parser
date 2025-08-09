@@ -440,7 +440,7 @@ def main():
         }
 
         pbar.set_postfix_str("Creating tables...")
-        table_helper.create_tables("weapon", generated_data, columns=column_headings, table_map=mapped_table, suppress=True, bot_flag_type="weapon_item_list", combine_tables=False)
+        table_helper.create_tables("weapon_item_list", generated_data, columns=column_headings, table_map=mapped_table, suppress=True, bot_flag_type="weapon_item_list", combine_tables=False)
 
 
 if __name__ == "__main__":

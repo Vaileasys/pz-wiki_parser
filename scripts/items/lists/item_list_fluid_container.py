@@ -94,7 +94,7 @@ def main():
 
     items = find_items()
 
-    create_tables("fluid_container", items, table_map=table_map, columns=column_headings, root_path=ROOT_PATH, suppress=True, bot_flag_type="fluid_container_item_list", combine_tables=False)
+    create_tables("fluid_container_item_list", items, table_map=table_map, columns=column_headings, root_path=ROOT_PATH, suppress=True, bot_flag_type="fluid_container_item_list", combine_tables=False)
 
 
 if __name__ == "__main__":

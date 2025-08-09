@@ -216,7 +216,7 @@ def main():
 
     save_cache(items, "temp_data.json")
 
-    table_helper.create_tables("tool", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="tool_item_list", combine_tables=False)
+    table_helper.create_tables("tool_item_list", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="tool_item_list", combine_tables=False)
 
 if __name__ == "__main__":
     main()

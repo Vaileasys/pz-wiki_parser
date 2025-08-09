@@ -9,7 +9,7 @@ Cached data is automatically stored and reused between sessions.
 import os
 from scripts.utils.lua_helper import load_lua_file, parse_lua_tables
 from scripts.core.cache import save_cache, load_cache
-from scripts.core.constants import DATA_DIR
+from scripts.core.constants import CACHE_DIR
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -107,7 +107,7 @@ class Fish:
         if cls._fishes is not None:
             return cls._fishes
         
-        path = os.path.join(DATA_DIR, cls._fish_data_file)
+        path = os.path.join(CACHE_DIR, cls._fish_data_file)
 
         data, version = load_cache(path, cache_name="fishing", get_version=True)
 

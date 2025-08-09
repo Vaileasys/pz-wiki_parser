@@ -6,6 +6,7 @@ This script extracts data from hotbar slot definitions and attachment types,
 formats it into MediaWiki tables, and writes them to output files.
 """
 
+import os
 from scripts.objects.attachment import HotbarSlot, AttachmentType
 from scripts.objects.item import Item
 from scripts.core.file_loading import write_file
@@ -16,7 +17,7 @@ def build_hotbar_table():
     Write table for `AttachmentsProvided` using hotbar slot data.
     Skips slots with replacements.
     """
-    flag_type = "table"
+    flag_type = "attachments"
     flag_id = "AttachmentsProvided"
 
     content = []
@@ -58,11 +59,13 @@ def build_hotbar_table():
     content.append('|}')
     content.append(BOT_FLAG_END.format(type=flag_type, id=flag_id))
 
-    write_file(content, rel_path="hotbar_table.txt")
+    rel_path = os.path.join("attachments", flag_id + ".txt")
+
+    write_file(content, rel_path=rel_path)
 
 def build_attachment_table():
     """Write table for `AttachmentType` with `AttachedLocation`, hotbar slots, and item icons."""
-    flag_type = "table"
+    flag_type = "attachments"
     flag_id = "AttachmentType"
 
     content = []
@@ -97,7 +100,9 @@ def build_attachment_table():
     content.append('|}')
     content.append(BOT_FLAG_END.format(type=flag_type, id=flag_id))
 
-    write_file(content, rel_path="attachment_table.txt")
+    rel_path = os.path.join("attachments", flag_id + ".txt")
+
+    write_file(content, rel_path=rel_path)
 
 
 def main():

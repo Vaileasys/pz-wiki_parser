@@ -1,7 +1,7 @@
 import os
-from objects.profession import Occupation, Trait
+from scripts.objects.profession import Occupation, Trait
 from scripts.core.cache import load_cache
-from scripts.core.constants import DATA_DIR
+from scripts.core.constants import CACHE_DIR
 from scripts.parser import distribution_parser
 from scripts.objects.item import Item
 from scripts.utils import util
@@ -10,7 +10,7 @@ from scripts.utils.lua_helper import load_lua_file, parse_lua_tables, lua_to_pyt
 from scripts.core.version import Version
 from scripts.core.language import Translate
 
-DISTRIBUTIONS_DIR = os.path.join(DATA_DIR, "distributions")
+DISTRIBUTIONS_DIR = os.path.join(CACHE_DIR, "distributions")
 FORAGING_CACHE_FILE = "foraging.json"
 FORAGING_CACHE_PATH = os.path.join(DISTRIBUTIONS_DIR, FORAGING_CACHE_FILE)
 
@@ -695,7 +695,7 @@ class ForageSystem:
         if cls._data is not None:
             return cls._data
 
-        path = os.path.join(DATA_DIR, "parsed_foraging.json")
+        path = os.path.join(CACHE_DIR, "parsed_foraging.json")
 
         data, version = load_cache(path, cache_name="foraging", get_version=True)
 
@@ -842,3 +842,6 @@ class ForageSystem:
     @classmethod
     def get_light_penalty_cutoff(cls) -> float | None:
         return cls.load().get("lightPenaltyCutoff")
+
+if __name__ == "__main__":
+    print(ForageSystem.load())

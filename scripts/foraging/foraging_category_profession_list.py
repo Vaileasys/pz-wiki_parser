@@ -11,6 +11,7 @@ root_dir = Path(FORAGING_DIR.format(language_code=Language.get()))
 
 def generate_data(profession: Occupation | Trait, category: ForageCategory) -> dict:
     parameters = {
+        "sort_key": profession.page,
         "icon": profession.icon,
         "name": profession.wiki_link,
         "cost": profession.cost,
@@ -29,13 +30,13 @@ def generate_data(profession: Occupation | Trait, category: ForageCategory) -> d
     return parameters
 
 
-def build_table(data_list: list, category: str, prof_type: str):
+def build_table(data_list: list, category: str, prof_type: str, root_path: str):
     if not data_list:
         echo.debug(f"Skipping {prof_type} table for '{category}' as no data was found.")
         return
 
     content = [
-        BOT_FLAG.format(type=f"{prof_type}_table", id=category),
+        BOT_FLAG.format(type=f"foraging_{prof_type}", id=category),
         "{| class=\"wikitable theme-red sortable\" style=\"text-align: center;\"",
         "! Icon",
         "! Name",
@@ -54,38 +55,35 @@ def build_table(data_list: list, category: str, prof_type: str):
     content.append("|}")
     content.append(BOT_FLAG_END.format(type=f"{prof_type}_table", id=category))
 
-    root_path = root_dir / prof_type
+    rel_path = category + ".txt"
 
-    write_file(content, rel_path=category + ".txt", root_path=str(root_path), suppress=True)
+    write_file(content, rel_path=rel_path, root_path=str(root_path), suppress=True)
 
 
 def main():
     occupation_name = "occupation"
     trait_name = "trait"
-    occupation_path = str(root_dir / occupation_name)
-    trait_path = str(root_dir / trait_name)
+    occupation_path = str(root_dir / (occupation_name + "_table"))
+    trait_path = str(root_dir / (trait_name + "_table"))
 
     clear_dir(occupation_path)
     clear_dir(trait_path)
 
     for category_id, category in ForageCategory.all().items():
-        occupation_rows = []
-        trait_rows = []
+        # Occupations
+        occupation_rows = [generate_data(o, category) for o in category.occupations]
+        occupation_rows.sort(key=lambda r: (r.get("sort_key") or "").casefold())
+        occupation_rows = [{k: v for k, v in r.items() if k != "sort_key"} for r in occupation_rows]
+        build_table(occupation_rows, category_id, occupation_name, occupation_path)
 
-        for occupation in category.occupations:
-            occupation_rows.append(generate_data(occupation, category))
-        
-        build_table(occupation_rows, category_id, occupation_name)
-
-        for trait in category.traits:
-            trait_rows.append(generate_data(trait, category))
-        
-        build_table(trait_rows, category_id, trait_name)
+        # Traits
+        trait_rows = [generate_data(t, category) for t in category.traits]
+        trait_rows.sort(key=lambda r: (r.get("sort_key") or "").casefold())
+        trait_rows = [{k: v for k, v in r.items() if k != "sort_key"} for r in trait_rows]
+        build_table(trait_rows, category_id, trait_name, trait_path)
     
     echo.success(f"Occupation files saved to '{occupation_path}'.")
     echo.success(f"Trait files saved to '{trait_path}'.")
-
-
 
 
 if __name__ == "__main__":

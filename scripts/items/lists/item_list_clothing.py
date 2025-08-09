@@ -180,7 +180,7 @@ def main():
         key: table_types[value["table"]]
         for key, value in body_location_map.items()
     }
-    table_helper.create_tables("clothing", clothing_items, columns=column_headings, table_map=table_map, suppress=True, bot_flag_type="clothing_item_list", combine_tables=False)
+    table_helper.create_tables("clothing_item_list", clothing_items, columns=column_headings, table_map=table_map, suppress=True, bot_flag_type="clothing_item_list", combine_tables=False)
 
 
 if __name__ == "__main__":

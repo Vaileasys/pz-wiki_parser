@@ -379,7 +379,7 @@ def main():
         for item_type, table_type in table_type_map.items()
     }
 
-    table_helper.create_tables("literature", items, columns=column_headings, table_map=mapped_table, suppress=True, bot_flag_type="literature_item_list", combine_tables=False)
+    table_helper.create_tables("literature_item_list", items, columns=column_headings, table_map=mapped_table, suppress=True, bot_flag_type="literature_item_list", combine_tables=False)
                 
 
 if __name__ == "__main__":

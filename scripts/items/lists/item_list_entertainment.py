@@ -73,7 +73,7 @@ def main():
 
     items = process_items()
 
-    table_helper.create_tables("entertainment", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="entertainment_item_list", combine_tables=False)
+    table_helper.create_tables("entertainment_item_list", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="entertainment_item_list", combine_tables=False)
 
 if __name__ == "__main__":
     main()

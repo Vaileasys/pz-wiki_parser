@@ -1,9 +1,9 @@
 import os
-from core.language import Translate
+from scripts.core.language import Translate
 from scripts.utils.lua_helper import load_lua_file, lua_to_python
 from scripts.core.cache import save_cache, load_cache
 from scripts.utils import echo, util
-from scripts.core.constants import LUA_STUB_PATH, DATA_DIR
+from scripts.core.constants import LUA_STUB_PATH, CACHE_DIR
 from scripts.core.file_loading import read_file
 from scripts.core.version import Version
 
@@ -61,7 +61,7 @@ class Occupation:
         if cls._occupations is not None:
             return cls._occupations
 
-        path = os.path.join(DATA_DIR, cls._data_file)
+        path = os.path.join(CACHE_DIR, cls._data_file)
 
         data, version = load_cache(path, cache_name="occupations", get_version=True)
 
@@ -171,7 +171,7 @@ class Trait:
         if cls._traits is not None:
             return cls._traits
 
-        path = os.path.join(DATA_DIR, cls._data_file)
+        path = os.path.join(CACHE_DIR, cls._data_file)
 
         data, version = load_cache(path, cache_name="traits", get_version=True)
 

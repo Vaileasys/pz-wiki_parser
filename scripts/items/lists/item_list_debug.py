@@ -71,7 +71,7 @@ def main():
     if len(items) < 1:
         echo.warning("No items found for 'debug'")
         return
-    table_helper.create_tables("debug", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="debug_item_list", combine_tables=False)
+    table_helper.create_tables("debug_item_list", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="debug_item_list", combine_tables=False)
 
 if __name__ == "__main__":
     main()

@@ -28,10 +28,11 @@ def generate_data(vehicle: Vehicle, table_type, section_type="vehicle"):
     
     vehicle_data = {}
 
-    model = vehicle.get_models()
+    model = vehicle.get_models() if section_type == "vehicle" else vehicle.get_model()
+    name = vehicle.wiki_link if section_type == "parent" else link(vehicle.page)
 
     vehicle_data["model"] = model if "model" in columns else None
-    vehicle_data["name"] = vehicle.wiki_link if "name" in columns else None
+    vehicle_data["name"] = name if "name" in columns else None
     vehicle_data["type"] = vehicle.get_vehicle_type() if "type" in columns else None
     vehicle_data["mass"] = convert_int(vehicle.get_mass()) if "mass" in columns else None
     vehicle_data["engine_power"] = check_dash(convert_int(vehicle.get_engine_power()), vehicle, True, True) if "engine_power" in columns else None
@@ -123,8 +124,8 @@ def main():
     all_vehicle_data = find_vehicles("vehicle")
     all_vehicle_data_parent = find_vehicles("parent")
 
-    veh_type = os.path.join("lists", "vehicles_by_type")
-    veh_type_parent = os.path.join("lists", "vehicles_by_model")
+    veh_type = os.path.join("lists", "vehicle_list")
+    veh_type_parent = os.path.join("lists", "vehicle_variants")
 
     PARENT_HEADER = '{| class="wikitable theme-red sortable sticky-column mw-collapsible" style="text-align: center;" data-expandtext="{{int:show}}" data-collapsetext="{{int:hide}}"'
     PARENT_CAPTION = 'style="min-width:300px;" | Variants list'
@@ -135,7 +136,7 @@ def main():
         table_map=table_map,
         columns=column_headings,
         root_path=VEHICLE_DIR,
-        bot_flag_type="type_vehicle_list",
+        bot_flag_type="vehicle_list",
         suppress=True,
         combine_tables=False
         )
@@ -147,7 +148,7 @@ def main():
         caption=PARENT_CAPTION,
         columns=column_headings,
         root_path=VEHICLE_DIR,
-        bot_flag_type="variant_vehicle_list",
+        bot_flag_type="vehicle_variants",
         suppress=True,
         combine_tables=False
         )

@@ -68,7 +68,7 @@ def generate_data(foraging: ForagingItem, table_type: str):
     item_dict = {key: item_dict[key] for key in columns if key in item_dict}
 
     # Add item_name for sorting
-    item_dict["item_name"] = item.name
+    item_dict["item_name"] = item.page
     
     return item_dict  
 
@@ -111,7 +111,7 @@ def main():
 
     items = process_items()
 
-    table_helper.create_tables("item_lists", items, table_map=table_map, columns=column_headings, root_path=FORAGING_DIR, suppress=True, bot_flag_type="item_list")
+    table_helper.create_tables("foraging_item_list", items, table_map=table_map, columns=column_headings, root_path=FORAGING_DIR, suppress=True, bot_flag_type="foraging_item_list", combine_tables=False)
 
 if __name__ == "__main__":
     main()

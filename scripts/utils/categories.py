@@ -304,7 +304,8 @@ def is_debug(item: Item) -> bool:
             or item.get("DisplayCategory") in ("Hidden")
             or "debug" in item.id_type.lower()
             or "_dev_" in item.id_type.lower()
-            or "_dummy" in item.id_type.lower())
+            or "_dummy" in item.id_type.lower()
+            or "Test" in item.id_type)
 
 ITEM_CHECKS = [
     (is_ammo, "ammo"),

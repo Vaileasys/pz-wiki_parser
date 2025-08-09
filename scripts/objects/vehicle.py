@@ -889,7 +889,18 @@ class Vehicle:
         """Return mechanics overlay."""
         if Vehicle._mechanics_overlay is None:
             Vehicle._load_mechanics_overlay()
-        return Vehicle._mechanics_overlay.get("CarList").get(self.vehicle_id, {}).get("imgPrefix")
+        mechanics_overlay = Vehicle._mechanics_overlay.get("CarList", {}).get(self.vehicle_id, {}).get("imgPrefix")
+
+        # Fallback to parent if not found
+        if not mechanics_overlay:
+            parent = self.get_parent()
+            if parent and parent.vehicle_id != self.vehicle_id:
+                mechanics_overlay = parent.get_mechanics_overlay()
+            else:
+                echo.warning(f"[{self.vehicle_id}] Unable to get parent mechanics overlay. Skipping.")
+                return None
+
+        return mechanics_overlay
     
 
     ## ---- Properties ---- ##

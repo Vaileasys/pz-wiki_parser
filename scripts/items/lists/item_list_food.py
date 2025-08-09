@@ -292,7 +292,7 @@ def main():
             pbar.update(1)
 
         pbar.set_postfix_str("Creating tables...")
-        table_helper.create_tables("food", all_food_data, table_map=table_map, columns=column_headings, bot_flag_type="food_item_list", combine_tables=False)
+        table_helper.create_tables("food_item_list", all_food_data, table_map=table_map, columns=column_headings, bot_flag_type="food_item_list", combine_tables=False)
 
 
 if __name__ == "__main__":

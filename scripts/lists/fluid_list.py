@@ -60,7 +60,7 @@ def main():
     for fluid_id in Fluid.keys():
         fluid_data["fluid"].append(process_fluid(fluid_id))
 
-    create_tables("fluid", fluid_data, table_map=table_map, columns=column_headings, root_path=ROOT_PATH, combine_tables=False)
+    create_tables("fluid_list", fluid_data, table_map=table_map, columns=column_headings, root_path=ROOT_PATH, combine_tables=False, bot_flag_type="fluid_list")
 
 
 if __name__ == "__main__":
