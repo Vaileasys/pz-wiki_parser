@@ -67,15 +67,27 @@ def link(page:str, name:str=None, anchor:str=None) -> str:
     """
     from scripts.core.language import Language
 
+    def normalise_first_char(s: str) -> str:
+        s = (s or "").strip().replace("_", " ")
+        return (s[:1].upper() + s[1:]) if s else s
+
     page_anchor = f"{page}#{anchor}" if anchor else page
     full_page = f"{page_anchor}{Language.get_subpage()}"
 
+    # No name provided, use the page as the name
     if name is None:
         return f"[[{full_page}]]"
-    elif page == name and Language.get() == "en" and not anchor:
+    
+    # Normalised name (lowercase first character) matches the page, no anchor, and language is English
+    if Language.get() == "en" and not anchor and normalise_first_char(page) == normalise_first_char(name):
+        return f"[[{name}]]"
+    
+    # Name is the same as page, no anchor, and language is English
+    if Language.get() == "en" and not anchor and page == name:
         return f"[[{page}]]"
-    else:
-        return f"[[{full_page}|{name}]]"
+    
+    # Return full link with name, e.g. for non-English languages or when anchor is present
+    return f"[[{full_page}|{name}]]"
 
 
 def convert_percentage(value: str | int | float, start_zero=True, percentage=False, default=None, decimals: int = 0) -> str:
