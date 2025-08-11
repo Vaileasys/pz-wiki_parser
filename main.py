@@ -167,6 +167,17 @@ menu_structure = {
         },
     },
     "6": {
+        "name": "Animals",
+        "description": "",
+        "sub_options": {
+            "1": {
+                "module": "scripts.animals.animal_list_pzwiki",
+                "name": "Animal list (maintenance)",
+                "description": "Generate animal list for the 'PZwiki:Animal_list' page.",
+            },
+        },
+    },
+    "7": {
         "name": "Lists",
         "description": "Generate lists for articles",
         "sub_options": {
@@ -207,7 +218,7 @@ menu_structure = {
             },
         },
     },
-    "7": {
+    "8": {
         "name": "Tools",
         "description": "Data analysis and generate reports.",
         "sub_options": {
@@ -233,7 +244,7 @@ menu_structure = {
             },
         },
     },
-    "8": {
+    "9": {
         "name": "Other",
         "description": "",
         "sub_options": {
