@@ -3,7 +3,7 @@ from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.objects.vehicle import Vehicle
 from scripts.objects.item import Item
-from scripts.vehicles import vehicle_infobox, vehicle_parts, vehicle_list2, vehicle_spawns
+from scripts.vehicles import vehicle_infobox, vehicle_parts, vehicle_list_detailed, vehicle_spawns
 from scripts.core.file_loading import load_file, write_file
 from scripts.core.constants import VEHICLE_DIR, PBAR_FORMAT
 from scripts.core.version import Version
@@ -129,7 +129,7 @@ def generate_see_also(vehicle: Vehicle):
 def load_modules():
     vehicle_infobox.main(pre_choice="1")
     vehicle_parts.main()
-    vehicle_list2.main()
+    vehicle_list_detailed.main()
     vehicle_spawns.main()
 
 def process_vehicle(vehicle_id):

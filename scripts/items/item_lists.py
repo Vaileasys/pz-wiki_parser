@@ -13,7 +13,7 @@ from scripts.core.language import Language
 OUTPUT_DIR = os.path.join(ITEM_DIR.format(language_code=Language.get()), "lists")
 
 MODULES = {
-    "1": {"module": "scripts.items.lists.item_list", "name": "Items list", "description": "item list for the 'PZwiki:Item_list' page."},
+    "1": {"module": "scripts.items.lists.item_list_pzwiki", "name": "Item list (maintenance)", "description": "item list for the 'PZwiki:Item_list' page."},
     "2": {"module": "scripts.items.lists.item_list_animal_part", "name": "Animal part", "description": "item list for the 'Animal part' page."},
     "3": {"module": "scripts.items.lists.item_list_appearance", "name": "Appearance", "description": "item list for the 'Appearance' page."},
     "4": {"module": "scripts.items.lists.item_list_camping", "name": "Camping", "description": "item list for the 'Camping' page."},

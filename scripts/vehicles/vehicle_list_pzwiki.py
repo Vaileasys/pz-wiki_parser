@@ -1,6 +1,7 @@
+"""Generates a list of all vehicles for PZwiki:Vehicle_list."""
 from scripts.objects.vehicle import Vehicle
 from scripts.core.file_loading import write_file
-from scripts.utils.util import link
+from scripts.utils import echo
 from scripts.core.constants import VEHICLE_DIR
 
 def generate_table(data):
@@ -53,7 +54,10 @@ def generate_data():
 def main():
     vehicle_data = generate_data()
     content = generate_table(vehicle_data)
-    write_file(content, rel_path="vehicle_list.txt", root_path=VEHICLE_DIR)
+    rel_path = "vehicle_list.txt"
+    file_path = write_file(content, rel_path=rel_path, root_path=VEHICLE_DIR, suppress=True)
+
+    echo.success(f"Vehicle list generated to {file_path / rel_path}.")
 
 if __name__ == "__main__":
     main()

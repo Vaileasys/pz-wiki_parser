@@ -135,14 +135,14 @@ menu_structure = {
         "description": "",
         "sub_options": {
             "1": {
-                "module": "scripts.vehicles.vehicle_list",
-                "name": "Vehicle list (base)",
-                "description": "Generate vehicle list for the base vehicle variants.",
+                "module": "scripts.vehicles.vehicle_list_pzwiki",
+                "name": "Vehicle list (maintenance)",
+                "description": "Generate vehicle list for the 'PZwiki:Vehicle_list' page.",
             },
             "2": {
-                "module": "scripts.vehicles.vehicle_list2",
-                "name": "Vehicle list (variants)",
-                "description": "Generate vehicle list for all variants per base vehicle.",
+                "module": "scripts.vehicles.vehicle_list_detailed",
+                "name": "Vehicle list (detailed)",
+                "description": "Generate detailed vehicle lists for both just the base vehicles and all variants.",
             },
             "3": {
                 "module": "scripts.vehicles.vehicle_infobox",
