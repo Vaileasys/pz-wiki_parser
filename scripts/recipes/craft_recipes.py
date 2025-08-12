@@ -17,13 +17,14 @@ The script handles:
 - Lua table generation for templates
 """
 
-import os, json, re
+import os, re
 from tqdm import tqdm
 from collections import defaultdict
-from scripts.core.constants import PBAR_FORMAT, DATA_DIR
+from scripts.core.constants import PBAR_FORMAT, CACHE_DIR
 from scripts.core.language import Language, Translate
 from scripts.core.version import Version
 from scripts.core.cache import load_cache
+from scripts.core import page_manager
 from scripts.parser.script_parser import extract_script_data
 from scripts.parser import literature_parser
 from scripts.objects.fluid import Fluid
@@ -33,6 +34,7 @@ from scripts.items import item_tags
 
 # Cache for unit tool IDs to avoid repeated computation
 _unit_tool_ids_cache = None
+
 
 def get_unit_tool_ids() -> list[str]:
     """
@@ -52,22 +54,23 @@ def get_unit_tool_ids() -> list[str]:
     for item_id, item in Item.all().items():
         if item.type == "Drainable":
             unit_tool_ids.append(item_id)
-    
+
     _unit_tool_ids_cache = unit_tool_ids
     return unit_tool_ids
+
 
 def get_use_delta(item_id: str) -> float:
     """
     Get the UseDelta value for a unit tool item.
-    
+
     Args:
         item_id (str): The item ID to look up
-        
+
     Returns:
         float: The UseDelta value as a float, or 0.1 as default if not found
     """
     use_delta = Item(item_id).get("UseDelta")
-    
+
     try:
         return float(use_delta) if use_delta else 0.1
     except (ValueError, TypeError):
@@ -98,10 +101,10 @@ def fluid_rgb(fluid_id):
     try:
         # Handle fluid 'categories'
         if isinstance(fluid_id, str):
-            match = re.match(r'categories\[(.+?)\]', fluid_id)
+            match = re.match(r"categories\[(.+?)\]", fluid_id)
             if match:
                 fluid_id = match.group(1)
-        
+
         fluid = Fluid(fluid_id)
 
         if not fluid.valid:
@@ -144,7 +147,7 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
         return "''none''"
 
     unit_tool_ids = get_unit_tool_ids()
-    
+
     parsed_ingredients = {"ingredients": {}}
     ingredient_counter = 0
     EXCLUDED_ITEM_IDS = {"Base.bobOmb"}
@@ -194,7 +197,7 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
             if all(isinstance(c, str) and ":" in c for c in items):
                 parsed = []
                 for entry in items:
-                    amt_str, rid = entry.split(":",1)
+                    amt_str, rid = entry.split(":", 1)
                     try:
                         amt = int(amt_str.strip().split(".")[-1])
                     except:
@@ -212,21 +215,26 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
                 info["items"] = parsed
 
         # Structured dict‑list
-        if not info and isinstance(input_entry.get("items"), list) \
-           and input_entry["items"] \
-           and isinstance(input_entry["items"][0], dict):
+        if (
+            not info
+            and isinstance(input_entry.get("items"), list)
+            and input_entry["items"]
+            and isinstance(input_entry["items"][0], dict)
+        ):
             struct = input_entry["items"]
             parsed = []
             for ent in struct:
-                rid = ent.get("raw_name") or ent.get("raw") or ent.get("item_id","")
+                rid = ent.get("raw_name") or ent.get("raw") or ent.get("item_id", "")
                 if not rid.startswith("Base."):
                     rid = f"Base.{rid}"
-                parsed.append({
-                    "raw": rid,
-                    "amount": ent.get("amount", quantity),
-                    "translated": safe_name_lookup(rid),
-                    "is_unit": rid in unit_tool_ids
-                })
+                parsed.append(
+                    {
+                        "raw": rid,
+                        "amount": ent.get("amount", quantity),
+                        "translated": safe_name_lookup(rid),
+                        "is_unit": rid in unit_tool_ids,
+                    }
+                )
             info["numbered_list"] = True
             info["items"] = parsed
 
@@ -237,15 +245,18 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
 
         # Simple items
         if not info and "items" in input_entry:
-            valid = [c for c in input_entry["items"]
-                     if isinstance(c, str) and c not in EXCLUDED_ITEM_IDS]
-            
+            valid = [
+                c
+                for c in input_entry["items"]
+                if isinstance(c, str) and c not in EXCLUDED_ITEM_IDS
+            ]
+
             if valid:
                 info["items"] = [
                     {
-                        "raw": c, 
+                        "raw": c,
                         "translated": safe_name_lookup(c),
-                        "is_unit": c in unit_tool_ids
+                        "is_unit": c in unit_tool_ids,
                     }
                     for c in valid
                 ]
@@ -256,7 +267,7 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
 
         if not info:
             echo.error(f"Unhandled ingredient #{input_index}: {input_entry}")
-        
+
         # Only add to parsed ingredients if we have actual content
         if info:
             parsed_ingredients["ingredients"][key] = info
@@ -267,26 +278,30 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
         # Skip empty data entries
         if not data:
             continue
-            
+
         # tags
         if "tags" in data:
             lines = []
             qty = data.get("amount", 1)
             for tag in data["tags"]:
-                span = open(os.path.join("output", "en", "tags", "cycle-img", f"{tag}.txt"), "r").read()
+                span = open(
+                    os.path.join("output", "en", "tags", "cycle-img", f"{tag}.txt"), "r"
+                ).read()
                 lines.append(f"{span} [[{tag} (tag)]] <small>×{qty}</small>")
             formatted.append(("tag", "<br>".join(lines), "Each of"))
 
         # Fluids
         elif data.get("fluid"):
             lines = []
-            vol = data.get("amount",1)
+            vol = data.get("amount", 1)
             for fid in data["fluidType"]:
                 cd = fluid_rgb(fid)
                 rgb = f"{{{{rgb|{cd['R']},{cd['G']},{cd['B']}}}}}"
-                lines.append(f"{rgb} [[{cd['name']} (fluid)|{cd['name']}]] <small>×{int(vol*1000)}mL</small>")
-            desc = "One of" if len(data["fluidType"])>1 else "Each of"
-            formatted.append(("fluid","<br>".join(lines),desc))
+                lines.append(
+                    f"{rgb} [[{cd['name']} (fluid)|{cd['name']}]] <small>×{int(vol * 1000)}mL</small>"
+                )
+            desc = "One of" if len(data["fluidType"]) > 1 else "Each of"
+            formatted.append(("fluid", "<br>".join(lines), desc))
 
         # Numbered_lists
         elif data.get("numbered_list"):
@@ -298,18 +313,20 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
                 if itm.get("is_unit"):
                     # Handle unit items with Unit bar
                     use_delta = get_use_delta(itm["raw"])
-                    unit_bar = f"{{{{#invoke:Unit bar|main|{itm['amount']}|{use_delta}}}}}"
+                    unit_bar = (
+                        f"{{{{#invoke:Unit bar|main|{itm['amount']}|{use_delta}}}}}"
+                    )
 
                     lines.append(f"{icon} {link} <br>{unit_bar}")
                 else:
                     # Regular items
                     lines.append(f"{icon} {link} <small>×{itm['amount']}</small>")
-            formatted.append(("item","<br>".join(lines),"One of"))
+            formatted.append(("item", "<br>".join(lines), "One of"))
 
         # Simple items
         elif data.get("items"):
             lines = []
-            qty = data.get("amount",1)
+            qty = data.get("amount", 1)
             for itm in data["items"]:
                 item_obj = Item(itm["raw"])
                 icon = item_obj.icon
@@ -322,11 +339,11 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
                 else:
                     # Regular items
                     lines.append(f"{icon} {link} <small>×{qty}</small>")
-            desc = "One of" if len(data["items"])>1 else "Each of"
-            formatted.append(("item","<br>".join(lines),desc))
+            desc = "One of" if len(data["items"]) > 1 else "Each of"
+            formatted.append(("item", "<br>".join(lines), desc))
 
         else:
-            formatted.append(("item","Unknown Ingredient","One of"))
+            formatted.append(("item", "Unknown Ingredient", "One of"))
 
     if not formatted:
         return "''none''"
@@ -370,24 +387,26 @@ def process_tools(recipe: dict, build_data: dict) -> str:
     - Unit items with Unit bar template
     """
     FLAG_MAP = {
-        'IsDamaged':       "damaged",
-        'IsNotDull':       "not dull",
-        'MayDegrade':      "may degrade",
-        'MayDegradeHeavy': "may degrade",
-        'MayDegradeLight': "may degrade",
-        'NoBrokenItems':   "not broken",
+        "IsDamaged": "damaged",
+        "IsNotDull": "not dull",
+        "MayDegrade": "may degrade",
+        "MayDegradeHeavy": "may degrade",
+        "MayDegradeLight": "may degrade",
+        "NoBrokenItems": "not broken",
     }
     EXCLUDED = {"Base.bobOmb"}
 
     groups: list[tuple[str, list[str]]] = []
-    
+
     unit_tool_ids = get_unit_tool_ids()
 
     # Process tools
     for inp in recipe.get("inputs", []):
-        if inp.get("mode") != "Keep" \
-           or "fluidModifier" in inp \
-           or any("mapper" in str(v).lower() for v in inp.values()):
+        if (
+            inp.get("mode") != "Keep"
+            or "fluidModifier" in inp
+            or any("mapper" in str(v).lower() for v in inp.values())
+        ):
             continue
 
         lines: list[str] = []
@@ -396,7 +415,10 @@ def process_tools(recipe: dict, build_data: dict) -> str:
         # Tags
         if "tags" in inp:
             for tag in inp["tags"]:
-                span = open(os.path.join("output", "en", "tags", "cycle-img", f"{tag}.txt"), encoding="utf-8").read()
+                span = open(
+                    os.path.join("output", "en", "tags", "cycle-img", f"{tag}.txt"),
+                    encoding="utf-8",
+                ).read()
                 lines.append(f"{span} [[{tag} (tag)]] <small>×{count}</small>")
 
         # Items
@@ -404,11 +426,11 @@ def process_tools(recipe: dict, build_data: dict) -> str:
             for rid in inp["items"]:
                 if rid in EXCLUDED or rid.startswith("Base.*"):
                     continue
-                
+
                 item = Item(rid)
                 wiki_link = item.wiki_link
                 icon = item.icon
-                
+
                 # Check if this is a unit tool
                 if rid in unit_tool_ids:
                     use_delta = get_use_delta(rid)
@@ -422,9 +444,11 @@ def process_tools(recipe: dict, build_data: dict) -> str:
 
         # One flag per tool ingredient
         raw_flags = inp.get("flags", [])
-        mapped    = [FLAG_MAP[f] for f in raw_flags if f in FLAG_MAP]
+        mapped = [FLAG_MAP[f] for f in raw_flags if f in FLAG_MAP]
         if mapped:
-            lines.append(f"<span style='color:var(--color-pz-subtle)'>({', '.join(dict.fromkeys(mapped))})</span>")
+            lines.append(
+                f"<span style='color:var(--color-pz-subtle)'>({', '.join(dict.fromkeys(mapped))})</span>"
+            )
 
         desc = "One of" if len(lines) - bool(mapped) > 1 else "Each of"
         groups.append((desc, lines))
@@ -434,7 +458,7 @@ def process_tools(recipe: dict, build_data: dict) -> str:
 
     # Handle each of
     out, last = [""], None
-    
+
     # Process tools
     for desc, lines in groups:
         if desc == "One of" or desc != last:
@@ -536,7 +560,9 @@ def process_output_mapper(recipe: dict, mapper_key: str) -> list[str]:
     item_mappers = recipe.get("itemMappers", {})
     mapper_data = item_mappers.get(mapper_key)
     if not mapper_data or not isinstance(mapper_data, dict):
-        echo.warning(f"Mapper '{mapper_key}' not found or invalid in recipe '{recipe.get('name')}'")
+        echo.warning(
+            f"Mapper '{mapper_key}' not found or invalid in recipe '{recipe.get('name')}'"
+        )
         return []
 
     # Look for the count on the matching output entry; default to 1
@@ -550,14 +576,12 @@ def process_output_mapper(recipe: dict, mapper_key: str) -> list[str]:
     for raw_output_key in mapper_data.keys():
         if raw_output_key.lower() == "default":
             continue
-        
+
         item_obj = Item(raw_output_key)
         icon = item_obj.get_icon(all_icons=False)
         wiki_link = item_obj.wiki_link
 
-        formatted_lines.append(
-            f"{icon}<br>{wiki_link} ×{output_amount}"
-        )
+        formatted_lines.append(f"{icon}<br>{wiki_link} ×{output_amount}")
 
     return formatted_lines
 
@@ -587,9 +611,7 @@ def process_products(recipe: dict, build_data: dict) -> str:
     raw_name = recipe.get("name", "")
     base_label = raw_label or raw_name
 
-    for key in (base_label.replace(" ", ""),
-                base_label.replace(" ", "_")):
-
+    for key in (base_label.replace(" ", ""), base_label.replace(" ", "_")):
         product_name = Translate.get(key)
         if product_name and product_name != key:  # found a real translation?
             break
@@ -624,7 +646,7 @@ def process_products(recipe: dict, build_data: dict) -> str:
                 if icon_ref:
                     img, size = icon_ref, "64x128px"
                     if icon_ref.startswith("Item_"):
-                        img = icon_ref[len("Item_"):]
+                        img = icon_ref[len("Item_") :]
                         size = "64x64px"
                     elif icon_ref.startswith("Build_"):
                         size = "96x96px"
@@ -634,7 +656,7 @@ def process_products(recipe: dict, build_data: dict) -> str:
                 elif first_sprite:
                     sp, size = first_sprite, "64x128px"
                     if first_sprite.startswith("Item_"):
-                        sp = first_sprite[len("Item_"):]
+                        sp = first_sprite[len("Item_") :]
                         size = "64x64px"
                     elif first_sprite.startswith("Build_"):
                         size = "96x96px"
@@ -644,7 +666,7 @@ def process_products(recipe: dict, build_data: dict) -> str:
         elif first_sprite:
             sp, size = first_sprite, "64x128px"
             if first_sprite.startswith("Item_"):
-                sp = first_sprite[len("Item_"):]
+                sp = first_sprite[len("Item_") :]
                 size = "64x64px"
             elif first_sprite.startswith("Build_"):
                 size = "96x96px"
@@ -658,16 +680,18 @@ def process_products(recipe: dict, build_data: dict) -> str:
         if len(built_entries) == 1:
             products_markup += built_entries[0]
         else:
-            products_markup += "<small>Each of:</small><br>" + "<br>".join(built_entries)
+            products_markup += "<small>Each of:</small><br>" + "<br>".join(
+                built_entries
+            )
 
         return products_markup
 
     # Crafting
     output_list = recipe.get("outputs", [])
-    item_lines:    list[str] = []
-    mapper_lines:  list[str] = []
-    fluid_lines:   list[str] = []
-    energy_lines:  list[str] = []
+    item_lines: list[str] = []
+    mapper_lines: list[str] = []
+    fluid_lines: list[str] = []
+    energy_lines: list[str] = []
 
     for out in output_list:
         # Energy
@@ -691,7 +715,9 @@ def process_products(recipe: dict, build_data: dict) -> str:
                 cd = fluid_rgb(fid)
                 rgb = f"{{{{rgb|{cd['R']}, {cd['G']}, {cd['B']}}}}}"
                 name = cd["name"]
-                fluid_lines.append(f"{rgb} [[{name} (fluid)|{name}]] <small>×{int(vol*1000)}mL</small>")
+                fluid_lines.append(
+                    f"{rgb} [[{name} (fluid)|{name}]] <small>×{int(vol * 1000)}mL</small>"
+                )
             continue
 
         # Item outputs
@@ -701,7 +727,9 @@ def process_products(recipe: dict, build_data: dict) -> str:
                 item_obj = Item(rid)
                 icon_filename = item_obj.get_icon(False, False, False)
                 wiki_link = item_obj.wiki_link
-                item_lines.append(f"[[File:{icon_filename}|64x64px|class=pixelart]]<br>{wiki_link} ×{qty}")
+                item_lines.append(
+                    f"[[File:{icon_filename}|64x64px|class=pixelart]]<br>{wiki_link} ×{qty}"
+                )
 
     # Assemble sections
     if item_lines:
@@ -713,7 +741,10 @@ def process_products(recipe: dict, build_data: dict) -> str:
     if mapper_lines:
         if item_lines:
             products_markup += "<br>"
-        products_markup += "<small>(Products are dependent on inputs)<br>One of:</small><br>" + "<br>".join(mapper_lines)
+        products_markup += (
+            "<small>(Products are dependent on inputs)<br>One of:</small><br>"
+            + "<br>".join(mapper_lines)
+        )
 
     if fluid_lines:
         if item_lines or mapper_lines:
@@ -789,10 +820,10 @@ def process_recipes(data: dict) -> str:
     SCHEMATIC = {
         "ExplosiveSchematics": ["Schematic (explosive)"],
         "MeleeWeaponSchematics": ["Schematic (melee weapon)"],
-        "BSToolsSchematics":   ["Tools Schematic"],
-        "ArmorSchematics":     ["Schematic (armor)"],
-        "CookwareSchematic":   ["Cookware Schematic"],
-        "FoodRecipes":         ["Recipe"]
+        "BSToolsSchematics": ["Tools Schematic"],
+        "ArmorSchematics": ["Schematic (armor)"],
+        "CookwareSchematic": ["Cookware Schematic"],
+        "FoodRecipes": ["Recipe"],
     }
     requirements_info = data.get("requirements", {})
     skillbook_list = requirements_info.get("skillbooks", [])
@@ -801,7 +832,13 @@ def process_recipes(data: dict) -> str:
     schematic_categories = requirements_info.get("schematics", [])
     trait_list = requirements_info.get("traits", [])
 
-    if not (skillbook_list or autolearn_dict or autolearn_any_list or schematic_categories or trait_list):
+    if not (
+        skillbook_list
+        or autolearn_dict
+        or autolearn_any_list
+        or schematic_categories
+        or trait_list
+    ):
         return "''none''"
 
     formatted_parts = [""]
@@ -831,7 +868,9 @@ def process_recipes(data: dict) -> str:
         for index, (skill_key, level_required) in enumerate(autolearn_dict.items()):
             if index > 0:
                 formatted_parts.extend(["<br><small>and</small><br>"])
-            formatted_parts.append(f"[[{Translate.get(skill_key, 'Perk')}]] {level_required}")
+            formatted_parts.append(
+                f"[[{Translate.get(skill_key, 'Perk')}]] {level_required}"
+            )
 
     # Handle autolearn_any list
     valid_autolearn_entries = []
@@ -876,7 +915,9 @@ def process_skills(data: dict) -> str:
 
     formatted_skills = []
     for skill_key, required_level in skill_requirements.items():
-        formatted_skills.append(f"[[{Translate.get(skill_key, 'Perk')}]] {required_level}")
+        formatted_skills.append(
+            f"[[{Translate.get(skill_key, 'Perk')}]] {required_level}"
+        )
 
     return "<br><small>and</small><br>".join(formatted_skills)
 
@@ -901,11 +942,11 @@ def process_requirements(recipe: dict, literature_data: dict) -> tuple[str, str]
     """
     requirements_work = {
         "skillrequired": {},
-        "skillbooks":   [],
-        "autolearn":    {},
+        "skillbooks": [],
+        "autolearn": {},
         "autolearn_any": [],
-        "schematics":   [],
-        "traits":       [],
+        "schematics": [],
+        "traits": [],
     }
 
     if recipe.get("needTobeLearn", "").lower() == "true":
@@ -931,13 +972,24 @@ def process_requirements(recipe: dict, literature_data: dict) -> tuple[str, str]
 
     # Traits parsed from Lua
     try:
-        lua_lines = open(os.path.join("resources", "lua", "MainCreationMethods.lua"), encoding="utf-8").read().splitlines()
-        translated_recipe_name = Translate.get(raw_recipe_name, property_key="TeachedRecipes")
+        lua_lines = (
+            open(
+                os.path.join("resources", "lua", "MainCreationMethods.lua"),
+                encoding="utf-8",
+            )
+            .read()
+            .splitlines()
+        )
+        translated_recipe_name = Translate.get(
+            raw_recipe_name, property_key="TeachedRecipes"
+        )
         for lua_line in lua_lines:
             stripped_line = lua_line.strip()
             if stripped_line.startswith("--"):
                 continue
-            if re.search(rf'"{re.escape(raw_recipe_name)}"', lua_line) or re.search(rf'"{re.escape(translated_recipe_name)}"', lua_line):
+            if re.search(rf'"{re.escape(raw_recipe_name)}"', lua_line) or re.search(
+                rf'"{re.escape(translated_recipe_name)}"', lua_line
+            ):
                 if ":" in lua_line:
                     trait_identifier = lua_line.split(":", 1)[0].strip()
                     trait_pattern = rf"local\s+{re.escape(trait_identifier)}\s*=\s*TraitFactory\.addTrait\("
@@ -946,7 +998,9 @@ def process_requirements(recipe: dict, literature_data: dict) -> tuple[str, str]
                             match = re.search(r'getText\("([^"]+)"\)', lookup_line)
                             if match and match.group(1).startswith("UI_trait_"):
                                 trait_key = match.group(1).replace("UI_trait_", "")
-                                trait_name = Translate.get(trait_key, property_key="Trait")
+                                trait_name = Translate.get(
+                                    trait_key, property_key="Trait"
+                                )
                                 if trait_name not in requirements_work["traits"]:
                                     requirements_work["traits"].append(trait_name)
                             break
@@ -970,7 +1024,7 @@ def process_requirements(recipe: dict, literature_data: dict) -> tuple[str, str]
             requirements_work["autolearn_any"].extend(auto_learn_any)
 
     recipes_string = process_recipes({"requirements": requirements_work})
-    skills_string  = process_skills({"requirements": requirements_work})
+    skills_string = process_skills({"requirements": requirements_work})
     return recipes_string, skills_string
 
 
@@ -995,9 +1049,13 @@ def build_tag_to_items_map() -> dict[str, list[dict[str, str]]]:
     return tag_map
 
 
-def output_item_article_lists(crafting_recipe_map: dict[str, dict], building_recipe_map: dict[str, dict], tag_to_items_map: dict[str, list[dict[str, str]]]) -> None:
+def output_item_article_lists(
+    crafting_recipe_map: dict[str, dict],
+    building_recipe_map: dict[str, dict],
+    tag_to_items_map: dict[str, list[dict[str, str]]],
+) -> None:
     """
-    Generate wiki article lists for items.
+    Generate wiki article lists for items with id and page subfolders.
 
     Args:
         crafting_recipe_map (dict[str, dict]): Crafting recipe data.
@@ -1005,8 +1063,22 @@ def output_item_article_lists(crafting_recipe_map: dict[str, dict], building_rec
         tag_to_items_map (dict[str, list[dict[str, str]]]): Tag to items mapping.
 
     Creates files documenting how items are used in recipes,
-    both as ingredients and as products.
+    both as ingredients and as products. Organizes outputs into
+    id and page subfolders for better wiki organization.
     """
+    # Create directory structure
+    crafting_id_dir = os.path.join("output", "recipes", "crafting", "id")
+    crafting_page_dir = os.path.join("output", "recipes", "crafting", "page")
+    building_id_dir = os.path.join("output", "recipes", "building", "id")
+    building_page_dir = os.path.join("output", "recipes", "building", "page")
+
+    for dir_path in [
+        crafting_id_dir,
+        crafting_page_dir,
+        building_id_dir,
+        building_page_dir,
+    ]:
+        os.makedirs(dir_path, exist_ok=True)
 
     def is_concrete(item_id: str) -> bool:
         return isinstance(item_id, str) and "*" not in item_id
@@ -1018,7 +1090,7 @@ def output_item_article_lists(crafting_recipe_map: dict[str, dict], building_rec
             if is_concrete(entry["item_id"])
         ]
 
-    def extract_ids(field) -> str: # type: ignore
+    def extract_ids(field) -> str:  # type: ignore
         for el in field:
             cand = None
             if isinstance(el, str):
@@ -1102,8 +1174,35 @@ def output_item_article_lists(crafting_recipe_map: dict[str, dict], building_rec
             header = "Building recipe table"
         else:
             header = "Crafting recipe table"
-        lines = [f"{{{{Crafting/sandbox|header={header}|item={tid}"] + [f"|{n}" for n in sorted(names)] + ["}}"]
+        lines = (
+            [f"{{{{Crafting/sandbox|header={header}|item={tid}"]
+            + [f"|{n}" for n in sorted(names)]
+            + ["}}"]
+        )
         return "\n".join(lines)
+
+    def sanitize_filename(name: str) -> str:
+        """Sanitize a string to be safe for use as a filename using percent encoding."""
+        # Replace invalid filename characters with percent encoding
+        replacements = {
+            ":": "%3A",
+            '"': "%22",
+            "<": "%3C",
+            ">": "%3E",
+            "|": "%7C",
+            "?": "%3F",
+            "*": "%2A",
+            "/": "%2F",
+            "\\": "%5C",
+        }
+        sanitized = name
+        for invalid_char, replacement in replacements.items():
+            sanitized = sanitized.replace(invalid_char, replacement)
+
+        # Remove any trailing spaces or dots (Windows doesn't like these)
+        sanitized = sanitized.rstrip(" .")
+
+        return sanitized
 
     def write_file(path: str, content: str) -> None:
         if not content:
@@ -1112,23 +1211,89 @@ def output_item_article_lists(crafting_recipe_map: dict[str, dict], building_rec
         with open(path, "w", encoding="utf-8") as fh:
             fh.write(content)
 
-    # whatitcrafts
+    # Collect data for pages
+    crafting_whatitcrafts_pages = defaultdict(set)  # page_name -> set of recipe names
+    crafting_howtocraft_pages = defaultdict(set)
+    building_whatitcrafts_pages = defaultdict(set)
+
+    # Generate individual files and collect page data
+    # whatitcrafts (crafting)
     for iid, names in usage_by_crafting.items():
         tid = f"{iid}_whatitcrafts"
-        write_file(os.path.join("output", "recipes", "crafting", f"{tid}.txt"),
-                   render_template(tid, names))
+        content = render_template(tid, names)
 
-    # howtocraft
+        # Write individual file
+        safe_filename = f"{sanitize_filename(tid)}.txt"
+        write_file(os.path.join(crafting_id_dir, safe_filename), content)
+
+        # Collect for page files
+        pages = page_manager.get_pages(iid, "item_id")
+        if pages:
+            for page in pages:
+                crafting_whatitcrafts_pages[page].update(names)
+        else:
+            crafting_whatitcrafts_pages["Unknown_Items"].update(names)
+
+    # howtocraft (crafting)
     for iid, names in production_by_item.items():
         tid = f"{iid}_howtocraft"
-        write_file(os.path.join("output", "recipes", "crafting", f"{tid}.txt"),
-                   render_template(tid, names))
+        content = render_template(tid, names)
 
-    # building
+        # Write individual file
+        safe_filename = f"{sanitize_filename(tid)}.txt"
+        write_file(os.path.join(crafting_id_dir, safe_filename), content)
+
+        # Collect for page files
+        pages = page_manager.get_pages(iid, "item_id")
+        if pages:
+            for page in pages:
+                crafting_howtocraft_pages[page].update(names)
+        else:
+            crafting_howtocraft_pages["Unknown_Items"].update(names)
+
+    # constructionwhatitcrafts (building)
     for iid, names in usage_by_building.items():
         tid = f"{iid}_constructionwhatitcrafts"
-        write_file(os.path.join("output", "recipes", "building", f"{tid}.txt"),
-                   render_template(tid, names))
+        content = render_template(tid, names)
+
+        # Write individual file
+        safe_filename = f"{sanitize_filename(tid)}.txt"
+        write_file(os.path.join(building_id_dir, safe_filename), content)
+
+        # Collect for page files
+        pages = page_manager.get_pages(iid, "item_id")
+        if pages:
+            for page in pages:
+                building_whatitcrafts_pages[page].update(names)
+        else:
+            building_whatitcrafts_pages["Unknown_Items"].update(names)
+
+    # Generate page-combined files
+    # crafting whatitcrafts pages
+    for page_name, recipe_names in crafting_whatitcrafts_pages.items():
+        if recipe_names:
+            tid = f"{page_name}_whatitcrafts"
+            content = render_template(tid, recipe_names)
+            safe_filename = f"{sanitize_filename(page_name)}_whatitcrafts.txt"
+            write_file(os.path.join(crafting_page_dir, safe_filename), content)
+
+    # crafting howtocraft pages
+    for page_name, recipe_names in crafting_howtocraft_pages.items():
+        if recipe_names:
+            tid = f"{page_name}_howtocraft"
+            content = render_template(tid, recipe_names)
+            safe_filename = f"{sanitize_filename(page_name)}_howtocraft.txt"
+            write_file(os.path.join(crafting_page_dir, safe_filename), content)
+
+    # building whatitcrafts pages
+    for page_name, recipe_names in building_whatitcrafts_pages.items():
+        if recipe_names:
+            tid = f"{page_name}_constructionwhatitcrafts"
+            content = render_template(tid, recipe_names)
+            safe_filename = (
+                f"{sanitize_filename(page_name)}_constructionwhatitcrafts.txt"
+            )
+            write_file(os.path.join(building_page_dir, safe_filename), content)
 
 
 def output_skill_usage(recipe_data_map: dict[str, dict]) -> None:
@@ -1157,25 +1322,51 @@ def output_skill_usage(recipe_data_map: dict[str, dict]) -> None:
         is_building_recipe = bool(recipe_data.get("construction", False))
 
         # XP from recipe
-        for matched_skill in re.findall(r'\[\[(.*?)\]\]', recipe_data.get("xp", "")):
+        for matched_skill in re.findall(r"\[\[(.*?)\]\]", recipe_data.get("xp", "")):
             display_skill = skill_name_mapping.get(matched_skill, matched_skill)
-            target_map = building_skill_usage if is_building_recipe else crafting_skill_usage
+            target_map = (
+                building_skill_usage if is_building_recipe else crafting_skill_usage
+            )
             target_map[display_skill].add(recipe_identifier)
 
         # skill requirements
-        for required_skill in recipe_data.get("requirements", {}).get("skillrequired", {}):
+        for required_skill in recipe_data.get("requirements", {}).get(
+            "skillrequired", {}
+        ):
             display_skill = skill_name_mapping.get(required_skill, required_skill)
-            target_map = building_skill_usage if is_building_recipe else crafting_skill_usage
+            target_map = (
+                building_skill_usage if is_building_recipe else crafting_skill_usage
+            )
             target_map[display_skill].add(recipe_identifier)
 
     # write out templates
     for skill, recipes in crafting_skill_usage.items():
-        lines = ["{{Crafting/sandbox|header=Crafting recipe table|ID=" + skill + "_crafting"] + [f"|{r}" for r in sorted(recipes)] + ["}}"]
-        with open(os.path.join("output", "recipes", "skills", f"{skill}_crafting.txt"), "w", encoding="utf-8") as file_handle:
+        lines = (
+            [
+                "{{Crafting/sandbox|header=Crafting recipe table|ID="
+                + skill
+                + "_crafting"
+            ]
+            + [f"|{r}" for r in sorted(recipes)]
+            + ["}}"]
+        )
+        with open(
+            os.path.join("output", "recipes", "skills", f"{skill}_crafting.txt"),
+            "w",
+            encoding="utf-8",
+        ) as file_handle:
             file_handle.write("\n".join(lines))
     for skill, recipes in building_skill_usage.items():
-        lines = ["{{Building|header=Building recipe table|ID=" + skill + "_building"] + [f"|{r}" for r in sorted(recipes)] + ["}}"]
-        with open(os.path.join("output", "recipes", "skills", f"{skill}_building.txt"), "w", encoding="utf-8") as file_handle:
+        lines = (
+            ["{{Building|header=Building recipe table|ID=" + skill + "_building"]
+            + [f"|{r}" for r in sorted(recipes)]
+            + ["}}"]
+        )
+        with open(
+            os.path.join("output", "recipes", "skills", f"{skill}_building.txt"),
+            "w",
+            encoding="utf-8",
+        ) as file_handle:
             file_handle.write("\n".join(lines))
 
 
@@ -1198,17 +1389,43 @@ def output_category_usage(recipe_data_map: dict[str, dict]) -> None:
         is_building_recipe = bool(recipe_data.get("construction", False))
         category = recipe_data.get("category", "Other")
 
-        target_map = building_category_usage if is_building_recipe else crafting_category_usage
+        target_map = (
+            building_category_usage if is_building_recipe else crafting_category_usage
+        )
         target_map[category].add(recipe_identifier)
 
     # write out templates
     for category, recipes in crafting_category_usage.items():
-        lines = ["{{Crafting/sandbox|header=Crafting recipe table|collapsed=false|ID=" + category + "_crafting"] + [f"|{r}" for r in sorted(recipes)] + ["}}"]
-        with open(os.path.join("output", "recipes", "categories", f"{category}_crafting.txt"), "w", encoding="utf-8") as file_handle:
+        lines = (
+            [
+                "{{Crafting/sandbox|header=Crafting recipe table|collapsed=false|ID="
+                + category
+                + "_crafting"
+            ]
+            + [f"|{r}" for r in sorted(recipes)]
+            + ["}}"]
+        )
+        with open(
+            os.path.join("output", "recipes", "categories", f"{category}_crafting.txt"),
+            "w",
+            encoding="utf-8",
+        ) as file_handle:
             file_handle.write("\n".join(lines))
     for category, recipes in building_category_usage.items():
-        lines = ["{{Building|header=Building recipe table|collapsed=false|ID=" + category + "_building"] + [f"|{r}" for r in sorted(recipes)] + ["}}"]
-        with open(os.path.join("output", "recipes", "categories", f"{category}_building.txt"), "w", encoding="utf-8") as file_handle:
+        lines = (
+            [
+                "{{Building|header=Building recipe table|collapsed=false|ID="
+                + category
+                + "_building"
+            ]
+            + [f"|{r}" for r in sorted(recipes)]
+            + ["}}"]
+        )
+        with open(
+            os.path.join("output", "recipes", "categories", f"{category}_building.txt"),
+            "w",
+            encoding="utf-8",
+        ) as file_handle:
             file_handle.write("\n".join(lines))
 
 
@@ -1250,14 +1467,14 @@ def output_lua_tables(recipe_data_map: dict[str, dict]) -> None:
             for recipe_id, recipe_data in recipes_in_category.items():
                 key_name = recipe_id.lower()
                 ingredients_markup = recipe_data["ingredients"]
-                tools_markup       = recipe_data["tools"]
-                recipes_markup     = recipe_data["recipes"]
-                skills_markup      = recipe_data["skills"]
+                tools_markup = recipe_data["tools"]
+                recipes_markup = recipe_data["recipes"]
+                skills_markup = recipe_data["skills"]
                 workstation_markup = recipe_data["workstation"]
-                xp_markup          = recipe_data["xp"]
-                products_markup    = recipe_data["products"]
+                xp_markup = recipe_data["xp"]
+                products_markup = recipe_data["products"]
                 if products_markup.startswith("products="):
-                    products_markup = products_markup[len("products="):]
+                    products_markup = products_markup[len("products=") :]
                 writer.write(
                     f"  {key_name} = {{\n"
                     f"    ingredients = [=[{ingredients_markup}]=],\n"
@@ -1280,14 +1497,14 @@ def output_lua_tables(recipe_data_map: dict[str, dict]) -> None:
         for recipe_id, recipe_data in building_recipe_map.items():
             key_name = recipe_id.lower()
             ingredients_markup = recipe_data["ingredients"]
-            tools_markup       = recipe_data["tools"]
-            recipes_markup     = recipe_data["recipes"]
-            skills_markup      = recipe_data["skills"]
+            tools_markup = recipe_data["tools"]
+            recipes_markup = recipe_data["recipes"]
+            skills_markup = recipe_data["skills"]
             workstation_markup = recipe_data["workstation"]
-            xp_markup          = recipe_data["xp"]
-            products_markup    = recipe_data["products"]
+            xp_markup = recipe_data["xp"]
+            products_markup = recipe_data["products"]
             if products_markup.startswith("products="):
-                products_markup = products_markup[len("products="):]
+                products_markup = products_markup[len("products=") :]
             writer.write(
                 f"  {key_name} = {{\n"
                 f"    ingredients = [=[{ingredients_markup}]=],\n"
@@ -1331,14 +1548,17 @@ def main():
     4. Creates skill usage documentation
     5. Outputs Lua tables for templates
     """
+    # Initialize page manager
+    page_manager.init()
+
     language_code = Language.get()
-    game_version  = Version.get()
+    game_version = Version.get()
 
     CRAFT_CACHE_FILE = "parsed_craftRecipe_data.json"
     BUILD_CACHE_FILE = "parsed_entity_data.json"
 
-    craft_cache_path = os.path.join(DATA_DIR, CRAFT_CACHE_FILE)
-    build_cache_path = os.path.join(DATA_DIR, BUILD_CACHE_FILE)
+    craft_cache_path = os.path.join(CACHE_DIR, CRAFT_CACHE_FILE)
+    build_cache_path = os.path.join(CACHE_DIR, BUILD_CACHE_FILE)
 
     try:
         try:
@@ -1390,43 +1610,52 @@ def main():
             )
         build_data = parsed_build_data
         echo.success("Build cache ready")
-        ''
+        ""
     except Exception as exc:
         echo.error(f"Error while gathering cache: {exc}")
     else:
         echo.success("Cache ready")
 
-    literature_data  = literature_parser.get_literature_data()
+    literature_data = literature_parser.get_literature_data()
     processed_recipe_map: dict[str, dict] = {}
 
     total_recipes = len(craft_data) + len(build_data)
 
-    try: #Main processing loop
-        with tqdm(total=total_recipes, desc="Processing recipes", bar_format=PBAR_FORMAT, unit=" recipes") as progress_bar:
+    try:  # Main processing loop
+        with tqdm(
+            total=total_recipes,
+            desc="Processing recipes",
+            bar_format=PBAR_FORMAT,
+            unit=" recipes",
+        ) as progress_bar:
             # Crafting recipes
             for recipe_id, recipe_data in craft_data.items():
                 progress_bar.set_postfix_str(f"Crafting: {recipe_id}")
                 try:
-                    ingredients_markup   = process_ingredients(recipe_data, build_data)
-                    tools_markup         = process_tools(recipe_data, build_data)
-                    recipes_markup, skills_markup = process_requirements(recipe_data, literature_data)
-                    workstation_markup   = process_workstation(recipe_data, build_data)
-                    products_markup      = process_products(recipe_data, build_data)
-                    xp_markup            = process_xp(recipe_data, build_data)
+                    ingredients_markup = process_ingredients(recipe_data, build_data)
+                    tools_markup = process_tools(recipe_data, build_data)
+                    recipes_markup, skills_markup = process_requirements(
+                        recipe_data, literature_data
+                    )
+                    workstation_markup = process_workstation(recipe_data, build_data)
+                    products_markup = process_products(recipe_data, build_data)
+                    xp_markup = process_xp(recipe_data, build_data)
 
                     processed_recipe_map[recipe_id] = {
                         "ingredients": ingredients_markup,
-                        "tools":        tools_markup,
-                        "recipes":      recipes_markup,
-                        "skills":       skills_markup,
-                        "workstation":  workstation_markup,
-                        "products":     products_markup,
-                        "xp":           xp_markup,
-                        "category":     recipe_data.get("category", "Other"),
+                        "tools": tools_markup,
+                        "recipes": recipes_markup,
+                        "skills": skills_markup,
+                        "workstation": workstation_markup,
+                        "products": products_markup,
+                        "xp": xp_markup,
+                        "category": recipe_data.get("category", "Other"),
                         "construction": False,
                     }
                 except Exception as error:
-                    echo.error(f"Skipping crafting recipe '{recipe_id}' due to error: {error}")
+                    echo.error(
+                        f"Skipping crafting recipe '{recipe_id}' due to error: {error}"
+                    )
                 finally:
                     progress_bar.update(1)
 
@@ -1434,26 +1663,30 @@ def main():
             for recipe_id, recipe_data in build_data.items():
                 progress_bar.set_postfix_str(f"Building: {recipe_id}")
                 try:
-                    ingredients_markup   = process_ingredients(recipe_data, build_data)
-                    tools_markup         = process_tools(recipe_data, build_data)
-                    recipes_markup, skills_markup = process_requirements(recipe_data, literature_data)
-                    workstation_markup   = process_workstation(recipe_data, build_data)
-                    products_markup      = process_products(recipe_data, build_data)
-                    xp_markup            = process_xp(recipe_data, build_data)
+                    ingredients_markup = process_ingredients(recipe_data, build_data)
+                    tools_markup = process_tools(recipe_data, build_data)
+                    recipes_markup, skills_markup = process_requirements(
+                        recipe_data, literature_data
+                    )
+                    workstation_markup = process_workstation(recipe_data, build_data)
+                    products_markup = process_products(recipe_data, build_data)
+                    xp_markup = process_xp(recipe_data, build_data)
 
                     processed_recipe_map[recipe_id] = {
                         "ingredients": ingredients_markup,
-                        "tools":        tools_markup,
-                        "recipes":      recipes_markup,
-                        "skills":       skills_markup,
-                        "workstation":  workstation_markup,
-                        "products":     products_markup,
-                        "xp":           xp_markup,
-                        "category":     recipe_data.get("category", "Other"),
+                        "tools": tools_markup,
+                        "recipes": recipes_markup,
+                        "skills": skills_markup,
+                        "workstation": workstation_markup,
+                        "products": products_markup,
+                        "xp": xp_markup,
+                        "category": recipe_data.get("category", "Other"),
                         "construction": True,
                     }
                 except Exception as error:
-                    echo.warning(f"Skipping building recipe '{recipe_id}' due to error: {error}")
+                    echo.warning(
+                        f"Skipping building recipe '{recipe_id}' due to error: {error}"
+                    )
                 finally:
                     progress_bar.update(1)
 
@@ -1463,7 +1696,7 @@ def main():
     else:
         echo.success("Recipes processed.")
 
-    try: # Begin outputting
+    try:  # Begin outputting
         try:
             echo.info("Mapping item tags")
             tag_map = build_tag_to_items_map()
