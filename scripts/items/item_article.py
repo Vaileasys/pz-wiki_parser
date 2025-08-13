@@ -18,7 +18,7 @@ LANGUAGE_DATA = {
             "Consumable properties": "Consumable properties",
             "Repairing": "Repairing",
         },
-        "help_text": "Help PZwiki by adding information to this section.",
+        "help_text": "Help PZwiki by adding information to this section. <span class=\"plainlinks\">[{{fullurl:{{FULLPAGENAMEE}}|veaction=edit}} Edit] ([{{fullurl:Special:CreateAccount|returnto={{FULLPAGENAMEE}}}} create account])</span>",
         "translate_reason": "Translated using game translation files.",
         "condition_categories": ["Weapon", "Tool / Weapon"],
         "condition_text": (
