@@ -4,11 +4,12 @@ from scripts.objects.item import Item
 from scripts.core.language import Language, Translate
 from scripts.core.constants import PBAR_FORMAT, ITEM_DIR
 from scripts.core.file_loading import write_file
+from scripts.utils import util
 
 ROOT_PATH = os.path.join(ITEM_DIR.format(language_code=Language.get()), "lists")
 OUTPUT_FILE = 'item_list.txt'
 
-HEADER = "! <<icon>> !! <<name>> !! <<item_id>>"
+HEADER = "! <<icon>> !! <<name>> !! <<page>> !! <<item_id>>"
 
 
 def generate_table(items_data: dict):
@@ -20,7 +21,7 @@ def generate_table(items_data: dict):
     for category in sorted(items_data.keys()):
         content.extend((
             '|-',
-            f'! colspan="3"| <h3 style="margin-top:0;">{category}</h3>',
+            f'! colspan="4"| <h3 style="margin-top:0;">{category}</h3>',
             '|-',
             f'{header}'
         ))
@@ -33,10 +34,9 @@ def generate_table(items_data: dict):
             id_rec = item["id_rec"]
 
             icons_image = ' '.join([f"[[File:{icon}|32x32px]]" for icon in icons])
-            item_link = f"[[{page_name}]]"
 
-            if Language.get() != "en" or page_name != item_name:
-                item_link = f"[[{page_name}{Language.get_subpage()}|{item_name}]]"
+            item_link = util.link(page_name, item_name)
+            page_link = util.link(page_name)
 
             if id_rec:
                 content.append('|-')
@@ -47,6 +47,7 @@ def generate_table(items_data: dict):
             content.extend((
                 f'| {icons_image}',
                 f'| {item_link}',
+                f'| {page_link}',
                 f'| {item_id}'
             ))
 
