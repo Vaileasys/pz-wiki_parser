@@ -204,7 +204,7 @@ def generate_item_data(item: Item):
     from scripts.items.item_tags import Tag
     param["tag"] = [Tag(tag).wiki_link for tag in item.tags] if item.tags else None
     param["guid"] = item.guid
-    param["clothing_item"] = util.link("ClothingItem", item.clothing_item) if item.clothing_item else None
+    param["clothing_item"] = util.link("ClothingItem", item.clothing_item.clothing_item) if item.clothing_item else None
     param["rm_guid"] = None
     param["item_id"] = item.item_id
 
