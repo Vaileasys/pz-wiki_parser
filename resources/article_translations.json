@@ -1,0 +1,58 @@
+{
+  "en": {
+    "intro_template": "{article} '''{lowercase_name}''' {verb} {subsequent_article} [[item]] in [[Project Zomboid]].",
+    "plural_intro_template": "'''{lowercase_name}''' {verb} {subsequent_article} [[item]] in [[Project Zomboid]].",
+    "headers": {
+      "Usage": "Usage",
+      "Obtaining": "Obtaining",
+      "History": "History",
+      "Code": "Code",
+      "Navigation": "Navigation"
+    },
+    "Usage_headers": {
+      "Clothing": "Clothing",
+      "Body part": "Body part",
+      "Weapon": "Weapon",
+      "Condition": "Condition",
+      "Tool": "Tool",
+      "Container": "Container",
+      "Contents": "Contents",
+      "Fluid container": "Fluid container",
+      "Food": "Food",
+      "Consumable Properties": "Consumable Properties",
+      "Crafting": "Crafting",
+      "Building": "Building",
+      "Evolved recipes": "Evolved recipes",
+      "Learned recipes": "Learned recipes",
+      "Researchable recipes": "Researchable recipes",
+      "Decoration": "Decoration",
+      "Fuel": "Fuel"
+    },
+    "Obtaining_headers": {
+      "Recipes": "Recipes",
+      "Loot": "Loot"
+    },
+    "weapon_usage_text": "A {translated_name} can be used as a weapon, scaling with the [[{skill}|{skill_lower}]] [[skill]]. It can hit a maximum of {max_hit_count} [[Zombie|zombies]] with multi-hit enabled.",
+    "condition_text": "The {translated_name} has a maximum condition of {condition_max}. Its rate of degradation is influenced by the [[{skill}|{skill_lower}]] and [[Maintenance|maintenance]] skills. The chance of losing [[durability]] can be simplified to the following formula: <code>1 in ({condition_lower_chance_one_in} + maintenanceMod &times; 2)</code>. Where \"maintenanceMod\" is calculated using the {skill_lower} and maintenance skills.<br>\nBelow is an example of the chance of losing durability at varying levels of the maintenance and {skill_lower} skills.\n\n{{{{Durability weapon|{condition_lower_chance_one_in}|{condition_max}|skill={skill}}}}}",
+    "tool_usage_base": "A {translated_name} can be used as a tool for various purposes.",
+    "tool_usage_texts": {
+      "ChopTree": "It can cut down trees to collect [[Log|logs]].",
+      "CutPlant": "It can be used to cut bushes and other plants.",
+      "RemoveBarricade": "It can be used to remove [[Barricade|barricades]] from windows and doors.",
+      "ButcherAnimal": "It can be used to [[butcher]] [[animal|animals]]."
+    },
+    "fuel_usage_text": "A {translated_name} can be used as fuel in a [[Heat source|fire]] burning for {burn_time}.",
+    "clothing_usage_text": "A {translated_name} is a [[clothing]] item that can be worn by the [[player]].",
+    "body_part_table": "{{{{Main|BodyLocation{{{{!}}}}Body location}}}}\n{{| style=\"text-align:center;\"\n|'''{item_id}'''<br>{body_part_cached}\n|}}",
+    "food_usage_text": "It can be eaten by the [[player]] providing them with some positive effects.",
+    "container_usage_text": "{article} {item_lower} reduces the [[Heavy Load|encumbrance]] of stored items when equipped by the [[player]].",
+    "container_contents_text": "{article} {item_lower} can spawn with the following items inside. The table(s) below show the probability of each item appearing at least once.",
+    "fluid_container_text": "{article} {item_lower} is a [[fluid container]] and has a maximum capacity of {capacity}mL.\n\nWhen filled with at least 120mL where [[Water (fluid)|water]], [[Carbonated Water (fluid)|carbonated water]], or [[Tainted Water (fluid)|tainted water]] are the primary fluid, the [[player]] can autodrink from this container.",
+    "crafting_text": "It is used as an ingredient in the following crafting recipes.",
+    "learned_recipes_text": "Reading this item will teach the following recipes.",
+    "evolved_recipes_text": "It is used as an ingredient in [[cooking]].",
+    "researchable_recipes_text": "The following recipes can be learned by researching this item.",
+    "building_text": "It is used as an ingredient in the following building recipes.",
+    "call_to_action": "Help PZwiki by adding to this section. <span class=\"plainlinks\">[{{fullurl:{{FULLPAGENAMEE}}|veaction=edit}} Edit] ([{{fullurl:Special:CreateAccount|returnto={{FULLPAGENAMEE}}}} create account])</span>"
+  }
+}

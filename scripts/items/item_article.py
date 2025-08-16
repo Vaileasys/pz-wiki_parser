@@ -1,250 +1,389 @@
-import os, re, sys, csv
+import os
+import re
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 from scripts.core.language import Language
-from scripts.core.constants import PBAR_FORMAT, DATA_DIR, ITEM_DIR
-from scripts.core.cache import save_cache, load_cache
+from scripts.core import page_manager, file_loading
+from scripts.core.constants import RESOURCE_DIR, PBAR_FORMAT, DATA_DIR
 from scripts.utils import echo
+from scripts.objects.item import Item
 
-LANGUAGE_DATA = {
-    "en": {
-        "intro_template": "{article} '''{lowercase_name}''' is an [[item]] in [[Project Zomboid]].",
-        "article": lambda lowercase_name: 'An' if lowercase_name[0] in 'aeiou' else 'A',
-        "headers": {
-            "Usage": "Usage",
-            "Condition": "Condition",
-            "Location": "Location",
-            "Code": "Code",
-            "See also": "See also",
-            "Consumable properties": "Consumable properties",
-            "Repairing": "Repairing",
-        },
-        "help_text": "Help PZwiki by adding information to this section. <span class=\"plainlinks\">[{{fullurl:{{FULLPAGENAMEE}}|veaction=edit}} Edit] ([{{fullurl:Special:CreateAccount|returnto={{FULLPAGENAMEE}}}} create account])</span>",
-        "translate_reason": "Translated using game translation files.",
-        "condition_categories": ["Weapon", "Tool / Weapon"],
-        "condition_text": (
-            "The {name} has a maximum condition of {condition_max}. Its rate of degradation is influenced by the {skill_type_lower} and [[maintenance]] [[skill]]s. The chance of losing [[durability]] can be simplified to the following formula: "
-            "<code>1 in (35 + maintenanceMod &times; 2)</code>. Where \"maintenanceMod\" is calculated using the {skill_type_lower} and maintenance skills.<br>"
-            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
-        ),
-    },
-    "pl": {
-        "intro_template": "'''{lowercase_name}''' to [[Item/pl|przedmiot]] w [[Project Zomboid/pl|Project Zomboid]].",
-        "headers": {
-            "Usage": "Zastosowanie",
-            "Condition": "Stan",
-            "Location": "Lokalizacja",
-            "Code": "Kod",
-            "See also": "Zobacz też",
-            "Consumable properties": "Właściwości konsumpcyjne",
-            "Repairing": "Naprawa",
-        },
-        "help_text": "Pomóż PZwiki, dodając informacje do tej sekcji.",
-        "translate_reason": "Przetłumaczone za pomocą plików tłumaczeń gry.",
-        "condition_categories": ["Broń", "Narzędzia/broń"],
-        "condition_text": (
-            "{name} ma maksymalny stan {condition_max}. Na szybkość degradacji mają  wpływ [[Skill/pl|umiejętności]] {skill_type_lower} i umiejętność [[Maintenance/pl|konserwacja]]. Szansa na zmniejszenie  [[Condition/pl|stanu]] może być uproszczona do następującej formuły: "
-            "<code>1 na (35 + maintenanceMod &times; 2)</code>. Gdzie \"maintenanceMod\" jest obliczony używając {skill_type_lower} i umiejętności konserwacji.<br>"
-            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
-        ),
-    },
-    "tr": {
-        "intro_template": "'''{lowercase_name}''' [[Project Zomboid/tr|Project Zomboid]]'de bir [[Item/tr|eşyadır]].",
-        "headers": {
-            "Usage": "Kullanım",
-            "Condition": "Sağlamlık",
-            "Location": "Dağılım",
-            "Code": "Kod",
-            "See also": "Ayrıca bakınız",
-            "Consumable properties": "Tüketilebilir nitelikler",
-            "Repairing": "Onarma",
-        },
-        "help_text": "Bu bölüme bilgi ekleyerek PZviki'ye destek olun.",
-        "translate_reason": "Oyunun çeviri dosyalaranı kullanarak çevrildi.",
-        "condition_categories": ["Silah", "Alet / Silah"],
-        "condition_text": (
-            "{name}, {condition_max} azami sağlamlığa sahiptir. Bozulma oranı {skill_type_lower} ve [[maintenance/tr|onarım]] [[skill/tr|becerilerine]] bağlıdır. [[durability/tr|Sağlamlığın]] düşme ihtimali şu formülü kullanarak basitleştirilebilir: "
-            "<code>1/(35 + maintenanceMod &times; 2)</code>. Buradaki \"maintenanceMod\", {skill_type_lower} ve onarım becerilerini kullanarak hesaplanır.<br>"
-            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
-        ),
-    },
-    "ru": {
-        "intro_template": "'''{lowercase_name}''' это [[Item/ru|предмет]] в [[Project Zomboid/ru|Project Zomboid]].",
-        "headers": {
-            "Usage": "Использование",
-            "Condition": "Состояние",
-            "Location": "Локация",
-            "Code": "Код",
-            "See also": "Смотрите также",
-            "Consumable properties": "Свойства",
-            "Repairing": "Починка",
-        },
-        "help_text": "Помогите PZwiki добавив информацию в этот раздел.",
-        "translate_reason": "Использован перевод из файлов игры.",
-        "condition_categories": ["Оружие", "Инструмент / Оружие"],
-        "condition_text": (
-            "{name} имеет максимальное состояние {condition_max}. Скорость поломки оружия зависит от уровня [[Skill/ru|навыков]] {skill_type_lower} и [[починки]]. Шанс потери одного очка [[состояния]] можно упростить до следующей формулы: <code>1 in (35 + maintenanceMod &times; 2)</code>. "
-            "В которой \"maintenanceMod\" вычислен используя навыки владения {skill_type_lower} и прочности.<br>"
-            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
-        ),
-    },
-    "it": {
-        "intro_template": "Il/la '''{lowercase_name}''' è un [[Item/it|Oggetto]] in [[Project Zomboid/it|Project Zomboid]].",
-        "headers": {
-            "Usage": "Utilizzo",
-            "Condition": "Condizione",
-            "Location": "Posizione",
-            "Code": "Codice",
-            "See also": "Vedi anche",
-            "Consumable properties": "Proprietà del consumabile",
-            "Repairing": "Riparazione",
-        },
-        "help_text": "Aiuta PZwiki aggiungendo informazioni a questa sezione.",
-        "translate_reason": "Tradotto usando file di traduzione del gioco.",
-        "condition_categories": ["Arma", "Attrezzo / Arma"],
-        "condition_text": (
-            "Il/la {name} ha una durabilità che arriva ad un massimo di :{condition_max}. Il ritmo a cui si degrada, dipende dall'abilità : {skill_type_lower} e [[maintenance/it|manutenzione]] [[skill/it|abilità]]. La probabilità di perdere [[durability/it|durabilità]] può essere semplificata nella seguente formula: <code>1 in (35 + maintenanceMod &times; 2)</code>. "
-            "Dove \"maintenanceMod\" è calcolata usando il livello di abilità in {skill_type_lower} e il livello di abilità in manutenzione.<br>"
-        "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
-        ),
-    },
-    "es": {
-        "intro_template": "'''{lowercase_name}''' es un [[item/es|artículo]] en [[Project Zomboid/es|Project Zomboid]].",
-        "headers": {
-            "Usage": "Uso",
-            "Condition": "Estado",
-            "Location": "Localización",
-            "Code": "Código",
-            "See also": "Ver también",
-            "Consumable properties": "Propiedades de los consumibles",
-            "Repairing": "Reparación",
-        },
-        "help_text": "Ayuda a PZwiki añadiendo información en esta sección",
-        "translate_reason": "Traducido con archivos de traducción del juego.",
-        "condition_categories": ["Arma", "Herramienta / Arma"],
-        "condition_text": (
-            "El {name} tiene una condición máxima de {condition_max}. Su tasa de degradación está influenciada por la {skill_type_lower} y [[maintenance/es|mantenimiento]] [[skill/es|habilidad]]. La probabilidad de perderlo [[durability/es|durabilidad]] se puede resumir con la siguiente fórmula: "
-            "<code>1 en (35 + maintenanceMod &times; 2)</code>. Donde \"maintenanceMod\" se calcula utilizando el {skill_type_lower} y las habilidades de mantenimiento.<br>"
-            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
-        ),
-    },
-    "pt-br": {
-        "intro_template": "'''{lowercase_name}''' é um [[item/pt-br|item]] em [[Project Zomboid/pt-br|Project Zomboid]].",
-        "headers": {
-            "Usage": "Utilidade",
-            "Condition": "Condição",
-            "Location": "Local",
-            "Code": "Código",
-            "See also": "Veja também",
-            "Consumable properties": "Propriedades consumíveis",
-            "Repairing": "Consertando",
-        },
-        "help_text": "Ajude a PZwiki adicionando mais informações a essa seção.",
-        "translate_reason": "Traduzido utilizando os arquivos de tradução do jogo.",
-        "condition_categories": ["Arma", "Ferramenta / Arma"],
-        "condition_text": (
-            "O/A {name} tem uma condição máxima de {condition_max}. Sua taxa de degradação é influenciada pelas [[skill/pt-br|habilidades]] de {skill_type_lower} and [[maintenance/pt-br|manutenção]]. A chance de perder [[durability/pt-br|durabilidade]] pode ser siplificada utilizando a seguinte fórmula: "
-            "<code>1 em (35 + maintenanceMod &times; 2)</code>. Onde \"maintenanceMod\" é calculado utilizando o nível das duas habilidades.<br>"
-            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
-        ),
-    },
-    "uk": {
-        "intro_template": "'''{lowercase_name}''' це [[Item/uk|предмет]] в [[Project Zomboid/uk|Project Zomboid]].",
-        "headers": {
-            "Usage": "Застосування",
-            "Condition": "Стан",
-            "Location": "Локація",
-            "Code": "Код",
-            "See also": "Дивіться також",
-            "Consumable properties": "Витратні властивості",
-            "Repairing": "Ремонт",
-        },
-        "help_text": "Допоможіть PZ-Wiki, додавши інформацію до цього розділу.",
-        "translate_reason": "Перекладено за допомогою файлів перекладу гри.",
-        "condition_categories": ["Інструмент", "Інструмент / Зброя"],
-        "condition_text": (
-            "{name} має максимальний стан {condition_max}. Його швидкість зносу залежить від {skill_type} і [[skill/uk|навички]] [[maintenance/uk|технічного обслуговування]]. Ймовірність втрати [[durability/uk|міцності]] можна спростити до наступної формули: "
-            "<code>1 із (35 + maintenanceMod &times; 2)</code>. Де \"maintenanceMod\" розраховується за допомогою {skill_type} та навички технічного обслуговування.<br>"
-            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
-        ),
-    },
-    "th": {
-        "intro_template": "'''{lowercase_name}''' คือ[[item/th|ไอเท็ม]]ใน [[Project Zomboid/th|Project Zomboid]]",
-        "headers": {
-            "Usage": "การใช้งาน",
-            "Condition": "สภาพความทนทาน",
-            "Location": "ตำแหน่ง",
-            "Code": "โค้ด",
-            "See also": "ดูเพิ่มเติม",
-            "Consumable properties": "คุณสมบัติของที่ใช้แล้วหมดไป",
-            "Repairing": "การซ่อมแซม",
-        },
-        "help_text": "ช่วย PZwiki  โดยการเพิ่มข้อมูลในส่วนนี้",
-        "translate_reason": "แปลโดยใช้ไฟล์แปลของเกม",
-        "condition_categories": ["อาวุธ", "อุปกรณ์ / อาวุธ"],
-        "condition_text": (
-            "{name}มีสภาพสูงสุด {condition_max} อัตราการเสื่อมสภาพของได้รับผลจาก[[skill/th|ทักษะ]]{skill_type_lower}และ[[maintenance/th|การดูแลรักษาอาวุธ]]สามารถสรุปโอกาสในการเสื่อม[[durability/th|สภาพความทนทาน]]ได้ด้วยสูตรดังต่อไปนี้:"
-            "<code>1 ใน (35 + maintenanceMod &times; 2)</code> โดยที่ \"maintenanceMod\" จะถูกคำนวณโดยรวมเลเวลทักษะ{skill_type_lower}บวกกับทักษะการดูแลรักษาอาวุธ<br>"
-            "\n\n{{{{Durability weapon|{condition_lower_chance}|{condition_max}|skill={skill_type}}}}}"
-            ),
-    },
-}
+# Global variables to store loaded data
+_translation_data = None
+_page_dictionary = None
+_history_cache: dict[str, str] = {}
+_codesnips_cache: dict[str, str] = {}
+_crafting_cache: dict[str, str] = {}
+_body_parts_cache: dict[str, str] = {}
+_consumable_properties_cache: dict[str, str] = {}
+_container_contents_cache: dict[str, str] = {}
+_fixing_cache: dict[str, str] = {}
+_infoboxes_cache: dict[str, str] = {}
+_evolved_recipes_cache: dict[str, str] = {}
+_researchrecipes_cache: dict[str, str] = {}
+_teachedrecipes_cache: dict[str, str] = {}
+_building_cache: dict[str, str] = {}
+_all_items_data = None
+
+# Usage section caches
+_usage_weapon_cache: dict[str, str] = {}
+_usage_clothing_cache: dict[str, str] = {}
+_usage_container_cache: dict[str, str] = {}
+_usage_fluid_container_cache: dict[str, str] = {}
+_usage_food_cache: dict[str, str] = {}
+_usage_crafting_cache: dict[str, str] = {}
+_usage_building_cache: dict[str, str] = {}
 
 
-def load_item_id_dictionary(dictionary_dir):
+def load_translations(language_code):
     """
-    Loads the item_id dictionary from a given CSV file.
-
-    The dictionary is expected to have the following format:
-        article_name, item_id1, item_id2, ...
-
-    The function will return a dictionary with the item_id as the key and the
-    article_name as the value.
+    Load translation data from JSON file for the specified language.
 
     Args:
-        dictionary_dir (str): The path to the CSV file containing the item_id
-            dictionary.
+        language_code (str): The language code to load translations for
 
     Returns:
-        dict: A dictionary with the item_id as the key and the article_name as
-            the value.
+        dict: Translation data for the specified language
     """
-    item_id_dict = {}
+    global _translation_data
+
+    if _translation_data is None:
+        translation_file = os.path.join(RESOURCE_DIR, "article_translations.json")
+        try:
+            _translation_data = file_loading.load_json(translation_file)
+            echo.info(f"Loaded article translations from {translation_file}")
+        except Exception as translation_error:
+            echo.error(f"Failed to load article translations: {translation_error}")
+            return {}
+
+    return _translation_data.get(language_code, _translation_data.get("en", {}))
+
+
+def load_page_dictionary():
+    """
+    Load the page dictionary from page_manager and store it in memory.
+
+    Returns:
+        dict: The flattened page dictionary
+    """
+    global _page_dictionary
+
+    if _page_dictionary is None:
+        try:
+            page_manager.init()
+            _page_dictionary = page_manager.get_flattened_page_dict()
+            echo.info("Loaded page dictionary.")
+        except Exception as dict_error:
+            echo.error(f"Failed to load page dictionary: {dict_error}")
+            _page_dictionary = {}
+
+    return _page_dictionary
+
+
+def load_cache():
+    """
+    Load frequently accessed content into memory for fast lookups.
+
+    Caches:
+    - History entries: resources/history/{id or id_type}.txt
+    - Code snippets: output/en/item/codesnips/{id_type or id}.txt
+    - Body parts: output/en/item/body_parts/{id_type or id}.txt
+    - Consumable properties: output/en/item/consumable_properties/{id_type or id}.txt
+    - Container contents: output/en/item/container_contents/{id_type or id}.txt
+    - Fixing: output/en/item/fixing/{id_type or id}.txt
+    - Infoboxes: output/en/item/infoboxes/{id_type or id}.txt
+    - Crafting recipes: output/recipes/crafting/id/*.txt
+    - Evolved recipes: output/recipes/evolved_recipes/template/*.txt
+    - Research recipes: output/recipes/researchrecipes/id/*.txt
+    - Teached recipes: output/recipes/teachedrecipes/id/*.txt
+    - Building recipes: output/recipes/building/id/*.txt
+    - Distribution data: data/distributions/all_items.json
+    - Usage sections:
+      - Weapon: output/en/item/usage/weapon/{id_type or id}.txt
+      - Clothing: output/en/item/usage/clothing/{id_type or id}.txt
+      - Container: output/en/item/usage/container/{id_type or id}.txt
+      - Fluid container: output/en/item/usage/fluid_container/{id_type or id}.txt
+      - Food: output/en/item/usage/food/{id_type or id}.txt
+      - Crafting: output/en/item/usage/crafting/{id_type or id}.txt
+      - Building: output/en/item/usage/building/{id_type or id}.txt
+    """
+    global _history_cache, _codesnips_cache, _crafting_cache, _body_parts_cache
+    global _consumable_properties_cache, _container_contents_cache, _fixing_cache
+    global _infoboxes_cache, _evolved_recipes_cache, _researchrecipes_cache
+    global _teachedrecipes_cache, _building_cache, _all_items_data
+    global _usage_weapon_cache, _usage_clothing_cache, _usage_container_cache
+    global _usage_fluid_container_cache, _usage_food_cache, _usage_crafting_cache
+    global _usage_building_cache
+
+    start_time = time.time()
+    echo.info("Starting cache loading with concurrent processing...")
+
+    def collect_files_to_read():
+        """
+        Collect all files that need to be read into cache.
+
+        Returns:
+            list: List of (file_path, base_name, cache_type) tuples
+        """
+        collected_files = []
+
+        # Cache configuration
+        cache_configs = [
+            (os.path.join(RESOURCE_DIR, "history"), "history", False),
+            (os.path.join("output", "en", "item", "codesnips"), "codesnips", False),
+            (os.path.join("output", "recipes", "crafting", "id"), "crafting", True),
+            (os.path.join("output", "en", "item", "body_parts"), "body_parts", False),
+            (
+                os.path.join("output", "en", "item", "consumable_properties"),
+                "consumable_properties",
+                False,
+            ),
+            (
+                os.path.join("output", "en", "item", "container_contents"),
+                "container_contents",
+                False,
+            ),
+            (os.path.join("output", "en", "item", "fixing"), "fixing", False),
+            (os.path.join("output", "en", "item", "infoboxes"), "infoboxes", False),
+            (
+                os.path.join("output", "recipes", "evolved_recipes", "template"),
+                "evolved_recipes",
+                False,
+            ),
+            (
+                os.path.join("output", "recipes", "researchrecipes", "id"),
+                "researchrecipes",
+                False,
+            ),
+            (
+                os.path.join("output", "recipes", "teachedrecipes", "id"),
+                "teachedrecipes",
+                False,
+            ),
+            (os.path.join("output", "recipes", "building", "id"), "building", False),
+        ]
+
+        for directory_path, cache_type, use_full_name in cache_configs:
+            if not os.path.isdir(directory_path):
+                echo.warning(
+                    f"{cache_type.title()} directory '{directory_path}' does not exist"
+                )
+                continue
+
+            files = [f for f in os.listdir(directory_path) if f.endswith(".txt")]
+            if not files:
+                echo.warning(
+                    f"{cache_type.title()} directory '{directory_path}' is empty"
+                )
+                continue
+
+            for fname in files:
+                source_file_path = os.path.join(directory_path, fname)
+                file_base_name = (
+                    fname.replace(".txt", "")
+                    if use_full_name
+                    else os.path.splitext(fname)[0]
+                )
+                collected_files.append((source_file_path, file_base_name, cache_type))
+
+        return collected_files
+
+    def read_file_worker(file_info):
+        """
+        Worker function to read a single file.
+
+        Args:
+            file_info (tuple): (file_path, base_name, cache_type)
+
+        Returns:
+            tuple: (content, base_name, cache_type, success, error_msg)
+        """
+        worker_file_path, worker_base_name, worker_cache_type = file_info
+        try:
+            with open(worker_file_path, "r", encoding="utf-8") as fh:
+                file_content = fh.read().strip()
+            return file_content, worker_base_name, worker_cache_type, True, None
+        except Exception as read_error:
+            return None, worker_base_name, worker_cache_type, False, str(read_error)
+
+    def get_cache_keys(input_base_name):
+        """
+        Generate cache keys for a given base name.
+        Normalizes Base. prefixes by removing them if present.
+
+        Args:
+            input_base_name (str): The base filename without extension
+
+        Returns:
+            set: Set of cache keys
+        """
+        # Removing module and normalize
+        normalized_name = input_base_name
+        if input_base_name.startswith("Base."):
+            normalized_name = input_base_name[5:]
+        cache_key_set = {normalized_name}
+        cache_key_set.add(f"Base.{normalized_name}")
+
+        return cache_key_set
+
+    # Collect all files to read
+    files_to_read = collect_files_to_read()
+    total_files = len(files_to_read)
+
+    if total_files == 0:
+        echo.warning("No cache files found to load")
+        return
+
+    echo.info(f"Found {total_files} files to load into cache")
+
+    # Map cache types to their dictionaries
+    cache_maps = {
+        "history": _history_cache,
+        "codesnips": _codesnips_cache,
+        "crafting": _crafting_cache,
+        "body_parts": _body_parts_cache,
+        "consumable_properties": _consumable_properties_cache,
+        "container_contents": _container_contents_cache,
+        "fixing": _fixing_cache,
+        "infoboxes": _infoboxes_cache,
+        "evolved_recipes": _evolved_recipes_cache,
+        "researchrecipes": _researchrecipes_cache,
+        "teachedrecipes": _teachedrecipes_cache,
+        "building": _building_cache,
+        # Usage sections
+        "usage_weapon": _usage_weapon_cache,
+        "usage_clothing": _usage_clothing_cache,
+        "usage_container": _usage_container_cache,
+        "usage_fluid_container": _usage_fluid_container_cache,
+        "usage_food": _usage_food_cache,
+        "usage_crafting": _usage_crafting_cache,
+        "usage_building": _usage_building_cache,
+    }
+
+    # Counters for each cache type
+    cache_counters = {cache_type: 0 for cache_type in cache_maps.keys()}
+    total_loaded = 0
+    total_errors = 0
+    max_workers = min(32, (os.cpu_count() or 1) + 4)
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Submit all file reading tasks
+        future_to_info = {
+            executor.submit(read_file_worker, file_info): file_info
+            for file_info in files_to_read
+        }
+
+        with tqdm(
+            total=total_files,
+            desc="Loading cache files",
+            bar_format=PBAR_FORMAT,
+            unit=" files",
+        ) as pbar:
+            for future in as_completed(future_to_info):
+                (
+                    result_content,
+                    result_base_name,
+                    result_cache_type,
+                    success,
+                    error_msg,
+                ) = future.result()
+
+                if success:
+                    cache_dict = cache_maps[result_cache_type]
+                    if result_cache_type == "crafting":
+                        normalized_base_name = result_base_name
+                        if result_base_name.startswith("Base."):
+                            normalized_base_name = result_base_name[5:]
+                        cache_dict[normalized_base_name] = result_content
+                    else:
+                        cache_keys = get_cache_keys(result_base_name)
+                        for key in cache_keys:
+                            cache_dict[key] = result_content
+
+                    cache_counters[result_cache_type] += 1
+                    total_loaded += 1
+                else:
+                    error_file_path = future_to_info[future][0]
+                    echo.error(
+                        f"Failed reading {result_cache_type} file '{error_file_path}': {error_msg}"
+                    )
+                    total_errors += 1
+
+                pbar.update(1)
+    all_items_path = os.path.join(DATA_DIR, "distributions", "all_items.json")
+
     try:
-        with open(dictionary_dir, 'r', encoding='utf-8') as csvfile:
-            reader = csv.reader(csvfile)
-            for row in reader:
-                article_name = row[0].strip()
+        _all_items_data = file_loading.load_json(all_items_path)
+        echo.info(f"Loaded distribution data from {all_items_path}")
+    except Exception as dist_error:
+        echo.error(f"Failed to load distribution data: {dist_error}")
+        _all_items_data = {}
 
-                for item_id in row[1:15]:
-                    item_id = item_id.strip()
-                    if item_id:  # Ensure item_id is not empty
-                        item_id_dict[item_id] = article_name
-
-    except Exception as e:
-        echo.error(f"Error reading {dictionary_dir}: {e}")
-
-    return item_id_dict
-
-
-def generate_intro(lowercase_name, language_code):
-    language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
-    intro_template = language_data["intro_template"]
-    article = language_data.get("article", lambda _: "")(lowercase_name).lower()
-
-    intro = intro_template.format(article=article, lowercase_name=lowercase_name)
-
-    first_alpha_index = next((i for i, c in enumerate(intro) if c.isalpha()), None)
-    if first_alpha_index is not None:
-        intro = intro[:first_alpha_index] + intro[first_alpha_index].upper() + intro[first_alpha_index + 1:]
-
-    return intro
+    # Report results
+    elapsed = time.time() - start_time
+    echo.info(f"Cache loading completed in {elapsed:.2f}s")
+    echo.info(f"Successfully loaded {total_loaded} files, {total_errors} errors")
+    for cache_type, count in cache_counters.items():
+        if count > 0:
+            echo.info(f"  {cache_type.title()}: {count} files")
 
 
-def generate_header(category, skill_type, infobox_version, language_code, name):
-    language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
-    translate_reason = language_data["translate_reason"]
+def get_article_for_item(item_name, language_code="en"):
+    """
+    Determine the correct article for an item name.
 
-    # Determine header based on category and skill type
+    Args:
+        item_name (str): The item name
+        language_code (str): Language code
+
+    Returns:
+        str: The appropriate article ("A", "An", or "")
+    """
+    if language_code != "en":
+        return ""
+
+    lowercase_name = item_name.lower()
+    words = lowercase_name.split()
+    first_word = words[0] if words else ""
+
+    has_of = " of " in lowercase_name
+    head_phrase = lowercase_name.split(" of ", 1)[0] if has_of else lowercase_name
+    head_words = head_phrase.split()
+    head_last_word = head_words[-1] if head_words else ""
+    last_word = words[-1] if words else ""
+
+    candidate_plural_word = head_last_word if has_of else last_word
+    is_plural = (
+        candidate_plural_word.endswith("s")
+        and not candidate_plural_word.endswith("ss")
+        and len(candidate_plural_word) > 1
+    )
+
+    if is_plural:
+        return ""
+
+    check_word = head_words[0] if has_of and head_words else first_word
+    vowel_starters = ["a", "e", "i", "o", "u"]
+    starts_with_vowel = check_word[:1].lower() in vowel_starters
+
+    return "An" if starts_with_vowel else "A"
+
+
+def create_header(item, translation_data, language_code="en"):
+    """
+    Create the header markup using logic adapted from the legacy generator.
+
+    Args:
+        item (Item): Item instance
+        translation_data (dict): Translation data
+        language_code (str): Language code
+
+    Returns:
+        str: Header markup
+    """
+
+    # Mapping adapted from legacy generate_header
     category_dict = {
         "Weapon": "use_skill_type",
         "Tool/Weapon": "use_skill_type",
@@ -285,7 +424,7 @@ def generate_header(category, skill_type, infobox_version, language_code, name):
         "Entertainment": "{{Header|Project Zomboid|Items|Electronics|Entertainment}}",
         "Food": "{{Header|Project Zomboid|Items|Food}}",
         "Household": "{{Header|Project Zomboid|Items|Miscellaneous items|Household}}",
-        "Appearance": "{{Header|Project Zomboid|Items|Miscellaneous items|Appearance}}"
+        "Appearance": "{{Header|Project Zomboid|Items|Miscellaneous items|Appearance}}",
     }
 
     skill_type_dict = {
@@ -296,447 +435,1015 @@ def generate_header(category, skill_type, infobox_version, language_code, name):
         "Spear": "{{Header|Project Zomboid|Items|Weapons|Melee weapons|Spears}}",
         "Axe": "{{Header|Project Zomboid|Items|Weapons|Melee weapons|Axes}}",
         "Aiming": "{{Header|Project Zomboid|Items|Weapons|Firearms}}",
-        "Firearm": "{{Header|Project Zomboid|Items|Weapons|Firearms}}"
+        "Firearm": "{{Header|Project Zomboid|Items|Weapons|Firearms}}",
     }
 
-    skill_type = re.sub(r'\[\[(?:[^\|\]]*\|)?([^\|\]]+)\]\]', r'\1', skill_type).strip()
+    item_categories = item.item_categories or []
+    header = None
 
-    # Determine the correct header based on the category and skill type
-    if category in category_dict:
-        if category_dict[category] == "use_skill_type":
-            header = skill_type_dict.get(skill_type, "{{Header|Project Zomboid|Items|Weapons}}")
-        else:
-            header = category_dict[category]
-    else:
+    # Create lowercase mapping for case-insensitive lookups
+    lower_key_map: dict[str, str] = {k.lower(): k for k in category_dict.keys()}
+
+    for cat in item_categories:
+        if not isinstance(cat, str):
+            continue
+        normalized = cat.strip()
+        key = lower_key_map.get(normalized.lower())
+        if key:
+            category_value = category_dict[key]
+            if category_value == "use_skill_type":
+                # Determine skill type
+                skill_type = item.get_skill(raw=True) or ""
+                skill_type = re.sub(
+                    r"\[\[(?:[^\|\]]*\|)?([^\|\]]+)\]\]", r"\1", skill_type
+                ).strip()
+                header = skill_type_dict.get(
+                    skill_type, "{{Header|Project Zomboid|Items|Weapons}}"
+                )
+            else:
+                header = category_value
+            break
+
+    if header is None:
         header = "{{Header|Project Zomboid|Items}}"
 
+    translate_reason = translation_data.get("translate_reason", "")
+
     if language_code == "en":
-        full_header = f"""{header}
-{{{{Page version|{infobox_version}}}}}
-{{{{Autogenerated|B42}}}}"""
+        full_header = f"{header}\n{{{{Autogenerated|B42}}}}"
     else:
-        full_header = f"""{{{{Title|{name}}}}}
-{header}
-{{{{Autogenerated|B41}}}}
-{{{{AutoT|{translate_reason}}}}}"""
+        full_header = (
+            f"{{{{Title|{item.name}}}}}\n"
+            f"{header}\n"
+            f"{{{{Autogenerated|B42}}}}\n"
+            f"{{{{AutoT|{translate_reason}}}}}"
+        )
 
     return full_header
 
 
-def generate_consumable_properties(item_id, consumables_dir):
-    if not os.path.exists(consumables_dir):
+def create_intro(item_data, translation_data, language_code="en"):
+    """
+    Creates the introduction section for an item article.
+
+    Args:
+        item_data (dict): Data about the item including name and other properties
+        translation_data (dict): Translation data for the current language
+        language_code (str): The language code (default: "en")
+
+    Returns:
+        str: The formatted introduction text
+    """
+
+    # Extract the name from item_data
+    name = item_data.get("name", "")
+    if not name:
+        echo.warning("No name found for item, cannot create introduction")
         return ""
-    filename = re.sub(r'[^\w\-_\. ]', '_', item_id) + '.txt'
-    file_path = os.path.join(consumables_dir, filename)
-
-    if os.path.isfile(file_path):
-        try:
-            with open(file_path, 'r', encoding='utf-8') as file:
-                return file.read().strip()
-        except Exception as e:
-            echo.error(f"Error reading {file_path}: {e}")
-
-    return ""
-
-
-def generate_condition(name, category, skill_type, infobox, fixing_dir, language_code):
-    language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
-    m_max = re.search(r'\|condition_max\s*=\s*(\d+)', infobox)
-    m_low = re.search(r'\|condition_lower_chance\s*=\s*(\d+)', infobox)
-
-    if not m_max or not m_low:
-        return ""
-    condition_max = m_max.group(1)
-    condition_lower_chance = m_low.group(1)
-    skill_type_lower = skill_type.lower().split('|')[-1]
-    text = language_data["condition_text"].format(
-        name=name,
-        condition_max=condition_max,
-        skill_type=skill_type,
-        skill_type_lower=skill_type_lower,
-        condition_lower_chance=condition_lower_chance
-    )
-    text = text[0].upper() + text[1:]
-    repairing_header = language_data["headers"]["Repairing"]
-    token = f"|item_id={re.search(r'\|item_id\s*=\s*(.+)', infobox).group(1).strip()}"
-    if os.path.isdir(fixing_dir):
-        for fname in os.listdir(fixing_dir):
-            path = os.path.join(fixing_dir, fname)
-            try:
-                with open(path, 'r', encoding='utf-8') as fh:
-                    content = fh.read()
-                if token in content:
-                    text += f"\n\n==={repairing_header}===\n{content.strip()}"
-                    break
-            except Exception as e:
-                echo.error(f"Error reading {path}: {e}")
-    return text
-
-
-def generate_crafting(item_id, crafting_dir, teachedrecipes_dir, language_code):
-    if language_code != "en":
-        return ""
-
-    parts = []
-
-    # What it crafts
-    what_fp = os.path.join(crafting_dir, f"{item_id}_whatitcrafts.txt")
-    if os.path.isfile(what_fp):
-        try:
-            with open(what_fp, 'r', encoding='utf-8') as fh:
-                parts.append(fh.read().strip())
-        except Exception as e:
-            echo.error(f"Error reading {what_fp}: {e}")
-
-    # Researchable recipes
-    research_fp = os.path.join(crafting_dir, f"{item_id}_research.txt")
-    if os.path.isfile(research_fp):
-        try:
-            with open(research_fp, 'r', encoding='utf-8') as fh:
-                research = fh.read().strip()
-            parts.append(
-                "====Researchable recipes====\n"
-                f"{research}"
-            )
-        except Exception as e:
-            echo.error(f"Error reading {research_fp}: {e}")
-
-    # Learned recipes
-    learned_fp = os.path.join(teachedrecipes_dir, f"{item_id}_Teached.txt")
-    if os.path.isfile(learned_fp):
-        try:
-            with open(learned_fp, 'r', encoding='utf-8') as fh:
-                learned = fh.read().strip()
-            parts.append(
-                "====Learned recipes====\n"
-                f"{learned}"
-            )
-        except Exception as e:
-            echo.error(f"Error reading {learned_fp}: {e}")
-
-    if not parts:
-        return ""
-    return "\n\n".join(parts)
-
-
-def generate_building(item_id, building_dir):
-    path = os.path.join(building_dir, f"{item_id}_constructionwhatitcrafts.txt")
-    if os.path.isfile(path):
-        try:
-            with open(path, 'r', encoding='utf-8') as fh:
-                return fh.read().strip()
-        except Exception as e:
-            echo.error(f"Error reading {path}: {e}")
-    return ""
-
-
-def generate_learned_recipes(item_id, teached_dir):
-    path = os.path.join(teached_dir, f"{item_id}_Teached.txt")
-    if os.path.isfile(path):
-        try:
-            with open(path, 'r', encoding='utf-8') as fh:
-                return fh.read().strip()
-        except Exception as e:
-            echo.error(f"Error reading {path}: {e}")
-    return ""
-
-
-def generate_body_part(item_id, body_parts_dir):
-    path = os.path.join(body_parts_dir, f"{item_id}.txt")
-    if os.path.isfile(path):
-        try:
-            with open(path, 'r', encoding='utf-8') as fh:
-                content = fh.read().strip()
-            return (
-                "{{Main|BodyLocation{{!}}Body location}}\n"
-                "{| style=\"text-align:center;\"\n"
-                f"|'''{item_id}'''<br>{content}\n"
-                "|}"
-            )
-        except Exception as e:
-            echo.error(f"Error reading {path}: {e}")
-    return ""
-
-
-def generate_location(original_filename, infobox_name, item_id, distribution_dir):
-    if not os.path.isdir(distribution_dir):
-        return ""
-    for name in (original_filename, infobox_name, re.sub(r'.*\.', '', item_id)):
-        path = os.path.join(distribution_dir, name + '.txt')
-        if os.path.isfile(path):
-            try:
-                with open(path, 'r', encoding='utf-8') as fh:
-                    return fh.read().strip()
-            except Exception as e:
-                echo.error(f"Error reading {path}: {e}")
-    return ""
-
-
-def generate_obtaining(item_id, crafting_dir, original_filename, infobox_name, distribution_dir):
-    parts = []
-    # Recipes
-    howto = os.path.join(crafting_dir, f"{item_id}_howtocraft.txt")
-    if os.path.isfile(howto):
-        try:
-            with open(howto, 'r', encoding='utf-8') as fh:
-                parts.append(f"===Recipes===\n{fh.read().strip()}")
-        except Exception as e:
-            echo.error(f"Error reading {howto}: {e}")
-
-    # Loot
-    loot = generate_location(original_filename, infobox_name, item_id, distribution_dir)
-    if loot:
-        parts.append(f"===Loot===\n{loot}")
-    return "\n\n".join(parts)
-
-
-def generate_history(item_id, history_dir, language_code):
-    if language_code != "en":
-        return ""
-    path = os.path.join(history_dir, f"{item_id}.txt")
-    if os.path.isfile(path):
-        try:
-            with open(path, 'r', encoding='utf-8') as fh:
-                return fh.read().strip()
-        except Exception as e:
-            echo.error(f"Error reading {path}: {e}")
-    return f"{{{{HistoryTable|\n|item_id={item_id}\n}}}}"
-
-
-def generate_code(item_id, code_dir):
-    if not os.path.isdir(code_dir):
-        return ""
-    filename = re.sub(r'.*\.', '', item_id) + '.txt'
-    path = os.path.join(code_dir, filename)
-    if os.path.isfile(path):
-        try:
-            with open(path, 'r', encoding='utf-8') as fh:
-                return f"{{{{CodeBox|\n{fh.read().strip()}\n}}}}"
-        except Exception as e:
-            echo.error(f"Error reading {path}: {e}")
-    return ""
-
-
-def load_infoboxes(infobox_dir):
-    infobox_data = []
-    for fname in os.listdir(infobox_dir):
-        if not fname.endswith('.txt'):
-            continue
-        path = os.path.join(infobox_dir, fname)
-        try:
-            with open(path, 'r', encoding='utf-8') as fh:
-                txt = fh.read()
-        except Exception as e:
-            echo.error(f"Error reading {path}: {e}")
-            continue
-        infobox_data.append({
-            'name': re.search(r'\|name\s*=\s*(.+)', txt).group(1).strip() if re.search(r'\|name\s*=\s*(.+)', txt) else "",
-            'category': re.search(r'\|category\s*=\s*(.+)', txt).group(1).strip() if re.search(r'\|category\s*=\s*(.+)', txt) else "",
-            'skill_type': re.search(r'\|skill_type\s*=\s*(.+)', txt).group(1).strip() if re.search(r'\|skill_type\s*=\s*(.+)', txt) else "",
-            'tags': [t.strip() for t in re.findall(r'\|tag\d?\s*=\s*(.+)', txt)],
-            'item_id': re.search(r'\|item_id\s*=\s*(.+)', txt).group(1).strip() if re.search(r'\|item_id\s*=\s*(.+)', txt) else ""
-        })
-    return infobox_data
-
-
-def assemble_body(name, original_filename, infobox_name, item_id, category, skill_type,
-                  infobox, consumables_dir, fixing_dir, code_dir, distribution_dir,
-                  history_dir, crafting_dir, building_dir, teachedrecipes_dir,
-                  body_parts_dir, language_code,
-                  ):
-    language_data = LANGUAGE_DATA.get(language_code, LANGUAGE_DATA["en"])
-    headers       = language_data["headers"]
-    help_text     = language_data["help_text"]
-
-    body = f"\n=={headers['Usage']}==\n{help_text}\n"
-
-    # Crafting
-    crafting_inner = generate_crafting(item_id, crafting_dir, teachedrecipes_dir, language_code)
-    if crafting_inner:
-        body += f"\n===Crafting===\n{crafting_inner}\n"
-
-    # Building
-    build_txt = generate_building(item_id, building_dir)
-    if build_txt:
-        body += f"\n===Building===\n{build_txt}\n"
-
-    # Body part
-    bp = generate_body_part(item_id, body_parts_dir)
-    if bp:
-        body += f"\n===Body part===\n{bp}\n"
-
-    # Consumable properties
-    cons = generate_consumable_properties(item_id, consumables_dir)
-    if cons:
-        body += f"\n==={headers['Consumable properties']}===\n{cons}\n"
-
-    # Condition
-    cond = generate_condition(name, category, skill_type, infobox, fixing_dir, language_code)
-    if cond:
-        body += f"\n===Condition===\n{cond}\n"
-
-
-
-    sections = {
-        "Obtaining": generate_obtaining(item_id, crafting_dir, original_filename, infobox_name, distribution_dir),
-        "History":    generate_history(item_id, history_dir, language_code),
-        headers['Code']: generate_code(item_id, code_dir) + "\n\n==Navigation==\n{{Navbox items}}",
-    }
-    for title, content in sections.items():
-        if content and content.strip():
-            body += f"\n=={title}==\n{content}\n"
-
-    return body.strip()
-
-
-def process_files(file_path,
-                  output_dir,
-                  consumables_dir,
-                  item_id_dict,
-                  generate_all,
-                  fixing_dir,
-                  code_dir,
-                  distribution_dir,
-                  history_dir,
-                  crafting_dir,
-                  building_dir,
-                  teached_dir,
-                  body_parts_dir,
-                  language_code,
-                  pbar):
-    try:
-        with open(file_path, 'r', encoding='utf-8') as fh:
-            content = fh.read()
-    except Exception as e:
-        echo.error(f"Error reading {file_path}: {e}")
-        return
-
-    infobox_match = re.search(r'(\{\{Infobox item.*?\}\})', content, re.DOTALL)
-    if not infobox_match:
-        echo.warning(f"Infobox not found in {file_path}")
-        return
-    infobox = infobox_match.group(1)
-
-    item_id_match = re.search(r'\|item_id\s*=\s*(.+)', infobox)
-    if not item_id_match:
-        echo.warning(f"Item ID not found in {file_path}")
-        return
-    item_id = item_id_match.group(1).strip()
-
-    if not generate_all and item_id in item_id_dict:
-        return
-
-    version_match = re.search(r'\|infobox_version\s*=\s*([\d\.]+)', infobox)
-    infobox_version = version_match.group(1) if version_match else ""
-    name_match = re.search(r'\|name\s*=\s*(.+)', infobox)
-    name = name_match.group(1).strip() if name_match else ""
     lowercase_name = name.lower()
-    category_match = re.search(r'\|category\s*=\s*(.+)', infobox)
-    category = category_match.group(1).strip() if category_match else ""
-    skill_type_match = re.search(r'\|skill_type\s*=\s*(.+)', infobox)
-    skill_type = skill_type_match.group(1).strip() if skill_type_match else ""
 
-    header = generate_header(category, skill_type, infobox_version, language_code, name)
-    body_content = assemble_body(
-        name,
-        os.path.basename(file_path),
-        name,
-        item_id,
-        category,
-        skill_type,
-        infobox,
-        consumables_dir,
-        fixing_dir,
-        code_dir,
-        distribution_dir,
-        history_dir,
-        crafting_dir,
-        building_dir,
-        teached_dir,
-        body_parts_dir,
-        language_code,
+    # Get the appropriate template
+    intro_template = translation_data.get(
+        "intro_template",
+        "{article} '''{lowercase_name}''' {verb} {subsequent_article} [[item]] in [[Project Zomboid]].",
     )
-    intro = generate_intro(lowercase_name, language_code)
+    plural_template = translation_data.get(
+        "plural_intro_template",
+        "'''{lowercase_name}''' {verb} {subsequent_article} [[item]]s in [[Project Zomboid]].",
+    )
 
-    new_content = f"{header}\n{infobox}\n{intro}\n\n{body_content}"
-    safe_id = re.sub(r'[^\w\-_\. ]', '_', item_id) + '.txt'
-    new_path = os.path.join(output_dir, safe_id)
-    try:
-        with open(new_path, 'w', encoding='utf-8') as fh:
-            fh.write(new_content.strip())
-    except Exception as e:
-        echo.error(f"Error writing {new_path}: {e}")
+    is_plural = False
+    needs_article = True
+    words = lowercase_name.split()
+    first_word = words[0] if words else ""
+    has_of = " of " in lowercase_name
+    head_phrase = lowercase_name.split(" of ", 1)[0] if has_of else lowercase_name
+    head_words = head_phrase.split()
+    head_first_word = head_words[0] if head_words else first_word
+    head_last_word = head_words[-1] if head_words else (words[-1] if words else "")
+    last_word = words[-1] if words else ""
+    subsequent_article = "an"
+    verb = "is"
+
+    if language_code == "en":
+        # Determine if the item is plural
+        candidate_plural_word = head_last_word if has_of else last_word
+        if (
+            candidate_plural_word.endswith("s")
+            and not candidate_plural_word.endswith("ss")
+            and len(candidate_plural_word) > 1
+        ):
+            is_plural = True
+            needs_article = False
+            verb = "are"
+
+        # Article selection
+        article = ""
+        if needs_article and not is_plural:
+            check_word = head_first_word or first_word
+            vowel_starters = ["a", "e", "i", "o", "u"]
+            starts_with_vowel = check_word[:1].lower() in vowel_starters
+
+            if starts_with_vowel:
+                article = "An"
+            else:
+                article = "A"
+    else:
+        article = translation_data.get("article", "")
+        if not article:
+            needs_article = False
+        verb = (
+            translation_data.get("verb_singular", "is")
+            if not is_plural
+            else translation_data.get("verb_plural", "are")
+        )
+
+    if is_plural:
+        intro = plural_template.format(
+            lowercase_name=lowercase_name,
+            subsequent_article="",
+            verb=verb,
+        )
+    else:
+        intro = intro_template.format(
+            article=article if needs_article else "",
+            lowercase_name=lowercase_name,
+            subsequent_article=subsequent_article,
+            verb=verb,
+        )
+
+    if intro:
+        first_alpha_index = None
+        for i, c in enumerate(intro):
+            if c.isalpha():
+                first_alpha_index = i
+                break
+
+        if first_alpha_index is not None:
+            intro = (
+                intro[:first_alpha_index]
+                + intro[first_alpha_index].upper()
+                + intro[first_alpha_index + 1 :]
+            )
+
+    return intro
 
 
-def main(run_directly=False):
-    if not run_directly:
-        Language.init()
+def create_infobox(item):
+    """
+    Get the infobox for an item from the cache.
+
+    Args:
+        item (Item): Item instance
+
+    Returns:
+        str: Infobox markup
+    """
+
+    item_id_full = item.item_id
+    item_id_type = item.id_type
+
+    infobox = None
+    if item_id_full:
+        infobox = _infoboxes_cache.get(item_id_full)
+    if not infobox and item_id_type:
+        infobox = _infoboxes_cache.get(item_id_type)
+
+    return infobox or ""
+
+
+def create_usage(item_data, translation_data):
+    """
+    Creates the usage section for an item article with a call to action.
+
+    Args:
+        item_data (dict): Data about the item
+        translation_data (dict): Translation data for the current language
+
+    Returns:
+        str: The formatted usage section
+    """
+
+    def create_usage_weapon():
+        """
+        Create the weapon subsection for the usage section.
+
+        Returns:
+            str or None: The formatted weapon usage section, or None if no data found
+        """
+        item_id_full = item_data.get("id") or ""
+        item_id_type = item_data.get("id_type") or ""
+
+        if not item_id_full and not item_id_type:
+            return None
+
+        item = Item(item_id_full or item_id_type)
+
+        if not item.get("MaxDamage"):
+            return None
+
+        usage_headers = translation_data.get("Usage_headers", {})
+        weapon_header = usage_headers.get("Weapon", "Weapon")
+        condition_header = usage_headers.get("Condition", "Condition")
+        weapon_text_template = translation_data.get("weapon_usage_text", "")
+        condition_text_template = translation_data.get("condition_text", "")
+
+        if not weapon_text_template:
+            return None
+
+        translated_name = item.name.lower()
+        skill = item.get_skill(raw=True) or "Unknown"
+        skill_lower = skill.lower()
+        max_hit_count = item.max_hit_count or 1
+
+        weapon_text = weapon_text_template.format(
+            translated_name=translated_name,
+            skill=skill,
+            skill_lower=skill_lower,
+            max_hit_count=max_hit_count,
+        )
+
+        weapon_section = f"==={weapon_header}===\n{weapon_text}"
+
+        if item.condition_max and item.condition_max > 0 and condition_text_template:
+            condition_lower_chance_one_in = item.condition_lower_chance_one_in or 10
+            condition_max = item.condition_max
+
+            condition_text = condition_text_template.format(
+                translated_name=translated_name,
+                condition_max=condition_max,
+                skill=skill,
+                skill_lower=skill_lower,
+                condition_lower_chance_one_in=condition_lower_chance_one_in,
+            )
+
+            weapon_section += f"\n\n===={condition_header}====\n{condition_text}"
+
+        return weapon_section
+
+    def create_usage_tool():
+        """
+        Create the tool subsection for the usage section.
+
+        Returns:
+            str or None: The formatted tool usage section, or None if no tool tags found
+        """
+        item_id_full = item_data.get("id") or ""
+        item_id_type = item_data.get("id_type") or ""
+
+        if not item_id_full and not item_id_type:
+            return None
+
+        item = Item(item_id_full or item_id_type)
+
+        tool_tags = ["ChopTree", "CutPlant", "RemoveBarricade", "ButcherAnimal"]
+        has_tool_tags = [tag for tag in tool_tags if item.has_tag(tag)]
+
+        if not has_tool_tags:
+            return None
+
+        usage_headers = translation_data.get("Usage_headers", {})
+        tool_header = usage_headers.get("Tool", "Tool")
+        tool_base_template = translation_data.get("tool_usage_base", "")
+        tool_texts = translation_data.get("tool_usage_texts", {})
+
+        if not tool_base_template:
+            return None
+
+        translated_name = item.name.lower()
+        tool_text = tool_base_template.format(translated_name=translated_name)
+
+        for tag in has_tool_tags:
+            if tag in tool_texts:
+                tool_text += " " + tool_texts[tag]
+
+        return f"==={tool_header}===\n{tool_text}"
+
+    def create_usage_fuel():
+        """
+        Create the fuel subsection for the usage section.
+
+        Returns:
+            str or None: The formatted fuel usage section, or None if item cannot be used as fuel
+        """
+        item_id_full = item_data.get("id") or ""
+        item_id_type = item_data.get("id_type") or ""
+
+        if not item_id_full and not item_id_type:
+            return None
+
+        item = Item(item_id_full or item_id_type)
+        burn_time = item.burn_time
+        if not burn_time:
+            return None
+
+        usage_headers = translation_data.get("Usage_headers", {})
+        fuel_header = usage_headers.get("Fuel", "Fuel")
+
+        fuel_text_template = translation_data.get("fuel_usage_text", "")
+
+        if not fuel_text_template:
+            return None
+
+        translated_name = item.name.lower()
+        fuel_text = fuel_text_template.format(
+            translated_name=translated_name, burn_time=burn_time
+        )
+
+        return f"==={fuel_header}===\n{fuel_text}"
+
+    def create_usage_clothing():
+        """
+        Create the clothing subsection for the usage section.
+
+        Returns:
+            str or None: The formatted clothing usage section, or None if not a clothing item
+        """
+        item_id_full = item_data.get("id") or ""
+        item_id_type = item_data.get("id_type") or ""
+
+        if not item_id_full and not item_id_type:
+            return None
+
+        item = Item(item_id_full or item_id_type)
+
+        has_body_location = item.get("BodyLocation") is not None
+        is_clothing_type = item.get("Type") == "Clothing"
+
+        if not has_body_location and not is_clothing_type:
+            return None
+
+        usage_headers = translation_data.get("Usage_headers", {})
+        clothing_header = usage_headers.get("Clothing", "Clothing")
+        body_part_header = usage_headers.get("Body part", "Body part")
+
+        clothing_text_template = translation_data.get("clothing_usage_text", "")
+        body_part_table_template = translation_data.get("body_part_table", "")
+
+        if not clothing_text_template:
+            return None
+
+        translated_name = item.name.lower()
+        clothing_text = clothing_text_template.format(translated_name=translated_name)
+
+        clothing_section = f"==={clothing_header}===\n{clothing_text}"
+
+        if has_body_location and item.body_location and body_part_table_template:
+            body_part_cached = None
+            if item_id_full:
+                body_part_cached = _body_parts_cache.get(item_id_full)
+            if not body_part_cached and item_id_type:
+                body_part_cached = _body_parts_cache.get(item_id_type)
+
+            if body_part_cached:
+                body_part_text = body_part_table_template.format(
+                    item_id=item.item_id, body_part_cached=body_part_cached
+                )
+                clothing_section += f"\n\n===={body_part_header}====\n{body_part_text}"
+
+        return clothing_section
+
+    def create_usage_food():
+        """
+        Create the food subsection for the usage section.
+
+        Returns:
+            str or None: The formatted food usage section, or None if not a food item
+        """
+        item_id_full = item_data.get("id") or ""
+        item_id_type = item_data.get("id_type") or ""
+
+        if not item_id_full and not item_id_type:
+            return None
+
+        item = Item(item_id_full or item_id_type)
+        if not item.get("HungerChange"):
+            return None
+
+        usage_headers = translation_data.get("Usage_headers", {})
+        food_header = usage_headers.get("Food", "Food")
+        consumable_properties_header = usage_headers.get(
+            "Consumable Properties", "Consumable Properties"
+        )
+
+        food_text_template = translation_data.get("food_usage_text", "")
+
+        if not food_text_template:
+            return None
+
+        food_section = f"==={food_header}===\n{food_text_template}"
+
+        consumable_properties_content = None
+        if item_id_full:
+            consumable_properties_content = _consumable_properties_cache.get(
+                item_id_full
+            )
+        if not consumable_properties_content and item_id_type:
+            consumable_properties_content = _consumable_properties_cache.get(
+                item_id_type
+            )
+
+        if consumable_properties_content:
+            food_section += f"\n\n===={consumable_properties_header}====\n{consumable_properties_content}"
+
+        return food_section
+
+    def create_usage_container():
+        """
+        Create the container subsection for the usage section.
+
+        Returns:
+            str or None: The formatted container usage section, or None if not a container
+        """
+        item_id_full = item_data.get("id") or ""
+        item_id_type = item_data.get("id_type") or ""
+
+        if not item_id_full and not item_id_type:
+            return None
+        item = Item(item_id_full or item_id_type)
+
+        if item.get("Type") != "Container" or item.get("Capacity", 0) <= 0:
+            return None
+
+        usage_headers = translation_data.get("Usage_headers", {})
+        container_header = usage_headers.get("Container", "Container")
+        container_text_template = translation_data.get("container_usage_text", "")
+
+        if not container_text_template:
+            return None
+
+        language_code = item_data.get("language_code", "en")
+        item_lower = item.name.lower()
+        article = get_article_for_item(item.name, language_code)
+
+        container_text = container_text_template.format(
+            article=article, item_lower=item_lower
+        )
+
+        return f"==={container_header}===\n{container_text}"
+
+    def create_usage_container_contents():
+        """
+        Create the container contents subsection for the usage section.
+
+        Returns:
+            str or None: The formatted container contents section, or None if no contents data found
+        """
+        item_id_full = item_data.get("id") or ""
+        item_id_type = item_data.get("id_type") or ""
+
+        if not item_id_full and not item_id_type:
+            return None
+
+        contents_cache = None
+        if item_id_full:
+            contents_cache = _container_contents_cache.get(item_id_full)
+        if not contents_cache and item_id_type:
+            contents_cache = _container_contents_cache.get(item_id_type)
+
+        if not contents_cache:
+            return None
+
+        usage_headers = translation_data.get("Usage_headers", {})
+        contents_header = usage_headers.get("Contents", "Contents")
+
+        contents_text_template = translation_data.get("container_contents_text", "")
+
+        if not contents_text_template:
+            return None
+
+        from scripts.objects.item import Item
+
+        item = Item(item_id_full or item_id_type)
+
+        language_code = item_data.get("language_code", "en")
+        item_lower = item.name.lower()
+        article = get_article_for_item(item.name, language_code)
+
+        contents_text = contents_text_template.format(
+            article=article, item_lower=item_lower
+        )
+
+        return f"==={contents_header}===\n{contents_text}\n{contents_cache}"
+
+    def create_usage_fluid_container():
+        """
+        Create the fluid container subsection for the usage section.
+
+        Returns:
+            str or None: The formatted fluid container usage section, or None if not a fluid container
+        """
+        item_id_full = item_data.get("id") or ""
+        item_id_type = item_data.get("id_type") or ""
+
+        if not item_id_full and not item_id_type:
+            return None
+
+        # Create Item object to check if it's a fluid container
+        from scripts.objects.item import Item
+
+        item = Item(item_id_full or item_id_type)
+
+        # Check if item has fluid container component
+        has_fluid_container = item.get_component("FluidContainer") is not None
+
+        if not has_fluid_container:
+            return None
+
+        # Get fluid container capacity
+        capacity = (
+            item.fluid_container.capacity if hasattr(item, "fluid_container") else 0
+        )
+
+        if capacity <= 0:
+            return None
+
+        # Convert capacity from liters to milliliters (round to nearest integer)
+        capacity_ml = int(round(capacity * 1000))
+
+        # Get translated headers and text template
+        usage_headers = translation_data.get("Usage_headers", {})
+        fluid_container_header = usage_headers.get("Fluid container", "Fluid container")
+
+        fluid_container_text_template = translation_data.get("fluid_container_text", "")
+
+        if not fluid_container_text_template:
+            return None
+
+        # Get item name and determine article
+        language_code = item_data.get("language_code", "en")
+        item_lower = item.name.lower()
+        article = get_article_for_item(item.name, language_code)
+
+        # Format the fluid container usage text
+        fluid_container_text = fluid_container_text_template.format(
+            article=article, item_lower=item_lower, capacity=capacity_ml
+        )
+
+        return f"==={fluid_container_header}===\n{fluid_container_text}"
+
+    def create_usage_crafting():
+        """
+        Create the crafting subsection for the usage section.
+
+        Returns:
+            str or None: The formatted crafting usage section, or None if no crafting data found
+        """
+        item_id_full = item_data.get("id") or ""
+        item_id_type = item_data.get("id_type") or ""
+
+        if not item_id_full and not item_id_type:
+            return None
+
+        crafting_content = None
+        teached_recipes_content = None
+        researchable_recipes_content = None
+        evolved_recipes_content = None
+
+        def normalize_item_id(item_id):
+            return item_id[5:] if item_id and item_id.startswith("Base.") else item_id
+
+        normalized_id_full = normalize_item_id(item_id_full)
+        normalized_id_type = normalize_item_id(item_id_type)
+
+        # Check crafting cache
+        if normalized_id_full:
+            crafting_content = _crafting_cache.get(f"{normalized_id_full}_whatitcrafts")
+        if not crafting_content and normalized_id_type:
+            crafting_content = _crafting_cache.get(f"{normalized_id_type}_whatitcrafts")
+
+        # Check teached recipes cache
+        if normalized_id_full:
+            teached_recipes_content = _teachedrecipes_cache.get(
+                f"{normalized_id_full}_Teached"
+            )
+        if not teached_recipes_content and normalized_id_type:
+            teached_recipes_content = _teachedrecipes_cache.get(
+                f"{normalized_id_type}_Teached"
+            )
+
+        # Check researchable recipes cache
+        if normalized_id_full:
+            researchable_recipes_content = _researchrecipes_cache.get(
+                f"{normalized_id_full}_research"
+            )
+        if not researchable_recipes_content and normalized_id_type:
+            researchable_recipes_content = _researchrecipes_cache.get(
+                f"{normalized_id_type}_research"
+            )
+
+        # Check evolved recipes cache
+        if normalized_id_full:
+            evolved_recipes_content = _evolved_recipes_cache.get(normalized_id_full)
+        if not evolved_recipes_content and normalized_id_type:
+            evolved_recipes_content = _evolved_recipes_cache.get(normalized_id_type)
+
+        # If no crafting data found in any cache, skip section
+        if not any(
+            [
+                crafting_content,
+                teached_recipes_content,
+                researchable_recipes_content,
+                evolved_recipes_content,
+            ]
+        ):
+            return None
+
+        # Get translated headers and text templates
+        usage_headers = translation_data.get("Usage_headers", {})
+        crafting_header = usage_headers.get("Crafting", "Crafting")
+        learned_recipes_header = usage_headers.get("Learned recipes", "Learned recipes")
+        evolved_recipes_header = usage_headers.get("Evolved recipes", "Evolved recipes")
+        researchable_recipes_header = usage_headers.get(
+            "Researchable recipes", "Researchable recipes"
+        )
+
+        crafting_text = translation_data.get("crafting_text", "")
+        learned_recipes_text = translation_data.get("learned_recipes_text", "")
+        evolved_recipes_text = translation_data.get("evolved_recipes_text", "")
+        researchable_recipes_text = translation_data.get(
+            "researchable_recipes_text", ""
+        )
+
+        # Start with main crafting section
+        crafting_content_parts = []
+
+        # If we have crafting content, add header, text and content
+        if crafting_content:
+            crafting_content_parts.append(f"==={crafting_header}===")
+            crafting_content_parts.append(crafting_text)
+            crafting_content_parts.append(crafting_content)
+
+        # Otherwise if we have any other recipe content, just add the header
+        elif any(
+            [
+                teached_recipes_content,
+                researchable_recipes_content,
+                evolved_recipes_content,
+            ]
+        ):
+            crafting_content_parts.append(f"==={crafting_header}===")
+
+        # Add learned recipes if available
+        if teached_recipes_content:
+            crafting_content_parts.append(f"\n===={learned_recipes_header}====")
+            crafting_content_parts.append(learned_recipes_text)
+            crafting_content_parts.append(teached_recipes_content)
+
+        # Add evolved recipes if available
+        if evolved_recipes_content:
+            crafting_content_parts.append(f"\n===={evolved_recipes_header}====")
+            crafting_content_parts.append(evolved_recipes_text)
+            crafting_content_parts.append(evolved_recipes_content)
+
+        # Add researchable recipes if available
+        if researchable_recipes_content:
+            crafting_content_parts.append(f"\n===={researchable_recipes_header}====")
+            crafting_content_parts.append(researchable_recipes_text)
+            crafting_content_parts.append(researchable_recipes_content)
+
+        return "\n".join(crafting_content_parts)
+
+    def create_usage_building():
+        """
+        Create the building subsection for the usage section.
+
+        Returns:
+            str or None: The formatted building usage section, or None if no data found
+        """
+        item_id_full = item_data.get("id") or ""
+        item_id_type = item_data.get("id_type") or ""
+
+        if not item_id_full and not item_id_type:
+            return None
+
+        def normalize_item_id(item_id):
+            return item_id[5:] if item_id and item_id.startswith("Base.") else item_id
+
+        normalized_id_full = normalize_item_id(item_id_full)
+        normalized_id_type = normalize_item_id(item_id_type)
+
+        building_content = None
+        if normalized_id_full:
+            building_content = _building_cache.get(
+                f"{normalized_id_full}_constructionwhatitcrafts"
+            )
+        if not building_content and normalized_id_type:
+            building_content = _building_cache.get(
+                f"{normalized_id_type}_constructionwhatitcrafts"
+            )
+
+        if building_content:
+            usage_headers = translation_data.get("Usage_headers", {})
+            building_header = usage_headers.get("Building", "Building")
+            building_text = translation_data.get(
+                "building_text",
+                "It is used as an ingredient in the following building recipes.",
+            )
+
+            return f"==={building_header}===\n{building_text}\n{building_content}"
+
+        return None
+
+    # Build usage
+    headers = translation_data.get("headers", {})
+    usage_header = headers.get("Usage", "Usage")
+    call_to_action = translation_data.get("call_to_action", "")
+
+    tool = create_usage_tool()
+    weapon = create_usage_weapon()
+    fuel = create_usage_fuel()
+    clothing = create_usage_clothing()
+    food = create_usage_food()
+    container = create_usage_container()
+    container_contents = create_usage_container_contents()
+    fluid_container = create_usage_fluid_container()
+    crafting = create_usage_crafting()
+    building = create_usage_building()
+
+    sections = [
+        section
+        for section in [
+            tool,
+            weapon,
+            fuel,
+            clothing,
+            food,
+            container,
+            container_contents,
+            fluid_container,
+            crafting,
+            building,
+        ]
+        if section is not None
+    ]
+
+    content = [f"=={usage_header}==\n{call_to_action}"]
+
+    if sections:
+        content.extend(sections)
+
+    return "\n\n".join(content)
+
+
+def create_obtaining(item_data, translation_data):
+    """
+    Creates the obtaining section.
+
+    Args:
+        item_data (dict): Data about the item
+        translation_data (dict): Translation data for the current language
+
+    Returns:
+        str: The formatted obtaining section, or empty string if no data
+    """
+
+    def create_obtaining_recipes():
+        """
+        Create the recipes subsection for the obtaining section.
+
+        Returns:
+            str or None: The formatted recipes section, or None if no recipes found
+        """
+        item_id = item_data.get("id") or ""
+        if not item_id:
+            return None
+
+        obtaining_headers = translation_data.get("Obtaining_headers", {})
+        recipes_header = obtaining_headers.get("Recipes", "Recipes")
+        cache_key = f"{item_id}_howtocraft"
+        if cache_key in _crafting_cache:
+            content = _crafting_cache[cache_key]
+            return f"==={recipes_header}===\n{content}"
+
+        return None
+
+    def create_obtaining_loot():
+        """
+        Create the loot subsection for the obtaining section.
+
+        Returns:
+            str or None: The formatted loot section, or None if no loot distribution found
+        """
+        item_id_type = item_data.get("id_type") or ""
+        if not item_id_type:
+            return None
+
+        # Get translated "Loot" header
+        obtaining_headers = translation_data.get("Obtaining_headers", {})
+        loot_header = obtaining_headers.get("Loot", "Loot")
+
+        if _all_items_data and item_id_type in _all_items_data:
+            return f"==={loot_header}===\n{{{{Loot|{item_id_type}}}}}"
+
+        return None
+
+    recipes = create_obtaining_recipes()
+    loot = create_obtaining_loot()
+
+    sections = [section for section in [recipes, loot] if section is not None]
+
+    if not sections:
+        return ""
+
+    headers = translation_data.get("headers", {})
+    obtaining_header = headers.get("Obtaining", "Obtaining")
+    content = "\n\n".join(sections)
+
+    return f"=={obtaining_header}==\n{content}"
+
+
+def create_history(item_data, translation_data):
+    """
+    Creates the history section.
+
+    Args:
+        item_data (dict): Data about the item
+        translation_data (dict): Translation data for the current language
+
+    Returns:
+        str: The formatted history section
+    """
+    language_code = item_data.get("language_code", "en")
+    headers = translation_data.get("headers", {})
+    history_header = headers.get("History", "History")
+
+    item_id_full = item_data.get("id") or ""
+    item_id_type = item_data.get("id_type") or ""
+    if not item_id_full and not item_id_type:
+        return ""
+
+    if language_code != "en":
+        return ""
+
+    content = None
+    if item_id_full:
+        content = _history_cache.get(item_id_full)
+    if not content and item_id_type:
+        content = _history_cache.get(item_id_type)
+    if not content:
+        fallback_id = item_id_full or item_id_type
+        content = f"{{{{HistoryTable|\n|item_id={fallback_id}\n}}}}"
+
+    return f"=={history_header}==\n{content}"
+
+
+def create_code(item_data, translation_data):
+    """
+    Creates the code section.
+
+    Args:
+        item_data (dict): Data about the item
+        translation_data (dict): Translation data for the current language
+
+    Returns:
+        str: The formatted code section
+    """
+    headers = translation_data.get("headers", {})
+    code_header = headers.get("Code", "Code")
+
+    item_id_full = item_data.get("id") or ""
+    item_id_type = item_data.get("id_type") or ""
+    if not item_id_full and not item_id_type:
+        return ""
+
+    inner = None
+    if item_id_full:
+        inner = _codesnips_cache.get(item_id_full)
+    if not inner and item_id_type:
+        inner = _codesnips_cache.get(item_id_type)
+    if not inner:
+        return ""
+
+    code_box = f"{{{{CodeBox|\n{inner}\n}}}}"
+    return f"=={code_header}==\n{code_box}"
+
+
+def create_navigation(translation_data):
+    """
+    Creates the navigation section.
+
+    Args:
+        translation_data (dict): Translation data for the current language
+
+    Returns:
+        str: The formatted navigation section
+    """
+    headers = translation_data.get("headers", {})
+    navigation_header = headers.get("Navigation", "Navigation")
+    return f"=={navigation_header}==\n{{{{Navbox items}}}}"
+
+
+def create_articles():
     language_code = Language.get()
+    translation_data = load_translations(language_code)
 
-    cache_file = "item_see_also_data.json"
-    see_also_cache = load_cache(os.path.join(DATA_DIR, cache_file), "see also")
+    if not translation_data:
+        echo.error(f"No translation data found for language: {language_code}")
+        return
 
-    output_item_dir = ITEM_DIR.format(language_code=language_code)
-    infobox_dir = os.path.join(output_item_dir, "infoboxes")
-    output_dir = os.path.join(output_item_dir, "articles")
-    consumables_dir = os.path.join("output", language_code, "consumables")
-    fixing_dir = os.path.join("output", language_code, "fixing")
-    dictionary_dir = os.path.join("resources", "item_id_dictionary.csv")
-    distribution_dir = os.path.join("output", "distributions", "complete")
-    history_dir = os.path.join("resources", "history")
-    code_dir = os.path.join("output", "codesnips")
-    crafting_dir = os.path.join("output", "recipes", "crafting")
-    building_dir = os.path.join("output", "recipes", "building")
-    teached_dir = os.path.join("output", "recipes", "teachedrecipes")
-    body_parts_dir = os.path.join("output", language_code, "body_parts")
+    articles_by_id: dict[str, str] = {}
 
-    if not os.path.isdir(infobox_dir):
-        echo.warning("Infoboxes directory not found")
-        sys.exit(1)
-    text_files = [f for f in os.listdir(infobox_dir) if f.endswith('.txt')]
-    if not text_files:
-        echo.warning("Infoboxes not found")
-        sys.exit(1)
+    total_items = Item.count()
+    with tqdm(
+        total=total_items,
+        desc="Generating item articles",
+        bar_format=PBAR_FORMAT,
+        unit=" items",
+    ) as pbar:
+        for item in Item.values():
+            if not item.valid:
+                pbar.update(1)
+                continue
 
-    echo.info(f"{len(text_files)} files found")
+            item_data = {
+                "name": item.name,
+                "id": item.item_id,
+                "id_type": item.id_type,
+                "language_code": language_code,
+            }
+
+            # Sections
+            header = create_header(item, translation_data, language_code)
+            infobox = create_infobox(item)
+            intro = create_intro(item_data, translation_data, language_code)
+            usage = create_usage(item_data, translation_data)
+            obtaining = create_obtaining(item_data, translation_data)
+            history = create_history(item_data, translation_data)
+            code = create_code(item_data, translation_data)
+            navigation = create_navigation(translation_data)
+
+            # Assemble content
+            special_parts = []
+            if header:
+                special_parts.append(header)
+            if infobox:
+                special_parts.append(infobox)
+            if intro:
+                special_parts.append(intro)
+
+            special_section = "\n".join(special_parts) if special_parts else ""
+
+            # Rest of the sections with double newlines
+            regular_parts = [
+                section
+                for section in [
+                    usage,
+                    obtaining,
+                    history,
+                    code,
+                    navigation,
+                ]
+                if section
+            ]
+
+            # Join everything together
+            if special_section and regular_parts:
+                content = special_section + "\n\n" + "\n\n".join(regular_parts)
+            else:
+                content = special_section or "\n\n".join(regular_parts)
+
+            content = content.strip()
+
+            # Use id without module (e.g., remove "Base.")
+            file_id = item.id_type
+            articles_by_id[file_id] = content
+
+            pbar.set_postfix_str(f"Processing: {file_id}")
+            pbar.update(1)
+
+    # Save all generated articles to disk
+    output_dir = os.path.join("output", language_code, "item", "articles")
     os.makedirs(output_dir, exist_ok=True)
 
-    while True:
-        choice = input("Do you want to generate:\n1: All items\n2: New items\nQ: Quit\n> ").strip().lower()
-        if choice in ('1', '2', 'q'):
-            break
-        echo.write("Invalid input. Please enter 1, 2, or Q.")
-    if choice == 'q':
+    for article_id, article_content in articles_by_id.items():
+        filename = f"{article_id}.txt"
+        path = os.path.join(output_dir, filename)
+        try:
+            with open(path, "w", encoding="utf-8") as fh:
+                fh.write(article_content)
+        except Exception as e:
+            echo.error(f"Error writing '{path}': {e}")
+
+
+def main():
+    Language.init()
+    language_code = Language.get()
+    echo.info(f"Using language: {language_code}")
+
+    # Load the JSON translation file
+    translation_data = load_translations(language_code)
+    if not translation_data:
+        echo.error("Failed to load translation data. Exiting.")
         return
-    generate_all = (choice == '1')
 
-    item_id_dict = load_item_id_dictionary(dictionary_dir)
+    # Load page dictionary
+    page_dictionary = load_page_dictionary()
+    if not page_dictionary:
+        echo.error("Failed to load page dictionary. Exiting.")
+        return
 
-    with tqdm(total=len(text_files), desc="Generating articles", bar_format=PBAR_FORMAT, unit=" files") as pbar:
-        for fname in text_files:
-            pbar.set_postfix_str(f"Processing: {fname[:-4]}")
-            process_files(
-                os.path.join(infobox_dir, fname),
-                output_dir,
-                consumables_dir,
-                item_id_dict,
-                generate_all,
-                fixing_dir,
-                code_dir,
-                distribution_dir,
-                history_dir,
-                crafting_dir,
-                building_dir,
-                teached_dir,
-                body_parts_dir,
-                language_code,
-                pbar
-            )
-            pbar.update(1)
-        pbar.bar_format = f"Item articles written to '{output_dir}'."
+    load_cache()
+    create_articles()
 
-    save_cache(see_also_cache, cache_file, suppress=True)
-
-
-if __name__ == "__main__":
-    main(run_directly=True)
+    echo.info("Item article generation completed.")
