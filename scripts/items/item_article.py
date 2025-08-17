@@ -505,11 +505,11 @@ def create_intro(item_data, translation_data, language_code="en"):
     # Get the appropriate template
     intro_template = translation_data.get(
         "intro_template",
-        "{article} '''{lowercase_name}''' {verb} {subsequent_article} [[item]] in [[Project Zomboid]].",
+        "{article} '''{lowercase_name}''' {verb} {subsequent_article} [[item]].",
     )
     plural_template = translation_data.get(
         "plural_intro_template",
-        "'''{lowercase_name}''' {verb} {subsequent_article} [[item]]s in [[Project Zomboid]].",
+        "'''{lowercase_name}''' {verb} {subsequent_article} [[item]]s.",
     )
 
     is_plural = False
