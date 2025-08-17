@@ -49,7 +49,7 @@ def generate_intro(vehicle: Vehicle):
     else:
         type_link = link("vehicle")
 
-    return [f"A '''{name}''' is a {type_link} in {link('Project Zomboid')}. It is a [[#Variants|variant]] of the {parent_link}{damage}."]
+    return [f"A '''{name}''' is a {type_link}. It is a [[#Variants|variant]] of the {parent_link}{damage}."]
 
 
 def generate_overview(vehicle: Vehicle):
@@ -83,7 +83,7 @@ def generate_overview(vehicle: Vehicle):
     zombie_types = vehicle.get_zombie_type()
     if zombie_types:
         content.append("===Outfits===")
-        content.append(f"The vehicle will spawn with zombies in the following outfits:")
+        content.append(f"The vehicle will spawn with zombies in the following [[outfit]]s:")
         for outfit in zombie_types:
             content.extend(check_outfit_exists(outfit))
 
