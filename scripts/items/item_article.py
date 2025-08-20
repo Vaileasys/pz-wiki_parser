@@ -1099,7 +1099,7 @@ def create_usage(item_data, translation_data):
         # Add researchable recipes if available
         if researchable_recipes_content:
             crafting_content_parts.append(f"\n===={researchable_recipes_header}====")
-            crafting_content_parts.append(researchable_recipes_text)
+            # Don't add the text template since it's already included in the content
             crafting_content_parts.append(researchable_recipes_content)
 
         return "\n".join(crafting_content_parts)
