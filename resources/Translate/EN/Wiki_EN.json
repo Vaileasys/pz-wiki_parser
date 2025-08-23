@@ -1,6 +1,7 @@
 {
     "Wiki_name": "Name",
     "Wiki_icon": "Icon",
+    "Wiki_page": "Page",
     "Wiki_item_id": "Item ID",
     "Wiki_fluid_id": "Fluid ID",
     "Wiki_weight": "Encumbrance",
