@@ -41,7 +41,7 @@ def generate_table(items_data: dict):
             if id_rec:
                 content.append('|-')
             else:
-                content.append('|- title="ID missing in infobox" style="background-color: var(--background-color-warning-subtle); color:red;"')
+                content.append('|- title="ID missing in infobox" style="background-color: var(--background-color-warning-subtle); color: red;"')
                 item_id += "*"
 
             content.extend((
