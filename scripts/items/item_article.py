@@ -425,6 +425,9 @@ def create_header(item, translation_data, language_code="en"):
         "Food": "{{Header|Project Zomboid|Items|Food}}",
         "Household": "{{Header|Project Zomboid|Items|Miscellaneous items|Household}}",
         "Appearance": "{{Header|Project Zomboid|Items|Miscellaneous items|Appearance}}",
+        "AnimalPart": "{{Header|Project Zomboid|Items|Miscellaneous items|Animal parts}}",
+        "AnimalPartWeapon": "{{Header|Project Zomboid|Items|Miscellaneous items|Animal parts}}",
+
     }
 
     skill_type_dict = {
