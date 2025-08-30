@@ -526,6 +526,9 @@ def parse_construction_recipe(full_text: str) -> List[Dict[str, Any]]:
             if base_health is not None:
                 recipe_output["skillBaseHealth"] = base_health
 
+            if recipe_output.get("category", "").lower() == "debug":
+                continue
+
             construction_recipes.append(recipe_output)
 
     return construction_recipes
