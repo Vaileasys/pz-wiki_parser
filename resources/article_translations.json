@@ -47,7 +47,7 @@
     "food_usage_text": "It can be eaten by the [[player]] providing them with some positive effects.",
     "container_usage_text": "{article} {item_lower} reduces the [[Heavy Load|encumbrance]] of stored items when equipped by the [[player]].",
     "container_contents_text": "{article} {item_lower} can spawn with the following items inside. The table(s) below show the probability of each item appearing at least once.",
-    "fluid_container_text": "{article} {item_lower} is a [[fluid container]] and has a maximum capacity of {capacity}mL.\n\nWhen filled with at least 120mL where [[Water (fluid)|water]], [[Carbonated Water (fluid)|carbonated water]], or [[Tainted Water (fluid)|tainted water]] are the primary fluid, the [[player]] can autodrink from this container.",
+    "fluid_container_text": "{article} {item_lower} is a [[fluid container]] and has a maximum capacity of {capacity}mL.\n\nWhen filled with at least 120mL where [[Water (fluid)|water]], [[Seltzer Water (fluid)|seltzer water]], or [[Water (Tainted) (fluid)|tainted water]] are the primary fluid, the [[player]] can autodrink from this container.",
     "crafting_text": "It is used as an ingredient in the following crafting recipes.",
     "learned_recipes_text": "Reading this item will teach the following recipes.",
     "evolved_recipes_text": "It is used as an ingredient in [[cooking]].",
