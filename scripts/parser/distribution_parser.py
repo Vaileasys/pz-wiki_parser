@@ -10,7 +10,9 @@ from scripts.core.cache import save_cache
 cache_path = os.path.join(DATA_DIR, "distributions")
 
 
-def parse_container_files(distributions_lua_path, procedural_distributions_path, output_path):
+def parse_container_files(
+    distributions_lua_path, procedural_distributions_path, output_path
+):
     """
     Parses Lua container files to extract distribution data and convert it to JSON format.
     Includes debug statements at each step for troubleshooting.
@@ -19,14 +21,14 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
     def lua_table_to_python(obj):
         if isinstance(obj, dict):
             return {k: lua_table_to_python(v) for k, v in obj.items()}
-        elif hasattr(obj, 'items'):
+        elif hasattr(obj, "items"):
             return {k: lua_table_to_python(v) for k, v in obj.items()}
         elif isinstance(obj, list):
             return [lua_table_to_python(item) for item in obj]
         return obj
 
     def read_and_modify_lua_file(filename, table_name):
-        with open(filename, 'r', encoding='utf-8') as file:
+        with open(filename, "r", encoding="utf-8") as file:
             lua_content = file.read()
         # Make local table global if needed
         if f"local {table_name}" in lua_content:
@@ -45,13 +47,13 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
             "Distribution_ClosetJunk.lua",
             "Distribution_CounterJunk.lua",
             "Distribution_DeskJunk.lua",
-            "Distribution_SideTableJunk.lua"
+            "Distribution_SideTableJunk.lua",
         ]
 
         for cf in clutter_files:
             cf_path = os.path.join(distributions_dir, cf)
             if os.path.exists(cf_path):
-                with open(cf_path, 'r', encoding='utf-8') as cff:
+                with open(cf_path, "r", encoding="utf-8") as cff:
                     lua_code_clutter = cff.read()
                     lua.execute(lua_code_clutter)
 
@@ -64,7 +66,7 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
             prefixes = ["Base."]
             for prefix in prefixes:
                 if name.startswith(prefix):
-                    return name[len(prefix):]
+                    return name[len(prefix) :]
             return name
 
         output_json = {}
@@ -79,54 +81,71 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
                     if not isinstance(container_content, dict):
                         continue
                     container_details = {}
-                    if 'procedural' in container_content and container_content['procedural']:
-                        container_details['procedural'] = True
-                        if 'procList' in container_content:
-                            container_details['procList'] = []
-                            for i in range(1, len(container_content['procList']) + 1):
-                                item = container_content['procList'][i]
+                    if (
+                        "procedural" in container_content
+                        and container_content["procedural"]
+                    ):
+                        container_details["procedural"] = True
+                        if "procList" in container_content:
+                            container_details["procList"] = []
+                            for i in range(1, len(container_content["procList"]) + 1):
+                                item = container_content["procList"][i]
                                 if isinstance(item, dict):
                                     # item is already Python dict, safe to use .get()
-                                    container_details['procList'].append({
-                                        'name': remove_prefixes(item.get('name', '')),
-                                        'min': item.get('min', 0),
-                                        'max': item.get('max', 0),
-                                        'weightChance': item.get('weightChance', None)
-                                    })
+                                    container_details["procList"].append(
+                                        {
+                                            "name": remove_prefixes(
+                                                item.get("name", "")
+                                            ),
+                                            "min": item.get("min", 0),
+                                            "max": item.get("max", 0),
+                                            "weightChance": item.get(
+                                                "weightChance", None
+                                            ),
+                                        }
+                                    )
                         containers[container_name] = container_details
                     else:
                         non_procedural_details = {}
-                        if 'rolls' in container_content:
-                            non_procedural_details['rolls'] = container_content['rolls']
+                        if "rolls" in container_content:
+                            non_procedural_details["rolls"] = container_content["rolls"]
 
-                        if 'items' in container_content and isinstance(container_content['items'], list):
-                            items_list = container_content['items']
-                            non_procedural_details['items'] = []
+                        if "items" in container_content and isinstance(
+                            container_content["items"], list
+                        ):
+                            items_list = container_content["items"]
+                            non_procedural_details["items"] = []
                             for i in range(1, len(items_list), 2):
                                 item_name = remove_prefixes(items_list[i])
                                 item_chance = items_list[i + 1]
-                                non_procedural_details['items'].append({
-                                    'name': item_name,
-                                    'chance': item_chance
-                                })
+                                non_procedural_details["items"].append(
+                                    {"name": item_name, "chance": item_chance}
+                                )
 
-                        if 'junk' in container_content and 'items' in container_content['junk'] and isinstance(container_content['junk']['items'], list):
-                            junk_items_list = container_content['junk']['items']
-                            non_procedural_details['junk'] = {
-                                'rolls': container_content['junk']['rolls'],
-                                'items': []
+                        if (
+                            "junk" in container_content
+                            and "items" in container_content["junk"]
+                            and isinstance(container_content["junk"]["items"], list)
+                        ):
+                            junk_items_list = container_content["junk"]["items"]
+                            non_procedural_details["junk"] = {
+                                "rolls": container_content["junk"]["rolls"],
+                                "items": [],
                             }
                             for i in range(1, len(junk_items_list), 2):
                                 item_name = remove_prefixes(junk_items_list[i])
                                 item_chance = junk_items_list[i + 1]
-                                non_procedural_details['junk']['items'].append({
-                                    'name': item_name,
-                                    'chance': item_chance
-                                })
+                                non_procedural_details["junk"]["items"].append(
+                                    {"name": item_name, "chance": item_chance}
+                                )
 
                         # Append non-procedural tables to procedural_memory
-                        procedural_memory[room_name] = procedural_memory.get(room_name, {})
-                        procedural_memory[room_name][container_name] = non_procedural_details
+                        procedural_memory[room_name] = procedural_memory.get(
+                            room_name, {}
+                        )
+                        procedural_memory[room_name][container_name] = (
+                            non_procedural_details
+                        )
 
             if containers:
                 output_json[room_name] = containers
@@ -145,13 +164,13 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
             "Distribution_ClosetJunk.lua",
             "Distribution_CounterJunk.lua",
             "Distribution_DeskJunk.lua",
-            "Distribution_SideTableJunk.lua"
+            "Distribution_SideTableJunk.lua",
         ]
 
         for cf in clutter_files:
             cf_path = os.path.join(distributions_dir, cf)
             if os.path.exists(cf_path):
-                with open(cf_path, 'r', encoding='utf-8') as cff:
+                with open(cf_path, "r", encoding="utf-8") as cff:
                     lua_code_clutter = cff.read()
                     lua.execute(lua_code_clutter)
 
@@ -165,10 +184,18 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
             if not isinstance(name, str):
                 name = str(name)
 
-            prefixes = ["Base.", "Farming.", "Radio.", "Camping.", "farming.", "radio.", "camping."]
+            prefixes = [
+                "Base.",
+                "Farming.",
+                "Radio.",
+                "Camping.",
+                "farming.",
+                "radio.",
+                "camping.",
+            ]
             for prefix in prefixes:
                 if name.startswith(prefix):
-                    return name[len(prefix):]
+                    return name[len(prefix) :]
             return name
 
         pz_is_table = lua.globals().pz_is_table
@@ -180,33 +207,35 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
 
             table_details = {}
 
-            if 'rolls' in table_content:
-                table_details['rolls'] = table_content['rolls']
+            if "rolls" in table_content:
+                table_details["rolls"] = table_content["rolls"]
 
-            if 'items' in table_content and pz_is_table(table_content['items']):
-                items_list = table_content['items']
-                table_details['items'] = []
+            if "items" in table_content and pz_is_table(table_content["items"]):
+                items_list = table_content["items"]
+                table_details["items"] = []
                 for i in range(1, len(items_list), 2):
                     item_name = remove_prefixes(items_list[i])
                     item_chance = items_list[i + 1]
-                    table_details['items'].append({
-                        'name': item_name,
-                        'chance': item_chance
-                    })
+                    table_details["items"].append(
+                        {"name": item_name, "chance": item_chance}
+                    )
 
-            if 'junk' in table_content and 'items' in table_content['junk'] and pz_is_table(table_content['junk']['items']):
-                junk_items_list = table_content['junk']['items']
-                table_details['junk'] = {
-                    'rolls': table_content['junk']['rolls'],
-                    'items': []
+            if (
+                "junk" in table_content
+                and "items" in table_content["junk"]
+                and pz_is_table(table_content["junk"]["items"])
+            ):
+                junk_items_list = table_content["junk"]["items"]
+                table_details["junk"] = {
+                    "rolls": table_content["junk"]["rolls"],
+                    "items": [],
                 }
                 for i in range(1, len(junk_items_list), 2):
                     item_name = remove_prefixes(junk_items_list[i])
                     item_chance = junk_items_list[i + 1]
-                    table_details['junk']['items'].append({
-                        'name': item_name,
-                        'chance': item_chance
-                    })
+                    table_details["junk"]["items"].append(
+                        {"name": item_name, "chance": item_chance}
+                    )
 
             output_json[table_name] = table_details
 
@@ -219,15 +248,21 @@ def parse_container_files(distributions_lua_path, procedural_distributions_path,
         return lua_table_to_python(output_json)
 
     def main():
-        lua_code_distributions = read_and_modify_lua_file(distributions_lua_path, 'distributionTable')
-        lua_code_procedural = read_and_modify_lua_file(procedural_distributions_path, 'ProceduralDistributions')
+        lua_code_distributions = read_and_modify_lua_file(
+            distributions_lua_path, "distributionTable"
+        )
+        lua_code_procedural = read_and_modify_lua_file(
+            procedural_distributions_path, "ProceduralDistributions"
+        )
 
         procedural_memory = {}
         room_data = distributions_parser(lua_code_distributions, procedural_memory)
-        save_cache(room_data, 'distributions.json', output_path)
+        save_cache(room_data, "distributions.json", output_path)
 
-        procedural_data = procedural_distributions_parser(lua_code_procedural, procedural_memory)
-        save_cache(procedural_data, 'proceduraldistributions.json', output_path)
+        procedural_data = procedural_distributions_parser(
+            lua_code_procedural, procedural_memory
+        )
+        save_cache(procedural_data, "proceduraldistributions.json", output_path)
 
     main()
 
@@ -246,11 +281,29 @@ def parse_foraging(forage_definitions_path, output_path):
     """
 
     additional_files = [
-        "Ammo", "Animals", "Artifacts", "Berries", "Bones", "Clothing", "CraftingMaterials",
-        "DeadAnimals", "ForestGoods",
-        "ForestRarities", "Fruits", "Herbs", "Insects", "Junk", "JunkFood", "JunkWeapons", "Medical",
-        "MedicinalPlants", "Mushrooms", "Stones", "Trash", "Vegetables", "WildPlants",
-
+        "Ammo",
+        "Animals",
+        "Artifacts",
+        "Berries",
+        "Bones",
+        "Clothing",
+        "CraftingMaterials",
+        "DeadAnimals",
+        "ForestGoods",
+        "ForestRarities",
+        "Fruits",
+        "Herbs",
+        "Insects",
+        "Junk",
+        "JunkFood",
+        "JunkWeapons",
+        "Medical",
+        "MedicinalPlants",
+        "Mushrooms",
+        "Stones",
+        "Trash",
+        "Vegetables",
+        "WildPlants",
     ]
 
     def preprocess_lua_code(lua_code):
@@ -258,14 +311,14 @@ def parse_foraging(forage_definitions_path, output_path):
         Removes or comments out the `require` statements from Lua code.
         """
         pattern = r'require\s*["\']Foraging/[^"\']*["\']\s*;'
-        return re.sub(pattern, '-- [REMOVED] \\g<0>', lua_code)
+        return re.sub(pattern, "-- [REMOVED] \\g<0>", lua_code)
 
     def parse_lua_file(file_path):
         """
         Reads and processes a Lua file to extract relevant data.
         """
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 lua_code = f.read()
 
             # Preprocess the Lua code to handle `require` statements
@@ -275,19 +328,23 @@ def parse_foraging(forage_definitions_path, output_path):
             lua = LuaRuntime(unpack_returned_tuples=True)
 
             # Inject global tables and dummy functions to prevent runtime errors
-            lua.execute('forageDefs = {}')
-            lua.execute('forageSystem = {}')
-            lua.execute('forageSystem.worldSprites = { berryBushes = "dummy_texture_path" }')
-            lua.execute('function getTexture(path) return path end')
+            lua.execute("forageDefs = {}")
+            lua.execute("forageSystem = {}")
+            lua.execute(
+                'forageSystem.worldSprites = { berryBushes = "dummy_texture_path" }'
+            )
+            lua.execute("function getTexture(path) return path end")
 
-            lua.execute('''
+            lua.execute("""
                 worldSprites = {
                     add = function() end,
                     remove = function() end,
                     update = function() end
                 }
-            ''')
-            lua.execute('forageSystem.addForageDef = function(itemName, itemDef) forageDefs[itemName] = itemDef end')
+            """)
+            lua.execute(
+                "forageSystem.addForageDef = function(itemName, itemDef) forageDefs[itemName] = itemDef end"
+            )
 
             # Execute the Lua script
             lua.execute(lua_code)
@@ -301,25 +358,25 @@ def parse_foraging(forage_definitions_path, output_path):
         """
         Converts a Lua table to a Python dictionary or list.
         """
-        if lupa.lua_type(obj) == 'table':
+        if lupa.lua_type(obj) == "table":
             py_dict = {}
             for key in obj:
                 py_key = key
                 py_value = obj[key]
-                if lupa.lua_type(py_key) in ('table', 'function'):
+                if lupa.lua_type(py_key) in ("table", "function"):
                     py_key = str(py_key)
                 else:
                     py_key = lua_table_to_python(py_key)
 
-                if lupa.lua_type(py_value) == 'table':
+                if lupa.lua_type(py_value) == "table":
                     py_value = lua_table_to_python(py_value)
-                elif lupa.lua_type(py_value) == 'function':
+                elif lupa.lua_type(py_value) == "function":
                     py_value = str(py_value)
                 else:
                     py_value = py_value
                 py_dict[py_key] = py_value
             return py_dict
-        elif lupa.lua_type(obj) == 'function':
+        elif lupa.lua_type(obj) == "function":
             return str(obj)
         else:
             return obj
@@ -329,7 +386,9 @@ def parse_foraging(forage_definitions_path, output_path):
 
     # Process each additional Lua file and merge its data
     for file_name in additional_files:
-        file_path = os.path.join(os.path.dirname(forage_definitions_path), f"{file_name}.lua")
+        file_path = os.path.join(
+            os.path.dirname(forage_definitions_path), f"{file_name}.lua"
+        )
         if os.path.exists(file_path):
             additional_data = parse_lua_file(file_path)
             if additional_data:
@@ -339,9 +398,8 @@ def parse_foraging(forage_definitions_path, output_path):
                     else:
                         forage_data[key] = value
 
-
     # Save the combined data to a JSON file
-    save_cache(forage_data, 'foraging.json', output_path)
+    save_cache(forage_data, "foraging.json", output_path)
 
 
 def parse_vehicles(vehicle_distributions_path, output_path):
@@ -354,11 +412,11 @@ def parse_vehicles(vehicle_distributions_path, output_path):
     """
 
     def parse_lua_table(lua_content):
-        key_pattern = re.compile(r'VehicleDistributions\.(\w+)\s*=\s*{')
-        rolls_pattern = re.compile(r'rolls\s*=\s*(\d+),')
+        key_pattern = re.compile(r"VehicleDistributions\.(\w+)\s*=\s*{")
+        rolls_pattern = re.compile(r"rolls\s*=\s*(\d+),")
         item_pattern = re.compile(r'"(\w+)"\s*,\s*(\d+\.?\d*),')
-        junk_pattern = re.compile(r'junk\s*=\s*{')
-        junk_rolls_pattern = re.compile(r'rolls\s*=\s*(\d+),')
+        junk_pattern = re.compile(r"junk\s*=\s*{")
+        junk_rolls_pattern = re.compile(r"rolls\s*=\s*(\d+),")
         junk_item_pattern = re.compile(r'"(\w+)"\s*,\s*(\d+\.?\d*),')
 
         distribution_dict = {}
@@ -376,36 +434,40 @@ def parse_vehicles(vehicle_distributions_path, output_path):
                     current_key = current_key.replace("Up Truck", "").strip()
                     current_key = "Pick Up Truck" + current_key
 
-                distribution_dict[current_key] = {'rolls': 1, 'items': {}, 'junk': {}}
+                distribution_dict[current_key] = {"rolls": 1, "items": {}, "junk": {}}
                 inside_junk = False
                 continue
             rolls_match = rolls_pattern.search(line)
             if rolls_match and current_key:
-                distribution_dict[current_key]['rolls'] = int(rolls_match.group(1))
+                distribution_dict[current_key]["rolls"] = int(rolls_match.group(1))
             item_match = item_pattern.findall(line)
             if item_match and current_key and not inside_junk:
                 for item, weight in item_match:
-                    distribution_dict[current_key]['items'][item] = distribution_dict[current_key]['items'].get(item,
-                                                                                                                0) + float(
-                        weight)
+                    distribution_dict[current_key]["items"][item] = distribution_dict[
+                        current_key
+                    ]["items"].get(item, 0) + float(weight)
             junk_match = junk_pattern.search(line)
             if junk_match and current_key:
                 inside_junk = True
                 junk_items = []
             junk_rolls_match = junk_rolls_pattern.search(line)
             if junk_rolls_match and inside_junk and current_key:
-                distribution_dict[current_key]['junk']['rolls'] = int(junk_rolls_match.group(1))
+                distribution_dict[current_key]["junk"]["rolls"] = int(
+                    junk_rolls_match.group(1)
+                )
             junk_item_match = junk_item_pattern.findall(line)
             if junk_item_match and inside_junk and current_key:
                 for item, weight in junk_item_match:
                     junk_items.append((item, float(weight)))
-            if inside_junk and '}' in line:
-                distribution_dict[current_key]['junk']['items'] = {item: weight for item, weight in junk_items}
+            if inside_junk and "}" in line:
+                distribution_dict[current_key]["junk"]["items"] = {
+                    item: weight for item, weight in junk_items
+                }
                 inside_junk = False
         return distribution_dict
 
     try:
-        with open(vehicle_distributions_path, 'r', encoding='utf-8') as lua_file:
+        with open(vehicle_distributions_path, "r", encoding="utf-8") as lua_file:
             lua_content = lua_file.read()
     except FileNotFoundError:
         print(f"Error: The file {vehicle_distributions_path} does not exist.")
@@ -413,14 +475,15 @@ def parse_vehicles(vehicle_distributions_path, output_path):
     except Exception as e:
         print(f"Error reading {vehicle_distributions_path}: {e}")
         return
-    
+
     try:
         vehicle_distributions = parse_lua_table(lua_content)
     except Exception as e:
         print(f"Error parsing Lua content: {e}")
         return
-    
-    save_cache(vehicle_distributions, 'vehicle_distributions.json', output_path)
+
+    save_cache(vehicle_distributions, "vehicle_distributions.json", output_path)
+
 
 def parse_clothing(clothing_file_path, guid_table_path, output_file):
     """
@@ -436,9 +499,9 @@ def parse_clothing(clothing_file_path, guid_table_path, output_file):
         try:
             tree = ET.parse(guid_table)
             root = tree.getroot()
-            for file_entry in root.findall('files'):
-                path = file_entry.find('path').text
-                guid = file_entry.find('guid').text
+            for file_entry in root.findall("files"):
+                path = file_entry.find("path").text
+                guid = file_entry.find("guid").text
                 filename = os.path.splitext(os.path.basename(path))[0]
                 guid_mapping[guid] = filename
         except ET.ParseError as e:
@@ -453,36 +516,55 @@ def parse_clothing(clothing_file_path, guid_table_path, output_file):
             print(f"Error parsing clothing XML: {e}")
             return {}
 
-        output_json = {
-            "FemaleOutfits": {},
-            "MaleOutfits": {}
-        }
+        output_json = {"FemaleOutfits": {}, "MaleOutfits": {}}
 
-        for outfit in root.findall('.//m_FemaleOutfits') + root.findall('.//m_MaleOutfits'):
-            outfit_type = "FemaleOutfits" if outfit.tag == 'm_FemaleOutfits' else "MaleOutfits"
-            outfit_name = outfit.find('m_Name').text if outfit.find('m_Name') is not None else "Unknown Outfit"
-            outfit_guid = outfit.find('m_Guid').text if outfit.find('m_Guid') is not None else "No GUID"
+        for outfit in root.findall(".//m_FemaleOutfits") + root.findall(
+            ".//m_MaleOutfits"
+        ):
+            outfit_type = (
+                "FemaleOutfits" if outfit.tag == "m_FemaleOutfits" else "MaleOutfits"
+            )
+            outfit_name = (
+                outfit.find("m_Name").text
+                if outfit.find("m_Name") is not None
+                else "Unknown Outfit"
+            )
+            outfit_guid = (
+                outfit.find("m_Guid").text
+                if outfit.find("m_Guid") is not None
+                else "No GUID"
+            )
             items_with_probabilities = {}
 
-            for item_block in outfit.findall('m_items'):
-                probability_tag = item_block.find('probability')
-                probability = float(probability_tag.text)*100 if probability_tag is not None else 100
+            for item_block in outfit.findall("m_items"):
+                probability_tag = item_block.find("probability")
+                probability = (
+                    float(probability_tag.text) * 100
+                    if probability_tag is not None
+                    else 100
+                )
                 probability = int(probability)
 
-                item_guid = item_block.find('itemGUID').text if item_block.find('itemGUID') is not None else None
+                item_guid = (
+                    item_block.find("itemGUID").text
+                    if item_block.find("itemGUID") is not None
+                    else None
+                )
                 if item_guid:
                     item_name = guid_mapping.get(item_guid, item_guid)
                     items_with_probabilities[item_name] = probability
 
-                for subitem in item_block.findall('.//subItems/itemGUID'):
+                for subitem in item_block.findall(".//subItems/itemGUID"):
                     subitem_guid = subitem.text
                     subitem_name = guid_mapping.get(subitem_guid, subitem_guid)
-                    items_with_probabilities[subitem_name] = probability  # Apply the same probability for sub-items
+                    items_with_probabilities[subitem_name] = (
+                        probability  # Apply the same probability for sub-items
+                    )
 
             if outfit_name:
                 output_json[outfit_type][outfit_name] = {
                     "GUID": outfit_guid,
-                    "Items": items_with_probabilities
+                    "Items": items_with_probabilities,
                 }
 
         return output_json
@@ -494,7 +576,6 @@ def parse_clothing(clothing_file_path, guid_table_path, output_file):
 
 
 def parse_stories(class_files_directory, output_file):
-
     """
     Processes all .class files in the given directory and collects their relevant string constants.
 
@@ -541,7 +622,9 @@ def parse_stories(class_files_directory, output_file):
                 try:
                     decoded_value = value.decode("utf-8")
                     # Only add constants that contain a period and start with specified prefixes
-                    if '.' in decoded_value and decoded_value.startswith(("Base.", "Farming.", "Radio.")):
+                    if "." in decoded_value and decoded_value.startswith(
+                        ("Base.", "Farming.", "Radio.")
+                    ):
                         # Remove the prefix before appending
                         if decoded_value.startswith("Base."):
                             constants.append(decoded_value[5:])
@@ -602,28 +685,184 @@ def parse_stories(class_files_directory, output_file):
     save_cache(constants_by_file, output_file, cache_path)
 
 
+def parse_container_contents(output_path):
+    """
+    Parse container contents using distribution_container_parser and save to cache.
+    This generates the same data as item_container_contents.py but saves it to cache.
+    """
+    from scripts.parser import distribution_container_parser
+    from scripts.objects.item import Item
+    from tqdm import tqdm
+
+    def get_probabilities(container_data):
+        """
+        Calculate probabilities for container contents.
+        This matches the calculation from item_container_contents.py
+        """
+
+        def calculate_probabilities(items_list, total_rolls, only_one=False):
+            """Calculates the probability of each item appearing at least once."""
+            item_weights = {}
+            total_weight = 0
+
+            # Combine duplicate items, adding weights
+            for i in range(0, len(items_list), 2):
+                item_name = items_list[i]
+                item_weight = items_list[i + 1]
+
+                if item_name in item_weights:
+                    item_weights[item_name] += item_weight
+                else:
+                    item_weights[item_name] = item_weight
+
+                total_weight += item_weight
+
+            # Calculate probability
+            probabilities = {}
+            for item_name, item_weight in item_weights.items():
+                if total_weight > 0:
+                    if only_one:
+                        # onlyOne = true
+                        probability = (item_weight / total_weight) * 100
+                        probability = round(probability, 2)
+                    else:
+                        # Normal calculation
+                        single_roll_prob = item_weight / total_weight
+                        probability = 1 - (1 - single_roll_prob) ** total_rolls
+                        probability = round(probability * 100, 2)
+                else:
+                    probability = 0
+
+                probabilities[item_name] = probability
+
+            return probabilities
+
+        # Extract item content data
+        rolls = container_data.get("rolls", 1)
+        junk_data = container_data.get("junk", {})
+        junk_rolls = junk_data.get("rolls", 0)
+        junk_items = junk_data.get("items", [])
+        item_list = container_data.get("items", [])
+        only_one = container_data.get("onlyOne", False)
+
+        normal_items = calculate_probabilities(item_list, rolls, only_one)
+        junk_items_dict = calculate_probabilities(
+            junk_items, junk_rolls, only_one=False
+        )
+
+        combined_probabilities = {}
+        all_items = set(normal_items.keys()).union(set(junk_items_dict.keys()))
+
+        for item in all_items:
+            normal_prob = normal_items.get(item, 0) / 100
+            junk_prob = junk_items_dict.get(item, 0) / 100
+
+            combined_prob = (normal_prob + junk_prob - (normal_prob * junk_prob))
+            combined_prob = round(combined_prob * 100, 2)
+            combined_prob = min(combined_prob, 100)
+
+            combined_probabilities[item] = combined_prob
+
+        return {"items": combined_probabilities}
+
+    def find_distro_key(search_dict, search_key):
+        """Find which distribution contains the search key."""
+        for parent, sub_dict in search_dict.items():
+            if isinstance(sub_dict, dict) and search_key in sub_dict:
+                return parent
+        return None
+
+    def process_item(id_type, distribution_data):
+        """Process a single container item and return its contents."""
+        has_distro = False
+        item_probabilities = {}
+
+        distro_key = find_distro_key(distribution_data, id_type)
+        if distro_key:
+            has_distro = True
+            dist_group = distribution_data[distro_key]
+            if isinstance(dist_group, dict):
+                container_contents = dist_group.get(id_type)
+                if container_contents and isinstance(container_contents, dict):
+                    item_probabilities = get_probabilities(container_contents)
+
+        return has_distro, item_probabilities
+
+    # Get distribution data
+    distribution_data = distribution_container_parser.get_distribution_data()
+    container_dict = {}
+
+    print("Processing container contents...")
+
+    # Get all container items
+    try:
+        total_items = Item.count()
+    except AttributeError:
+        # Fallback if Item.count() doesn't work
+        total_items = len(list(Item.all()))
+
+    with tqdm(
+        total=total_items, desc="Processing container items", unit=" items"
+    ) as pbar:
+        for item_id in Item.all():
+            try:
+                item = Item(item_id)
+                pbar.set_postfix_str(f"Processing: {item_id[:30]}")
+
+                if item.type == "Container":
+                    has_distro, item_contents = process_item(
+                        item.id_type, distribution_data
+                    )
+
+                    if has_distro and item_contents.get("items"):
+                        container_dict[item_id] = item_contents
+
+            except Exception:
+                pass
+
+            pbar.update(1)
+
+    # Save to cache
+    save_cache(container_dict, "container_contents.json", output_path)
+    print(f"Container contents data saved with {len(container_dict)} containers")
+
+
 def main():
     # File paths
     distributions_lua_path = os.path.join("resources", "lua", "Distributions.lua")
     forage_definitions_path = os.path.join("resources", "lua", "forageDefinitions.lua")
-    procedural_distributions_path = os.path.join("resources", "lua", "ProceduralDistributions.lua")
-    vehicle_distributions_path = os.path.join("resources", "lua", "VehicleDistributions.lua")
+    procedural_distributions_path = os.path.join(
+        "resources", "lua", "ProceduralDistributions.lua"
+    )
+    vehicle_distributions_path = os.path.join(
+        "resources", "lua", "VehicleDistributions.lua"
+    )
     clothing_file_path = os.path.join("resources", "clothing", "clothing.xml")
     guid_table_path = os.path.join("resources", "fileGuidTable.xml")
     class_files_directory = os.path.join("resources", "Java")
 
     # Call the init function to check if all files exist
-    init(distributions_lua_path, forage_definitions_path,
-         procedural_distributions_path, vehicle_distributions_path, clothing_file_path, guid_table_path)
+    init(
+        distributions_lua_path,
+        forage_definitions_path,
+        procedural_distributions_path,
+        vehicle_distributions_path,
+        clothing_file_path,
+        guid_table_path,
+    )
 
     # Parse files into json
-    parse_container_files(distributions_lua_path, procedural_distributions_path, cache_path)
+    parse_container_files(
+        distributions_lua_path, procedural_distributions_path, cache_path
+    )
     parse_foraging(forage_definitions_path, cache_path)
     parse_vehicles(vehicle_distributions_path, cache_path)
 
     parse_clothing(clothing_file_path, guid_table_path, "clothing.json")
     parse_stories(class_files_directory, "stories.json")
 
+    # Parse container contents
+    parse_container_contents(cache_path)
 
 # Function to check if all resources are found
 def init(*file_paths):
