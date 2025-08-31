@@ -29,7 +29,7 @@ category_page_map = {
     "AnimalPartWeapon": "Animal part",
     "Appearance": "Appearance",
     "Camping": "Camping",
-    "Cartography": "Map",
+    "Cartography": "Literature",
     "Communications": "Communication",
     "Cooking": "Cooking",
     "CookingWeapon": "Cooking",
