@@ -81,7 +81,7 @@ def generate_content() -> list[str]:
         content.append(f'|- id="{PART_MAP.get(loc.blood_location, loc.blood_location)}"')
         content.append(f'| <code>{loc.blood_location}</code>')
         content.append("| " + build_links(loc))
-        content.append(f'| style="text-align:center;" | {get_image(loc.blood_location)}')
+        content.append(f'| style="text-align: center;" | {get_image(loc.blood_location)}')
 
     content.append('|}')
     return content
