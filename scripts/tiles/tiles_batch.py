@@ -32,6 +32,7 @@ from scripts.tiles.tiles_infobox import generate_infoboxes
 from scripts.tiles.tiles_codesnip import generate_codesnips
 from scripts.tiles.tiles_scrapping import generate_scrapping_tables
 from scripts.tiles.tiles_article import generate_tile_articles
+from scripts.tiles.tiles_container_mapping import main as generate_container_mapping
 from scripts.lists.furniture_list import generate_furniture_lists
 from scripts.lists.furniture_surfaces_list import generate_surface_list
 
@@ -85,15 +86,19 @@ def main():
     """
     os.makedirs(DATA_DIR, exist_ok=True)
     game_version = Version.get()
-    lang_code    = Language.get()
+    lang_code = Language.get()
 
-    tile_path   = os.path.join(DATA_DIR, TILE_CACHE_FILE)
-    named_path  = os.path.join(DATA_DIR, NAMED_FURNITURE_CACHE_FILE)
-    defs_path   = os.path.join(DATA_DIR, MOVABLE_DEFINITIONS_CACHE_FILE)
+    tile_path = os.path.join(DATA_DIR, TILE_CACHE_FILE)
+    named_path = os.path.join(DATA_DIR, NAMED_FURNITURE_CACHE_FILE)
+    defs_path = os.path.join(DATA_DIR, MOVABLE_DEFINITIONS_CACHE_FILE)
 
-    tiles_data, _        = generate_cache(tile_path,   "Tiles",               parse_tiles,               game_version)
-    named_tiles_data, _  = generate_cache(named_path,  "Named Tiles",         parse_named_furniture,     game_version)
-    movable_defs_data, _ = generate_cache(defs_path,   "Movable Definitions", parse_movable_definitions, game_version)
+    tiles_data, _ = generate_cache(tile_path, "Tiles", parse_tiles, game_version)
+    named_tiles_data, _ = generate_cache(
+        named_path, "Named Tiles", parse_named_furniture, game_version
+    )
+    movable_defs_data, _ = generate_cache(
+        defs_path, "Movable Definitions", parse_movable_definitions, game_version
+    )
 
     if tiles_data is None or named_tiles_data is None or movable_defs_data is None:
         echo.error("One or more caches failed to load.")
@@ -102,7 +107,9 @@ def main():
     echo.success("All caches loaded")
 
     echo.info("Generating infoboxes")
-    infoboxes = generate_infoboxes(named_tiles_data, movable_defs_data, lang_code, game_version)
+    infoboxes = generate_infoboxes(
+        named_tiles_data, movable_defs_data, lang_code, game_version
+    )
     echo.success("Infoboxes generated")
 
     echo.info("Generating CodeSnips")
@@ -111,9 +118,7 @@ def main():
 
     echo.info("Generating Scrapping tables")
     scrapping = generate_scrapping_tables(
-        tiles=      named_tiles_data,
-        definitions=movable_defs_data,
-        lang_code=  lang_code
+        tiles=named_tiles_data, definitions=movable_defs_data, lang_code=lang_code
     )
     echo.success("Scrapping tables generated")
 
@@ -128,6 +133,11 @@ def main():
     echo.info("Generating crafting surfaces list")
     generate_surface_list(named_tiles_data)
     echo.success("Crafting surfaces list generated")
+
+    echo.info("Generating container mapping")
+    generate_container_mapping(tiles_data, lang_code)
+    echo.success("Container mapping generated")
+
 
 if __name__ == "__main__":
     main()
