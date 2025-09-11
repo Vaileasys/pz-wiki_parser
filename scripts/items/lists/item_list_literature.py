@@ -46,7 +46,7 @@ def get_list_type(item: Item, special_data):
     
     # Skill Books & Recipes
     if display_category == "SkillBook":
-        schematics = ["Schematic", "Recipe"]
+        schematics = ["Schematic", "Recipe", "SewingPattern"]
         if item.teached_recipes:
             return "Recipe magazines"
         elif any(keyword in (item.on_create or "") for keyword in schematics) or any(keyword in item.item_id for keyword in schematics):

@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from scripts.parser import literature_parser
 from scripts.core.language import Language, Translate
 from scripts.objects.item import Item
@@ -107,6 +108,7 @@ SCHEMATIC = {
     "OnCreateArmorSchematic": ["ArmorSchematics", 30],
     "OnCreateCookwareSchematic": ["CookwareSchematic", 40],
     "OnCreateSurvivalSchematic": ["SurvivalSchematics", 40],
+    "OnCreateSewingPattern": ["SewingPatterns", 0],
     "OnCreateRecipeClipping": ["FoodRecipes", None] # Special case
 }
 
@@ -505,14 +507,13 @@ def combine_txt_files(type):
 
 
 def main():
-    for item_id in Item.all():
-        item = Item(item_id)
-        if "OnCreate" not in item.data:
+    for item_id, item in Item.items():
+        on_create = item.on_create
+
+        if not on_create:
             continue
 
         # Remove "SpecialLootSpawns." prefix
-        on_create = item.on_create
-
         if not on_create.startswith("SpecialLootSpawns."):
             continue
 
