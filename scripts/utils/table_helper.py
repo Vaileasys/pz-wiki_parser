@@ -51,7 +51,7 @@ def get_table_data(path:str, extra_keys:str|list=None):
     return map, headings
 
 
-def get_column_headings(table_type:str, table_map:dict, columns:dict):
+def get_column_headings(table_type:str, table_map:dict, columns:dict, drop_keys: set[str] = None):
     """
     Builds the list of column headings for a given table type.
 
@@ -59,6 +59,7 @@ def get_column_headings(table_type:str, table_map:dict, columns:dict):
         table_type (str): Table type to look up.
         table_map (dict): Mapping of table types to their column keys.
         columns (dict): Translated heading strings by key.
+        drop_keys (set[str]): optional set of keys to exclude.
 
     Returns:
         list[str]: Formatted wiki heading strings.
@@ -69,10 +70,13 @@ def get_column_headings(table_type:str, table_map:dict, columns:dict):
         echo.warning(f"No mapping for table type: '{table_type}'")
         return []
 
+    drop_keys = drop_keys or set()
+
     if isinstance(column_def, list):
-        return [columns.get(key, f'! {key}') for key in column_def]
+        return [columns.get(key, f'! {key}') for key in column_def if key not in drop_keys]
     elif isinstance(column_def, dict):
-        return generate_column_headings(column_def, columns)
+        filtered_def = {k: v for k, v in column_def.items() if k not in drop_keys}
+        return generate_column_headings(filtered_def, columns)
     else:
         echo.warning(f"Invalid column definition type for '{table_type}'")
         return []
@@ -229,6 +233,31 @@ def process_notes(data_list):
     return caption, data
 
 
+def remove_empty_columns(all_food_data: dict[str, list[dict]]) -> dict[str, set]:
+    """
+    Remove columns from each table where all values are '-'.
+    Returns a dict mapping table_type -> removed column keys.
+    """
+    removed = {}
+    for table_type, rows in all_food_data.items():
+        if not isinstance(rows, list) or not rows:
+            continue
+
+        always_empty = set(rows[0].keys())
+        for row in rows:
+            for k, v in row.items():
+                if v != "-":
+                    always_empty.discard(k)
+
+        if always_empty:
+            removed[table_type] = always_empty
+            for row in rows:
+                for k in always_empty:
+                    row.pop(k, None)
+
+    return removed
+
+
 def create_tables(
         item_type: str,
         all_data: dict,
@@ -243,7 +272,8 @@ def create_tables(
         root_path: str = os.path.join(ITEM_DIR, "lists"),
         do_bot_flag: bool = True,
         bot_flag_type: str = "table",
-        suppress: bool = False
+        suppress: bool = False,
+        drop_empty_columns: bool = False
         ):
     """
     Creates and writes individual and/or combined item tables for each table type.
@@ -263,10 +293,16 @@ def create_tables(
         do_bot_flag (bool): Whether to add the bot flag comment to the output. Defaults to True.
         bot_flag_type (str): The identifier used in bot flag comments. Defaults to "table".
         suppress (bool): If True, suppresses terminal output except for final success message.
-
+        drop_empty_columns (bool): If True, removes columns that are empty in all rows for each table type. Defaults to False.
+        
     Returns:
         None
     """
+
+    # Remove empty columns if enabled
+    removed_columns = {}
+    if drop_empty_columns:
+        removed_columns = remove_empty_columns(all_data)
 
     all_tables = []
     for table_type, data in sorted(all_data.items()):
@@ -288,7 +324,8 @@ def create_tables(
         for item in data:
             item.pop("item_name", None)
 
-        column_headings = get_column_headings(table_type, table_map, columns)
+        drop = removed_columns.get(table_type, set())
+        column_headings = get_column_headings(table_type, table_map, columns, drop_keys=drop)
 
         content.extend(generate_table(table_type, data, column_headings, table_header, table_footer, caption_bottom=local_caption_bottom, caption_top=local_caption_top, caption=local_caption, do_bot_flag=do_bot_flag, bot_flag_type=bot_flag_type))
         rel_path = os.path.join(item_type, table_type + ".txt")
