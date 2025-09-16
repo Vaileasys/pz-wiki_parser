@@ -71,6 +71,34 @@ class Occupation:
 
         cls._occupations = data or {}
         return cls._occupations
+    
+    @classmethod
+    def all(cls):
+        """Return all occupations as a dictionary of Occupation instances."""
+        if cls._occupations is None:
+            cls.load()
+        return {occ_id: cls(occ_id) for occ_id in cls._occupations}
+
+    @classmethod
+    def keys(cls):
+        """Return all occupation keys."""
+        if cls._occupations is None:
+            cls.load()
+        return cls._occupations.keys()
+
+    @classmethod
+    def values(cls):
+        """Yield Occupation instances for all occupations."""
+        if cls._occupations is None:
+            cls.load()
+        return (cls(occ_id) for occ_id in cls._occupations)
+    
+    @classmethod
+    def count(cls):
+        """Return the number of defined occupations."""
+        if cls._occupations is None:
+            cls.load()
+        return len(cls._occupations)
 
     @classmethod
     def exists(cls, trait: str) -> bool:
@@ -181,6 +209,34 @@ class Trait:
 
         cls._traits = data or {}
         return cls._traits
+    
+    @classmethod
+    def all(cls):
+        """Return all traits as a dictionary of Trait instances."""
+        if cls._traits is None:
+            cls.load()
+        return {trait_id: cls(trait_id) for trait_id in cls._traits}
+    
+    @classmethod
+    def keys(cls):
+        """Return all trait keys."""
+        if cls._traits is None:
+            cls.load()
+        return cls._traits.keys()
+
+    @classmethod
+    def values(cls):
+        """Yield Trait instances for all traits."""
+        if cls._traits is None:
+            cls.load()
+        return (cls(occ_id) for occ_id in cls._traits)
+    
+    @classmethod
+    def count(cls):
+        """Return the number of defined traits."""
+        if cls._traits is None:
+            cls.load()
+        return len(cls._traits)
 
     @classmethod
     def exists(cls, trait: str) -> bool:
