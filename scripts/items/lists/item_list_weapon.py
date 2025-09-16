@@ -1,7 +1,7 @@
 import os
 from tqdm import tqdm
 from scripts.core.language import Language, Translate
-from scripts.utils import table_helper, echo
+from scripts.utils import table_helper, echo, util
 from scripts.utils.util import format_positive, convert_int
 from scripts.objects.item import Item
 from scripts.objects.fixing import Fixing
@@ -221,8 +221,8 @@ def generate_data(item_id, table_type):
     item_dict["max_range"] = (convert_int(item.max_range) or '-') if "max_range" in columns else None
     item_dict["attack_speed"] = convert_int(item.base_speed) if "attack_speed" in columns else None
     if "endurance_mod" in columns:
-        endurance_mod = format_positive(item.endurance_mod - 1.0)
-        item_dict["endurance_mod"] = "-" if endurance_mod == "0" else endurance_mod
+        endurance_mod = f"{util.convert_int(item.endurance_mod)}×"
+        item_dict["endurance_mod"] = "-" if not item.get("EnduranceMod") else endurance_mod
     item_dict["hit_chance"] = (str(convert_int(item.hit_chance)) or '-') + '%' if "hit_chance" in columns else None
     item_dict["hit_chance_mod"] = f"+{convert_int(item.aiming_perk_hit_chance_modifier)}%" if "hit_chance_mod" in columns else None
     if "crit_chance" in columns:

@@ -105,7 +105,7 @@ def generate_item_data(item: Item):
     param["wind_resistance"] = item.wind_resistance
     param["water_resistance"] = item.water_resistance
     param["discomfort_mod"] = item.discomfort_modifier
-    param["endurance_mod"] = util.format_positive(item.endurance_mod - 1.0) if item.get("EnduranceMod") else None
+    param["endurance_mod"] = f"{util.convert_int(item.endurance_mod)}×" if item.get("EnduranceMod") else None
     param["light_distance"] = item.light_distance
     param["light_strength"] = item.light_strength
     param["torch_cone"] = item.torch_cone
