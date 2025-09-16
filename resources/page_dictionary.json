@@ -38798,6 +38798,490 @@
             ]
         }
     },
+    "occupation": {
+        "Angler": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "fisherman"
+            ]
+        },
+        "Blacksmith": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "smither"
+            ]
+        },
+        "Burger Flipper": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "burgerflipper"
+            ]
+        },
+        "Burglar": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "burglar"
+            ]
+        },
+        "Carpenter": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "carpenter"
+            ]
+        },
+        "Chef": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "chef"
+            ]
+        },
+        "Construction Worker": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "constructionworker"
+            ]
+        },
+        "Crop Farmer": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "farmer"
+            ]
+        },
+        "Custom Occupation": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "unemployed"
+            ]
+        },
+        "DIY Expert": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "repairman"
+            ]
+        },
+        "Doctor": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "doctor"
+            ]
+        },
+        "Electrician": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "electrician"
+            ]
+        },
+        "Engineer": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "engineer"
+            ]
+        },
+        "Fire Officer": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "fireofficer"
+            ]
+        },
+        "Fitness Instructor": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "fitnessInstructor"
+            ]
+        },
+        "Livestock Farmer": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "rancher"
+            ]
+        },
+        "Lumberjack": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "lumberjack"
+            ]
+        },
+        "Mechanic": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "mechanics"
+            ]
+        },
+        "Nurse": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "nurse"
+            ]
+        },
+        "Park Ranger": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "parkranger"
+            ]
+        },
+        "Police Officer": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "policeofficer"
+            ]
+        },
+        "Security Guard": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "securityguard"
+            ]
+        },
+        "Tailor": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "tailorProfession"
+            ]
+        },
+        "Veteran": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "veteran"
+            ]
+        },
+        "Welder": {
+            "categories": [
+                "Occupations"
+            ],
+            "occupation_id": [
+                "metalworker"
+            ]
+        }
+    },
+    "skill": {
+        "Agriculture": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Farming"
+            ]
+        },
+        "Aiming": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Aiming"
+            ]
+        },
+        "Animal Care": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Husbandry"
+            ]
+        },
+        "Axe (skill)": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Axe"
+            ]
+        },
+        "Butchering": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Butchering"
+            ]
+        },
+        "Carpentry": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Woodwork"
+            ]
+        },
+        "Carving": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Carving"
+            ]
+        },
+        "Cooking": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Cooking"
+            ]
+        },
+        "Electrical": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Electricity"
+            ]
+        },
+        "First Aid": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Doctor"
+            ]
+        },
+        "Fishing": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Fishing"
+            ]
+        },
+        "Fitness": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Fitness"
+            ]
+        },
+        "Foraging": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "PlantScavenging"
+            ]
+        },
+        "Glassmaking": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Glassmaking"
+            ]
+        },
+        "Knapping": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "FlintKnapping"
+            ]
+        },
+        "Lightfooted": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Lightfoot"
+            ]
+        },
+        "Long Blade": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "LongBlade"
+            ]
+        },
+        "Long Blunt": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Blunt"
+            ]
+        },
+        "Maintenance": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Maintenance"
+            ]
+        },
+        "Masonry": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Masonry"
+            ]
+        },
+        "Mechanics": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Mechanics"
+            ]
+        },
+        "Metalworking": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Blacksmith"
+            ]
+        },
+        "Nimble": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Nimble"
+            ]
+        },
+        "Pottery": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Pottery"
+            ]
+        },
+        "Reloading": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Reloading"
+            ]
+        },
+        "Running": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Sprinting"
+            ]
+        },
+        "Short Blade": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "SmallBlade"
+            ]
+        },
+        "Short Blunt": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "SmallBlunt"
+            ]
+        },
+        "Sneaking": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Sneak"
+            ]
+        },
+        "Spear": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Spear"
+            ]
+        },
+        "Strength": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Strength"
+            ]
+        },
+        "Tailoring": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Tailoring"
+            ]
+        },
+        "Tracking": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Tracking"
+            ]
+        },
+        "Trapping": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Trapping"
+            ]
+        },
+        "Welding": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "MetalWelding"
+            ]
+        }
+    },
     "tile": {
         "49 / 99 Cent Sign": {
             "categories": [
@@ -50078,6 +50562,728 @@
                 "location_shop_zippee_01_2",
                 "location_shop_zippee_01_0",
                 "location_shop_zippee_01_1"
+            ]
+        }
+    },
+    "trait": {
+        "Adrenaline Junkie": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "AdrenalineJunkie"
+            ]
+        },
+        "Agoraphobic": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Agoraphobic"
+            ]
+        },
+        "All Thumbs": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "AllThumbs"
+            ]
+        },
+        "Angler (trait)": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Fishing"
+            ]
+        },
+        "Artisan": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Artisan"
+            ]
+        },
+        "Athletic": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Athletic"
+            ]
+        },
+        "Ax-pert": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Axeman"
+            ]
+        },
+        "Baseball Player": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "BaseballPlayer"
+            ]
+        },
+        "Blacksmith Knowledge": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Blacksmith"
+            ]
+        },
+        "Blacksmith Knowledge (occupation trait)": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Blacksmith2"
+            ]
+        },
+        "Brave": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Brave"
+            ]
+        },
+        "Brawler": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Brawler"
+            ]
+        },
+        "Burglar (trait)": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Burglar"
+            ]
+        },
+        "Cat's Eyes": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "NightVision"
+            ]
+        },
+        "Claustrophobic": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Claustrophobic"
+            ]
+        },
+        "Clumsy": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Clumsy"
+            ]
+        },
+        "Conspicuous": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Conspicuous"
+            ]
+        },
+        "Cowardly": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Cowardly"
+            ]
+        },
+        "Deaf": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Deaf"
+            ]
+        },
+        "Desensitized": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Desensitized"
+            ]
+        },
+        "Dextrous": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Dextrous"
+            ]
+        },
+        "Disorganized": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Disorganized"
+            ]
+        },
+        "Eagle Eyed": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "EagleEyed"
+            ]
+        },
+        "Emaciated": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Emaciated"
+            ]
+        },
+        "Fast Healer": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "FastHealer"
+            ]
+        },
+        "Fast Learner": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "FastLearner"
+            ]
+        },
+        "Fast Reader": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "FastReader"
+            ]
+        },
+        "Fear of Blood": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Hemophobic"
+            ]
+        },
+        "First Aider": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "FirstAid"
+            ]
+        },
+        "Fit": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Fit"
+            ]
+        },
+        "Former Scout": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Formerscout"
+            ]
+        },
+        "Gardener": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Gardener"
+            ]
+        },
+        "Graceful": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Graceful"
+            ]
+        },
+        "Gymnast": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Gymnast"
+            ]
+        },
+        "Handy": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Handy"
+            ]
+        },
+        "Hard of Hearing": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "HardOfHearing"
+            ]
+        },
+        "Hearty Appetite": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "HeartyAppetite"
+            ]
+        },
+        "Herbalist": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Herbalist"
+            ]
+        },
+        "High Thirst": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "HighThirst"
+            ]
+        },
+        "High Weight": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Overweight"
+            ]
+        },
+        "Hiker": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Hiker"
+            ]
+        },
+        "Hunter": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Hunter"
+            ]
+        },
+        "Illiterate": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Illiterate"
+            ]
+        },
+        "Inconspicuous": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Inconspicuous"
+            ]
+        },
+        "Inventive": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Inventive"
+            ]
+        },
+        "Iron Gut": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "IronGut"
+            ]
+        },
+        "Keen Cook": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Cook"
+            ]
+        },
+        "Keen Cook (occupation trait)": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Cook2"
+            ]
+        },
+        "Keen Hearing": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "KeenHearing"
+            ]
+        },
+        "Light Eater": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "LightEater"
+            ]
+        },
+        "Low Thirst": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "LowThirst"
+            ]
+        },
+        "Low Weight": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Underweight"
+            ]
+        },
+        "Mason": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Mason"
+            ]
+        },
+        "Night Owl": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "NightOwl"
+            ]
+        },
+        "Nutritionist": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Nutritionist"
+            ]
+        },
+        "Nutritionist (occupation trait)": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Nutritionist2"
+            ]
+        },
+        "Organized": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Organized"
+            ]
+        },
+        "Out of Shape": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Out of Shape"
+            ]
+        },
+        "Outdoorsy": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Outdoorsman"
+            ]
+        },
+        "Prone to Illness": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "ProneToIllness"
+            ]
+        },
+        "Puny": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Weak"
+            ]
+        },
+        "Reluctant Fighter": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Pacifist"
+            ]
+        },
+        "Resilient": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Resilient"
+            ]
+        },
+        "Restless Sleeper": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Insomniac"
+            ]
+        },
+        "Runner": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Jogger"
+            ]
+        },
+        "Sewer": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Tailor"
+            ]
+        },
+        "Short Sighted": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "ShortSighted"
+            ]
+        },
+        "Short of Breath": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Asthmatic"
+            ]
+        },
+        "Sleepyhead": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "NeedsMoreSleep"
+            ]
+        },
+        "Slow Healer": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "SlowHealer"
+            ]
+        },
+        "Slow Learner": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "SlowLearner"
+            ]
+        },
+        "Slow Metabolism": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "WeightGain"
+            ]
+        },
+        "Slow Reader": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "SlowReader"
+            ]
+        },
+        "Smoker": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Smoker"
+            ]
+        },
+        "Speed Demon": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "SpeedDemon"
+            ]
+        },
+        "Stout": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Stout"
+            ]
+        },
+        "Strong": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Strong"
+            ]
+        },
+        "Sunday Driver": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "SundayDriver"
+            ]
+        },
+        "Thick Skinned": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "ThickSkinned"
+            ]
+        },
+        "Thin-skinned": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "ThinSkinned"
+            ]
+        },
+        "Unfit": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Unfit"
+            ]
+        },
+        "Vehicle Knowledge": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Mechanics"
+            ]
+        },
+        "Vehicle Knowledge (occupation trait)": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Mechanics2"
+            ]
+        },
+        "Very High Weight": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Obese"
+            ]
+        },
+        "Very Low Weight": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Very Underweight"
+            ]
+        },
+        "Wakeful": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "NeedsLessSleep"
+            ]
+        },
+        "Weak": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Feeble"
+            ]
+        },
+        "Weak Stomach": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "WeakStomach"
+            ]
+        },
+        "Whittler": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "Whittler"
+            ]
+        },
+        "Wilderness Knowledge": {
+            "categories": [
+                "Traits"
+            ],
+            "trait_id": [
+                "WildernessKnowledge"
             ]
         }
     },
