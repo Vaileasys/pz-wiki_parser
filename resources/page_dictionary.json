@@ -1,4 +1,86 @@
 {
+    "animal": {
+        "Chicken": {
+            "animal_id": [
+                "chicken"
+            ],
+            "categories": [
+                "Animals"
+            ]
+        },
+        "Cow": {
+            "animal_id": [
+                "cow"
+            ],
+            "categories": [
+                "Animals"
+            ]
+        },
+        "Deer": {
+            "animal_id": [
+                "deer"
+            ],
+            "categories": [
+                "Animals"
+            ]
+        },
+        "Mouse": {
+            "animal_id": [
+                "mouse"
+            ],
+            "categories": [
+                "Animals"
+            ]
+        },
+        "Pig": {
+            "animal_id": [
+                "pig"
+            ],
+            "categories": [
+                "Animals"
+            ]
+        },
+        "Rabbit": {
+            "animal_id": [
+                "base.rabbit"
+            ],
+            "categories": [
+                "Animals"
+            ]
+        },
+        "Raccoon": {
+            "animal_id": [
+                "raccoon"
+            ],
+            "categories": [
+                "Animals"
+            ]
+        },
+        "Rat": {
+            "animal_id": [
+                "rat"
+            ],
+            "categories": [
+                "Animals"
+            ]
+        },
+        "Sheep": {
+            "animal_id": [
+                "sheep"
+            ],
+            "categories": [
+                "Animals"
+            ]
+        },
+        "Turkey": {
+            "animal_id": [
+                "x"
+            ],
+            "categories": [
+                "Animals"
+            ]
+        }
+    },
     "fluid": {
         "Acid (fluid)": {
             "categories": [
