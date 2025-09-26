@@ -3380,7 +3380,6 @@
                 "Evolved recipes"
             ],
             "item_id": [
-                "Base.Beverage",
                 "Base.HotDrinkTumbler"
             ]
         },
@@ -18866,6 +18865,30 @@
             ],
             "item_id": [
                 "Base.KeyRing_CarDealer"
+            ]
+        },
+        "Key Ring - 12": {
+            "categories": [
+                "Items"
+            ],
+            "item_id": [
+                "Base.KeyRing_Racing12"
+            ]
+        },
+        "Key Ring - 34": {
+            "categories": [
+                "Items"
+            ],
+            "item_id": [
+                "Base.KeyRing_Racing34"
+            ]
+        },
+        "Key Ring - 58": {
+            "categories": [
+                "Items"
+            ],
+            "item_id": [
+                "Base.KeyRing_Racing58"
             ]
         },
         "Key Ring - American Eagle": {
@@ -35094,7 +35117,7 @@
             ],
             "item_id": [
                 "Base.Vest_DefaultTEXTURE_TINT",
-                "Base.Vest_DefaultTEXTURE_TINT"
+                "Base.Vest_DefaultTEXTURE"
             ]
         },
         "Tarot Cards": {
@@ -42858,7 +42881,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "floors_rugs_01_26"
+                "floors_rugs_01_116+117+124+125+132+133",
+                "floors_rugs_01_27+35+43+26+34+42"
             ]
         },
         "Fancy Brown Rug": {
@@ -42869,7 +42893,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "floors_rugs_01_28"
+                "floors_rugs_01_28+29+36+37+44+45",
+                "floors_rugs_01_115+123+131+114+122+130"
             ]
         },
         "Fancy Distaff": {
@@ -42891,7 +42916,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "floors_rugs_01_30"
+                "floors_rugs_01_112+113+120+121+128+129",
+                "floors_rugs_01_31+39+47+30+38+46"
             ]
         },
         "Fancy Hanging Sink": {
@@ -42951,7 +42977,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "floors_rugs_01_24"
+                "floors_rugs_01_24+25+32+33+40+41",
+                "floors_rugs_01_119+127+135+118+126+134"
             ]
         },
         "Fancy Outdoor Lamp": {
@@ -45966,6 +45993,18 @@
                 "furniture_shelving_01_28",
                 "furniture_shelving_01_30",
                 "furniture_shelving_01_31"
+            ]
+        },
+        "Metal Window": {
+            "categories": [
+                "Walls"
+            ],
+            "item_id": [
+                "Moveables.{sprite_id}"
+            ],
+            "sprite_id": [
+                "fixtures_windows_metal_1+3+5+7+9+11+13+15+17+19+21+23+25+27+29+31+49+51+57+59+61+63+65+67+69+71+73+75+77+79+81+83+85+87+89+91+93+95+97+99+101+103+105+107+109+111+113+115+117+119",
+                "fixtures_windows_metal_0+2+4+6+8+10+12+14+16+18+20+22+24+26+28+30+48+50+56+58+60+62+64+66+68+70+72+74+76+78+80+82+84+86+88+90+92+94+96+98+100+102+104+106+108+110+112+114+116+118"
             ]
         },
         "Middle Counter": {
@@ -49151,7 +49190,7 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "location_restaurant_spiffos_03_16+17+18"
+                "location_restaurant_spiffos_03_22+16+18+17"
             ]
         },
         "Theater Corner Counter": {
@@ -50637,8 +50676,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "fixtures_windows_01_1",
-                "fixtures_windows_01_1"
+                "fixtures_windows_01_1+1+3+5+7+9+11+13+15+17+21+23+25+27+29+31+49+51+57+59+61+63+65+67+69+71+73+75+77+79+81+83+85+87+89+91+93+95+97+99+101+103+105+107+109+111+113+115+117+119",
+                "fixtures_windows_wood_0+2+4+6+8+10+12+14+16+18+20+22+24+26+28+30+48+50+56+58+60+62+64+66+68+70+72+74+76+78+80+82+84+86+88+90+92+94+96+98+100+102+104+106+108+110+112+114+116+118"
             ]
         },
         "Wooden window": {
@@ -50649,8 +50688,8 @@
                 "Moveables.{sprite_id}"
             ],
             "sprite_id": [
-                "fixtures_windows_01_1",
-                "fixtures_windows_01_1"
+                "fixtures_windows_01_1+1+3+5+7+9+11+13+15+17+21+23+25+27+29+31+49+51+57+59+61+63+65+67+69+71+73+75+77+79+81+83+85+87+89+91+93+95+97+99+101+103+105+107+109+111+113+115+117+119",
+                "fixtures_windows_wood_0+2+4+6+8+10+12+14+16+18+20+22+24+26+28+30+48+50+56+58+60+62+64+66+68+70+72+74+76+78+80+82+84+86+88+90+92+94+96+98+100+102+104+106+108+110+112+114+116+118"
             ]
         },
         "Yellow Carpet": {
@@ -51780,6 +51819,14 @@
                 "Base.LuxuryCarBurnt"
             ]
         },
+        "Burnt Race Car": {
+            "categories": [
+                "Burnt vehicles"
+            ],
+            "vehicle_id": [
+                "Base.RaceCarBurnt"
+            ]
+        },
         "Burnt Taxi": {
             "categories": [
                 "Burnt vehicles"
@@ -52715,6 +52762,30 @@
             ],
             "vehicle_id": [
                 "Base.VanSeats_Space"
+            ]
+        },
+        "Race Car": {
+            "categories": [
+                "Sports vehicles"
+            ],
+            "vehicle_id": [
+                "Base.RaceCar12"
+            ]
+        },
+        "Race Car (34)": {
+            "categories": [
+                "Sports vehicles"
+            ],
+            "vehicle_id": [
+                "Base.RaceCar34"
+            ]
+        },
+        "Race Car (58)": {
+            "categories": [
+                "Sports vehicles"
+            ],
+            "vehicle_id": [
+                "Base.RaceCar58"
             ]
         },
         "Randi's Plants Chevalier Step Van": {
