@@ -103,7 +103,7 @@ def generate_mechanics(vehicle: Vehicle):
         content.extend(["\n===Dismantling===", DISMANTLING.format(vehicle_type=vehicle_type)])
     if not vehicle.is_burnt:
         content.extend(["\n===Parts===", "The table below shows a list of parts this vehicle can have and the requirements to install/uninstall."])
-        content.extend(load_file(rel_path=os.path.join("mechanics", vehicle.vehicle_id + ".txt"), root_path=VEH_DIR))
+        content.extend(load_file(rel_path=os.path.join("vehicle_parts", vehicle.vehicle_id + ".txt"), root_path=VEH_DIR))
 
     return content
 
@@ -147,7 +147,7 @@ def process_vehicle(vehicle_id):
     overview_content = generate_overview(vehicle)
     mechanics_content = generate_mechanics(vehicle)
     location_content = generate_location(vehicle)
-    variants_content = load_file(rel_path=os.path.join("lists", "vehicles_by_model", parent_id + ".txt"), root_path=VEH_DIR)
+    variants_content = load_file(rel_path=os.path.join("lists", "vehicle_variants", parent_id + ".txt"), root_path=VEH_DIR)
     see_also_content = generate_see_also(vehicle)
 
     content = []

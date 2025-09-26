@@ -88,6 +88,12 @@ WHEEL_ORIGINS = {
         "FrontRight": (1.04,  1.93, -0.93),
         "RearRight":  (1.04, -1.7, -0.93),
     },
+    "RaceCar": {
+        "FrontLeft":  (-1.21,  2.47, -0.83),
+        "RearLeft":   (-1.21, -2.03, -0.83),
+        "FrontRight": (1.21,  2.03, -0.83),
+        "RearRight":  (1.21, -2.03, -0.83),
+    },
     "Trailer_Horsebox": {
         "FrontLeft":  (-1.31,  -1.23, -1.65, 0.9),
         "RearLeft":   (-1.31, -2.22, -1.65, 0.9),

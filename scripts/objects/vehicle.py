@@ -269,7 +269,8 @@ class Vehicle:
             "CarSmall": "SmallCar",
             "NormalCarPolice": "CarNormal",
             "PickUp": "PickUpTruck",
-            "Ambulance": "VanAmbulance"
+            "Ambulance": "VanAmbulance",
+            "RaceCar": "RaceCar12"
         }
         self.is_parent = False
         self.parent_id = self.get_mesh_id()
@@ -708,6 +709,10 @@ class Vehicle:
         """Return parts data with wildcard templates merged into specific parts."""
         def merge(base: dict, override: dict) -> dict:
             """Recursively merge base into override without overwriting existing keys."""
+            if base == []:
+                base = {}
+            elif not isinstance(base, dict):
+                raise ValueError(f"Base is not a dictionary: {self.vehicle_id}")
             result = base.copy()
             for key, val in override.items():
                 if key in result and isinstance(result[key], dict) and isinstance(val, dict):
@@ -943,5 +948,5 @@ class Vehicle:
 
 
 if __name__ == "__main__":
-    vehicle = Vehicle("Base.Van").get_total_capacity()
-    print(vehicle)
+    vehicle = Vehicle("Base.RaceCar34")
+    print(vehicle.get_parent().name)

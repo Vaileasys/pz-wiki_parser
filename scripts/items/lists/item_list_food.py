@@ -83,7 +83,7 @@ def generate_data(item: Item, table_type: str):
 
 
 def find_table_type(item: Item):
-    display_name = item.display_name
+    display_name = item.name_en
     table_type = None
     if item.id_type in evolvedrecipe_results or item.item_id in evolvedrecipe_results:
         table_type = "evolved_recipes"
@@ -221,10 +221,10 @@ def main():
             if item.has_tag("Smokable", "Feather"):
                 continue
             # Animal parts
-            if any(x in item.display_name for x in ("Head", "Animal")) and "Sunflower" not in item.display_name:
+            if any(x in item.name_en for x in ("Head", "Animal")) and "Sunflower" not in item.name_en:
                 continue
             # Droppings
-            if any(x in item.display_name for x in ("Dung", "Droppings")):
+            if any(x in item.name_en for x in ("Dung", "Droppings")):
                 continue
             if item.foraging:
                 if item.foraging.has_category("MedicinalPlants", "Medical") and not item.hunger_change:
