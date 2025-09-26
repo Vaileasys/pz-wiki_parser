@@ -68,7 +68,7 @@ def get_list_type(item: Item, special_data):
 
 # Get list of recipes an item teaches.
 def get_recipes(item: Item):
-    if item.on_create:
+    if item.on_create and not item.teached_recipes:
         return "''Randomized''"
     else:
         recipes = item.get_recipes()

@@ -181,7 +181,7 @@ def get_function(item: Item):
     return "style=\"text-align:left;\" | "+ "<br>".join(string_list) if string_list else "-"
 
 
-def generate_data(item_id, table_type):
+def generate_data(item_id: str, table_type: str):
     item = Item(item_id)
     notes = None
     for key, value in table_type_map.items():
@@ -271,18 +271,23 @@ def generate_data(item_id, table_type):
     if "effect" in columns:
         effects = {
             "Smoke": {"property": "SmokeRange", "string": "Smoke"}, # Priority 1
-            "Noise": {"property": "NoiseDuration", "string": "[[Noise{lcs}|Noise]]"}, # Priority 2
-            "Fire": {"property": "FirePower", "string": "[[Fire{lcs}|Fire]]"}, # Priority 3
+            "Noise": {"property": "NoiseDuration", "string": "[[Noise{lcs}]]"}, # Priority 2
+            "Fire": {"property": "FirePower", "string": "[[Fire{lcs}]]"}, # Priority 3
             "Explosion": {"property": "ExplosionPower", "string": "[[Fire{lcs}|Explosion]]"}, # Priority 4
         }
-        effect = None
-        for key, value in effects.items():
-            if item.get(value["property"]) is not None:
-                effect = key
-                item_dict["effect"] = value["string"].format(lcs=Language.get_subpage())
-                break
-            else:
-                item_dict["effect"] = "-"
+        #TODO: add a better way to detect fire effect. FirePower property removed in 42.12.0
+        effect = "Fire" if (item_id.startswith("Base.FlameTrap") or item_id.startswith("Base.Molotov")) else None
+
+        if effect is None:
+            for key, value in effects.items():
+                if item.get(value["property"]) is not None:
+                    effect = key
+                    break
+
+        if effect is not None:
+            item_dict["effect"] = effects.get(effect).get("string").format(lcs=Language.get_subpage())
+        else:
+            item_dict["effect"] = "-"
     item_dict["effect_power"] = item.get_default(f'{effect}Power', '-') if "effect_power" in columns else None
     item_dict["effect_range"] = item.get_default(f'{effect}Range', '-') if "effect_range" in columns else None
     item_dict["effect_timer"] = item.get_default(f'{effect}Timer', '-') if "effect_timer" in columns else None
