@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from scripts.objects.item import Item
     from scripts.objects.fluid import Fluid
     from scripts.objects.animal_part import AnimalPart
+#    from scripts.objects.zone import RanchZone
 
 
 class Animal:
@@ -18,15 +19,18 @@ class Animal:
     _breeds_data: dict = None
     _stages_data: dict = None
     _genome_data: dict = None
+    _animal_avatar_data: dict = None
 
     _stage_animals: dict[str, set[str]] = {}
     _instances = {}
     _data_file = "parsed_animal_data.json"
+    _avatar_data_file = "parsed_animal_avatar_data.json"
 
     def __new__(cls, animal_id: str):
         """Ensures only one Animal instance exists per animal ID."""
         if not cls._animals_data:
             cls.load()
+            cls.load_avatar()
 
         if animal_id in cls._instances:
             return cls._instances[animal_id]
@@ -43,8 +47,12 @@ class Animal:
         if Animal._animals_data is None:
            Animal.load()
 
+        if Animal._animal_avatar_data is None:
+            Animal.load_avatar()
+
         self.animal_id = animal_id
-        self._data = self._animals_data.get(animal_id, {})
+        self._data = Animal._animals_data.get(animal_id, {})
+        self._avatar_data = Animal._animal_avatar_data.get(animal_id, {})
 
     @classmethod
     def _parse(cls):
@@ -97,6 +105,27 @@ class Animal:
         save_cache(cls._raw_data, cls._data_file)
 
         return cls._raw_data
+    
+    @classmethod
+    def _parse_avatar(cls):
+        """
+        Parse animal avatar data.
+        """
+        ISODIRECTIONS = """
+        IsoDirections = {
+            SE = "SE",
+            SW = "SW"
+        }
+        """
+
+        lua_runtime = lua_helper.load_lua_file("AnimalAvatarDefinition.lua", inject_lua=ISODIRECTIONS)
+        parsed_data = lua_helper.parse_lua_tables(lua_runtime, tables="AnimalAvatarDefinition")
+
+        cls._animal_avatar_data = parsed_data.get("AnimalAvatarDefinition", {})
+
+        save_cache(cls._animal_avatar_data, cls._avatar_data_file)
+
+        return cls._animal_avatar_data
 
 
     @classmethod
@@ -128,6 +157,23 @@ class Animal:
             return getattr(cls, attribute)
 
         return cls._animals_data
+    
+
+    @classmethod
+    def load_avatar(cls):
+        from scripts.core.version import Version
+        if cls._animal_avatar_data is None:
+            path = os.path.join(CACHE_DIR, cls._avatar_data_file)
+
+            data, version = load_cache(path, cache_name="animal avatar", get_version=True)
+
+            # Re-parse if outdated
+            if version != Version.get():
+                data = cls._parse_avatar()
+
+            cls._animal_avatar_data = data
+
+        return cls._animal_avatar_data
     
     @classmethod
     def all(cls) -> dict[str, "Animal"]:
@@ -177,6 +223,19 @@ class Animal:
             Any: Value from the raw data or default.
         """
         return self.data.get(key, default)
+    
+    def get_avatar(self, key: str, default=None):
+        """
+        Returns a raw value from the animal avatar data.
+
+        Args:
+            key (str): Key to look up.
+            default: Value to return if key is missing.
+
+        Returns:
+            Any: Value from the raw data or default.
+        """
+        return self.avatar_data.get(key, default)
 
     def _translate_month(self, month: int):
         from scripts.core.language import Translate
@@ -189,6 +248,10 @@ class Animal:
     @property
     def data(self) -> dict:
         return self._data
+    
+    @property
+    def avatar_data(self) -> dict:
+        return self._avatar_data
     
     @property
     def item(self) -> "Item":
@@ -231,7 +294,8 @@ class Animal:
     @property
     def group(self) -> str: return self.get("group")
     @property
-    def group_name(self) -> str: return Translate.get("IGUI_Animal_Group_" + self.group, default=self.group)
+    def group_name(self) -> str:
+        return Translate.get("IGUI_Animal_Group_" + self.group, default=self.group)
     @property
     def group_name_en(self) -> str: return Translate.get("IGUI_Animal_Group_" + self.group, lang_code="en", default=self.group)
     @property
@@ -536,6 +600,7 @@ class Animal:
     @property
     def fertilized_time_max(self) -> int: return self.get("fertilizedTimeMax", 0) # Number of hours - divide by 24 for number of days
     @property
+    #Note: Hatch time is dependent on sandbox settings. Apocalypse is 'Fast', which is floor(0.7 * timeToHatch) (see Food.setTimeToHatch())
     def time_to_hatch(self) -> int: return self.get("timeToHatch", 0) # Number of hours - divide by 24 for number of days
 
     # --- Animation and visuals --- #
@@ -603,6 +668,51 @@ class Animal:
         if isinstance(value, str):
             value = [value]
         return value
+    #TODO: Create a 'food' property that returns a list of all foods organised by the food type
+    @property
+    def food_types(self) -> dict[str, str]:
+        #TODO: Refactor this to use a cache
+        from scripts.objects.item import Item
+        from scripts.objects.fluid import Fluid
+        if not hasattr(self, "_food_types"):
+            self._food_types = {}
+            for value in self.eat_type_trough:
+
+                value_type = None
+
+                if value == "All":
+                    value_type = "All"
+
+                # Check if it's a Fluid/milk
+#                elif "milk" in value.lower():
+#                    if Fluid.exists(value):
+#                        value_type = "Fluid"
+
+                else:
+                    # Check if it's an Item
+                    if Item.exists(value):
+                        value_type = "Item"
+                    else:
+                        # Loop through items checking for FoodType and AnimalFeedType
+                        for item_id, item in Item.items():
+
+                            if item.animal_feed_type == value:
+                                value_type = "AnimalFeedType"
+                                break
+
+                            elif item.food_type == value:
+                                value_type = "FoodType"
+                                break
+                        
+                        if not value_type:
+                            echo.warning(f"Animal '{self.animal_id}' has an unknown food type '{value}'.")
+                            value_type = "Unknown"
+
+                self._food_types[value] = value_type
+
+
+        return self._food_types
+    
     @property
     def lured_possible_items(self) -> list[str]:
         value = self.get("luredPossibleItems", [])
@@ -621,6 +731,17 @@ class Animal:
     def lay_egg_period_start(self) -> int: return self.get("layEggPeriodStart", 0)
     @property
     def lay_egg_period_month_start(self) -> int: return self._translate_month(self.lay_egg_period_start) if self.lay_egg_period_start else None
+
+#    @property
+#    def ranch_zones(self) -> list["RanchZone"]:
+#        from scripts.objects.zone import RanchZone
+#        if self.animal_id in RanchZone.animal_index():
+#            return [RanchZone(z) for z in RanchZone.animal_index().get(self.animal_id, [])]
+
+    @property
+    def can_be_hooked(self) -> bool:
+        return bool(self.get_avatar("hook"))
+
 
     def __repr__(self):
         return f"<Animal {self.animal_id}>"
@@ -899,6 +1020,17 @@ class AnimalBreed:
     def milk_type(self) -> "Fluid | None":
         from scripts.objects.fluid import Fluid
         return Fluid(self.get("milkType")) if self.get("milkType") else None
+    @property
+    def wool_type(self) -> "Item | None":
+        from scripts.objects.item import Item
+        return Item(self.get("woolType")) if self.get("woolType") else None
+    @property
+    def feather_item(self) -> "Item | None":
+        from scripts.objects.item import Item
+        return Item(self.get("featherItem")) if self.get("featherItem") else None
+    @property
+    def max_feather(self) -> int:
+        return self.get("maxFeather", 0)
     
     ## ------------ Gene effects ------------ ##
 
@@ -1000,6 +1132,7 @@ def animal_report(animal_id: str):
         f"*'''Lure:''' {''.join([Item(item.get("name")).icon for item in animal.lured_possible_items]) or 'N/A'}",
         f"*'''Eats grass:''' {animal.eat_grass}",
         f"*'''Trough food:''' {', '.join(animal.eat_type_trough) or 'N/A'}",
+        f"*'''Food types:''' \n**{'\n**'.join([(f'{key} ({value})' if key != "All" else key) for key, value in animal.food_types.items()]) or 'N/A'}",
         f"*'''Pet:''' {animal.can_be_pet}",
         f"*'''Flees humans:''' {animal.always_flee_humans}",
         f"*'''Flees zombies:''' {animal.flee_zombies}",
@@ -1046,10 +1179,10 @@ def animal_report(animal_id: str):
     return content
 
 if __name__ == "__main__":
-    from scripts.core.file_loading import write_file
-    content = []
-    for animal_id, animal in Animal.all().items():
-        content.extend(animal_report(animal_id))
-    write_file(content, rel_path="animal_reports.txt")
+#    from scripts.core.file_loading import write_file
+#    content = []
+#    for animal_id, animal in Animal.all().items():
+#        content.extend(animal_report(animal_id))
+#    write_file(content, rel_path="animal_reports.txt")
 
-#    print(Animal("piglet").model)
+    print(Animal("chick").can_be_hooked)
