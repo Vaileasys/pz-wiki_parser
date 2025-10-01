@@ -33,6 +33,12 @@ def generate_data(breed: AnimalBreed) -> dict[str, str]:
         else:
             products = { "ground": "0", "hook": "1", "ground_roadkill": "0", "hook_roadkill": "1" }
         results[carcass.leather] = products
+    if breed.feather_item:
+        # Animal should also drop feathers
+        item = breed.feather_item
+        feather_str = "≤" + str(breed.max_feather)
+        products = { "ground": feather_str, "hook": feather_str, "ground_roadkill": feather_str, "hook_roadkill": feather_str }
+        results[item] = products
 
     for part in carcass.parts:
         item = Item(part.get("item"))
