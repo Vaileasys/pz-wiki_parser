@@ -773,9 +773,46 @@ class AnimalBreed:
         self.id = id # A concatenation of the animal group and breed id. Used to lookup a specific breed in _breeds_data
         self.breed_id = breed_id # The raw key for a specific breed, inside an animal def
         self.animal_id = animal_id # The raw key for a specific animal stage
-        self.animal_key = animal_id + breed_id # A concatenation of the animal id and breed id. Used as a bot flag on the wiki and to lookup animal part defs
+        self.full_breed_id = animal_id + breed_id # A concatenation of the animal id and breed id. Used as a bot flag on the wiki and to lookup animal part defs
         self._data = self._breeds_data.get(Animal(animal_id).group, {}).get("breeds", {}).get(breed_id, {})
-    
+
+    @staticmethod
+    def fix_texture(texture: str|list) -> str:
+        """
+        Checks for an existing case-incensitive texture in the game files, and corrects the casing.
+        """
+        from pathlib import Path
+        from scripts.core.file_loading import get_media_dir
+
+        if not texture:
+            return texture
+
+        if isinstance(texture, str):
+            textures = [texture]
+            single = True
+        else:
+            textures = list(texture)
+            single = False
+
+        textures_dir = Path(get_media_dir()) / "textures" / "Body"
+
+        fixed = []
+        for tex in textures:
+            full_path = textures_dir / f"{tex}.png"
+            parent_dir = full_path.parent
+            filename_lower = full_path.name.lower()
+
+            file_match = None
+            if parent_dir.exists():
+                for file in parent_dir.iterdir():
+                    if file.is_file() and file.name.lower() == filename_lower:
+                        file_match = file.stem
+                        break
+
+            fixed.append(file_match if file_match else tex)
+
+        return fixed[0] if single else fixed
+
     @classmethod
     def exists(cls, animal_id: str, breed_id: str) -> bool:
         """
@@ -980,13 +1017,13 @@ class AnimalBreed:
     def inv_icon_baby_skel(self) -> str: return self.get("invIconBabySkel")
 
     @property
-    def texture(self) -> list[str] | str: return self.get("texture")
+    def texture(self) -> list[str] | str: return AnimalBreed.fix_texture(self.get("texture"))
     @property
-    def texture_male(self) -> list[str] | str: return self.get("textureMale")
+    def texture_male(self) -> list[str] | str: return AnimalBreed.fix_texture(self.get("textureMale"))
     @property
-    def texture_baby(self) -> list[str] | str: return self.get("texturebaby")
+    def texture_baby(self) -> list[str] | str: return AnimalBreed.fix_texture(self.get("textureBaby"))
     @property
-    def rotten_texture(self) -> list[str] | str: return self.get("rottenTexture")
+    def rotten_texture(self) -> list[str] | str: return AnimalBreed.fix_texture(self.get("rottenTexture"))
 
     @property
     def models(self) -> list[str]:
@@ -995,10 +1032,15 @@ class AnimalBreed:
     @property
     def model_files(self) -> list[str]:
         if self.animal.baby:
-            textures = self.texture_baby
-            if not textures:
+            if self.texture_baby:
+                textures = self.texture_baby if isinstance(self.texture_baby, list) else [self.texture_baby]
+            else:
                 textures = self.texture if isinstance(self.texture, list) else [self.texture]
                 textures = [tex + "_" + self.animal.animal_id for tex in textures]
+#            textures = self.texture_baby
+#            if not textures:
+#                textures = self.texture if isinstance(self.texture, list) else [self.texture]
+#                textures = [tex + "_" + self.animal.animal_id for tex in textures]
         
         elif self.animal.male:
             textures = self.texture_male if isinstance(self.texture_male, list) else [self.texture_male]
@@ -1185,4 +1227,4 @@ if __name__ == "__main__":
 #        content.extend(animal_report(animal_id))
 #    write_file(content, rel_path="animal_reports.txt")
 
-    print(Animal("chick").can_be_hooked)
+    print(AnimalBreed.from_key("turkeypoultmeleagris").texture_baby)
