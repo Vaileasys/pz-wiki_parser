@@ -22,7 +22,7 @@ def main():
                 gene = AnimalGene(gene_id)
 
             if not gene.is_valid:
-                echo.warning(f"[{breed.animal_key}] Gene '{gene_id}' is not valid.")
+                echo.warning(f"[{breed.full_breed_id}] Gene '{gene_id}' is not valid.")
                 continue
             genes.append(gene)
         

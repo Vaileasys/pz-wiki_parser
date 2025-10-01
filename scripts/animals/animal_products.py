@@ -106,8 +106,8 @@ def do_meat_table(meats: list[AnimalMeat], breed: AnimalBreed, stat: str = "hung
 
     content = []
 
-    bot_flag_start = BOT_FLAG.format(type=f"meat_{stat}", id=breed.animal_key)
-    bot_flag_end = BOT_FLAG_END.format(type=f"meat_{stat}", id=breed.animal_key)
+    bot_flag_start = BOT_FLAG.format(type=f"meat_{stat}", id=breed.full_breed_id)
+    bot_flag_end = BOT_FLAG_END.format(type=f"meat_{stat}", id=breed.full_breed_id)
 
     content.append(bot_flag_start + table_helper.TABLE_WRAP_BEFORE + table_helper.DEF_TABLE_HEADER)
     # Animals that don't have a butchers hook entry in AnimalAvatarDefintion.lua can't be hooked
@@ -160,7 +160,7 @@ def do_meat_table(meats: list[AnimalMeat], breed: AnimalBreed, stat: str = "hung
 
     content.append(table_helper.DEF_TABLE_FOOTER + table_helper.TABLE_WRAP_AFTER + bot_flag_end)
 
-    write_file(content, rel_path=breed.animal_key + ".txt", root_path=root_path_meat + stat)
+    write_file(content, rel_path=breed.full_breed_id + ".txt", root_path=root_path_meat + stat)
 
 
 def get_meat_variants(meat: AnimalMeat, meat_ratio: list, breed: AnimalBreed) -> list[dict]:
@@ -278,8 +278,8 @@ def calculate_meat(
 def do_parts_table(results: dict[Item, dict[str, str]], breed: AnimalBreed) -> list[str]:
     content = []
 
-    bot_flag_start = BOT_FLAG.format(type="butchering_parts", id=breed.animal_key)
-    bot_flag_end = BOT_FLAG_END.format(type="butchering_parts", id=breed.animal_key)
+    bot_flag_start = BOT_FLAG.format(type="butchering_parts", id=breed.full_breed_id)
+    bot_flag_end = BOT_FLAG_END.format(type="butchering_parts", id=breed.full_breed_id)
 
     content.append(bot_flag_start + table_helper.TABLE_WRAP_BEFORE + table_helper.DEF_TABLE_HEADER)
     # Animals that don't have a butchers hook entry in AnimalAvatarDefintion.lua can't be hooked
@@ -333,7 +333,7 @@ def do_parts_table(results: dict[Item, dict[str, str]], breed: AnimalBreed) -> l
     content.append(
         table_helper.DEF_TABLE_FOOTER + footnote + table_helper.TABLE_WRAP_AFTER + bot_flag_end)
     
-    write_file(content, rel_path=breed.animal_key + ".txt", root_path=root_path_parts)
+    write_file(content, rel_path=breed.full_breed_id + ".txt", root_path=root_path_parts)
 
 
 def main():

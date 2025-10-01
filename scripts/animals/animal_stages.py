@@ -39,7 +39,7 @@ def main():
                 animal.gender,
                 animal.min_age,
                 animal.max_age,
-                stage.animal_key
+                stage.full_breed_id
             ]
 
             gender = "baby" if animal.baby else "male" if animal.male else "female" if animal.female else None

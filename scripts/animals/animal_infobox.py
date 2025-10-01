@@ -85,7 +85,7 @@ def generate_animal_data(breed: AnimalBreed):
     #-------------- TECHNICAL --------------#
     param["breed_id"] = breed.breed_id
     param["animal_id"] = animal.animal_id
-    param["animal_key"] = breed.animal_key
+    param["full_breed_id"] = breed.full_breed_id
 
     param["infobox_version"] = Version.get()
     
@@ -263,8 +263,8 @@ def select_animal() -> list:
         for animal_key in animal_keys:
             if AnimalBreed.key_exists(animal_key):
                 breed = AnimalBreed.from_key(animal_key)
-                echo.success(f"Found animal_key: '{breed.animal_key}' ({breed.name})")
-                valid_keys.append(breed.animal_key)
+                echo.success(f"Found animal_key: '{breed.full_breed_id}' ({breed.name})")
+                valid_keys.append(breed.full_breed_id)
             else:
                 invalid_keys.append(animal_key)
 
