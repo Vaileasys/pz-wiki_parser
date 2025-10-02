@@ -787,7 +787,7 @@ def process_xp(recipe: dict, build_data: dict) -> str:
         "Woodwork": "Carpentry",
         "MetalWelding": "Welding",
         "FlintKnapping": "Knapping",
-        "Blacksmith": "Metalworking",
+        "Blacksmith": "Blacksmithing",
         "Electricity": "Electrical",
         "LargeBlade": "Long Blade",
     }
@@ -1311,7 +1311,7 @@ def output_skill_usage(recipe_data_map: dict[str, dict]) -> None:
         "Woodwork": "Carpentry",
         "MetalWelding": "Welding",
         "FlintKnapping": "Knapping",
-        "Blacksmith": "Metalworking",
+        "Blacksmith": "Blacksmithing",
         "Electricity": "Electrical",
     }
 
