@@ -750,7 +750,7 @@ class Animal:
 class AnimalBreed:
     _breeds_data: dict = Animal.load("_breeds_data")
     _instances: dict = {}
-    _animal_keys: dict[str, dict[str, str]] = {}
+    _full_breed_ids: dict[str, dict[str, str]] = {}
 
     def __new__(cls, animal_id: str, breed_id: str):
         """Ensures only one instance exists per animal breed."""
@@ -830,29 +830,29 @@ class AnimalBreed:
         return breed_id in cls._breeds_data.get(group, {}).get("breeds")
     
     @classmethod
-    def build_animal_keys(cls):
+    def build_full_breed_ids(cls):
         for animal_id, animal in Animal.all().items():
             for breed in animal.breeds:
-                animal_key = animal_id + breed.breed_id
-                cls._animal_keys[animal_key] = {"animal_id": animal_id, "breed_id": breed.breed_id}
+                full_breed_id = animal_id + breed.breed_id
+                cls._full_breed_ids[full_breed_id] = {"animal_id": animal_id, "breed_id": breed.breed_id}
     
     @classmethod
-    def get_animal_keys(cls) -> dict:
-        if not cls._animal_keys:
-            cls.build_animal_keys()
-        return cls._animal_keys
+    def get_full_breed_ids(cls) -> dict:
+        if not cls._full_breed_ids:
+            cls.build_full_breed_ids()
+        return cls._full_breed_ids
     
     @classmethod
-    def key_exists(cls, animal_key) -> bool:
-        return animal_key in cls.get_animal_keys()
+    def key_exists(cls, full_breed_id) -> bool:
+        return full_breed_id in cls.get_full_breed_ids()
     
     @classmethod
-    def from_key(cls, animal_key) -> "AnimalBreed":
-        if not cls.key_exists(animal_key):
-            echo.warning(f"Animal key '{animal_key}' could not be found. Was it misspelt?")
+    def from_key(cls, full_breed_id) -> "AnimalBreed":
+        if not cls.key_exists(full_breed_id):
+            echo.warning(f"Animal key '{full_breed_id}' could not be found. Was it misspelt?")
             return
         
-        key_data:dict = cls.get_animal_keys().get(animal_key)
+        key_data:dict = cls.get_full_breed_ids().get(full_breed_id)
         
         animal_id = key_data.get("animal_id")
         breed_id = key_data.get("breed_id")
@@ -861,7 +861,7 @@ class AnimalBreed:
     
     @classmethod
     def all(cls) -> "dict[str, AnimalBreed]":
-        return {id: cls.from_key(id) for id in cls.get_animal_keys()}
+        return {id: cls.from_key(id) for id in cls.get_full_breed_ids()}
     
     @classmethod
     def count(cls) -> int:

@@ -10,7 +10,7 @@ def table_row(content: list[str]) -> list[str]:
     return [f"| {data}" for data in content]
 
 def main():
-    for animal_key, breed in AnimalBreed.all().items():
+    for full_breed_id, breed in AnimalBreed.all().items():
         animal = breed.animal
 
         # Build the genes first so we can sort before generating the table
@@ -53,7 +53,7 @@ def main():
         if has_random_dominance:
             content.append(":{{Footnote|Random|Indicates that the dominance is chosen at random based on how close the value is to 0.5.|name=<sup>Random</sup>}}")
 
-        file_loading.write_file(content, rel_path=f"{animal_key}.txt", root_path=GENES_DIR)
+        file_loading.write_file(content, rel_path=f"{full_breed_id}.txt", root_path=GENES_DIR)
 
 if __name__ == "__main__":
     main()

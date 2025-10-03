@@ -8,7 +8,7 @@ def table_row(content: list):
     return [f"| {data}" for data in content]
 
 def main():
-    for animal_key, breed in AnimalBreed.all().items():
+    for full_breed_id, breed in AnimalBreed.all().items():
         stages = breed.animal.stages
 
         content = []
@@ -20,7 +20,7 @@ def main():
             "! Stage",
             "! Min. age",
             "! Max. age",
-            "! Breed key"
+            "! Full breed ID"
         ])
 
         content_dict = {}
@@ -55,7 +55,7 @@ def main():
         
         content.append("|}")
         
-        file_loading.write_file(content, rel_path=f"{animal_key}.txt", root_path=STAGES_DIR)
+        file_loading.write_file(content, rel_path=f"{full_breed_id}.txt", root_path=STAGES_DIR)
         
 
     return

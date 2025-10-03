@@ -59,7 +59,7 @@ def generate_animal_data(breed: AnimalBreed):
     param["size"] = f"{animal.min_size}–{animal.max_size}"
     param["trailer_size"] = animal.trailer_base_size
     param["age"] = f"{animal.min_age}–{animal.max_age}"
-    param["daily_water"] = animal.daily_water
+    param["daily_water"] = animal.daily_water if animal.daily_water != "0 mL" else None
     param["daily_hunger"] = animal.daily_hunger
 
     #-------------- HUSBANDRY --------------#
@@ -138,17 +138,17 @@ def process_pages(pages: dict) -> None:
         clear_dir(directory=ROOT_PATH)
         for page_name, page in pages.items():
             pbar.set_postfix_str(f'Processing page: {page_name[:30]}')
-            animal_keys = page.get("animal_key", [])
+            full_breed_ids = page.get("full_breed_id", [])
             page_data = {}
 
-            if len(animal_keys) > 1:
-                echo.warning(f"{page_name} has more than one animal key. Using {animal_keys[0]}.")
+            if len(full_breed_ids) > 1:
+                echo.warning(f"{page_name} has more than one full breed ID. Using {full_breed_ids[0]}.")
 
-            animal_key = animal_keys[0] # We should only have 1 key for animals, so we skip the rest
+            full_breed_id = full_breed_ids[0] # We should only have 1 key for animals, so we skip the rest
 
-            breed = AnimalBreed.from_key(animal_key)
+            breed = AnimalBreed.from_key(full_breed_id)
             if not breed.is_valid:
-                echo.warning(f"Animal key '{animal_key}' not found in the parsed data. Skipping.")
+                echo.warning(f"Full breed ID '{full_breed_id}' not found in the parsed data. Skipping.")
                 continue
             animal_params = generate_animal_data(breed)
             
@@ -169,29 +169,29 @@ def process_pages(pages: dict) -> None:
     echo.success(f"Files saved to '{output_dir}' after {elapsed_time:.2f} seconds.")
 
 
-def process_animals(animal_key_list: list, page_names: bool = False) -> None:
+def process_animals(full_breed_id_list: list, page_names: bool = False) -> None:
     """
     Generates infoboxes for a list of specific item IDs and writes output files.
 
     Args:
         item_id_list (list): List of item IDs to process.
     """
-    with tqdm(total=len(animal_key_list), desc="Building animal infoboxes", unit=" animals", bar_format=PBAR_FORMAT, unit_scale=True, leave=False) as pbar:
+    with tqdm(total=len(full_breed_id_list), desc="Building animal infoboxes", unit=" animals", bar_format=PBAR_FORMAT, unit_scale=True, leave=False) as pbar:
         clear_dir(directory=ROOT_PATH)
-        for animal_key in animal_key_list:
-            breed = AnimalBreed.from_key(animal_key)
-            pbar.set_postfix_str(f'Processing: {breed.animal.group} ({animal_key[:30]})')
+        for full_breed_id in full_breed_id_list:
+            breed = AnimalBreed.from_key(full_breed_id)
+            pbar.set_postfix_str(f'Processing: {breed.animal.group} ({full_breed_id[:30]})')
             infobox_data = generate_animal_data(breed)
             infobox_data = util.enumerate_params(infobox_data, numbered_params)
             content = build_infobox(infobox_data)
-            output_dir = write_file(content, animal_key + ".txt", root_path=ROOT_PATH, suppress=True)
+            output_dir = write_file(content, full_breed_id + ".txt", root_path=ROOT_PATH, suppress=True)
             pbar.update(1)
         elapsed_time = pbar.format_dict["elapsed"]
     echo.success(f"Files saved to '{output_dir}' after {elapsed_time:.2f} seconds.")
 
 
 ## ------------------- Initialisation/Preparation ------------------- ##
-def prepare_pages(animal_key_list: list) -> dict:
+def prepare_pages(full_breed_id_list: list) -> dict:
     """
     Prepares and validates the item-to-page mappings for later infobox generation.
 
@@ -209,33 +209,33 @@ def prepare_pages(animal_key_list: list) -> dict:
     seen_animals = set()
     pages_dict = animal_page_dict.copy()
 
-    with tqdm(total=len(animal_key_list), desc="Building page list", unit=" animals", bar_format=PBAR_FORMAT, unit_scale=True, leave=False) as pbar:
-        for animal_key in animal_key_list:
-            pbar.set_postfix_str(f'Processing animal key: {animal_key[:30]}')
+    with tqdm(total=len(full_breed_id_list), desc="Building page list", unit=" animals", bar_format=PBAR_FORMAT, unit_scale=True, leave=False) as pbar:
+        for full_breed_id in full_breed_id_list:
+            pbar.set_postfix_str(f'Processing animal key: {full_breed_id[:30]}')
 
-            if animal_key in seen_animals:
+            if full_breed_id in seen_animals:
                 continue
 
-            seen_animals.add(animal_key)
+            seen_animals.add(full_breed_id)
 
-            page = AnimalBreed.from_key(animal_key).page
+            page = AnimalBreed.from_key(full_breed_id).page
             page_data:dict = pages_dict.get(page)
 
             if not page_data:
-                pages_dict[page] = {"animal_key": [animal_key]}
+                pages_dict[page] = {"full_breed_id": [full_breed_id]}
                 logger.write(
-                    message=f"'{animal_key}' missing from page dict, added to '{color.style(page, color.GREEN)}' {color.style('[new]', color.YELLOW)}.",
+                    message=f"'{full_breed_id}' missing from page dict, added to '{color.style(page, color.GREEN)}' {color.style('[new]', color.YELLOW)}.",
                     print_bool=True,
                     category="warning",
                     file_name="missing_pages_log.txt"
                 )
 
             else:
-                key_list:list = page_data.setdefault("animal_key", [])
-                if animal_key not in key_list:
-                    key_list.append(animal_key)
+                key_list:list = page_data.setdefault("full_breed_id", [])
+                if full_breed_id not in key_list:
+                    key_list.append(full_breed_id)
                     logger.write(
-                        message=f"'{animal_key}' missing from page dict, added to '{color.style(page, color.GREEN)}'.",
+                        message=f"'{full_breed_id}' missing from page dict, added to '{color.style(page, color.GREEN)}'.",
                         print_bool=True,
                         category="warning",
                         file_name="missing_pages_log.txt"
@@ -256,17 +256,17 @@ def select_animal() -> list:
     """
     while True:
         query = input("Enter one or more animal keys (separated by semicolons):\n> ")
-        animal_keys = [animal_key.strip() for animal_key in query.split(';') if animal_key.strip()]
+        full_breed_ids = [full_breed_id.strip() for full_breed_id in query.split(';') if full_breed_id.strip()]
         valid_keys = []
         invalid_keys = []
 
-        for animal_key in animal_keys:
-            if AnimalBreed.key_exists(animal_key):
-                breed = AnimalBreed.from_key(animal_key)
-                echo.success(f"Found animal_key: '{breed.full_breed_id}' ({breed.name})")
+        for full_breed_id in full_breed_ids:
+            if AnimalBreed.key_exists(full_breed_id):
+                breed = AnimalBreed.from_key(full_breed_id)
+                echo.success(f"Found full_breed_id: '{breed.full_breed_id}' ({breed.name})")
                 valid_keys.append(breed.full_breed_id)
             else:
-                invalid_keys.append(animal_key)
+                invalid_keys.append(full_breed_id)
 
         if valid_keys:
             if invalid_keys:
@@ -291,10 +291,10 @@ def select_page() -> dict[str, dict[str, list[str]]]:
 
         for name in page_names:
             if name in pages_dict:
-                animal_keys = pages_dict[name].get("animal_key")
-                valid_ids = [animal_key for animal_key in animal_keys if AnimalBreed.key_exists(animal_key)] if animal_keys else []
+                full_breed_ids = pages_dict[name].get("full_breed_id")
+                valid_ids = [full_breed_id for full_breed_id in full_breed_ids if AnimalBreed.key_exists(full_breed_id)] if full_breed_ids else []
                 if valid_ids:
-                    valid_pages[name] = {"animal_key": valid_ids}
+                    valid_pages[name] = {"full_breed_id": valid_ids}
                 else:
                     print(f"No valid animal keys found for page '{name}'. Skipping.")
             else:
@@ -357,8 +357,8 @@ def main(pre_choice: int = None, run_directly: bool = False):
         run_directly (bool): Whether the script is being run directly.
     """
     init_dependencies()
-    animal_key_list = list(AnimalBreed.get_animal_keys().keys())
-    pages = prepare_pages(animal_key_list)
+    full_breed_id_list = list(AnimalBreed.get_full_breed_ids().keys())
+    pages = prepare_pages(full_breed_id_list)
 
     if not pre_choice or not pre_choice in [1, 2, 3, 4]:
         user_choice = choose_process(run_directly)
@@ -368,12 +368,12 @@ def main(pre_choice: int = None, run_directly: bool = False):
     if user_choice == '3':
         pages = select_page()
     elif user_choice == '4':
-        animal_key_list = select_animal()
+        full_breed_id_list = select_animal()
 
     if user_choice in ['1', '3']:
         process_pages(pages)
     elif user_choice in ['2', '4']:
-        process_animals(animal_key_list)
+        process_animals(full_breed_id_list)
 
 
 if __name__ == "__main__":
