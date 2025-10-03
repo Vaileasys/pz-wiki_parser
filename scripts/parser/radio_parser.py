@@ -34,7 +34,7 @@ CODES_REPLACEMENTS = {
     "TRA": "Trapping",
     "MEC": "Mechanics",
     "TAI": "Tailoring",
-    "MTL": "Metalworking",
+    "MTL": "Welding",
     "ELC": "Electrical",
     "DOC": "First Aid",
     "LFT": "Lightfooted",
