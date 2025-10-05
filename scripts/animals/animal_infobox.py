@@ -116,7 +116,7 @@ def build_infobox(infobox_data: dict) -> list[str]:
     if not infobox_data:
         return None
     content = []
-    content.append("{{Infobox animal/sandbox")
+    content.append("{{Infobox animal")
     for key, value in infobox_data.items():
         content.append(f"|{key}={value}")
     content.append("}}")
