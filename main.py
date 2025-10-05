@@ -298,6 +298,11 @@ menu_structure = {
                 "name": "Spawn points",
                 "description": "Parse spawn points file.",
             },
+            "5": {
+                "module": "scripts.misc.test",
+                "name": "Test module",
+                "description": "Run a test script.",
+            },
         },
     },
 }
