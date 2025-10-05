@@ -117,6 +117,7 @@ def do_meat_table(meats: list[AnimalMeat], breed: AnimalBreed, stat: str = "hung
 
     content.append(bot_flag_start + table_helper.TABLE_WRAP_BEFORE + table_helper.DEF_TABLE_HEADER)
     # Animals that don't have a butchers hook entry in AnimalAvatarDefintion.lua can't be hooked
+    content.append(f"|+ ''{stat.capitalize()} at different cuts''")
     if breed.animal.can_be_hooked:
         content.extend([
             '! rowspan="2" | Icon',
