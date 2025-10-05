@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from scripts.objects.item import Item
     from scripts.objects.fluid import Fluid
     from scripts.objects.animal_part import AnimalPart
-#    from scripts.objects.zone import RanchZone
+    from scripts.objects.zone import RanchZone
 
 
 class Animal:
@@ -732,11 +732,11 @@ class Animal:
     @property
     def lay_egg_period_month_start(self) -> int: return self._translate_month(self.lay_egg_period_start) if self.lay_egg_period_start else None
 
-#    @property
-#    def ranch_zones(self) -> list["RanchZone"]:
-#        from scripts.objects.zone import RanchZone
-#        if self.animal_id in RanchZone.animal_index():
-#            return [RanchZone(z) for z in RanchZone.animal_index().get(self.animal_id, [])]
+    @property
+    def ranch_zones(self) -> list["RanchZone"]:
+        from scripts.objects.zone import RanchZone
+        if self.animal_id in RanchZone.animal_index():
+            return [RanchZone(z) for z in RanchZone.animal_index().get(self.animal_id, [])]
 
     @property
     def can_be_hooked(self) -> bool:
