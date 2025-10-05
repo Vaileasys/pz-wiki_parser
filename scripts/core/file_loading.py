@@ -64,6 +64,8 @@ def map_dir(base_dir, extension=None, media_type="scripts", suppress=False, excl
         dict[str, list[str]]: {filename: [relative_paths]}
     """
 
+    echo.info(f"Generating directory map for '{media_type}'...")
+
     BLACKLIST = {
         "tempNotWorking": {"folder": True, "type": "scripts"}
     }
