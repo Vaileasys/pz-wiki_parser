@@ -13,6 +13,10 @@ def main():
 
         content = []
 
+        bot_flag_start = constants.BOT_FLAG.format(type=f"stages", id=breed.full_breed_id)
+        bot_flag_end = constants.BOT_FLAG_END.format(type=f"stages", id=breed.full_breed_id)
+
+        content.append(bot_flag_start)
         content.append('{| class="wikitable theme-red"')
         content.extend([
             "! Icon",
@@ -54,6 +58,7 @@ def main():
         content.extend(content_dict["male"])
         
         content.append("|}")
+        content.append(bot_flag_end)
         
         file_loading.write_file(content, rel_path=f"{full_breed_id}.txt", root_path=STAGES_DIR)
         

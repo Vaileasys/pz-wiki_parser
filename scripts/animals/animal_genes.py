@@ -29,6 +29,11 @@ def main():
         genes.sort(key=lambda g: g.name.casefold())
 
         content: list[str] = []
+
+        bot_flag_start = constants.BOT_FLAG.format(type=f"genes", id=breed.full_breed_id)
+        bot_flag_end = constants.BOT_FLAG_END.format(type=f"genes", id=breed.full_breed_id)
+
+        content.append(bot_flag_start)
         content.append('{| class="wikitable theme-red"')
         content.extend([
             "! Gene",
@@ -48,6 +53,8 @@ def main():
             content.extend(table_row([name, dominance, value]))
 
         content.append("|}")
+        content.append(bot_flag_end)
+
         if has_forced_gene:
             content.append(":{{Footnote|Breed|The value and dominance shown are specific to this breed.|name=<sup>Breed</sup>}}")
         if has_random_dominance:
