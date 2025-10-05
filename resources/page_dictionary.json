@@ -1,15 +1,183 @@
 {
     "animal": {
-        "Chicken": {
+        "American Landrace Boar": {
             "animal_id": [
+                "boar"
+            ],
+            "breed_id": [
+                "landrace"
+            ],
+            "categories": [
+                "Pigs"
+            ],
+            "full_breed_id": [
+                "boarlandrace"
+            ]
+        },
+        "American Landrace Piglet": {
+            "animal_id": [
+                "piglet"
+            ],
+            "breed_id": [
+                "landrace"
+            ],
+            "categories": [
+                "Pigs"
+            ],
+            "full_breed_id": [
+                "pigletlandrace"
+            ]
+        },
+        "American Landrace Sow": {
+            "animal_id": [
+                "sow"
+            ],
+            "breed_id": [
+                "landrace"
+            ],
+            "categories": [
+                "Pigs"
+            ],
+            "full_breed_id": [
+                "sowlandrace"
+            ]
+        },
+        "Angus Bull": {
+            "animal_id": [
+                "bull"
+            ],
+            "breed_id": [
+                "angus"
+            ],
+            "categories": [
+                "Cows"
+            ],
+            "full_breed_id": [
+                "bullangus"
+            ]
+        },
+        "Angus Calf": {
+            "animal_id": [
+                "cowcalf"
+            ],
+            "breed_id": [
+                "angus"
+            ],
+            "categories": [
+                "Cows"
+            ],
+            "full_breed_id": [
+                "cowcalfangus"
+            ]
+        },
+        "Angus Cow": {
+            "animal_id": [
+                "cow"
+            ],
+            "breed_id": [
+                "angus"
+            ],
+            "categories": [
+                "Cows"
+            ],
+            "full_breed_id": [
+                "cowangus"
+            ]
+        },
+        "Appalachian Baby Rabbit (Kitten)": {
+            "animal_id": [
+                "rabkitten"
+            ],
+            "breed_id": [
+                "appalachian"
+            ],
+            "categories": [
+                "Rabbits"
+            ],
+            "full_breed_id": [
+                "rabkittenappalachian"
+            ]
+        },
+        "Appalachian Female Rabbit (Doe)": {
+            "animal_id": [
+                "rabdoe"
+            ],
+            "breed_id": [
+                "appalachian"
+            ],
+            "categories": [
+                "Rabbits"
+            ],
+            "full_breed_id": [
+                "rabdoeappalachian"
+            ]
+        },
+        "Appalachian Male Rabbit (Buck)": {
+            "animal_id": [
+                "rabbuck"
+            ],
+            "breed_id": [
+                "appalachian"
+            ],
+            "categories": [
+                "Rabbits"
+            ],
+            "full_breed_id": [
+                "rabbuckappalachian"
+            ]
+        },
+        "Chicken": {
+            "animal_group_id": [
                 "chicken"
             ],
             "categories": [
                 "Animals"
             ]
         },
-        "Cow": {
+        "Cottontail Baby Rabbit (Kitten)": {
             "animal_id": [
+                "rabkitten"
+            ],
+            "breed_id": [
+                "cottontail"
+            ],
+            "categories": [
+                "Rabbits"
+            ],
+            "full_breed_id": [
+                "rabkittencottontail"
+            ]
+        },
+        "Cottontail Female Rabbit (Doe)": {
+            "animal_id": [
+                "rabdoe"
+            ],
+            "breed_id": [
+                "cottontail"
+            ],
+            "categories": [
+                "Rabbits"
+            ],
+            "full_breed_id": [
+                "rabdoecottontail"
+            ]
+        },
+        "Cottontail Male Rabbit (Buck)": {
+            "animal_id": [
+                "rabbuck"
+            ],
+            "breed_id": [
+                "cottontail"
+            ],
+            "categories": [
+                "Rabbits"
+            ],
+            "full_breed_id": [
+                "rabbuckcottontail"
+            ]
+        },
+        "Cow": {
+            "animal_group_id": [
                 "cow"
             ],
             "categories": [
@@ -17,15 +185,393 @@
             ]
         },
         "Deer": {
-            "animal_id": [
+            "animal_group_id": [
                 "deer"
             ],
             "categories": [
                 "Animals"
             ]
         },
-        "Mouse": {
+        "Deer Female Mouse (Doe)": {
             "animal_id": [
+                "mousefemale"
+            ],
+            "breed_id": [
+                "deer"
+            ],
+            "categories": [
+                "Mice"
+            ],
+            "full_breed_id": [
+                "mousefemaledeer"
+            ]
+        },
+        "Deer Male Mouse (Buck)": {
+            "animal_id": [
+                "mouse"
+            ],
+            "breed_id": [
+                "deer"
+            ],
+            "categories": [
+                "Mice"
+            ],
+            "full_breed_id": [
+                "mousedeer"
+            ]
+        },
+        "Deer Mouse Pup": {
+            "animal_id": [
+                "mousepups"
+            ],
+            "breed_id": [
+                "deer"
+            ],
+            "categories": [
+                "Mice"
+            ],
+            "full_breed_id": [
+                "mousepupsdeer"
+            ]
+        },
+        "East Friesian Ewe": {
+            "animal_id": [
+                "ewe"
+            ],
+            "breed_id": [
+                "friesian"
+            ],
+            "categories": [
+                "Sheep"
+            ],
+            "full_breed_id": [
+                "ewefriesian"
+            ]
+        },
+        "East Friesian Lamb": {
+            "animal_id": [
+                "lamb"
+            ],
+            "breed_id": [
+                "friesian"
+            ],
+            "categories": [
+                "Sheep"
+            ],
+            "full_breed_id": [
+                "lambfriesian"
+            ]
+        },
+        "East Friesian Ram": {
+            "animal_id": [
+                "ram"
+            ],
+            "breed_id": [
+                "friesian"
+            ],
+            "categories": [
+                "Sheep"
+            ],
+            "full_breed_id": [
+                "ramfriesian"
+            ]
+        },
+        "Golden Female Mouse (Doe)": {
+            "animal_id": [
+                "mousefemale"
+            ],
+            "breed_id": [
+                "golden"
+            ],
+            "categories": [
+                "Mice"
+            ],
+            "full_breed_id": [
+                "mousefemalegolden"
+            ]
+        },
+        "Golden Male Mouse (Buck)": {
+            "animal_id": [
+                "mouse"
+            ],
+            "breed_id": [
+                "golden"
+            ],
+            "categories": [
+                "Mice"
+            ],
+            "full_breed_id": [
+                "mousegolden"
+            ]
+        },
+        "Golden Mouse Pup": {
+            "animal_id": [
+                "mousepups"
+            ],
+            "breed_id": [
+                "golden"
+            ],
+            "categories": [
+                "Mice"
+            ],
+            "full_breed_id": [
+                "mousepupsgolden"
+            ]
+        },
+        "Gray Baby Raccoon (Kit)": {
+            "animal_id": [
+                "raccoonkit"
+            ],
+            "breed_id": [
+                "grey"
+            ],
+            "categories": [
+                "Raccoons"
+            ],
+            "full_breed_id": [
+                "raccoonkitgrey"
+            ]
+        },
+        "Gray Female Raccoon (Sow)": {
+            "animal_id": [
+                "raccoonsow"
+            ],
+            "breed_id": [
+                "grey"
+            ],
+            "categories": [
+                "Raccoons"
+            ],
+            "full_breed_id": [
+                "raccoonsowgrey"
+            ]
+        },
+        "Gray Female Rat (Doe)": {
+            "animal_id": [
+                "ratfemale"
+            ],
+            "breed_id": [
+                "grey"
+            ],
+            "categories": [
+                "Rats"
+            ],
+            "full_breed_id": [
+                "ratfemalegrey"
+            ]
+        },
+        "Gray Male Raccoon (Boar)": {
+            "animal_id": [
+                "raccoonboar"
+            ],
+            "breed_id": [
+                "grey"
+            ],
+            "categories": [
+                "Raccoons"
+            ],
+            "full_breed_id": [
+                "raccoonboargrey"
+            ]
+        },
+        "Gray Male Rat (Buck)": {
+            "animal_id": [
+                "rat"
+            ],
+            "breed_id": [
+                "grey"
+            ],
+            "categories": [
+                "Rats"
+            ],
+            "full_breed_id": [
+                "ratgrey"
+            ]
+        },
+        "Gray Rat Pup": {
+            "animal_id": [
+                "ratbaby"
+            ],
+            "breed_id": [
+                "grey"
+            ],
+            "categories": [
+                "Rats"
+            ],
+            "full_breed_id": [
+                "ratbabygrey"
+            ]
+        },
+        "Holstein Bull": {
+            "animal_id": [
+                "bull"
+            ],
+            "breed_id": [
+                "holstein"
+            ],
+            "categories": [
+                "Cows"
+            ],
+            "full_breed_id": [
+                "bullholstein"
+            ]
+        },
+        "Holstein Calf": {
+            "animal_id": [
+                "cowcalf"
+            ],
+            "breed_id": [
+                "holstein"
+            ],
+            "categories": [
+                "Cows"
+            ],
+            "full_breed_id": [
+                "cowcalfholstein"
+            ]
+        },
+        "Holstein Cow": {
+            "animal_id": [
+                "cow"
+            ],
+            "breed_id": [
+                "holstein"
+            ],
+            "categories": [
+                "Cows"
+            ],
+            "full_breed_id": [
+                "cowholstein"
+            ]
+        },
+        "Large Black Boar": {
+            "animal_id": [
+                "boar"
+            ],
+            "breed_id": [
+                "largeblack"
+            ],
+            "categories": [
+                "Pigs"
+            ],
+            "full_breed_id": [
+                "boarlargeblack"
+            ]
+        },
+        "Large Black Piglet": {
+            "animal_id": [
+                "piglet"
+            ],
+            "breed_id": [
+                "largeblack"
+            ],
+            "categories": [
+                "Pigs"
+            ],
+            "full_breed_id": [
+                "pigletlargeblack"
+            ]
+        },
+        "Large Black Sow": {
+            "animal_id": [
+                "sow"
+            ],
+            "breed_id": [
+                "largeblack"
+            ],
+            "categories": [
+                "Pigs"
+            ],
+            "full_breed_id": [
+                "sowlargeblack"
+            ]
+        },
+        "Leghorn Chick": {
+            "animal_id": [
+                "chick"
+            ],
+            "breed_id": [
+                "leghorn"
+            ],
+            "categories": [
+                "Chickens"
+            ],
+            "full_breed_id": [
+                "chickleghorn"
+            ]
+        },
+        "Leghorn Cockerel": {
+            "animal_id": [
+                "cockerel"
+            ],
+            "breed_id": [
+                "leghorn"
+            ],
+            "categories": [
+                "Chickens"
+            ],
+            "full_breed_id": [
+                "cockerelleghorn"
+            ]
+        },
+        "Leghorn Hen": {
+            "animal_id": [
+                "hen"
+            ],
+            "breed_id": [
+                "leghorn"
+            ],
+            "categories": [
+                "Chickens"
+            ],
+            "full_breed_id": [
+                "henleghorn"
+            ]
+        },
+        "Meleagris Hen": {
+            "animal_id": [
+                "turkeyhen"
+            ],
+            "breed_id": [
+                "meleagris"
+            ],
+            "categories": [
+                "Turkeys"
+            ],
+            "full_breed_id": [
+                "turkeyhenmeleagris"
+            ]
+        },
+        "Meleagris Poult": {
+            "animal_id": [
+                "turkeypoult"
+            ],
+            "breed_id": [
+                "meleagris"
+            ],
+            "categories": [
+                "Turkeys"
+            ],
+            "full_breed_id": [
+                "turkeypoultmeleagris"
+            ]
+        },
+        "Meleagris Tom": {
+            "animal_id": [
+                "gobblers"
+            ],
+            "breed_id": [
+                "meleagris"
+            ],
+            "categories": [
+                "Turkeys"
+            ],
+            "full_breed_id": [
+                "gobblersmeleagris"
+            ]
+        },
+        "Mouse": {
+            "animal_group_id": [
                 "mouse"
             ],
             "categories": [
@@ -33,7 +579,7 @@
             ]
         },
         "Pig": {
-            "animal_id": [
+            "animal_group_id": [
                 "pig"
             ],
             "categories": [
@@ -41,43 +587,379 @@
             ]
         },
         "Rabbit": {
-            "animal_id": [
-                "base.rabbit"
+            "animal_group_id": [
+                "rabbit"
             ],
             "categories": [
                 "Animals"
             ]
         },
         "Raccoon": {
-            "animal_id": [
+            "animal_group_id": [
                 "raccoon"
             ],
             "categories": [
                 "Animals"
             ]
         },
-        "Rat": {
+        "Rambouillet Ewe": {
             "animal_id": [
+                "ewe"
+            ],
+            "breed_id": [
+                "rambouillet"
+            ],
+            "categories": [
+                "Sheep"
+            ],
+            "full_breed_id": [
+                "ewerambouillet"
+            ]
+        },
+        "Rambouillet Lamb": {
+            "animal_id": [
+                "lamb"
+            ],
+            "breed_id": [
+                "rambouillet"
+            ],
+            "categories": [
+                "Sheep"
+            ],
+            "full_breed_id": [
+                "lambrambouillet"
+            ]
+        },
+        "Rambouillet Ram": {
+            "animal_id": [
+                "ram"
+            ],
+            "breed_id": [
+                "rambouillet"
+            ],
+            "categories": [
+                "Sheep"
+            ],
+            "full_breed_id": [
+                "ramrambouillet"
+            ]
+        },
+        "Rat": {
+            "animal_group_id": [
                 "rat"
             ],
             "categories": [
                 "Animals"
             ]
         },
-        "Sheep": {
+        "Rhode Island Red Chick": {
             "animal_id": [
+                "chick"
+            ],
+            "breed_id": [
+                "rhodeisland"
+            ],
+            "categories": [
+                "Chickens"
+            ],
+            "full_breed_id": [
+                "chickrhodeisland"
+            ]
+        },
+        "Rhode Island Red Cockerel": {
+            "animal_id": [
+                "cockerel"
+            ],
+            "breed_id": [
+                "rhodeisland"
+            ],
+            "categories": [
+                "Chickens"
+            ],
+            "full_breed_id": [
+                "cockerelrhodeisland"
+            ]
+        },
+        "Rhode Island Red Hen": {
+            "animal_id": [
+                "hen"
+            ],
+            "breed_id": [
+                "rhodeisland"
+            ],
+            "categories": [
+                "Chickens"
+            ],
+            "full_breed_id": [
+                "henrhodeisland"
+            ]
+        },
+        "Sheep": {
+            "animal_group_id": [
                 "sheep"
             ],
             "categories": [
                 "Animals"
             ]
         },
-        "Turkey": {
+        "Simmental Bull": {
             "animal_id": [
-                "x"
+                "bull"
+            ],
+            "breed_id": [
+                "simmental"
+            ],
+            "categories": [
+                "Cows"
+            ],
+            "full_breed_id": [
+                "bullsimmental"
+            ]
+        },
+        "Simmental Calf": {
+            "animal_id": [
+                "cowcalf"
+            ],
+            "breed_id": [
+                "simmental"
+            ],
+            "categories": [
+                "Cows"
+            ],
+            "full_breed_id": [
+                "cowcalfsimmental"
+            ]
+        },
+        "Simmental Cow": {
+            "animal_id": [
+                "cow"
+            ],
+            "breed_id": [
+                "simmental"
+            ],
+            "categories": [
+                "Cows"
+            ],
+            "full_breed_id": [
+                "cowsimmental"
+            ]
+        },
+        "Suffolk Ewe": {
+            "animal_id": [
+                "ewe"
+            ],
+            "breed_id": [
+                "suffolk"
+            ],
+            "categories": [
+                "Sheep"
+            ],
+            "full_breed_id": [
+                "ewesuffolk"
+            ]
+        },
+        "Suffolk Lamb": {
+            "animal_id": [
+                "lamb"
+            ],
+            "breed_id": [
+                "suffolk"
+            ],
+            "categories": [
+                "Sheep"
+            ],
+            "full_breed_id": [
+                "lambsuffolk"
+            ]
+        },
+        "Suffolk Ram": {
+            "animal_id": [
+                "ram"
+            ],
+            "breed_id": [
+                "suffolk"
+            ],
+            "categories": [
+                "Sheep"
+            ],
+            "full_breed_id": [
+                "ramsuffolk"
+            ]
+        },
+        "Swamp Baby Rabbit (Kitten)": {
+            "animal_id": [
+                "rabkitten"
+            ],
+            "breed_id": [
+                "swamp"
+            ],
+            "categories": [
+                "Rabbits"
+            ],
+            "full_breed_id": [
+                "rabkittenswamp"
+            ]
+        },
+        "Swamp Female Rabbit (Doe)": {
+            "animal_id": [
+                "rabdoe"
+            ],
+            "breed_id": [
+                "swamp"
+            ],
+            "categories": [
+                "Rabbits"
+            ],
+            "full_breed_id": [
+                "rabdoeswamp"
+            ]
+        },
+        "Swamp Male Rabbit (Buck)": {
+            "animal_id": [
+                "rabbuck"
+            ],
+            "breed_id": [
+                "swamp"
+            ],
+            "categories": [
+                "Rabbits"
+            ],
+            "full_breed_id": [
+                "rabbuckswamp"
+            ]
+        },
+        "Turkey": {
+            "animal_group_id": [
+                "turkey"
             ],
             "categories": [
                 "Animals"
+            ]
+        },
+        "White Female Mouse (Doe)": {
+            "animal_id": [
+                "mousefemale"
+            ],
+            "breed_id": [
+                "white"
+            ],
+            "categories": [
+                "Mice"
+            ],
+            "full_breed_id": [
+                "mousefemalewhite"
+            ]
+        },
+        "White Female Rat (Doe)": {
+            "animal_id": [
+                "ratfemale"
+            ],
+            "breed_id": [
+                "white"
+            ],
+            "categories": [
+                "Rats"
+            ],
+            "full_breed_id": [
+                "ratfemalewhite"
+            ]
+        },
+        "White Male Mouse (Buck)": {
+            "animal_id": [
+                "mouse"
+            ],
+            "breed_id": [
+                "white"
+            ],
+            "categories": [
+                "Mice"
+            ],
+            "full_breed_id": [
+                "mousewhite"
+            ]
+        },
+        "White Male Rat (Buck)": {
+            "animal_id": [
+                "rat"
+            ],
+            "breed_id": [
+                "white"
+            ],
+            "categories": [
+                "Rats"
+            ],
+            "full_breed_id": [
+                "ratwhite"
+            ]
+        },
+        "White Mouse Pup": {
+            "animal_id": [
+                "mousepups"
+            ],
+            "breed_id": [
+                "white"
+            ],
+            "categories": [
+                "Mice"
+            ],
+            "full_breed_id": [
+                "mousepupswhite"
+            ]
+        },
+        "White Rat Pup": {
+            "animal_id": [
+                "ratbaby"
+            ],
+            "breed_id": [
+                "white"
+            ],
+            "categories": [
+                "Rats"
+            ],
+            "full_breed_id": [
+                "ratbabywhite"
+            ]
+        },
+        "White-Tailed Buck": {
+            "animal_id": [
+                "buck"
+            ],
+            "breed_id": [
+                "whitetailed"
+            ],
+            "categories": [
+                "Deer"
+            ],
+            "full_breed_id": [
+                "buckwhitetailed"
+            ]
+        },
+        "White-Tailed Doe": {
+            "animal_id": [
+                "doe"
+            ],
+            "breed_id": [
+                "whitetailed"
+            ],
+            "categories": [
+                "Deer"
+            ],
+            "full_breed_id": [
+                "doewhitetailed"
+            ]
+        },
+        "White-Tailed Fawn": {
+            "animal_id": [
+                "fawn"
+            ],
+            "breed_id": [
+                "whitetailed"
+            ],
+            "categories": [
+                "Deer"
+            ],
+            "full_breed_id": [
+                "fawnwhitetailed"
             ]
         }
     },
@@ -3727,6 +4609,46 @@
             ],
             "item_id": [
                 "Base.BlacksmithAnvilUntreated"
+            ]
+        },
+        "Blacksmithing I: \"Elementary Forge Practice\"": {
+            "categories": [
+                "Skill books"
+            ],
+            "item_id": [
+                "Base.BookBlacksmith1"
+            ]
+        },
+        "Blacksmithing II: \"General Purpose Blacksmithing\"": {
+            "categories": [
+                "Skill books"
+            ],
+            "item_id": [
+                "Base.BookBlacksmith2"
+            ]
+        },
+        "Blacksmithing III: \"Old West Smiths and Their Secrets\"": {
+            "categories": [
+                "Skill books"
+            ],
+            "item_id": [
+                "Base.BookBlacksmith3"
+            ]
+        },
+        "Blacksmithing IV: \"Really Hard Steel Co. Workers Handbook\"": {
+            "categories": [
+                "Skill books"
+            ],
+            "item_id": [
+                "Base.BookBlacksmith4"
+            ]
+        },
+        "Blacksmithing V: \"The Complete Encyclopedia of Metallurgy\"": {
+            "categories": [
+                "Skill books"
+            ],
+            "item_id": [
+                "Base.BookBlacksmith5"
             ]
         },
         "Blank Key": {
@@ -21687,7 +22609,7 @@
                 "Base.HunkZ"
             ]
         },
-        "Magazine: Iron Age Metalworking": {
+        "Magazine: Iron Age Blacksmithing": {
             "categories": [
                 "Recipe magazines"
             ],
@@ -21783,7 +22705,7 @@
                 "Base.SmithingMag11"
             ]
         },
-        "Magazine: Medieval Metalworking": {
+        "Magazine: Medieval Blacksmithing": {
             "categories": [
                 "Recipe magazines"
             ],
@@ -21799,7 +22721,7 @@
                 "Base.TailoringMag3"
             ]
         },
-        "Magazine: Modern Metalworking at Home": {
+        "Magazine: Modern Blacksmithing at Home": {
             "categories": [
                 "Recipe magazines"
             ],
@@ -23051,38 +23973,6 @@
                 "Base.MetalworkingChisel"
             ]
         },
-        "Metalworking I: \"Elementary Forge Practice\"": {
-            "categories": [
-                "Skill books"
-            ],
-            "item_id": [
-                "Base.BookBlacksmith1"
-            ]
-        },
-        "Metalworking II: \"General Purpose Blacksmithing\"": {
-            "categories": [
-                "Skill books"
-            ],
-            "item_id": [
-                "Base.BookBlacksmith2"
-            ]
-        },
-        "Metalworking III: \"Old West Smiths and Their Secrets\"": {
-            "categories": [
-                "Skill books"
-            ],
-            "item_id": [
-                "Base.BookBlacksmith3"
-            ]
-        },
-        "Metalworking IV: \"Really Hard Steel Co. Workers Handbook\"": {
-            "categories": [
-                "Skill books"
-            ],
-            "item_id": [
-                "Base.BookBlacksmith4"
-            ]
-        },
         "Metalworking Pliers": {
             "categories": [
                 "Tools"
@@ -23097,14 +23987,6 @@
             ],
             "item_id": [
                 "Base.MetalworkingPunch"
-            ]
-        },
-        "Metalworking V: \"The Complete Encyclopedia of Metallurgy\"": {
-            "categories": [
-                "Skill books"
-            ],
-            "item_id": [
-                "Base.BookBlacksmith5"
             ]
         },
         "Microphone": {
@@ -30469,6 +31351,14 @@
                 "Base.BookHusbandrySet"
             ]
         },
+        "Set of Blacksmithing Books": {
+            "categories": [
+                "Skill books"
+            ],
+            "item_id": [
+                "Base.BookBlacksmithSet"
+            ]
+        },
         "Set of Butchering Books": {
             "categories": [
                 "Skill books"
@@ -30587,14 +31477,6 @@
             ],
             "item_id": [
                 "Base.BookMechanicsSet"
-            ]
-        },
-        "Set of Metalworking Books": {
-            "categories": [
-                "Skill books"
-            ],
-            "item_id": [
-                "Base.BookBlacksmithSet"
             ]
         },
         "Set of Pottery Books": {
@@ -39340,6 +40222,14 @@
                 "Axe"
             ]
         },
+        "Blacksmithing": {
+            "categories": [
+                "Skills"
+            ],
+            "skill_id": [
+                "Blacksmith"
+            ]
+        },
         "Butchering": {
             "categories": [
                 "Skills"
@@ -39474,14 +40364,6 @@
             ],
             "skill_id": [
                 "Mechanics"
-            ]
-        },
-        "Metalworking": {
-            "categories": [
-                "Skills"
-            ],
-            "skill_id": [
-                "Blacksmith"
             ]
         },
         "Nimble": {
