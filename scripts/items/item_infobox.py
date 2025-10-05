@@ -22,7 +22,7 @@ from scripts.objects.craft_recipe import CraftRecipe
 from scripts.objects.attachment import AttachmentType, HotbarSlot
 from scripts.objects.recorded_media import RecMedia
 from scripts.core import page_manager
-from scripts.core.file_loading import write_file, clear_dir
+from scripts.core.file_loading import write_file
 from scripts.core.constants import ITEM_DIR, PBAR_FORMAT, RESOURCE_DIR
 
 ROOT_PATH = os.path.join(ITEM_DIR, "infoboxes")
@@ -413,7 +413,6 @@ def process_pages(pages: dict) -> None:
     """
     from urllib.parse import quote
     with tqdm(total=len(pages), desc="Building page infoboxes", unit=" pages", bar_format=PBAR_FORMAT, unit_scale=True, leave=False) as pbar:
-        clear_dir(directory=ROOT_PATH)
         for page_name, page in pages.items():
             pbar.set_postfix_str(f'Processing page: {page_name[:30]}')
             item_ids = page.get("item_id", [])
@@ -453,7 +452,6 @@ def process_items(item_id_list: list) -> None:
         item_id_list (list): List of item IDs to process.
     """
     with tqdm(total=len(item_id_list), desc="Building item infoboxes", unit=" items", bar_format=PBAR_FORMAT, unit_scale=True, leave=False) as pbar:
-        clear_dir(directory=ROOT_PATH)
         for item_id in item_id_list:
             item = Item(item_id)
             pbar.set_postfix_str(f'Processing: {item.type} ({item_id[:30]})')
