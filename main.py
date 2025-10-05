@@ -175,6 +175,36 @@ menu_structure = {
                 "name": "Animal list (maintenance)",
                 "description": "Generate animal list for the 'PZwiki:Animal_list' page.",
             },
+            "2": {
+                "module": "scripts.animals.animal_article",
+                "name": "Animal article",
+                "description": "Generate articles for animals. Runs the required modules automatically.",
+            },
+            "3": {
+                "module": "scripts.animals.animal_infobox",
+                "name": "Animal infobox",
+                "description": "Generate animal infoboxes.",
+            },
+            "4": {
+                "module": "scripts.animals.animal_food",
+                "name": "Animal food list",
+                "description": "Generate list of foods for each animal.",
+            },
+            "5": {
+                "module": "scripts.animals.animal_products",
+                "name": "Animal products",
+                "description": "Generate product tables for animals.",
+            },
+            "6": {
+                "module": "scripts.animals.animal_genes",
+                "name": "Animal genes",
+                "description": "Generate tables of genes for animals.",
+            },
+            "7": {
+                "module": "scripts.animals.animal_stages",
+                "name": "Animal stages",
+                "description": "Generate tables of stages for animals.",
+            },
         },
     },
     "7": {
