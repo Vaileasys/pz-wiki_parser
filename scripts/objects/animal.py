@@ -1074,6 +1074,34 @@ class AnimalBreed:
     def max_feather(self) -> int:
         return self.get("maxFeather", 0)
     
+    @property
+    def actual_min_milk_min(self) -> float:
+        """Lowest possible udder capacity (breed.minMilk × gene.min)."""
+        return float(self.animal.min_milk * self.min_milk)
+    @property
+    def actual_min_milk_max(self) -> float:
+        """Highest possible minimum udder capacity (breed.minMilk × gene.max)"""
+        return float(self.animal.min_milk * self.max_milk)
+    @property
+    def actual_max_milk_min(self) -> float:
+        """Lowest possible maximum udder capacity (breed.maxMilk × gene.min)"""
+        return float(self.animal.max_milk * self.min_milk)
+    @property
+    def actual_max_milk_max(self) -> float:
+        """Highest possible udder capacity (breed.maxMilk × gene.max)"""
+        return float(self.animal.max_milk * self.max_milk)
+    
+    @property
+    def actual_max_wool_min(self) -> float:
+        """Lowest possible wool capacity (breed.maxWool × gene.min)"""
+        return float(self.max_wool[0] * self.animal.max_wool)
+    @property
+    def actual_max_wool_max(self) -> float:
+        """Highest possible wool capacity (breed.maxWool × gene.max)"""
+        return float(self.max_wool[1] * self.animal.max_wool)
+
+
+    
     ## ------------ Gene effects ------------ ##
 
     @property
