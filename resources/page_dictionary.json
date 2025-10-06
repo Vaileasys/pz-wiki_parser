@@ -40885,6 +40885,14 @@
                 "location_shop_mall_signs_01_143"
             ]
         },
+        "Barley (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Barley"
+            ]
+        },
         "Barrel": {
             "categories": [
                 "Decorations"
@@ -40913,6 +40921,14 @@
                 "street_decoration_01_64+65+66+67",
                 "street_decoration_01_59+58+57+56",
                 "street_decoration_01_60+61+62+63"
+            ]
+        },
+        "Basil (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Basil"
             ]
         },
         "Bathroom Rug": {
@@ -41110,6 +41126,14 @@
                 "location_shop_generic_01_30",
                 "location_shop_generic_01_28",
                 "location_shop_generic_01_29"
+            ]
+        },
+        "Bell Pepper (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "BellPepper"
             ]
         },
         "Bench Grinder": {
@@ -41410,6 +41434,14 @@
                 "location_business_office_generic_02_5",
                 "location_business_office_generic_02_6",
                 "location_business_office_generic_02_7"
+            ]
+        },
+        "Black Sage (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "BlackSage"
             ]
         },
         "Black Tiles": {
@@ -42053,6 +42085,22 @@
                 "furniture_tables_high_01_39+38"
             ]
         },
+        "Broadleaf Plantain (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "BroadleafPlantain"
+            ]
+        },
+        "Broccoli (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Broccoli"
+            ]
+        },
         "Brown Carpet": {
             "categories": [
                 "Carpets"
@@ -42225,6 +42273,14 @@
                 "crafted_05_72"
             ]
         },
+        "Cabbage (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Cabbages"
+            ]
+        },
         "Cactus": {
             "categories": [
                 "Vegetation tiles"
@@ -42314,6 +42370,14 @@
                 "signs_one-off_01_51"
             ]
         },
+        "Carrots (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Carrots"
+            ]
+        },
         "Cash Register": {
             "categories": [
                 "Container tiles"
@@ -42326,6 +42390,14 @@
                 "location_shop_accessories_01_1",
                 "location_shop_accessories_01_3",
                 "location_shop_accessories_01_2"
+            ]
+        },
+        "Cauliflower (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Cauliflower"
             ]
         },
         "Cedar Corner Counter": {
@@ -42404,6 +42476,14 @@
                 "location_community_school_01_18+17+16",
                 "location_community_school_01_27+28+29",
                 "location_community_school_01_26+25+24"
+            ]
+        },
+        "Chamomile (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Chamomile"
             ]
         },
         "Charcoal Burner": {
@@ -42534,6 +42614,14 @@
                 "furniture_storage_02_37+36"
             ]
         },
+        "Chives (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Chives"
+            ]
+        },
         "Chromatic Accident Painting": {
             "categories": [
                 "Wall decorations"
@@ -42637,6 +42725,14 @@
                 "location_community_church_small_01_50+49+48",
                 "location_community_church_small_01_56+57+58",
                 "location_community_church_small_01_61+60+59"
+            ]
+        },
+        "Cilantro (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Cilantro"
             ]
         },
         "Cinema Projector": {
@@ -42805,6 +42901,14 @@
                 "papernotices_01_7"
             ]
         },
+        "Comfrey (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Comfrey"
+            ]
+        },
         "Comics Shop Shelves": {
             "categories": [
                 "Shelves"
@@ -42815,6 +42919,14 @@
             "sprite_id": [
                 "location_shop_generic_01_0",
                 "location_shop_generic_01_1"
+            ]
+        },
+        "Common Mallow (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "CommonMallow"
             ]
         },
         "Complex Loom": {
@@ -42885,6 +42997,14 @@
             "sprite_id": [
                 "location_business_office_generic_01_15",
                 "location_business_office_generic_01_7"
+            ]
+        },
+        "Corn (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Corn"
             ]
         },
         "Corner A Counter": {
@@ -43094,6 +43214,14 @@
                 "crafted_05_20",
                 "crafted_05_23",
                 "crafted_05_22"
+            ]
+        },
+        "Cucumber (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Cucumber"
             ]
         },
         "Dark Blue Chair": {
@@ -44016,6 +44144,14 @@
                 "crafted_04_50+51"
             ]
         },
+        "Flax (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Flax"
+            ]
+        },
         "Flood Lights": {
             "categories": [
                 "Lights"
@@ -44229,6 +44365,14 @@
             "sprite_id": [
                 "location_restaurant_pizzawhirled_01_17",
                 "location_restaurant_pizzawhirled_01_18"
+            ]
+        },
+        "Garlic (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Garlic"
             ]
         },
         "Gas2Go Low Shelves": {
@@ -44753,6 +44897,14 @@
                 "appliances_cooking_01_3"
             ]
         },
+        "Green Peas (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Greenpeas"
+            ]
+        },
         "Green Pie Poster": {
             "categories": [
                 "Wall decorations"
@@ -45082,6 +45234,14 @@
                 "signs_one-off_01_6"
             ]
         },
+        "Habanero (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Habanero"
+            ]
+        },
         "Hair O Genesis Sign": {
             "categories": [
                 "Signs"
@@ -45219,6 +45379,14 @@
                 "location_entertainment_gallery_01_38"
             ]
         },
+        "Hemp (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Hemp"
+            ]
+        },
         "Hide Sleeping Bag": {
             "categories": [
                 "Tiles"
@@ -45231,6 +45399,14 @@
                 "camping_02_83+82",
                 "camping_02_80+81",
                 "camping_02_87+86"
+            ]
+        },
+        "Hops (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Hops"
             ]
         },
         "Hospital Bed": {
@@ -45387,6 +45563,14 @@
                 "walls_decoration_01_44+45"
             ]
         },
+        "Jalapeno (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Jalapeno"
+            ]
+        },
         "John Adams Painting": {
             "categories": [
                 "Wall decorations"
@@ -45423,6 +45607,14 @@
                 "recreational_01_20",
                 "recreational_01_22",
                 "recreational_01_23"
+            ]
+        },
+        "Kale (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Kale"
             ]
         },
         "Kennel": {
@@ -45982,6 +46174,14 @@
                 "appliances_laundry_01_24"
             ]
         },
+        "Lavender (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Lavender"
+            ]
+        },
         "Layout I Painting": {
             "categories": [
                 "Wall decorations"
@@ -46022,6 +46222,14 @@
                 "location_community_church_small_01_46"
             ]
         },
+        "Leek (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Leek"
+            ]
+        },
         "Left Bar Wall Bar": {
             "categories": [
                 "Container tiles"
@@ -46044,6 +46252,22 @@
             "sprite_id": [
                 "location_shop_accessories_genericsigns_01_8+9+10",
                 "location_shop_accessories_genericsigns_01_13+12+11"
+            ]
+        },
+        "Lemon Grass (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "LemonGrass"
+            ]
+        },
+        "Lettuce (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Lettuce"
             ]
         },
         "Light Green Carpet": {
@@ -46713,6 +46937,14 @@
                 "location_entertainment_gallery_01_29"
             ]
         },
+        "Marigold (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Marigold"
+            ]
+        },
         "Mattress": {
             "categories": [
                 "Beds"
@@ -46966,6 +47198,14 @@
                 "appliances_refrigeration_01_25",
                 "appliances_refrigeration_01_26",
                 "appliances_refrigeration_01_27"
+            ]
+        },
+        "Mint (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Mint"
             ]
         },
         "Mirror and Drawers": {
@@ -47397,6 +47637,14 @@
                 "location_community_church_small_01_62+63"
             ]
         },
+        "Onion (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Onion"
+            ]
+        },
         "Open Wardrobe": {
             "categories": [
                 "Container tiles"
@@ -47479,6 +47727,14 @@
             ],
             "sprite_id": [
                 "location_shop_zippee_01_7"
+            ]
+        },
+        "Oregano (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Oregano"
             ]
         },
         "Organs Poster": {
@@ -47650,6 +47906,14 @@
                 "street_decoration_01_4",
                 "street_decoration_01_7",
                 "street_decoration_01_6"
+            ]
+        },
+        "Parsley (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Parsley"
             ]
         },
         "Patient Chair": {
@@ -48071,6 +48335,14 @@
                 "location_entertainment_theatre_01_17"
             ]
         },
+        "Poppy (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Poppies"
+            ]
+        },
         "Popsicle Freezer": {
             "categories": [
                 "Fridges"
@@ -48083,6 +48355,14 @@
                 "appliances_refrigeration_01_21",
                 "appliances_refrigeration_01_38",
                 "appliances_refrigeration_01_39"
+            ]
+        },
+        "Potato (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Potatoes"
             ]
         },
         "Prisoners Bed": {
@@ -48134,6 +48414,14 @@
                 "street_decoration_01_8",
                 "street_decoration_01_11",
                 "street_decoration_01_10"
+            ]
+        },
+        "Pumpkin (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Pumpkin"
             ]
         },
         "Purple Carpet": {
@@ -48209,6 +48497,14 @@
                 "furniture_seating_indoor_03_45",
                 "furniture_seating_indoor_03_46",
                 "furniture_seating_indoor_03_47"
+            ]
+        },
+        "Radish (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Radishes"
             ]
         },
         "Rain Collector Barrel": {
@@ -48664,6 +48960,22 @@
                 "furniture_seating_indoor_03_147+151"
             ]
         },
+        "Rose (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Roses"
+            ]
+        },
+        "Rosemary (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Rosemary"
+            ]
+        },
         "Rosewood Road Sign": {
             "categories": [
                 "Signs"
@@ -48774,6 +49086,22 @@
             "sprite_id": [
                 "trash_walls_01_6",
                 "trash_walls_01_7"
+            ]
+        },
+        "Rye (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Rye"
+            ]
+        },
+        "Sage (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Sage"
             ]
         },
         "Sale Sign": {
@@ -49426,6 +49754,14 @@
                 "crafted_05_77"
             ]
         },
+        "Soybeans (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Soybeans"
+            ]
+        },
         "Spiffo On A Wall": {
             "categories": [
                 "Wall decorations"
@@ -49625,6 +49961,14 @@
                 "location_restaurant_spiffos_02_33",
                 "location_restaurant_spiffos_02_34",
                 "location_restaurant_spiffos_02_35"
+            ]
+        },
+        "Spinach (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Spinach"
             ]
         },
         "Spinning Wheel": {
@@ -49851,6 +50195,14 @@
                 "location_shop_generic_01_91"
             ]
         },
+        "Strawberry (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Strawberryplant"
+            ]
+        },
         "Streetname Sign": {
             "categories": [
                 "Signs"
@@ -49902,6 +50254,22 @@
                 "furniture_seating_indoor_03_53+52"
             ]
         },
+        "Sugar Beet (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "SugarBeets"
+            ]
+        },
+        "Sunflower (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Sunflower"
+            ]
+        },
         "Sunstar Motel Sign": {
             "categories": [
                 "Signs"
@@ -49923,6 +50291,14 @@
             "sprite_id": [
                 "location_community_medical_01_30",
                 "location_community_medical_01_31"
+            ]
+        },
+        "Sweet Potato (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "SweetPotato"
             ]
         },
         "Table with Drawer": {
@@ -50115,6 +50491,14 @@
                 "location_entertainment_gallery_01_45"
             ]
         },
+        "Thyme (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Thyme"
+            ]
+        },
         "Tiled Window": {
             "categories": [
                 "Windows"
@@ -50136,6 +50520,14 @@
             "sprite_id": [
                 "location_shop_mall_signs_02_20+21+22+23",
                 "location_shop_mall_signs_02_16+17+18+19"
+            ]
+        },
+        "Tobacco (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Tobacco"
             ]
         },
         "Toddler Rug": {
@@ -50161,6 +50553,14 @@
                 "recreational_01_65",
                 "recreational_01_61",
                 "recreational_01_57"
+            ]
+        },
+        "Tomato (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Tomato"
             ]
         },
         "Tool Bench": {
@@ -50264,6 +50664,14 @@
             ],
             "sprite_id": [
                 "trash_01_0"
+            ]
+        },
+        "Turnip (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Turnip"
             ]
         },
         "Twiggy's Sign": {
@@ -50804,6 +51212,14 @@
                 "location_entertainment_gallery_01_33"
             ]
         },
+        "Watermelon (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Watermelon"
+            ]
+        },
         "Weathered Notices": {
             "categories": [
                 "Wall decorations"
@@ -50860,6 +51276,14 @@
             ],
             "sprite_id": [
                 "vegetation_farm_01_2"
+            ]
+        },
+        "Wheat (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Wheat"
             ]
         },
         "Wheeled Metal Stool": {
@@ -51382,6 +51806,14 @@
                 "furniture_seating_indoor_02_58"
             ]
         },
+        "Wild Garlic (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "WildGarlic"
+            ]
+        },
         "Window": {
             "categories": [
                 "Windows"
@@ -51767,6 +52199,14 @@
                 "location_shop_zippee_01_2",
                 "location_shop_zippee_01_0",
                 "location_shop_zippee_01_1"
+            ]
+        },
+        "Zucchini (crop)": {
+            "categories": [
+                "Crops"
+            ],
+            "crop_id": [
+                "Zucchini"
             ]
         }
     },
