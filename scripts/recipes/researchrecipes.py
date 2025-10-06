@@ -7,7 +7,9 @@ recipes. It generates wiki markup showing which recipes can be learned by resear
 each item, using the Crafting/sandbox template for proper formatting.
 
 The script handles:
-- Parsing item data for researchable recipes
+- Parsing item data for researchable recipes (from item's ResearchableRecipes property)
+- Finding recipes where the item is a product (product-based research)
+- Combining all researchable recipes into a single unified list
 - Generating formatted wiki markup with recipe lists
 - Creating output in both research and crafting directories
 - Proper template formatting for wiki integration
@@ -18,9 +20,37 @@ import os
 from collections import defaultdict
 from tqdm import tqdm
 from scripts.objects.item import Item
+from scripts.objects.craft_recipe import CraftRecipe
 from scripts.parser import metarecipe_parser
 from scripts.core import page_manager
 from scripts.utils import echo
+
+
+def find_recipes_producing_item(item_id: str) -> list[str]:
+    """
+    Find all recipes that produce the given item as an output.
+
+    Args:
+        item_id (str): The item ID to search for
+
+    Returns:
+        list[str]: List of recipe IDs that produce this item
+    """
+    producing_recipes = []
+
+    for recipe_id, recipe_obj in CraftRecipe.all().items():
+        if item_id in recipe_obj.output_items:
+            # Include any recipe that has learnable requirements
+            has_skill_requirements = bool(recipe_obj.skill_required)
+            has_auto_learn = bool(
+                recipe_obj.auto_learn_all or recipe_obj.auto_learn_any
+            )
+
+            # If the recipe has any form of skill/learning requirements, it can be researched
+            if has_skill_requirements or has_auto_learn:
+                producing_recipes.append(recipe_id)
+
+    return producing_recipes
 
 
 def main():
@@ -29,11 +59,12 @@ def main():
 
     This function:
     1. Loads parsed item data
-    2. Identifies items with researchable recipes
-    3. Generates wiki markup using Crafting/sandbox template
-    4. Creates output files organized by individual IDs and by wiki pages
-    5. Handles proper formatting for wiki integration
-    6. Expands meta recipes into their component recipes
+    2. Identifies items with researchable recipes (traditional and product-based)
+    3. Combines all researchable recipes into a single unified list per item
+    4. Generates wiki markup using Crafting/sandbox template
+    5. Creates output files organized by individual IDs and by wiki pages
+    6. Handles proper formatting for wiki integration
+    7. Expands meta recipes into their component recipes
 
     The output is saved in multiple locations:
     - output/recipes/researchrecipes/id/ (individual item files)
@@ -67,38 +98,76 @@ def main():
     # First pass: collect all items and organize by pages
     items_with_research = {}
     for item_id, item in tqdm(Item.all().items(), desc="Collecting research recipes"):
+        all_research_data = []  # List of (recipe_id, research_level, source_type)
+
+        # Get recipes from item's researchable_recipes property
         researchable_recipes = item.researchable_recipes
-        if not researchable_recipes:
-            continue
+        if researchable_recipes:
+            # Ensure researchable_recipes is always a list
+            if not isinstance(researchable_recipes, list):
+                researchable_recipes = [researchable_recipes]
 
-        # Ensure researchable_recipes is always a list
-        if not isinstance(researchable_recipes, list):
-            researchable_recipes = [researchable_recipes]
+            # Expand meta recipes
+            expanded_recipes = metarecipe_parser.expand_recipe_list(
+                researchable_recipes
+            )
 
-        # Expand meta recipes
-        expanded_recipes = metarecipe_parser.expand_recipe_list(researchable_recipes)
-        items_with_research[item_id] = expanded_recipes
+            # Add research data for each recipe
+            for recipe_id in expanded_recipes:
+                try:
+                    recipe_obj = CraftRecipe(recipe_id)
+                    all_research_data.append((recipe_id, 0, "research_item"))
+                except Exception as e:
+                    echo.warning(
+                        f"Error processing recipe {recipe_id} for item {item_id}: {e}"
+                    )
+                    all_research_data.append((recipe_id, -1, "research_item"))
 
-        # Find pages for this item
-        pages = page_manager.get_pages(item_id, "item_id")
-        if pages:
-            for page in pages:
-                page_recipes[page].append((item_id, expanded_recipes))
-        else:
-            # If no page found, create a fallback page name
-            page_recipes[f"Unknown_Items"].append((item_id, expanded_recipes))
+        # Get recipes where this item is a product
+        producing_recipes = find_recipes_producing_item(item_id)
+        for recipe_id in producing_recipes:
+            try:
+                recipe_obj = CraftRecipe(recipe_id)
+                all_research_data.append((recipe_id, 0, "product_item"))
+            except Exception as e:
+                echo.warning(
+                    f"Error processing producing recipe {recipe_id} for item {item_id}: {e}"
+                )
+                all_research_data.append((recipe_id, -1, "product_item"))
+
+        # Only include items that have research data
+        if all_research_data:
+            items_with_research[item_id] = all_research_data
+
+            # Find pages for this item
+            pages = page_manager.get_pages(item_id, "item_id")
+            if pages:
+                for page in pages:
+                    page_recipes[page].append((item_id, all_research_data))
+            else:
+                # If no page found, create a fallback page name
+                page_recipes[f"Unknown_Items"].append((item_id, all_research_data))
 
     # Second pass: generate individual files
-    for item_id, expanded_recipes in tqdm(
+    for item_id, research_data in tqdm(
         items_with_research.items(), desc="Generating individual files"
     ):
-        lines = [
-            "The following recipes can be learned by researching this item.",
-            f"{{{{Crafting/sandbox|header=Research recipes|id={item_id}_research",
-        ]
-        for recipe in expanded_recipes:
-            lines.append(f"|{recipe}")
-        lines.append("}}")
+        # Collect all recipes into a single set to avoid duplicates
+        all_recipes = set()
+
+        for recipe_id, research_level, source_type in research_data:
+            all_recipes.add(recipe_id)
+
+        lines = []
+
+        # Add single research recipes section
+        if all_recipes:
+            lines.append(
+                f"{{{{Crafting/sandbox|header=Research recipes|id={item_id}_research"
+            )
+            for recipe_id in sorted(all_recipes):
+                lines.append(f"|{recipe_id}")
+            lines.append("}}")
 
         output_content = "\n".join(lines)
 
@@ -125,18 +194,21 @@ def main():
         all_recipes = set()
         page_item_ids = []
 
-        for item_id, expanded_recipes in page_items:
+        for item_id, research_data in page_items:
             page_item_ids.append(item_id)
-            all_recipes.update(expanded_recipes)
+            for recipe_id, research_level, source_type in research_data:
+                all_recipes.add(recipe_id)
 
-        # Generate combined content
-        lines = [
-            "The following recipes can be learned by researching items on this page.",
-            f"{{{{Crafting/sandbox|header=Research recipes|id={page_name}_research",
-        ]
-        for recipe in sorted(all_recipes):
-            lines.append(f"|{recipe}")
-        lines.append("}}")
+        lines = []
+
+        # Add single research recipes section
+        if all_recipes:
+            lines.append(
+                f"{{{{Crafting/sandbox|header=Research recipes|id={page_name}_research"
+            )
+            for recipe_id in sorted(all_recipes):
+                lines.append(f"|{recipe_id}")
+            lines.append("}}")
 
         output_content = "\n".join(lines)
 
@@ -156,6 +228,16 @@ def main():
         except Exception as e:
             echo.error(f"Error writing page file for {page_name}: {e}")
 
+    # Count statistics
+    total_recipes = 0
+    unique_recipes = set()
+
+    for research_data in items_with_research.values():
+        for recipe_id, research_level, source_type in research_data:
+            total_recipes += 1
+            unique_recipes.add(recipe_id)
+
     echo.success(
-        f"Research recipes written - {len(items_with_research)} individual items, {len(page_recipes)} pages"
+        f"Research recipes written - {len(items_with_research)} individual items, {len(page_recipes)} pages\n"
+        f"  {total_recipes} total recipe entries"
     )
