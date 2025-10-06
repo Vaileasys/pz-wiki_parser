@@ -40,17 +40,17 @@ def get_unit_tool_ids() -> list[str]:
     """
     Get list of item IDs that should be treated as unit tools.
     Finds all items with Type "Drainable" from the item data cache.
-    
+
     Returns:
         list[str]: List of item IDs that are unit tools (drainable items)
     """
     global _unit_tool_ids_cache
-    
+
     if _unit_tool_ids_cache is not None:
         return _unit_tool_ids_cache
-        
+
     unit_tool_ids = []
-    
+
     for item_id, item in Item.all().items():
         if item.type == "Drainable":
             unit_tool_ids.append(item_id)
@@ -205,12 +205,14 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
                     rid = rid.strip()
                     if not rid.startswith("Base."):
                         rid = f"Base.{rid}"
-                    parsed.append({
-                        "raw": rid,
-                        "amount": amt,
-                        "translated": safe_name_lookup(rid),
-                        "is_unit": rid in unit_tool_ids
-                    })
+                    parsed.append(
+                        {
+                            "raw": rid,
+                            "amount": amt,
+                            "translated": safe_name_lookup(rid),
+                            "is_unit": rid in unit_tool_ids,
+                        }
+                    )
                 info["numbered_list"] = True
                 info["items"] = parsed
 
@@ -756,8 +758,15 @@ def process_products(recipe: dict, build_data: dict) -> str:
             products_markup += "<br>"
         products_markup += "<br>".join(energy_lines)
 
-    # Fallback
+    # Handle sharpening blade recipes with empty outputs
     if products_markup.endswith("<br>") and products_markup.count("<br>") == 1:
+        on_create = recipe.get("OnCreate", "")
+        if on_create in [
+            "RecipeCodeOnCreate.sharpenBlade",
+            "RecipeCodeOnCreate.sharpenBladeGrindstone",
+        ]:
+            products_markup += "Sharpened Blade"
+            return products_markup
         return "products=<small>''none''</small>"
 
     return products_markup
