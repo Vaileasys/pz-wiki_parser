@@ -9,7 +9,6 @@ from scripts.core import config_manager as cfg
 from scripts.core.constants import OUTPUT_DIR
 
 is_windows = platform.system() == "Windows"
-is_zombdec = bool(cfg.get_zomboid_decompiler())
 is_pwb = bool(cfg.get_pywikibot())
 
 def run_batch_file(batch_path: str, name: str = None, args: list[str] = None):
@@ -27,7 +26,7 @@ def run_batch_file(batch_path: str, name: str = None, args: list[str] = None):
 
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
 
-    print(result.stdout)
+    echo.info(result.stdout)
     if result.stderr:
         echo.error(f"There was a problem running {name}")
         echo.write(result.stderr, style_func=color.error)
@@ -44,33 +43,42 @@ def run_python_file(script_path: str, name: str = None):
         text=True
     )
 
-    print(result.stdout)
+    echo.info(result.stdout)
     if result.stderr:
         echo.error(f"There was a problem running {name}")
-        print(result.stderr)
+        echo.error(result.stderr)
 
 
 def run_zomboid_decompiler():
     print(color.style("ZomboidDecompiler", color.BLUE))
-    if not is_windows:
-        print("This process can only be run on Windows. Please manually run the Zomboid Decompiler:\nhttps://github.com/demiurgeQuantified/ZomboidDecompiler")
-        return True
     
-    if not is_zombdec:
-        print("ZomboidDecompiler has not been set up yet. Ensure you have downloaded the ZomboidDecompiler:\nhttps://github.com/demiurgeQuantified/ZomboidDecompiler")
-        choice = input("Enter the path to the ZomboidDecompiler batch (.bat) file:\n> ").strip()
-
-        if not choice:
-            print("No path detected. Returning to previous menu.")
-            return True
-
-        cfg.set_zomboid_decompiler(choice)
-
-    decompiler_path = os.path.join('resources', 'ZomboidDecompiler', 'bin', 'ZomboidDecompiler.bat')
+    # Determine the executable based on OS
+    if is_windows:
+        executable_name = 'ZomboidDecompiler.bat'
+    else:
+        executable_name = 'ZomboidDecompiler'
+    
+    decompiler_path = os.path.join('resources', 'ZomboidDecompiler', 'bin', executable_name)
     game_path = Path(cfg.get_game_directory())
     output_path = Path(OUTPUT_DIR) / "ZomboidDecompiler"
     
-    run_batch_file(decompiler_path,args=[str(game_path), str(output_path)])
+    # Run the command
+    if is_windows:
+        run_batch_file(decompiler_path, args=[str(game_path), str(output_path)])
+    else:
+        # Ensure the executable has execute permissions on Linux
+        import stat
+        current_permissions = os.stat(decompiler_path).st_mode
+        os.chmod(decompiler_path, current_permissions | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+        
+        command = [decompiler_path, str(game_path), str(output_path)]
+        echo.info(f"Running {executable_name}, please wait...")
+        result = subprocess.run(command, capture_output=True, text=True)
+        
+        echo.info(result.stdout)
+        if result.stderr:
+            echo.error(f"There was a problem running {executable_name}")
+            echo.write(result.stderr, style_func=color.error)
 
     echo.success(f"ZomboidDecompiler process completed. Decompiled files should be found in \"{output_path}\"")
 
@@ -79,11 +87,11 @@ def run_zomboid_decompiler():
 
 def run_pywikibot():
     if not is_pwb:
-        print("Pywikibot has not been set up yet. Ensure you have downloaded and set up pywikibot:\nhttps://www.mediawiki.org/wiki/Manual:Pywikibot/Installation")
+        echo.error("Pywikibot has not been set up yet. Ensure you have downloaded and set up pywikibot:\nhttps://www.mediawiki.org/wiki/Manual:Pywikibot/Installation")
         choice = input("Enter the path to the entry point python (.py) file:\n> ").strip()
 
         if not choice:
-            print("No path detected. Returning to previous menu.")
+            echo.error("No path detected. Returning to previous menu.")
             return True
 
         cfg.set_pywikibot(choice)
@@ -96,15 +104,12 @@ def run_pywikibot():
 
 
 def choose_process(run_directly: bool = False):
-    post_zombdec = ""
     post_pwb = ""
-    if not is_windows:
-        post_zombdec += color.error(" [Windows Only]")
     if not is_pwb:
         post_pwb += color.warning(" [Setup]")
 
     options = [
-        "1: ZomboidDecompiler - Runs ZomboidDecompiler." + post_zombdec,
+        "1: ZomboidDecompiler - Runs ZomboidDecompiler.",
         "2: pywikibot - Runs pywikibot." + post_pwb
     ]
     options.append("Q: Quit" if run_directly else "B: Back")
