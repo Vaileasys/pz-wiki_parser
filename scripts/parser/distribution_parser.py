@@ -1,13 +1,14 @@
 import os
 import re
-import struct
 import lupa
 from lupa import LuaRuntime
 import xml.etree.ElementTree as ET
-from scripts.core.constants import DATA_DIR
+from scripts.core.constants import CACHE_DIR, OUTPUT_DIR
 from scripts.core.cache import save_cache
+from scripts.core import config_manager as cfg
+from scripts.utils import lua_helper
 
-cache_path = os.path.join(DATA_DIR, "distributions")
+cache_path = os.path.join(CACHE_DIR, "distributions")
 
 
 def parse_container_files(
@@ -575,114 +576,356 @@ def parse_clothing(clothing_file_path, guid_table_path, output_file):
     save_cache(outfits_data, output_file, cache_path)
 
 
-def parse_stories(class_files_directory, output_file):
+def check_decompiler_output():
     """
-    Processes all .class files in the given directory and collects their relevant string constants.
+    Check if the ZomboidDecompiler output directory exists.
 
-    This function takes two parameters: the path to the directory containing the .class files
-    and the path to the output JSON file.
+    Returns:
+        bool: True if decompiler output exists, False otherwise
+    """
+    decompiler_output = os.path.join(OUTPUT_DIR, "ZomboidDecompiler")
+    return os.path.exists(decompiler_output) and os.path.isdir(decompiler_output)
 
-    It first processes each .class file in the given directory and collects their relevant string
-    constants. It then saves the collected constants to a JSON file at the specified output path.
 
-    :param class_files_directory: The path to the directory containing the .class files
-    :return: None
+def ensure_decompiler_run():
+    """
+    Ensure the ZomboidDecompiler has been run.
+    If not, run it now.
+
+    Returns:
+        bool: True if decompiler output exists or was successfully created, False otherwise
+    """
+    if check_decompiler_output():
+        print("ZomboidDecompiler output found. Skipping decompilation.")
+        return True
+
+    print("ZomboidDecompiler output not found. Running decompiler...")
+
+    # Check if Java is installed
+    import subprocess
+    import platform
+
+    try:
+        # Check for Java installation
+        if platform.system() == "Windows":
+            result = subprocess.run(
+                ["java", "-version"],
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+        else:
+            result = subprocess.run(
+                ["java", "-version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            )
+
+        if result.returncode != 0:
+            print("Error: Java is not installed or not in PATH. Cannot run decompiler.")
+            return False
+    except Exception as e:
+        print(f"Error checking Java installation: {e}")
+        return False
+
+    # Run the decompiler
+    from scripts.core import runner
+
+    result = runner.run_zomboid_decompiler()
+
+    if result:
+        print("Warning: Decompiler may not have completed successfully.")
+        return False
+    else:
+        print("Decompiler completed successfully.")
+        return True
+
+
+def parse_stories(output_file):
+    """
+    Parses story-related files from the game directory and decompiled Java files.
+
+    This function orchestrates parsing of:
+    - Story clutter definitions from Lua files
+    - Various story types from decompiled Java files (building, table, survivor, vehicle, zone)
+
+    The parsing process:
+    1. Extracts all strings containing "Base." from Java files and removes the prefix
+    2. Checks if story clutter category names appear in each Java file
+    3. If found, includes all items from that clutter category in the story's item list
+
+    Args:
+        output_file (str): Name of the output JSON file (will be saved in cache/distributions/)
     """
 
-    def read_constant_pool(file):
-        # Skip the first 8 bytes (magic number and minor/major version)
-        initial_bytes = file.read(8)
-        if len(initial_bytes) < 8:
-            return []
+    def get_story_files():
+        """
+        Scans the decompiled Java directory and categorizes story files by prefix.
 
-        # Read the constant pool count
-        count_bytes = file.read(2)
-        if len(count_bytes) < 2:
-            return []
-        constant_pool_count = struct.unpack(">H", count_bytes)[0] - 1
+        Returns:
+            dict: Dictionary mapping story types to lists of file paths
+        """
+        base_path = os.path.join(
+            OUTPUT_DIR, "ZomboidDecompiler", "source", "zombie", "randomizedWorld"
+        )
 
-        constants = []
-        i = 0
-        while i < constant_pool_count:
-            # Attempt to read the tag byte
-            tag_byte = file.read(1)
-            if len(tag_byte) < 1:
-                break  # Stop processing as we've hit EOF prematurely
+        if not os.path.exists(base_path):
+            print(f"Warning: Decompiler output directory not found at {base_path}")
+            return {}
 
-            tag = struct.unpack("B", tag_byte)[0]
+        # Define file categorization based on prefixes
+        # Map file prefixes to story type keys
+        prefix_mapping = {
+            "RBTS": "random_table",  # Must check RBTS before RB (more specific)
+            "RB": "random_building",
+            "RDS": "random_survivor",
+            "RVS": "random_vehicle",
+            "RZS": "random_zone",
+        }
 
-            if tag == 1:  # CONSTANT_Utf8
-                length_bytes = file.read(2)
-                if len(length_bytes) < 2:
-                    break
-                length = struct.unpack(">H", length_bytes)[0]
-                value = file.read(length)
-                if len(value) < length:
-                    break
+        story_files = {
+            "random_building": [],
+            "random_table": [],
+            "random_survivor": [],
+            "random_vehicle": [],
+            "random_zone": [],
+        }
+
+        # Scan all subdirectories for Java files
+        for root, dirs, files in os.walk(base_path):
+            for filename in files:
+                if not filename.endswith(".java"):
+                    continue
+
+                # Skip base classes
+                if filename.endswith("Base.java"):
+                    continue
+
+                # Check prefixes in order (most specific first)
+                for prefix, story_type in prefix_mapping.items():
+                    if filename.startswith(prefix):
+                        file_path = os.path.join(root, filename)
+                        story_files[story_type].append(file_path)
+                        break
+
+        # Print summary
+        total_files = sum(len(files) for files in story_files.values())
+        print(f"Found {total_files} story files:")
+        for story_type, files in story_files.items():
+            if files:
+                print(f"  - {story_type}: {len(files)} files")
+
+        return story_files
+
+    def parse_java_story_file(file_path, story_clutter_data):
+        """
+        Parse a single Java story file and extract item spawn data.
+
+        This function:
+        1. Extracts all strings containing "Base." and adds items to the list
+        2. Checks if any story clutter category names appear in the file
+        3. If found, adds all items from that clutter category to the spawn list
+
+        Args:
+            file_path (str): Path to the Java file
+            story_clutter_data (dict): Story clutter categories and their items
+
+        Returns:
+            dict: Parsed story data with possible item spawns
+        """
+        filename = os.path.basename(file_path)
+        story_id = os.path.splitext(filename)[0]
+
+        try:
+            # Read the Java file content
+            with open(file_path, "r", encoding="utf-8") as f:
+                file_content = f.read()
+        except Exception as e:
+            print(f"Error reading {filename}: {e}")
+            return {"id": story_id, "file": filename, "items": [], "error": str(e)}
+
+        items = []
+
+        # Step 1: Extract all strings containing "Base." between quotes
+        # Pattern matches: "Base.ItemName" or 'Base.ItemName'
+        # Only captures valid item names (alphanumeric + underscores)
+        base_item_pattern = r'["\'](Base\.([A-Za-z0-9_]+))["\']'
+        matches = re.findall(base_item_pattern, file_content)
+
+        for match in matches:
+            # match is a tuple: (full_string_with_base, item_name_without_base)
+            # We want the second element (item name without "Base." prefix)
+            item_name = match[1] if isinstance(match, tuple) else match
+            if item_name and item_name not in items:
+                items.append(item_name)
+
+        # Step 2: Check for story clutter category names in the file
+        # and add their items if found
+        if story_clutter_data:
+            for clutter_category, clutter_items in story_clutter_data.items():
+                # Check if this clutter category name appears in the file
+                if clutter_category in file_content:
+                    # Add all items from this clutter category
+                    for clutter_item in clutter_items:
+                        if clutter_item not in items:
+                            items.append(clutter_item)
+
+        return {
+            "id": story_id,
+            "file": filename,
+            "items": sorted(items),  # Sort for consistent output
+            "item_count": len(items),
+        }
+
+    def parse_story_clutter():
+        """
+        Parses StoryClutter_Definitions.lua and extracts all story clutter item definitions.
+
+        Returns:
+            dict: Dictionary of story clutter categories and their items
+        """
+        # Get the game directory from config
+        game_directory = cfg.get_game_directory()
+
+        # Construct path to StoryClutter_Definitions.lua
+        story_clutter_path = os.path.join(game_directory,
+            "media",
+            "lua",
+            "server",
+            "RandomizedWorldContent",
+            "StoryClutter",
+            "StoryClutter_Definitions.lua",
+        )
+
+        if not os.path.exists(story_clutter_path):
+            print(
+                f"Warning: StoryClutter_Definitions.lua not found at {story_clutter_path}"
+            )
+            print("Skipping story clutter parsing.")
+            return {}
+
+        print(f"Parsing StoryClutter_Definitions.lua from {story_clutter_path}")
+
+        try:
+            # Read and execute the Lua file using lua_helper
+            with open(story_clutter_path, "r", encoding="utf-8") as f:
+                lua_code = f.read()
+
+            # Create Lua runtime and execute the code
+            lua_runtime = LuaRuntime(unpack_returned_tuples=True)
+            lua_runtime.execute(lua_code)
+
+            # Parse the StoryClutter table
+            parsed_data = lua_helper.parse_lua_tables(
+                lua_runtime, tables=["StoryClutter"]
+            )
+
+            if "StoryClutter" not in parsed_data:
+                print("Warning: StoryClutter table not found in parsed data")
+                return {}
+
+            # Extract and clean the story clutter data
+            story_clutter_table = parsed_data["StoryClutter"]
+            story_data = {}
+
+            # Process each category in the StoryClutter table
+            for category_name, items in story_clutter_table.items():
+                if isinstance(items, list):
+                    # Clean item names
+                    cleaned_items = []
+                    for item_name in items:
+                        if isinstance(item_name, str):
+                            # Remove module prefix
+                            clean_name = item_name
+                            for prefix in ["Base."]:
+                                if clean_name.startswith(prefix):
+                                    clean_name = clean_name[len(prefix) :]
+                                    break
+                            cleaned_items.append(clean_name)
+
+                    story_data[category_name] = cleaned_items
+
+            print(f"Parsed {len(story_data)} story clutter categories")
+            return story_data
+
+        except Exception as e:
+            print(f"Error parsing StoryClutter_Definitions.lua: {e}")
+            import traceback
+
+            traceback.print_exc()
+            return {}
+
+    def parse_story_types(story_files, story_clutter_data):
+        """
+        Parses various story type definitions from decompiled Java classes.
+
+        Args:
+            story_files (dict): Dictionary mapping story types to file paths
+            story_clutter_data (dict): Story clutter categories and their items
+
+        Returns:
+            dict: Dictionary of story types and their parsed data
+        """
+        story_types = {}
+
+        for story_type, file_paths in story_files.items():
+            if not file_paths:
+                continue
+
+            print(f"Processing {story_type} stories ({len(file_paths)} files)...")
+
+            story_type_data = {}
+            for file_path in file_paths:
                 try:
-                    decoded_value = value.decode("utf-8")
-                    # Only add constants that contain a period and start with specified prefixes
-                    if "." in decoded_value and decoded_value.startswith(
-                        ("Base.", "Farming.", "Radio.")
-                    ):
-                        # Remove the prefix before appending
-                        if decoded_value.startswith("Base."):
-                            constants.append(decoded_value[5:])
-                        elif decoded_value.startswith("Farming."):
-                            constants.append(decoded_value[8:])
-                        elif decoded_value.startswith("Radio."):
-                            constants.append(decoded_value[6:])
-                        else:
-                            constants.append(decoded_value)
-                except UnicodeDecodeError:
-                    # Skip non-UTF-8 constants
-                    pass
-            elif tag in {7, 8}:
-                # Skip over 2 bytes (index reference)
-                skip_bytes = file.read(2)
-                if len(skip_bytes) < 2:
-                    break
-            elif tag in {3, 4}:
-                # Skip over 4 bytes
-                skip_bytes = file.read(4)
-                if len(skip_bytes) < 4:
-                    break
-            elif tag in {5, 6}:
-                # Skip over 8 bytes
-                skip_bytes = file.read(8)
-                if len(skip_bytes) < 8:
-                    break
-                i += 1  # Long/double take two entries
-            elif tag in {9, 10, 11, 12, 15, 16, 18}:
-                # Skip over 4 bytes
-                skip_bytes = file.read(4)
-                if len(skip_bytes) < 4:
-                    break
+                    parsed_data = parse_java_story_file(file_path, story_clutter_data)
+                    story_id = parsed_data.get("id")
+                    if story_id:
+                        story_type_data[story_id] = parsed_data
+                except Exception as e:
+                    print(f"Error parsing {file_path}: {e}")
+                    continue
 
-            i += 1
+            if story_type_data:
+                story_types[story_type] = story_type_data
 
-        return constants
+        return story_types
 
-    def process_class_files(directory):
-        """Processes all .class files in the given directory and collects their relevant constants."""
-        constants_by_file = {}
+    # Main execution
+    all_story_data = {}
 
-        for root, dirs, files in os.walk(directory):
-            for file in files:
-                if file.endswith(".class"):
-                    class_file_path = os.path.join(root, file)
-                    with open(class_file_path, "rb") as class_file:
-                        constants = read_constant_pool(class_file)
-                        if constants:
-                            # Use the filename without extension as the key
-                            file_name_without_ext = os.path.splitext(file)[0]
-                            constants_by_file[file_name_without_ext] = constants
+    # Parse story clutter from Lua files first (needed for story type parsing)
+    story_clutter = parse_story_clutter()
+    if story_clutter:
+        all_story_data["story_clutter"] = story_clutter
 
-        return constants_by_file
+    # Get categorized story files from decompiled Java
+    story_files = get_story_files()
 
-    # Execute the process
-    constants_by_file = process_class_files(class_files_directory)
-    save_cache(constants_by_file, output_file, cache_path)
+    # Parse story types from Java files (pass story_clutter for item resolution)
+    if story_files:
+        story_types = parse_story_types(story_files, story_clutter)
+        if story_types:
+            all_story_data["story_types"] = story_types
+
+            # Print summary statistics
+            total_stories = sum(len(stories) for stories in story_types.values())
+            total_items = 0
+            for story_type_data in story_types.values():
+                for story_data in story_type_data.values():
+                    total_items += story_data.get("item_count", 0)
+
+            print(
+                f"\nParsed {total_stories} stories with {total_items} total item references"
+            )
+
+    # Save to cache/distributions directory
+    distributions_cache = os.path.join(CACHE_DIR, "distributions")
+    os.makedirs(distributions_cache, exist_ok=True)
+
+    if all_story_data:
+        save_cache(all_story_data, output_file, distributions_cache)
+        output_path = os.path.join(distributions_cache, output_file)
+        print(f"\nStory data saved to {output_path}")
+    else:
+        print("Warning: No story data was parsed")
 
 
 def parse_container_contents(output_path):
@@ -757,7 +1000,7 @@ def parse_container_contents(output_path):
             normal_prob = normal_items.get(item, 0) / 100
             junk_prob = junk_items_dict.get(item, 0) / 100
 
-            combined_prob = (normal_prob + junk_prob - (normal_prob * junk_prob))
+            combined_prob = normal_prob + junk_prob - (normal_prob * junk_prob)
             combined_prob = round(combined_prob * 100, 2)
             combined_prob = min(combined_prob, 100)
 
@@ -828,6 +1071,18 @@ def parse_container_contents(output_path):
 
 
 def main():
+    """
+    Main function to process all distribution data.
+
+    Returns:
+        bool: True if processing was successful, False if decompiler check failed
+    """
+    # Ensure decompiler has been run before proceeding
+    if not ensure_decompiler_run():
+        print("ERROR: Cannot continue without decompiler output.")
+        print("Please ensure Java is installed and the decompiler can run.")
+        return False
+
     # File paths
     distributions_lua_path = os.path.join("resources", "lua", "Distributions.lua")
     forage_definitions_path = os.path.join("resources", "lua", "forageDefinitions.lua")
@@ -839,7 +1094,6 @@ def main():
     )
     clothing_file_path = os.path.join("resources", "clothing", "clothing.xml")
     guid_table_path = os.path.join("resources", "fileGuidTable.xml")
-    class_files_directory = os.path.join("resources", "Java")
 
     # Call the init function to check if all files exist
     init(
@@ -859,10 +1113,11 @@ def main():
     parse_vehicles(vehicle_distributions_path, cache_path)
 
     parse_clothing(clothing_file_path, guid_table_path, "clothing.json")
-    parse_stories(class_files_directory, "stories.json")
+    parse_stories("stories.json")
 
     # Parse container contents
     parse_container_contents(cache_path)
+    return True
 
 # Function to check if all resources are found
 def init(*file_paths):

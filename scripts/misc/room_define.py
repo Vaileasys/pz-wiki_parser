@@ -9,9 +9,15 @@ from scripts.core.cache import load_cache
 
 
 def main():
-    distribution_parser.main()
+    # Run distribution parser and check if it was successful
+    if not distribution_parser.main():
+        print(
+            "ERROR: Distribution parser failed to run due to missing Java or decompiler issues."
+        )
+        print("Cannot continue with room definition processing.")
+        return False
 
-    json_path = Path(DATA_DIR) / "distributions" / "all_items.json"
+    json_path = Path(DATA_DIR) / "cache" / "distributions" / "all_items.json"
 
     data = load_cache(json_path)
 
@@ -31,11 +37,11 @@ def main():
     room_to_containers = {}
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
         futures = {}
-        with tqdm(total=len(unique_rooms), desc="Processing Rooms", unit="room") as pbar:
+        with tqdm(
+            total=len(unique_rooms), desc="Processing Rooms", unit="room"
+        ) as pbar:
             for room in unique_rooms:
-                futures[executor.submit(
-                    process_single_room, room, data
-                )] = room
+                futures[executor.submit(process_single_room, room, data)] = room
 
             for future in concurrent.futures.as_completed(futures):
                 room_name = futures[future]
@@ -72,7 +78,7 @@ def generate_per_letter_files(room_to_containers: dict):
 
     rooms_by_letter = {}
     for room_name in room_to_containers:
-        first_char = room_name[0].upper() if room_name else 'Other'
+        first_char = room_name[0].upper() if room_name else "Other"
         if first_char not in rooms_by_letter:
             rooms_by_letter[first_char] = []
         rooms_by_letter[first_char].append(room_name)
@@ -98,11 +104,7 @@ def generate_per_letter_files(room_to_containers: dict):
             '{| class="wikitable theme-blue"\n|-\n\n'
         )
 
-        footer_text = (
-            "\n==See also==\n"
-            "*{{ll|Mapping}}\n\n"
-            "{{Navbox modding}}\n"
-        )
+        footer_text = "\n==See also==\n*{{ll|Mapping}}\n\n{{Navbox modding}}\n"
 
         output_lines = [header_text]
 
@@ -111,10 +113,12 @@ def generate_per_letter_files(room_to_containers: dict):
             for container in room_to_containers[room_name].values():
                 total_items += len(container)
 
-        with tqdm(total=total_items, desc=f"Processing {letter} rooms", unit="item") as pbar:
+        with tqdm(
+            total=total_items, desc=f"Processing {letter} rooms", unit="item"
+        ) as pbar:
             for room_name in rooms_in_letter:
-                output_lines.append("! colspan=\"2\" |\n")
-                output_lines.append(f"<h2 style=\"margin-top:0;\">{room_name}</h2>\n")
+                output_lines.append('! colspan="2" |\n')
+                output_lines.append(f'<h2 style="margin-top:0;">{room_name}</h2>\n')
                 output_lines.append("|-\n! Container !! Items\n|-\n")
 
                 containers_sorted = sorted(room_to_containers[room_name].keys())
@@ -126,14 +130,19 @@ def generate_per_letter_files(room_to_containers: dict):
                     items = sorted(room_to_containers[room_name][container_name])
                     translated_items = []
                     for item in items:
-                        translated = Translate.get("Base." + item, property_key="DisplayName",
-                                                               lang_code=language_code)
+                        translated = Translate.get(
+                            "Base." + item,
+                            property_key="DisplayName",
+                            lang_code=language_code,
+                        )
                         translated_items.append(f"[[{translated}]]")
                         pbar.update(1)
                     items_line = ", ".join(translated_items)
                     output_lines.append(items_line)
 
-                    output_lines.append("\n|-\n" if idx < last_container_idx else "\n|-\n")
+                    output_lines.append(
+                        "\n|-\n" if idx < last_container_idx else "\n|-\n"
+                    )
 
             output_lines.append("|}\n")
             output_lines.append(footer_text)
@@ -159,22 +168,17 @@ def generate_main_page(room_to_containers: dict):
         "'''Warning: Everything below has been programmatically generated - any changes made will be lost on the next update!'''\n\n"
         "==Room list==\n"
         '{| class="wikitable theme-blue sortable"\n|-\n'
-        '! Room !! Containers\n|-\n'
+        "! Room !! Containers\n|-\n"
     )
 
-    footer_text = (
-        "\n|}\n"
-        "\n==See also==\n"
-        "*{{ll|Mapping}}\n\n"
-        "{{Navbox modding}}\n"
-    )
+    footer_text = "\n|}\n\n==See also==\n*{{ll|Mapping}}\n\n{{Navbox modding}}\n"
 
     output_lines = [header_text]
 
     all_rooms_sorted = sorted(room_to_containers.keys())
 
     for room_name in all_rooms_sorted:
-        first_letter = room_name[0].upper() if room_name else 'Other'
+        first_letter = room_name[0].upper() if room_name else "Other"
         room_link = f"[[Room definitions and item spawns/{first_letter}#{room_name}|{room_name}]]"
         containers = sorted(room_to_containers[room_name].keys())
         container_links = [f"[[{container}]]" for container in containers]
@@ -187,6 +191,8 @@ def generate_main_page(room_to_containers: dict):
     with output_file.open("w", encoding="utf-8") as f:
         f.write(final_output)
     print(f"Main page written to {output_file}")
+
+    return True
 
 
 if __name__ == "__main__":

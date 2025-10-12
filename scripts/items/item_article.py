@@ -98,7 +98,7 @@ def load_cache():
     - Research recipes: output/recipes/researchrecipes/id/*.txt
     - Teached recipes: output/recipes/teachedrecipes/id/*.txt
     - Building recipes: output/recipes/building/id/*.txt
-    - Distribution data: data/distributions/all_items.json
+    - Distribution data: data/cache/distributions/all_items.json
     - Usage sections:
       - Weapon: output/en/item/usage/weapon/{id_type or id}.txt
       - Clothing: output/en/item/usage/clothing/{id_type or id}.txt
@@ -311,7 +311,7 @@ def load_cache():
                     total_errors += 1
 
                 pbar.update(1)
-    all_items_path = os.path.join(DATA_DIR, "distributions", "all_items.json")
+    all_items_path = os.path.join(DATA_DIR, "cache", "distributions", "all_items.json")
 
     try:
         _all_items_data = file_loading.load_json(all_items_path)
@@ -427,7 +427,6 @@ def create_header(item, translation_data, language_code="en"):
         "Appearance": "{{Header|Project Zomboid|Items|Miscellaneous items|Appearance}}",
         "AnimalPart": "{{Header|Project Zomboid|Items|Miscellaneous items|Animal parts}}",
         "AnimalPartWeapon": "{{Header|Project Zomboid|Items|Miscellaneous items|Animal parts}}",
-
     }
 
     skill_type_dict = {

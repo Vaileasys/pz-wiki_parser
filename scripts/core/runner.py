@@ -2,6 +2,7 @@ import subprocess
 from pathlib import Path
 import platform
 import sys
+import os
 
 from scripts.utils import echo, color
 from scripts.core import config_manager as cfg
@@ -18,7 +19,7 @@ def run_batch_file(batch_path: str, name: str = None, args: list[str] = None):
     
     if not name:
         name = Path(batch_path).name
-    echo.info(f"Running {name}...")
+    echo.info(f"Running {name}, please wait...")
 
     command = [batch_path]
     if args:
@@ -64,11 +65,12 @@ def run_zomboid_decompiler():
             return True
 
         cfg.set_zomboid_decompiler(choice)
-    
+
+    decompiler_path = os.path.join('resources', 'ZomboidDecompiler', 'bin', 'ZomboidDecompiler.bat')
     game_path = Path(cfg.get_game_directory())
     output_path = Path(OUTPUT_DIR) / "ZomboidDecompiler"
     
-    run_batch_file(cfg.get_zomboid_decompiler(),args=[str(game_path), str(output_path)])
+    run_batch_file(decompiler_path,args=[str(game_path), str(output_path)])
 
     echo.success(f"ZomboidDecompiler process completed. Decompiled files should be found in \"{output_path}\"")
 
@@ -98,8 +100,6 @@ def choose_process(run_directly: bool = False):
     post_pwb = ""
     if not is_windows:
         post_zombdec += color.error(" [Windows Only]")
-    if not is_zombdec:
-        post_zombdec += color.warning(" [Setup]")
     if not is_pwb:
         post_pwb += color.warning(" [Setup]")
 

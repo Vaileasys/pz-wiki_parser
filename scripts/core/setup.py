@@ -256,34 +256,6 @@ def copy_xml_files(media_dir):
         echo.warning(f"Clothing folder not found at {source_clothing_dir}, skipping.")
 
 
-def copy_java_files(install_path):
-    # Define the source directory
-    java_dir = os.path.join(install_path, 'zombie', 'randomizedWorld')
-
-    # Define the destination directory
-    destination_dir = os.path.join('resources', 'java')
-
-    # Check if source directory exists
-    if not os.path.exists(java_dir):
-        raise FileNotFoundError(f"Java directory not found in {java_dir}. Please check the installation path.")
-
-    # Ensure destination directory exists
-    if not os.path.exists(destination_dir):
-        os.makedirs(destination_dir)
-
-    # List of valid prefixes
-    valid_prefixes = ('RVS', 'RZS', 'RDS', 'RB', 'RBTS')
-
-    # Copy all .class files from java_dir and its subdirectories to destination_dir if they start with valid prefixes
-    for root, _, files in os.walk(java_dir):
-        for file in files:
-            if file.endswith('.class') and file.startswith(valid_prefixes):
-                src = os.path.join(root, file)
-                dst = os.path.join(destination_dir, file)
-                shutil.copy(src, dst)
-                echo.info(f"Copied {file} to {dst}")
-
-
 def handle_translations(media_dir):
     translation_dir = os.path.join(media_dir, 'lua', 'shared', 'Translate')
     destination_dir = os.path.join('resources', 'Translate')
@@ -314,7 +286,6 @@ def main():
         copy_spawnpoint_files(media_dir)
         copy_tile_definitions(media_dir)
         copy_xml_files(media_dir)
-        copy_java_files(install_path)
         handle_translations(media_dir)
     except FileNotFoundError as e:
         echo.error(e)

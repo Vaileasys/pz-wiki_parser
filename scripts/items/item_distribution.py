@@ -10,7 +10,7 @@ from scripts.utils import lua_helper
 from scripts.objects.item import Item
 from scripts.objects.fish import Fish
 
-cache_path = os.path.join(DATA_DIR, "distributions")
+cache_path = os.path.join(DATA_DIR, "cache", "distributions")
 
 # Dictionary to store changes for reference across the script
 item_name_changes = {}
@@ -103,12 +103,16 @@ def process_json(file_paths):
                     count += len(items)
 
         elif file_key == "stories":
-            for story_key, items in data.items():
-                for item in items:
-                    # Update item name if found in the dictionary
-                    item = load_item_dictionary(item)
-                    item_list.add(item)
-                    count += 1
+            # New structure: {"story_types": {"random_building": {"RBBar": {"items": [...]}}}}
+            story_types = data.get("story_types", {})
+            for story_type_name, stories in story_types.items():
+                for story_id, story_data in stories.items():
+                    items = story_data.get("items", [])
+                    for item in items:
+                        # Update item name if found in the dictionary
+                        item = load_item_dictionary(item)
+                        item_list.add(item)
+                        count += 1
 
         elif file_key == "fishing":
             for fish_item_id, fish_data in data.items():
@@ -640,11 +644,15 @@ def build_item_json(
 
     def get_story_info(item_name):
         matching_stories = []
-        for story_category, items in stories_data.items():
-            if item_name in items:
-                matching_stories.append(
-                    {"id": story_category, "link": get_story_link(story_category)}
-                )
+        # New structure: iterate through story_types
+        story_types = stories_data.get("story_types", {})
+        for story_type_name, stories in story_types.items():
+            for story_id, story_data in stories.items():
+                items = story_data.get("items", [])
+                if item_name in items:
+                    matching_stories.append(
+                        {"id": story_id, "link": get_story_link(story_id)}
+                    )
         return matching_stories
 
     def get_story_link(story_category):
@@ -656,6 +664,8 @@ def build_item_json(
             return "Building stories"
         elif story_category.startswith("RVS"):
             return "Vehicle stories"
+        elif story_category.startswith("RDS"):
+            return "Survivor stories"
         else:
             return "Randomized stories"
 
@@ -1990,25 +2000,38 @@ def main():
     Main function to process and generate distribution data files.
 
     This function:
-    1. Parses distribution data from various sources
-    2. Processes items and builds JSON data
-    3. Combines items that share the same wiki page
-    4. Categorizes items by type
-    5. Generates Lua data files by category
-    6. Creates an index file
+    1. Checks if decompiler has run successfully
+    2. Parses distribution data from various sources
+    3. Processes items and builds JSON data
+    4. Combines items that share the same wiki page
+    5. Categorizes items by type
+    6. Generates Lua data files by category
+    7. Creates an index file
+
+    Returns:
+        bool: True if processing completed successfully, False otherwise
     """
+    # Run distribution parser and check if it was successful
+    if not distribution_parser.main():
+        print(
+            "ERROR: Distribution parser failed to run due to missing Java or decompiler issues."
+        )
+        print("Cannot continue with item distribution processing.")
+        return False
 
     file_paths = {
         "proceduraldistributions": os.path.join(
-            DATA_DIR, "distributions", "proceduraldistributions.json"
+            DATA_DIR, "cache", "distributions", "proceduraldistributions.json"
         ),
-        "foraging": os.path.join(DATA_DIR, "distributions", "foraging.json"),
+        "foraging": os.path.join(DATA_DIR, "cache", "distributions", "foraging.json"),
         "vehicle_distributions": os.path.join(
-            DATA_DIR, "distributions", "vehicle_distributions.json"
+            DATA_DIR, "cache", "distributions", "vehicle_distributions.json"
         ),
-        "clothing": os.path.join(DATA_DIR, "distributions", "clothing.json"),
-        "stories": os.path.join(DATA_DIR, "distributions", "stories.json"),
-        "distributions": os.path.join(DATA_DIR, "distributions", "distributions.json"),
+        "clothing": os.path.join(DATA_DIR, "cache", "distributions", "clothing.json"),
+        "stories": os.path.join(DATA_DIR, "cache", "distributions", "stories.json"),
+        "distributions": os.path.join(
+            DATA_DIR, "cache", "distributions", "distributions.json"
+        ),
         "fishing": os.path.join(DATA_DIR, "cache", "parsed_fish_data.json"),
     }
 
@@ -2039,10 +2062,10 @@ def main():
     # Process item list and build JSON data
     print("Processing item list...")
     file_paths["butchering"] = os.path.join(
-        DATA_DIR, "distributions", "butchering_data.json"
+        DATA_DIR, "cache", "distributions", "butchering_data.json"
     )
     file_paths["container_contents"] = os.path.join(
-        DATA_DIR, "distributions", "container_contents.json"
+        DATA_DIR, "cache", "distributions", "container_contents.json"
     )
     item_list = process_json(file_paths)
 
@@ -2055,12 +2078,14 @@ def main():
     stories_data = load_cache(file_paths["stories"])
     butchering_data_loaded = load_cache(file_paths["butchering"])
     attached_weapons_data = load_cache(
-        os.path.join(DATA_DIR, "distributions", "attached_weapon_definitions.json")
+        os.path.join(
+            DATA_DIR, "cache", "distributions", "attached_weapon_definitions.json"
+        )
     )
 
     # Load container contents data
     container_contents_data = load_cache(
-        os.path.join(DATA_DIR, "distributions", "container_contents.json")
+        os.path.join(DATA_DIR, "cache", "distributions", "container_contents.json")
     )
 
     build_item_json(
@@ -2079,7 +2104,9 @@ def main():
 
     # Load all_items and combine items by page
     print("Loading and combining items by page...")
-    all_items = load_cache(os.path.join(DATA_DIR, "distributions", "all_items.json"))
+    all_items = load_cache(
+        os.path.join(DATA_DIR, "cache", "distributions", "all_items.json")
+    )
     combined_items = combine_items_by_page(all_items)
     save_cache(combined_items, "combined_items.json", cache_path)
 
@@ -2184,6 +2211,8 @@ def main():
 
     calculate_missing_items(itemname_path, itemlist_path, missing_items_path)
     print("Script completed successfully.")
+
+    return True
 
 
 if __name__ == "__main__":
