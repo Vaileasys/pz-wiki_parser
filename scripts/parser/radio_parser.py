@@ -2,10 +2,11 @@ import os
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from typing import Tuple, Union, List
-from scripts.core.constants import OUTPUT_LANG_DIR, RESOURCE_DIR
+from scripts.core.constants import OUTPUT_LANG_DIR
 from scripts.core.language import Language
+from scripts.core.file_loading import get_media_dir
 
-RESOURCE_PATH = os.path.join(RESOURCE_DIR, 'radio', 'RadioData.xml')
+RESOURCE_PATH = os.path.join(get_media_dir(), 'radio', 'RadioData.xml')
 RADIO_DIR = os.path.join(OUTPUT_LANG_DIR.format(language_code=Language.get()), 'radio')
 OUTPUT_FILE = "radio_output.txt"
 OUTPUT_PATH = os.path.join(RADIO_DIR, OUTPUT_FILE)

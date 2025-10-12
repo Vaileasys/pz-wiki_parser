@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 import re
 from difflib import SequenceMatcher
 from scripts.core.version import Version
+from scripts.core.file_loading import get_clothing_dir, get_media_dir
 from scripts.utils import echo
 
 _outfits_cache = {}
@@ -236,8 +237,8 @@ def generate_name_guid_table(translated_names, outfits_json, output_file):
 
 def main():
     """Main function to process XML files, generate JSON, and create articles."""
-    guid_table_path = os.path.join("resources", "fileGuidTable.xml")
-    outfits_xml_path = os.path.join("resources", "clothing", "clothing.xml")
+    guid_table_path = os.path.join(get_media_dir(), "fileGuidTable.xml")
+    outfits_xml_path = os.path.join(get_clothing_dir(), "clothing.xml")
     json_output_dir = os.path.join("data", "cache")
 
     articles_output_dir = os.path.join("output", "en", "outfits", "articles")

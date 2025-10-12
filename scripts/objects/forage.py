@@ -2,6 +2,7 @@ import os
 from scripts.objects.profession import Occupation, Trait
 from scripts.core.cache import load_cache
 from scripts.core.constants import CACHE_DIR
+from scripts.core.file_loading import get_lua_path
 from scripts.parser import distribution_parser
 from scripts.objects.item import Item
 from scripts.utils import util
@@ -35,7 +36,7 @@ class ForagingItem:
             return cls._foraging
 
         if not os.path.exists(FORAGING_CACHE_PATH):
-            forage_definitions_path = os.path.join("resources", "lua", "forageDefinitions.lua")
+            forage_definitions_path = get_lua_path("forageDefinitions")
             distribution_parser.parse_foraging(forage_definitions_path, DISTRIBUTIONS_DIR)
 
         cls._foraging = load_cache(FORAGING_CACHE_PATH) or {}

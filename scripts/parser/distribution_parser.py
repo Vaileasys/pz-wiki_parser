@@ -6,7 +6,8 @@ import xml.etree.ElementTree as ET
 from scripts.core.constants import CACHE_DIR, OUTPUT_DIR
 from scripts.core.cache import save_cache
 from scripts.core import config_manager as cfg
-from scripts.utils import lua_helper
+from scripts.core.file_loading import get_lua_path, get_clothing_dir, get_media_dir
+from scripts.utils import lua_helper, echo
 
 cache_path = os.path.join(CACHE_DIR, "distributions")
 
@@ -352,7 +353,7 @@ def parse_foraging(forage_definitions_path, output_path):
             forage_defs = lua.globals().forageDefs
             return lua_table_to_python(forage_defs)
         except Exception as e:
-            print(f"Error processing Lua file {file_path}: {e}")
+            echo.error(f"Error processing Lua file {file_path}: {e}")
             return {}
 
     def lua_table_to_python(obj):
@@ -471,16 +472,16 @@ def parse_vehicles(vehicle_distributions_path, output_path):
         with open(vehicle_distributions_path, "r", encoding="utf-8") as lua_file:
             lua_content = lua_file.read()
     except FileNotFoundError:
-        print(f"Error: The file {vehicle_distributions_path} does not exist.")
+        echo.error(f"Error: The file {vehicle_distributions_path} does not exist.")
         return
     except Exception as e:
-        print(f"Error reading {vehicle_distributions_path}: {e}")
+        echo.error(f"Error reading {vehicle_distributions_path}: {e}")
         return
 
     try:
         vehicle_distributions = parse_lua_table(lua_content)
     except Exception as e:
-        print(f"Error parsing Lua content: {e}")
+        echo.error(f"Error parsing Lua content: {e}")
         return
 
     save_cache(vehicle_distributions, "vehicle_distributions.json", output_path)
@@ -506,7 +507,7 @@ def parse_clothing(clothing_file_path, guid_table_path, output_file):
                 filename = os.path.splitext(os.path.basename(path))[0]
                 guid_mapping[guid] = filename
         except ET.ParseError as e:
-            print(f"Error parsing GUID table XML: {e}")
+            echo.error(f"Error parsing GUID table XML: {e}")
         return guid_mapping
 
     def get_outfits(xml_file, guid_mapping):
@@ -514,7 +515,7 @@ def parse_clothing(clothing_file_path, guid_table_path, output_file):
             tree = ET.parse(xml_file)
             root = tree.getroot()
         except ET.ParseError as e:
-            print(f"Error parsing clothing XML: {e}")
+            echo.error(f"Error parsing clothing XML: {e}")
             return {}
 
         output_json = {"FemaleOutfits": {}, "MaleOutfits": {}}
@@ -596,10 +597,10 @@ def ensure_decompiler_run():
         bool: True if decompiler output exists or was successfully created, False otherwise
     """
     if check_decompiler_output():
-        print("ZomboidDecompiler output found. Skipping decompilation.")
+        echo.success("ZomboidDecompiler output found. Skipping decompilation.")
         return True
 
-    print("ZomboidDecompiler output not found. Running decompiler...")
+    echo.info("ZomboidDecompiler output not found. Running decompiler...")
 
     # Check if Java is installed
     import subprocess
@@ -620,10 +621,10 @@ def ensure_decompiler_run():
             )
 
         if result.returncode != 0:
-            print("Error: Java is not installed or not in PATH. Cannot run decompiler.")
+            echo.error("Error: Java is not installed or not in PATH. Cannot run decompiler.")
             return False
     except Exception as e:
-        print(f"Error checking Java installation: {e}")
+        echo.error(f"Error checking Java installation: {e}")
         return False
 
     # Run the decompiler
@@ -632,10 +633,10 @@ def ensure_decompiler_run():
     result = runner.run_zomboid_decompiler()
 
     if result:
-        print("Warning: Decompiler may not have completed successfully.")
+        echo.warning("Warning: Decompiler may not have completed successfully.")
         return False
     else:
-        print("Decompiler completed successfully.")
+        echo.success("Decompiler completed successfully.")
         return True
 
 
@@ -668,7 +669,7 @@ def parse_stories(output_file):
         )
 
         if not os.path.exists(base_path):
-            print(f"Warning: Decompiler output directory not found at {base_path}")
+            echo.info(f"Warning: Decompiler output directory not found at {base_path}")
             return {}
 
         # Define file categorization based on prefixes
@@ -708,10 +709,10 @@ def parse_stories(output_file):
 
         # Print summary
         total_files = sum(len(files) for files in story_files.values())
-        print(f"Found {total_files} story files:")
+        echo.info(f"Found {total_files} story files:")
         for story_type, files in story_files.items():
             if files:
-                print(f"  - {story_type}: {len(files)} files")
+                echo.info(f"  - {story_type}: {len(files)} files")
 
         return story_files
 
@@ -739,7 +740,7 @@ def parse_stories(output_file):
             with open(file_path, "r", encoding="utf-8") as f:
                 file_content = f.read()
         except Exception as e:
-            print(f"Error reading {filename}: {e}")
+            echo.error(f"Error reading {filename}: {e}")
             return {"id": story_id, "file": filename, "items": [], "error": str(e)}
 
         items = []
@@ -796,13 +797,11 @@ def parse_stories(output_file):
         )
 
         if not os.path.exists(story_clutter_path):
-            print(
-                f"Warning: StoryClutter_Definitions.lua not found at {story_clutter_path}"
-            )
-            print("Skipping story clutter parsing.")
+            echo.warning(f"StoryClutter_Definitions.lua not found at {story_clutter_path}")
+            echo.info("Skipping story clutter parsing.")
             return {}
 
-        print(f"Parsing StoryClutter_Definitions.lua from {story_clutter_path}")
+        echo.info(f"Parsing StoryClutter_Definitions.lua from {story_clutter_path}")
 
         try:
             # Read and execute the Lua file using lua_helper
@@ -819,7 +818,7 @@ def parse_stories(output_file):
             )
 
             if "StoryClutter" not in parsed_data:
-                print("Warning: StoryClutter table not found in parsed data")
+                echo.warning("StoryClutter table not found in parsed data")
                 return {}
 
             # Extract and clean the story clutter data
@@ -843,11 +842,11 @@ def parse_stories(output_file):
 
                     story_data[category_name] = cleaned_items
 
-            print(f"Parsed {len(story_data)} story clutter categories")
+            echo.info(f"Parsed {len(story_data)} story clutter categories")
             return story_data
 
         except Exception as e:
-            print(f"Error parsing StoryClutter_Definitions.lua: {e}")
+            echo.error(f"Error parsing StoryClutter_Definitions.lua: {e}")
             import traceback
 
             traceback.print_exc()
@@ -870,7 +869,7 @@ def parse_stories(output_file):
             if not file_paths:
                 continue
 
-            print(f"Processing {story_type} stories ({len(file_paths)} files)...")
+            echo.info(f"Processing {story_type} stories ({len(file_paths)} files)...")
 
             story_type_data = {}
             for file_path in file_paths:
@@ -880,7 +879,7 @@ def parse_stories(output_file):
                     if story_id:
                         story_type_data[story_id] = parsed_data
                 except Exception as e:
-                    print(f"Error parsing {file_path}: {e}")
+                    echo.error(f"Error parsing {file_path}: {e}")
                     continue
 
             if story_type_data:
@@ -905,16 +904,12 @@ def parse_stories(output_file):
         if story_types:
             all_story_data["story_types"] = story_types
 
-            # Print summary statistics
+            # Statistics
             total_stories = sum(len(stories) for stories in story_types.values())
             total_items = 0
             for story_type_data in story_types.values():
                 for story_data in story_type_data.values():
                     total_items += story_data.get("item_count", 0)
-
-            print(
-                f"\nParsed {total_stories} stories with {total_items} total item references"
-            )
 
     # Save to cache/distributions directory
     distributions_cache = os.path.join(CACHE_DIR, "distributions")
@@ -923,9 +918,8 @@ def parse_stories(output_file):
     if all_story_data:
         save_cache(all_story_data, output_file, distributions_cache)
         output_path = os.path.join(distributions_cache, output_file)
-        print(f"\nStory data saved to {output_path}")
     else:
-        print("Warning: No story data was parsed")
+        echo.warning("No story data was parsed")
 
 
 def parse_container_contents(output_path):
@@ -1035,7 +1029,7 @@ def parse_container_contents(output_path):
     distribution_data = distribution_container_parser.get_distribution_data()
     container_dict = {}
 
-    print("Processing container contents...")
+    echo.info("Processing container contents...")
 
     # Get all container items
     try:
@@ -1067,7 +1061,7 @@ def parse_container_contents(output_path):
 
     # Save to cache
     save_cache(container_dict, "container_contents.json", output_path)
-    print(f"Container contents data saved with {len(container_dict)} containers")
+    echo.info(f"Container contents data saved with {len(container_dict)} containers")
 
 
 def main():
@@ -1079,21 +1073,17 @@ def main():
     """
     # Ensure decompiler has been run before proceeding
     if not ensure_decompiler_run():
-        print("ERROR: Cannot continue without decompiler output.")
-        print("Please ensure Java is installed and the decompiler can run.")
+        echo.error("Cannot continue without decompiler output.")
+        echo.error("Please ensure Java is installed and the decompiler can run.")
         return False
 
     # File paths
-    distributions_lua_path = os.path.join("resources", "lua", "Distributions.lua")
-    forage_definitions_path = os.path.join("resources", "lua", "forageDefinitions.lua")
-    procedural_distributions_path = os.path.join(
-        "resources", "lua", "ProceduralDistributions.lua"
-    )
-    vehicle_distributions_path = os.path.join(
-        "resources", "lua", "VehicleDistributions.lua"
-    )
-    clothing_file_path = os.path.join("resources", "clothing", "clothing.xml")
-    guid_table_path = os.path.join("resources", "fileGuidTable.xml")
+    distributions_lua_path = get_lua_path("Distributions")
+    forage_definitions_path = get_lua_path("forageDefinitions")
+    procedural_distributions_path = get_lua_path("ProceduralDistributions")
+    vehicle_distributions_path = get_lua_path("VehicleDistributions")
+    clothing_file_path = os.path.join(get_clothing_dir(), "clothing.xml")
+    guid_table_path = os.path.join(get_media_dir(), "fileGuidTable.xml")
 
     # Call the init function to check if all files exist
     init(
@@ -1128,10 +1118,10 @@ def init(*file_paths):
             missing_files.append(path)
 
     if not missing_files:
-        print("All resources are found.")
+        echo.success("All resources are found.")
     else:
         for missing in missing_files:
-            print(f"Resource missing: {missing}")
+            echo.warning(f"Resource missing: {missing}")
 
 
 if __name__ == "__main__":

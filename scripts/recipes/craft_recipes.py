@@ -18,6 +18,7 @@ The script handles:
 """
 
 import os, re
+from scripts.core.file_loading import get_lua_path
 from tqdm import tqdm
 from collections import defaultdict
 from scripts.core.constants import PBAR_FORMAT, CACHE_DIR
@@ -983,7 +984,7 @@ def process_requirements(recipe: dict, literature_data: dict) -> tuple[str, str]
     try:
         lua_lines = (
             open(
-                os.path.join("resources", "lua", "MainCreationMethods.lua"),
+                get_lua_path("MainCreationMethods"),
                 encoding="utf-8",
             )
             .read()

@@ -8,7 +8,6 @@ from scripts.utils import echo
 from scripts.core.cache import save_cache, load_cache
 from scripts.core.file_loading import get_script_files
 
-RESOURCE_PATH = os.path.join("resources", "scripts")
 CACHE_JSON = 'item_data.json'
 
 # Blacklisted item name prefixes

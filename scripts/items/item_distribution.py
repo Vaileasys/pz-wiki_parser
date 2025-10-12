@@ -5,10 +5,12 @@ import scripts.parser.distribution_parser as distribution_parser
 from scripts.core import page_manager
 from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache, load_cache
+from scripts.core.file_loading import get_lua_dir
 from scripts.utils.categories import find_all_categories
 from scripts.utils import lua_helper
 from scripts.objects.item import Item
 from scripts.objects.fish import Fish
+from scripts.utils import echo
 
 cache_path = os.path.join(DATA_DIR, "cache", "distributions")
 
@@ -235,9 +237,9 @@ def process_json(file_paths):
 
         item_counts[file_key] = count
 
-    print(f"Unique items found: {len(item_list)}")
+    echo.info(f"Unique items found: {len(item_list)}")
     for file_key, count in item_counts.items():
-        print(f"Total items found in {file_key}: {count}")
+        echo.info(f"Total items found in {file_key}: {count}")
 
     os.makedirs(os.path.join("output", "en", "item", "distributions"), exist_ok=True)
     with open(
@@ -1653,8 +1655,6 @@ def combine_items_by_page(all_items):
     # Dictionary to map secondary items to their primary item
     item_mapping = {}
 
-    print("Combining items by page...")
-
     # Build a mapping of item IDs to their pages and primary IDs
     item_to_page_info = {}
 
@@ -1696,7 +1696,7 @@ def combine_items_by_page(all_items):
                 "is_primary": item_id == primary_id,
             }
 
-    print(f"Found {len(item_to_page_info)} items with page mappings")
+    echo.info(f"Found {len(item_to_page_info)} items with page mappings")
 
     # First pass: Process all items that have page mappings
     for item_id, item_data in all_items.items():
@@ -1836,7 +1836,6 @@ def combine_items_by_page(all_items):
             processed_items.add(item_id)
 
     # Third pass: Remove duplicates in each list
-    print("Removing duplicates...")
     for item_id, item_data in combined_items.items():
         # Remove duplicate container entries
         if item_data.get("Containers"):
@@ -1938,14 +1937,14 @@ def combine_items_by_page(all_items):
                         unique_attached_weapons.append(weapon)
                 item_data["AttachedWeapons"] = unique_attached_weapons
 
-    # Print statistics
+    # Statistics
     original_count = len(all_items)
     combined_count = len(combined_items)
 
-    print(f"Original item count: {original_count}")
-    print(f"Combined item count: {combined_count}")
-    print(f"Reduced by: {original_count - combined_count} items")
-    print(f"Number of secondary items combined: {len(item_mapping)}")
+    echo.info(f"Original item count: {original_count}")
+    echo.info(f"Combined item count: {combined_count}")
+    echo.info(f"Reduced by: {original_count - combined_count} items")
+    echo.info(f"Number of secondary items combined: {len(item_mapping)}")
 
     # Save the mapping for reference
     save_cache(item_mapping, "item_page_mapping.json", cache_path)
@@ -2013,10 +2012,8 @@ def main():
     """
     # Run distribution parser and check if it was successful
     if not distribution_parser.main():
-        print(
-            "ERROR: Distribution parser failed to run due to missing Java or decompiler issues."
-        )
-        print("Cannot continue with item distribution processing.")
+        echo.error("Distribution parser failed to run due to missing Java or decompiler issues.")
+        echo.info("Cannot continue with item distribution processing.")
         return False
 
     file_paths = {
@@ -2050,17 +2047,17 @@ def main():
     save_cache(parsed_data, "attached_weapon_definitions.json", cache_path)
 
     # Parse distribution data
-    print("Parsing distribution data...")
+    echo.info("Parsing distribution data...")
     distribution_parser.main()
 
     # Parse container contents (this depends on distribution data being available)
-    print("Parsing container contents...")
+    echo.info("Parsing container contents...")
     from scripts.parser.distribution_parser import parse_container_contents
 
     parse_container_contents(cache_path)
 
     # Process item list and build JSON data
-    print("Processing item list...")
+    echo.info("Processing item list...")
     file_paths["butchering"] = os.path.join(
         DATA_DIR, "cache", "distributions", "butchering_data.json"
     )
@@ -2069,7 +2066,7 @@ def main():
     )
     item_list = process_json(file_paths)
 
-    print("Building item JSON data...")
+    echo.info("Building item JSON data...")
     procedural_data = load_cache(file_paths["proceduraldistributions"])
     distribution_data = load_cache(file_paths["distributions"])
     vehicle_data = load_cache(file_paths["vehicle_distributions"])
@@ -2102,16 +2099,12 @@ def main():
         container_contents_data,
     )
 
-    # Load all_items and combine items by page
-    print("Loading and combining items by page...")
     all_items = load_cache(
         os.path.join(DATA_DIR, "cache", "distributions", "all_items.json")
     )
     combined_items = combine_items_by_page(all_items)
     save_cache(combined_items, "combined_items.json", cache_path)
 
-    # Initialize language before categorization
-    print("Initializing language...")
     from scripts.core.language import Language
 
     Language.set("en")  # Set to english to avoid user input
@@ -2120,7 +2113,6 @@ def main():
     Translate.load()
 
     # Categorize items
-    print("Categorizing items...")
     category_items = {}
     index = {}
     processed_items = set()  # Track which items have been assigned to a category
@@ -2193,15 +2185,13 @@ def main():
             category_items["misc"][item_id] = item_data
             index["misc"].append(item_id)
             processed_items.add(item_id)
-            print(f"Error processing {item_id}: {e}")
+            echo.error(f"Error processing {item_id}: {e}")
 
     # Generate Lua data files by category
-    print("Generating Lua data files...")
     build_tables(category_items, index)
 
     # Calculate missing items
-    print("Calculating missing items...")
-    itemname_path = os.path.join("resources", "Translate", "EN", "ItemName_EN.txt")
+    itemname_path = os.path.join(get_lua_dir(), "shared", "Translate", "EN", "ItemName_EN.txt")
     itemlist_path = os.path.join(
         "output", "en", "item", "distributions", "Item_list.txt"
     )
@@ -2210,7 +2200,7 @@ def main():
     )
 
     calculate_missing_items(itemname_path, itemlist_path, missing_items_path)
-    print("Script completed successfully.")
+    echo.success("Script completed successfully.")
 
     return True
 

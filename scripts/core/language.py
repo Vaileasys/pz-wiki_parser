@@ -219,7 +219,8 @@ class Translate:
 
     @classmethod
     def _parse(cls, wiki_code, game_code):
-        base_dir = os.path.join("resources", "Translate", game_code.upper())
+        from scripts.core.file_loading import get_lua_dir
+        base_dir = os.path.join(get_lua_dir(), "shared", "Translate", game_code.upper())
         if not os.path.exists(base_dir):
             raise FileNotFoundError(f"No translation folder: {base_dir}")
 

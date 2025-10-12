@@ -7,7 +7,8 @@ from scripts.parser import item_parser
 from scripts.core import logger, config_manager as config
 from scripts.core.version import Version
 from scripts.core.language import Language, Translate
-from scripts.core.constants import (DATA_DIR, RESOURCE_DIR)
+from scripts.core.constants import DATA_DIR, RESOURCE_DIR
+from scripts.core.file_loading import get_clothing_dir
 from scripts.utils import lua_helper, echo
 from scripts.core.cache import save_cache as new_save_cache
 from scripts.core.cache import load_cache as new_load_cache
@@ -58,7 +59,7 @@ def fix_item_id(item_id):
 def get_clothing_xml_value(item_data, xml_value):
     if 'ClothingItem' in item_data:
         clothing_item = item_data['ClothingItem']
-        file_path = os.path.join("resources", "clothing", "clothingItems", f"{clothing_item}.xml")
+        file_path = os.path.join(get_clothing_dir(), "clothingItems", f"{clothing_item}.xml")
 
         if not os.path.exists(file_path):
             logger.write(f"No XML file found for ClothingItem '{clothing_item}'. Is it in the correct directory?")

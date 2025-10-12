@@ -295,7 +295,7 @@ def get_abs_path_by_type(name: str, media_type: str, prefer: str = None) -> str 
     rel_path = get_relpath_by_type(name, media_type, prefer=prefer)
     if rel_path:
         base_dir = BASE_MEDIA_DIRS.get(media_type, get_media_dir()) # fallback to media root if unknown
-        return os.path.join(base_dir, rel_path.replace("/", "\\"))
+        return os.path.join(base_dir, rel_path.replace("/", os.sep))
     return None
 
 def get_script_path(name: str, media_type: str = "scripts", prefer: str = None) -> str | None:

@@ -1,6 +1,7 @@
 import re, os
 from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache
+from scripts.core.file_loading import get_lua_path
 from scripts.utils import echo
 
 def split_arguments(arguments_string):
@@ -56,7 +57,7 @@ def parse_argument(argument_string):
         return stripped_argument
 
 def main():
-    lua_file_path = os.path.join('resources', 'lua', 'ISMoveableDefinitions.lua')
+    lua_file_path = get_lua_path('ISMoveableDefinitions')
 
     filtered_lines = []
     with open(lua_file_path, 'r', encoding='utf-8') as file_handle:

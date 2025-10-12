@@ -1,9 +1,7 @@
 import os
-import shutil
 import platform
 from pathlib import Path
 from scripts.core import config_manager as config
-from scripts.core.constants import LUA_PATH
 from scripts.utils import echo, color
 
 
@@ -55,219 +53,11 @@ def get_install_path():
 
 
 def verify_media_directory(install_path):
+    """Verify that the media directory exists in the game installation."""
     media_dir = os.path.join(install_path, 'media')
     if not os.path.exists(media_dir):
         raise FileNotFoundError("Media directory not found, likely incorrect installation path.")
     return media_dir
-
-
-def copy_scripts_and_radio(media_dir):
-    # Define source directories
-    scripts_dir = os.path.join(media_dir, 'scripts')
-    radio_dir = os.path.join(media_dir, 'radio')
-
-    # Define destination directories
-    scripts_destination = os.path.join('resources', 'scripts')
-    radio_destination = os.path.join('resources', 'radio')
-
-    # Check and copy scripts folder
-    if not os.path.exists(scripts_dir):
-        raise FileNotFoundError(f"Scripts directory not found in {scripts_dir}.")
-
-    if os.path.exists(scripts_destination):
-        shutil.rmtree(scripts_destination)
-
-    shutil.copytree(scripts_dir, scripts_destination)
-    echo.info(f"Copied {scripts_dir} to {scripts_destination}")
-
-    # Check and copy radio folder
-    if not os.path.exists(radio_dir):
-        raise FileNotFoundError(f"Radio directory not found in {radio_dir}.")
-
-    if os.path.exists(radio_destination):
-        shutil.rmtree(radio_destination)
-
-    shutil.copytree(radio_dir, radio_destination)
-    echo.info(f"Copied {radio_dir} to {radio_destination}")
-
-
-def copy_lua_files(media_dir: str) -> None:
-    """
-    Copies specific Lua files from the Project Zomboid 'lua' directory to the
-    local 'resources/lua' directory.
-
-    :param media_dir: The path to the 'media' directory in the Project Zomboid installation.
-    """
-    lua_dir = Path(media_dir) / 'lua'
-    if not lua_dir.exists():
-        raise FileNotFoundError(f"Lua directory not found in {lua_dir}.")
-
-    # Lua files to copy, with their destination folder
-    # Key: Lua file
-    # Value: destination folder inside 'resources/lua'. Leave blank to add to 'lua' folder.
-    lua_files_to_copy = {
-        'Ammo.lua': None,
-        'Animals.lua': None,
-        'Berries.lua': None,
-        'Clothing.lua': None,
-        'DeadAnimals.lua': None,
-        'Distribution_BagsAndContainers.lua': None,
-        'Distribution_BinJunk.lua': None,
-        'Distribution_ClosetJunk.lua': None,
-        'Distribution_CounterJunk.lua': None,
-        'Distribution_DeskJunk.lua': None,
-        'Distribution_ShelfJunk.lua': None,
-        'Distribution_SideTableJunk.lua': None,
-        'Fruits.lua': None,
-        'ForestGoods.lua': None,
-        'ForestRarities.lua': None,
-        'Herbs.lua': None,
-        'Insects.lua': None,
-        'Junk.lua': None,
-        'MedicinalPlants.lua': None,
-        'Medical.lua': None,
-        'Mushrooms.lua': None,
-        'Stones.lua': None,
-        'Bones.lua': None,
-        'Vegetables.lua': None,
-        'WildPlants.lua': None,
-        'Artifacts.lua': None,
-        'CraftingMaterials.lua': None,
-        'JunkFood.lua': None,
-        'JunkWeapons.lua': None,
-        'Trash.lua': None,
-        'forageSystem.lua': None,
-        'BodyLocations.lua': None,
-        'Distributions.lua': None,
-        'ProceduralDistributions.lua': None,
-        'AttachedWeaponDefinitions.lua': None,
-        'VehicleDistributions.lua': None,
-        'VehicleDistribution_SeatJunk.lua': None,
-        'VehicleDistribution_TrunkJunk.lua': None,
-        'VehicleDistribution_GloveBoxJunk.lua': None,
-        'forageDefinitions.lua': None,
-        'SpecialLootSpawns.lua': None,
-        'SpecialItemData_Books.lua': None,
-        'SpecialItemData_Comics.lua': None,
-        'SpecialItemData_Magazines.lua': None,
-        'SpecialItemData_Misc.lua': None,
-        'SpecialItemData_Photos.lua': None,
-        'PrintMediaDefinitions.lua': None,
-        'MainCreationMethods.lua': None,
-        'ISMoveableDefinitions.lua': None,
-        # stashes
-        'BrandenburgStashDesc.lua': 'stashes',
-        'EkronStashDesc.lua': 'stashes',
-        'IrvingtonStashDesc.lua': 'stashes',
-        'LouisvilleStashDesc.lua': 'stashes',
-        'MarchRidgeStashDesc.lua': 'stashes',
-        'MulStashDesc.lua': 'stashes',
-        'RiversideStashDesc.lua': 'stashes',
-        'RosewoodStashDesc.lua': 'stashes',
-        'WorldStashDesc.lua': 'stashes',
-        'WpStashDesc.lua': 'stashes',
-    }
-
-    destination_dir = Path(LUA_PATH)
-
-    # Copy each file from the lua directory to the destination
-    find_and_copy_files(destination_dir, lua_dir, lua_files_to_copy)
-
-
-def find_and_copy_files(destination_dir, input_dir, files_to_copy, rename_func=None):
-    for root, _, files in os.walk(input_dir):
-        for file in files:
-            if file in files_to_copy:
-                src = Path(root) / file
-                dst = destination_dir
-                folder = files_to_copy[file]
-                if folder:
-                    dst = destination_dir / folder
-                dst.mkdir(parents=True, exist_ok=True)
-                dst_filename = rename_func(Path(root).name) if rename_func else file
-                dst = dst / dst_filename
-                shutil.copy(src, dst)
-                echo.info(f"Copied {file} to {dst}")
-
-
-def rename_spawnpoints(folder_name: str) -> str:
-    return folder_name.replace(", KY", "").replace(" ", "_").lower() + ".lua"
-
-
-def copy_spawnpoint_files(media_dir):
-    spawnpoint_files = {
-        'spawnpoints.lua': 'spawnpoints'
-    }
-    lua_dir = Path(media_dir) / 'maps'
-    if not lua_dir.exists():
-        raise FileNotFoundError(f"Lua directory not found in {lua_dir}.")
-
-    destination_dir = Path(LUA_PATH)
-    find_and_copy_files(destination_dir, lua_dir, spawnpoint_files, rename_func=rename_spawnpoints)
-
-
-def copy_tile_definitions(media_dir):
-    """Copy newtiledefinitions.tiles from media_dir to resources/tiles."""
-    src = os.path.join(media_dir, 'newtiledefinitions.tiles')
-    dst_dir = os.path.join('resources', 'tiles')
-    os.makedirs(dst_dir, exist_ok=True)
-    if os.path.exists(src):
-        shutil.copy(src, dst_dir)
-        echo.info(f"Copied newtiledefinitions.tiles to {dst_dir}")
-    else:
-        echo.warning(f"newtiledefinitions.tiles not found at {src}, skipping.")
-
-
-def copy_xml_files(media_dir):
-    # Define the specific XML files and their locations
-    files_to_copy = {
-        'fileGuidTable.xml': os.path.join(media_dir, 'fileGuidTable.xml')
-    }
-    source_clothing_dir = os.path.join(media_dir, 'clothing')
-    destination_dir = os.path.join('resources')
-    clothing_destination_dir = os.path.join('resources', 'clothing')
-
-    # Ensure destination directory exists
-    if not os.path.exists(destination_dir):
-        os.makedirs(destination_dir)
-    if not os.path.exists(clothing_destination_dir):
-        os.makedirs(clothing_destination_dir)
-
-    # Copy each file to the resources directory
-    for file_name, src_path in files_to_copy.items():
-        dst_path = os.path.join(destination_dir, file_name)
-        if os.path.exists(src_path):
-            shutil.copy(src_path, dst_path)
-            echo.info(f"Copied {file_name} to {dst_path}")
-        else:
-            echo.warning(f"{file_name} not found in {src_path}, skipping.")
-
-    # Copy contents of the clothing folder
-    if os.path.exists(source_clothing_dir):
-        for item in os.listdir(source_clothing_dir):
-            src_path = os.path.join(source_clothing_dir, item)
-            dst_path = os.path.join(clothing_destination_dir, item)
-            if os.path.isdir(src_path):
-                shutil.copytree(src_path, dst_path, dirs_exist_ok=True)
-            else:
-                shutil.copy2(src_path, dst_path)
-            echo.info(f"Copied {item} to {dst_path}")
-    else:
-        echo.warning(f"Clothing folder not found at {source_clothing_dir}, skipping.")
-
-
-def handle_translations(media_dir):
-    translation_dir = os.path.join(media_dir, 'lua', 'shared', 'Translate')
-    destination_dir = os.path.join('resources', 'Translate')
-
-    if not os.path.exists(destination_dir):
-        os.makedirs(destination_dir)
-
-    if os.path.exists(translation_dir):
-        shutil.copytree(translation_dir, destination_dir, dirs_exist_ok=True)
-        echo.info(f"Copied local translation to {destination_dir}")
-    else:
-        echo.error(f"Translation directory not found in {translation_dir}")
 
 
 def main():
@@ -275,22 +65,20 @@ def main():
     config.set_game_directory(install_path)
 
     try:
-        media_dir = verify_media_directory(install_path)
+        verify_media_directory(install_path)
     except FileNotFoundError as e:
         echo.error(e)
         return
 
+    echo.info("Game directory set successfully")
+    
     try:
-        copy_scripts_and_radio(media_dir)
-        copy_lua_files(media_dir)
-        copy_spawnpoint_files(media_dir)
-        copy_tile_definitions(media_dir)
-        copy_xml_files(media_dir)
-        handle_translations(media_dir)
-    except FileNotFoundError as e:
-        echo.error(e)
-    else:
-        echo.success(f"Setup complete")
+        from scripts.core.file_loading import map_game_files
+        map_game_files()
+        echo.success("File map built.")
+    except Exception as e:
+        echo.error(f"Failed to build file map: {e}")
+        return
 
 
 if __name__ == "__main__":
