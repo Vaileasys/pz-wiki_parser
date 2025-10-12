@@ -324,11 +324,12 @@ settings_structure = {
         "module": "core.language",
     },
     "3": {"name": "Clear cache", "description": "Clear the data cache."},
-    "4": {
+    "4": {"name": "Remove output", "description": "Delete all generated output files."},
+    "5": {
         "name": "Toggle debug",
         "description": f"Toggle debug mode, to show or hide debug prints. Current: {config.get_debug_mode()}",
     },
-    "5": {
+    "6": {
         "name": "Run First Time Setup",
         "description": "Run the initial setup again.",
         "module": "setup",
@@ -407,10 +408,25 @@ def navigate_menu(menu, is_root=False, title=None):
                 navigate_menu(settings_structure, title=name)
             elif name == "Clear cache":
                 cache.clear_cache()
+            elif name == "Remove output":
+                import shutil
+                import os
+
+                output_dir = os.path.join(os.path.dirname(__file__), "output")
+                if os.path.exists(output_dir):
+                    for item in os.listdir(output_dir):
+                        item_path = os.path.join(output_dir, item)
+                        if os.path.isdir(item_path):
+                            shutil.rmtree(item_path)
+                        else:
+                            os.remove(item_path)
+                    echo.info("Output directory contents removed.")
+                else:
+                    echo.info("Output directory does not exist.")
             elif name == "Toggle debug":
                 new_debug = not config.get_debug_mode()
                 config.set_debug_mode(new_debug)
-                settings_structure["4"]["description"] = (
+                settings_structure["5"]["description"] = (
                     f"Toggle debug mode, to show or hide debug prints. Current: {new_debug}"
                 )
             elif name == "Run First Time Setup":
