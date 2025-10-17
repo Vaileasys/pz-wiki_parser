@@ -1825,22 +1825,8 @@
                 "Wearable containers"
             ],
             "item_id": [
-                "Base.Bag_ALICE_BeltSus"
-            ]
-        },
-        "ALICE Belt and Suspenders (camo)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
-                "Base.Bag_ALICE_BeltSus_Camo"
-            ]
-        },
-        "ALICE Belt and Suspenders (green)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
+                "Base.Bag_ALICE_BeltSus",
+                "Base.Bag_ALICE_BeltSus_Camo",
                 "Base.Bag_ALICE_BeltSus_Green"
             ]
         },
@@ -2178,78 +2164,15 @@
                 "Container items"
             ],
             "item_id": [
-                "Base.Bag_AmmoBox_Mixed"
-            ]
-        },
-        "Ammunition Box (.223)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_AmmoBox_223"
-            ]
-        },
-        "Ammunition Box (.308)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_AmmoBox_308"
-            ]
-        },
-        "Ammunition Box (.38 special)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_AmmoBox_38"
-            ]
-        },
-        "Ammunition Box (.44 magnum)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_AmmoBox_44"
-            ]
-        },
-        "Ammunition Box (.45 auto)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_AmmoBox_45"
-            ]
-        },
-        "Ammunition Box (5.56mm)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_AmmoBox"
-            ]
-        },
-        "Ammunition Box (9mm)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_AmmoBox_9mm"
-            ]
-        },
-        "Ammunition Box (hunting)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_AmmoBox_Hunting"
-            ]
-        },
-        "Ammunition Box (shotgun shells)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
+                "Base.Bag_AmmoBox_Mixed",
+                "Base.Bag_AmmoBox",
+                "Base.Bag_AmmoBox_223",
+                "Base.Bag_AmmoBox_308",
+                "Base.Bag_AmmoBox_38",
+                "Base.Bag_AmmoBox_44",
+                "Base.Bag_AmmoBox_45",
+                "Base.Bag_AmmoBox_9mm",
+                "Base.Bag_AmmoBox_Hunting",
                 "Base.Bag_AmmoBox_ShotgunShells"
             ]
         },
@@ -2557,27 +2480,13 @@
                 "Base.DriedApricots"
             ]
         },
-        "Apron (bbq)": {
+        "Apron": {
             "categories": [
                 "Vests"
             ],
             "item_id": [
-                "Base.Apron_BBQ"
-            ]
-        },
-        "Apron (black)": {
-            "categories": [
-                "Vests"
-            ],
-            "item_id": [
-                "Base.Apron_Black"
-            ]
-        },
-        "Apron (white)": {
-            "categories": [
-                "Vests"
-            ],
-            "item_id": [
+                "Base.Apron_BBQ",
+                "Base.Apron_Black",
                 "Base.Apron_White"
             ]
         },
@@ -2783,14 +2692,7 @@
                 "Wearable containers"
             ],
             "item_id": [
-                "Base.KnapsackSprayer"
-            ]
-        },
-        "Backpack Sprayer (Stowed)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
+                "Base.KnapsackSprayer",
                 "Base.KnapsackSprayer_Stowed"
             ]
         },
@@ -2911,14 +2813,7 @@
                 "Grains"
             ],
             "item_id": [
-                "Base.Baguette"
-            ]
-        },
-        "Baguette (dough)": {
-            "categories": [
-                "Prepared food"
-            ],
-            "item_id": [
+                "Base.Baguette",
                 "Base.BaguetteDough"
             ]
         },
@@ -2975,14 +2870,7 @@
                 "Short blunt weapons"
             ],
             "item_id": [
-                "Base.BallPeenHammer"
-            ]
-        },
-        "Ball-peen Hammer (forged)": {
-            "categories": [
-                "Short blunt weapons"
-            ],
-            "item_id": [
+                "Base.BallPeenHammer",
                 "Base.BallPeenHammerForged"
             ]
         },
@@ -3193,14 +3081,7 @@
                 "Long blunt weapons"
             ],
             "item_id": [
-                "Base.BarBell"
-            ]
-        },
-        "Barbell (forged)": {
-            "categories": [
-                "Long blunt weapons"
-            ],
-            "item_id": [
+                "Base.BarBell",
                 "Base.BarBell_Forged"
             ]
         },
@@ -3268,14 +3149,7 @@
                 "Long blunt weapons"
             ],
             "item_id": [
-                "Base.BaseballBat"
-            ]
-        },
-        "Baseball Bat (crafted)": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
+                "Base.BaseballBat",
                 "Base.BaseballBat_Crafted"
             ]
         },
@@ -3349,43 +3223,15 @@
             ],
             "item_id": [
                 "Base.Hat_BaseballCap",
-                "Base.Hat_BaseballCap_Reverse"
-            ]
-        },
-        "Baseball Cap (blue)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
+                "Base.Hat_BaseballCap_Reverse",
                 "Base.Hat_BaseballCapBlue",
-                "Base.Hat_BaseballCapBlue_Reverse"
-            ]
-        },
-        "Baseball Cap (colored)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
+                "Base.Hat_BaseballCapBlue_Reverse",
+                "Base.Hat_BaseballCapGreen",
+                "Base.Hat_BaseballCapGreen_Reverse",
+                "Base.Hat_BaseballCapRed",
+                "Base.Hat_BaseballCapRed_Reverse",
                 "Base.Hat_BaseballCapTINT",
                 "Base.Hat_BaseballCapTINT_Reverse"
-            ]
-        },
-        "Baseball Cap (green)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
-                "Base.Hat_BaseballCapGreen",
-                "Base.Hat_BaseballCapGreen_Reverse"
-            ]
-        },
-        "Baseball Cap (red)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
-                "Base.Hat_BaseballCapRed",
-                "Base.Hat_BaseballCapRed_Reverse"
             ]
         },
         "Baseball Cap - 3N": {
@@ -3675,14 +3521,7 @@
                 "Wild herbs"
             ],
             "item_id": [
-                "Base.BasilDried"
-            ]
-        },
-        "Basil (Dried) (seasoning)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
+                "Base.BasilDried",
                 "Base.Seasoning_Basil"
             ]
         },
@@ -3731,14 +3570,7 @@
                 "Household"
             ],
             "item_id": [
-                "Base.BathTowel"
-            ]
-        },
-        "Bath Towel (Wet)": {
-            "categories": [
-                "Household"
-            ],
-            "item_id": [
+                "Base.BathTowel",
                 "Base.BathTowelWet"
             ]
         },
@@ -3847,17 +3679,10 @@
         },
         "Beer Bottle": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
-                "Base.BeerBottle"
-            ]
-        },
-        "Beer Bottle (empty)": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
+                "Base.BeerBottle",
                 "Base.BeerEmpty"
             ]
         },
@@ -3866,14 +3691,7 @@
                 "Drinks"
             ],
             "item_id": [
-                "Base.BeerCan"
-            ]
-        },
-        "Beer Can (empty)": {
-            "categories": [
-                "Drinks"
-            ],
-            "item_id": [
+                "Base.BeerCan",
                 "Base.BeerCanEmpty"
             ]
         },
@@ -4325,14 +4143,7 @@
                 "Wearable containers"
             ],
             "item_id": [
-                "Base.Bag_BigHikingBag"
-            ]
-        },
-        "Big Hiking Backpack (travel)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
+                "Base.Bag_BigHikingBag",
                 "Base.Bag_BigHikingBag_Travel"
             ]
         },
@@ -4365,14 +4176,7 @@
                 "Underwear"
             ],
             "item_id": [
-                "Base.Bikini_TINT"
-            ]
-        },
-        "Bikini (pattern)": {
-            "categories": [
-                "Underwear"
-            ],
-            "item_id": [
+                "Base.Bikini_TINT",
                 "Base.Bikini_Pattern01"
             ]
         },
@@ -4806,19 +4610,12 @@
                 "Base.DullBoneKnife"
             ]
         },
-        "Boar Head (black)": {
+        "Boar Head": {
             "categories": [
                 "Animal parts"
             ],
             "item_id": [
-                "Base.Pig_Boar_Head_Black"
-            ]
-        },
-        "Boar Head (pink)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
+                "Base.Pig_Boar_Head_Black",
                 "Base.Pig_Boar_Head_Pink"
             ]
         },
@@ -5423,54 +5220,12 @@
                 "Hats"
             ],
             "item_id": [
-                "Base.Hat_BonnieHat"
-            ]
-        },
-        "Boonie Hat (desert camo new)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
-                "Base.Hat_BonnieHat_DesertCamoNew"
-            ]
-        },
-        "Boonie Hat (desert camo)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
-                "Base.Hat_BonnieHat_DesertCamo"
-            ]
-        },
-        "Boonie Hat (green camo)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
-                "Base.Hat_BonnieHat_CamoGreen"
-            ]
-        },
-        "Boonie Hat (milius camo)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
-                "Base.Hat_BonnieHat_MiliusCamo"
-            ]
-        },
-        "Boonie Hat (olive drab)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
-                "Base.Hat_BonnieHat_OliveDrab"
-            ]
-        },
-        "Boonie Hat (tiger stripe camo)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
+                "Base.Hat_BonnieHat",
+                "Base.Hat_BonnieHat_CamoGreen",
+                "Base.Hat_BonnieHat_DesertCamo",
+                "Base.Hat_BonnieHat_DesertCamoNew",
+                "Base.Hat_BonnieHat_MiliusCamo",
+                "Base.Hat_BonnieHat_OliveDrab",
                 "Base.Hat_BonnieHat_TigerStripeCamo"
             ]
         },
@@ -5508,82 +5263,19 @@
         },
         "Bottle": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
-                "Base.BottleCrafted"
-            ]
-        },
-        "Bottle (cranberry juice)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
-                "Base.JuiceCranberry"
-            ]
-        },
-        "Bottle (fruit punch)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
-                "Base.JuiceFruitpunch"
-            ]
-        },
-        "Bottle (grape juice)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
-                "Base.JuiceGrape"
-            ]
-        },
-        "Bottle (lemon juice)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
-                "Base.JuiceLemon"
-            ]
-        },
-        "Bottle (milk)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
-                "Base.MilkBottle"
-            ]
-        },
-        "Bottle (orange juice)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
-                "Base.JuiceOrange"
-            ]
-        },
-        "Bottle (rare pop)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
-                "Base.PopBottleRare"
-            ]
-        },
-        "Bottle (simple syrup)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
+                "Base.BottleCrafted",
+                "Base.JuiceCranberry",
+                "Base.JuiceFruitpunch",
+                "Base.JuiceGrape",
+                "Base.JuiceLemon",
+                "Base.JuiceOrange",
+                "Base.JuiceTomato",
+                "Base.MilkBottle",
+                "Base.PopBottleRare",
                 "Base.SimpleSyrup"
-            ]
-        },
-        "Bottle (tomato juice)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
-                "Base.JuiceTomato"
             ]
         },
         "Bottle Opener": {
@@ -5622,27 +5314,13 @@
                 "Base.WhiskeyPetrol"
             ]
         },
-        "Bottle of Hair Dye (common)": {
+        "Bottle of Hair Dye": {
             "categories": [
                 "Appearance"
             ],
             "item_id": [
-                "Base.HairDyeCommon"
-            ]
-        },
-        "Bottle of Hair Dye (rare)": {
-            "categories": [
-                "Appearance"
-            ],
-            "item_id": [
-                "Base.HairDyeRare"
-            ]
-        },
-        "Bottle of Hair Dye (uncommon)": {
-            "categories": [
-                "Appearance"
-            ],
-            "item_id": [
+                "Base.HairDyeCommon",
+                "Base.HairDyeRare",
                 "Base.HairDyeUncommon"
             ]
         },
@@ -5656,7 +5334,7 @@
         },
         "Bottle with Water (Bleach)": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.WaterBleachBottle",
@@ -5697,17 +5375,10 @@
         },
         "Bowl": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
-                "Base.Bowl"
-            ]
-        },
-        "Bowl (ceramic)": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
+                "Base.Bowl",
                 "Base.ClayBowl"
             ]
         },
@@ -5861,22 +5532,8 @@
                 "Hats"
             ],
             "item_id": [
-                "Base.Animal_BowtieGold"
-            ]
-        },
-        "Bowtie (green)": {
-            "categories": [
-                "Accessories"
-            ],
-            "item_id": [
-                "Base.Animal_BowtieGreen"
-            ]
-        },
-        "Bowtie (red)": {
-            "categories": [
-                "Accessories"
-            ],
-            "item_id": [
+                "Base.Animal_BowtieGold",
+                "Base.Animal_BowtieGreen",
                 "Base.Animal_BowtieRed"
             ]
         },
@@ -6333,84 +5990,37 @@
                 "Underpants"
             ],
             "item_id": [
-                "Base.Boxers_White"
-            ]
-        },
-        "Boxers (black silk)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
-                "Base.Boxers_Silk_Black"
-            ]
-        },
-        "Boxers (hearts)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
-                "Base.Boxers_Hearts"
-            ]
-        },
-        "Boxers (red silk)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
+                "Base.Boxers_White",
+                "Base.Boxers_Hearts",
+                "Base.Boxers_RedStripes",
+                "Base.Boxers_Silk_Black",
                 "Base.Boxers_Silk_Red"
             ]
         },
-        "Boxers (red stripes)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
-                "Base.Boxers_RedStripes"
-            ]
-        },
-        "Boxing Gloves (blue)": {
-            "categories": [],
-            "item_id": [
-                "Base.Gloves_BoxingBlue"
-            ]
-        },
-        "Boxing Gloves (red)": {
+        "Boxing Gloves": {
             "categories": [
                 "Gloves"
             ],
             "item_id": [
+                "Base.Gloves_BoxingBlue",
                 "Base.Gloves_BoxingRed"
             ]
         },
-        "Boxing Head Gear (blue)": {
+        "Boxing Head Gear": {
             "categories": [
                 "Helmets"
             ],
             "item_id": [
-                "Base.Hat_BoxingBlue"
-            ]
-        },
-        "Boxing Head Gear (red)": {
-            "categories": [
-                "Helmets"
-            ],
-            "item_id": [
+                "Base.Hat_BoxingBlue",
                 "Base.Hat_BoxingRed"
             ]
         },
-        "Boxing Shorts (blue)": {
+        "Boxing Shorts": {
             "categories": [
                 "Shorts"
             ],
             "item_id": [
-                "Base.Shorts_BoxingBlue"
-            ]
-        },
-        "Boxing Shorts (red)": {
-            "categories": [
-                "Shorts"
-            ],
-            "item_id": [
+                "Base.Shorts_BoxingBlue",
                 "Base.Shorts_BoxingRed"
             ]
         },
@@ -6419,46 +6029,11 @@
                 "Bras"
             ],
             "item_id": [
-                "Base.Bra_Straps_White"
-            ]
-        },
-        "Bra (animal print)": {
-            "categories": [
-                "Bras"
-            ],
-            "item_id": [
-                "Base.Bra_Straps_AnimalPrint"
-            ]
-        },
-        "Bra (black frills)": {
-            "categories": [
-                "Bras"
-            ],
-            "item_id": [
-                "Base.Bra_Straps_FrillyBlack"
-            ]
-        },
-        "Bra (black)": {
-            "categories": [
-                "Bras"
-            ],
-            "item_id": [
-                "Base.Bra_Straps_Black"
-            ]
-        },
-        "Bra (pink frills)": {
-            "categories": [
-                "Bras"
-            ],
-            "item_id": [
-                "Base.Bra_Straps_FrillyPink"
-            ]
-        },
-        "Bra (red frills)": {
-            "categories": [
-                "Bras"
-            ],
-            "item_id": [
+                "Base.Bra_Straps_White",
+                "Base.Bra_Straps_AnimalPrint",
+                "Base.Bra_Straps_Black",
+                "Base.Bra_Straps_FrillyBlack",
+                "Base.Bra_Straps_FrillyPink",
                 "Base.Bra_Straps_FrillyRed"
             ]
         },
@@ -6475,54 +6050,12 @@
                 "Bras"
             ],
             "item_id": [
-                "Base.Bra_Strapless_White"
-            ]
-        },
-        "Bra - Strapless (animal print)": {
-            "categories": [
-                "Bras"
-            ],
-            "item_id": [
-                "Base.Bra_Strapless_AnimalPrint"
-            ]
-        },
-        "Bra - Strapless (black frills)": {
-            "categories": [
-                "Bras"
-            ],
-            "item_id": [
-                "Base.Bra_Strapless_FrillyBlack"
-            ]
-        },
-        "Bra - Strapless (black)": {
-            "categories": [
-                "Bras"
-            ],
-            "item_id": [
-                "Base.Bra_Strapless_Black"
-            ]
-        },
-        "Bra - Strapless (pink frills)": {
-            "categories": [
-                "Bras"
-            ],
-            "item_id": [
-                "Base.Bra_Strapless_FrillyPink"
-            ]
-        },
-        "Bra - Strapless (red frills)": {
-            "categories": [
-                "Bras"
-            ],
-            "item_id": [
-                "Base.Bra_Strapless_FrillyRed"
-            ]
-        },
-        "Bra - Strapless (red spots)": {
-            "categories": [
-                "Bras"
-            ],
-            "item_id": [
+                "Base.Bra_Strapless_White",
+                "Base.Bra_Strapless_AnimalPrint",
+                "Base.Bra_Strapless_Black",
+                "Base.Bra_Strapless_FrillyBlack",
+                "Base.Bra_Strapless_FrillyPink",
+                "Base.Bra_Strapless_FrillyRed",
                 "Base.Bra_Strapless_RedSpots"
             ]
         },
@@ -6737,14 +6270,7 @@
                 "Handheld containers"
             ],
             "item_id": [
-                "Base.Briefcase"
-            ]
-        },
-        "Briefcase (money)": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
+                "Base.Briefcase",
                 "Base.Briefcase_Money"
             ]
         },
@@ -6753,14 +6279,7 @@
                 "Underpants"
             ],
             "item_id": [
-                "Base.Briefs_White"
-            ]
-        },
-        "Briefs (animal print)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
+                "Base.Briefs_White",
                 "Base.Briefs_AnimalPrints"
             ]
         },
@@ -7173,19 +6692,12 @@
         },
         "Bucket": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.BucketEmpty",
                 "Base.BucketWaterDebug",
-                "Base.Bucket"
-            ]
-        },
-        "Bucket (forged)": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
+                "Base.Bucket",
                 "Base.BucketForged"
             ]
         },
@@ -7266,78 +6778,15 @@
                 "Container items"
             ],
             "item_id": [
-                "Base.Bag_ProtectiveCaseBulkyAmmo"
-            ]
-        },
-        "Bulky Ammo Container (.223)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_ProtectiveCaseBulkyAmmo_223"
-            ]
-        },
-        "Bulky Ammo Container (.308)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_ProtectiveCaseBulkyAmmo_308"
-            ]
-        },
-        "Bulky Ammo Container (.38)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_ProtectiveCaseBulkyAmmo_38"
-            ]
-        },
-        "Bulky Ammo Container (.44)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_ProtectiveCaseBulkyAmmo_44"
-            ]
-        },
-        "Bulky Ammo Container (.45)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_ProtectiveCaseBulkyAmmo_45"
-            ]
-        },
-        "Bulky Ammo Container (.556)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_ProtectiveCaseBulkyAmmo_556"
-            ]
-        },
-        "Bulky Ammo Container (9mm)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_ProtectiveCaseBulkyAmmo_9mm"
-            ]
-        },
-        "Bulky Ammo Container (hunting)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_ProtectiveCaseBulkyAmmo_Hunting"
-            ]
-        },
-        "Bulky Ammo Container (shotgun shells)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
+                "Base.Bag_ProtectiveCaseBulkyAmmo",
+                "Base.Bag_ProtectiveCaseBulkyAmmo_223",
+                "Base.Bag_ProtectiveCaseBulkyAmmo_308",
+                "Base.Bag_ProtectiveCaseBulkyAmmo_38",
+                "Base.Bag_ProtectiveCaseBulkyAmmo_44",
+                "Base.Bag_ProtectiveCaseBulkyAmmo_45",
+                "Base.Bag_ProtectiveCaseBulkyAmmo_556",
+                "Base.Bag_ProtectiveCaseBulkyAmmo_9mm",
+                "Base.Bag_ProtectiveCaseBulkyAmmo_Hunting",
                 "Base.Bag_ProtectiveCaseBulkyAmmo_ShotgunShells"
             ]
         },
@@ -7346,22 +6795,8 @@
                 "Container items"
             ],
             "item_id": [
-                "Base.Bag_ProtectiveCaseBulkyMilitary"
-            ]
-        },
-        "Bulky Military Container (radio)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_ProtectiveCaseBulkyMilitary_HAMRadio2"
-            ]
-        },
-        "Bulky Military Container (survivalist)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
+                "Base.Bag_ProtectiveCaseBulkyMilitary",
+                "Base.Bag_ProtectiveCaseBulkyMilitary_HAMRadio2",
                 "Base.Bag_ProtectiveCaseBulky_Survivalist"
             ]
         },
@@ -7376,27 +6811,13 @@
                 "Base.Bag_ProtectiveCaseBulky_HAMRadio1"
             ]
         },
-        "Bull Head (Angus)": {
+        "Bull Head": {
             "categories": [
                 "Animal parts"
             ],
             "item_id": [
-                "Base.Bull_Head_Angus"
-            ]
-        },
-        "Bull Head (Holstein)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
-                "Base.Bull_Head_Holstein"
-            ]
-        },
-        "Bull Head (Simmental)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
+                "Base.Bull_Head_Angus",
+                "Base.Bull_Head_Holstein",
                 "Base.Bull_Head_Simmental"
             ]
         },
@@ -7429,30 +6850,9 @@
                 "Vests"
             ],
             "item_id": [
-                "Base.Vest_BulletArmy"
-            ]
-        },
-        "Bulletproof Vest - Military (desert new)": {
-            "categories": [
-                "Vests"
-            ],
-            "item_id": [
-                "Base.Vest_BulletDesertNew"
-            ]
-        },
-        "Bulletproof Vest - Military (desert)": {
-            "categories": [
-                "Vests"
-            ],
-            "item_id": [
-                "Base.Vest_BulletDesert"
-            ]
-        },
-        "Bulletproof Vest - Military (olive drab)": {
-            "categories": [
-                "Vests"
-            ],
-            "item_id": [
+                "Base.Vest_BulletArmy",
+                "Base.Vest_BulletDesert",
+                "Base.Vest_BulletDesertNew",
                 "Base.Vest_BulletOliveDrab"
             ]
         },
@@ -7478,23 +6878,9 @@
             ],
             "item_id": [
                 "Base.Vambrace_BodyArmour_Left",
-                "Base.Vambrace_BodyArmour_Right"
-            ]
-        },
-        "Bulletproof Vest Forearm Armor (civilian)": {
-            "categories": [
-                "Protective gear"
-            ],
-            "item_id": [
+                "Base.Vambrace_BodyArmour_Right",
                 "Base.Vambrace_BodyArmour_Left_Civ",
-                "Base.Vambrace_BodyArmour_Right_Civ"
-            ]
-        },
-        "Bulletproof Vest Forearm Armor (desert)": {
-            "categories": [
-                "Protective gear"
-            ],
-            "item_id": [
+                "Base.Vambrace_BodyArmour_Right_Civ",
                 "Base.Vambrace_BodyArmour_Left_Desert",
                 "Base.Vambrace_BodyArmour_Right_Desert"
             ]
@@ -7505,23 +6891,9 @@
             ],
             "item_id": [
                 "Base.GreaveBodyArmour_Left",
-                "Base.GreaveBodyArmour_Right"
-            ]
-        },
-        "Bulletproof Vest Shin Armor (civilian)": {
-            "categories": [
-                "Protective gear"
-            ],
-            "item_id": [
+                "Base.GreaveBodyArmour_Right",
                 "Base.GreaveBodyArmour_Right_Civ",
-                "Base.GreaveBodyArmour_Left_Civ"
-            ]
-        },
-        "Bulletproof Vest Shin Armor (desert)": {
-            "categories": [
-                "Protective gear"
-            ],
-            "item_id": [
+                "Base.GreaveBodyArmour_Left_Civ",
                 "Base.GreaveBodyArmour_Right_Desert",
                 "Base.GreaveBodyArmour_Left_Desert"
             ]
@@ -7532,23 +6904,9 @@
             ],
             "item_id": [
                 "Base.ThighBodyArmour_L",
-                "Base.ThighBodyArmour_R"
-            ]
-        },
-        "Bulletproof Vest Thigh Armor (civilian)": {
-            "categories": [
-                "Protective gear"
-            ],
-            "item_id": [
+                "Base.ThighBodyArmour_R",
                 "Base.ThighBodyArmour_R_Civ",
-                "Base.ThighBodyArmour_L_Civ"
-            ]
-        },
-        "Bulletproof Vest Thigh Armor (desert)": {
-            "categories": [
-                "Protective gear"
-            ],
-            "item_id": [
+                "Base.ThighBodyArmour_L_Civ",
                 "Base.ThighBodyArmour_R_Desert",
                 "Base.ThighBodyArmour_L_Desert"
             ]
@@ -7559,54 +6917,26 @@
             ],
             "item_id": [
                 "Base.AmmoStrap_Bullets",
-                "Base.AmmoStrap_Brown_Bullets"
-            ]
-        },
-        "Bullets Bandolier (.223)": {
-            "categories": [
-                "Accessories"
-            ],
-            "item_id": [
-                "Base.AmmoStrap_Bullets_223"
-            ]
-        },
-        "Bullets Bandolier (.308)": {
-            "categories": [
-                "Accessories"
-            ],
-            "item_id": [
+                "Base.AmmoStrap_Brown_Bullets",
+                "Base.AmmoStrap_Bullets_223",
                 "Base.AmmoStrap_Bullets_308"
             ]
         },
-        "Bunny Ears (black)": {
+        "Bunny Ears": {
             "categories": [
                 "Accessories"
             ],
             "item_id": [
-                "Base.Hat_BunnyEarsBlack"
-            ]
-        },
-        "Bunny Ears (white)": {
-            "categories": [
-                "Accessories"
-            ],
-            "item_id": [
+                "Base.Hat_BunnyEarsBlack",
                 "Base.Hat_BunnyEarsWhite"
             ]
         },
-        "Bunny Suit (black)": {
+        "Bunny Suit": {
             "categories": [
                 "Full body"
             ],
             "item_id": [
-                "Base.BunnySuitBlack"
-            ]
-        },
-        "Bunny Suit (pink)": {
-            "categories": [
-                "Full body"
-            ],
-            "item_id": [
+                "Base.BunnySuitBlack",
                 "Base.BunnySuitPink"
             ]
         },
@@ -7623,14 +6953,7 @@
                 "Miscellaneous food"
             ],
             "item_id": [
-                "Base.Burger"
-            ]
-        },
-        "Burger (crafted)": {
-            "categories": [
-                "Evolved recipes"
-            ],
-            "item_id": [
+                "Base.Burger",
                 "Base.BurgerRecipe"
             ]
         },
@@ -7719,14 +7042,7 @@
                 "Miscellaneous food"
             ],
             "item_id": [
-                "Base.Burrito"
-            ]
-        },
-        "Burrito (crafted)": {
-            "categories": [
-                "Evolved recipes"
-            ],
-            "item_id": [
+                "Base.Burrito",
                 "Base.BurritoRecipe"
             ]
         },
@@ -7735,14 +7051,7 @@
                 "Junk"
             ],
             "item_id": [
-                "Base.BusinessCard"
-            ]
-        },
-        "Business Card (personal)": {
-            "categories": [
-                "Junk"
-            ],
-            "item_id": [
+                "Base.BusinessCard",
                 "Base.BusinessCard_Personal"
             ]
         },
@@ -7952,27 +7261,13 @@
                 "Base.Calculator"
             ]
         },
-        "Calf Head (Angus)": {
+        "Calf Head": {
             "categories": [
                 "Animal parts"
             ],
             "item_id": [
-                "Base.Calf_Head_Angus"
-            ]
-        },
-        "Calf Head (Holstein)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
-                "Base.Calf_Head_Holstein"
-            ]
-        },
-        "Calf Head (Simmental)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
+                "Base.Calf_Head_Angus",
+                "Base.Calf_Head_Holstein",
                 "Base.Calf_Head_Simmental"
             ]
         },
@@ -7984,51 +7279,23 @@
                 "Base.Calf_Skull"
             ]
         },
-        "Calfhide Coat (Angus)": {
+        "Calfhide Coat": {
             "categories": [
                 "Clothing"
             ],
             "item_id": [
-                "Base.JacketLong_AngusCalfHide"
-            ]
-        },
-        "Calfhide Coat (Holstein)": {
-            "categories": [
-                "Clothing"
-            ],
-            "item_id": [
-                "Base.JacketLong_HolsteinCalfHide"
-            ]
-        },
-        "Calfhide Coat (Simmental)": {
-            "categories": [
-                "Clothing"
-            ],
-            "item_id": [
+                "Base.JacketLong_AngusCalfHide",
+                "Base.JacketLong_HolsteinCalfHide",
                 "Base.JacketLong_SimmentalCalfHide"
             ]
         },
-        "Calfhide Jacket (Angus)": {
+        "Calfhide Jacket": {
             "categories": [
                 "Clothing"
             ],
             "item_id": [
-                "Base.Jacket_AngusCalfHide"
-            ]
-        },
-        "Calfhide Jacket (Holstein)": {
-            "categories": [
-                "Clothing"
-            ],
-            "item_id": [
-                "Base.Jacket_HolsteinCalfHide"
-            ]
-        },
-        "Calfhide Jacket (Simmental)": {
-            "categories": [
-                "Clothing"
-            ],
-            "item_id": [
+                "Base.Jacket_AngusCalfHide",
+                "Base.Jacket_HolsteinCalfHide",
                 "Base.Jacket_SimmentalCalfHide"
             ]
         },
@@ -8133,7 +7400,7 @@
         },
         "Can of Water": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.WaterRationCan_Open"
@@ -8377,25 +7644,11 @@
         },
         "Canteen": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
-                "Base.Canteen"
-            ]
-        },
-        "Canteen (ceramic)": {
-            "categories": [
-                "Water containers"
-            ],
-            "item_id": [
-                "Base.CanteenClay"
-            ]
-        },
-        "Canteen (military)": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
+                "Base.Canteen",
+                "Base.CanteenClay",
                 "Base.CanteenMilitary",
                 "Base.CanteenMilitaryFull"
             ]
@@ -8836,30 +8089,9 @@
                 "Protective gear"
             ],
             "item_id": [
-                "Base.Vest_CatcherVest"
-            ]
-        },
-        "Catcher's Vest (blue)": {
-            "categories": [
-                "Vests"
-            ],
-            "item_id": [
-                "Base.Vest_CatcherVest_Blue"
-            ]
-        },
-        "Catcher's Vest (green)": {
-            "categories": [
-                "Vests"
-            ],
-            "item_id": [
-                "Base.Vest_CatcherVest_Green"
-            ]
-        },
-        "Catcher's Vest (red)": {
-            "categories": [
-                "Vests"
-            ],
-            "item_id": [
+                "Base.Vest_CatcherVest",
+                "Base.Vest_CatcherVest_Blue",
+                "Base.Vest_CatcherVest_Green",
                 "Base.Vest_CatcherVest_Red"
             ]
         },
@@ -9266,19 +8498,12 @@
                 "Base.Pie"
             ]
         },
-        "Chess Pieces (black)": {
+        "Chess Pieces": {
             "categories": [
                 "Junk"
             ],
             "item_id": [
-                "Base.ChessBlack"
-            ]
-        },
-        "Chess Pieces (white)": {
-            "categories": [
-                "Junk"
-            ],
-            "item_id": [
+                "Base.ChessBlack",
                 "Base.ChessWhite"
             ]
         },
@@ -9362,19 +8587,12 @@
                 "Base.ChickenFoot"
             ]
         },
-        "Chicken Head (brown)": {
+        "Chicken Head": {
             "categories": [
                 "Animal parts"
             ],
             "item_id": [
-                "Base.Chicken_Hen_Brown_Head"
-            ]
-        },
-        "Chicken Head (white)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
+                "Base.Chicken_Hen_Brown_Head",
                 "Base.Chicken_Hen_White_Head"
             ]
         },
@@ -9700,30 +8918,9 @@
                 "Container items"
             ],
             "item_id": [
-                "Base.CigarBox"
-            ]
-        },
-        "Cigar Box (gaming)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.CigarBox_Gaming"
-            ]
-        },
-        "Cigar Box (keepsakes)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.CigarBox_Keepsakes"
-            ]
-        },
-        "Cigar Box (kids)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
+                "Base.CigarBox",
+                "Base.CigarBox_Gaming",
+                "Base.CigarBox_Keepsakes",
                 "Base.CigarBox_Kids"
             ]
         },
@@ -9772,14 +8969,7 @@
                 "Wild herbs"
             ],
             "item_id": [
-                "Base.CilantroDried"
-            ]
-        },
-        "Cilantro (Dried) (seasoning)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
+                "Base.CilantroDried",
                 "Base.Seasoning_Cilantro"
             ]
         },
@@ -9861,14 +9051,7 @@
                 "Short blunt weapons"
             ],
             "item_id": [
-                "Base.Hammer"
-            ]
-        },
-        "Claw Hammer (forged)": {
-            "categories": [
-                "Short blunt weapons"
-            ],
-            "item_id": [
+                "Base.Hammer",
                 "Base.HammerForged"
             ]
         },
@@ -10096,37 +9279,16 @@
                 "Base.Clipboard"
             ]
         },
-        "Cloth Gun Case (JS-2000 shotgun)": {
+        "Cloth Gun Case": {
             "categories": [
                 "Wearable containers"
             ],
             "item_id": [
-                "Base.Bag_ShotgunCaseCloth"
-            ]
-        },
-        "Cloth Gun Case (MSR700 rifle)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
-                "Base.Bag_RifleCaseCloth"
-            ]
-        },
-        "Cloth Gun Case (MSR788 rifle)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
+                "Base.Bag_ShotgunCaseCloth2",
+                "Base.Bag_RifleCaseCloth",
                 "Base.Bag_RifleCaseCloth2",
-                "Base.Bag_RifleCaseClothCamo"
-            ]
-        },
-        "Cloth Gun Case (double barrel shotgun)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
-                "Base.Bag_ShotgunCaseCloth2"
+                "Base.Bag_RifleCaseClothCamo",
+                "Base.Bag_ShotgunCaseCloth"
             ]
         },
         "Cloth Headwrap (Fully Closed)": {
@@ -10150,14 +9312,7 @@
                 "Short blunt weapons"
             ],
             "item_id": [
-                "Base.ClubHammer"
-            ]
-        },
-        "Club Hammer (forged)": {
-            "categories": [
-                "Short blunt weapons"
-            ],
-            "item_id": [
+                "Base.ClubHammer",
                 "Base.ClubHammerForged"
             ]
         },
@@ -10466,17 +9621,10 @@
         },
         "Cooking Pot": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
-                "Base.Pot"
-            ]
-        },
-        "Cooking Pot (forged)": {
-            "categories": [
-                "Cooking"
-            ],
-            "item_id": [
+                "Base.Pot",
                 "Base.PotForged"
             ]
         },
@@ -10501,38 +9649,10 @@
                 "Handheld containers"
             ],
             "item_id": [
-                "Base.Cooler"
-            ]
-        },
-        "Cooler (beer)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Cooler_Beer"
-            ]
-        },
-        "Cooler (meat)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Cooler_Meat"
-            ]
-        },
-        "Cooler (seafood)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Cooler_Seafood"
-            ]
-        },
-        "Cooler (soda)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
+                "Base.Cooler",
+                "Base.Cooler_Beer",
+                "Base.Cooler_Meat",
+                "Base.Cooler_Seafood",
                 "Base.Cooler_Soda"
             ]
         },
@@ -10749,30 +9869,9 @@
                 "Underwear"
             ],
             "item_id": [
-                "Base.Corset"
-            ]
-        },
-        "Corset (black)": {
-            "categories": [
-                "Underwear"
-            ],
-            "item_id": [
-                "Base.Corset_Black"
-            ]
-        },
-        "Corset (medical)": {
-            "categories": [
-                "Underwear"
-            ],
-            "item_id": [
-                "Base.Corset_Medical"
-            ]
-        },
-        "Corset (red)": {
-            "categories": [
-                "Underwear"
-            ],
-            "item_id": [
+                "Base.Corset",
+                "Base.Corset_Black",
+                "Base.Corset_Medical",
                 "Base.Corset_Red"
             ]
         },
@@ -10858,30 +9957,9 @@
                 "Full body"
             ],
             "item_id": [
-                "Base.Boilersuit"
-            ]
-        },
-        "Coveralls (SWAT)": {
-            "categories": [
-                "Full body"
-            ],
-            "item_id": [
-                "Base.Boilersuit_SWAT"
-            ]
-        },
-        "Coveralls (blue and red)": {
-            "categories": [
-                "Full body"
-            ],
-            "item_id": [
-                "Base.Boilersuit_BlueRed"
-            ]
-        },
-        "Coveralls (yellow)": {
-            "categories": [
-                "Full body"
-            ],
-            "item_id": [
+                "Base.Boilersuit",
+                "Base.Boilersuit_BlueRed",
+                "Base.Boilersuit_SWAT",
                 "Base.Boilersuit_Yellow"
             ]
         },
@@ -10901,27 +9979,13 @@
                 "Base.Dung_Cow"
             ]
         },
-        "Cow Head (Angus)": {
+        "Cow Head": {
             "categories": [
                 "Animal parts"
             ],
             "item_id": [
-                "Base.Cow_Head_Angus"
-            ]
-        },
-        "Cow Head (Holstein)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
-                "Base.Cow_Head_Holstein"
-            ]
-        },
-        "Cow Head (Simmental)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
+                "Base.Cow_Head_Angus",
+                "Base.Cow_Head_Holstein",
                 "Base.Cow_Head_Simmental"
             ]
         },
@@ -11106,22 +10170,8 @@
                 "Full body"
             ],
             "item_id": [
-                "Base.Dress_Long_Crafted_Denim"
-            ]
-        },
-        "Crafted Denim Dress - Full Length (black)": {
-            "categories": [
-                "Full body"
-            ],
-            "item_id": [
-                "Base.Dress_Long_Crafted_DenimBlack"
-            ]
-        },
-        "Crafted Denim Dress - Full Length (light)": {
-            "categories": [
-                "Full body"
-            ],
-            "item_id": [
+                "Base.Dress_Long_Crafted_Denim",
+                "Base.Dress_Long_Crafted_DenimBlack",
                 "Base.Dress_Long_Crafted_DenimLight"
             ]
         },
@@ -11130,22 +10180,8 @@
                 "Full body"
             ],
             "item_id": [
-                "Base.Dress_Knees_Crafted_Denim"
-            ]
-        },
-        "Crafted Denim Dress - Knee-length Strapless (black)": {
-            "categories": [
-                "Full body"
-            ],
-            "item_id": [
-                "Base.Dress_Knees_Crafted_DenimBlack"
-            ]
-        },
-        "Crafted Denim Dress - Knee-length Strapless (light)": {
-            "categories": [
-                "Full body"
-            ],
-            "item_id": [
+                "Base.Dress_Knees_Crafted_Denim",
+                "Base.Dress_Knees_Crafted_DenimBlack",
                 "Base.Dress_Knees_Crafted_DenimLight"
             ]
         },
@@ -11154,22 +10190,8 @@
                 "Wearable containers"
             ],
             "item_id": [
-                "Base.Bag_ClothSatchel_Denim"
-            ]
-        },
-        "Crafted Denim Satchel (black)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
-                "Base.Bag_ClothSatchel_DenimBlack"
-            ]
-        },
-        "Crafted Denim Satchel (light)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
+                "Base.Bag_ClothSatchel_Denim",
+                "Base.Bag_ClothSatchel_DenimBlack",
                 "Base.Bag_ClothSatchel_DenimLight"
             ]
         },
@@ -11178,30 +10200,9 @@
                 "Shirts"
             ],
             "item_id": [
-                "Base.Shirt_Crafted_Denim"
-            ]
-        },
-        "Crafted Denim Shirt (black)": {
-            "categories": [
-                "Shirts"
-            ],
-            "item_id": [
-                "Base.Shirt_Crafted_DenimBlack"
-            ]
-        },
-        "Crafted Denim Shirt (light)": {
-            "categories": [
-                "Shirts"
-            ],
-            "item_id": [
-                "Base.Shirt_Crafted_DenimLight"
-            ]
-        },
-        "Crafted Denim Shirt (random)": {
-            "categories": [
-                "Shirts"
-            ],
-            "item_id": [
+                "Base.Shirt_Crafted_Denim",
+                "Base.Shirt_Crafted_DenimBlack",
+                "Base.Shirt_Crafted_DenimLight",
                 "Base.Shirt_Crafted_DenimRandom"
             ]
         },
@@ -11210,22 +10211,8 @@
                 "Skirts"
             ],
             "item_id": [
-                "Base.Skirt_Knees_Crafted_Denim"
-            ]
-        },
-        "Crafted Denim Skirt - Knee-length (black)": {
-            "categories": [
-                "Skirts"
-            ],
-            "item_id": [
-                "Base.Skirt_Knees_Crafted_DenimBlack"
-            ]
-        },
-        "Crafted Denim Skirt - Knee-length (light)": {
-            "categories": [
-                "Skirts"
-            ],
-            "item_id": [
+                "Base.Skirt_Knees_Crafted_Denim",
+                "Base.Skirt_Knees_Crafted_DenimBlack",
                 "Base.Skirt_Knees_Crafted_DenimLight"
             ]
         },
@@ -11234,22 +10221,8 @@
                 "Skirts"
             ],
             "item_id": [
-                "Base.Skirt_Long_Crafted_Denim"
-            ]
-        },
-        "Crafted Denim Skirt - Long (black)": {
-            "categories": [
-                "Skirts"
-            ],
-            "item_id": [
-                "Base.Skirt_Long_Crafted_DenimBlack"
-            ]
-        },
-        "Crafted Denim Skirt - Long (light)": {
-            "categories": [
-                "Skirts"
-            ],
-            "item_id": [
+                "Base.Skirt_Long_Crafted_Denim",
+                "Base.Skirt_Long_Crafted_DenimBlack",
                 "Base.Skirt_Long_Crafted_DenimLight"
             ]
         },
@@ -11282,22 +10255,8 @@
                 "Shirts"
             ],
             "item_id": [
-                "Base.Shirt_NoSleeves_Crafted_Denim"
-            ]
-        },
-        "Crafted Sleeveless Denim Shirt (black)": {
-            "categories": [
-                "Shirts"
-            ],
-            "item_id": [
-                "Base.Shirt_NoSleeves_Crafted_DenimBlack"
-            ]
-        },
-        "Crafted Sleeveless Denim Shirt (light)": {
-            "categories": [
-                "Shirts"
-            ],
-            "item_id": [
+                "Base.Shirt_NoSleeves_Crafted_Denim",
+                "Base.Shirt_NoSleeves_Crafted_DenimBlack",
                 "Base.Shirt_NoSleeves_Crafted_DenimLight"
             ]
         },
@@ -11354,14 +10313,7 @@
                 "Junk"
             ],
             "item_id": [
-                "Base.CreditCard"
-            ]
-        },
-        "Credit Card (stolen)": {
-            "categories": [
-                "Junk"
-            ],
-            "item_id": [
+                "Base.CreditCard",
                 "Base.CreditCard_Stolen"
             ]
         },
@@ -11431,14 +10383,7 @@
                 "Long blunt weapons"
             ],
             "item_id": [
-                "Base.Crowbar"
-            ]
-        },
-        "Crowbar (forged)": {
-            "categories": [
-                "Long blunt weapons"
-            ],
-            "item_id": [
+                "Base.Crowbar",
                 "Base.CrowbarForged"
             ]
         },
@@ -11610,19 +10555,12 @@
                 "Base.Curacao"
             ]
         },
-        "Cutting Board (plastic)": {
+        "Cutting Board": {
             "categories": [
                 "Junk"
             ],
             "item_id": [
-                "Base.CuttingBoardPlastic"
-            ]
-        },
-        "Cutting Board (wood)": {
-            "categories": [
-                "Junk"
-            ],
-            "item_id": [
+                "Base.CuttingBoardPlastic",
                 "Base.CuttingBoardWooden"
             ]
         },
@@ -12060,30 +10998,9 @@
                 "Pants"
             ],
             "item_id": [
-                "Base.Trousers_Crafted_Denim"
-            ]
-        },
-        "Denim Crafted Pants (black)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
-                "Base.Trousers_Crafted_DenimBlack"
-            ]
-        },
-        "Denim Crafted Pants (light)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
-                "Base.Trousers_Crafted_DenimLight"
-            ]
-        },
-        "Denim Crafted Pants (random)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
+                "Base.Trousers_Crafted_Denim",
+                "Base.Trousers_Crafted_DenimBlack",
+                "Base.Trousers_Crafted_DenimLight",
                 "Base.Trousers_Crafted_DenimRandom"
             ]
         },
@@ -12153,14 +11070,6 @@
             ],
             "item_id": [
                 "Base.DentedCan"
-            ]
-        },
-        "Dented Unlabeled Can of Food (Open)": {
-            "categories": [
-                "Canned food"
-            ],
-            "item_id": [
-                "Base.DentedCan_Open"
             ]
         },
         "Deux Bar": {
@@ -12276,22 +11185,15 @@
                 "Base.Pop"
             ]
         },
-        "Digital Watch (black)": {
-            "categories": [
-                "Electronics"
-            ],
-            "item_id": [
-                "Base.WristWatch_Right_DigitalBlack",
-                "Base.WristWatch_Left_DigitalBlack"
-            ]
-        },
-        "Digital Watch (red)": {
+        "Digital Watch": {
             "categories": [
                 "Electronics"
             ],
             "item_id": [
                 "Base.WristWatch_Right_DigitalRed",
-                "Base.WristWatch_Left_DigitalRed"
+                "Base.WristWatch_Left_DigitalRed",
+                "Base.WristWatch_Right_DigitalBlack",
+                "Base.WristWatch_Left_DigitalBlack"
             ]
         },
         "Digital Watch - Metallic Dress Style": {
@@ -12325,7 +11227,7 @@
         },
         "Dispenser Bottle": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.WaterDispenserBottle"
@@ -12452,14 +11354,7 @@
                 "Literature"
             ],
             "item_id": [
-                "Base.Doodle"
-            ]
-        },
-        "Doodle (kid)": {
-            "categories": [
-                "Literature"
-            ],
-            "item_id": [
+                "Base.Doodle",
                 "Base.DoodleKids"
             ]
         },
@@ -12599,14 +11494,7 @@
                 "Full body"
             ],
             "item_id": [
-                "Base.Dress_SmallStraps"
-            ]
-        },
-        "Dress - Small (black)": {
-            "categories": [
-                "Full body"
-            ],
-            "item_id": [
+                "Base.Dress_SmallStraps",
                 "Base.Dress_SmallBlackStraps"
             ]
         },
@@ -12647,14 +11535,7 @@
                 "Full body"
             ],
             "item_id": [
-                "Base.Dress_SmallStrapless"
-            ]
-        },
-        "Dress - Small, Strapless (black)": {
-            "categories": [
-                "Full body"
-            ],
-            "item_id": [
+                "Base.Dress_SmallStrapless",
                 "Base.Dress_SmallBlackStrapless"
             ]
         },
@@ -12775,14 +11656,7 @@
                 "Short blunt weapons"
             ],
             "item_id": [
-                "Base.DumbBell"
-            ]
-        },
-        "Dumbbell (forged)": {
-            "categories": [
-                "Short blunt weapons"
-            ],
-            "item_id": [
+                "Base.DumbBell",
                 "Base.DumbBell_Forged"
             ]
         },
@@ -13080,7 +11954,9 @@
                 "Base.ElbowPad_Right_TINT",
                 "Base.ElbowPad_Left_TINT",
                 "Base.ElbowPad_Right_Workman",
-                "Base.ElbowPad_Left_Workman"
+                "Base.ElbowPad_Left_Workman",
+                "Base.ElbowPad_Right_Military",
+                "Base.ElbowPad_Left_Military"
             ]
         },
         "Electric Bass": {
@@ -13165,7 +12041,7 @@
         },
         "Empty Bottle (Red Wine)": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.WineEmpty2"
@@ -13684,19 +12560,12 @@
                 "e502be90-8631-43d4-9ebd-d28f9401484c"
             ]
         },
-        "Ewe Head (black)": {
+        "Ewe Head": {
             "categories": [
                 "Animal parts"
             ],
             "item_id": [
-                "Base.Sheep_Ewe_Head_Black"
-            ]
-        },
-        "Ewe Head (white)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
+                "Base.Sheep_Ewe_Head_Black",
                 "Base.Sheep_Ewe_Head_White"
             ]
         },
@@ -14028,14 +12897,7 @@
                 "Gloves"
             ],
             "item_id": [
-                "Base.Gloves_FingerlessLeatherGloves"
-            ]
-        },
-        "Fingerless Gloves - Leather (black)": {
-            "categories": [
-                "Gloves"
-            ],
-            "item_id": [
+                "Base.Gloves_FingerlessLeatherGloves",
                 "Base.Gloves_FingerlessLeatherGloves_Black"
             ]
         },
@@ -14423,14 +13285,7 @@
                 "Light sources"
             ],
             "item_id": [
-                "Base.FlashLight_AngleHead"
-            ]
-        },
-        "Flashlight - Angle Headed (army)": {
-            "categories": [
-                "Light sources"
-            ],
-            "item_id": [
+                "Base.FlashLight_AngleHead",
                 "Base.FlashLight_AngleHead_Army"
             ]
         },
@@ -14743,14 +13598,7 @@
                 "First aid tools"
             ],
             "item_id": [
-                "Base.SutureNeedleHolder"
-            ]
-        },
-        "Forceps (forged)": {
-            "categories": [
-                "Medical items"
-            ],
-            "item_id": [
+                "Base.SutureNeedleHolder",
                 "Base.Forceps_Forged"
             ]
         },
@@ -14831,7 +13679,7 @@
         },
         "Fountain Cup of Water": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.FountainCupWater"
@@ -14939,14 +13787,7 @@
                 "Miscellaneous food"
             ],
             "item_id": [
-                "Base.FriedOnionRings"
-            ]
-        },
-        "Fried Onion Rings (crafted)": {
-            "categories": [
-                "Prepared food"
-            ],
-            "item_id": [
+                "Base.FriedOnionRings",
                 "Base.FriedOnionRingsCraft"
             ]
         },
@@ -14955,14 +13796,7 @@
                 "Prepared food"
             ],
             "item_id": [
-                "Base.ShrimpFried"
-            ]
-        },
-        "Fried Shrimp (crafted)": {
-            "categories": [
-                "Prepared food"
-            ],
-            "item_id": [
+                "Base.ShrimpFried",
                 "Base.ShrimpFriedCraft"
             ]
         },
@@ -14980,14 +13814,7 @@
                 "Miscellaneous food"
             ],
             "item_id": [
-                "Base.Fries"
-            ]
-        },
-        "Fries (french fries)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
+                "Base.Fries",
                 "Base.FrenchFries"
             ]
         },
@@ -15103,14 +13930,7 @@
                 "Short blunt weapons"
             ],
             "item_id": [
-                "Base.Pan"
-            ]
-        },
-        "Frying Pan (forged)": {
-            "categories": [
-                "Short blunt weapons"
-            ],
-            "item_id": [
+                "Base.Pan",
                 "Base.PanForged"
             ]
         },
@@ -15255,27 +14075,13 @@
                 "Base.Chocolate_GalacticDairy"
             ]
         },
-        "Game Pieces (black)": {
+        "Game Pieces": {
             "categories": [
                 "Junk"
             ],
             "item_id": [
-                "Base.GamePieceBlack"
-            ]
-        },
-        "Game Pieces (red)": {
-            "categories": [
-                "Junk"
-            ],
-            "item_id": [
-                "Base.GamePieceRed"
-            ]
-        },
-        "Game Pieces (white)": {
-            "categories": [
-                "Junk"
-            ],
-            "item_id": [
+                "Base.GamePieceBlack",
+                "Base.GamePieceRed",
                 "Base.GamePieceWhite"
             ]
         },
@@ -15333,14 +14139,7 @@
                 "Spears"
             ],
             "item_id": [
-                "Base.GardenFork"
-            ]
-        },
-        "Garden Fork (forged)": {
-            "categories": [
-                "Spears"
-            ],
-            "item_id": [
+                "Base.GardenFork",
                 "Base.GardenFork_Forged"
             ]
         },
@@ -15349,14 +14148,7 @@
                 "Long blunt weapons"
             ],
             "item_id": [
-                "Base.GardenForkHead"
-            ]
-        },
-        "Garden Fork Head (forged)": {
-            "categories": [
-                "Long blunt weapons"
-            ],
-            "item_id": [
+                "Base.GardenForkHead",
                 "Base.GardenForkHead_Forged"
             ]
         },
@@ -15373,14 +14165,7 @@
                 "Long blunt weapons"
             ],
             "item_id": [
-                "Base.GardenHoe"
-            ]
-        },
-        "Garden Hoe (forged)": {
-            "categories": [
-                "Long blunt weapons"
-            ],
-            "item_id": [
+                "Base.GardenHoe",
                 "Base.GardenHoeForged"
             ]
         },
@@ -15940,22 +14725,8 @@
                 "Gloves"
             ],
             "item_id": [
-                "Base.Gloves_LeatherGloves"
-            ]
-        },
-        "Gloves - Leather (black)": {
-            "categories": [
-                "Gloves"
-            ],
-            "item_id": [
-                "Base.Gloves_LeatherGlovesBlack"
-            ]
-        },
-        "Gloves - Leather (brown)": {
-            "categories": [
-                "Gloves"
-            ],
-            "item_id": [
+                "Base.Gloves_LeatherGloves",
+                "Base.Gloves_LeatherGlovesBlack",
                 "Base.Gloves_LeatherGlovesBrown"
             ]
         },
@@ -16313,38 +15084,6 @@
             ],
             "item_id": [
                 "Base.GreenpeasSeed"
-            ]
-        },
-        "Green Shemagh (Face Covering Scarf)": {
-            "categories": [
-                "Headwear"
-            ],
-            "item_id": [
-                "Base.ShemaghScarfFace_Green"
-            ]
-        },
-        "Green Shemagh (Fully Closed)": {
-            "categories": [
-                "Headwear"
-            ],
-            "item_id": [
-                "Base.Hat_ShemaghFull_Green"
-            ]
-        },
-        "Green Shemagh (Open Face)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
-                "Base.Hat_ShemaghFace_Green"
-            ]
-        },
-        "Green Shemagh (Scarf)": {
-            "categories": [
-                "Headwear"
-            ],
-            "item_id": [
-                "Base.ShemaghScarf_Green"
             ]
         },
         "Green Sunfish": {
@@ -16730,14 +15469,7 @@
                 "Short blade weapons"
             ],
             "item_id": [
-                "Base.HandScythe"
-            ]
-        },
-        "Hand Scythe (forged)": {
-            "categories": [
-                "Axes"
-            ],
-            "item_id": [
+                "Base.HandScythe",
                 "Base.HandScytheForged"
             ]
         },
@@ -16882,54 +15614,12 @@
                 "Hats"
             ],
             "item_id": [
-                "Base.Hat_Cowboy"
-            ]
-        },
-        "Hat - Cowboy (Angus)": {
-            "categories": [
-                "Clothing"
-            ],
-            "item_id": [
-                "Base.Hat_Cowboy_Angus"
-            ]
-        },
-        "Hat - Cowboy (Holstein)": {
-            "categories": [
-                "Clothing"
-            ],
-            "item_id": [
-                "Base.Hat_Cowboy_Holstein"
-            ]
-        },
-        "Hat - Cowboy (Simmental)": {
-            "categories": [
-                "Clothing"
-            ],
-            "item_id": [
-                "Base.Hat_Cowboy_Simmental"
-            ]
-        },
-        "Hat - Cowboy (black)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
-                "Base.Hat_Cowboy_Black"
-            ]
-        },
-        "Hat - Cowboy (cowhide)": {
-            "categories": [
-                "Clothing"
-            ],
-            "item_id": [
-                "Base.Hat_Cowboy_CowHide"
-            ]
-        },
-        "Hat - Cowboy (white)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
+                "Base.Hat_Cowboy",
+                "Base.Hat_Cowboy_Angus",
+                "Base.Hat_Cowboy_Black",
+                "Base.Hat_Cowboy_CowHide",
+                "Base.Hat_Cowboy_Holstein",
+                "Base.Hat_Cowboy_Simmental",
                 "Base.Hat_Cowboy_White"
             ]
         },
@@ -16946,14 +15636,7 @@
                 "Hats"
             ],
             "item_id": [
-                "Base.Hat_Fedora"
-            ]
-        },
-        "Hat - Fedora (delmonte)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
+                "Base.Hat_Fedora",
                 "Base.Hat_Fedora_Delmonte"
             ]
         },
@@ -17082,14 +15765,7 @@
                 "Hats"
             ],
             "item_id": [
-                "Base.Hat_Stovepipe"
-            ]
-        },
-        "Hat - Stovepipe (black)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
+                "Base.Hat_Stovepipe",
                 "Base.Hat_Stovepipe_Black"
             ]
         },
@@ -17138,14 +15814,7 @@
                 "Hats"
             ],
             "item_id": [
-                "Base.Hat_WinterHat"
-            ]
-        },
-        "Hat - Winter (sheep skin)": {
-            "categories": [
-                "Clothing"
-            ],
-            "item_id": [
+                "Base.Hat_WinterHat",
                 "Base.Hat_WinterHat_SheepSkin"
             ]
         },
@@ -17186,14 +15855,7 @@
                 "Axes"
             ],
             "item_id": [
-                "Base.HandAxe"
-            ]
-        },
-        "Hatchet (forged)": {
-            "categories": [
-                "Axes"
-            ],
-            "item_id": [
+                "Base.HandAxe",
                 "Base.HandAxeForged"
             ]
         },
@@ -17348,30 +16010,9 @@
                 "Helmets"
             ],
             "item_id": [
-                "Base.Hat_FootballHelmet"
-            ]
-        },
-        "Helmet - Football (blue)": {
-            "categories": [
-                "Helmets"
-            ],
-            "item_id": [
-                "Base.Hat_FootballHelmet_Blue"
-            ]
-        },
-        "Helmet - Football (red)": {
-            "categories": [
-                "Helmets"
-            ],
-            "item_id": [
-                "Base.Hat_FootballHelmet_Red"
-            ]
-        },
-        "Helmet - Football (white)": {
-            "categories": [
-                "Helmets"
-            ],
-            "item_id": [
+                "Base.Hat_FootballHelmet",
+                "Base.Hat_FootballHelmet_Blue",
+                "Base.Hat_FootballHelmet_Red",
                 "Base.Hat_FootballHelmet_White"
             ]
         },
@@ -17437,23 +16078,9 @@
                 "Helmets"
             ],
             "item_id": [
-                "Base.Hat_Army"
-            ]
-        },
-        "Helmet - Military (desert new)": {
-            "categories": [
-                "Helmets"
-            ],
-            "item_id": [
+                "Base.Hat_Army",
+                "Base.Hat_ArmyDesert",
                 "Base.Hat_ArmyDesertNew"
-            ]
-        },
-        "Helmet - Military (desert)": {
-            "categories": [
-                "Helmets"
-            ],
-            "item_id": [
-                "Base.Hat_ArmyDesert"
             ]
         },
         "Helmet - Mining": {
@@ -17469,14 +16096,7 @@
                 "Helmets"
             ],
             "item_id": [
-                "Base.Hat_CrashHelmetFULL"
-            ]
-        },
-        "Helmet - Motorcycle (black)": {
-            "categories": [
-                "Helmets"
-            ],
-            "item_id": [
+                "Base.Hat_CrashHelmetFULL",
                 "Base.Hat_CrashHelmetFULL_Black"
             ]
         },
@@ -17736,14 +16356,7 @@
                 "Wearable containers"
             ],
             "item_id": [
-                "Base.Bag_NormalHikingBag"
-            ]
-        },
-        "Hiking Backpack (travel)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
+                "Base.Bag_NormalHikingBag",
                 "Base.Bag_HikingBag_Travel"
             ]
         },
@@ -17895,30 +16508,9 @@
                 "Accessories"
             ],
             "item_id": [
-                "Base.HolsterSimple"
-            ]
-        },
-        "Holster (black)": {
-            "categories": [
-                "Accessories"
-            ],
-            "item_id": [
-                "Base.HolsterSimple_Black"
-            ]
-        },
-        "Holster (brown)": {
-            "categories": [
-                "Accessories"
-            ],
-            "item_id": [
-                "Base.HolsterSimple_Brown"
-            ]
-        },
-        "Holster (green)": {
-            "categories": [
-                "Accessories"
-            ],
-            "item_id": [
+                "Base.HolsterSimple",
+                "Base.HolsterSimple_Black",
+                "Base.HolsterSimple_Brown",
                 "Base.HolsterSimple_Green"
             ]
         },
@@ -18149,7 +16741,7 @@
         },
         "Hot Water Bottle": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.HotWaterBottle"
@@ -18184,14 +16776,7 @@
                 "Short blade weapons"
             ],
             "item_id": [
-                "Base.HuntingKnife"
-            ]
-        },
-        "Hunting Knife (forged)": {
-            "categories": [
-                "Short blade weapons"
-            ],
-            "item_id": [
+                "Base.HuntingKnife",
                 "Base.HuntingKnifeForged"
             ]
         },
@@ -18302,17 +16887,10 @@
         },
         "Hydration Pack": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
-                "Base.Bag_HydrationBackpack"
-            ]
-        },
-        "Hydration Pack (camo)": {
-            "categories": [
-                "Water containers"
-            ],
-            "item_id": [
+                "Base.Bag_HydrationBackpack",
                 "Base.Bag_HydrationBackpack_Camo"
             ]
         },
@@ -18354,30 +16932,9 @@
                 "Junk"
             ],
             "item_id": [
-                "Base.IDcard"
-            ]
-        },
-        "ID Card (female)": {
-            "categories": [
-                "Junk"
-            ],
-            "item_id": [
-                "Base.IDcard_Female"
-            ]
-        },
-        "ID Card (male)": {
-            "categories": [
-                "Junk"
-            ],
-            "item_id": [
-                "Base.IDcard_Male"
-            ]
-        },
-        "ID Card (stolen)": {
-            "categories": [
-                "Junk"
-            ],
-            "item_id": [
+                "Base.IDcard",
+                "Base.IDcard_Female",
+                "Base.IDcard_Male",
                 "Base.IDcard_Stolen"
             ]
         },
@@ -18423,14 +16980,7 @@
             ],
             "item_id": [
                 "Base.ConeIcecream",
-                "Base.ConeIcecreamMelted"
-            ]
-        },
-        "Ice Cream Cone (crafted)": {
-            "categories": [
-                "Evolved recipes"
-            ],
-            "item_id": [
+                "Base.ConeIcecreamMelted",
                 "Base.ConeIcecreamToppings"
             ]
         },
@@ -18463,30 +17013,9 @@
                 "Protective gear"
             ],
             "item_id": [
-                "Base.Gloves_IceHockeyGloves"
-            ]
-        },
-        "Ice Hockey Gloves (black)": {
-            "categories": [
-                "Gloves"
-            ],
-            "item_id": [
-                "Base.Gloves_IceHockeyGloves_Black"
-            ]
-        },
-        "Ice Hockey Gloves (blue)": {
-            "categories": [
-                "Gloves"
-            ],
-            "item_id": [
-                "Base.Gloves_IceHockeyGloves_Blue"
-            ]
-        },
-        "Ice Hockey Gloves (white)": {
-            "categories": [
-                "Gloves"
-            ],
-            "item_id": [
+                "Base.Gloves_IceHockeyGloves",
+                "Base.Gloves_IceHockeyGloves_Black",
+                "Base.Gloves_IceHockeyGloves_Blue",
                 "Base.Gloves_IceHockeyGloves_White"
             ]
         },
@@ -18585,14 +17114,7 @@
             ],
             "item_id": [
                 "Base.PonchoGarbageBag",
-                "Base.PonchoGarbageBagDOWN"
-            ]
-        },
-        "Improvised Poncho (tarp)": {
-            "categories": [
-                "Jackets"
-            ],
-            "item_id": [
+                "Base.PonchoGarbageBagDOWN",
                 "Base.PonchoTarp",
                 "Base.PonchoTarpDOWN"
             ]
@@ -19023,46 +17545,11 @@
                 "Jackets"
             ],
             "item_id": [
-                "Base.Jacket_Shellsuit_TINT"
-            ]
-        },
-        "Jacket - Shell Suit (black)": {
-            "categories": [
-                "Jackets"
-            ],
-            "item_id": [
-                "Base.Jacket_Shellsuit_Black"
-            ]
-        },
-        "Jacket - Shell Suit (blue)": {
-            "categories": [
-                "Jackets"
-            ],
-            "item_id": [
-                "Base.Jacket_Shellsuit_Blue"
-            ]
-        },
-        "Jacket - Shell Suit (green)": {
-            "categories": [
-                "Jackets"
-            ],
-            "item_id": [
-                "Base.Jacket_Shellsuit_Green"
-            ]
-        },
-        "Jacket - Shell Suit (pink)": {
-            "categories": [
-                "Jackets"
-            ],
-            "item_id": [
-                "Base.Jacket_Shellsuit_Pink"
-            ]
-        },
-        "Jacket - Shell Suit (teal)": {
-            "categories": [
-                "Jackets"
-            ],
-            "item_id": [
+                "Base.Jacket_Shellsuit_TINT",
+                "Base.Jacket_Shellsuit_Black",
+                "Base.Jacket_Shellsuit_Blue",
+                "Base.Jacket_Shellsuit_Green",
+                "Base.Jacket_Shellsuit_Pink",
                 "Base.Jacket_Shellsuit_Teal"
             ]
         },
@@ -19079,22 +17566,8 @@
                 "Jackets"
             ],
             "item_id": [
-                "Base.Suit_JacketTINT"
-            ]
-        },
-        "Jacket - Suit (black)": {
-            "categories": [
-                "Jackets"
-            ],
-            "item_id": [
-                "Base.Suit_Jacket"
-            ]
-        },
-        "Jacket - Suit (white)": {
-            "categories": [
-                "Jackets"
-            ],
-            "item_id": [
+                "Base.Suit_JacketTINT",
+                "Base.Suit_Jacket",
                 "Base.Suit_Jacket_White"
             ]
         },
@@ -19365,14 +17838,7 @@
                 "Pants"
             ],
             "item_id": [
-                "Base.Trousers_Denim"
-            ]
-        },
-        "Jeans (light)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
+                "Base.Trousers_Denim",
                 "Base.TrousersMesh_DenimLight"
             ]
         },
@@ -19467,14 +17933,7 @@
                 "Container items"
             ],
             "item_id": [
-                "Base.JewelleryBox"
-            ]
-        },
-        "Jewelry Box (fancy)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
+                "Base.JewelleryBox",
                 "Base.JewelleryBox_Fancy"
             ]
         },
@@ -19582,30 +18041,9 @@
                 "Drinks"
             ],
             "item_id": [
-                "Base.JuiceBox"
-            ]
-        },
-        "Juice Box (apple)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
-                "Base.JuiceBoxApple"
-            ]
-        },
-        "Juice Box (fruit punch)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
-                "Base.JuiceBoxFruitpunch"
-            ]
-        },
-        "Juice Box (orange)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
+                "Base.JuiceBox",
+                "Base.JuiceBoxApple",
+                "Base.JuiceBoxFruitpunch",
                 "Base.JuiceBoxOrange"
             ]
         },
@@ -19622,14 +18060,7 @@
                 "Full body"
             ],
             "item_id": [
-                "Base.Boilersuit_Prisoner"
-            ]
-        },
-        "Jumpsuit - Prisoner (khaki)": {
-            "categories": [
-                "Full body"
-            ],
-            "item_id": [
+                "Base.Boilersuit_Prisoner",
                 "Base.Boilersuit_PrisonerKhaki"
             ]
         },
@@ -19735,7 +18166,7 @@
         },
         "Kettle": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.Kettle"
@@ -19778,14 +18209,7 @@
                 "Key rings"
             ],
             "item_id": [
-                "Base.KeyRing"
-            ]
-        },
-        "Key Ring (car dealer)": {
-            "categories": [
-                "Key rings"
-            ],
-            "item_id": [
+                "Base.KeyRing",
                 "Base.KeyRing_CarDealer"
             ]
         },
@@ -20043,14 +18467,7 @@
                 "Short blade weapons"
             ],
             "item_id": [
-                "Base.KitchenKnife"
-            ]
-        },
-        "Kitchen Knife (forged)": {
-            "categories": [
-                "Melee weapons"
-            ],
-            "item_id": [
+                "Base.KitchenKnife",
                 "Base.KitchenKnifeForged"
             ]
         },
@@ -20134,7 +18551,9 @@
                 "Base.Kneepad_Right_Tactical",
                 "Base.Kneepad_Left_Tactical",
                 "Base.Kneepad_Right_TINT",
-                "Base.Kneepad_Left_TINT"
+                "Base.Kneepad_Left_TINT",
+                "Base.Kneepad_Right_Military",
+                "Base.Kneepad_Left_Military"
             ]
         },
         "Knitting Needles": {
@@ -20204,19 +18623,12 @@
                 "Base.Ladybug"
             ]
         },
-        "Lamb Head (black)": {
+        "Lamb Head": {
             "categories": [
                 "Animal parts"
             ],
             "item_id": [
-                "Base.Sheep_Lamb_Head_Black"
-            ]
-        },
-        "Lamb Head (white)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
+                "Base.Sheep_Lamb_Head_Black",
                 "Base.Sheep_Lamb_Head_White"
             ]
         },
@@ -20433,14 +18845,6 @@
                 "Base.MalachiteLarge"
             ]
         },
-        "Large Crafted Framepack": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
-                "Base.Bag_CraftedFramepack_Large"
-            ]
-        },
         "Large Crystal": {
             "categories": [
                 "Items"
@@ -20654,22 +19058,8 @@
                 "Container items"
             ],
             "item_id": [
-                "Base.Bag_Laundry"
-            ]
-        },
-        "Laundry Bag (hospital)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_LaundryHospital"
-            ]
-        },
-        "Laundry Bag (linen)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
+                "Base.Bag_Laundry",
+                "Base.Bag_LaundryHospital",
                 "Base.Bag_LaundryLinen"
             ]
         },
@@ -20734,15 +19124,8 @@
                 "Jackets"
             ],
             "item_id": [
-                "Base.Jacket_Black"
-            ]
-        },
-        "Leather Coat (black)": {
-            "categories": [
-                "Jackets"
-            ],
-            "item_id": [
-                "Base.JacketLong_Black"
+                "Base.JacketLong_Black",
+                "Base.JacketLong_Random"
             ]
         },
         "Leather Codpiece": {
@@ -20767,31 +19150,10 @@
                 "Jackets"
             ],
             "item_id": [
-                "Base.Jacket_Leather"
-            ]
-        },
-        "Leather Jacket (black)": {
-            "categories": [
-                "Jackets"
-            ],
-            "item_id": [
-                "Base.Jacket_LeatherBlack"
-            ]
-        },
-        "Leather Jacket (brown)": {
-            "categories": [
-                "Jackets"
-            ],
-            "item_id": [
+                "Base.Jacket_Black",
+                "Base.Jacket_Leather",
+                "Base.Jacket_LeatherBlack",
                 "Base.Jacket_LeatherBrown"
-            ]
-        },
-        "Leather Jacket (long)": {
-            "categories": [
-                "Jackets"
-            ],
-            "item_id": [
-                "Base.JacketLong_Random"
             ]
         },
         "Leather Jacket - Barrel Dogs": {
@@ -20960,20 +19322,13 @@
                 "Memento"
             ],
             "item_id": [
-                "Base.Vest_Leather_Biker"
-            ]
-        },
-        "Leather Vest with Patches (veteran)": {
-            "categories": [
-                "Vests"
-            ],
-            "item_id": [
+                "Base.Vest_Leather_Biker",
                 "Base.Vest_Leather_Veteran"
             ]
         },
         "Leather Water Bag": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.Bag_LeatherWaterBag"
@@ -21203,14 +19558,7 @@
                 "Sweets"
             ],
             "item_id": [
-                "Base.LicoriceBlack"
-            ]
-        },
-        "Licorice (red)": {
-            "categories": [
-                "Sweets"
-            ],
-            "item_id": [
+                "Base.LicoriceBlack",
                 "Base.LicoriceRed"
             ]
         },
@@ -21673,14 +20021,7 @@
                 "Shorts"
             ],
             "item_id": [
-                "Base.Shorts_LongSport"
-            ]
-        },
-        "Long Shorts - Sport (red)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
+                "Base.Shorts_LongSport",
                 "Base.Shorts_LongSport_Red"
             ]
         },
@@ -21706,14 +20047,7 @@
             ],
             "item_id": [
                 "Base.Tshirt_WhiteLongSleeve",
-                "Base.Tshirt_WhiteLongSleeveTINT"
-            ]
-        },
-        "Long Sleeve T-shirt (super color)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
+                "Base.Tshirt_WhiteLongSleeveTINT",
                 "Base.Tshirt_LongSleeve_SuperColor"
             ]
         },
@@ -22031,14 +20365,7 @@
                 "Long blade weapons"
             ],
             "item_id": [
-                "Base.Machete"
-            ]
-        },
-        "Machete (forged)": {
-            "categories": [
-                "Long blade weapons"
-            ],
-            "item_id": [
+                "Base.Machete",
                 "Base.MacheteForged"
             ]
         },
@@ -23600,7 +21927,7 @@
         },
         "Mayonnaise Bottle": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.MayonnaiseEmpty"
@@ -23619,14 +21946,7 @@
                 "Short blade weapons"
             ],
             "item_id": [
-                "Base.MeatCleaver"
-            ]
-        },
-        "Meat Cleaver (forged)": {
-            "categories": [
-                "Axes"
-            ],
-            "item_id": [
+                "Base.MeatCleaver",
                 "Base.MeatCleaverForged"
             ]
         },
@@ -24010,30 +22330,9 @@
                 "Wearable containers"
             ],
             "item_id": [
-                "Base.Bag_ALICEpack"
-            ]
-        },
-        "Military Backpack (army)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
-                "Base.Bag_ALICEpack_Army"
-            ]
-        },
-        "Military Backpack (desert)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
-                "Base.Bag_ALICEpack_DesertCamo"
-            ]
-        },
-        "Military Backpack (survivor)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
+                "Base.Bag_ALICEpack",
+                "Base.Bag_ALICEpack_Army",
+                "Base.Bag_ALICEpack_DesertCamo",
                 "Base.Bag_SurvivorBag"
             ]
         },
@@ -24080,28 +22379,12 @@
                 "Base.ThighBodyArmour_L_Army"
             ]
         },
-        "Military Elbow Pad": {
-            "categories": [
-                "Protective gear"
-            ],
-            "item_id": [
-                "Base.ElbowPad_Right_Military",
-                "Base.ElbowPad_Left_Military"
-            ]
-        },
         "Military Jacket - Desert Camo": {
             "categories": [
                 "Jackets"
             ],
             "item_id": [
-                "Base.Jacket_ArmyCamoDesert"
-            ]
-        },
-        "Military Jacket - Desert Camo (new)": {
-            "categories": [
-                "Jackets"
-            ],
-            "item_id": [
+                "Base.Jacket_ArmyCamoDesert",
                 "Base.Jacket_ArmyCamoDesertNew"
             ]
         },
@@ -24145,15 +22428,6 @@
                 "Base.Jacket_ArmyCamoUrban"
             ]
         },
-        "Military Kneepad": {
-            "categories": [
-                "Protective gear"
-            ],
-            "item_id": [
-                "Base.Kneepad_Right_Military",
-                "Base.Kneepad_Left_Military"
-            ]
-        },
         "Military Medal": {
             "categories": [
                 "Memento"
@@ -24167,14 +22441,7 @@
                 "Pants"
             ],
             "item_id": [
-                "Base.Trousers_CamoDesert"
-            ]
-        },
-        "Military Pants - Desert Camo (new)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
+                "Base.Trousers_CamoDesert",
                 "Base.Trousers_CamoDesertNew"
             ]
         },
@@ -24231,14 +22498,7 @@
                 "Shirts"
             ],
             "item_id": [
-                "Base.Shirt_CamoDesert"
-            ]
-        },
-        "Military Shirt - Desert Camo (new)": {
-            "categories": [
-                "Shirts"
-            ],
-            "item_id": [
+                "Base.Shirt_CamoDesert",
                 "Base.Shirt_CamoDesertNew"
             ]
         },
@@ -24343,14 +22603,7 @@
                 "T-shirts"
             ],
             "item_id": [
-                "Base.Tshirt_CamoDesert"
-            ]
-        },
-        "Military T-shirt - Desert Camo (new)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
+                "Base.Tshirt_CamoDesert",
                 "Base.Tshirt_CamoDesertNew"
             ]
         },
@@ -24749,14 +23002,7 @@
                 "Prepared food"
             ],
             "item_id": [
-                "Base.BakingTray_Muffin"
-            ]
-        },
-        "Muffin Tray with Muffins (crafted)": {
-            "categories": [
-                "Evolved recipes"
-            ],
-            "item_id": [
+                "Base.BakingTray_Muffin",
                 "Base.BakingTray_Muffin_Recipe"
             ]
         },
@@ -24834,7 +23080,7 @@
         },
         "Mug": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.Mugl",
@@ -25485,14 +23731,7 @@
             ],
             "item_id": [
                 "Base.EggOmelette",
-                "Base.OmeletteRecipeForged"
-            ]
-        },
-        "Omelette (crafted)": {
-            "categories": [
-                "Evolved recipes"
-            ],
-            "item_id": [
+                "Base.OmeletteRecipeForged",
                 "Base.OmeletteRecipe"
             ]
         },
@@ -25614,14 +23853,7 @@
                 "Wild herbs"
             ],
             "item_id": [
-                "Base.OreganoDried"
-            ]
-        },
-        "Oregano (Dried) (seasoning)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
+                "Base.OreganoDried",
                 "Base.Seasoning_Oregano"
             ]
         },
@@ -25818,30 +24050,9 @@
                 "Pants"
             ],
             "item_id": [
-                "Base.Shorts_FootballPants"
-            ]
-        },
-        "Padded Football Pants (black)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
-                "Base.Shorts_FootballPants_Black"
-            ]
-        },
-        "Padded Football Pants (gold)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
-                "Base.Shorts_FootballPants_Gold"
-            ]
-        },
-        "Padded Football Pants (white)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
+                "Base.Shorts_FootballPants",
+                "Base.Shorts_FootballPants_Black",
+                "Base.Shorts_FootballPants_Gold",
                 "Base.Shorts_FootballPants_White"
             ]
         },
@@ -25850,38 +24061,10 @@
                 "Pants"
             ],
             "item_id": [
-                "Base.Shorts_HockeyPants"
-            ]
-        },
-        "Padded Ice Hockey Pants (black)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
-                "Base.Shorts_HockeyPants_Black"
-            ]
-        },
-        "Padded Ice Hockey Pants (red)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
-                "Base.Shorts_HockeyPants_Red"
-            ]
-        },
-        "Padded Ice Hockey Pants (uni blue)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
-                "Base.Shorts_HockeyPants_UniBlue"
-            ]
-        },
-        "Padded Ice Hockey Pants (white)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
+                "Base.Shorts_HockeyPants",
+                "Base.Shorts_HockeyPants_Black",
+                "Base.Shorts_HockeyPants_Red",
+                "Base.Shorts_HockeyPants_UniBlue",
                 "Base.Shorts_HockeyPants_White"
             ]
         },
@@ -26047,7 +24230,7 @@
         },
         "Paint Bucket": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.PaintbucketEmpty"
@@ -26058,14 +24241,7 @@
                 "Carpentry tools"
             ],
             "item_id": [
-                "Base.Paintbrush"
-            ]
-        },
-        "Paintbrush (crafted)": {
-            "categories": [
-                "Tools"
-            ],
-            "item_id": [
+                "Base.Paintbrush",
                 "Base.PaintbrushCrafted"
             ]
         },
@@ -26091,14 +24267,7 @@
             ],
             "item_id": [
                 "Base.Pancakes",
-                "Base.PancakesCraft"
-            ]
-        },
-        "Pancakes (crafted)": {
-            "categories": [
-                "Evolved recipes"
-            ],
-            "item_id": [
+                "Base.PancakesCraft",
                 "Base.PancakesRecipe"
             ]
         },
@@ -26115,24 +24284,10 @@
                 "Pants"
             ],
             "item_id": [
-                "Base.Trousers"
-            ]
-        },
-        "Pants (jeans)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
+                "Base.Trousers",
                 "Base.Trousers_DefaultTEXTURE",
                 "Base.Trousers_DefaultTEXTURE_HUE",
-                "Base.Trousers_DefaultTEXTURE_TINT"
-            ]
-        },
-        "Pants (white)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
+                "Base.Trousers_DefaultTEXTURE_TINT",
                 "Base.Trousers_WhiteTEXTURE",
                 "Base.Trousers_WhiteTINT"
             ]
@@ -26286,46 +24441,11 @@
                 "Pants"
             ],
             "item_id": [
-                "Base.Trousers_Shellsuit_TINT"
-            ]
-        },
-        "Pants - Shell Suit (black)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
-                "Base.Trousers_Shellsuit_Black"
-            ]
-        },
-        "Pants - Shell Suit (blue)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
-                "Base.Trousers_Shellsuit_Blue"
-            ]
-        },
-        "Pants - Shell Suit (green)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
-                "Base.Trousers_Shellsuit_Green"
-            ]
-        },
-        "Pants - Shell Suit (pink)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
-                "Base.Trousers_Shellsuit_Pink"
-            ]
-        },
-        "Pants - Shell Suit (teal)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
+                "Base.Trousers_Shellsuit_TINT",
+                "Base.Trousers_Shellsuit_Black",
+                "Base.Trousers_Shellsuit_Blue",
+                "Base.Trousers_Shellsuit_Green",
+                "Base.Trousers_Shellsuit_Pink",
                 "Base.Trousers_Shellsuit_Teal"
             ]
         },
@@ -26350,31 +24470,10 @@
                 "Pants"
             ],
             "item_id": [
-                "Base.Trousers_SuitWhite_White"
-            ]
-        },
-        "Pants - Suit (black)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
-                "Base.Trousers_Suit"
-            ]
-        },
-        "Pants - Suit (colored)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
+                "Base.Trousers_SuitWhite_White",
+                "Base.Trousers_Suit",
+                "Base.Trousers_SuitTEXTURE",
                 "Base.Trousers_SuitWhite"
-            ]
-        },
-        "Pants - Suit (skinny)": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
-                "Base.Trousers_SuitTEXTURE"
             ]
         },
         "Paper Bag": {
@@ -26382,22 +24481,8 @@
                 "Handheld containers"
             ],
             "item_id": [
-                "Base.PaperBag"
-            ]
-        },
-        "Paper Bag (Jay's)": {
-            "categories": [
-                "Handheld containers"
-            ],
-            "item_id": [
-                "Base.Paperbag_Jays"
-            ]
-        },
-        "Paper Bag (Spiffo's)": {
-            "categories": [
-                "Handheld containers"
-            ],
-            "item_id": [
+                "Base.PaperBag",
+                "Base.Paperbag_Jays",
                 "Base.Paperbag_Spiffos"
             ]
         },
@@ -26945,14 +25030,7 @@
                 "Spices"
             ],
             "item_id": [
-                "Base.ParsleyDried"
-            ]
-        },
-        "Parsley (Dried) (seasoning)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
+                "Base.ParsleyDried",
                 "Base.Seasoning_Parsley"
             ]
         },
@@ -27132,14 +25210,7 @@
                 "Container items"
             ],
             "item_id": [
-                "Base.PencilCase"
-            ]
-        },
-        "Pencil Case (gaming)": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
+                "Base.PencilCase",
                 "Base.PencilCase_Gaming"
             ]
         },
@@ -27286,14 +25357,7 @@
                 "Container items"
             ],
             "item_id": [
-                "Base.PhotoAlbum"
-            ]
-        },
-        "Photo Album (old)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
+                "Base.PhotoAlbum",
                 "Base.PhotoAlbum_Old"
             ]
         },
@@ -27350,14 +25414,7 @@
                 "Axes"
             ],
             "item_id": [
-                "Base.PickAxe"
-            ]
-        },
-        "Pickaxe (forged)": {
-            "categories": [
-                "Axes"
-            ],
-            "item_id": [
+                "Base.PickAxe",
                 "Base.PickAxeForged"
             ]
         },
@@ -27529,19 +25586,12 @@
                 "Base.PigTusk"
             ]
         },
-        "Piglet Head (black)": {
+        "Piglet Head": {
             "categories": [
                 "Animal parts"
             ],
             "item_id": [
-                "Base.Pig_Piglet_Head_Black"
-            ]
-        },
-        "Piglet Head (pink)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
+                "Base.Pig_Piglet_Head_Black",
                 "Base.Pig_Piglet_Head_Pink"
             ]
         },
@@ -27574,14 +25624,7 @@
                 "Materials"
             ],
             "item_id": [
-                "Base.Pillow"
-            ]
-        },
-        "Pillow (crafted)": {
-            "categories": [
-                "Materials"
-            ],
-            "item_id": [
+                "Base.Pillow",
                 "Base.Pillow_Crafted"
             ]
         },
@@ -27662,14 +25705,7 @@
                 "Perishable food"
             ],
             "item_id": [
-                "Base.PizzaWhole"
-            ]
-        },
-        "Pizza (crafted)": {
-            "categories": [
-                "Evolved recipes"
-            ],
-            "item_id": [
+                "Base.PizzaWhole",
                 "Base.PizzaRecipe"
             ]
         },
@@ -27779,7 +25815,7 @@
         },
         "Plastic Cup": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.PlasticCup"
@@ -27838,14 +25874,7 @@
                 "Junk"
             ],
             "item_id": [
-                "Base.Plate"
-            ]
-        },
-        "Plate (ceramic)": {
-            "categories": [
-                "Junk"
-            ],
-            "item_id": [
+                "Base.Plate",
                 "Base.ClayPlate"
             ]
         },
@@ -27978,20 +26007,13 @@
                 "Base.Bag_Police"
             ]
         },
-        "Poncho (green)": {
+        "Poncho": {
             "categories": [
                 "Jackets"
             ],
             "item_id": [
                 "Base.PonchoGreenDOWN",
-                "Base.PonchoGreen"
-            ]
-        },
-        "Poncho (yellow)": {
-            "categories": [
-                "Jackets"
-            ],
-            "item_id": [
+                "Base.PonchoGreen",
                 "Base.PonchoYellowDOWN",
                 "Base.PonchoYellow"
             ]
@@ -28012,27 +26034,13 @@
                 "Base.Poolcue"
             ]
         },
-        "Pop Can (cola)": {
+        "Pop Can": {
             "categories": [
                 "Junk"
             ],
             "item_id": [
-                "Base.Pop2Empty"
-            ]
-        },
-        "Pop Can (diet cola)": {
-            "categories": [
-                "Junk"
-            ],
-            "item_id": [
-                "Base.PopEmpty"
-            ]
-        },
-        "Pop Can (ginger ale)": {
-            "categories": [
-                "Junk"
-            ],
-            "item_id": [
+                "Base.Pop2Empty",
+                "Base.PopEmpty",
                 "Base.Pop3Empty"
             ]
         },
@@ -28213,36 +26221,15 @@
                 "Base.BookPottery5"
             ]
         },
-        "Pouch (dice)": {
+        "Pouch": {
             "categories": [
                 "Items"
             ],
             "item_id": [
-                "Base.DiceBag"
-            ]
-        },
-        "Pouch (gem)": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
-                "Base.GemBag"
-            ]
-        },
-        "Pouch (seed farming)": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
+                "Base.DiceBag",
+                "Base.GemBag",
+                "Base.SeedBag",
                 "Base.SeedBag_Farming"
-            ]
-        },
-        "Pouch (seed)": {
-            "categories": [
-                "Handheld containers"
-            ],
-            "item_id": [
-                "Base.SeedBag"
             ]
         },
         "Pouch of Tobacco": {
@@ -28513,22 +26500,8 @@
                 "Container items"
             ],
             "item_id": [
-                "Base.Bag_ProtectiveCase"
-            ]
-        },
-        "Protective Case (survivalist)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_ProtectiveCase_Survivalist"
-            ]
-        },
-        "Protective Case (tools)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
+                "Base.Bag_ProtectiveCase",
+                "Base.Bag_ProtectiveCase_Survivalist",
                 "Base.Bag_ProtectiveCase_Tools"
             ]
         },
@@ -28670,51 +26643,23 @@
                 "Base.Dung_Rabbit"
             ]
         },
-        "Rabbit Head (Appalachian)": {
+        "Rabbit Head": {
             "categories": [
                 "Animal parts"
             ],
             "item_id": [
-                "Base.Rabbit_Head_Appalachian"
-            ]
-        },
-        "Rabbit Head (Cottontail)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
-                "Base.Rabbit_Head_CottonTail"
-            ]
-        },
-        "Rabbit Head (Swamp)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
+                "Base.Rabbit_Head_Appalachian",
+                "Base.Rabbit_Head_CottonTail",
                 "Base.Rabbit_Head_Swamp"
             ]
         },
-        "Rabbit Kitten Head (Appalachian)": {
+        "Rabbit Kitten Head": {
             "categories": [
                 "Animal parts"
             ],
             "item_id": [
-                "Base.Rabbit_Kitten_Head_Appalachian"
-            ]
-        },
-        "Rabbit Kitten Head (Cottontail)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
-                "Base.Rabbit_Kitten_Head_CottonTail"
-            ]
-        },
-        "Rabbit Kitten Head (Swamp)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
+                "Base.Rabbit_Kitten_Head_Appalachian",
+                "Base.Rabbit_Kitten_Head_CottonTail",
                 "Base.Rabbit_Kitten_Head_Swamp"
             ]
         },
@@ -28731,14 +26676,7 @@
                 "Tailoring materials"
             ],
             "item_id": [
-                "Base.RabbitLeather_Fur"
-            ]
-        },
-        "Rabbit Leather (Furred) (grey)": {
-            "categories": [
-                "Tailoring materials"
-            ],
-            "item_id": [
+                "Base.RabbitLeather_Fur",
                 "Base.RabbitLeather_Grey_Fur"
             ]
         },
@@ -28747,14 +26685,7 @@
                 "Materials"
             ],
             "item_id": [
-                "Base.RabbitLeather_Fur_Tan"
-            ]
-        },
-        "Rabbit Leather (Tanned, Furred) (grey)": {
-            "categories": [
-                "Materials"
-            ],
-            "item_id": [
+                "Base.RabbitLeather_Fur_Tan",
                 "Base.RabbitLeather_Grey_Fur_Tan"
             ]
         },
@@ -28763,14 +26694,7 @@
                 "Tailoring materials"
             ],
             "item_id": [
-                "Base.RabbitLeather_Fur_Tan_Wet"
-            ]
-        },
-        "Rabbit Leather (Tanned, Furred, Wet) (grey)": {
-            "categories": [
-                "Materials"
-            ],
-            "item_id": [
+                "Base.RabbitLeather_Fur_Tan_Wet",
                 "Base.RabbitLeather_Grey_Fur_Tan_Wet"
             ]
         },
@@ -28779,14 +26703,7 @@
                 "Tailoring materials"
             ],
             "item_id": [
-                "Base.RabbitLeather_Full"
-            ]
-        },
-        "Rabbit Leather (Unprocessed) (grey)": {
-            "categories": [
-                "Tailoring materials"
-            ],
-            "item_id": [
+                "Base.RabbitLeather_Full",
                 "Base.RabbitLeather_Grey_Full"
             ]
         },
@@ -28806,27 +26723,13 @@
                 "Base.Rabbit_Skull"
             ]
         },
-        "Raccoon Head (boar)": {
+        "Raccoon Head": {
             "categories": [
                 "Animal parts"
             ],
             "item_id": [
-                "Base.Raccoon_Boar_Head"
-            ]
-        },
-        "Raccoon Head (kit)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
-                "Base.Raccoon_Kit_Head"
-            ]
-        },
-        "Raccoon Head (sow)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
+                "Base.Raccoon_Boar_Head",
+                "Base.Raccoon_Kit_Head",
                 "Base.Raccoon_Sow_Head"
             ]
         },
@@ -29021,14 +26924,7 @@
                 "Long blunt weapons"
             ],
             "item_id": [
-                "Base.RailroadSpikePuller"
-            ]
-        },
-        "Railroad Spike Puller (old)": {
-            "categories": [
-                "Long blunt weapons"
-            ],
-            "item_id": [
+                "Base.RailroadSpikePuller",
                 "Base.RailroadSpikePullerOld"
             ]
         },
@@ -29072,19 +26968,12 @@
                 "Base.ScrapWeaponRakeHead"
             ]
         },
-        "Ram Head (black)": {
+        "Ram Head": {
             "categories": [
                 "Animal parts"
             ],
             "item_id": [
-                "Base.Sheep_Ram_Head_Black"
-            ]
-        },
-        "Ram Head (white)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
+                "Base.Sheep_Ram_Head_Black",
                 "Base.Sheep_Ram_Head_White"
             ]
         },
@@ -29521,7 +27410,7 @@
         },
         "Remoulade Bottle": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.RemouladeEmpty"
@@ -29824,19 +27713,12 @@
                 "Base.RollingPin"
             ]
         },
-        "Rooster Head (brown)": {
+        "Rooster Head": {
             "categories": [
                 "Animal parts"
             ],
             "item_id": [
-                "Base.Chicken_Rooster_Head_Brown"
-            ]
-        },
-        "Rooster Head (white)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
+                "Base.Chicken_Rooster_Head_Brown",
                 "Base.Chicken_Rooster_Head_White"
             ]
         },
@@ -29909,14 +27791,7 @@
                 "Wild herbs"
             ],
             "item_id": [
-                "Base.RosemaryDried"
-            ]
-        },
-        "Rosemary (Dried) (seasoning)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
+                "Base.RosemaryDried",
                 "Base.Seasoning_Rosemary"
             ]
         },
@@ -30231,14 +28106,7 @@
                 "Wild herbs"
             ],
             "item_id": [
-                "Base.SageDried"
-            ]
-        },
-        "Sage (Dried) (seasoning)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
+                "Base.SageDried",
                 "Base.Seasoning_Sage"
             ]
         },
@@ -30383,14 +28251,7 @@
                 "Wearable containers"
             ],
             "item_id": [
-                "Base.Bag_Satchel"
-            ]
-        },
-        "Satchel (photo)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
+                "Base.Bag_Satchel",
                 "Base.Bag_SatchelPhoto"
             ]
         },
@@ -30501,35 +28362,14 @@
                 "Base.ScannerModule"
             ]
         },
-        "Scarf (black stripes)": {
+        "Scarf": {
             "categories": [
                 "Tops"
             ],
             "item_id": [
-                "Base.Scarf_StripeBlackWhite"
-            ]
-        },
-        "Scarf (blue stripes)": {
-            "categories": [
-                "Tops"
-            ],
-            "item_id": [
-                "Base.Scarf_StripeBlueWhite"
-            ]
-        },
-        "Scarf (red stripes)": {
-            "categories": [
-                "Tops"
-            ],
-            "item_id": [
-                "Base.Scarf_StripeRedWhite"
-            ]
-        },
-        "Scarf (white)": {
-            "categories": [
-                "Tops"
-            ],
-            "item_id": [
+                "Base.Scarf_StripeBlackWhite",
+                "Base.Scarf_StripeBlueWhite",
+                "Base.Scarf_StripeRedWhite",
                 "Base.Scarf_White"
             ]
         },
@@ -30785,14 +28625,7 @@
                 "Short blade weapons"
             ],
             "item_id": [
-                "Base.Screwdriver"
-            ]
-        },
-        "Screwdriver (old)": {
-            "categories": [
-                "Short blade weapons"
-            ],
-            "item_id": [
+                "Base.Screwdriver",
                 "Base.Screwdriver_Old"
             ]
         },
@@ -30809,14 +28642,7 @@
                 "Farming tools"
             ],
             "item_id": [
-                "Base.Scythe"
-            ]
-        },
-        "Scythe (forged)": {
-            "categories": [
-                "Farming tools"
-            ],
-            "item_id": [
+                "Base.Scythe",
                 "Base.ScytheForged"
             ]
         },
@@ -31564,14 +29390,7 @@
                 "Tools"
             ],
             "item_id": [
-                "Base.SheepShears"
-            ]
-        },
-        "Shears (forged)": {
-            "categories": [
-                "Tools"
-            ],
-            "item_id": [
+                "Base.SheepShears",
                 "Base.SheepShearsForged"
             ]
         },
@@ -31749,7 +29568,8 @@
                 "Headwear"
             ],
             "item_id": [
-                "Base.ShemaghScarfFace"
+                "Base.ShemaghScarfFace",
+                "Base.ShemaghScarfFace_Green"
             ]
         },
         "Shemagh (Fully Closed)": {
@@ -31757,7 +29577,8 @@
                 "Headwear"
             ],
             "item_id": [
-                "Base.Hat_ShemaghFull"
+                "Base.Hat_ShemaghFull",
+                "Base.Hat_ShemaghFull_Green"
             ]
         },
         "Shemagh (Open Face)": {
@@ -31765,7 +29586,8 @@
                 "Hats"
             ],
             "item_id": [
-                "Base.Hat_ShemaghFace"
+                "Base.Hat_ShemaghFace",
+                "Base.Hat_ShemaghFace_Green"
             ]
         },
         "Shemagh (Scarf)": {
@@ -31773,7 +29595,8 @@
                 "Headwear"
             ],
             "item_id": [
-                "Base.ShemaghScarf"
+                "Base.ShemaghScarf",
+                "Base.ShemaghScarf_Green"
             ]
         },
         "Sheriff Duffel Bag": {
@@ -31798,41 +29621,13 @@
             ],
             "item_id": [
                 "Base.ShinKneeGuard_L",
-                "Base.ShinKneeGuard_R"
-            ]
-        },
-        "Shin Guard (baseball)": {
-            "categories": [
-                "Protective gear"
-            ],
-            "item_id": [
+                "Base.ShinKneeGuard_R",
                 "Base.ShinKneeGuard_L_Baseball",
-                "Base.ShinKneeGuard_R_Baseball"
-            ]
-        },
-        "Shin Guard (ice hockey)": {
-            "categories": [
-                "Protective gear"
-            ],
-            "item_id": [
+                "Base.ShinKneeGuard_R_Baseball",
                 "Base.ShinKneeGuard_L_IceHockey",
-                "Base.ShinKneeGuard_R_IceHockey"
-            ]
-        },
-        "Shin Guard (protective)": {
-            "categories": [
-                "Protective gear"
-            ],
-            "item_id": [
+                "Base.ShinKneeGuard_R_IceHockey",
                 "Base.ShinKneeGuard_L_Protective",
-                "Base.ShinKneeGuard_R_Protective"
-            ]
-        },
-        "Shin Guard (tint)": {
-            "categories": [
-                "Protective gear"
-            ],
-            "item_id": [
+                "Base.ShinKneeGuard_R_Protective",
                 "Base.ShinKneeGuard_L_TINT",
                 "Base.ShinKneeGuard_R_TINT"
             ]
@@ -31859,14 +29654,7 @@
                 "Shirts"
             ],
             "item_id": [
-                "Base.Shirt_HawaiianTINT"
-            ]
-        },
-        "Shirt - Hawaiian (red)": {
-            "categories": [
-                "Shirts"
-            ],
-            "item_id": [
+                "Base.Shirt_HawaiianTINT",
                 "Base.Shirt_HawaiianRed"
             ]
         },
@@ -31883,23 +29671,9 @@
                 "Shirts"
             ],
             "item_id": [
-                "Base.Shirt_Lumberjack"
-            ]
-        },
-        "Shirt - Lumberjack (colored)": {
-            "categories": [
-                "Shirts"
-            ],
-            "item_id": [
+                "Base.Shirt_Lumberjack",
+                "Base.Shirt_Lumberjack_Green",
                 "Base.Shirt_Lumberjack_TINT"
-            ]
-        },
-        "Shirt - Lumberjack (green)": {
-            "categories": [
-                "Shirts"
-            ],
-            "item_id": [
-                "Base.Shirt_Lumberjack_Green"
             ]
         },
         "Shirt - Police": {
@@ -32003,22 +29777,8 @@
                 "Shoes"
             ],
             "item_id": [
-                "Base.Shoes_Random"
-            ]
-        },
-        "Shoes (black)": {
-            "categories": [
-                "Shoes"
-            ],
-            "item_id": [
-                "Base.Shoes_Black"
-            ]
-        },
-        "Shoes (brown)": {
-            "categories": [
-                "Shoes"
-            ],
-            "item_id": [
+                "Base.Shoes_Random",
+                "Base.Shoes_Black",
                 "Base.Shoes_Brown"
             ]
         },
@@ -32481,7 +30241,8 @@
                 "Items"
             ],
             "item_id": [
-                "Base.Bag_TarpFramepack_Large"
+                "Base.Bag_TarpFramepack_Large",
+                "Base.Bag_CraftedFramepack_Large"
             ]
         },
         "Simple Metal Blade": {
@@ -32778,14 +30539,7 @@
             ],
             "item_id": [
                 "Base.Sledgehammer",
-                "Base.Sledgehammer2"
-            ]
-        },
-        "Sledgehammer (forged)": {
-            "categories": [
-                "Long blunt weapons"
-            ],
-            "item_id": [
+                "Base.Sledgehammer2",
                 "Base.SledgehammerForged"
             ]
         },
@@ -32797,132 +30551,48 @@
                 "Base.SledgehammerHead"
             ]
         },
-        "Sleeping Bag (blue plaid packed)": {
+        "Sleeping Bag": {
             "categories": [
                 "Camping"
             ],
             "item_id": [
-                "Base.SleepingBag_BluePlaid_Packed"
-            ]
-        },
-        "Sleeping Bag (blue plaid)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.SleepingBag_BluePlaid"
-            ]
-        },
-        "Sleeping Bag (camo packed)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.SleepingBag_Camo_Packed"
-            ]
-        },
-        "Sleeping Bag (camo)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
+                "Base.SleepingBag_GreenPlaid",
+                "Base.SleepingBag_Green",
+                "Base.SleepingBag_BluePlaid",
+                "Base.SleepingBag_RedPlaid",
                 "Base.SleepingBag_Camo"
             ]
         },
-        "Sleeping Bag (green packed)": {
+        "Sleeping Bag (Packed)": {
             "categories": [
                 "Camping"
             ],
             "item_id": [
-                "Base.SleepingBag_Green_Packed"
-            ]
-        },
-        "Sleeping Bag (green plaid packed)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.SleepingBag_GreenPlaid_Packed"
-            ]
-        },
-        "Sleeping Bag (green plaid)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.SleepingBag_GreenPlaid"
-            ]
-        },
-        "Sleeping Bag (green)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.SleepingBag_Green"
-            ]
-        },
-        "Sleeping Bag (red plaid packed)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
+                "Base.SleepingBag_BluePlaid_Packed",
+                "Base.SleepingBag_Camo_Packed",
+                "Base.SleepingBag_GreenPlaid_Packed",
+                "Base.SleepingBag_Green_Packed",
                 "Base.SleepingBag_RedPlaid_Packed"
             ]
         },
-        "Sleeping Bag (red plaid)": {
+        "Sleeping Bag - Cheap": {
             "categories": [
                 "Camping"
             ],
             "item_id": [
-                "Base.SleepingBag_RedPlaid"
-            ]
-        },
-        "Sleeping Bag - Cheap (blue packed)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.SleepingBag_Cheap_Blue_Packed"
-            ]
-        },
-        "Sleeping Bag - Cheap (blue)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.SleepingBag_Cheap_Blue"
-            ]
-        },
-        "Sleeping Bag - Cheap (green 2 packed)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.SleepingBag_Cheap_Green2_Packed"
-            ]
-        },
-        "Sleeping Bag - Cheap (green 2)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
+                "Base.SleepingBag_Cheap_Green",
+                "Base.SleepingBag_Cheap_Blue",
                 "Base.SleepingBag_Cheap_Green2"
             ]
         },
-        "Sleeping Bag - Cheap (green packed)": {
+        "Sleeping Bag - Cheap (Packed)": {
             "categories": [
                 "Camping"
             ],
             "item_id": [
+                "Base.SleepingBag_Cheap_Blue_Packed",
+                "Base.SleepingBag_Cheap_Green2_Packed",
                 "Base.SleepingBag_Cheap_Green_Packed"
-            ]
-        },
-        "Sleeping Bag - Cheap (green)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.SleepingBag_Cheap_Green"
             ]
         },
         "Sleeping Bag - Hide": {
@@ -33062,38 +30732,10 @@
                 "Wearable containers"
             ],
             "item_id": [
-                "Base.Bag_Schoolbag"
-            ]
-        },
-        "Small Backpack (kids)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
-                "Base.Bag_Schoolbag_Kids"
-            ]
-        },
-        "Small Backpack (medical)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
-                "Base.Bag_Schoolbag_Medical"
-            ]
-        },
-        "Small Backpack (patches)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
-                "Base.Bag_Schoolbag_Patches"
-            ]
-        },
-        "Small Backpack (travel)": {
-            "categories": [
-                "Wearable containers"
-            ],
-            "item_id": [
+                "Base.Bag_Schoolbag",
+                "Base.Bag_Schoolbag_Kids",
+                "Base.Bag_Schoolbag_Medical",
+                "Base.Bag_Schoolbag_Patches",
                 "Base.Bag_Schoolbag_Travel"
             ]
         },
@@ -33151,14 +30793,6 @@
             ],
             "item_id": [
                 "Base.CeramicCrucibleSmallUnfired"
-            ]
-        },
-        "Small Crafted Framepack": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
-                "Base.Bag_CraftedFramepack_Small"
             ]
         },
         "Small File Set": {
@@ -33267,22 +30901,8 @@
                 "Container items"
             ],
             "item_id": [
-                "Base.Bag_ProtectiveCaseSmallMilitary_FirstAid"
-            ]
-        },
-        "Small Protective Case - Military (pistol)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_ProtectiveCaseSmallMilitary_Pistol1"
-            ]
-        },
-        "Small Protective Case - Military (walkie talkie)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
+                "Base.Bag_ProtectiveCaseSmallMilitary_FirstAid",
+                "Base.Bag_ProtectiveCaseSmallMilitary_Pistol1",
                 "Base.Bag_ProtectiveCaseSmallMilitary_WalkieTalkie"
             ]
         },
@@ -33315,7 +30935,8 @@
                 "Items"
             ],
             "item_id": [
-                "Base.Bag_TarpFramepack_Small"
+                "Base.Bag_TarpFramepack_Small",
+                "Base.Bag_CraftedFramepack_Small"
             ]
         },
         "Small Stone Wheel": {
@@ -33451,22 +31072,8 @@
                 "Shoes"
             ],
             "item_id": [
-                "Base.Shoes_TrainerTINT"
-            ]
-        },
-        "Sneakers (blue)": {
-            "categories": [
-                "Shoes"
-            ],
-            "item_id": [
-                "Base.Shoes_BlueTrainers"
-            ]
-        },
-        "Sneakers (red)": {
-            "categories": [
-                "Shoes"
-            ],
-            "item_id": [
+                "Base.Shoes_TrainerTINT",
+                "Base.Shoes_BlueTrainers",
                 "Base.Shoes_RedTrainers"
             ]
         },
@@ -33534,22 +31141,8 @@
                 "Socks"
             ],
             "item_id": [
-                "Base.Socks_Ankle"
-            ]
-        },
-        "Socks (black)": {
-            "categories": [
-                "Socks"
-            ],
-            "item_id": [
-                "Base.Socks_Ankle_Black"
-            ]
-        },
-        "Socks (white)": {
-            "categories": [
-                "Socks"
-            ],
-            "item_id": [
+                "Base.Socks_Ankle",
+                "Base.Socks_Ankle_Black",
                 "Base.Socks_Ankle_White"
             ]
         },
@@ -33566,22 +31159,8 @@
                 "Socks"
             ],
             "item_id": [
-                "Base.Socks_Long"
-            ]
-        },
-        "Socks - Long (black)": {
-            "categories": [
-                "Socks"
-            ],
-            "item_id": [
-                "Base.Socks_Long_Black"
-            ]
-        },
-        "Socks - Long (white)": {
-            "categories": [
-                "Socks"
-            ],
-            "item_id": [
+                "Base.Socks_Long",
+                "Base.Socks_Long_Black",
                 "Base.Socks_Long_White"
             ]
         },
@@ -33625,19 +31204,12 @@
                 "Base.SourCream"
             ]
         },
-        "Sow Head (black)": {
+        "Sow Head": {
             "categories": [
                 "Animal parts"
             ],
             "item_id": [
-                "Base.Pig_Sow_Head_Black"
-            ]
-        },
-        "Sow Head (pink)": {
-            "categories": [
-                "Animal parts"
-            ],
-            "item_id": [
+                "Base.Pig_Sow_Head_Black",
                 "Base.Pig_Sow_Head_Pink"
             ]
         },
@@ -33725,14 +31297,7 @@
                 "Long blunt weapons"
             ],
             "item_id": [
-                "Base.Shovel"
-            ]
-        },
-        "Spade (forged)": {
-            "categories": [
-                "Long blunt weapons"
-            ],
-            "item_id": [
+                "Base.Shovel",
                 "Base.SpadeForged"
             ]
         },
@@ -33741,14 +31306,7 @@
                 "Long blunt weapons"
             ],
             "item_id": [
-                "Base.SpadeHead"
-            ]
-        },
-        "Spade Head (forged)": {
-            "categories": [
-                "Materials"
-            ],
-            "item_id": [
+                "Base.SpadeHead",
                 "Base.SpadeHead_Forged"
             ]
         },
@@ -34152,14 +31710,6 @@
                 "Base.SpiffoTail"
             ]
         },
-        "Spiffo T-shirt (Spiffo's)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
-                "Base.Tshirt_BusinessSpiffo"
-            ]
-        },
         "Spiffo World June 1992": {
             "categories": [
                 "Home VHS"
@@ -34233,14 +31783,7 @@
                 "Helmets"
             ],
             "item_id": [
-                "Base.Hat_CrashHelmetFULL_Spiked"
-            ]
-        },
-        "Spiked Helmet - Motorcycle (black)": {
-            "categories": [
-                "Helmets"
-            ],
-            "item_id": [
+                "Base.Hat_CrashHelmetFULL_Spiked",
                 "Base.Hat_CrashHelmetFULL_Black_Spiked"
             ]
         },
@@ -34347,32 +31890,11 @@
             ],
             "item_id": [
                 "Base.ShinKneeGuardSpike_L",
-                "Base.ShinKneeGuardSpike_R"
-            ]
-        },
-        "Spiked Shin Guard (baseball)": {
-            "categories": [
-                "Protective gear"
-            ],
-            "item_id": [
+                "Base.ShinKneeGuardSpike_R",
                 "Base.ShinKneeGuardSpike_L_Baseball",
-                "Base.ShinKneeGuardSpike_R_Baseball"
-            ]
-        },
-        "Spiked Shin Guard (ice hockey)": {
-            "categories": [
-                "Protective gear"
-            ],
-            "item_id": [
+                "Base.ShinKneeGuardSpike_R_Baseball",
                 "Base.ShinKneeGuardSpike_L_IceHockey",
-                "Base.ShinKneeGuardSpike_R_IceHockey"
-            ]
-        },
-        "Spiked Shin Guard (protective)": {
-            "categories": [
-                "Protective gear"
-            ],
-            "item_id": [
+                "Base.ShinKneeGuardSpike_R_IceHockey",
                 "Base.ShinKneeGuardSpike_L_Protective",
                 "Base.ShinKneeGuardSpike_R_Protective"
             ]
@@ -34427,7 +31949,7 @@
         },
         "Sports Bottle": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.Sportsbottle"
@@ -35410,35 +32932,14 @@
                 "Base.SweetPotatoSeed"
             ]
         },
-        "Swim Trunks (blue)": {
+        "Swim Trunks": {
             "categories": [
                 "Underpants"
             ],
             "item_id": [
-                "Base.SwimTrunks_Blue"
-            ]
-        },
-        "Swim Trunks (green)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
-                "Base.SwimTrunks_Green"
-            ]
-        },
-        "Swim Trunks (red)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
-                "Base.SwimTrunks_Red"
-            ]
-        },
-        "Swim Trunks (yellow)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
+                "Base.SwimTrunks_Blue",
+                "Base.SwimTrunks_Green",
+                "Base.SwimTrunks_Red",
                 "Base.SwimTrunks_Yellow"
             ]
         },
@@ -35527,25 +33028,11 @@
                 "T-shirts"
             ],
             "item_id": [
-                "Base.Tshirt_WhiteTINT"
-            ]
-        },
-        "T-shirt (decal)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
+                "Base.Tshirt_WhiteTINT",
                 "Base.Tshirt_DefaultDECAL",
                 "Base.Tshirt_DefaultDECAL_TINT",
                 "Base.Tshirt_DefaultTEXTURE",
-                "Base.Tshirt_DefaultTEXTURE_TINT"
-            ]
-        },
-        "T-shirt (striped polo)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
+                "Base.Tshirt_DefaultTEXTURE_TINT",
                 "Base.Tshirt_SuperColor"
             ]
         },
@@ -35554,30 +33041,9 @@
                 "T-shirts"
             ],
             "item_id": [
-                "Base.Tshirt_Profession_FiremanBlue"
-            ]
-        },
-        "T-shirt - Firefighter (dark red)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
-                "Base.Tshirt_Profession_FiremanRed02"
-            ]
-        },
-        "T-shirt - Firefighter (red)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
-                "Base.Tshirt_Profession_FiremanRed"
-            ]
-        },
-        "T-shirt - Firefighter (white)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
+                "Base.Tshirt_Profession_FiremanBlue",
+                "Base.Tshirt_Profession_FiremanRed",
+                "Base.Tshirt_Profession_FiremanRed02",
                 "Base.Tshirt_Profession_FiremanWhite"
             ]
         },
@@ -35613,67 +33079,18 @@
                 "Base.Tshirt_McCoys"
             ]
         },
-        "T-shirt - Music (EMD)": {
+        "T-shirt - Music": {
             "categories": [
                 "T-shirts"
             ],
             "item_id": [
-                "Base.Tshirt_EMD"
-            ]
-        },
-        "T-shirt - Music (blues/country)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
-                "Base.Tshirt_BluesCountry"
-            ]
-        },
-        "T-shirt - Music (hip hop)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
-                "Base.Tshirt_HipHop"
-            ]
-        },
-        "T-shirt - Music (indie)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
-                "Base.Tshirt_Indie"
-            ]
-        },
-        "T-shirt - Music (metal)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
-                "Base.Tshirt_Metal"
-            ]
-        },
-        "T-shirt - Music (punk)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
-                "Base.Tshirt_Punk"
-            ]
-        },
-        "T-shirt - Music (rock)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
-                "Base.Tshirt_Rock"
-            ]
-        },
-        "T-shirt - Music (rock2)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
+                "Base.Tshirt_BluesCountry",
+                "Base.Tshirt_EMD",
+                "Base.Tshirt_HipHop",
+                "Base.Tshirt_Indie",
+                "Base.Tshirt_Metal",
+                "Base.Tshirt_Punk",
+                "Base.Tshirt_Rock",
                 "Base.Tshirt_Rock2"
             ]
         },
@@ -35693,19 +33110,12 @@
                 "Base.Tshirt_PizzaWhirled"
             ]
         },
-        "T-shirt - Police (blue)": {
+        "T-shirt - Police": {
             "categories": [
                 "T-shirts"
             ],
             "item_id": [
-                "Base.Tshirt_Profession_PoliceBlue"
-            ]
-        },
-        "T-shirt - Police (white)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
+                "Base.Tshirt_Profession_PoliceBlue",
                 "Base.Tshirt_Profession_PoliceWhite"
             ]
         },
@@ -35733,20 +33143,13 @@
                 "Base.Tshirt_PoloTINT"
             ]
         },
-        "T-shirt - Ranger (brown)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
-                "Base.Tshirt_Profession_RangerBrown"
-            ]
-        },
         "T-shirt - Ranger (green)": {
             "categories": [
                 "T-shirts"
             ],
             "item_id": [
-                "Base.Tshirt_Profession_RangerGreen"
+                "Base.Tshirt_Profession_RangerGreen",
+                "Base.Tshirt_Profession_RangerBrown"
             ]
         },
         "T-shirt - Spiffo": {
@@ -35754,7 +33157,8 @@
                 "T-shirts"
             ],
             "item_id": [
-                "Base.Tshirt_SpiffoDECAL"
+                "Base.Tshirt_SpiffoDECAL",
+                "Base.Tshirt_BusinessSpiffo"
             ]
         },
         "T-shirt - Sports": {
@@ -35762,14 +33166,7 @@
                 "T-shirts"
             ],
             "item_id": [
-                "Base.Tshirt_Sport"
-            ]
-        },
-        "T-shirt - Sports (decal)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
+                "Base.Tshirt_Sport",
                 "Base.Tshirt_SportDECAL"
             ]
         },
@@ -35826,14 +33223,7 @@
                 "T-shirts"
             ],
             "item_id": [
-                "Base.Tshirt_Profession_VeterenGreen"
-            ]
-        },
-        "T-shirt - Veteran (red)": {
-            "categories": [
-                "T-shirts"
-            ],
-            "item_id": [
+                "Base.Tshirt_Profession_VeterenGreen",
                 "Base.Tshirt_Profession_VeterenRed"
             ]
         },
@@ -35888,14 +33278,7 @@
                 "Miscellaneous food"
             ],
             "item_id": [
-                "Base.Taco"
-            ]
-        },
-        "Taco (crafted)": {
-            "categories": [
-                "Evolved recipes"
-            ],
-            "item_id": [
+                "Base.Taco",
                 "Base.TacoRecipe"
             ]
         },
@@ -36132,7 +33515,7 @@
         },
         "Teacup": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.Teacup"
@@ -36143,22 +33526,8 @@
                 "Junk"
             ],
             "item_id": [
-                "Base.ToyBear"
-            ]
-        },
-        "Teddy Bear (burlap)": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
-                "Base.ToyBear_Crafted_Burlap"
-            ]
-        },
-        "Teddy Bear (cotton)": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
+                "Base.ToyBear",
+                "Base.ToyBear_Crafted_Burlap",
                 "Base.ToyBear_Crafted_Cotton"
             ]
         },
@@ -36197,68 +33566,26 @@
                 "Base.TennisRacket"
             ]
         },
-        "Tent (blue packed)": {
+        "Tent": {
             "categories": [
                 "Camping"
             ],
             "item_id": [
-                "Base.TentBlue_Packed"
-            ]
-        },
-        "Tent (blue)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.TentBlue"
-            ]
-        },
-        "Tent (brown packed)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.TentBrown_Packed"
-            ]
-        },
-        "Tent (brown)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.TentBrown"
-            ]
-        },
-        "Tent (green packed)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.TentGreen_Packed"
-            ]
-        },
-        "Tent (green)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.TentGreen"
-            ]
-        },
-        "Tent (yellow packed)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.TentYellow_Packed"
-            ]
-        },
-        "Tent (yellow)": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
+                "Base.TentBlue",
+                "Base.TentBrown",
+                "Base.TentGreen",
                 "Base.TentYellow"
+            ]
+        },
+        "Tent (Packed)": {
+            "categories": [
+                "Camping"
+            ],
+            "item_id": [
+                "Base.TentBlue_Packed",
+                "Base.TentBrown_Packed",
+                "Base.TentGreen_Packed",
+                "Base.TentYellow_Packed"
             ]
         },
         "Tent Kit": {
@@ -36787,14 +34114,7 @@
                 "Food"
             ],
             "item_id": [
-                "Base.ThymeDried"
-            ]
-        },
-        "Thyme (Dried) (seasoning)": {
-            "categories": [
-                "Wild herbs"
-            ],
-            "item_id": [
+                "Base.ThymeDried",
                 "Base.Seasoning_Thyme"
             ]
         },
@@ -36921,14 +34241,7 @@
                 "Metal"
             ],
             "item_id": [
-                "Base.TinCanEmpty"
-            ]
-        },
-        "Tin Can (water ration)": {
-            "categories": [
-                "Junk"
-            ],
-            "item_id": [
+                "Base.TinCanEmpty",
                 "Base.WaterRationCanEmpty"
             ]
         },
@@ -37257,46 +34570,11 @@
                 "Handheld containers"
             ],
             "item_id": [
-                "Base.Toolbox"
-            ]
-        },
-        "Toolbox (farming)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Toolbox_Farming"
-            ]
-        },
-        "Toolbox (fishing)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Toolbox_Fishing"
-            ]
-        },
-        "Toolbox (gardening)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Toolbox_Gardening"
-            ]
-        },
-        "Toolbox (janitor)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Bag_JanitorToolbox"
-            ]
-        },
-        "Toolbox (mechanic)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
+                "Base.Toolbox",
+                "Base.Bag_JanitorToolbox",
+                "Base.Toolbox_Farming",
+                "Base.Toolbox_Fishing",
+                "Base.Toolbox_Gardening",
                 "Base.Toolbox_Mechanic"
             ]
         },
@@ -37345,14 +34623,7 @@
                 "Grains"
             ],
             "item_id": [
-                "Base.TortillaChips"
-            ]
-        },
-        "Tortilla Chips (baked)": {
-            "categories": [
-                "Food"
-            ],
-            "item_id": [
+                "Base.TortillaChips",
                 "Base.TortillaChipsBaked"
             ]
         },
@@ -37361,31 +34632,10 @@
                 "Handheld containers"
             ],
             "item_id": [
-                "Base.Tote"
-            ]
-        },
-        "Tote Bag (bags)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Tote_Bags"
-            ]
-        },
-        "Tote Bag (clothing)": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
+                "Base.Tote",
+                "Base.Bag_Dancer",
+                "Base.Tote_Bags",
                 "Base.Tote_Clothing"
-            ]
-        },
-        "Tote Bag (dancer)": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
-                "Base.Bag_Dancer"
             ]
         },
         "Toy Badge": {
@@ -37632,27 +34882,13 @@
                 "Base.TritiumSights"
             ]
         },
-        "Trophy (bronze)": {
+        "Trophy": {
             "categories": [
                 "Memento"
             ],
             "item_id": [
-                "Base.TrophyBronze"
-            ]
-        },
-        "Trophy (gold)": {
-            "categories": [
-                "Memento"
-            ],
-            "item_id": [
-                "Base.TrophyGold"
-            ]
-        },
-        "Trophy (silver)": {
-            "categories": [
-                "Memento"
-            ],
-            "item_id": [
+                "Base.TrophyBronze",
+                "Base.TrophyGold",
                 "Base.TrophySilver"
             ]
         },
@@ -37789,36 +35025,15 @@
                 "Underpants"
             ],
             "item_id": [
-                "Base.Briefs_SmallTrunks_WhiteTINT"
-            ]
-        },
-        "Trunks (black)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
-                "Base.Briefs_SmallTrunks_Black"
-            ]
-        },
-        "Trunks (blue)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
-                "Base.Briefs_SmallTrunks_Blue"
-            ]
-        },
-        "Trunks (red)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
+                "Base.Briefs_SmallTrunks_WhiteTINT",
+                "Base.Briefs_SmallTrunks_Black",
+                "Base.Briefs_SmallTrunks_Blue",
                 "Base.Briefs_SmallTrunks_Red"
             ]
         },
         "Tumbler": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.GlassTumbler"
@@ -37949,14 +35164,7 @@
                 "First aid tools"
             ],
             "item_id": [
-                "Base.Tweezers"
-            ]
-        },
-        "Tweezers (forged)": {
-            "categories": [
-                "Medical items"
-            ],
-            "item_id": [
+                "Base.Tweezers",
                 "Base.Tweezers_Forged"
             ]
         },
@@ -38057,54 +35265,12 @@
                 "Underpants"
             ],
             "item_id": [
-                "Base.Underpants_White"
-            ]
-        },
-        "Underpants (animal print)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
-                "Base.Underpants_AnimalPrint"
-            ]
-        },
-        "Underpants (black frilly)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
-                "Base.FrillyUnderpants_Black"
-            ]
-        },
-        "Underpants (black)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
-                "Base.Underpants_Black"
-            ]
-        },
-        "Underpants (pink frilly)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
-                "Base.FrillyUnderpants_Pink"
-            ]
-        },
-        "Underpants (red frilly)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
-                "Base.FrillyUnderpants_Red"
-            ]
-        },
-        "Underpants (red spots)": {
-            "categories": [
-                "Underpants"
-            ],
-            "item_id": [
+                "Base.Underpants_White",
+                "Base.FrillyUnderpants_Black",
+                "Base.FrillyUnderpants_Pink",
+                "Base.FrillyUnderpants_Red",
+                "Base.Underpants_AnimalPrint",
+                "Base.Underpants_Black",
                 "Base.Underpants_RedSpots"
             ]
         },
@@ -38130,7 +35296,8 @@
                 "Canned food"
             ],
             "item_id": [
-                "Base.MysteryCan"
+                "Base.MysteryCan",
+                "Base.DentedCan_Open"
             ]
         },
         "Unlabeled Can of Food (Open)": {
@@ -38278,22 +35445,8 @@
                 "Hats"
             ],
             "item_id": [
-                "Base.Hat_Visor_WhiteTINT"
-            ]
-        },
-        "Visor (black)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
-                "Base.Hat_VisorBlack"
-            ]
-        },
-        "Visor (red)": {
-            "categories": [
-                "Hats"
-            ],
-            "item_id": [
+                "Base.Hat_Visor_WhiteTINT",
+                "Base.Hat_VisorBlack",
                 "Base.Hat_VisorRed"
             ]
         },
@@ -38310,14 +35463,7 @@
                 "Miscellaneous food"
             ],
             "item_id": [
-                "Base.Waffles"
-            ]
-        },
-        "Waffles (crafted)": {
-            "categories": [
-                "Evolved recipes"
-            ],
-            "item_id": [
+                "Base.Waffles",
                 "Base.WafflesRecipe"
             ]
         },
@@ -38326,14 +35472,7 @@
                 "Vests"
             ],
             "item_id": [
-                "Base.Vest_WaistcoatTINT"
-            ]
-        },
-        "Waistcoat (black)": {
-            "categories": [
-                "Vests"
-            ],
-            "item_id": [
+                "Base.Vest_WaistcoatTINT",
                 "Base.Vest_Waistcoat"
             ]
         },
@@ -38361,7 +35500,9 @@
                 "Container items"
             ],
             "item_id": [
-                "Base.Wallet"
+                "Base.Wallet",
+                "Base.Wallet_Female",
+                "Base.Wallet_Male"
             ]
         },
         "Wallet (brown)": {
@@ -38372,28 +35513,12 @@
                 "Base.Wallet3"
             ]
         },
-        "Wallet (female)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Wallet_Female"
-            ]
-        },
         "Wallet (leather)": {
             "categories": [
                 "Junk"
             ],
             "item_id": [
                 "Base.Wallet4"
-            ]
-        },
-        "Wallet (male)": {
-            "categories": [
-                "Container items"
-            ],
-            "item_id": [
-                "Base.Wallet_Male"
             ]
         },
         "Wallet (purple)": {
@@ -38563,7 +35688,7 @@
         },
         "Water Bottle (Bourbon)": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.WhiskeyEmpty",
@@ -38572,7 +35697,7 @@
         },
         "Water Bottle (Mayonnaise)": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "farming.MayonnaiseEmpty",
@@ -38581,7 +35706,7 @@
         },
         "Water Bottle (Orange Soda)": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.PopBottleEmpty",
@@ -38590,7 +35715,7 @@
         },
         "Water Bottle (Remoulade)": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "farming.RemouladeEmpty",
@@ -38599,7 +35724,7 @@
         },
         "Water Bottle (White Wine)": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.WineEmpty",
@@ -38784,22 +35909,8 @@
                 "Shoes"
             ],
             "item_id": [
-                "Base.Shoes_CowboyBoots"
-            ]
-        },
-        "Western Boots (black)": {
-            "categories": [
-                "Shoes"
-            ],
-            "item_id": [
-                "Base.Shoes_CowboyBoots_Black"
-            ]
-        },
-        "Western Boots (brown)": {
-            "categories": [
-                "Shoes"
-            ],
-            "item_id": [
+                "Base.Shoes_CowboyBoots",
+                "Base.Shoes_CowboyBoots_Black",
                 "Base.Shoes_CowboyBoots_Brown"
             ]
         },
@@ -38821,7 +35932,7 @@
         },
         "Western Canteen": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.CanteenCowboy"
@@ -39038,7 +36149,7 @@
         },
         "Wine Glass": {
             "categories": [
-                "Water containers"
+                "Fluid containers"
             ],
             "item_id": [
                 "Base.GlassWine"
@@ -39073,14 +36184,7 @@
                 "Axes"
             ],
             "item_id": [
-                "Base.WoodAxe"
-            ]
-        },
-        "Wood Axe (forged)": {
-            "categories": [
-                "Axes"
-            ],
-            "item_id": [
+                "Base.WoodAxe",
                 "Base.WoodAxeForged"
             ]
         },
@@ -39278,14 +36382,7 @@
                 "Items"
             ],
             "item_id": [
-                "Base.BucketWood"
-            ]
-        },
-        "Wooden Bucket (large)": {
-            "categories": [
-                "Items"
-            ],
-            "item_id": [
+                "Base.BucketWood",
                 "Base.BucketLargeWood"
             ]
         },
@@ -39517,14 +36614,7 @@
             ],
             "item_id": [
                 "Base.WristWatch_Right_ClassicBlack",
-                "Base.WristWatch_Left_ClassicBlack"
-            ]
-        },
-        "Wrist Watch - Classic (brown)": {
-            "categories": [
-                "Accessories"
-            ],
-            "item_id": [
+                "Base.WristWatch_Left_ClassicBlack",
                 "Base.WristWatch_Right_ClassicBrown",
                 "Base.WristWatch_Left_ClassicBrown"
             ]
@@ -51242,6 +48332,14 @@
             "sprite_id": [
                 "location_community_medical_01_8",
                 "location_community_medical_01_9"
+            ]
+        },
+        "Well": {
+            "categories": [
+                "Water sources"
+            ],
+            "sprite_id": [
+                "camping_01_16"
             ]
         },
         "West Point Road Sign": {
