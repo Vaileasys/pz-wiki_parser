@@ -95,6 +95,10 @@ def main():
     # Collect data for pages
     page_recipes = defaultdict(list)  # page_name -> list of (item_id, expanded_recipes)
 
+    # Build a mapping of item_id to all item_ids on the same page(s)
+    # This allows us to merge recipes for items that share a page
+    item_to_page_items = {}  # item_id -> set of all item_ids (including itself) on same page(s)
+
     # First pass: collect all items and organize by pages
     items_with_research = {}
     for item_id, item in tqdm(Item.all().items(), desc="Collecting research recipes"):
@@ -148,6 +152,21 @@ def main():
                 # If no page found, create a fallback page name
                 page_recipes[f"Unknown_Items"].append((item_id, all_research_data))
 
+    # Build item_to_page_items mapping after collecting all items
+    for iid in items_with_research.keys():
+        pages = page_manager.get_pages(iid, "item_id")
+        if pages:
+            # Get all item IDs from all pages this item appears on
+            related_items = set()
+            for page in pages:
+                page_ids = page_manager.get_ids(page, "item_id")
+                if page_ids:
+                    related_items.update(page_ids)
+            item_to_page_items[iid] = related_items
+        else:
+            # If no page found, just use the item itself
+            item_to_page_items[iid] = {iid}
+
     # Second pass: generate individual files
     for item_id, research_data in tqdm(
         items_with_research.items(), desc="Generating individual files"
@@ -155,8 +174,17 @@ def main():
         # Collect all recipes into a single set to avoid duplicates
         all_recipes = set()
 
+        # Add recipes from this item
         for recipe_id, research_level, source_type in research_data:
             all_recipes.add(recipe_id)
+
+        # Merge recipes from all items on the same page(s)
+        related_items = item_to_page_items.get(item_id, {item_id})
+        for related_id in related_items:
+            if related_id != item_id and related_id in items_with_research:
+                related_data = items_with_research[related_id]
+                for recipe_id, research_level, source_type in related_data:
+                    all_recipes.add(recipe_id)
 
         lines = []
 

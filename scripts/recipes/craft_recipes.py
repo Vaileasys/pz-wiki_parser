@@ -111,12 +111,7 @@ def fluid_rgb(fluid_id):
         if not fluid.valid:
             raise ValueError(f"No fluid found for ID: {fluid_id}")
 
-        return {
-            "name": fluid.name,
-            "R":    fluid.r,
-            "G":    fluid.g,
-            "B":    fluid.b
-        }
+        return {"name": fluid.name, "R": fluid.r, "G": fluid.g, "B": fluid.b}
 
     except Exception as error:
         raise RuntimeError(f"Error processing fluid '{fluid_id}': {error}")
@@ -167,9 +162,9 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
         if input_entry.get("mode") == "Keep" and "fluidModifier" not in input_entry:
             continue
 
-        quantity = input_entry.get("count",
-                     input_entry.get("amount",
-                     input_entry.get("index", 1)))
+        quantity = input_entry.get(
+            "count", input_entry.get("amount", input_entry.get("index", 1))
+        )
 
         ingredient_counter += 1
         key = f"ingredient{ingredient_counter}"
@@ -1221,6 +1216,30 @@ def output_item_article_lists(
         with open(path, "w", encoding="utf-8") as fh:
             fh.write(content)
 
+    # Build a mapping of item_id to all item_ids on the same page(s)
+    # This allows us to merge recipes for items that share a page
+    item_to_page_items = {}  # item_id -> set of all item_ids (including itself) on same page(s)
+
+    all_item_ids = (
+        set(usage_by_crafting.keys())
+        | set(production_by_item.keys())
+        | set(usage_by_building.keys())
+    )
+
+    for iid in all_item_ids:
+        pages = page_manager.get_pages(iid, "item_id")
+        if pages:
+            # Get all item IDs from all pages this item appears on
+            related_items = set()
+            for page in pages:
+                page_ids = page_manager.get_ids(page, "item_id")
+                if page_ids:
+                    related_items.update(page_ids)
+            item_to_page_items[iid] = related_items
+        else:
+            # If no page found, just use the item itself
+            item_to_page_items[iid] = {iid}
+
     # Collect data for pages
     crafting_whatitcrafts_pages = defaultdict(set)  # page_name -> set of recipe names
     crafting_howtocraft_pages = defaultdict(set)
@@ -1229,8 +1248,15 @@ def output_item_article_lists(
     # Generate individual files and collect page data
     # whatitcrafts (crafting)
     for iid, names in usage_by_crafting.items():
+        # Merge recipes from all items on the same page(s)
+        merged_names = set(names)
+        related_items = item_to_page_items.get(iid, {iid})
+        for related_id in related_items:
+            if related_id in usage_by_crafting:
+                merged_names.update(usage_by_crafting[related_id])
+
         tid = f"{iid}_whatitcrafts"
-        content = render_template(tid, names)
+        content = render_template(tid, merged_names)
 
         # Write individual file
         safe_filename = f"{sanitize_filename(tid)}.txt"
@@ -1240,14 +1266,21 @@ def output_item_article_lists(
         pages = page_manager.get_pages(iid, "item_id")
         if pages:
             for page in pages:
-                crafting_whatitcrafts_pages[page].update(names)
+                crafting_whatitcrafts_pages[page].update(merged_names)
         else:
-            crafting_whatitcrafts_pages["Unknown_Items"].update(names)
+            crafting_whatitcrafts_pages["Unknown_Items"].update(merged_names)
 
     # howtocraft (crafting)
     for iid, names in production_by_item.items():
+        # Merge recipes from all items on the same page(s)
+        merged_names = set(names)
+        related_items = item_to_page_items.get(iid, {iid})
+        for related_id in related_items:
+            if related_id in production_by_item:
+                merged_names.update(production_by_item[related_id])
+
         tid = f"{iid}_howtocraft"
-        content = render_template(tid, names)
+        content = render_template(tid, merged_names)
 
         # Write individual file
         safe_filename = f"{sanitize_filename(tid)}.txt"
@@ -1257,14 +1290,21 @@ def output_item_article_lists(
         pages = page_manager.get_pages(iid, "item_id")
         if pages:
             for page in pages:
-                crafting_howtocraft_pages[page].update(names)
+                crafting_howtocraft_pages[page].update(merged_names)
         else:
-            crafting_howtocraft_pages["Unknown_Items"].update(names)
+            crafting_howtocraft_pages["Unknown_Items"].update(merged_names)
 
     # constructionwhatitcrafts (building)
     for iid, names in usage_by_building.items():
+        # Merge recipes from all items on the same page(s)
+        merged_names = set(names)
+        related_items = item_to_page_items.get(iid, {iid})
+        for related_id in related_items:
+            if related_id in usage_by_building:
+                merged_names.update(usage_by_building[related_id])
+
         tid = f"{iid}_constructionwhatitcrafts"
-        content = render_template(tid, names)
+        content = render_template(tid, merged_names)
 
         # Write individual file
         safe_filename = f"{sanitize_filename(tid)}.txt"
@@ -1274,9 +1314,9 @@ def output_item_article_lists(
         pages = page_manager.get_pages(iid, "item_id")
         if pages:
             for page in pages:
-                building_whatitcrafts_pages[page].update(names)
+                building_whatitcrafts_pages[page].update(merged_names)
         else:
-            building_whatitcrafts_pages["Unknown_Items"].update(names)
+            building_whatitcrafts_pages["Unknown_Items"].update(merged_names)
 
     # Generate page-combined files
     # crafting whatitcrafts pages
