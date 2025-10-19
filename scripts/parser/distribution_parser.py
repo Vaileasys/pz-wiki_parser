@@ -621,7 +621,9 @@ def ensure_decompiler_run():
             )
 
         if result.returncode != 0:
-            echo.error("Error: Java is not installed or not in PATH. Cannot run decompiler.")
+            echo.error(
+                "Error: Java is not installed or not in PATH. Cannot run decompiler."
+            )
             return False
     except Exception as e:
         echo.error(f"Error checking Java installation: {e}")
@@ -787,7 +789,8 @@ def parse_stories(output_file):
         game_directory = cfg.get_game_directory()
 
         # Construct path to StoryClutter_Definitions.lua
-        story_clutter_path = os.path.join(game_directory,
+        story_clutter_path = os.path.join(
+            game_directory,
             "media",
             "lua",
             "server",
@@ -797,7 +800,9 @@ def parse_stories(output_file):
         )
 
         if not os.path.exists(story_clutter_path):
-            echo.warning(f"StoryClutter_Definitions.lua not found at {story_clutter_path}")
+            echo.warning(
+                f"StoryClutter_Definitions.lua not found at {story_clutter_path}"
+            )
             echo.info("Skipping story clutter parsing.")
             return {}
 
@@ -1108,6 +1113,7 @@ def main():
     # Parse container contents
     parse_container_contents(cache_path)
     return True
+
 
 # Function to check if all resources are found
 def init(*file_paths):

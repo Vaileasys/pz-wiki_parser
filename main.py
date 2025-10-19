@@ -242,9 +242,9 @@ menu_structure = {
                 "description": "Generate the fluid table.",
             },
             "7": {
-                "module": "scripts.parser.outfit_parser",
-                "name": "Outfit list",
-                "description": "Parse outfit xml files.",
+                "module": "scripts.misc.outfits",
+                "name": "Outfits",
+                "description": "Process outfits.",
             },
         },
     },

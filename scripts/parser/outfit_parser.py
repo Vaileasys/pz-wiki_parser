@@ -1,33 +1,8 @@
 import os
-import json
 import xml.etree.ElementTree as ET
-import re
-from difflib import SequenceMatcher
-from scripts.core.version import Version
 from scripts.core.file_loading import get_clothing_dir, get_media_dir
+from scripts.core import cache
 from scripts.utils import echo
-
-_outfits_cache = {}
-
-def get_outfits():
-    """Returns the generated outfit data."""
-    if not _outfits_cache:
-        main()
-    return _outfits_cache
-
-def translate_outfit_name(outfit_label):
-    # Add spaces before capital letters, but skip if preceded by "KY"
-    name_with_spaces = re.sub(r'(?<!^)(?<!KY)(?=[A-Z])', ' ', outfit_label)
-    name_with_spaces = name_with_spaces.replace('_', ' ')
-
-    # Ensure only one space between words
-    return re.sub(r'\s+', ' ', name_with_spaces).strip()
-
-
-def generate_translated_names(outfits_json):
-    """Generate a dictionary of translated names based on outfit labels."""
-    return {outfit_label: translate_outfit_name(outfit_label) for outfit_type in outfits_json.values() for outfit_label
-            in outfit_type}
 
 
 def guid_item_mapping(guid_table):
@@ -36,9 +11,9 @@ def guid_item_mapping(guid_table):
     try:
         tree = ET.parse(guid_table)
         root = tree.getroot()
-        for file_entry in root.findall('files'):
-            path = file_entry.find('path').text
-            guid = file_entry.find('guid').text
+        for file_entry in root.findall("files"):
+            path = file_entry.find("path").text
+            guid = file_entry.find("guid").text
             filename = os.path.splitext(os.path.basename(path))[0]
             guid_mapping[guid] = filename
     except ET.ParseError as e:
@@ -48,221 +23,110 @@ def guid_item_mapping(guid_table):
 
 def parse_outfits(xml_file, guid_mapping):
     """Parse the outfits XML file and return a structured JSON based on GUID mapping."""
-    global _outfits_cache
-    if not _outfits_cache:
-        try:
-            tree = ET.parse(xml_file)
-            root = tree.getroot()
-        except ET.ParseError as e:
-            echo.error(f"Error parsing clothing XML: {e}")
-            return {}
+    echo.info(f"Parsing outfits from: {xml_file}")
+    if not os.path.exists(xml_file):
+        echo.error(f"Outfit XML file not found: {xml_file}")
+        return {}
 
-        output_json = {
-            "FemaleOutfits": {},
-            "MaleOutfits": {}
-        }
+    try:
+        tree = ET.parse(xml_file)
+        root = tree.getroot()
+    except ET.ParseError as e:
+        echo.error(f"Error parsing clothing XML: {e}")
+        return {}
 
-        for outfit in root.findall('.//m_FemaleOutfits') + root.findall('.//m_MaleOutfits'):
-            outfit_type = "FemaleOutfits" if outfit.tag == 'm_FemaleOutfits' else "MaleOutfits"
-            outfit_name = outfit.find('m_Name').text if outfit.find('m_Name') is not None else "Unknown Outfit"
-            outfit_guid = outfit.find('m_Guid').text if outfit.find('m_Guid') is not None else "No GUID"
-            items_with_probabilities = {}
+    output_json = {"FemaleOutfits": {}, "MaleOutfits": {}}
 
-            for item_block in outfit.findall('m_items'):
-                probability_tag = item_block.find('probability')
-                probability = float(probability_tag.text) * 100 if probability_tag is not None else 100
-                probability = int(probability)
+    # Look for outfit-related elements (case-insensitive search)
+    outfit_elements = []
+    for elem in root.iter():
+        if "outfit" in elem.tag.lower():
+            outfit_elements.append(elem.tag)
 
-                item_guid = item_block.find('itemGUID').text if item_block.find('itemGUID') is not None else None
-                if item_guid:
-                    item_name = guid_mapping.get(item_guid, item_guid)
-                    items_with_probabilities[item_name] = probability
+    for outfit in root.findall(".//m_FemaleOutfits") + root.findall(".//m_MaleOutfits"):
+        outfit_type = (
+            "FemaleOutfits" if outfit.tag == "m_FemaleOutfits" else "MaleOutfits"
+        )
+        outfit_name = (
+            outfit.find("m_Name").text
+            if outfit.find("m_Name") is not None
+            else "Unknown Outfit"
+        )
+        outfit_guid = (
+            outfit.find("m_Guid").text
+            if outfit.find("m_Guid") is not None
+            else "No GUID"
+        )
 
-                for subitem in item_block.findall('.//subItems/itemGUID'):
+        # Parse all XML parameters
+        outfit_params = {}
+        for child in outfit:
+            if child.tag not in ["m_Name", "m_Guid", "m_items"]:
+                # Handle boolean and other parameter types
+                if child.text in ["true", "false"]:
+                    outfit_params[child.tag] = child.text.lower() == "true"
+                else:
+                    outfit_params[child.tag] = child.text
+
+        # Parse items with proper main item and sub-item structure
+        items_structure = {}
+
+        for item_block in outfit.findall("m_items"):
+            probability_tag = item_block.find("probability")
+            probability = (
+                float(probability_tag.text) * 100
+                if probability_tag is not None
+                else 100
+            )
+            probability = int(probability)
+
+            item_guid = (
+                item_block.find("itemGUID").text
+                if item_block.find("itemGUID") is not None
+                else None
+            )
+            if item_guid:
+                item_name = guid_mapping.get(item_guid, item_guid)
+
+                # Initialize main item structure
+                items_structure[item_name] = {
+                    "probability": probability,
+                    "subItems": {},
+                }
+
+                # Parse sub-items
+                for subitem in item_block.findall(".//subItems/itemGUID"):
                     subitem_guid = subitem.text
                     subitem_name = guid_mapping.get(subitem_guid, subitem_guid)
-                    items_with_probabilities[subitem_name] = probability
+                    items_structure[item_name]["subItems"][subitem_name] = probability
 
-            if outfit_name:
-                output_json[outfit_type][outfit_name] = {
-                    "GUID": outfit_guid,
-                    "Items": items_with_probabilities
-                }
-        _outfits_cache = output_json
+        if outfit_name:
+            output_json[outfit_type][outfit_name] = {
+                "GUID": outfit_guid,
+                **outfit_params,
+                "Items": items_structure,
+            }
 
-    return _outfits_cache
-
-
-def generate_articles(outfits_json, output_dir, translated_names):
-    version_number = Version.get()
-    def generate_intro():
-        return "{{Header|Project Zomboid|World|Lore|Outfits}}\n" \
-               f"{{{{Page version|{version_number}}}}}\n" \
-               "{{Autogenerated|Outfits}}\n"
-
-    def generate_infobox(outfit_name, outfit_details, outfit_type):
-        translated_name = translated_names[outfit_name]
-        sex = "Female" if outfit_type == "FemaleOutfits" else "Male"
-        guid = outfit_details.get("GUID", "Unknown GUID")
-
-        return (
-            "{{Infobox outfit\n"
-            f"|name={translated_name}\n"
-            "|image=NoImage-Person.png\n"
-            f"|outfit={translated_name}\n"
-            f"|sex={sex}\n"
-            f"|guid={guid}\n"
-            "}}\n"
-        )
-
-    def generate_body(outfit_name, outfit_details):
-        translated_name = translated_names[outfit_name]
-        intro = f"'''{translated_name}''' is a [[clothing]] [[outfit]] in [[Project Zomboid]].\n"
-        table_header = (
-            "\n==Items==\n"
-            '{| class="wikitable theme-red sortable"\n'
-            "! {{ll|Item}}\n"
-            "! Probability\n"
-        )
-
-        table_rows = ""
-        sorted_items = sorted(outfit_details["Items"].items(), key=lambda x: x[1], reverse=True)
-        for item, probability in sorted_items:
-            table_rows += f"|-\n| [[{item}]] || {probability}%\n"
-
-        table_footer = "|}\n"
-        return intro + table_header + table_rows + table_footer
-
-    def similarity(a, b):
-        """Calculate the similarity ratio between two strings."""
-        return SequenceMatcher(None, a, b).ratio()
-
-    def generate_see_also(outfit_name, translated_names):
-        """Generate a 'See also' section with the three most similar outfit names."""
-        current_name = translated_names[outfit_name]
-
-        # Calculate similarity for each other outfit name
-        similarities = {
-            name: similarity(current_name, name)
-            for name in translated_names.values()
-            if name != current_name
-        }
-
-        # Get the three most similar names
-        similar_names = sorted(similarities, key=similarities.get, reverse=True)[:3]
-
-        # Format the 'See also' section
-        see_also_section = "\n==See also==\n"
-        for name in similar_names:
-            see_also_section += f"*{{{{ll|{name}}}}}\n"
-
-        return see_also_section
-
-    def generate_code(outfit_name, outfit_details):
-        translated_name = translated_names[outfit_name]
-        json_object = json.dumps({translated_name: outfit_details}, indent=4)
-        version_number = Version.get()
-        return (
-            "\n==Code==\n"
-            "{{CodeBox|\n"
-            "{{CodeSnip\n"
-            "  | lang = json\n"
-            "  | line = false\n"
-            "  | path = [[https://github.com/Vaileasys/pz-wiki_parser/]]\n"
-            "  | source = outfit_parser\n"
-            "  | retrieved = true\n"
-            f"  | version = {version_number}\n"
-            "  | code =\n"
-            f"{json_object}\n"
-            "}}\n"
-            "}}\n"
-        )
-
-    def generate_footer():
-        return "\n{{Navbox outfits}}"
-
-    os.makedirs(output_dir, exist_ok=True)
-
-    for outfit_type, outfits in outfits_json.items():
-        sex = "Female" if outfit_type == "FemaleOutfits" else "Male"
-        for outfit_name, outfit_details in outfits.items():
-            article_content = [
-                generate_intro(),
-                generate_infobox(outfit_name, outfit_details, outfit_type),
-                generate_body(outfit_name, outfit_details),
-                generate_see_also(outfit_name, translated_names),
-                generate_code(outfit_name, outfit_details),
-                generate_footer()
-            ]
-            article_text = "".join(article_content)
-
-            # Save the article to a text file with the sex appended to the filename
-            translated_name = translated_names[outfit_name]
-            article_path = os.path.join(output_dir, f"{translated_name} ({sex}).txt")
-            with open(article_path, 'w', encoding='utf-8') as article_file:
-                article_file.write(article_text)
+    return output_json
 
 
-def generate_name_guid_table(translated_names, outfits_json, output_file):
-    """Generate a name-GUID table for all outfits (with gendered labels) and save it to the specified file."""
-    table_content = '{| class="wikitable theme-red sortable"\n! Name\n! GUID\n'
+def get_outfits():
+    """
+    Get the parsed outfits data from cache, or parse XML files if cache doesn't exist.
 
-    # Collect all gendered outfits with their translated names and GUIDs
-    gendered_outfits = []
-    for outfit_type, outfits in outfits_json.items():
-        sex = "female" if outfit_type == "FemaleOutfits" else "male"  # Ensure lowercase
-        for outfit_label, outfit_details in outfits.items():
-            translated_name = translated_names[outfit_label]
-            # Format with "(gender outfit)"
-            gendered_name = f"{translated_name} ({sex} outfit)"
-            guid = outfit_details.get("GUID", "Unknown GUID")
-            gendered_outfits.append((gendered_name, guid))
+    Returns:
+        dict: Parsed outfits data with MaleOutfits and FemaleOutfits
+    """
 
-    # Sort the gendered outfits alphabetically by name
-    gendered_outfits = sorted(gendered_outfits, key=lambda x: x[0])
-
-    # Build table rows with sorted gendered outfit names and GUIDs
-    for name, guid in gendered_outfits:
-        # Extract the correct gender for display from `name`
-        display_name = f"{name.split(' (')[0]} ({'female' if 'female' in name else 'male'})"
-        table_content += f"|-\n| [[{name}|{display_name}]] || {guid}\n"
-
-    table_content += "|}\n"
-
-    # Write the table to the output file
-    with open(output_file, 'w', encoding='utf-8') as file:
-        file.write(table_content)
-    echo.success(f"Name-GUID table written to {output_file}")
-
-
-def main():
-    """Main function to process XML files, generate JSON, and create articles."""
     guid_table_path = os.path.join(get_media_dir(), "fileGuidTable.xml")
     outfits_xml_path = os.path.join(get_clothing_dir(), "clothing.xml")
-    json_output_dir = os.path.join("data", "cache")
-
-    articles_output_dir = os.path.join("output", "en", "outfits", "articles")
-    name_table_output = os.path.join("output", "en", "outfits", "name_table.txt")
-
-    os.makedirs(json_output_dir, exist_ok=True)
-    outfits_json_path = os.path.join(json_output_dir, "outfits.json")
 
     guid_mapping = guid_item_mapping(guid_table_path)
     outfits_json = parse_outfits(outfits_xml_path, guid_mapping)
 
-    translated_names = generate_translated_names(outfits_json)
-
-    # Save outfits JSON data
-    with open(outfits_json_path, 'w', encoding='utf-8') as json_file:
-        json.dump(outfits_json, json_file, ensure_ascii=False, indent=4)
-    echo.success(f"Outfits data written to {outfits_json_path}")
-
-    # Generate articles
-    generate_articles(outfits_json, articles_output_dir, translated_names)
-
-    # Generate Name-GUID table
-    generate_name_guid_table(translated_names, outfits_json, name_table_output)
+    cache.save_cache(outfits_json, "outfits.json")
+    return outfits_json
 
 
-if __name__ == "__main__":
-    main()
+def main():
+    get_outfits()

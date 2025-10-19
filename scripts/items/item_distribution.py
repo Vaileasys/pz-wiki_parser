@@ -265,7 +265,14 @@ def build_item_json(
     butchering_data,
     attached_weapons_data,
     container_contents_data,
+    outfits_data=None,
 ):
+    # Load outfit data once for all items if not provided
+    if outfits_data is None:
+        from scripts.parser.outfit_parser import get_outfits
+
+        outfits_data = get_outfits()
+
     def get_container_info(item_name):
         containers_info = []
         unique_entries = set()
@@ -623,24 +630,38 @@ def build_item_json(
     def get_clothing_info(item_name, clothing_data):
         clothing_matches = []
 
+        # Try to resolve the item name using the same logic as outfits.py
+        resolved_item_names = set()
+
+        # Add the original item name
+        resolved_item_names.add(item_name)
+
+        # Try to resolve using Item.fix_item_id as fallback
+        try:
+            fixed_item_id = Item.fix_item_id(item_name)
+            if fixed_item_id != item_name:
+                resolved_item_names.add(fixed_item_id)
+        except:
+            # If Item.fix_item_id fails, continue with just the original name
+            pass
+
         for gender_outfits in ["FemaleOutfits", "MaleOutfits"]:
             gender_outfits_data = clothing_data.get(gender_outfits, {})
-            gender = "Female" if gender_outfits == "FemaleOutfits" else "Male"
 
             for outfit_name, outfit_details in gender_outfits_data.items():
                 items = outfit_details.get("Items", {})
 
-                outfit_name = outfit_name.replace("_", "")
-                outfit_name = re.sub(r"(?<!^)(?=[A-Z])", " ", outfit_name)
-
-                if item_name in items:
-                    clothing_matches.append(
-                        {
-                            "GUID": outfit_details.get("GUID", ""),
-                            "outfit_name": f"{outfit_name} ({gender.lower()})",
-                            "Chance": items[item_name],
-                        }
-                    )
+                # Check if any of our resolved item names appear in the clothing data
+                for resolved_name in resolved_item_names:
+                    if resolved_name in items:
+                        clothing_matches.append(
+                            {
+                                "GUID": outfit_details.get("GUID", ""),
+                                "outfit_name": get_outfit_link(outfit_name),
+                                "Chance": items[resolved_name],
+                            }
+                        )
+                        break  # Only add once per outfit
 
         return clothing_matches
 
@@ -851,7 +872,7 @@ def build_item_json(
 
         return container_matches
 
-    def get_attached_weapon_info(item_name, attached_weapons_data):
+    def get_attached_weapon_info(item_name, attached_weapons_data, outfits_data=None):
         """
         Calculate effective spawn chances for attached weapons based on the Java implementation.
 
@@ -874,10 +895,11 @@ def build_item_json(
         definitions_data = attached_weapons_data.get("AttachedWeaponDefinitions", {})
         outfit_definitions_data = definitions_data.get("attachedWeaponCustomOutfit", {})
 
-        # Load outfit data for link generation
-        from scripts.parser.outfit_parser import get_outfits
+        # Load outfit data for link generation if not provided
+        if outfits_data is None:
+            from scripts.parser.outfit_parser import get_outfits
 
-        outfits_data = get_outfits()
+            outfits_data = get_outfits()
 
         def get_days_from_outfit_name(outfit_name):
             """Helper function to determine days required based on outfit name"""
@@ -958,10 +980,12 @@ def build_item_json(
 
         # Process outfit-specific definitions
         for outfit_name, outfit_config in outfit_definitions_data.items():
+            # Extract the raw outfit ID by removing gender suffixes
+            raw_outfit_id = extract_raw_outfit_id(outfit_name)
             outfit_base_chance = outfit_config.get("chance", 0) / 100.0
             outfit_weapons = outfit_config.get("weapons", [])
 
-            # Check outfit name for time period
+            # Check outfit name for time period (use original name for time detection)
             outfit_days_required = get_days_from_outfit_name(outfit_name)
             if (
                 outfit_days_required == 0
@@ -1021,8 +1045,8 @@ def build_item_json(
                     attached_weapon_matches.append(
                         {
                             "outfit": get_outfit_link(
-                                outfit_name, outfits_data
-                            ),  # Convert outfit name to link
+                                raw_outfit_id, outfits_data
+                            ),  # Convert raw outfit ID to link
                             "definition_id": definition["id"],
                             "effective_chance": round(effective_chance_percentage, 2),
                             "days_required": definition[
@@ -1038,7 +1062,10 @@ def build_item_json(
             all_mentioned_outfits.update(definition["outfit_filter"])
 
         for outfit_name in all_mentioned_outfits:
-            # Check outfit name for time period
+            # Extract the raw outfit ID by removing gender suffixes
+            raw_outfit_id = extract_raw_outfit_id(outfit_name)
+
+            # Check outfit name for time period (use original name for time detection)
             outfit_days_required = get_days_from_outfit_name(outfit_name)
             if (
                 outfit_days_required == 0
@@ -1090,8 +1117,8 @@ def build_item_json(
                         attached_weapon_matches.append(
                             {
                                 "outfit": get_outfit_link(
-                                    outfit_name, outfits_data
-                                ),  # Convert outfit name to link
+                                    raw_outfit_id, outfits_data
+                                ),  # Convert raw outfit ID to link
                                 "definition_id": definition["id"],
                                 "effective_chance": round(
                                     effective_chance_percentage, 2
@@ -1115,7 +1142,7 @@ def build_item_json(
             "Fishing": get_fishing_info(item_name),
             "Butchering": get_butchering_info(item_name),
             "AttachedWeapons": get_attached_weapon_info(
-                item_name, attached_weapons_data
+                item_name, attached_weapons_data, outfits_data
             ),
         }
 
@@ -1952,46 +1979,52 @@ def combine_items_by_page(all_items):
     return combined_items
 
 
-def translate_outfit_name(outfit_label):
-    """Convert an outfit ID to a readable name, following outfit_parser.py's rules."""
-    # Add spaces before capital letters, but skip if preceded by "KY"
-    name_with_spaces = re.sub(r"(?<!^)(?<!KY)(?=[A-Z])", " ", outfit_label)
-    name_with_spaces = name_with_spaces.replace("_", " ")
-    # Ensure only one space between words
-    return re.sub(r"\s+", " ", name_with_spaces).strip()
+def extract_raw_outfit_id(outfit_name):
+    """
+    Extract the raw outfit ID by removing gender suffixes.
+
+    Args:
+        outfit_name (str): Outfit name like "Armor Test Kelly Gang (male)"
+
+    Returns:
+        str: Raw outfit ID like "ArmorTestKellyGang"
+    """
+    # Remove gender suffixes
+    if outfit_name.endswith(" (male)"):
+        return outfit_name[:-7]  # Remove " (male)"
+    elif outfit_name.endswith(" (female)"):
+        return outfit_name[:-9]  # Remove " (female)"
+    else:
+        return outfit_name
 
 
 def get_outfit_link(outfit_id, outfits_data=None):
     """
-    Convert an outfit ID to a wiki link. Uses male version by default unless only female exists.
-    Returns link in format [[Name (gender)|Name]] with sentence case display.
+    Convert an outfit ID to a wiki link using the page dictionary.
 
     Args:
         outfit_id: The outfit identifier (e.g., "ArmyInstructor")
-        outfits_data: Optional dictionary containing outfit data from outfit_parser
+        outfits_data: Optional dictionary containing outfit data (no longer used for linking)
 
     Returns:
-        A wiki link to the outfit page (e.g., "[[Army Instructor (male)|Army instructor]]")
+        A wiki link to the outfit page if found in page dictionary, otherwise the raw ID
     """
-    if outfits_data is None:
-        from scripts.parser.outfit_parser import get_outfits
+    # Import page_manager to check for outfit pages
+    from scripts.core import page_manager
 
-        outfits_data = get_outfits()
+    # Initialize page_manager to ensure data is loaded
+    page_manager.init()
 
-    translated_name = translate_outfit_name(outfit_id)
+    # Check if there's a page for this outfit_id in the page dictionary
+    pages = page_manager.get_pages(outfit_id, id_type="outfit_id")
 
-    # Convert to sentence case for display (first letter capital, rest lowercase)
-    display_name = translated_name[0].upper() + translated_name[1:].lower()
+    if pages and len(pages) > 0:
+        # Use the first page found (there should typically be only one)
+        page_name = pages[0]
+        return f"{page_name}"
 
-    # Check if outfit exists in male/female versions
-    in_male = outfit_id in outfits_data.get("MaleOutfits", {})
-    in_female = outfit_id in outfits_data.get("FemaleOutfits", {})
-
-    # Default to male unless only female exists
-    if in_male or not in_female:
-        return f"[[{translated_name} (male)|{display_name}]]"
-    else:
-        return f"[[{translated_name} (female)|{display_name}]]"
+    # If no page found, return the raw ID
+    return outfit_id
 
 
 def main():
@@ -2012,7 +2045,9 @@ def main():
     """
     # Run distribution parser and check if it was successful
     if not distribution_parser.main():
-        echo.error("Distribution parser failed to run due to missing Java or decompiler issues.")
+        echo.error(
+            "Distribution parser failed to run due to missing Java or decompiler issues."
+        )
         echo.info("Cannot continue with item distribution processing.")
         return False
 
@@ -2085,6 +2120,11 @@ def main():
         os.path.join(DATA_DIR, "cache", "distributions", "container_contents.json")
     )
 
+    # Load outfits data once for all items
+    from scripts.parser.outfit_parser import get_outfits
+
+    outfits_data = get_outfits()
+
     build_item_json(
         item_list,
         procedural_data,
@@ -2097,6 +2137,7 @@ def main():
         butchering_data_loaded,
         attached_weapons_data,
         container_contents_data,
+        outfits_data,
     )
 
     all_items = load_cache(
@@ -2191,7 +2232,9 @@ def main():
     build_tables(category_items, index)
 
     # Calculate missing items
-    itemname_path = os.path.join(get_lua_dir(), "shared", "Translate", "EN", "ItemName_EN.txt")
+    itemname_path = os.path.join(
+        get_lua_dir(), "shared", "Translate", "EN", "ItemName_EN.txt"
+    )
     itemlist_path = os.path.join(
         "output", "en", "item", "distributions", "Item_list.txt"
     )
