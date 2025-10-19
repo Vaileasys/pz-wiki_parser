@@ -37291,6 +37291,18 @@
                 "1RJTest"
             ]
         },
+        "Agent": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "edf210bb-d67d-4633-a467-0efbf4ff1158",
+                "4324a28b-08d1-4e53-8084-10ec53c92198"
+            ],
+            "outfit_id": [
+                "Agent"
+            ]
+        },
         "Air Crew": {
             "categories": [
                 "Outfits"
@@ -37301,6 +37313,41 @@
             ],
             "outfit_id": [
                 "AirCrew"
+            ]
+        },
+        "Airport Security Tarmac": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "73240f9e-6158-43e4-9fb9-0251618a5f7f",
+                "9b36c2cb-5b2d-4dbd-8806-3d8a9112d0b3"
+            ],
+            "outfit_id": [
+                "AirportSecurityTarmac"
+            ]
+        },
+        "Airport Worker Tarmac": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "db4a2b23-47cb-49ce-abcb-53789576d0a4",
+                "04bb0188-5f80-4ca2-a682-43f15b30497d"
+            ],
+            "outfit_id": [
+                "AirportWorkerTarmac"
+            ]
+        },
+        "Always Radio Test": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "dcc57c06-1894-4844-9255-3e180feceeb9"
+            ],
+            "outfit_id": [
+                "AlwaysRadioTest"
             ]
         },
         "Ambulance Driver": {
@@ -37355,11 +37402,23 @@
                 "Outfits"
             ],
             "guid": [
-                "5c380647-e5a4-4121-ac5c-55441dfee5b0",
+                "f26aa1be-9c5e-4add-bd7a-92cb6a8c6359",
                 "5c380647-e5a4-4121-ac5c-55441dfee5b0"
             ],
             "outfit_id": [
                 "ArmyServiceUniform"
+            ]
+        },
+        "Backpacker": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "01c1cd41-868c-4e71-9d4a-4f1d13203bae",
+                "01c1cd41-868c-4e71-9d4a-4f1d13203bae"
+            ],
+            "outfit_id": [
+                "Backpacker"
             ]
         },
         "Bandit": {
@@ -37372,6 +37431,65 @@
             ],
             "outfit_id": [
                 "Bandit"
+            ]
+        },
+        "Bandit Early": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "ef273470-7ad6-4f1c-9ec5-e2c1a3bca9bb",
+                "f3d9c0f0-368a-46e1-8cd0-06bb4739083e"
+            ],
+            "outfit_id": [
+                "Bandit_Early"
+            ]
+        },
+        "Bandit Late": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "ab3e431b-e0c0-4e9f-9891-58844dd28fdb",
+                "b98bd8e6-92eb-495a-86c3-5225eeadacfc"
+            ],
+            "outfit_id": [
+                "Bandit_Late"
+            ]
+        },
+        "Bandit Mid": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "45c658ec-a7e5-426c-8d5d-7bd24bc983b9",
+                "0b927882-1b59-4206-a7cf-aeb1087fb792"
+            ],
+            "outfit_id": [
+                "Bandit_Mid"
+            ]
+        },
+        "Bank Robber": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "37b262d0-be35-4807-ae8f-adee14ee0628"
+            ],
+            "outfit_id": [
+                "BankRobber"
+            ]
+        },
+        "Bank Robber Suit": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "85b15716-914a-4a1c-a4f1-0a6460698cae",
+                "4708cab2-a77a-4d1e-bd22-a238c7f1014f"
+            ],
+            "outfit_id": [
+                "BankRobberSuit"
             ]
         },
         "Baseball Fan KY": {
@@ -37422,6 +37540,30 @@
                 "BaseballPlayer_KY"
             ]
         },
+        "Baseball Player Rangers": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "86d96a79-76b7-4057-bf02-49a6983e4aad",
+                "86d96a79-76b7-4057-bf02-49a6983e4aad"
+            ],
+            "outfit_id": [
+                "BaseballPlayer_Rangers"
+            ]
+        },
+        "Baseball Player Z": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "d8e5e532-9387-480b-8604-2bbc3ef914a9",
+                "d8e5e532-9387-480b-8604-2bbc3ef914a9"
+            ],
+            "outfit_id": [
+                "BaseballPlayer_Z"
+            ]
+        },
         "Bathrobe (outfit)": {
             "categories": [
                 "Outfits"
@@ -37467,6 +37609,18 @@
             ],
             "outfit_id": [
                 "Bob"
+            ]
+        },
+        "Bounty Hunter": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "083d10db-f617-4477-98ef-9a24f10aee44",
+                "7a6c1710-c62a-4c38-a4f4-462517f2e696"
+            ],
+            "outfit_id": [
+                "BountyHunter"
             ]
         },
         "Bowling": {
@@ -37552,6 +37706,18 @@
                 "Classy"
             ]
         },
+        "Club Goer": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "ca03e92b-b5e9-4260-95b1-08f345f38a44",
+                "20cdd102-f902-4bc5-8ec9-193586e92260"
+            ],
+            "outfit_id": [
+                "ClubGoer"
+            ]
+        },
         "Construction Worker (outfit)": {
             "categories": [
                 "Outfits"
@@ -37587,6 +37753,18 @@
                 "Cook_IceCream"
             ]
         },
+        "Cook Jays": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "2f0dbea9-373b-4228-a73e-ab85a19c89bb",
+                "62b2daf1-4db9-44a3-b3cb-962dcc07d4b1"
+            ],
+            "outfit_id": [
+                "Cook_Jays"
+            ]
+        },
         "Cook Spiffos": {
             "categories": [
                 "Outfits"
@@ -37597,6 +37775,291 @@
             ],
             "outfit_id": [
                 "Cook_Spiffos"
+            ]
+        },
+        "Costume Beast Mom": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "b2869bde-d776-4b40-a3b2-74ad09869494"
+            ],
+            "outfit_id": [
+                "CostumeBeastMom"
+            ]
+        },
+        "Costume Blood First": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "cfb25960-4082-4f33-a45a-b06abf802fbc"
+            ],
+            "outfit_id": [
+                "CostumeBloodFirst"
+            ]
+        },
+        "Costume Chunk": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "f760ced6-5ea2-46db-abfb-da54fcf7f8ac"
+            ],
+            "outfit_id": [
+                "CostumeChunk"
+            ]
+        },
+        "Costume Commando John": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "cbe870d2-0cbe-4a39-af7e-560738f00b1f"
+            ],
+            "outfit_id": [
+                "CostumeCommandoJohn"
+            ]
+        },
+        "Costume CommandoIan": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "5cd8f475-e026-411c-b30d-5b1c93d0703d"
+            ],
+            "outfit_id": [
+                "CostumeCommandoIan"
+            ]
+        },
+        "Costume Frogman": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "37f73001-3c72-4ea9-8c71-7293e6290e5f"
+            ],
+            "outfit_id": [
+                "CostumeFrogman"
+            ]
+        },
+        "Costume General": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "e08065c3-4e19-4036-9746-d89b725b4f28"
+            ],
+            "outfit_id": [
+                "CostumeGeneral"
+            ]
+        },
+        "Costume Grimey Rick": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "ac787f72-d2ad-4c9e-94a2-02791f0bf662"
+            ],
+            "outfit_id": [
+                "CostumeGrimeyRick"
+            ]
+        },
+        "Costume Monster": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "3516610d-4a57-4f8d-86d6-9a80d911a7d6"
+            ],
+            "outfit_id": [
+                "CostumeMonster"
+            ]
+        },
+        "Costume Monster Bride": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "3516610d-4a57-4f8d-86d6-9a80d911a7d6"
+            ],
+            "outfit_id": [
+                "CostumeMonsterBride"
+            ]
+        },
+        "Costume Scarecrow": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "13355792-9106-4237-8773-bf46640ba57c",
+                "13355792-9106-4237-8773-bf46640ba57c"
+            ],
+            "outfit_id": [
+                "CostumeScarecrow"
+            ]
+        },
+        "Costume Setup": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "454cd0b8-4faa-494a-a85d-a0be407f4f7e"
+            ],
+            "outfit_id": [
+                "CostumeSetup"
+            ]
+        },
+        "Costume Uppermost Firearm": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "8b0862c4-f4c8-482f-b064-2b77c1e3514b"
+            ],
+            "outfit_id": [
+                "CostumeUppermostFirearm"
+            ]
+        },
+        "Costume Vampire": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "fe38269a-8e97-4aaf-b8af-71db2aefea5d",
+                "010c2e2e-72d4-485d-b64f-9525bf3b24e6"
+            ],
+            "outfit_id": [
+                "CostumeVampire"
+            ]
+        },
+        "Costume Walter": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "6e87cbe2-6b8e-4c7d-a7f8-6a6a31441eca"
+            ],
+            "outfit_id": [
+                "CostumeWalter"
+            ]
+        },
+        "Costume Wild West Boss": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "04502440-a4ef-434f-835d-9952b00897d9",
+                "5753255c-6e3c-4370-a7e8-0101be682816"
+            ],
+            "outfit_id": [
+                "CostumeWildWestBoss"
+            ]
+        },
+        "Costume Wild West Clown": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "90997460-c9fc-435d-a875-b69e1c3db4f1",
+                "8fbed457-17ae-471a-bb44-424e82ecdb0d"
+            ],
+            "outfit_id": [
+                "CostumeWildWestClown"
+            ]
+        },
+        "Costume Wild West Cowpoke": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "7c955472-42ed-4f8c-9a0d-428fbe350581",
+                "879d22bd-fb6c-4bbe-a5ee-91241a706aa1"
+            ],
+            "outfit_id": [
+                "CostumeWildWestCowpoke"
+            ]
+        },
+        "Costume Wild West Fancy": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "f0426db0-0d3d-4f4a-805c-81daff20e5c1",
+                "769a7a00-39c7-48e1-aeda-71dbbdbfcf4f"
+            ],
+            "outfit_id": [
+                "CostumeWildWestFancy"
+            ]
+        },
+        "Costume Wild West Lawman": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "0ea3c538-54f6-4146-a13b-fed27b077c0a",
+                "126d1500-1694-42cd-adfb-fdc0204164b4"
+            ],
+            "outfit_id": [
+                "CostumeWildWestLawman"
+            ]
+        },
+        "Costume Wild West Mayor": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "e4601c05-bb27-4b96-90dd-0df82daa246e",
+                "a8e0e1f0-f548-42a0-a196-4d265dd55d74"
+            ],
+            "outfit_id": [
+                "CostumeWildWestMayor"
+            ]
+        },
+        "Costume Wild West Mountain Person": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "3effec00-6ade-4b86-ac70-73e96d1c232b",
+                "a5b1cca8-2ec4-49c0-bbd3-3da0060513ca"
+            ],
+            "outfit_id": [
+                "CostumeWildWestMountainPerson"
+            ]
+        },
+        "Costume Wild West Outlaw": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "936463b0-39d9-4fe1-a861-e5996e7df334",
+                "8f26f7d8-27a9-4369-8334-99f7f95d53a3"
+            ],
+            "outfit_id": [
+                "CostumeWildWestOutlaw"
+            ]
+        },
+        "Costume Witch": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "754ca526-ee8b-44cc-87b0-ddeeb6eabbb5"
+            ],
+            "outfit_id": [
+                "CostumeWitch"
+            ]
+        },
+        "Costume Wizard": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "c02c2ff2-7478-4fa1-823f-f53209f5bd27"
+            ],
+            "outfit_id": [
+                "CostumeWizard"
             ]
         },
         "Cowboy Stripper": {
@@ -37610,23 +38073,24 @@
                 "CowboyStripper"
             ]
         },
+        "Cultist": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "115b9552-b3a5-465f-872e-e8c4e5487f88",
+                "3c455da2-831a-40d7-bc7d-fc7154507c89"
+            ],
+            "outfit_id": [
+                "Cultist"
+            ]
+        },
         "Cyclist": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
                 "870f6e8a-369e-44b8-9a9f-aa1ca1caf190",
-                "870f6e8a-369e-44b8-9a9f-aa1ca1caf190"
-            ],
-            "outfit_id": [
-                "Cyclist"
-            ]
-        },
-        "Cyclist (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
                 "870f6e8a-369e-44b8-9a9f-aa1ca1caf190"
             ],
             "outfit_id": [
@@ -37644,15 +38108,16 @@
                 "Dean"
             ]
         },
-        "Doctor (female)": {
+        "Detective": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "23731a48-3cbd-494e-9ea8-781000a83041"
+                "0f7c0f5c-e74c-45a0-a4d6-0fbf3576b5a3",
+                "2a723f39-b9f5-454b-9bf2-e393c3189694"
             ],
             "outfit_id": [
-                "Doctor"
+                "Detective"
             ]
         },
         "Doctor (outfit)": {
@@ -37672,7 +38137,7 @@
                 "Outfits"
             ],
             "guid": [
-                "23731a48-3cbd-494e-9ea8-781000a83041"
+                "7cc96266-836c-45a5-8ebf-091b315693c2"
             ],
             "outfit_id": [
                 "DressLong"
@@ -37711,15 +38176,28 @@
                 "Duke"
             ]
         },
-        "Farmer (female)": {
+        "Evacuee": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "3c455da2-831a-40d7-bc7d-fc7154507c89"
+                "abc5a4ab-5662-443c-a66e-e2f6f66513b6",
+                "abc5a4ab-5662-443c-a66e-e2f6f66513b6"
             ],
             "outfit_id": [
-                "Farmer"
+                "Evacuee"
+            ]
+        },
+        "Exterminator Suited": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "cff9d988-d11c-4433-9eda-ce059e2b0a69",
+                "5e7eaac1-1dbb-4e2e-86d7-621e60919cc6"
+            ],
+            "outfit_id": [
+                "ExterminatorSuited"
             ]
         },
         "Farmer (outfit)": {
@@ -37746,34 +38224,12 @@
                 "Fireman"
             ]
         },
-        "Fireman (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "15162edc-d5bc-4a2e-8b52-ac0bdff283e0"
-            ],
-            "outfit_id": [
-                "Fireman"
-            ]
-        },
         "Fireman Full Suit": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
                 "db97c1a3-c695-42d7-9a71-f8a3f5e6d08c",
-                "9d4cf092-a0a0-4b2c-94a7-c83255e5706b"
-            ],
-            "outfit_id": [
-                "FiremanFullSuit"
-            ]
-        },
-        "Fireman Full Suit (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
                 "9d4cf092-a0a0-4b2c-94a7-c83255e5706b"
             ],
             "outfit_id": [
@@ -37802,17 +38258,6 @@
                 "Fisherman"
             ]
         },
-        "Fitness Instructor (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "1444761a-8b96-4cfe-bf5c-7e9b91484ed5"
-            ],
-            "outfit_id": [
-                "FitnessInstructor"
-            ]
-        },
         "Fitness Instructor (outfit)": {
             "categories": [
                 "Outfits"
@@ -37825,6 +38270,39 @@
                 "FitnessInstructor"
             ]
         },
+        "Football Black": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "893fcefa-7046-4879-8939-98d6644a0a21"
+            ],
+            "outfit_id": [
+                "Football_Black"
+            ]
+        },
+        "Football Gold": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "df9b6637-4a66-477c-9661-c36b48dbb8c6"
+            ],
+            "outfit_id": [
+                "Football_Gold"
+            ]
+        },
+        "Football White": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "80cd3d68-6710-4ebf-8083-8427f6571746"
+            ],
+            "outfit_id": [
+                "Football_White"
+            ]
+        },
         "Foreman": {
             "categories": [
                 "Outfits"
@@ -37834,17 +38312,6 @@
             ],
             "outfit_id": [
                 "Foreman"
-            ]
-        },
-        "Fossoil (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "75b901c3-0986-4780-bb1e-c11b7d117b63"
-            ],
-            "outfit_id": [
-                "Fossoil"
             ]
         },
         "Fossoil (outfit)": {
@@ -37870,17 +38337,6 @@
                 "Frank_Hemingway"
             ]
         },
-        "Gas 2 Go (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "6f61b729-6ada-4fb1-9039-96a0489e846f"
-            ],
-            "outfit_id": [
-                "Gas2Go"
-            ]
-        },
         "Gas 2 Go (outfit)": {
             "categories": [
                 "Outfits"
@@ -37891,6 +38347,18 @@
             ],
             "outfit_id": [
                 "Gas2Go"
+            ]
+        },
+        "Gaudy": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "615db7b1-e7ac-45ae-827f-62746dfc9c49",
+                "fc0109f4-2d41-4360-8ae4-97f3839e9e82"
+            ],
+            "outfit_id": [
+                "Gaudy"
             ]
         },
         "Generic Skirt": {
@@ -37916,34 +38384,12 @@
                 "Generic01"
             ]
         },
-        "Generic01 (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "5a39681b-f64b-4305-b36b-89c6961303db"
-            ],
-            "outfit_id": [
-                "Generic01"
-            ]
-        },
         "Generic02": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
                 "4fcf83f0-b20c-4106-8b92-1699d1094dbc",
-                "4fcf83f0-b20c-4106-8b92-1699d1094dbc"
-            ],
-            "outfit_id": [
-                "Generic02"
-            ]
-        },
-        "Generic02 (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
                 "4fcf83f0-b20c-4106-8b92-1699d1094dbc"
             ],
             "outfit_id": [
@@ -37962,17 +38408,6 @@
                 "Generic03"
             ]
         },
-        "Generic03 (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "8e4b7b38-1e6e-4cda-a7d7-f01b75e0c8e6"
-            ],
-            "outfit_id": [
-                "Generic03"
-            ]
-        },
         "Generic04": {
             "categories": [
                 "Outfits"
@@ -37985,34 +38420,12 @@
                 "Generic04"
             ]
         },
-        "Generic04 (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "bdd925eb-c34a-4355-b430-0552cfceba9e"
-            ],
-            "outfit_id": [
-                "Generic04"
-            ]
-        },
         "Generic05": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
                 "2e59b6c2-d232-4f8d-9151-14cf7b6a03c8",
-                "2e59b6c2-d232-4f8d-9151-14cf7b6a03c8"
-            ],
-            "outfit_id": [
-                "Generic05"
-            ]
-        },
-        "Generic05 (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
                 "2e59b6c2-d232-4f8d-9151-14cf7b6a03c8"
             ],
             "outfit_id": [
@@ -38042,17 +38455,6 @@
                 "GigaMart_Employee"
             ]
         },
-        "GigaMart Employee (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "33037c49-6cae-44ac-ada9-d4853ab78113"
-            ],
-            "outfit_id": [
-                "GigaMart_Employee"
-            ]
-        },
         "Golfer": {
             "categories": [
                 "Outfits"
@@ -38065,15 +38467,16 @@
                 "Golfer"
             ]
         },
-        "Golfer (female)": {
+        "Goth": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "5a28b6e2-6d8a-4ffe-b81e-34079c113826"
+                "1d553032-b6aa-4c9d-9d47-e1ada6be1944",
+                "fca59952-4c9b-4325-9b91-cc9522b76acd"
             ],
             "outfit_id": [
-                "Golfer"
+                "Goth"
             ]
         },
         "Groom": {
@@ -38087,23 +38490,59 @@
                 "Groom"
             ]
         },
+        "Groucho": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "f78c2f3d-9871-4018-b045-aef8e555f5d7",
+                "c7f6b091-7c47-48e6-a1bb-536956b69537"
+            ],
+            "outfit_id": [
+                "Groucho"
+            ]
+        },
+        "Groucho Tshirt": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "b0391ae0-0fef-4c07-a8f4-38081191bf98",
+                "a835c2cd-c1b6-44b0-a004-11c7a6f917d4"
+            ],
+            "outfit_id": [
+                "Groucho_Tshirt"
+            ]
+        },
+        "Grunge": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "44600109-3e26-4a18-8cc2-5d4d9182d9c7",
+                "1911370c-0374-4082-8c2e-5142e912536b"
+            ],
+            "outfit_id": [
+                "Grunge"
+            ]
+        },
+        "Guitar Guy": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "73689111-f44c-465b-a270-c532f65e8525"
+            ],
+            "outfit_id": [
+                "GuitarGuy"
+            ]
+        },
         "Hazard Suit": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
                 "6f6534b3-927d-41f0-b422-ce1f72b7fbe9",
-                "6f6534b3-927d-41f0-b422-ce1f72b7fbe9"
-            ],
-            "outfit_id": [
-                "HazardSuit"
-            ]
-        },
-        "Hazard Suit (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
                 "6f6534b3-927d-41f0-b422-ce1f72b7fbe9"
             ],
             "outfit_id": [
@@ -38122,15 +38561,16 @@
                 "Hobbo"
             ]
         },
-        "Hobbo (female)": {
+        "Hobbyist": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "7a11f4c9-4645-4235-8520-b4391069d136"
+                "45b67a5a-a5f5-41a0-a8f7-9e19b2e069ca",
+                "050a4d4b-40f1-42a7-a032-2dc762398362"
             ],
             "outfit_id": [
-                "Hobbo"
+                "Hobbyist"
             ]
         },
         "Hockey Psycho": {
@@ -38142,6 +38582,18 @@
             ],
             "outfit_id": [
                 "HockeyPsycho"
+            ]
+        },
+        "Honor Student": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "f661cb5b-668f-4761-9275-1213c2afa5ee",
+                "48a0ab19-09d6-4ef6-b9fa-4000e13fb04f"
+            ],
+            "outfit_id": [
+                "HonorStudent"
             ]
         },
         "Hospital Patient": {
@@ -38156,15 +38608,16 @@
                 "HospitalPatient"
             ]
         },
-        "Hospital Patient (female)": {
+        "Hospital Patient Bathrobe": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "378a77f6-503c-4f41-967c-c6a5497e56b8"
+                "e54db7ab-2256-49b1-9418-eb47b7cd6272",
+                "f48f7512-abb9-4c81-9c27-e222e3d4c275"
             ],
             "outfit_id": [
-                "HospitalPatient"
+                "HospitalPatientBathrobe"
             ]
         },
         "Hunter (outfit)": {
@@ -38176,6 +38629,106 @@
             ],
             "outfit_id": [
                 "Hunter"
+            ]
+        },
+        "IT (outfit)": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "a2859f95-55fb-489e-8ed5-0e7909d4e981",
+                "b9d5b79d-405e-4420-8a60-efa0d2ade78b"
+            ],
+            "outfit_id": [
+                "IT"
+            ]
+        },
+        "Ice Hockey Black": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "e6c7b138-d740-4d1c-84c3-2bbad0a2047a"
+            ],
+            "outfit_id": [
+                "IceHockey_Black"
+            ]
+        },
+        "Ice Hockey Black Goalie": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "3cbb5092-a314-434b-a4b6-c4815fea6fde"
+            ],
+            "outfit_id": [
+                "IceHockey_Black_Goalie"
+            ]
+        },
+        "Ice Hockey Blue": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "db26b1b0-ef58-4198-964f-ee4bdcd55819"
+            ],
+            "outfit_id": [
+                "IceHockey_Blue"
+            ]
+        },
+        "Ice Hockey Blue Goalie": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "b02d9b12-1651-47fc-a5c0-10504436b544"
+            ],
+            "outfit_id": [
+                "IceHockey_Blue_Goalie"
+            ]
+        },
+        "Ice Hockey Red": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "bf1d5962-08de-4d9e-a52d-8fbed460aeca"
+            ],
+            "outfit_id": [
+                "IceHockey_Red"
+            ]
+        },
+        "Ice Hockey Red Goalie": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "7772559a-0134-4fa1-a81f-066841fdc58f"
+            ],
+            "outfit_id": [
+                "IceHockey_Red_Goalie"
+            ]
+        },
+        "Ice Hockey White": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "d8e62192-05b1-4119-a785-cd6aa3852222"
+            ],
+            "outfit_id": [
+                "IceHockey_White"
+            ]
+        },
+        "Ice Hockey White Goalie": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "edd7591e-22ef-4a0f-b392-0853e9ae7679"
+            ],
+            "outfit_id": [
+                "IceHockey_White_Goalie"
             ]
         },
         "Inmate": {
@@ -38354,6 +38907,18 @@
                 "Kirsty_Kormick"
             ]
         },
+        "Mad Scientist": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "ff40ceb7-c4ab-453b-b1f9-ccc58c62ed28",
+                "83db6cd5-a105-406b-ad11-b3b16d26dfdc"
+            ],
+            "outfit_id": [
+                "MadScientist"
+            ]
+        },
         "Mall Security": {
             "categories": [
                 "Outfits"
@@ -38363,6 +38928,18 @@
             ],
             "outfit_id": [
                 "MallSecurity"
+            ]
+        },
+        "Mannequin Leather": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "23c4bacc-e802-4570-b05e-13bb7148cdb2",
+                "fd1b216a-84d0-4dcb-8f6c-1acf73bf9c92"
+            ],
+            "outfit_id": [
+                "MannequinLeather"
             ]
         },
         "Mannequin1": {
@@ -38409,6 +38986,18 @@
                 "McCoys"
             ]
         },
+        "Meat Master": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "105a8a0d-83f5-4377-892c-720bc43572f5",
+                "e2d52d20-67b2-4d12-a80d-3a82a965a26c"
+            ],
+            "outfit_id": [
+                "Meat_Master"
+            ]
+        },
         "Mechanic (outfit)": {
             "categories": [
                 "Outfits"
@@ -38431,23 +39020,34 @@
                 "MetalWorker"
             ]
         },
+        "Mob": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "032d1f6c-b9f4-4544-8e5b-0800a684b739"
+            ],
+            "outfit_id": [
+                "Mob"
+            ]
+        },
+        "Mob Casual": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "861d8de9-d6c2-4c53-9144-242fcbf4d291"
+            ],
+            "outfit_id": [
+                "MobCasual"
+            ]
+        },
         "Naked": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
                 "836531ac-7e02-4ede-8545-5ac987df51ba",
-                "836531ac-7e02-4ede-8545-5ac987df51ba"
-            ],
-            "outfit_id": [
-                "Naked"
-            ]
-        },
-        "Naked (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
                 "836531ac-7e02-4ede-8545-5ac987df51ba"
             ],
             "outfit_id": [
@@ -38462,18 +39062,18 @@
                 "d7cb92aa-b4a7-4077-9b7f-07b5cea33227"
             ],
             "outfit_id": [
-                "Naked Veil"
+                "NakedVeil"
             ]
         },
-        "Nurse (female)": {
+        "Nolan (outfit)": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "9600a5f9-2728-4cb2-9160-a02ecdb81d6d"
+                "70ddb592-dd77-4390-8840-36ee8d46d14e"
             ],
             "outfit_id": [
-                "Nurse"
+                "Nolan"
             ]
         },
         "Nurse (outfit)": {
@@ -38522,17 +39122,6 @@
                 "Party"
             ]
         },
-        "Party (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "efdcec8a-1f2f-4dce-ab94-da2b4e98f96b"
-            ],
-            "outfit_id": [
-                "Party"
-            ]
-        },
         "Pharmacist": {
             "categories": [
                 "Outfits"
@@ -38545,15 +39134,15 @@
                 "Pharmacist"
             ]
         },
-        "Pharmacist (female)": {
+        "Plonkies Guy": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "4cc96f55-0ae4-4f20-bdc0-2fd1c0e9a20a"
+                "0bffddb1-1224-4712-97d0-98d8ce281321"
             ],
             "outfit_id": [
-                "Pharmacist"
+                "PlonkiesGuy"
             ]
         },
         "Poker Dealer": {
@@ -38579,17 +39168,6 @@
                 "Police"
             ]
         },
-        "Police (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "8ad78667-4a4a-4d59-878d-216ceefc5275"
-            ],
-            "outfit_id": [
-                "Police"
-            ]
-        },
         "Police Riot": {
             "categories": [
                 "Outfits"
@@ -38601,23 +39179,24 @@
                 "PoliceRiot"
             ]
         },
+        "Police SWAT": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "340fcbf9-8568-45ce-ab5f-e4e0da41d1e4",
+                "6749ec2f-4224-44ef-a8cc-4fec7dd618c5"
+            ],
+            "outfit_id": [
+                "Police_SWAT"
+            ]
+        },
         "Police State": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
                 "771243fc-c1c1-4f52-9885-598a77d69321",
-                "771243fc-c1c1-4f52-9885-598a77d69321"
-            ],
-            "outfit_id": [
-                "PoliceState"
-            ]
-        },
-        "Police State (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
                 "771243fc-c1c1-4f52-9885-598a77d69321"
             ],
             "outfit_id": [
@@ -38641,17 +39220,6 @@
             ],
             "guid": [
                 "bcdfa184-a015-443c-a3b8-73d42580e90d",
-                "9f88b553-429d-41cd-bad2-30680fc8bb99"
-            ],
-            "outfit_id": [
-                "Postal"
-            ]
-        },
-        "Postal (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
                 "9f88b553-429d-41cd-bad2-30680fc8bb99"
             ],
             "outfit_id": [
@@ -38692,34 +39260,12 @@
                 "PrivateMilitia"
             ]
         },
-        "Private Militia (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "fb4ada73-d7da-48af-920e-4e85a38c171b"
-            ],
-            "outfit_id": [
-                "PrivateMilitia"
-            ]
-        },
         "Punk": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
                 "2dc49726-6074-4623-8ad1-b45e1a29cbea",
-                "1d39e43a-cefa-4cfc-a736-3e2a180ac346"
-            ],
-            "outfit_id": [
-                "Punk"
-            ]
-        },
-        "Punk (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
                 "1d39e43a-cefa-4cfc-a736-3e2a180ac346"
             ],
             "outfit_id": [
@@ -38749,17 +39295,6 @@
                 "Ranger"
             ]
         },
-        "Ranger (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "13b1baed-4903-4a02-8e7e-e6da9c3dfaa2"
-            ],
-            "outfit_id": [
-                "Ranger"
-            ]
-        },
         "Redneck": {
             "categories": [
                 "Outfits"
@@ -38772,15 +39307,28 @@
                 "Redneck"
             ]
         },
-        "Redneck (female)": {
+        "Resident": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "3a52f21f-713d-4d38-8eb3-e452793f4522"
+                "d2bcd323-7145-4419-aecb-22233d430139",
+                "fb14395f-481e-4ba7-9401-9ff28fade1ad"
             ],
             "outfit_id": [
-                "Redneck"
+                "Resident"
+            ]
+        },
+        "Retiree": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "9b2c3d1e-7cc4-47d7-83cf-816f89831a3f",
+                "b83664b0-098d-43a9-a9dc-ee4c5ffebdce"
+            ],
+            "outfit_id": [
+                "Retiree"
             ]
         },
         "Rev Peter Watts": {
@@ -38792,6 +39340,18 @@
             ],
             "outfit_id": [
                 "Rev_Peter_Watts"
+            ]
+        },
+        "Riverboat Captain": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "640ff777-fad9-46ef-8bca-a01a99b05973",
+                "ca732198-b4e1-4c6b-80bb-7472a5f0a820"
+            ],
+            "outfit_id": [
+                "RiverboatCaptain"
             ]
         },
         "Rocker": {
@@ -38806,15 +39366,16 @@
                 "Rocker"
             ]
         },
-        "Rocker (female)": {
+        "Sanitation": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "8e4725f7-c8ca-4996-bd3e-de826b703209"
+                "83595b39-7574-4c60-92cd-5d85abcdbee8",
+                "8d2f0d0e-c18e-4cfe-8dea-24dc56dcf1ee"
             ],
             "outfit_id": [
-                "Rocker"
+                "Sanitation"
             ]
         },
         "Santa": {
@@ -38823,17 +39384,6 @@
             ],
             "guid": [
                 "a2d0a1ba-939d-48d1-a51d-af674c9f74a4",
-                "a2d0a1ba-939d-48d1-a51d-af674c9f74a4"
-            ],
-            "outfit_id": [
-                "Santa"
-            ]
-        },
-        "Santa (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
                 "a2d0a1ba-939d-48d1-a51d-af674c9f74a4"
             ],
             "outfit_id": [
@@ -38852,15 +39402,16 @@
                 "SantaGreen"
             ]
         },
-        "Santa Green (female)": {
+        "Scarecrow (outfit)": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "78008cd5-b10a-4402-84de-62b1d83208b4"
+                "13355792-9106-4237-8773-bf46640ba57c",
+                "13355792-9106-4237-8773-bf46640ba57c"
             ],
             "outfit_id": [
-                "SantaGreen"
+                "Scarecrow"
             ]
         },
         "Security (outfit)": {
@@ -38886,29 +39437,7 @@
                 "ShellSuit_Black"
             ]
         },
-        "Shell Suit Black (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "ebe1f173-d935-4513-8803-427bbf73392c"
-            ],
-            "outfit_id": [
-                "ShellSuit_Black"
-            ]
-        },
-        "Shell Suit Blue (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "95249997-5a42-4c40-a4a1-15e62f7b02e3"
-            ],
-            "outfit_id": [
-                "ShellSuit_Blue"
-            ]
-        },
-        "Shell Suit Blue (male)": {
+        "Shell Suit Blue": {
             "categories": [
                 "Outfits"
             ],
@@ -38920,18 +39449,7 @@
                 "ShellSuit_Blue"
             ]
         },
-        "Shell Suit Green (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "0bc89a87-fd8c-4cc5-8715-d098df75bb71"
-            ],
-            "outfit_id": [
-                "ShellSuit_Green"
-            ]
-        },
-        "Shell Suit Green (male)": {
+        "Shell Suit Green": {
             "categories": [
                 "Outfits"
             ],
@@ -38943,18 +39461,7 @@
                 "ShellSuit_Green"
             ]
         },
-        "Shell Suit Pink (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "6f2c599a-c5fc-4430-a91f-bca0dc8dd536"
-            ],
-            "outfit_id": [
-                "ShellSuit_Pink"
-            ]
-        },
-        "Shell Suit Pink (male)": {
+        "Shell Suit Pink": {
             "categories": [
                 "Outfits"
             ],
@@ -38978,15 +39485,16 @@
                 "ShellSuit_Teal"
             ]
         },
-        "Shell Suit Teal (female)": {
+        "Sheriff Deputy": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "d4795616-0090-4cbf-8c6d-d06220cd852e"
+                "b33dca08-6dd5-4d0e-b73b-95ca6894ce52",
+                "75dc5064-d29e-42ca-be1f-8a8e81d47082"
             ],
             "outfit_id": [
-                "ShellSuit_Teal"
+                "Sheriff_Deputy"
             ]
         },
         "Sir Twiggy (outfit)": {
@@ -39010,28 +39518,6 @@
             ],
             "outfit_id": [
                 "Ski"
-            ]
-        },
-        "Ski (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "1b17cba4-fa41-4b87-808b-904e285479b1"
-            ],
-            "outfit_id": [
-                "Ski"
-            ]
-        },
-        "Spiffo (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "50870e1d-017b-4285-a654-ac1bb9e1cccd"
-            ],
-            "outfit_id": [
-                "Spiffo"
             ]
         },
         "Spiffo (outfit)": {
@@ -39058,34 +39544,12 @@
                 "SportsFan"
             ]
         },
-        "Sports Fan (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "9ab76aac-46b3-44a5-86f0-7efa5e0cec17"
-            ],
-            "outfit_id": [
-                "SportsFan"
-            ]
-        },
         "Street Sports": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
                 "961c7505-ab9f-433b-9e37-1bbd72ca6a81",
-                "9f7eb187-3f59-4cf0-893f-0fbe512d42d3"
-            ],
-            "outfit_id": [
-                "StreetSports"
-            ]
-        },
-        "Street Sports (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
                 "9f7eb187-3f59-4cf0-893f-0fbe512d42d3"
             ],
             "outfit_id": [
@@ -39148,17 +39612,6 @@
                 "Student"
             ]
         },
-        "Student (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "4f469f0f-d2fb-4005-a607-acc66fe4d64e"
-            ],
-            "outfit_id": [
-                "Student"
-            ]
-        },
         "Survivalist": {
             "categories": [
                 "Outfits"
@@ -39171,15 +39624,28 @@
                 "Survivalist"
             ]
         },
-        "Survivalist (female)": {
+        "Survivalist Late": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "9049965e-3d83-4fb9-bf2b-51bf16d20c56"
+                "842345b4-ea36-44bb-a8b4-40f803389d83",
+                "ea2d0c7e-92b0-471f-a8ee-fbecec00da3c"
             ],
             "outfit_id": [
-                "Survivalist"
+                "Survivalist_Late"
+            ]
+        },
+        "Survivalist Mid": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "f81d0567-0109-4673-a3f7-db721ad75ca2",
+                "0401db9e-dba4-4266-9e61-141fce2607ca"
+            ],
+            "outfit_id": [
+                "Survivalist_Mid"
             ]
         },
         "Survivalist02": {
@@ -39194,15 +39660,28 @@
                 "Survivalist02"
             ]
         },
-        "Survivalist02 (female)": {
+        "Survivalist02 Late": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "f90a99d5-5b53-4b85-ad0a-a5fbd2dbfceb"
+                "f7bdfced-9d50-4bce-a1ca-7d78719e7c1f",
+                "5ed586e5-5af5-468f-8b96-396685c73344"
             ],
             "outfit_id": [
-                "Survivalist02"
+                "Survivalist02_Late"
+            ]
+        },
+        "Survivalist02 Mid": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "e6b34a2d-6618-46a5-80ce-0b7bf4ac13a5",
+                "a9da196d-b9ad-4c8b-ae48-7ddb3f5ee50d"
+            ],
+            "outfit_id": [
+                "Survivalist02_Mid"
             ]
         },
         "Survivalist03": {
@@ -39217,15 +39696,100 @@
                 "Survivalist03"
             ]
         },
-        "Survivalist03 (female)": {
+        "Survivalist03 Late": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "8548461b-6d27-4a0a-a2f0-a92051614cdb"
+                "134117e4-c57d-4473-a810-e844689d7a1d",
+                "d6320c62-a99d-4854-848e-7e76c14e45b2"
             ],
             "outfit_id": [
-                "Survivalist03"
+                "Survivalist03_Late"
+            ]
+        },
+        "Survivalist03 Mid": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "d6a168ae-d12f-409b-b3d5-90108661de15",
+                "92ae99c1-cdc1-4c02-ad5e-a3d990d7679a"
+            ],
+            "outfit_id": [
+                "Survivalist03_Mid"
+            ]
+        },
+        "Survivalist04": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "cbd59b52-7e4d-4b65-8bd0-f87a29436721",
+                "a1775cd1-f02f-4ff5-8abe-e8c6b1b96ed6"
+            ],
+            "outfit_id": [
+                "Survivalist04"
+            ]
+        },
+        "Survivalist04 Late": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "6564ded6-aaad-4394-8948-03f30d537886",
+                "a3108625-85fb-4c8d-a3ec-2dad806ca4af"
+            ],
+            "outfit_id": [
+                "Survivalist04_Late"
+            ]
+        },
+        "Survivalist04 Mid": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "5b6cc0fb-0481-4b42-b699-a1a24b259679",
+                "e5d30686-3efb-4a28-8ef7-109c72a91640"
+            ],
+            "outfit_id": [
+                "Survivalist04_Mid"
+            ]
+        },
+        "Survivalist05": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "1ba70473-16bc-4818-8a30-9980cf533ffc",
+                "8a24a81f-c8d7-4cd9-818e-929183575c16"
+            ],
+            "outfit_id": [
+                "Survivalist05"
+            ]
+        },
+        "Survivalist05 Late": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "0b110fd9-33ea-4f5e-9daa-58b8abe96967",
+                "65bfe045-d6e0-4623-8eed-e9fe6b285355"
+            ],
+            "outfit_id": [
+                "Survivalist05_Late"
+            ]
+        },
+        "Survivalist05 Mid": {
+            "categories": [
+                "Outfits"
+            ],
+            "guid": [
+                "7db4722f-347c-4112-9707-4bc1101b547f",
+                "36de3356-27c0-4282-a8af-48e60a19f428"
+            ],
+            "outfit_id": [
+                "Survivalist05_Mid"
             ]
         },
         "Swimmer": {
@@ -39240,34 +39804,12 @@
                 "Swimmer"
             ]
         },
-        "Swimmer (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "8b7bc116-27cd-479b-8b6e-86953f6646bb"
-            ],
-            "outfit_id": [
-                "Swimmer"
-            ]
-        },
         "Teacher": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
                 "0d3f7696-3301-49e3-97c1-89cee39779e8",
-                "37e8113d-e886-4480-a335-66bf7cd6f867"
-            ],
-            "outfit_id": [
-                "Teacher"
-            ]
-        },
-        "Teacher (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
                 "37e8113d-e886-4480-a335-66bf7cd6f867"
             ],
             "outfit_id": [
@@ -39296,17 +39838,6 @@
                 "Thug"
             ]
         },
-        "Thunder Gas (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "d7b7e8aa-fac4-4552-9518-38cf8a9e8888"
-            ],
-            "outfit_id": [
-                "ThunderGas"
-            ]
-        },
         "Thunder Gas (outfit)": {
             "categories": [
                 "Outfits"
@@ -39317,17 +39848,6 @@
             ],
             "outfit_id": [
                 "ThunderGas"
-            ]
-        },
-        "Tin Foil Hat (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "09dc6df1-f899-46b3-996a-3327601800f6"
-            ],
-            "outfit_id": [
-                "TinFoilHat"
             ]
         },
         "Tin Foil Hat (outfit)": {
@@ -39354,17 +39874,6 @@
                 "Tourist"
             ]
         },
-        "Tourist (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "66e92995-31c6-4b85-84e3-453dd634b37b"
-            ],
-            "outfit_id": [
-                "Tourist"
-            ]
-        },
         "Trader": {
             "categories": [
                 "Outfits"
@@ -39377,15 +39886,16 @@
                 "Trader"
             ]
         },
-        "Trader (female)": {
+        "Trucker": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "ba6666c1-0cc7-46c6-918a-c401df939b12"
+                "c41977c9-3a40-4482-a8b3-df11a476845a",
+                "45d158b9-36c7-446b-be83-64d6a8e1812d"
             ],
             "outfit_id": [
-                "Trader"
+                "Trucker"
             ]
         },
         "Tutorial Brother1": {
@@ -39444,17 +39954,6 @@
                 "Varsity"
             ]
         },
-        "Varsity (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "2568831d-115a-451c-bac0-3a745c1d6772"
-            ],
-            "outfit_id": [
-                "Varsity"
-            ]
-        },
         "Veteran (outfit)": {
             "categories": [
                 "Outfits"
@@ -39466,23 +39965,13 @@
                 "Veteran"
             ]
         },
-        "Waiter Classy (female)": {
+        "Waiter Classy": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
+                "ca5930d0-a948-492e-97ad-d831c38e101f",
                 "f7b6fd8d-c42b-42a8-850c-41aca7e9ce84"
-            ],
-            "outfit_id": [
-                "Waiter Classy"
-            ]
-        },
-        "Waiter Classy (male)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "ca5930d0-a948-492e-97ad-d831c38e101f"
             ],
             "outfit_id": [
                 "Waiter_Classy"
@@ -39500,15 +39989,16 @@
                 "Waiter_Diner"
             ]
         },
-        "Waiter Diner (female)": {
+        "Waiter Jays": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "756e47c0-b7ce-480f-ac31-ab22aec8e2f7"
+                "8e2bd8a5-c009-4dba-9f72-238a4a9a7e9b",
+                "80e4b7e6-3970-49e3-9063-0f2b5dff371a"
             ],
             "outfit_id": [
-                "Waiter_Diner"
+                "Waiter_Jays"
             ]
         },
         "Waiter Market": {
@@ -39517,17 +40007,6 @@
             ],
             "guid": [
                 "61054f40-75e7-4c77-9f4d-7abd42af39a7",
-                "bab18bd5-e37b-40fe-a3d1-968dc150ccba"
-            ],
-            "outfit_id": [
-                "Waiter_Market"
-            ]
-        },
-        "Waiter Market (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
                 "bab18bd5-e37b-40fe-a3d1-968dc150ccba"
             ],
             "outfit_id": [
@@ -39546,34 +40025,12 @@
                 "Waiter_PileOCrepe"
             ]
         },
-        "Waiter Pile O Crepe (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "6322f1b6-4f86-4e0c-99b3-89c609eb3ec4"
-            ],
-            "outfit_id": [
-                "Waiter_PileOCrepe"
-            ]
-        },
         "Waiter Pizza Whirled": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
                 "4a08e16c-bc08-425a-9b18-a02f09fa1b82",
-                "5cb80d23-d97b-4af7-98f7-63e84c8e85b0"
-            ],
-            "outfit_id": [
-                "Waiter_PizzaWhirled"
-            ]
-        },
-        "Waiter Pizza Whirled (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
                 "5cb80d23-d97b-4af7-98f7-63e84c8e85b0"
             ],
             "outfit_id": [
@@ -39592,34 +40049,12 @@
                 "Waiter_Restaurant"
             ]
         },
-        "Waiter Restaurant (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "4bb8e618-637a-4cb2-9e7e-075d65805550"
-            ],
-            "outfit_id": [
-                "Waiter_Restaurant"
-            ]
-        },
         "Waiter Spiffo": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
                 "828f361e-6877-49f6-8cd1-21610f7572bc",
-                "af9b629a-4281-4425-978f-450642e703aa"
-            ],
-            "outfit_id": [
-                "Waiter_Spiffo"
-            ]
-        },
-        "Waiter Spiffo (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
                 "af9b629a-4281-4425-978f-450642e703aa"
             ],
             "outfit_id": [
@@ -39638,18 +40073,7 @@
                 "WaiterStripper"
             ]
         },
-        "Waiter Stripper (female)": {
-            "categories": [
-                "Outfits"
-            ],
-            "guid": [
-                "170db8ce-e48c-42a9-a724-d1ba3d40aba2"
-            ],
-            "outfit_id": [
-                "WaiterStripper"
-            ]
-        },
-        "Waiter Tacho Del Pancho (female)": {
+        "Waiter Tacho Del Pancho": {
             "categories": [
                 "Outfits"
             ],
@@ -39665,11 +40089,10 @@
                 "Outfits"
             ],
             "guid": [
-                "dd3624d9-d6b0-412e-8508-2f25f8d10701",
-                "870589d5-a752-4064-8e0d-db9875c7c7dc"
+                "dd3624d9-d6b0-412e-8508-2f25f8d10701"
             ],
             "outfit_id": [
-                "Waiter_TachoDelPancho"
+                "Waiter_TacoDelPancho"
             ]
         },
         "Wedding Dress (outfit)": {
@@ -39706,15 +40129,16 @@
                 "Young"
             ]
         },
-        "Young (female)": {
+        "Young Cowpoke": {
             "categories": [
                 "Outfits"
             ],
             "guid": [
-                "0122cf99-8213-4fff-b72d-c595c01c4506"
+                "87183954-4f67-460a-aeee-9031628b5c1c",
+                "b3caba7d-8b1b-427c-ba3a-3d3b4e9b2db9"
             ],
             "outfit_id": [
-                "Young"
+                "YoungCowpoke"
             ]
         },
         "Zed Test": {
