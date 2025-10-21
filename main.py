@@ -272,6 +272,16 @@ menu_structure = {
                 "name": "Version differences",
                 "description": "Generate a diff between 2 versions of the game, showing line-by-line differences.",
             },
+            "5": {
+                "module": "scripts.parser.creation_method_parser",
+                "name": "Creation methods parser",
+                "description": "Parse MainCreationMethods.lua to extract traits and occupations data.",
+            },
+            "6": {
+                "module": "scripts.tools.outfit_images",
+                "name": "Outfit images",
+                "description": "Process outfit images: crop, remove greenscreen background, and output to images folder.",
+            },
         },
     },
     "9": {
