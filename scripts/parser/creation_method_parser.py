@@ -6,9 +6,9 @@ Parser for MainCreationMethods.lua file to extract traits and occupations data w
 import os
 import re
 from scripts.core.cache import save_cache
-from scripts.core import file_loading
 from scripts.core.language import Translate, Language
 from scripts.core import page_manager
+from scripts.core import file_loading
 from scripts.utils import echo
 
 
@@ -152,13 +152,8 @@ def output_trait_files(traits_data: dict):
     os.makedirs(output_dir, exist_ok=True)
 
     for trait_name, trait_data in traits_data.items():
-        # Get the page name for this trait using the page dictionary
-        trait_pages = page_manager.get_pages(trait_name, id_type="trait_id")
-        if trait_pages and len(trait_pages) > 0:
-            filename = f"{trait_pages[0]}.txt"
-        else:
-            # Fallback to raw trait name if no page found
-            filename = f"{trait_name}.txt"
+        # Use trait ID directly as filename since IDs are unique
+        filename = f"{trait_name}.txt"
 
         infobox_content = generate_trait_infobox(trait_data)
         filepath = os.path.join(output_dir, filename)
@@ -170,7 +165,6 @@ def output_trait_files(traits_data: dict):
             )
             with open(filepath, "w", encoding="utf-8") as f:
                 f.write(cleaned_content)
-            echo.info(f"Generated trait file: {filename}")
         except Exception as e:
             echo.error(f"Failed to write trait file {filename}: {e}")
 
@@ -181,15 +175,8 @@ def output_occupation_files(occupations_data: dict):
     os.makedirs(output_dir, exist_ok=True)
 
     for occupation_name, occupation_data in occupations_data.items():
-        # Get the page name for this occupation using the page dictionary
-        occupation_pages = page_manager.get_pages(
-            occupation_name, id_type="occupation_id"
-        )
-        if occupation_pages and len(occupation_pages) > 0:
-            filename = f"{occupation_pages[0]}.txt"
-        else:
-            # Fallback to raw occupation name if no page found
-            filename = f"{occupation_name}.txt"
+        # Use occupation ID directly as filename since IDs are unique
+        filename = f"{occupation_name}.txt"
 
         infobox_content = generate_occupation_infobox(occupation_data)
         filepath = os.path.join(output_dir, filename)
@@ -201,7 +188,6 @@ def output_occupation_files(occupations_data: dict):
             )
             with open(filepath, "w", encoding="utf-8") as f:
                 f.write(cleaned_content)
-            echo.info(f"Generated occupation file: {filename}")
         except Exception as e:
             echo.error(f"Failed to write occupation file {filename}: {e}")
 
@@ -216,13 +202,8 @@ def output_recipe_files(data: dict):
     os.makedirs(trait_recipe_dir, exist_ok=True)
 
     for trait_name, trait_data in traits_data.items():
-        # Get the page name for this trait using the page dictionary
-        trait_pages = page_manager.get_pages(trait_name, id_type="trait_id")
-        if trait_pages and len(trait_pages) > 0:
-            filename = f"{trait_pages[0]}.txt"
-        else:
-            # Fallback to raw trait name if no page found
-            filename = f"{trait_name}.txt"
+        # Use trait ID directly as filename since IDs are unique
+        filename = f"{trait_name}.txt"
 
         # Get free recipes for this trait
         free_recipes = trait_data.get("free_recipes", [])
@@ -236,7 +217,6 @@ def output_recipe_files(data: dict):
             try:
                 with open(filepath, "w", encoding="utf-8") as f:
                     f.write(recipe_content)
-                echo.info(f"Generated trait recipe file: {filename}")
             except Exception as e:
                 echo.error(f"Failed to write trait recipe file {filename}: {e}")
 
@@ -245,15 +225,8 @@ def output_recipe_files(data: dict):
     os.makedirs(occupation_recipe_dir, exist_ok=True)
 
     for occupation_name, occupation_data in occupations_data.items():
-        # Get the page name for this occupation using the page dictionary
-        occupation_pages = page_manager.get_pages(
-            occupation_name, id_type="occupation_id"
-        )
-        if occupation_pages and len(occupation_pages) > 0:
-            filename = f"{occupation_pages[0]}.txt"
-        else:
-            # Fallback to raw occupation name if no page found
-            filename = f"{occupation_name}.txt"
+        # Use occupation ID directly as filename since IDs are unique
+        filename = f"{occupation_name}.txt"
 
         # Get free recipes for this occupation
         free_recipes = occupation_data.get("free_recipes", [])
@@ -589,11 +562,11 @@ def parse_lua_file() -> dict:
     # Initialize language system for translations
     Language.init()
 
-    # Path to the Lua file (assuming it's in the expected location)
-    lua_file_path = os.path.join("resources", "lua", "MainCreationMethods.lua")
+    # Use file_loading system to find MainCreationMethods.lua in the game's lua directory
+    lua_file_path = file_loading.get_lua_path("MainCreationMethods")
 
-    if not os.path.exists(lua_file_path):
-        echo.error(f"Lua file not found: {lua_file_path}")
+    if not lua_file_path:
+        echo.error("MainCreationMethods.lua file not found in game's lua directory")
         return {}
 
     # Read and parse the Lua file
@@ -655,4 +628,4 @@ def main():
     echo.info("Generating recipe files...")
     output_recipe_files(data)
 
-    echo.success(f"Successfully parsed and cached creation methods data")
+    echo.success("Successfully parsed and cached creation methods data")
