@@ -240,7 +240,6 @@ def output_recipe_files(data: dict):
             try:
                 with open(filepath, "w", encoding="utf-8") as f:
                     f.write(recipe_content)
-                echo.info(f"Generated occupation recipe file: {filename}")
             except Exception as e:
                 echo.error(f"Failed to write occupation recipe file {filename}: {e}")
 
