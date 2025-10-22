@@ -17,7 +17,8 @@ The script handles:
 - Lua table generation for templates
 """
 
-import os, re
+import os
+import re
 from scripts.core.file_loading import get_lua_path
 from tqdm import tqdm
 from collections import defaultdict
@@ -1089,6 +1090,10 @@ def output_item_article_lists(
         return isinstance(item_id, str) and "*" not in item_id
 
     def expand_tag(tag: str) -> list[str]:
+        # Skip expanding SharpKnife tag to avoid overfilling templates with tool items
+        if tag.lower() == "sharpknife":
+            return []
+
         return [
             entry["item_id"]
             for entry in tag_to_items_map.get(tag, [])
@@ -1479,6 +1484,110 @@ def output_category_usage(recipe_data_map: dict[str, dict]) -> None:
             file_handle.write("\n".join(lines))
 
 
+def output_tag_usage(
+    crafting_recipe_map: dict[str, dict], building_recipe_map: dict[str, dict]
+) -> None:
+    """
+    Generate wiki markup for tag usage.
+
+    Args:
+        crafting_recipe_map (dict[str, dict]): Crafting recipe data.
+        building_recipe_map (dict[str, dict]): Building recipe data.
+
+    Creates files documenting which recipes use each tag,
+    organized by crafting vs building recipes.
+    """
+    os.makedirs(os.path.join("output", "recipes", "crafting", "tags"), exist_ok=True)
+    os.makedirs(os.path.join("output", "recipes", "building", "tags"), exist_ok=True)
+
+    # Collect tag usage by recipe from raw recipe data
+    tag_usage_crafting: defaultdict[str, set[str]] = defaultdict(set)
+    tag_usage_building: defaultdict[str, set[str]] = defaultdict(set)
+
+    def collect_tags_from_recipe(
+        recipe_id: str, recipe_data: dict, tag_usage_dict: defaultdict[str, set[str]]
+    ) -> None:
+        """Collect all tags used in a recipe (recipe-level tags + input tags)."""
+        # Recipe-level tags
+        recipe_tags = recipe_data.get("tags", [])
+        for tag in recipe_tags:
+            tag_usage_dict[tag].add(recipe_id)
+
+        # Input tags (ingredients and tools)
+        inputs = recipe_data.get("inputs", [])
+        for input_item in inputs:
+            input_tags = input_item.get("tags", [])
+            for tag in input_tags:
+                tag_usage_dict[tag].add(recipe_id)
+
+    # Process crafting recipes
+    for recipe_id, recipe_data in crafting_recipe_map.items():
+        collect_tags_from_recipe(recipe_id, recipe_data, tag_usage_crafting)
+
+    # Process building recipes
+    for recipe_id, recipe_data in building_recipe_map.items():
+        collect_tags_from_recipe(recipe_id, recipe_data, tag_usage_building)
+
+    def render_tag_template(tag: str, recipes: set[str]) -> str:
+        header = "Crafting recipe table"
+        lines = (
+            [f"{{{{Crafting/sandbox|header={header}|item=Tag_{tag}"]
+            + [f"|{r}" for r in sorted(recipes)]
+            + ["}}"]
+        )
+        return "\n".join(lines)
+
+    def sanitize_filename(name: str) -> str:
+        """Sanitize a string to be safe for use as a filename using percent encoding."""
+        # Replace invalid filename characters with percent encoding
+        replacements = {
+            ":": "%3A",
+            '"': "%22",
+            "<": "%3C",
+            ">": "%3E",
+            "|": "%7C",
+            "?": "%3F",
+            "*": "%2A",
+            "/": "%2F",
+            "\\": "%5C",
+        }
+        sanitized = name
+        for invalid_char, replacement in replacements.items():
+            sanitized = sanitized.replace(invalid_char, replacement)
+
+        # Remove any trailing spaces or dots (Windows doesn't like these)
+        sanitized = sanitized.rstrip(" .")
+
+        return sanitized
+
+    def write_file(path: str, content: str) -> None:
+        if not content:
+            return
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(content)
+
+    # Write crafting tag files
+    for tag, recipes in tag_usage_crafting.items():
+        if recipes:
+            content = render_tag_template(tag, recipes)
+            safe_filename = f"Tag_{sanitize_filename(tag)}.txt"
+            write_file(
+                os.path.join("output", "recipes", "crafting", "tags", safe_filename),
+                content,
+            )
+
+    # Write building tag files
+    for tag, recipes in tag_usage_building.items():
+        if recipes:
+            content = render_tag_template(tag, recipes)
+            safe_filename = f"Tag_{sanitize_filename(tag)}_building.txt"
+            write_file(
+                os.path.join("output", "recipes", "building", "tags", safe_filename),
+                content,
+            )
+
+
 def output_lua_tables(recipe_data_map: dict[str, dict]) -> None:
     """
     Generate Lua tables for recipe data.
@@ -1771,6 +1880,22 @@ def main():
             echo.error(f"Error while writing category usage: {exc}")
         else:
             echo.success("Category usage written")
+
+        try:
+            echo.info("Writing tag usage")
+            # Use raw recipe data like the other functions do
+            # Split raw recipes into crafting and building
+            crafting_recipes = {
+                k: v for k, v in craft_data.items() if not v.get("construction", False)
+            }
+            building_recipes = {
+                k: v for k, v in build_data.items() if v.get("construction", False)
+            }
+            output_tag_usage(crafting_recipes, building_recipes)
+        except Exception as exc:
+            echo.error(f"Error while writing tag usage: {exc}")
+        else:
+            echo.success("Tag usage written")
 
         try:
             echo.info("Writing lua tables")
