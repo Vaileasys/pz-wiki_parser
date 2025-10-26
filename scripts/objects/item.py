@@ -1106,18 +1106,27 @@ class Item:
 
     @property
     def name(self):
-        if self._name is None:
-            self._name = self._find_name()
-        return self._name
+        current_lang = Language.get()
+        if not hasattr(self, '_name_cache') or self._name_cache.get('lang') != current_lang:
+            self._name_cache = {
+                'lang': current_lang,
+                'value': self._find_name()
+            }
+        return self._name_cache['value']
     @name.setter
     def name(self, value):
-        self._name = value
+        # Clear the cache to force re-fetch on next access
+        if hasattr(self, '_name_cache'):
+            delattr(self, '_name_cache')
 
     @property
     def name_en(self):
-        if self._name_en is None:
-            self._name_en = self._find_name(language="en")
-        return self._name_en
+        if not hasattr(self, '_name_en_cache') or self._name_en_cache.get('lang') != 'en':
+            self._name_en_cache = {
+                'lang': 'en',
+                'value': self._find_name(language="en")
+            }
+        return self._name_en_cache['value']
     @name_en.setter
     def name_en(self, value):
         self._name_en = value
@@ -1151,9 +1160,13 @@ class Item:
         return self._display_category
     @property
     def display_category_name(self) -> str:
-        if not hasattr(self, '_display_category_name'):
-            self._display_category = Translate.get("IGUI_ItemCat_" + (self.raw_display_category or "Unknown"))
-        return self._display_category
+        current_lang = Language.get()
+        if not hasattr(self, '_display_category_name_cache') or self._display_category_name_cache.get('lang') != current_lang:
+            self._display_category_name_cache = {
+                'lang': current_lang,
+                'value': Translate.get("IGUI_ItemCat_" + (self.raw_display_category or "Unknown"))
+            }
+        return self._display_category_name_cache['value']
     @property
     def display_name(self) -> str: return self.get_default("DisplayName")
     @property
@@ -2142,9 +2155,13 @@ class Item:
     
     @property
     def vehicle_type_name(self) -> int:
-        if not hasattr(self, "_vehicle_type_name"):
-            self._vehicle_type_name = Translate.get(f"IGUI_VehicleType_{self.vehicle_type}")
-        return self._vehicle_type_name
+        current_lang = Language.get()
+        if not hasattr(self, '_vehicle_type_name_cache') or self._vehicle_type_name_cache.get('lang') != current_lang:
+            self._vehicle_type_name_cache = {
+                'lang': current_lang,
+                'value': Translate.get(f"IGUI_VehicleType_{self.vehicle_type}")
+            }
+        return self._vehicle_type_name_cache['value']
     
     @property
     def item_categories(self) -> list[str]:

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-import importlib, sys, os
+import importlib
+import sys
+import os
 from scripts.core import config_manager as config, setup, logger, cache
 from scripts.core.language import Language
 from scripts.utils import echo, color
@@ -12,6 +14,11 @@ menu_structure = {
         "sub_options": None,
     },
     "1": {
+        "name": "Batches",
+        "description": "",
+        "module": "scripts.tools.batch_processor",
+    },
+    "2": {
         "name": "Items",
         "description": "",
         "sub_options": {
@@ -62,7 +69,7 @@ menu_structure = {
             },
         },
     },
-    "2": {
+    "3": {
         "name": "Fluids",
         "description": "",
         "sub_options": {
@@ -83,23 +90,7 @@ menu_structure = {
             },
         },
     },
-    "3": {
-        "name": "Tiles",
-        "description": "",
-        "sub_options": {
-            "1": {
-                "module": "scripts.tiles.tiles_batch",
-                "name": "Tile batch",
-                "description": "Process tiles.",
-            },
-            "2": {
-                "module": "scripts.tiles.tiles_stitcher",
-                "name": "Tile stitcher",
-                "description": "Stitch tile sprites.",
-            },
-        },
-    },
-    "4": {
+    "5": {
         "name": "Recipes",
         "description": "Manage and generate recipies.",
         "sub_options": {
@@ -130,7 +121,7 @@ menu_structure = {
             },
         },
     },
-    "5": {
+    "6": {
         "name": "Vehicles",
         "description": "",
         "sub_options": {
@@ -166,7 +157,7 @@ menu_structure = {
             },
         },
     },
-    "6": {
+    "7": {
         "name": "Animals",
         "description": "",
         "sub_options": {
@@ -207,7 +198,7 @@ menu_structure = {
             },
         },
     },
-    "7": {
+    "8": {
         "name": "Lists",
         "description": "Generate lists for articles",
         "sub_options": {
@@ -248,7 +239,7 @@ menu_structure = {
             },
         },
     },
-    "8": {
+    "9": {
         "name": "Tools",
         "description": "Data analysis and generate reports.",
         "sub_options": {
@@ -282,9 +273,14 @@ menu_structure = {
                 "name": "Outfit images",
                 "description": "Process outfit images: crop, remove greenscreen background, and output to images folder.",
             },
+            "7": {
+                "module": "scripts.tiles.tiles_stitcher",
+                "name": "Tile stitcher",
+                "description": "Stitch tile sprites.",
+            },
         },
     },
-    "9": {
+    "10": {
         "name": "Other",
         "description": "",
         "sub_options": {
