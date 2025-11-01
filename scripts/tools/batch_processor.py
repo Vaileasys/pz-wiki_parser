@@ -277,14 +277,12 @@ def batch_lists(lang_code):
     from scripts.lists.furniture_list import generate_furniture_lists
     from scripts.lists.furniture_surfaces_list import generate_surface_list
     from scripts.lists.hotbar_slots import main as hotbar_slots_main
-    from scripts.lists.recmedia_list import main as recmedia_list_main
 
     attachment_list_main()
     body_parts_list_main()
     body_locations_list_main()
     fluid_list_main()
     hotbar_slots_main()
-    recmedia_list_main()
 
     named_tiles_cache_file = "named_tiles.json"
     named_tiles_data, _ = load_cache(
