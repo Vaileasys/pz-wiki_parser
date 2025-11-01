@@ -4,6 +4,7 @@ import os
 from tqdm import tqdm
 from scripts.core.constants import ITEM_DIR, PBAR_FORMAT
 from scripts.core.file_loading import write_file
+from scripts.core.language import Language
 from scripts.objects.evolved_recipe import EvolvedRecipe
 from scripts.objects.item import Item
 from scripts.utils import echo
@@ -177,9 +178,12 @@ def format_recipe_template(item, evolved_recipe):
     return content
 
 
-def main():
+def main(batch: bool = False):
     """
     Main execution function for evolved recipes article generation.
+
+    Args:
+        batch (bool): If True, skip language initialization
 
     This function:
     1. Loads all evolved recipes
@@ -192,6 +196,8 @@ def main():
        - Creates a file named after the item's ID
        - Writes the formatted content to the template directory
     """
+    if not batch:
+        Language.get()
     recipes = EvolvedRecipe.all()
 
     if not recipes:

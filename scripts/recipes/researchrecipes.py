@@ -23,6 +23,7 @@ from scripts.objects.item import Item
 from scripts.objects.craft_recipe import CraftRecipe
 from scripts.parser import metarecipe_parser
 from scripts.core import page_manager
+from scripts.core.language import Language
 from scripts.utils import echo
 
 
@@ -53,9 +54,12 @@ def find_recipes_producing_item(item_id: str) -> list[str]:
     return producing_recipes
 
 
-def main():
+def main(batch: bool = False):
     """
     Main execution function for research recipes generation.
+
+    Args:
+        batch (bool): If True, skip language initialization
 
     This function:
     1. Loads parsed item data
@@ -72,6 +76,8 @@ def main():
     - output/recipes/crafting/id/ (individual item files)
     - output/recipes/crafting/page/ (page-combined files)
     """
+    if not batch:
+        Language.get()
     # Initialize page manager
     page_manager.init()
 

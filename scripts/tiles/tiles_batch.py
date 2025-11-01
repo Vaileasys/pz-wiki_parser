@@ -19,7 +19,6 @@ import os
 from scripts.core.cache import load_cache
 from scripts.core.constants import DATA_DIR
 from scripts.core.version import Version
-from scripts.core.language import Language
 from scripts.utils import echo
 
 # parsers
@@ -69,9 +68,12 @@ def generate_cache(cache_path: str, cache_label: str, parser_func, game_version:
         return None, None
 
 
-def main():
+def main(lang_code):
     """
     Main execution function for the tile processing pipeline.
+
+    Args:
+        lang_code (str): Language code to process
 
     This function:
     1. Ensures all necessary caches are present and up-to-date
@@ -86,7 +88,6 @@ def main():
     """
     os.makedirs(DATA_DIR, exist_ok=True)
     game_version = Version.get()
-    lang_code = Language.get()
 
     tile_path = os.path.join(DATA_DIR, TILE_CACHE_FILE)
     named_path = os.path.join(DATA_DIR, NAMED_FURNITURE_CACHE_FILE)
@@ -137,7 +138,3 @@ def main():
     echo.info("Generating container mapping")
     generate_container_mapping(tiles_data, lang_code)
     echo.success("Container mapping generated")
-
-
-if __name__ == "__main__":
-    main()
