@@ -23,12 +23,16 @@ from scripts.parser import metarecipe_parser
 from scripts.core.file_loading import write_file
 from scripts.core.constants import OUTPUT_DIR, PBAR_FORMAT
 from scripts.core import page_manager
+from scripts.core.language import Language
 from scripts.utils import echo
 
 
-def main():
+def main(batch: bool = False):
     """
     Main execution function for taught recipes generation.
+
+    Args:
+        batch (bool): If True, skip language initialization
 
     This function:
     1. Loads parsed item data
@@ -42,6 +46,8 @@ def main():
     - output/recipes/teachedrecipes/id/ (individual item files)
     - output/recipes/teachedrecipes/page/ (page-combined files)
     """
+    if not batch:
+        Language.get()
     # Initialize page manager
     page_manager.init()
 

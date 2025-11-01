@@ -204,7 +204,5 @@ def main():
     write_to_file(items)
 
 
-
-
 if __name__ == "__main__":
     main()

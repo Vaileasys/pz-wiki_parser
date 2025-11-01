@@ -1696,9 +1696,12 @@ def output_lua_tables(recipe_data_map: dict[str, dict]) -> None:
         index_file.write("return index\n")
 
 
-def main():
+def main(batch: bool = False):
     """
     Main execution function for recipe processing.
+
+    Args:
+        batch (bool): If True, skip language initialization
 
     This function:
     1. Loads necessary data from parsers
@@ -1710,7 +1713,8 @@ def main():
     # Initialize page manager
     page_manager.init()
 
-    language_code = Language.get()
+    if not batch:
+        Language.get()
     game_version = Version.get()
 
     CRAFT_CACHE_FILE = "parsed_craftRecipe_data.json"
@@ -1719,202 +1723,151 @@ def main():
     craft_cache_path = os.path.join(CACHE_DIR, CRAFT_CACHE_FILE)
     build_cache_path = os.path.join(CACHE_DIR, BUILD_CACHE_FILE)
 
+    echo.info("Building item tags")
+    item_tags.get_tag_data()
+    item_tags.write_tag_image()
+    echo.success("Item tags built successfully")
+
+    # Craft cache
+    echo.info("Loading craft cache")
     try:
-        try:
-            echo.info("Building item tags")
-            tags_data = item_tags.get_tag_data()
-            item_tags.write_tag_image()
-        except Exception as exc:
-            echo.error(f"Error while building item tags: {exc}")
-        else:
-            echo.success("Item tags built successfully")
-
-        # Craft cache
-        try:
-            echo.info("Loading craft cache")
-            parsed_craft_data, craft_cache_version = load_cache(
-                craft_cache_path, "Craft", get_version=True
-            )
-
-            if craft_cache_version != game_version:
-                raise ValueError("Craft cache version mismatch")
-
-        except Exception as exc:
-            echo.info(f"{exc}; regenerating")
-
-            extract_script_data("craftRecipe")
-
-            parsed_craft_data, craft_cache_version = load_cache(
-                craft_cache_path, "Craft", get_version=True
-            )
-        craft_data = parsed_craft_data
-        echo.success("Craft cache ready")
-
-        # Build cache
-        try:
-            echo.info("Loading build cache")
-            parsed_build_data, build_cache_version = load_cache(
-                build_cache_path, "Build", get_version=True
-            )
-
-            if build_cache_version != game_version:
-                raise ValueError("Build cache version mismatch")
-
-        except Exception as exc:
-            echo.info(f"{exc}; regenerating")
-            extract_script_data("entity")
-
-            parsed_build_data, build_cache_version = load_cache(
-                build_cache_path, "Build", get_version=True
-            )
-        build_data = parsed_build_data
-        echo.success("Build cache ready")
-        ""
+        parsed_craft_data, craft_cache_version = load_cache(
+            craft_cache_path, "Craft", get_version=True
+        )
+        if craft_cache_version != game_version:
+            raise ValueError("Craft cache version mismatch")
     except Exception as exc:
-        echo.error(f"Error while gathering cache: {exc}")
-    else:
-        echo.success("Cache ready")
+        echo.info(f"{exc}; regenerating")
+        extract_script_data("craftRecipe")
+        parsed_craft_data, craft_cache_version = load_cache(
+            craft_cache_path, "Craft", get_version=True
+        )
+    craft_data = parsed_craft_data
+    echo.success("Craft cache ready")
+
+    # Build cache
+    echo.info("Loading build cache")
+    try:
+        parsed_build_data, build_cache_version = load_cache(
+            build_cache_path, "Build", get_version=True
+        )
+        if build_cache_version != game_version:
+            raise ValueError("Build cache version mismatch")
+    except Exception as exc:
+        echo.info(f"{exc}; regenerating")
+        extract_script_data("entity")
+        parsed_build_data, build_cache_version = load_cache(
+            build_cache_path, "Build", get_version=True
+        )
+    build_data = parsed_build_data
+    echo.success("Build cache ready")
+    echo.success("Cache ready")
 
     literature_data = literature_parser.get_literature_data()
     processed_recipe_map: dict[str, dict] = {}
 
     total_recipes = len(craft_data) + len(build_data)
 
-    try:  # Main processing loop
-        with tqdm(
-            total=total_recipes,
-            desc="Processing recipes",
-            bar_format=PBAR_FORMAT,
-            unit=" recipes",
-        ) as progress_bar:
-            # Crafting recipes
-            for recipe_id, recipe_data in craft_data.items():
-                progress_bar.set_postfix_str(f"Crafting: {recipe_id}")
-                try:
-                    ingredients_markup = process_ingredients(recipe_data, build_data)
-                    tools_markup = process_tools(recipe_data, build_data)
-                    recipes_markup, skills_markup = process_requirements(
-                        recipe_data, literature_data
-                    )
-                    workstation_markup = process_workstation(recipe_data, build_data)
-                    products_markup = process_products(recipe_data, build_data)
-                    xp_markup = process_xp(recipe_data, build_data)
+    with tqdm(
+        total=total_recipes,
+        desc="Processing recipes",
+        bar_format=PBAR_FORMAT,
+        unit=" recipes",
+    ) as progress_bar:
+        # Crafting recipes
+        for recipe_id, recipe_data in craft_data.items():
+            progress_bar.set_postfix_str(f"Crafting: {recipe_id}")
+            try:
+                ingredients_markup = process_ingredients(recipe_data, build_data)
+                tools_markup = process_tools(recipe_data, build_data)
+                recipes_markup, skills_markup = process_requirements(
+                    recipe_data, literature_data
+                )
+                workstation_markup = process_workstation(recipe_data, build_data)
+                products_markup = process_products(recipe_data, build_data)
+                xp_markup = process_xp(recipe_data, build_data)
 
-                    processed_recipe_map[recipe_id] = {
-                        "ingredients": ingredients_markup,
-                        "tools": tools_markup,
-                        "recipes": recipes_markup,
-                        "skills": skills_markup,
-                        "workstation": workstation_markup,
-                        "products": products_markup,
-                        "xp": xp_markup,
-                        "category": recipe_data.get("category", "Other"),
-                        "construction": False,
-                    }
-                except Exception as error:
-                    echo.error(
-                        f"Skipping crafting recipe '{recipe_id}' due to error: {error}"
-                    )
-                finally:
-                    progress_bar.update(1)
+                processed_recipe_map[recipe_id] = {
+                    "ingredients": ingredients_markup,
+                    "tools": tools_markup,
+                    "recipes": recipes_markup,
+                    "skills": skills_markup,
+                    "workstation": workstation_markup,
+                    "products": products_markup,
+                    "xp": xp_markup,
+                    "category": recipe_data.get("category", "Other"),
+                    "construction": False,
+                }
+            except Exception as error:
+                echo.error(
+                    f"Skipping crafting recipe '{recipe_id}' due to error: {error}"
+                )
+            finally:
+                progress_bar.update(1)
 
-            # Building recipes
-            for recipe_id, recipe_data in build_data.items():
-                progress_bar.set_postfix_str(f"Building: {recipe_id}")
-                try:
-                    ingredients_markup = process_ingredients(recipe_data, build_data)
-                    tools_markup = process_tools(recipe_data, build_data)
-                    recipes_markup, skills_markup = process_requirements(
-                        recipe_data, literature_data
-                    )
-                    workstation_markup = process_workstation(recipe_data, build_data)
-                    products_markup = process_products(recipe_data, build_data)
-                    xp_markup = process_xp(recipe_data, build_data)
+        # Building recipes
+        for recipe_id, recipe_data in build_data.items():
+            progress_bar.set_postfix_str(f"Building: {recipe_id}")
+            try:
+                ingredients_markup = process_ingredients(recipe_data, build_data)
+                tools_markup = process_tools(recipe_data, build_data)
+                recipes_markup, skills_markup = process_requirements(
+                    recipe_data, literature_data
+                )
+                workstation_markup = process_workstation(recipe_data, build_data)
+                products_markup = process_products(recipe_data, build_data)
+                xp_markup = process_xp(recipe_data, build_data)
 
-                    processed_recipe_map[recipe_id] = {
-                        "ingredients": ingredients_markup,
-                        "tools": tools_markup,
-                        "recipes": recipes_markup,
-                        "skills": skills_markup,
-                        "workstation": workstation_markup,
-                        "products": products_markup,
-                        "xp": xp_markup,
-                        "category": recipe_data.get("category", "Other"),
-                        "construction": True,
-                    }
-                except Exception as error:
-                    echo.warning(
-                        f"Skipping building recipe '{recipe_id}' due to error: {error}"
-                    )
-                finally:
-                    progress_bar.update(1)
+                processed_recipe_map[recipe_id] = {
+                    "ingredients": ingredients_markup,
+                    "tools": tools_markup,
+                    "recipes": recipes_markup,
+                    "skills": skills_markup,
+                    "workstation": workstation_markup,
+                    "products": products_markup,
+                    "xp": xp_markup,
+                    "category": recipe_data.get("category", "Other"),
+                    "construction": True,
+                }
+            except Exception as error:
+                echo.warning(
+                    f"Skipping building recipe '{recipe_id}' due to error: {error}"
+                )
+            finally:
+                progress_bar.update(1)
 
-    except Exception as exc:
-        echo.error(f"Error while running main processing loop: {exc}")
+    echo.success("Recipes processed.")
 
-    else:
-        echo.success("Recipes processed.")
+    echo.info("Mapping item tags")
+    tag_map = build_tag_to_items_map()
+    echo.success("Item tags mapped")
 
-    try:  # Begin outputting
-        try:
-            echo.info("Mapping item tags")
-            tag_map = build_tag_to_items_map()
-        except Exception as exc:
-            echo.error(f"Error while mapping item tags: {exc}")
-            tag_map = {}
-        else:
-            echo.success("Item tags mapped")
+    echo.info("Writing skill usage")
+    output_skill_usage(processed_recipe_map)
+    echo.success("Skill usage written")
 
-        try:
-            echo.info("Writing skill usage")
-            output_skill_usage(processed_recipe_map)
-        except Exception as exc:
-            echo.error(f"Error while writing skill usage: {exc}")
-        else:
-            echo.success("Skill usage written")
+    echo.info("Writing category usage")
+    output_category_usage(processed_recipe_map)
+    echo.success("Category usage written")
 
-        try:
-            echo.info("Writing category usage")
-            output_category_usage(processed_recipe_map)
-        except Exception as exc:
-            echo.error(f"Error while writing category usage: {exc}")
-        else:
-            echo.success("Category usage written")
+    echo.info("Writing tag usage")
+    # Use raw recipe data like the other functions do
+    # Split raw recipes into crafting and building
+    crafting_recipes = {
+        k: v for k, v in craft_data.items() if not v.get("construction", False)
+    }
+    building_recipes = {
+        k: v for k, v in build_data.items() if v.get("construction", False)
+    }
+    output_tag_usage(crafting_recipes, building_recipes)
+    echo.success("Tag usage written")
 
-        try:
-            echo.info("Writing tag usage")
-            # Use raw recipe data like the other functions do
-            # Split raw recipes into crafting and building
-            crafting_recipes = {
-                k: v for k, v in craft_data.items() if not v.get("construction", False)
-            }
-            building_recipes = {
-                k: v for k, v in build_data.items() if v.get("construction", False)
-            }
-            output_tag_usage(crafting_recipes, building_recipes)
-        except Exception as exc:
-            echo.error(f"Error while writing tag usage: {exc}")
-        else:
-            echo.success("Tag usage written")
+    echo.info("Writing lua tables")
+    output_lua_tables(processed_recipe_map)
+    echo.success("Lua tables written")
 
-        try:
-            echo.info("Writing lua tables")
-            output_lua_tables(processed_recipe_map)
-        except Exception as exc:
-            echo.error(f"Error while writing lua tables: {exc}")
-        else:
-            echo.success("Lua tables written")
+    echo.info("Writing per-item article lists")
+    output_item_article_lists(craft_data, build_data, tag_map)
+    echo.success("Item article lists written")
 
-        try:
-            echo.info("Writing per-item article lists")
-            output_item_article_lists(craft_data, build_data, tag_map)
-        except Exception as exc:
-            echo.error(f"Error while writing per-item article lists: {exc}")
-        else:
-            echo.success("Item article lists written")
-
-    except Exception as exc:
-        echo.error(f"Error while writing output: {exc}")
-
-    else:
-        echo.success("Recipe output complete")
+    echo.success("Recipe output complete")
