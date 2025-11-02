@@ -601,6 +601,11 @@ class Item:
             self._name = Translate.get("IGUI_ItemNameMechanicalType").replace("%1", display_name).replace("%2", Translate.get("IGUI_VehicleType_" + str(self.get("VehicleType"))))
             return self._name
 
+        # Fluid containers
+        fluid_container = self.fluid_container
+        if fluid_container.is_valid:
+            display_name = fluid_container.container_name
+
         # Default fallback
         if display_name == item_id:
             display_name = self.get("DisplayName", item_id)
@@ -2250,7 +2255,6 @@ class Item:
 
 
 if __name__ == "__main__":
-    from scripts.objects.vehicle_part import VehiclePartItem
-    item = Item("Base.CarBattery1")
-    print(item.vehicle_part.uninstall.skills)
+    item = Item("Base.Pop")
+    print(item.name)
    
