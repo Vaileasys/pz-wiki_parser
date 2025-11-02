@@ -122,11 +122,15 @@ def generate_template(data: dict):
     return content
 
 
-def main():
+def main(batch=False):
     """
     Generate and save {{Fixing}} templates for all items with fixings.
+
+    Args:
+        batch (bool): If True, skip language loading (for batch processing).
     """
-    Language.get() #Ensure language is loaded
+    if not batch:
+        Language.get() #Ensure language is loaded
 
     file_count = 0
 

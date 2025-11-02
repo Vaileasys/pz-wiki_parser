@@ -11,8 +11,22 @@ from scripts.core.cache import save_cache, load_cache
 CACHE_JSON = "tags_data.json"
 is_run_locally = False
 
-language_code = Language.get()
-output_tags_dir = os.path.join(OUTPUT_DIR, language_code, "tags")
+_language_code_cache = None
+_output_tags_dir_cache = None
+
+def _get_language_code():
+    """Lazy-load language code to avoid import-time prompts."""
+    global _language_code_cache
+    if _language_code_cache is None:
+        _language_code_cache = Language.get()
+    return _language_code_cache
+
+def _get_output_tags_dir():
+    """Lazy-load output tags directory to avoid import-time prompts."""
+    global _output_tags_dir_cache
+    if _output_tags_dir_cache is None:
+        _output_tags_dir_cache = os.path.join(OUTPUT_DIR, _get_language_code(), "tags")
+    return _output_tags_dir_cache
 
 tag_data = {}
 
@@ -22,7 +36,7 @@ tag_data = {}
 def write_tag_image():
     """Write each tag's item icons for `cycle-img`."""
     tags_dict = get_tag_data()
-    output_dir = os.path.join(output_tags_dir, "cycle-img")
+    output_dir = os.path.join(_get_output_tags_dir(), "cycle-img")
     os.makedirs(output_dir, exist_ok=True)
 
     with tqdm(total=len(tags_dict), desc="Generating tag images", bar_format=PBAR_FORMAT, unit=" tags", leave=False) as pbar:
@@ -48,7 +62,7 @@ def write_tag_image():
 def write_tag_table():
     """Write a wikitable showing all tags and corresponding items."""
     tags_dict = get_tag_data()
-    output_dir = output_tags_dir
+    output_dir = _get_output_tags_dir()
     os.makedirs(output_dir, exist_ok=True)
     output_file = os.path.join(output_dir, 'tags_table.txt')
 
@@ -76,7 +90,7 @@ def write_tag_table():
 def write_tag_list():
     """Write each tag item as an item_list."""
     tags_dict = get_tag_data()
-    output_dir = os.path.join(output_tags_dir, "item_list")
+    output_dir = os.path.join(_get_output_tags_dir(), "item_list")
     os.makedirs(output_dir, exist_ok=True)
 
     with tqdm(total=len(tags_dict), desc="Generating tag item list", bar_format=PBAR_FORMAT, unit=" tags", leave=False) as pbar:
@@ -189,11 +203,11 @@ def get_item_list(source_dir):
 ## -------------------- TAG ARTICLE (MODDING) -------------------- ##
 
 def generate_article_modding():
-    source_dir = os.path.join(output_tags_dir, "item_list")
+    source_dir = os.path.join(_get_output_tags_dir(), "item_list")
     if not os.path.exists(source_dir):
         echo.warning(f"'source_dir' doesn't exist, running 'Tag item list'")
         write_tag_list()
-    dest_dir = os.path.join(output_tags_dir, "articles", "modding")
+    dest_dir = os.path.join(_get_output_tags_dir(), "articles", "modding")
     item_list = get_item_list(source_dir)
     if item_list:
         all_tags = [tag for _, tag in item_list]
@@ -214,11 +228,11 @@ def generate_article_modding():
 ## -------------------- TEMPLATE ARTICLE -------------------- ##
 
 def generate_article_templates():
-    source_dir = os.path.join(output_tags_dir, "cycle-img")
+    source_dir = os.path.join(_get_output_tags_dir(), "cycle-img")
     if not os.path.exists(source_dir):
         echo.warning(f"'source_dir' doesn't exist, running 'Tag item list'")
         write_tag_image()
-    dest_dir = os.path.join(output_tags_dir, "articles", "templates")
+    dest_dir = os.path.join(_get_output_tags_dir(), "articles", "templates")
     item_list = get_item_list(source_dir)
     if item_list:
         all_tags = [tag for _, tag in item_list]

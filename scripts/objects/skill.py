@@ -6,7 +6,7 @@ Skill book data is parsed from `XPSystem_SkillBook.lua`.
 """
 import os
 from scripts.core.constants import RESOURCE_DIR
-from scripts.core.language import Translate
+from scripts.core.language import Language, Translate
 from scripts.core import cache
 from scripts.utils.util import link
 from scripts.utils.lua_helper import load_lua_file, parse_lua_tables
@@ -46,10 +46,8 @@ class Skill:
         self.parent = self.data.get("parent")
         self.passive = self.data.get("passive", False)
         self.xp = [int(val * PERK_XP_REQ_MULTIPLIER) for val in self.data.get("xp", [])]
-        self.name = Translate.get(f"IGUI_perks_{self.translation}")
-        self.name_en = Translate.get(f"IGUI_perks_{self.translation}", lang_code="en")
-        self.page = self.data.get("page", self.name_en)
-        self.wiki_link = link(self.page, self.name)
+        # Remove direct assignment - will use properties instead
+        self._page_base = self.data.get("page")  # Store base page name
 
     def __getitem__(self, key):
         """Allow dict-like access to raw skill data."""
@@ -109,6 +107,42 @@ class Skill:
         if not self.xp or level < 1 or level > len(self.xp):
             return 0
         return self.xp[level - 1]
+
+    @property
+    def name(self):
+        """Localised name of the skill."""
+        current_lang = Language.get()
+        if not hasattr(self, '_name_cache') or self._name_cache.get('lang') != current_lang:
+            self._name_cache = {
+                'lang': current_lang,
+                'value': Translate.get(f"IGUI_perks_{self.translation}")
+            }
+        return self._name_cache['value']
+
+    @property
+    def name_en(self):
+        """English name of the skill."""
+        if not hasattr(self, '_name_en_cache') or self._name_en_cache.get('lang') != 'en':
+            self._name_en_cache = {
+                'lang': 'en',
+                'value': Translate.get(f"IGUI_perks_{self.translation}", lang_code="en")
+            }
+        return self._name_en_cache['value']
+
+    @property
+    def page(self):
+        """Page name for the skill."""
+        if not hasattr(self, '_page'):
+            self._page = self._page_base or self.name_en
+        return self._page
+
+    @property
+    def wiki_link(self):
+        """Wiki link for the skill."""
+        if not hasattr(self, '_wiki_link'):
+            from scripts.utils import util
+            self._wiki_link = util.link(self.page, self.name)
+        return self._wiki_link
 
 
 class SkillBook:

@@ -35,12 +35,13 @@ all_descriptors = None
 numbered_params = ["model", "icon", "icon_name", "weight", "body_location", "weapon", "tag", "guid", "item_id"]
 
 
-def generate_item_data(item: Item):
+def generate_item_data(item: Item, language_code: str = None):
     """
     Extracts relevant parameters from an Item object into a dictionary.
 
     Args:
         item (Item): The item object to process.
+        language_code (str, optional): Language code to use for translations.
 
     Returns:
         dict: Dictionary of infobox parameters for the given item.
@@ -88,8 +89,8 @@ def generate_item_data(item: Item):
     param["page_number"] = (item.page_to_write or item.number_of_pages) if (item.page_to_write or item.number_of_pages) > 0 else None
     param["packaged"] = item.packaged
     param["rain_factor"] = item.fluid_container.rain_factor if item.fluid_container else None
-    param["days_fresh"] = f'{item.days_fresh} {get_translation("day" if item.days_fresh == 1 else "days")}' if item.get("DaysFresh") else None
-    param["days_rotten"] = f'{item.days_totally_rotten} {get_translation("day" if item.days_totally_rotten == 1 else "days")}' if item.get("DaysTotallyRotten") else None
+    param["days_fresh"] = f'{item.days_fresh} {get_translation("day" if item.days_fresh == 1 else "days", language_code)}' if item.get("DaysFresh") else None
+    param["days_rotten"] = f'{item.days_totally_rotten} {get_translation("day" if item.days_totally_rotten == 1 else "days", language_code)}' if item.get("DaysTotallyRotten") else None
     param["cant_be_frozen"] = item.cant_be_frozen if item.get("DaysFresh") else None
     param["feed_type"] = item.animal_feed_type
     param["condition_max"] = item.get("ConditionMax")
@@ -190,8 +191,8 @@ def generate_item_data(item: Item):
     param["poison_power"] = util.check_zero(item.poison_power)
 
     #-------------- COOKING --------------#
-    param["cook_minutes"] = f'{item.minutes_to_cook} {get_translation("minute" if item.minutes_to_cook == 1 else "minutes")}' if item.is_cookable else None
-    param["burn_minutes"] = f'{item.minutes_to_burn} {get_translation("minute" if item.minutes_to_burn == 1 else "minutes")}' if item.is_cookable else None
+    param["cook_minutes"] = f'{item.minutes_to_cook} {get_translation("minute" if item.minutes_to_cook == 1 else "minutes", language_code)}' if item.is_cookable else None
+    param["burn_minutes"] = f'{item.minutes_to_burn} {get_translation("minute" if item.minutes_to_burn == 1 else "minutes", language_code)}' if item.is_cookable else None
     param["dangerous_uncooked"] = item.dangerous_uncooked
     param["bad_microwaved"] = item.bad_in_microwave
     param["good_hot"] = item.good_hot
@@ -228,8 +229,18 @@ def post_process_rm(data: dict, page: str):
 
 
 translations_cache = {}
-def get_translation(translation_key: str):
-    from scripts.core.language import Translate
+def get_translation(translation_key: str, language_code: str = None):
+    """
+    Get translation for a given key.
+
+    Args:
+        translation_key (str): The key to translate
+        language_code (str, optional): Language code to use. If None, uses current language.
+
+    Returns:
+        str: The translated string or the original key if translation not found
+    """
+    from scripts.core.language import Translate, Language
 
     translation_keys = {
         "day": "IGUI_Gametime_day",
@@ -239,16 +250,23 @@ def get_translation(translation_key: str):
     }
 
     global translations_cache
-    if translation_key in translations_cache:
-        return translations_cache.get(translation_key)
+    cache_key = f"{translation_key}_{language_code}" if language_code else translation_key
+    if cache_key in translations_cache:
+        return translations_cache.get(cache_key)
 
     if translation_key in translation_keys:
-        translation = Translate.get(translation_keys.get(translation_key, translation_key))
-        translations_cache[translation_key] = translation
+        # Use provided language code or get current language
+        lang_code = language_code or Language.get()
 
+        # Get translation with the specified language
+        translation = Translate.get(translation_keys.get(translation_key, translation_key), lang_code=lang_code)
+
+        translations_cache[cache_key] = translation
         return translation
-    
-    return ""
+
+    # Return the original key if no translation found
+    translations_cache[cache_key] = translation_key
+    return translation_key
 
 
 def build_infobox(infobox_data: dict) -> list[str]:
@@ -404,12 +422,13 @@ def merge_items(page_data: dict) -> dict:
     return util.enumerate_params(merged_params, numbered_params)
 
 
-def process_pages(pages: dict) -> None:
+def process_pages(pages: dict, language_code: str = None) -> None:
     """
     Generates infoboxes for all items grouped by page name and writes output files.
 
     Args:
         pages (dict): Mapping of page names to their item_id entries.
+        language_code (str, optional): Language code to use for translations.
     """
     from urllib.parse import quote
     with tqdm(total=len(pages), desc="Building page infoboxes", unit=" pages", bar_format=PBAR_FORMAT, unit_scale=True, leave=False) as pbar:
@@ -422,7 +441,7 @@ def process_pages(pages: dict) -> None:
                 if not item.valid:
                     echo.warning(f"Item ID '{item_id}' not found in the parsed data. Skipping.")
                     continue
-                item_params = generate_item_data(item)
+                item_params = generate_item_data(item, language_code)
 
                 if item.media_category:
                     post_process_rm(item_params, page_name)
@@ -444,18 +463,19 @@ def process_pages(pages: dict) -> None:
     echo.success(f"Files saved to '{output_dir}' after {elapsed_time:.2f} seconds.")
 
 
-def process_items(item_id_list: list) -> None:
+def process_items(item_id_list: list, language_code: str = None) -> None:
     """
     Generates infoboxes for a list of specific item IDs and writes output files.
 
     Args:
         item_id_list (list): List of item IDs to process.
+        language_code (str, optional): Language code to use for translations.
     """
     with tqdm(total=len(item_id_list), desc="Building item infoboxes", unit=" items", bar_format=PBAR_FORMAT, unit_scale=True, leave=False) as pbar:
         for item_id in item_id_list:
             item = Item(item_id)
             pbar.set_postfix_str(f'Processing: {item.type} ({item_id[:30]})')
-            infobox_data = generate_item_data(item)
+            infobox_data = generate_item_data(item, language_code)
             infobox_data = util.enumerate_params(infobox_data, numbered_params)
             content = build_infobox(infobox_data)
             output_dir = write_file(content, item_id + ".txt", root_path=ROOT_PATH, suppress=True)
@@ -661,18 +681,25 @@ def choose_process(run_directly: bool):
 
 def init_dependencies():
     """Initialises required modules so they don't interrupt tqdm progress bars."""
-    from scripts.core.language import Language
-    Language.get()
     page_manager.init()
 
 
-def main(run_directly: bool = False):
+def main(run_directly: bool = False, language: str = None):
     """
     Entry point for infobox generation.
 
     Args:
         run_directly (bool): Whether the script is being run directly.
+        language (str, optional): Language code to use. If None, uses current language.
     """
+    # Set up language if provided
+    if not language:
+        from scripts.core.language import Language, Translate
+        Language.get()
+        Language.set_subpage(language)
+        Translate.load()
+        echo.info(f"Language set to: {language} ({Language.get_language_name(language)})")
+
     init_dependencies()
     item_id_list = list(Item.keys())
     pages = prepare_pages(item_id_list)
@@ -685,10 +712,51 @@ def main(run_directly: bool = False):
         item_id_list = select_item()
 
     if user_choice in ['1', '3']:
-        process_pages(pages)
+        process_pages(pages, language)
     elif user_choice in ['2', '4']:
-        process_items(item_id_list)
+        process_items(item_id_list, language)
 
+
+def batch_entry(language_code=None):
+    """
+    Entry point for batch processing.
+
+    This function runs both processing modes automatically:
+    1. Process all pages (with merging) - generates merged infoboxes for items that share pages
+    2. Process all individual items (no merging) - generates individual infoboxes for each item
+
+    Args:
+        language_code (str, optional): Language code to use. If None, uses current language.
+    """
+    # Set up language if provided
+    if language_code:
+        from scripts.core.language import Language, Translate
+        Language.set(language_code)
+        Language.set_subpage(language_code)
+        Translate.load()
+
+        echo.info(f"Language set to: {language_code} ({Language.get_language_name(language_code)})")
+
+    echo.info("Initializing page manager...")
+    page_manager.init()
+
+    # Get all item IDs
+    item_id_list = list(Item.keys())
+    echo.info(f"Found {len(item_id_list)} items to process")
+
+    # Prepare pages dictionary (validates and groups items by page)
+    echo.info("Preparing page dictionary...")
+    pages = prepare_pages(item_id_list)
+
+    # Process all pages first (option 1 - with merging)
+    echo.info("Processing pages with merging...")
+    process_pages(pages, language_code)
+
+    # Process all individual items (option 2 - no merging)
+    echo.info("Processing individual items...")
+    process_items(item_id_list, language_code)
+
+    echo.success("Item infobox batch processing completed successfully")
 
 if __name__ == "__main__":
     main(run_directly=True)

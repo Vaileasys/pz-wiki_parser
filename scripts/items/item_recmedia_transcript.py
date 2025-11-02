@@ -59,9 +59,16 @@ def process_rm(rm: RecMedia):
     return content
 
 
-def main():
+def main(batch=False):
+    """
+    Generate recorded media transcripts.
+
+    Args:
+        batch (bool): If True, skip language loading (for batch processing).
+    """
     from scripts.core.language import Language
-    Language.get() #pre-init language
+    if not batch:
+        Language.get() #pre-init language
 
     root_path = os.path.join(ITEM_DIR, "recorded_media", "transcripts")
 
