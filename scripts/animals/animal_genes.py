@@ -55,10 +55,11 @@ def main():
         content.append("|}")
         content.append(bot_flag_end)
 
-        if has_forced_gene:
-            content.append(":{{Footnote|Breed|The value and dominance shown are specific to this breed.|name=<sup>Breed</sup>}}")
-        if has_random_dominance:
-            content.append(":{{Footnote|Random|Indicates that the dominance is chosen at random based on how close the value is to 0.5.|name=<sup>Random</sup>}}")
+        # Moved to animal_article.py
+#        if has_forced_gene:
+#            content.append(":{{Footnote|Breed|The value and dominance shown are specific to this breed.|name=<sup>Breed</sup>}}")
+#        if has_random_dominance:
+#            content.append(":{{Footnote|Random|Indicates that the dominance is chosen at random based on how close the value is to 0.5.|name=<sup>Random</sup>}}")
 
         file_loading.write_file(content, rel_path=f"{full_breed_id}.txt", root_path=GENES_DIR)
 

@@ -347,6 +347,10 @@ def generate_breeding(breed: AnimalBreed):
         content.append("=== Genes ===")
         content.append("This table below shows the genes that this animal breed has, along with their dominance and potential range for the first generation (when first spawned). It should be noted that these can be affected by mutations.")
         content.extend(genes_table)
+        #if has_forced_gene:
+        content.append(":{{Footnote|Breed|The value and dominance shown are specific to this breed.|name=<sup>Breed</sup>}}")
+        #if has_random_dominance:
+        content.append(":{{Footnote|Random|Indicates that the dominance is chosen at random based on how close the value is to 0.5.|name=<sup>Random</sup>}}")
     else:
         echo.warning(f"No genes table found for '{breed.full_breed_id}.txt' in '{animal_stages.STAGES_DIR}'")
     

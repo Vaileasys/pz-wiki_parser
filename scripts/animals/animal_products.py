@@ -8,7 +8,7 @@ from scripts.core.file_loading import write_file
 
 root_path = os.path.join(ANIMAL_DIR, "products")
 root_path_parts = os.path.join(root_path, "butchering_parts")
-root_path_meat = os.path.join(root_path, "butchering_meat_")
+root_path_meat = os.path.join(root_path, "meat_")
 
 def generate_data(breed: AnimalBreed) -> dict[str, str]:
     carcass: AnimalPart = breed.parts
