@@ -256,13 +256,7 @@ def main(run_directly=False):
         elif choice == "[" and page > 0:
             page -= 1
         elif choice == "0":
-            for mod in MODULES.values():
-                echo.write(f"\n[Running] {mod['name']}", color.warning)
-                run_module(mod["module"])
-            print("")
-            echo.success(
-                f"Finished generating item lists. Files saved to '{get_output_dir()}'"
-            )
+            run_all_modules()
             break
         elif choice in MODULES:
             mod = MODULES[choice]
