@@ -6,7 +6,12 @@ import xml.etree.ElementTree as ET
 from scripts.core.constants import CACHE_DIR, OUTPUT_DIR
 from scripts.core.cache import save_cache
 from scripts.core import config_manager as cfg
-from scripts.core.file_loading import get_lua_path, get_clothing_dir, get_media_dir
+from scripts.core.file_loading import (
+    get_lua_path,
+    get_lua_dir,
+    get_clothing_dir,
+    get_media_dir,
+)
 from scripts.utils import lua_helper, echo
 
 cache_path = os.path.join(CACHE_DIR, "distributions")
@@ -269,7 +274,7 @@ def parse_container_files(
     main()
 
 
-def parse_foraging(forage_definitions_path, output_path):
+def parse_foraging(output_path):
     """
     Parses foraging-related Lua files and combines their data into a single JSON output.
 
@@ -278,35 +283,23 @@ def parse_foraging(forage_definitions_path, output_path):
     results are then saved into a JSON file.
 
     Args:
-        forage_definitions_path (str): Path to the primary forageDefinitions.lua file.
         output_path (str): Directory where the final foraging JSON will be saved.
     """
+    # Get the foraging directory from lua_dir + shared/Foraging
+    foraging_dir = os.path.join(get_lua_dir(), "shared", "Foraging")
+    forage_definitions_path = os.path.join(foraging_dir, "forageDefinitions.lua")
 
-    additional_files = [
-        "Ammo",
-        "Animals",
-        "Artifacts",
-        "Berries",
-        "Bones",
-        "Clothing",
-        "CraftingMaterials",
-        "DeadAnimals",
-        "ForestGoods",
-        "ForestRarities",
-        "Fruits",
-        "Herbs",
-        "Insects",
-        "Junk",
-        "JunkFood",
-        "JunkWeapons",
-        "Medical",
-        "MedicinalPlants",
-        "Mushrooms",
-        "Stones",
-        "Trash",
-        "Vegetables",
-        "WildPlants",
-    ]
+    # Get all .lua files from the Categories subdirectory
+    categories_dir = os.path.join(foraging_dir, "Categories")
+    additional_files = []
+
+    if os.path.exists(categories_dir):
+        for filename in os.listdir(categories_dir):
+            if filename.endswith(".lua"):
+                # Remove .lua extension to match previous behavior
+                additional_files.append(os.path.splitext(filename)[0])
+    else:
+        echo.warning(f"Categories directory not found at {categories_dir}")
 
     def preprocess_lua_code(lua_code):
         """
@@ -388,9 +381,7 @@ def parse_foraging(forage_definitions_path, output_path):
 
     # Process each additional Lua file and merge its data
     for file_name in additional_files:
-        file_path = os.path.join(
-            os.path.dirname(forage_definitions_path), f"{file_name}.lua"
-        )
+        file_path = os.path.join(categories_dir, f"{file_name}.lua")
         if os.path.exists(file_path):
             additional_data = parse_lua_file(file_path)
             if additional_data:
@@ -1084,11 +1075,14 @@ def main():
 
     # File paths
     distributions_lua_path = get_lua_path("Distributions")
-    forage_definitions_path = get_lua_path("forageDefinitions")
     procedural_distributions_path = get_lua_path("ProceduralDistributions")
     vehicle_distributions_path = get_lua_path("VehicleDistributions")
     clothing_file_path = os.path.join(get_clothing_dir(), "clothing.xml")
     guid_table_path = os.path.join(get_media_dir(), "fileGuidTable.xml")
+
+    # Foraging path for init check
+    foraging_dir = os.path.join(get_lua_dir(), "shared", "Foraging")
+    forage_definitions_path = os.path.join(foraging_dir, "forageDefinitions.lua")
 
     # Call the init function to check if all files exist
     init(
@@ -1104,7 +1098,7 @@ def main():
     parse_container_files(
         distributions_lua_path, procedural_distributions_path, cache_path
     )
-    parse_foraging(forage_definitions_path, cache_path)
+    parse_foraging(cache_path)
     parse_vehicles(vehicle_distributions_path, cache_path)
 
     parse_clothing(clothing_file_path, guid_table_path, "clothing.json")
