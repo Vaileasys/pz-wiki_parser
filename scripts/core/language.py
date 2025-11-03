@@ -5,6 +5,8 @@ from scripts.core.constants import DATA_DIR
 from scripts.core import config_manager as config
 from scripts.utils import echo
 
+suppress_warnings = False
+
 LANGUAGE_CODES = {
     'ar': {"encoding": "CP1252", "language": "Arabic"},
     'ca': {"encoding": "ISO-8859-15", "language": "Catalan"},
@@ -168,10 +170,16 @@ class Translate:
 
         lang_code = lang_code or Language.get()
         if lang_code not in cls._translations:
+            if not suppress_warnings:
+                echo.warning("No translations loaded for language code:", lang_code)
             return default or property_value
 
         translations = cls._translations[lang_code]
         key = cls._PROPERTY_PREFIXES.get(property_key, "") + property_value
+        
+        if key not in translations and not suppress_warnings:
+            echo.warning(f"Missing translation for key '{key}' in language '{lang_code}'")
+        
         return translations.get(key, default or property_value).strip()
 
     @classmethod
@@ -220,42 +228,46 @@ class Translate:
     @classmethod
     def _parse(cls, wiki_code, game_code):
         from scripts.core.file_loading import get_lua_dir
-        base_dir = os.path.join(get_lua_dir(), "shared", "Translate", game_code.upper())
-        if not os.path.exists(base_dir):
-            raise FileNotFoundError(f"No translation folder: {base_dir}")
+        base_dirs = [
+            os.path.join(get_lua_dir(), "shared", "Translate", game_code.upper()),
+            os.path.join("resources", "Translate", game_code.upper())
+        ]
+        if not any(os.path.exists(d) for d in base_dirs):
+            raise FileNotFoundError(f"No translation folder: {base_dirs}")
 
         parsed = {}
         encoding = Language.get_encoding(wiki_code)
 
-        for root, _, files in os.walk(base_dir):
-            for name in files:
-                if not any(name.startswith(prefix) for prefix in cls._FILE_WHITELIST):
-                    continue
+        for base_dir in base_dirs:
+            for root, _, files in os.walk(base_dir):
+                for name in files:
+                    if not any(name.startswith(prefix) for prefix in cls._FILE_WHITELIST):
+                        continue
 
-                path = os.path.join(root, name)
-                if name.endswith(".json"):
+                    path = os.path.join(root, name)
+                    if name.endswith(".json"):
+                        try:
+                            with open(path, 'r', encoding="UTF-8") as f:
+                                parsed.update(json.load(f))
+                        except Exception as e:
+                            echo.error(f"JSON error in {name}: {e}")
+                        continue
+
                     try:
-                        with open(path, 'r', encoding="UTF-8") as f:
-                            parsed.update(json.load(f))
+                        with open(path, 'r', encoding=encoding) as f:
+                            for line in f:
+                                line = cls._remove_comments(line).strip()
+                                if '=' not in line or '{' in line or '}' in line:
+                                    continue
+                                key, val = [x.strip() for x in line.split('=', 1)]
+                                if val.endswith(','): val = val[:-1].strip()
+                                if val.startswith('"'): val = val[1:]
+                                if val.endswith('"'): val = val[:-1]
+                                parsed[key] = val
+                    except UnicodeDecodeError as e:
+                        echo.error(f"Couldn't decode {name}: {e}")
                     except Exception as e:
-                        echo.error(f"JSON error in {name}: {e}")
-                    continue
-
-                try:
-                    with open(path, 'r', encoding=encoding) as f:
-                        for line in f:
-                            line = cls._remove_comments(line).strip()
-                            if '=' not in line or '{' in line or '}' in line:
-                                continue
-                            key, val = [x.strip() for x in line.split('=', 1)]
-                            if val.endswith(','): val = val[:-1].strip()
-                            if val.startswith('"'): val = val[1:]
-                            if val.endswith('"'): val = val[:-1]
-                            parsed[key] = val
-                except UnicodeDecodeError as e:
-                    echo.error(f"Couldn't decode {name}: {e}")
-                except Exception as e:
-                    echo.error(f"TXT error in {name}: {e}")
+                        echo.error(f"TXT error in {name}: {e}")
 
         return parsed
 
