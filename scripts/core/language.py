@@ -182,11 +182,18 @@ class Translate:
             return translations[key].strip()
         
         # Fallback for TeachedRecipes: try without Recipe_ prefix
-        if property_key == 'TeachedRecipes' and property_value in translations:
-            return translations[property_value].strip()
-        
+        if property_key == "TeachedRecipes":
+            # Try without prefix
+            if property_value in translations:
+                return translations[property_value].strip()
+
+            # Try without prefix and without underscores
+            value_no_underscore = property_value.replace("_", "")
+            if value_no_underscore in translations:
+                return translations[value_no_underscore].strip()
+
         if not suppress_warnings:
-            echo.warning(f"Missing translation for key '{key}' in language '{lang_code}'")
+            echo.warning(f"Missing translation for key '{key}' or '{property_value} in language '{lang_code}'")
         
         return (default or property_value).strip()
 
