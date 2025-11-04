@@ -611,7 +611,7 @@ def process_products(recipe: dict, build_data: dict) -> str:
     base_label = raw_label or raw_name
 
     for key in (base_label.replace(" ", ""), base_label.replace(" ", "_")):
-        product_name = Translate.get(key)
+        product_name = Translate.get(key, property_key="TeachedRecipes")
         if product_name and product_name != key:  # found a real translation?
             break
     else:  # ran through both keys
@@ -619,7 +619,7 @@ def process_products(recipe: dict, build_data: dict) -> str:
 
     display_name = product_name.replace("_", " ")
 
-    recipe_name = Translate.get(raw_name)
+    recipe_name = Translate.get(raw_name, property_key="TeachedRecipes")
     products_markup = f"products=<small>''{recipe_name}''</small><br>"
 
     display_name = display_name.replace("Construct ", "")

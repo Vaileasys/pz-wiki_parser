@@ -177,10 +177,18 @@ class Translate:
         translations = cls._translations[lang_code]
         key = cls._PROPERTY_PREFIXES.get(property_key, "") + property_value
         
-        if key not in translations and not suppress_warnings:
+        # Check if key exists
+        if key in translations:
+            return translations[key].strip()
+        
+        # Fallback for TeachedRecipes: try without Recipe_ prefix
+        if property_key == 'TeachedRecipes' and property_value in translations:
+            return translations[property_value].strip()
+        
+        if not suppress_warnings:
             echo.warning(f"Missing translation for key '{key}' in language '{lang_code}'")
         
-        return translations.get(key, default or property_value).strip()
+        return (default or property_value).strip()
 
     @classmethod
     def get_wiki(cls, value: str) -> str:
