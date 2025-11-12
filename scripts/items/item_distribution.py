@@ -1149,6 +1149,250 @@ def build_item_json(
     save_cache(all_items, "all_items.json", cache_path)
 
 
+def merge_case_insensitive_duplicates(items_dict):
+    """
+    Merge items that have the same ID but different capitalization.
+    
+    This prevents issues where items like "Bag_Schoolbag" and "Bag_SchoolBag" 
+    are treated as separate items, causing later overwrites and split index entries.
+    
+    Args:
+        items_dict (dict): Dictionary of item_id -> item_data
+        
+    Returns:
+        dict: Deduplicated dictionary with merged data
+    """
+    # Build a mapping of lowercase IDs to all their variants
+    lowercase_to_variants = {}
+    for item_id in items_dict.keys():
+        lowercase_id = item_id.lower()
+        if lowercase_id not in lowercase_to_variants:
+            lowercase_to_variants[lowercase_id] = []
+        lowercase_to_variants[lowercase_id].append(item_id)
+    
+    # Find duplicates
+    duplicates = {
+        lower_id: variants 
+        for lower_id, variants in lowercase_to_variants.items() 
+        if len(variants) > 1
+    }
+    
+    if duplicates:
+        echo.info(f"Found {len(duplicates)} case-insensitive duplicate item groups")
+
+    merged_items = {}
+    processed = set()
+    
+    for item_id, item_data in items_dict.items():
+        lowercase_id = item_id.lower()
+
+        if item_id in processed:
+            continue
+
+        if lowercase_id not in duplicates:
+            merged_items[item_id] = item_data
+            continue
+
+        variants = duplicates[lowercase_id]
+        preferred_id = None
+        best_score = -1
+        
+        for variant_id in variants:
+            variant_data = items_dict[variant_id]
+            
+            # Calculate a score based on data richness
+            score = 0
+            has_clothing = bool(variant_data.get("Clothing"))
+            has_containers = bool(variant_data.get("Containers"))
+            has_vehicles = bool(variant_data.get("Vehicles"))
+            has_foraging = bool(variant_data.get("Foraging"))
+            has_fishing = bool(variant_data.get("Fishing"))
+            has_butchering = bool(variant_data.get("Butchering"))
+            has_stories = bool(variant_data.get("Stories"))
+            has_attached_weapons = bool(variant_data.get("AttachedWeapons"))
+
+            # Prefer items with clothing spawns
+            if has_clothing:
+                score += 100
+            
+            # Add points for each type of data
+            score += (
+                (len(variant_data.get("Containers", [])) if has_containers else 0) +
+                (len(variant_data.get("Vehicles", [])) if has_vehicles else 0) +
+                (10 if has_foraging else 0) +
+                (10 if has_fishing else 0) +
+                (len(variant_data.get("Butchering", [])) if has_butchering else 0) +
+                (len(variant_data.get("Stories", [])) if has_stories else 0) +
+                (len(variant_data.get("AttachedWeapons", [])) if has_attached_weapons else 0)
+            )
+            
+            if score > best_score:
+                best_score = score
+                preferred_id = variant_id
+        
+        # If no preferred ID found use first alphabetically
+        if preferred_id is None:
+            preferred_id = sorted(variants)[0]
+        
+        # Merge all data
+        merged_data = {
+            "Containers": [],
+            "Vehicles": [],
+            "Stories": [],
+            "Clothing": [],
+            "Foraging": None,
+            "Fishing": None,
+            "Butchering": [],
+            "AttachedWeapons": []
+        }
+        
+        for variant_id in variants:
+            variant_data = items_dict[variant_id]
+            
+            # Merge containers
+            if variant_data.get("Containers"):
+                merged_data["Containers"].extend(variant_data["Containers"])
+            
+            # Merge vehicles
+            if variant_data.get("Vehicles"):
+                merged_data["Vehicles"].extend(variant_data["Vehicles"])
+            
+            # Merge stories
+            if variant_data.get("Stories"):
+                merged_data["Stories"].extend(variant_data["Stories"])
+            
+            # Merge clothing
+            if variant_data.get("Clothing"):
+                merged_data["Clothing"].extend(variant_data["Clothing"])
+            
+            # For foraging, keep the first non-None value
+            if variant_data.get("Foraging") and merged_data["Foraging"] is None:
+                merged_data["Foraging"] = variant_data["Foraging"]
+            
+            # For fishing, keep the first non-None value
+            if variant_data.get("Fishing") and merged_data["Fishing"] is None:
+                merged_data["Fishing"] = variant_data["Fishing"]
+            
+            # Merge butchering
+            if variant_data.get("Butchering"):
+                merged_data["Butchering"].extend(variant_data["Butchering"])
+            
+            # Merge attached weapons
+            if variant_data.get("AttachedWeapons"):
+                merged_data["AttachedWeapons"].extend(variant_data["AttachedWeapons"])
+
+        # Remove duplicates from merged lists
+        # For containers
+        if merged_data["Containers"]:
+            seen_containers = set()
+            unique_containers = []
+            for container in merged_data["Containers"]:
+                key = (
+                    container.get("Room", ""),
+                    container.get("Container", ""),
+                    container.get("Chance", 0),
+                    container.get("Rolls", 0)
+                )
+                if key not in seen_containers:
+                    seen_containers.add(key)
+                    unique_containers.append(container)
+            merged_data["Containers"] = unique_containers
+        
+        # For vehicles
+        if merged_data["Vehicles"]:
+            seen_vehicles = set()
+            unique_vehicles = []
+            for vehicle in merged_data["Vehicles"]:
+                key = (
+                    vehicle.get("Type", ""),
+                    vehicle.get("Container", ""),
+                    vehicle.get("Chance", 0),
+                    vehicle.get("Rolls", 0)
+                )
+                if key not in seen_vehicles:
+                    seen_vehicles.add(key)
+                    unique_vehicles.append(vehicle)
+            merged_data["Vehicles"] = unique_vehicles
+        
+        # For stories
+        if merged_data["Stories"]:
+            seen_stories = set()
+            unique_stories = []
+            for story in merged_data["Stories"]:
+                key = (story.get("id", ""), story.get("link", ""))
+                if key not in seen_stories:
+                    seen_stories.add(key)
+                    unique_stories.append(story)
+            merged_data["Stories"] = unique_stories
+        
+        # For clothing
+        if merged_data["Clothing"]:
+            seen_clothing = set()
+            unique_clothing = []
+            for clothing in merged_data["Clothing"]:
+                key = (
+                    clothing.get("outfit_name", ""),
+                    clothing.get("Chance", 0),
+                    clothing.get("GUID", "")
+                )
+                if key not in seen_clothing:
+                    seen_clothing.add(key)
+                    unique_clothing.append(clothing)
+            merged_data["Clothing"] = unique_clothing
+
+        # For butchering
+        if merged_data["Butchering"]:
+            seen_butchering = set()
+            unique_butchering = []
+            for butcher in merged_data["Butchering"]:
+                key = (butcher.get("animal", ""), butcher.get("amount", ""))
+                if key not in seen_butchering:
+                    seen_butchering.add(key)
+                    unique_butchering.append(butcher)
+            merged_data["Butchering"] = unique_butchering
+
+        # For attached weapons
+        if merged_data["AttachedWeapons"]:
+            seen_weapons = set()
+            unique_weapons = []
+            for weapon in merged_data["AttachedWeapons"]:
+                key = (
+                    weapon.get("outfit", ""),
+                    weapon.get("definition_id", ""),
+                    weapon.get("days_required", 0),
+                    weapon.get("effective_chance", 0)
+                )
+                if key not in seen_weapons:
+                    seen_weapons.add(key)
+                    unique_weapons.append(weapon)
+            merged_data["AttachedWeapons"] = unique_weapons
+        
+        # Clean up empty lists/None values
+        if not merged_data["Containers"]:
+            del merged_data["Containers"]
+        if not merged_data["Vehicles"]:
+            del merged_data["Vehicles"]
+        if not merged_data["Stories"]:
+            del merged_data["Stories"]
+        if not merged_data["Clothing"]:
+            del merged_data["Clothing"]
+        if merged_data["Foraging"] is None:
+            del merged_data["Foraging"]
+        if merged_data["Fishing"] is None:
+            del merged_data["Fishing"]
+        if not merged_data["Butchering"]:
+            del merged_data["Butchering"]
+        if not merged_data["AttachedWeapons"]:
+            del merged_data["AttachedWeapons"]
+
+        merged_items[preferred_id] = merged_data
+
+        for variant_id in variants:
+            processed.add(variant_id)
+    
+    return merged_items
+
+
 def build_tables(category_items, index):
     """
     Build Lua tables from pre-categorized item data, organizing items by category.
@@ -2152,6 +2396,9 @@ def main():
     from scripts.core.language import Translate
 
     Translate.load()
+
+    # Merge case-insensitive duplicates before categorization
+    combined_items = merge_case_insensitive_duplicates(combined_items)
 
     # Categorize items
     category_items = {}
