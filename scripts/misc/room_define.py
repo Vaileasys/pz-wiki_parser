@@ -101,11 +101,11 @@ def generate_per_letter_files(room_to_containers: dict):
             "for increased readability and a greater chance of linking to their respective wiki articles. For a full "
             "list of these items refer to the distribution files in your [[Project Zomboid]] install directory.\n\n"
             "'''Warning: Everything below has been programmatically generated - any changes made will be lost on the next update!'''\n\n"
-            "==Room definitions and item spawns==\n"
+            "== Room definitions and item spawns ==\n"
             '{| class="wikitable theme-blue"\n|-\n\n'
         )
 
-        footer_text = "\n==See also==\n*{{ll|Mapping}}\n\n{{Navbox modding}}\n"
+        footer_text = "\n== See also ==\n*{{ll|Mapping}}\n\n== Navigation ==\n{{Navbox modding}}\n\n{{ll|Category:Mapping}}"
 
         output_lines = [header_text]
 
