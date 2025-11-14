@@ -1631,9 +1631,12 @@ def build_tables(category_items, index):
 
                 zones = foraging.get("zones", {})
                 if zones:
-                    zone_items = [
-                        f'["{zone}"] = {value}' for zone, value in zones.items()
-                    ]
+                    from scripts.core.language import Translate
+                    zone_items = []
+                    for zone_id, value in zones.items():
+                        translated_zone = Translate.get(f'IGUI_SearchMode_Zone_Names_{zone_id}') or zone_id
+                        zone_link = f"[[{translated_zone}]]"
+                        zone_items.append(f'["{zone_link}"] = {value}')
                     foraging_props.append(f"{{{', '.join(zone_items)}}}")
                 else:
                     foraging_props.append("{}")
