@@ -87,7 +87,7 @@ def generate_per_letter_files(room_to_containers: dict):
 
     for letter in sorted_letters:
         rooms_in_letter = sorted(rooms_by_letter[letter])
-        output_dir = Path("output") / "distributions" / "roomdef"
+        output_dir = Path("output") / f"{language_code}" / "item" / "distributions" / "roomdef"
         output_dir.mkdir(parents=True, exist_ok=True)
         output_file = output_dir / f"{letter}.txt"
 
