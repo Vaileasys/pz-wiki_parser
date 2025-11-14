@@ -105,7 +105,7 @@ def generate_per_letter_files(room_to_containers: dict):
             '{| class="wikitable theme-blue"\n|-\n\n'
         )
 
-        footer_text = "\n== See also ==\n*{{ll|Mapping}}\n\n== Navigation ==\n{{Navbox modding}}\n\n{{ll|Category:Mapping}}"
+        footer_text = "\n== See also ==\n*{{ll|Mapping}}\n\n== Navigation ==\n{{Navbox modding}}\n\n{{ll|Category:Mapping}}\n"
 
         output_lines = [header_text]
 
@@ -173,7 +173,7 @@ def generate_main_page(room_to_containers: dict):
         "! Room !! Containers\n|-\n"
     )
 
-    footer_text = "\n|}\n\n==See also==\n*{{ll|Mapping}}\n\n{{Navbox modding}}\n"
+    footer_text = "\n|}\n\n==See also==\n*{{ll|Mapping}}\n\n== Navigation ==\n{{Navbox modding}}\n\n{{ll|Category:Mapping}}\n"
 
     output_lines = [header_text]
 
