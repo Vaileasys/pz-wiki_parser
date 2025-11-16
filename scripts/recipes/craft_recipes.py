@@ -494,6 +494,15 @@ def process_workstation(recipe: dict, build_data: dict) -> str:
 
     workstation_mapping = {
         "anysurfacecraft": "Any surface",
+        "primitiveforge": "Primitive Forge",
+        "forge": "Simple Forge",
+        "advancedforge": "Advanced Forge",
+        "domekiln": "Dome Kiln",
+        "kilnlarge": "Advanced Kiln",
+        "kilnsmall": "Primitive Kiln",
+        "primitivefurnace": "Primitive Furnace",
+        "furnace": "Simple Furnace",
+        "advancedfurnace": "Advanced Furnace",
         "choppingblock": "Chopping Block",
         "coffeemachine": "Coffee Machine",
         "grindstone": "Grindstone",
@@ -505,18 +514,12 @@ def process_workstation(recipe: dict, build_data: dict) -> str:
         "dryleatherlarge": "Leather Drying Rack (Large)",
         "dryleathermedium": "Leather Drying Rack (Medium)",
         "dryleathersmall": "Leather Drying Rack (Small)",
-        "tanleather": "Tanning Barrel",
-        "advancedforge": "Advanced Forge",
         "dryingrackgrain": "Large Plant Drying Rack",
         "dryingrackherb": "Small Plant Drying Rack",
-        "forge": "Forge",
-        "primitivefurnace": "Primitive Furnace",
-        "furnace": "Furnace",
-        "advancedfurnace": "Advanced Furnace",
+        "tanleather": "Tannin Barrel",
         "metalbandsaw": "Metal Bandsaw",
         "potterywheel": "Pottery Wheel",
         "potterybench": "Pottery Bench",
-        "primitiveforge": "Primitive Forge",
         "removeflesh": "Softening Beam",
         "removefur": "Softening Beam",
         "spinningwheel": "Spinning Wheel",
@@ -524,18 +527,22 @@ def process_workstation(recipe: dict, build_data: dict) -> str:
         "whetstone": "Whetstone",
         "toaster": "Toaster",
         "handpress": "Hand Press",
-        "domekiln": "Kiln - Dome",
-        "kilnlarge": "Advanced Kiln",
-        "kilnsmall": "Primitive Kiln",
         "heckling": "Heckle Comb",
         "rippling": "Ripple Comb",
         "scutching": "Scutching Board",
+        "woodcharcoal": ["Charcoal Burning Pile", "Charcoal Burning Barrel"],
     }
 
     for tag_identifier in tag_list:
-        workstation_name = workstation_mapping.get(tag_identifier.lower())
-        if workstation_name:
-            return f"[[{workstation_name}]]"
+        workstation_value = workstation_mapping.get(tag_identifier.lower())
+        if workstation_value:
+            # Handle multiple workstations (list) or single workstation (string)
+            if isinstance(workstation_value, list):
+                # Format: [[Workstation1]]<br>or<br>[[Workstation2]]
+                workstation_links = [f"[[{ws}]]" for ws in workstation_value]
+                return "<br>or<br>".join(workstation_links)
+            else:
+                return f"[[{workstation_value}]]"
 
     return "''none''"
 
@@ -1484,6 +1491,121 @@ def output_category_usage(recipe_data_map: dict[str, dict]) -> None:
             file_handle.write("\n".join(lines))
 
 
+def output_workstation_usage(recipe_data_map: dict[str, dict]) -> None:
+    """
+    Generate wiki markup for workstation usage.
+
+    Args:
+        recipe_data_map (dict[str, dict]): Recipe data.
+
+    Creates files documenting which recipes require each workstation,
+    organized by crafting vs building recipes.
+    """
+    os.makedirs(os.path.join("output", "recipes", "workstation"), exist_ok=True)
+
+    crafting_workstation_usage: defaultdict[str, set[str]] = defaultdict(set)
+    building_workstation_usage: defaultdict[str, set[str]] = defaultdict(set)
+
+    def sanitize_filename(name: str) -> str:
+        """Sanitize a string to be safe for use as a filename using percent encoding."""
+        replacements = {
+            ":": "%3A",
+            '"': "%22",
+            "<": "%3C",
+            ">": "%3E",
+            "|": "%7C",
+            "?": "%3F",
+            "*": "%2A",
+            "/": "%2F",
+            "\\": "%5C",
+            " ": "_",
+        }
+        sanitized = name
+        for invalid_char, replacement in replacements.items():
+            sanitized = sanitized.replace(invalid_char, replacement)
+
+        # Remove any trailing spaces or dots (Windows doesn't like these)
+        sanitized = sanitized.rstrip(" .")
+
+        return sanitized
+
+    for recipe_identifier, recipe_data in recipe_data_map.items():
+        is_building_recipe = bool(recipe_data.get("construction", False))
+        workstation_markup = recipe_data.get("workstation", "''none''")
+
+        if workstation_markup and workstation_markup != "''none''":
+            workstation_names = re.findall(r"\[\[([^\]]+)\]\]", workstation_markup)
+            if workstation_names:
+                target_map = (
+                    building_workstation_usage
+                    if is_building_recipe
+                    else crafting_workstation_usage
+                )
+                # Add recipe to each workstation's set
+                for workstation_name in workstation_names:
+                    target_map[workstation_name].add(recipe_identifier)
+
+    tier_hierarchies = {
+        "Furnace": ["Primitive Furnace"],
+        "Advanced Furnace": ["Furnace", "Primitive Furnace"],
+        "Forge": ["Primitive Forge"],
+        "Advanced Forge": ["Forge", "Primitive Forge"],
+        "Kiln - Dome": ["Primitive Kiln"],
+        "Advanced Kiln": ["Kiln - Dome", "Primitive Kiln"],
+    }
+
+    # Cascade recipes from lower tiers to higher tiers
+    def cascade_recipes(usage_map: defaultdict[str, set[str]]) -> None:
+        """Add recipes from lower tier workstations to higher tier ones."""
+        for higher_tier, lower_tiers in tier_hierarchies.items():
+            for lower_tier in lower_tiers:
+                if lower_tier in usage_map and usage_map[lower_tier]:
+                    usage_map[higher_tier].update(usage_map[lower_tier])
+
+    cascade_recipes(crafting_workstation_usage)
+    cascade_recipes(building_workstation_usage)
+
+    # Write out templates for crafting recipes
+    for workstation, recipes in crafting_workstation_usage.items():
+        if recipes:
+            lines = (
+                [
+                    "{{Crafting/sandbox|header=Crafting recipe table|ID="
+                    + sanitize_filename(workstation)
+                    + "_crafting"
+                ]
+                + [f"|{r}" for r in sorted(recipes)]
+                + ["}}"]
+            )
+            safe_filename = f"{sanitize_filename(workstation)}_crafting.txt"
+            with open(
+                os.path.join("output", "recipes", "workstation", safe_filename),
+                "w",
+                encoding="utf-8",
+            ) as file_handle:
+                file_handle.write("\n".join(lines))
+
+    # Write out templates for building recipes
+    for workstation, recipes in building_workstation_usage.items():
+        if recipes:  # Only write if there are recipes
+            lines = (
+                [
+                    "{{Building|header=Building recipe table|ID="
+                    + sanitize_filename(workstation)
+                    + "_building"
+                ]
+                + [f"|{r}" for r in sorted(recipes)]
+                + ["}}"]
+            )
+            safe_filename = f"{sanitize_filename(workstation)}_building.txt"
+            with open(
+                os.path.join("output", "recipes", "workstation", safe_filename),
+                "w",
+                encoding="utf-8",
+            ) as file_handle:
+                file_handle.write("\n".join(lines))
+
+
 def output_tag_usage(
     crafting_recipe_map: dict[str, dict], building_recipe_map: dict[str, dict]
 ) -> None:
@@ -1849,6 +1971,10 @@ def main(batch: bool = False):
     echo.info("Writing category usage")
     output_category_usage(processed_recipe_map)
     echo.success("Category usage written")
+
+    echo.info("Writing workstation usage")
+    output_workstation_usage(processed_recipe_map)
+    echo.success("Workstation usage written")
 
     echo.info("Writing tag usage")
     # Use raw recipe data like the other functions do
