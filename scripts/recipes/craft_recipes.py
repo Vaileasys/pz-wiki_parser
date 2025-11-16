@@ -1546,12 +1546,12 @@ def output_workstation_usage(recipe_data_map: dict[str, dict]) -> None:
                     target_map[workstation_name].add(recipe_identifier)
 
     tier_hierarchies = {
-        "Furnace": ["Primitive Furnace"],
-        "Advanced Furnace": ["Furnace", "Primitive Furnace"],
-        "Forge": ["Primitive Forge"],
-        "Advanced Forge": ["Forge", "Primitive Forge"],
-        "Kiln - Dome": ["Primitive Kiln"],
-        "Advanced Kiln": ["Kiln - Dome", "Primitive Kiln"],
+        "Simple Furnace": ["Primitive Furnace"],
+        "Advanced Furnace": ["Simple Furnace", "Primitive Furnace"],
+        "Simple Forge": ["Primitive Forge"],
+        "Advanced Forge": ["Simple Forge", "Primitive Forge"],
+        "Dome Kiln": ["Primitive Kiln"],
+        "Advanced Kiln": ["Dome Kiln", "Primitive Kiln"],
     }
 
     # Cascade recipes from lower tiers to higher tiers
