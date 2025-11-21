@@ -734,7 +734,7 @@ def process_products(recipe: dict, build_data: dict) -> str:
                 icon_filename = item_obj.get_icon(False, False, False)
                 wiki_link = item_obj.wiki_link
                 item_lines.append(
-                    f"[[File:{icon_filename}|64x64px|class=pixelart]]<br>{wiki_link} ×{qty}"
+                    f"[[File:{icon_filename}|64x64px|class=pixelart|link={wiki_link}]]<br>{wiki_link} ×{qty}"
                 )
 
     # Assemble sections
