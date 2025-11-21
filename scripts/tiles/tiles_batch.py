@@ -1,19 +1,3 @@
-#!/usr/bin/env python3
-"""
-Project Zomboid Wiki Tile Processing Orchestrator
-
-This script orchestrates the complete tile processing pipeline for the Project Zomboid Wiki.
-It manages cache generation, data parsing, and the generation of various wiki components
-including infoboxes, code snippets, scrapping tables, and complete articles.
-
-The script handles:
-- Cache management and validation
-- Data parsing from game files
-- Generation of wiki components
-- Article assembly and organization
-- List generation for furniture and crafting surfaces
-"""
-
 import os
 
 from scripts.core.cache import load_cache
@@ -32,6 +16,7 @@ from scripts.tiles.tiles_codesnip import generate_codesnips
 from scripts.tiles.tiles_scrapping import generate_scrapping_tables
 from scripts.tiles.tiles_article import generate_tile_articles
 from scripts.tiles.tiles_container_mapping import main as generate_container_mapping
+from scripts.tiles.entity_article import main as generate_entity_articles
 from scripts.lists.furniture_list import generate_furniture_lists
 from scripts.lists.furniture_surfaces_list import generate_surface_list
 
@@ -138,3 +123,5 @@ def main(lang_code):
     echo.info("Generating container mapping")
     generate_container_mapping(tiles_data, lang_code)
     echo.success("Container mapping generated")
+
+    generate_entity_articles(lang_code)
