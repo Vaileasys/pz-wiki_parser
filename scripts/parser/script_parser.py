@@ -112,6 +112,7 @@ SCRIPT_CONFIGS = {
         # Handled through recipe_parser
         "list_keys": ["row"],
         "list_keys_space": ["row"],
+        "list_keys_semicolon": ["previousStage"],
         "dict_keys_colon": ["SkillRequired", "xpAward"],
     },
     "uniquerecipe": {
@@ -824,6 +825,86 @@ def is_blacklisted(filepath: str, script_type: str) -> bool:
     return False
 
 
+def parse_entity_block(lines: list[str], entity_name: str, script_type: str = "entity") -> dict:
+    """
+    Parse an entity block to extract component data.
+    
+    Args:
+        lines (list[str]): Lines within the entity block
+        entity_name (str): Name of the entity
+        script_type (str): Script type (should be "entity")
+        
+    Returns:
+        dict: Parsed entity data with flattened component fields
+    """
+    entity_data = {}
+    i = 0
+    
+    while i < len(lines):
+        line = lines[i].strip()
+        
+        # Check for component blocks
+        component_match = re.match(r'^component\s+(\w+)$', line)
+        if component_match and i + 1 < len(lines) and lines[i + 1].strip() == "{":
+            component_name = component_match.group(1)
+            i += 2
+            component_lines = []
+            block_depth = 1
+            
+            while i < len(lines):
+                next_line = lines[i].strip()
+                block_depth += next_line.count("{")
+                block_depth -= next_line.count("}")
+                component_lines.append(next_line)
+                i += 1
+                if block_depth <= 0:
+                    break
+            
+            cleaned = remove_comments(component_lines)
+            
+            # Skip CraftRecipe component as it's handled by parse_construction_recipe
+            if component_name != "CraftRecipe":
+                component_data = parse_block(cleaned, entity_name, script_type)
+                
+                # Flatten component data into entity data
+                # For SpriteConfig, extract key fields at the top level
+                if component_name == "SpriteConfig":
+                    # Extract top-level fields
+                    for key, value in component_data.items():
+                        if key not in ("face", "ScriptType", "SourceFile"):
+                            entity_data[key] = value
+                    
+                    # Handle face data specially to extract sprite outputs
+                    if "face" in component_data:
+                        sprite_outputs = {}
+                        for face_dir, face_data in component_data["face"].items():
+                            if isinstance(face_data, dict) and "layer" in face_data:
+                                layer_data = face_data["layer"]
+                                if isinstance(layer_data, dict) and "row" in layer_data:
+                                    row_data = layer_data["row"]
+                                    if isinstance(row_data, list):
+                                        # Filter out False/None values from sprite lists
+                                        sprite_outputs[face_dir] = [s for s in row_data if s and isinstance(s, str)]
+                                    elif isinstance(row_data, str):
+                                        sprite_outputs[face_dir] = [row_data]
+                        
+                        if sprite_outputs:
+                            entity_data["spriteOutputs"] = sprite_outputs
+                    
+                    # Keep corner data if present
+                    if "corner" in component_data:
+                        entity_data["corner"] = component_data["corner"]
+                else:
+                    # For other components, store them under their component name
+                    entity_data[component_name] = component_data
+            
+            continue
+        
+        i += 1
+    
+    return entity_data
+
+
 def check_cache_version(script_type: str):
     cached_data, cached_version = load_cache(f"parsed_{script_type}_data.json", f"{script_type}", get_version=True)
     if cached_version == Version.get():
@@ -902,6 +983,8 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
                 recipes = parse_construction_recipe(full_text)
 
                 entity_dict = {}
+                
+                # First pass: get recipe data
                 for recipe in recipes:
                     name = recipe.get("name")
                     if not name:
@@ -917,6 +1000,59 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
                     recipe["ScriptType"] = script_type
                     recipe["SourceFile"] = source_file
                     entity_dict[name] = recipe
+                
+                # Second pass: parse full entity structure to get additional fields
+                for filepath, text in file_texts.items():
+                    lines = remove_comments(text.splitlines())
+                    module = None
+                    i = 0
+                    
+                    while i < len(lines):
+                        line = lines[i].strip()
+                        if not line:
+                            i += 1
+                            continue
+                        
+                        # Get module name
+                        if match := re.match(r'^module\s+(\w+)', line):
+                            module = match.group(1)
+                            i += 1
+                            continue
+                        
+                        # Detect entity block start
+                        block_match = re.match(r'^entity\s+(.+)', line)
+                        if block_match and i + 1 < len(lines) and lines[i + 1].strip() == "{":
+                            entity_name = block_match.group(1).strip()
+                            
+                            # Extract entity block lines
+                            i += 2
+                            block_lines = []
+                            block_depth = 1
+                            
+                            while i < len(lines):
+                                next_line = lines[i].strip()
+                                block_depth += next_line.count("{")
+                                block_depth -= next_line.count("}")
+                                block_lines.append(next_line)
+                                i += 1
+                                if block_depth <= 0:
+                                    break
+                            
+                            # Parse the entity block structure
+                            cleaned = remove_comments(block_lines)
+                            entity_data = parse_entity_block(cleaned, entity_name, script_type)
+                            
+                            # Merge with existing recipe data if present
+                            if entity_name in entity_dict:
+                                entity_dict[entity_name].update(entity_data)
+                            else:
+                                entity_data["ScriptType"] = script_type
+                                entity_data["SourceFile"] = Path(filepath).stem
+                                entity_dict[entity_name] = entity_data
+                            
+                            continue
+                        
+                        i += 1
 
                 save_cache(entity_dict, "parsed_entity_data.json")
                 script_cache[script_type] = entity_dict

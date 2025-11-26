@@ -146,6 +146,9 @@ def extract_entity_stitching_tasks(
         sprite_outputs = entity_def.get("spriteOutputs", {})
 
         for facing_direction, sprite_list in sprite_outputs.items():
+            # Filter out False/None values from sprite list
+            sprite_list = [s for s in sprite_list if s and isinstance(s, str)]
+            
             if not sprite_list or len(sprite_list) < 2:
                 continue
 

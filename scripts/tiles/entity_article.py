@@ -199,11 +199,12 @@ def collect_entity_sprites(grouped_entities: Dict[str, List[tuple]]) -> Set[str]
             sprite_outputs = entity_def.get("spriteOutputs", {})
             for facing, sprite_list in sprite_outputs.items():
                 if sprite_list:
-                    # Add individual sprites
-                    sprites.update(sprite_list)
+                    # Filter out non-string values (e.g., False, None) and add individual sprites
+                    valid_sprites = [s for s in sprite_list if s and isinstance(s, str)]
+                    sprites.update(valid_sprites)
                     # Add composite name if multi-sprite
-                    if len(sprite_list) > 1:
-                        composite_name = "+".join(sprite_list)
+                    if len(valid_sprites) > 1:
+                        composite_name = "+".join(valid_sprites)
                         sprites.add(composite_name)
 
     return sprites
@@ -369,33 +370,38 @@ def generate_entity_articles(
     return articles
 
 
-def main(lang_code: str):
+def main(lang_code: str, entity_data: Dict[str, dict] = None):
     """
     Main execution function for entity article generation.
 
     Args:
         lang_code (str): Language code to process
+        entity_data (Dict[str, dict], optional): Pre-loaded entity data. If None, loads from cache.
 
     This function:
-    1. Loads the parsed entity data cache
+    1. Loads the parsed entity data cache (if not provided)
     2. Groups entities by base name (merging level variants)
     3. Generates merged entity infoboxes
     4. Generates complete entity articles
     5. Outputs files to output/{lang_code}/tiles/entity_articles/
     """
 
-    ENTITY_CACHE_FILE = "parsed_entity_data.json"
     game_version = Version.get()
 
-    entity_path = os.path.join(CACHE_DIR, ENTITY_CACHE_FILE)
+    # Load entity data if not provided
+    if entity_data is None:
+        ENTITY_CACHE_FILE = "parsed_entity_data.json"
+        entity_path = os.path.join(CACHE_DIR, ENTITY_CACHE_FILE)
 
-    try:
-        entity_data = load_cache(entity_path, "Entity")
+        try:
+            entity_data = load_cache(entity_path, "Entity")
 
-    except Exception as exc:
-        echo.error(f"Failed to load entity cache: {exc}")
-        echo.error("Make sure the entity cache exists by running the script parser first")
-        return
+        except Exception as exc:
+            echo.error(f"Failed to load entity cache: {exc}")
+            echo.error(
+                "Make sure the entity cache exists by running the script parser first"
+            )
+            return
 
     if not entity_data:
         echo.error("Entity data is empty, skipping generation")

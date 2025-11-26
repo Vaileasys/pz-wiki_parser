@@ -1,7 +1,7 @@
 import os
 
 from scripts.core.cache import load_cache
-from scripts.core.constants import DATA_DIR
+from scripts.core.constants import DATA_DIR, CACHE_DIR
 from scripts.core.version import Version
 from scripts.utils import echo
 
@@ -9,6 +9,7 @@ from scripts.utils import echo
 from scripts.parser.tiles_parser import main as parse_tiles
 from scripts.parser.movable_definitions_parser import main as parse_movable_definitions
 from scripts.tiles.named_furniture_filter import main as parse_named_furniture
+from scripts.parser.script_parser import extract_script_data
 
 # generators
 from scripts.tiles.tiles_infobox import generate_infoboxes
@@ -23,6 +24,12 @@ from scripts.lists.furniture_surfaces_list import generate_surface_list
 TILE_CACHE_FILE = "tiles_data.json"
 NAMED_FURNITURE_CACHE_FILE = "named_furniture.json"
 MOVABLE_DEFINITIONS_CACHE_FILE = "movable_definitions.json"
+ENTITY_CACHE_FILE = "parsed_entity_data.json"
+
+
+def parse_entities():
+    """Wrapper function to parse entity data."""
+    extract_script_data("entity")
 
 
 def generate_cache(cache_path: str, cache_label: str, parser_func, game_version: str):
@@ -77,6 +84,7 @@ def main(lang_code):
     tile_path = os.path.join(DATA_DIR, TILE_CACHE_FILE)
     named_path = os.path.join(DATA_DIR, NAMED_FURNITURE_CACHE_FILE)
     defs_path = os.path.join(DATA_DIR, MOVABLE_DEFINITIONS_CACHE_FILE)
+    entity_path = os.path.join(CACHE_DIR, ENTITY_CACHE_FILE)
 
     tiles_data, _ = generate_cache(tile_path, "Tiles", parse_tiles, game_version)
     named_tiles_data, _ = generate_cache(
@@ -85,8 +93,16 @@ def main(lang_code):
     movable_defs_data, _ = generate_cache(
         defs_path, "Movable Definitions", parse_movable_definitions, game_version
     )
+    entity_data, _ = generate_cache(
+        entity_path, "Entities", parse_entities, game_version
+    )
 
-    if tiles_data is None or named_tiles_data is None or movable_defs_data is None:
+    if (
+        tiles_data is None
+        or named_tiles_data is None
+        or movable_defs_data is None
+        or entity_data is None
+    ):
         echo.error("One or more caches failed to load.")
         return
 
@@ -124,4 +140,6 @@ def main(lang_code):
     generate_container_mapping(tiles_data, lang_code)
     echo.success("Container mapping generated")
 
-    generate_entity_articles(lang_code)
+    echo.info("Generating entity articles")
+    generate_entity_articles(lang_code, entity_data)
+    echo.success("Entity articles generated")
