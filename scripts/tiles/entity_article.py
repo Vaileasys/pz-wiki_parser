@@ -288,28 +288,21 @@ def assemble_article(
     Returns:
         str: Complete wiki article text with all sections properly formatted.
     """
-    # Manually assemble article with specific newline patterns
-    # No blank line between header-infobox and infobox-intro
-    # Blank lines (double newlines) between other sections
     article_parts = []
 
-    # Header and infobox - single newline (no blank line)
     if header and header.strip():
         article_parts.append(header)
     if infobox and infobox.strip():
         article_parts.append(infobox)
 
-    # Join header and infobox with single newline
     article = "\n".join(article_parts)
 
-    # Intro - single newline after infobox (no blank line)
     if intro and intro.strip():
         if article:
             article += "\n" + intro
         else:
             article = intro
 
-    # Remaining sections - double newlines (blank lines)
     remaining_sections = [usage, crafting, navigation]
     for section in remaining_sections:
         if section and section.strip():
@@ -400,27 +393,25 @@ def main(lang_code: str):
         entity_data = load_cache(entity_path, "Entity")
 
     except Exception as exc:
-        echo.error(f"ENTITIES ARTICLE: Failed to load entity cache: {exc}")
-        echo.error(
-            "ENTITIES ARTICLE: Make sure the entity cache exists by running the script parser first"
-        )
+        echo.error(f"Failed to load entity cache: {exc}")
+        echo.error("Make sure the entity cache exists by running the script parser first")
         return
 
     if not entity_data:
-        echo.error("ENTITIES ARTICLE: Entity data is empty, skipping generation")
+        echo.error("Entity data is empty, skipping generation")
         return
 
     # Group entities by base name (merge level variants)
     grouped_entities = group_entities_by_base(entity_data)
 
-    # First, generate merged infoboxes
+    # generate merged infoboxes
     echo.info("Generating entity infoboxes")
     infoboxes = generate_merged_entity_infoboxes(
         grouped_entities, lang_code, game_version
     )
     echo.success(f"Entity infoboxes generated ({len(infoboxes)} base entities)")
 
-    # Then, generate complete articles
+    # generate complete articles
     echo.info("Generating entity articles")
     articles = generate_entity_articles(
         grouped_entities, infoboxes, lang_code, game_version
@@ -435,7 +426,7 @@ def main(lang_code: str):
     except Exception as exc:
         echo.warning(f"Entity sprite stitching failed: {exc}")
 
-    # Finally, copy sprite images (including stitched composites)
+    # copy sprite images
     echo.info("Collecting and copying entity sprite images")
     sprites = collect_entity_sprites(grouped_entities)
     copy_entity_sprites(sprites, lang_code)
