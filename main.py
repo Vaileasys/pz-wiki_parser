@@ -278,6 +278,11 @@ menu_structure = {
                 "name": "Tile stitcher",
                 "description": "Stitch tile sprites.",
             },
+            "8": {
+                "module": "scripts.tools.manual_tile_stitcher",
+                "name": "Manual tile stitcher",
+                "description": "Manually stitch tile sprites.",
+            },
         },
     },
     "9": {
