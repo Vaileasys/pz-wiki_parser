@@ -147,8 +147,8 @@ def build_health_template_single(
     if not display_name:
         display_name = entity_name
 
-    # Get health values
-    health = entity_def.get("health", "")
+    # Get health values (default health to 0 if missing)
+    health = entity_def.get("health", 0)
     skill_bonus = entity_def.get("skillBaseHealth", "")
     min_level = get_min_level(entity_def)
 
@@ -191,8 +191,8 @@ def build_health_template_merged(
         # Map the descriptor to its replacement value
         name_value = map_descriptor(descriptor) if descriptor else display_name
 
-        # Get health values
-        health = entity_def.get("health", "")
+        # Get health values (default health to 0 if missing)
+        health = entity_def.get("health", 0)
         skill_bonus = entity_def.get("skillBaseHealth", "")
         min_level = get_min_level(entity_def)
 
@@ -211,17 +211,17 @@ def build_health_template_merged(
 
 def has_health_values(entity_def: dict) -> bool:
     """
-    Check if an entity has both health and skillBaseHealth values.
+    Check if an entity has skillBaseHealth value.
 
     Args:
         entity_def (dict): Entity definition dictionary.
 
     Returns:
-        bool: True if entity has both health and skillBaseHealth values.
+        bool: True if entity has skillBaseHealth value.
+               If health is missing but skillBaseHealth exists, health defaults to 0.
     """
-    health = entity_def.get("health")
     skill_base_health = entity_def.get("skillBaseHealth")
-    return health is not None and skill_base_health is not None
+    return skill_base_health is not None
 
 
 def generate_health_templates(
