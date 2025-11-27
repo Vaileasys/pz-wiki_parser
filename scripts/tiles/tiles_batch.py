@@ -18,6 +18,7 @@ from scripts.tiles.tiles_scrapping import generate_scrapping_tables
 from scripts.tiles.tiles_article import generate_tile_articles
 from scripts.tiles.tiles_container_mapping import main as generate_container_mapping
 from scripts.tiles.entity_article import main as generate_entity_articles
+from scripts.tiles.entity_health import main as generate_entity_health
 from scripts.lists.furniture_list import generate_furniture_lists
 from scripts.lists.furniture_surfaces_list import generate_surface_list
 
@@ -143,3 +144,7 @@ def main(lang_code):
     echo.info("Generating entity articles")
     generate_entity_articles(lang_code, entity_data)
     echo.success("Entity articles generated")
+
+    echo.info("Generating entity health templates")
+    generate_entity_health(lang_code, entity_data)
+    echo.success("Entity health templates generated")

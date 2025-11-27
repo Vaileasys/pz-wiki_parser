@@ -218,6 +218,9 @@ def generate_entity_infoboxes(
     infoboxes: Dict[str, str] = {}
     
     for idx, (entity_name, entity_def) in enumerate(entity_data.items(), 1):
+        # Skip entities starting with ES_
+        if entity_name.startswith("ES_"):
+            continue
         
         if not isinstance(entity_def, dict):
             echo.error(f"Skipping entity '{entity_name}': expected a dict, got {type(entity_def)}")
@@ -411,6 +414,10 @@ def generate_merged_entity_infoboxes(
     infoboxes: Dict[str, str] = {}
     
     for base_name, entity_variants in grouped_entities.items():
+        # Skip entities starting with ES_
+        if base_name.startswith("ES_"):
+            continue
+
         try:
             infobox_text = build_merged_entity_infobox(
                 base_name,

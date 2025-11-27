@@ -39,6 +39,10 @@ def group_entities_by_base(entity_data: Dict[str, dict]) -> Dict[str, List[tuple
     grouped: Dict[str, List[tuple]] = {}
 
     for entity_name, entity_def in entity_data.items():
+        # Skip entities starting with ES_
+        if entity_name.startswith("ES_"):
+            continue
+
         base_name = extract_base_name(entity_name)
 
         if base_name not in grouped:
@@ -342,6 +346,10 @@ def generate_entity_articles(
     articles: Dict[str, str] = {}
 
     for idx, (base_name, entity_variants) in enumerate(grouped_entities.items(), 1):
+        # Skip entities starting with ES_
+        if base_name.startswith("ES_"):
+            continue
+
         try:
             # Generate each section
             header = create_header(base_name, entity_variants, game_version)
