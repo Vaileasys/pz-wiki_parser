@@ -81,7 +81,7 @@ class Item:
         "EvolvedRecipe": {},
         "ResearchableRecipes": [],
         "ResearchableRecipe": [],
-        "Teachedrecipes": [],
+        "LearnedRecipes": [],
         "Sharpness": 0.0,
         "HeadCondition": 0.0,
         "HeadConditionLowerChanceMultiplier": 1.0,
@@ -1585,7 +1585,7 @@ class Item:
 
     @property  # TODO: should these be CraftRecipe objects?
     def teached_recipes(self) -> list:
-        return self.get_default("Teachedrecipes")
+        return self.get_default("LearnedRecipes")
 
     @property
     def sharpness(self) -> float | int:
