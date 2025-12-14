@@ -776,7 +776,7 @@ def create_usage(item_data, translation_data):
         item = Item(item_id_full or item_id_type)
 
         has_body_location = item.get("BodyLocation") is not None
-        is_clothing_type = item.get("Type") == "Clothing"
+        is_clothing_type = item.get("ItemType") == "Clothing"
 
         if not has_body_location and not is_clothing_type:
             return None
@@ -870,7 +870,7 @@ def create_usage(item_data, translation_data):
             return None
         item = Item(item_id_full or item_id_type)
 
-        if item.get("Type") != "Container" or item.get("Capacity", 0) <= 0:
+        if item.get("ItemType") != "Container" or item.get("Capacity", 0) <= 0:
             return None
 
         usage_headers = translation_data.get("Usage_headers", {})

@@ -28,6 +28,7 @@ if TYPE_CHECKING:
     from scripts.objects.vehicle_part import VehiclePartItem, VehiclePart
     from scripts.objects.fish import Fish
 
+
 class Item:
     """
     Represents a single parsed game item.
@@ -37,6 +38,7 @@ class Item:
     like burn time or skill books. Also wraps component data
     such as durability or fluid container info.
     """
+
     _items = None  # Shared cache for all items
     _instances = {}
     _icon_cache_files = None
@@ -45,7 +47,7 @@ class Item:
 
     # Define property defaults
     _property_defaults = {
-        "Type": "Normal",
+        "ItemType": "Normal",
         "DisplayCategory": "Unknown",
         "AlwaysWelcomeGift": False,
         "Tags": [],
@@ -104,8 +106,8 @@ class Item:
         "KeepOnDeplete": False,
         "ChanceToSpawnDamaged": 0,
         "MetalValue": 0.0,
-        #"DaysFresh": 1000000000,
-        #"DaysTotallyRotten": 1000000000,
+        # "DaysFresh": 1000000000,
+        # "DaysTotallyRotten": 1000000000,
         "HungerChange": 0.0,
         "ThirstChange": 0.0,
         "Calories": 0.0,
@@ -311,9 +313,7 @@ class Item:
     }
 
     # Convert to lowercase
-    _property_defaults = {
-        k.lower(): v for k, v in _property_defaults.items()
-    }
+    _property_defaults = {k.lower(): v for k, v in _property_defaults.items()}
 
     _material_map = {
         "Cotton": "Base.RippedSheets",
@@ -325,7 +325,7 @@ class Item:
         "Gold": "Base.GoldBar",
         "Iron": "Base.IronIngot",
         "Silver": "Base.SilverBar",
-        "Steel": "Base.SteelIngot"
+        "Steel": "Base.SteelIngot",
     }
 
     _material_map_flipped = util.flip_data(_material_map)
@@ -350,7 +350,7 @@ class Item:
 
     def __init__(self, item_id: str):
         """Initialise the Item instance with its data if not already initialised."""
-        if hasattr(self, 'item_id'):
+        if hasattr(self, "item_id"):
             return
 
         if Item._items is None:
@@ -367,24 +367,24 @@ class Item:
 
         self._name = None
         self._name_en = None  # English name
-        self._page = None     # Wiki page
-        self._wiki_link = None # Wiki link
-        self._has_page = None # Page defined (bool)
-        self._icon = None     # Primary icon (str)
-        self._icons = None    # All icons (list)
-    
+        self._page = None  # Wiki page
+        self._wiki_link = None  # Wiki link
+        self._has_page = None  # Page defined (bool)
+        self._icon = None  # Primary icon (str)
+        self._icons = None  # All icons (list)
+
     def __getitem__(self, key):
         """Allow dictionary-style access to item data (e.g., item["DisplayName"])."""
         return self.data[key]
-    
+
     def __contains__(self, key):
         """Allow 'in' checks for item data keys (e.g., "EvolvedRecipe" in item)."""
         return key in self.data
-    
+
     def __repr__(self):
         """Return a string representation of the Item showing name, ID, type, and source path."""
-        return (f'<Item {self._item_id}>')
-    
+        return f"<Item {self._item_id}>"
+
     @staticmethod
     def _lower_keys(data: dict) -> dict:
         """
@@ -396,7 +396,9 @@ class Item:
         Returns:
             dict: Dictionary with all top-level keys lowercased.
         """
-        return {k.lower(): v for k, v in data.items()} if isinstance(data, dict) else data
+        return (
+            {k.lower(): v for k, v in data.items()} if isinstance(data, dict) else data
+        )
 
     @classmethod
     def _load_items(cls):
@@ -411,11 +413,17 @@ class Item:
     @classmethod
     def _parse_foraging_penalties(cls):
         """Extracts clothing penalties from 'forageSystem.lua' and cache."""
-        #TODO: have a separate foraging parser/class that we can extract this type of data from.
-        lua_runtime = lua_helper.load_lua_file("forageSystem.lua", inject_lua=lua_helper.LUA_EVENTS)
-        parsed_data = lua_helper.parse_lua_tables(lua_runtime, tables=["forageSystem.clothingPenalties"])
-        cls._forage_clothing_penalties = parsed_data.get("forageSystem.clothingPenalties", {})
-        #save_cache(cls._forage_clothing_penalties, "forage_clothing_penalties_data.json")
+        # TODO: have a separate foraging parser/class that we can extract this type of data from.
+        lua_runtime = lua_helper.load_lua_file(
+            "forageSystem.lua", inject_lua=lua_helper.LUA_EVENTS
+        )
+        parsed_data = lua_helper.parse_lua_tables(
+            lua_runtime, tables=["forageSystem.clothingPenalties"]
+        )
+        cls._forage_clothing_penalties = parsed_data.get(
+            "forageSystem.clothingPenalties", {}
+        )
+        # save_cache(cls._forage_clothing_penalties, "forage_clothing_penalties_data.json")
 
     @classmethod
     def fix_item_id(cls, item_id: str) -> str:
@@ -432,7 +440,7 @@ class Item:
         if item_id is None:
             item_id = ""
 
-        if '.' in item_id:
+        if "." in item_id:
             return item_id
 
         base_guess = f"Base.{item_id}"
@@ -456,12 +464,12 @@ class Item:
         if cls._items is None:
             cls._load_items()
         return {item_id: cls(item_id) for item_id in cls._items}
-    
+
     @classmethod
     def items(cls):
         """Return an iterable of (item_id, Item) pairs."""
         return cls.all().items()
-    
+
     @classmethod
     def keys(cls):
         """Return all item IDs as a keys view."""
@@ -475,22 +483,24 @@ class Item:
         if cls._items is None:
             cls._load_items()
         return (cls(item_id) for item_id in cls._items)
-    
+
     @classmethod
     def count(cls):
         """Return the total number of loaded items."""
         if cls._items is None:
             cls._load_items()
         return len(cls._items)
-    
+
     @classmethod
     def get_icon_cache(cls):
         """Return the cached list of item icon filenames."""
         if cls._icon_cache_files is None:
-            texture_cache = load_cache(f"{RESOURCE_DIR}/texture_names.json", "texture cache", suppress=True)
+            texture_cache = load_cache(
+                f"{RESOURCE_DIR}/texture_names.json", "texture cache", suppress=True
+            )
             cls._icon_cache_files = texture_cache.get("Item", [])
         return cls._icon_cache_files
-    
+
     @classmethod
     def load_burn_data(cls):
         """Load and cache burn time data from camping_fuel.lua."""
@@ -499,11 +509,13 @@ class Item:
                 "campingFuelType",
                 "campingFuelCategory",
                 "campingLightFireType",
-                "campingLightFireCategory"
+                "campingLightFireCategory",
             ]
             CACHE_FILE = "burn_data.json"
 
-            parsed_burn_data, cache_version = load_cache(CACHE_FILE, "burn", True, suppress=True)
+            parsed_burn_data, cache_version = load_cache(
+                CACHE_FILE, "burn", True, suppress=True
+            )
 
             if cache_version != Version.get():
                 lua_runtime = lua_helper.load_lua_file("camping_fuel.lua")
@@ -519,7 +531,7 @@ class Item:
 
         item_id = cls.fix_item_id(item_id)
         return item_id in cls._items
-    
+
     ## ------------------------- Dict-like Methods ------------------------- ##
 
     def get(self, key: str, default=None):
@@ -534,7 +546,7 @@ class Item:
             any: The value from data or the provided default.
         """
         return self.data.get(key.lower(), default)
-    
+
     ## ------------------------- Private Methods ------------------------- ##
 
     def _find_name(self, language: str = None) -> str:
@@ -549,37 +561,41 @@ class Item:
         """
         item_id = self._item_id
         language_code = language or Language.get()
-        is_english = (language_code == "en")
+        is_english = language_code == "en"
 
         ITEM_NAMES = {
             "bible": {
-                "item_id": ["Base.Book_Bible", "Base.BookFancy_Bible", "Base.Paperback_Bible"],
-                "suffix": f": {Translate.get('TheBible', 'BookTitle', language_code)}"
+                "item_id": [
+                    "Base.Book_Bible",
+                    "Base.BookFancy_Bible",
+                    "Base.Paperback_Bible",
+                ],
+                "suffix": f": {Translate.get('TheBible', 'BookTitle', language_code)}",
             },
             "Newspaper_Dispatch_New": {
                 "item_id": ["Base.Newspaper_Dispatch_New"],
-                "suffix": f": {Translate.get('NationalDispatch', 'NewspaperTitle', language_code)}"
+                "suffix": f": {Translate.get('NationalDispatch', 'NewspaperTitle', language_code)}",
             },
             "Newspaper_Herald_New": {
                 "item_id": ["Base.Newspaper_Herald_New"],
-                "suffix": f": {Translate.get('KentuckyHerald', 'NewspaperTitle', language_code)}"
+                "suffix": f": {Translate.get('KentuckyHerald', 'NewspaperTitle', language_code)}",
             },
             "Newspaper_Knews_New": {
                 "item_id": ["Base.Newspaper_Knews_New"],
-                "suffix": f": {Translate.get('KnoxKnews', 'NewspaperTitle', language_code)}"
+                "suffix": f": {Translate.get('KnoxKnews', 'NewspaperTitle', language_code)}",
             },
             "Newspaper_Times_New": {
                 "item_id": ["Base.Newspaper_Times_New"],
-                "suffix": f": {Translate.get('LouisvilleSunTimes', 'NewspaperTitle', language_code)}"
+                "suffix": f": {Translate.get('LouisvilleSunTimes', 'NewspaperTitle', language_code)}",
             },
             "BusinessCard_Nolans": {
                 "item_id": ["Base.BusinessCard_Nolans"],
-                "suffix": f": {Translate.get('NolansUsedCars', 'IGUI', language_code)}"
+                "suffix": f": {Translate.get('NolansUsedCars', 'IGUI', language_code)}",
             },
             "Flier_Nolans": {
                 "item_id": ["Base.Flier_Nolans"],
-                "suffix": f": {Translate.get('NolansUsedCars_title', 'PrintMedia', language_code)}"
-            }
+                "suffix": f": {Translate.get('NolansUsedCars_title', 'PrintMedia', language_code)}",
+            },
         }
 
         for key, value in ITEM_NAMES.items():
@@ -588,17 +604,28 @@ class Item:
                 prefix = value.get("prefix", "")
                 infix = value.get("infix", "")
                 if not infix:
-                    infix = Translate.get(item_id, "DisplayName", "en" if is_english else language_code)
+                    infix = Translate.get(
+                        item_id, "DisplayName", "en" if is_english else language_code
+                    )
 
                 name = f"{prefix}{infix}{suffix}"
                 if is_english:
                     self._name = name
                 return name
-        
-        display_name = Translate.get(item_id, "DisplayName", "en" if is_english else language_code)
+
+        display_name = Translate.get(
+            item_id, "DisplayName", "en" if is_english else language_code
+        )
         # Vehicle parts
         if self.get("VehicleType", 0) > 0:
-            self._name = Translate.get("IGUI_ItemNameMechanicalType").replace("%1", display_name).replace("%2", Translate.get("IGUI_VehicleType_" + str(self.get("VehicleType"))))
+            self._name = (
+                Translate.get("IGUI_ItemNameMechanicalType")
+                .replace("%1", display_name)
+                .replace(
+                    "%2",
+                    Translate.get("IGUI_VehicleType_" + str(self.get("VehicleType"))),
+                )
+            )
             return self._name
 
         # Fluid containers
@@ -633,22 +660,24 @@ class Item:
                     if file.lower() == name.lower():
                         updated_icons.append(file)
                         break
-            
+
             if not updated_icons:
                 return icon_name
 
             return updated_icons
 
-        icons_csv = os.path.join('resources', 'icons.csv')
+        icons_csv = os.path.join("resources", "icons.csv")
         if os.path.exists(icons_csv):
-            with open(icons_csv, newline='', encoding='UTF-8') as csv_file:
+            with open(icons_csv, newline="", encoding="UTF-8") as csv_file:
                 csv_reader = csv.DictReader(csv_file)
                 for row in csv_reader:
-                    if row['item_id'] == self.item_id:
-                        icon = [row['icon'] + ".png"]
+                    if row["item_id"] == self.item_id:
+                        icon = [row["icon"] + ".png"]
                         break
         else:
-            echo.warning(f"File '{icons_csv}' does not exist. Getting icon from item properties.")
+            echo.warning(
+                f"File '{icons_csv}' does not exist. Getting icon from item properties."
+            )
 
         if not icon:
             icon = self.raw_icon
@@ -656,17 +685,25 @@ class Item:
             if icon == "default":
                 # Item is a tile, so should get WorldObjectSprite
                 icon = self.world_object_sprite or "Flatpack"
-            
+
             elif icon:
                 # Use 'Icon' property
-                icon_variants = ['Rotten', '_Rotten', 'Spoiled', 'Cooked', 'Burnt', '_Burnt', 'Overdone']
+                icon_variants = [
+                    "Rotten",
+                    "_Rotten",
+                    "Spoiled",
+                    "Cooked",
+                    "Burnt",
+                    "_Burnt",
+                    "Overdone",
+                ]
                 icons = [icon]
                 for variant in icon_variants:
                     variant_icon = f"{icon}{variant}.png"
                     if variant_icon in icon_cache_files:
                         icons.append(variant_icon)
                 icon = icons
-            
+
             elif self.icons_for_texture:
                 # Use 'IconsForTeture' property
                 icon = self.icons_for_texture
@@ -682,25 +719,39 @@ class Item:
                 icon = icon.removeprefix("Item_")
             elif isinstance(icon, list):
                 icon = [i.removeprefix("Item_") for i in icon]
-        
+
         # Bundle all_icons as a list, and ensure endswith .png
         if isinstance(icon, str):
             all_icons = [icon]
         else:
             all_icons = icon
-        all_icons = [i if i.endswith('.png') else f"{i}.png" for i in all_icons]
+        all_icons = [i if i.endswith(".png") else f"{i}.png" for i in all_icons]
 
         checked = check_icon_exists(all_icons)
         if checked and checked != all_icons:
-            logger.write(f"Icon was modified for {self._item_id} with icon: {all_icons}", False, "log_modified_icons.txt")
+            logger.write(
+                f"Icon was modified for {self._item_id} with icon: {all_icons}",
+                False,
+                "log_modified_icons.txt",
+            )
         elif not checked:
-            logger.write(f"Missing icon for '{self._item_id}' with icon: {all_icons}", False, "log_missing_icons.txt")
+            logger.write(
+                f"Missing icon for '{self._item_id}' with icon: {all_icons}",
+                False,
+                "log_missing_icons.txt",
+            )
 
         all_icons = checked or all_icons
         self._icons = all_icons
         self._icon = all_icons[0]
 
-    def _format_icon(self, format: bool = False, all_icons: bool = False, cycling: bool = False, custom_name: str = None) -> str | list[str]:
+    def _format_icon(
+        self,
+        format: bool = False,
+        all_icons: bool = False,
+        cycling: bool = False,
+        custom_name: str = None,
+    ) -> str | list[str]:
         """
         Formats the item's icon(s) for display or wiki markup, with optional cycling or custom names.
 
@@ -746,14 +797,13 @@ class Item:
 
         if cycling and len(icon_list) > 1:
             return f'<span class="cycle-img">{"".join(icon_list)}</span>'
-        return ''.join(icon_list)
-    
-    
+        return "".join(icon_list)
+
     def _calculate_burn_time(self):
         """
         Calculate and store the burn time for this item based on weight, category, tags, and fuel data.
         """
-        #TODO: clean up and use should_burn property
+        # TODO: clean up and use should_burn property
         if not self.data:
             self._burn_time = None
             return
@@ -763,7 +813,7 @@ class Item:
 
         valid_fuel = False
         id_type = self._id_type
-        category = self.get("Type", "")
+        category = self.get("ItemType", "")
         weight = float(self.get("Weight", 1))
         tags = self.get("Tags", [])
         fabric_type = self.get("FabricType", "")
@@ -776,11 +826,18 @@ class Item:
         campingLightFireCategory = fuel_data["campingLightFireCategory"]
 
         # Logic copied from `ISCampingMenu.shouldBurn()` and `ISCampingMenu.isValidFuel()`
-        if "IsFireFuel" in tags or fire_fuel_ratio > 0: valid_fuel = True
-        if campingFuelType.get(id_type) or campingFuelCategory.get(category): valid_fuel = True
-        if campingFuelType.get(id_type) == 0 or campingFuelCategory.get(category) == 0: valid_fuel = False
-        if "NotFireFuel" in tags:  valid_fuel = False
-        if category.lower() == "clothing" and (fabric_type == "" or fabric_type.lower() == "leather"): valid_fuel = False
+        if "IsFireFuel" in tags or fire_fuel_ratio > 0:
+            valid_fuel = True
+        if campingFuelType.get(id_type) or campingFuelCategory.get(category):
+            valid_fuel = True
+        if campingFuelType.get(id_type) == 0 or campingFuelCategory.get(category) == 0:
+            valid_fuel = False
+        if "NotFireFuel" in tags:
+            valid_fuel = False
+        if category.lower() == "clothing" and (
+            fabric_type == "" or fabric_type.lower() == "leather"
+        ):
+            valid_fuel = False
 
         if not valid_fuel:
             self._burn_time = ""
@@ -788,10 +845,14 @@ class Item:
 
         # Fuel duration logic
         value = None
-        if campingFuelType.get(id_type): value = campingFuelType[id_type]
-        elif campingLightFireType.get(id_type): value = campingLightFireType[id_type]
-        elif campingFuelCategory.get(category): value = campingFuelCategory[category]
-        elif campingLightFireCategory.get(category): value = campingLightFireCategory[category]
+        if campingFuelType.get(id_type):
+            value = campingFuelType[id_type]
+        elif campingLightFireType.get(id_type):
+            value = campingLightFireType[id_type]
+        elif campingFuelCategory.get(category):
+            value = campingFuelCategory[category]
+        elif campingLightFireCategory.get(category):
+            value = campingLightFireCategory[category]
 
         burn_ratio = 2 / 3
         if category.lower() in ["clothing", "container", "literature", "map"]:
@@ -807,8 +868,16 @@ class Item:
         minutes = (value - hours) * 60
 
         # Translate units
-        hours_unit = Translate.get("IGUI_Gametime_hour") if hours == 1 else Translate.get("IGUI_Gametime_hours")
-        minutes_unit = Translate.get("IGUI_Gametime_minute") if minutes == 1 else Translate.get("IGUI_Gametime_minutes")
+        hours_unit = (
+            Translate.get("IGUI_Gametime_hour")
+            if hours == 1
+            else Translate.get("IGUI_Gametime_hours")
+        )
+        minutes_unit = (
+            Translate.get("IGUI_Gametime_minute")
+            if minutes == 1
+            else Translate.get("IGUI_Gametime_minutes")
+        )
 
         # Remove decimal where appropriate
         if minutes % 1 == 0:
@@ -818,25 +887,28 @@ class Item:
 
         # Convert to appropriate string layout
         if hours > 0:
-            self._burn_time = f"{hours} {hours_unit}, {minutes} {minutes_unit}" if minutes else f"{hours} {hours_unit}"
+            self._burn_time = (
+                f"{hours} {hours_unit}, {minutes} {minutes_unit}"
+                if minutes
+                else f"{hours} {hours_unit}"
+            )
         else:
             self._burn_time = f"{minutes} {minutes_unit}"
 
     def calculate_weight(self, trait: str = None):
-        TRAITS = {
-            "organized": 1.3,
-            "disorganized": 0.7
-        }
+        TRAITS = {"organized": 1.3, "disorganized": 0.7}
 
         trait_mod = TRAITS.get(trait, 1.0)
 
         if self.weight_reduction == 0:
             weight_full = (self.weight * 0.3) + (self.capacity * trait_mod)
         else:
-            weight_full = (self.weight * 0.3) + (self.capacity * trait_mod) * (self.weight_reduction / 100)
+            weight_full = (self.weight * 0.3) + (self.capacity * trait_mod) * (
+                self.weight_reduction / 100
+            )
 
         return round(weight_full, 2)
-    
+
     ## ------------------------- Getter Methods ------------------------- ##
 
     def get_default(self, key: str, default=None):
@@ -867,7 +939,13 @@ class Item:
         """
         return self.data.get("component", {}).get(key, {})
 
-    def get_icon(self, format: bool = True, all_icons: bool = True, cycling: bool = True, custom_name: str = None) -> str | list[str]:
+    def get_icon(
+        self,
+        format: bool = True,
+        all_icons: bool = True,
+        cycling: bool = True,
+        custom_name: str = None,
+    ) -> str | list[str]:
         """
         Returns the item's icon(s), either as raw filenames or formatted wiki markup.
 
@@ -892,9 +970,11 @@ class Item:
                 return self._icon
 
         # Otherwise return formatted wiki link
-        return self._format_icon(format=True, all_icons=all_icons, cycling=cycling, custom_name=custom_name)
-    
-    def get_skill(self, raw : bool = False, get_all : bool = False):
+        return self._format_icon(
+            format=True, all_icons=all_icons, cycling=cycling, custom_name=custom_name
+        )
+
+    def get_skill(self, raw: bool = False, get_all: bool = False):
         """
         Returns the skill(s) associated with the item.
 
@@ -913,10 +993,10 @@ class Item:
 
         if not skill_list:
             return None
-        
+
         if not isinstance(skill_list, list):
             skill_list = [skill_list]
-        
+
         if "Improvised" in skill_list:
             skill_list = [s for s in skill_list if s != "Improvised"]
             if not skill_list:
@@ -924,7 +1004,9 @@ class Item:
 
         if not get_all:
             if len(skill_list) > 1:
-                echo.warning(f"More than one skill value found for {self.item_id} with a value of: {skill_list}")
+                echo.warning(
+                    f"More than one skill value found for {self.item_id} with a value of: {skill_list}"
+                )
                 return None
 
             skill_raw = skill_list[0]
@@ -941,8 +1023,10 @@ class Item:
                 expanded_skills.append(skill_raw)
 
         return [Skill(s) for s in expanded_skills]
-    
-    def get_body_parts(self, do_link:bool=True, raw_id:bool=False, default=None) -> list[str]:
+
+    def get_body_parts(
+        self, do_link: bool = True, raw_id: bool = False, default=None
+    ) -> list[str]:
         """
         Returns a list of body parts based on the item's `BloodLocation`.
 
@@ -962,28 +1046,28 @@ class Item:
             return self.blood_location.body_parts.wiki_links
         else:
             return self.blood_location.body_parts.names
-    
+
     def get_recipes(self) -> list[str]:
         from scripts.objects.craft_recipe import CraftRecipe
+
         if not self.teached_recipes:
             return []
-        
+
         products = []
         for recipe_id in self.teached_recipes:
             recipe = CraftRecipe(recipe_id)
             products.append(recipe.wiki_link)
-        
+
         return products
-    
+
     def get_fabric(self) -> str | None:
         """Returns the item id for the item's fabric type."""
         FABRIC_TYPES = {
-            "Cotton": 'Base.RippedSheets',
-            "Denim": 'Base.DenimStrips',
-            "Leather": 'Base.LeatherStrips',
+            "Cotton": "Base.RippedSheets",
+            "Denim": "Base.DenimStrips",
+            "Leather": "Base.LeatherStrips",
         }
         return FABRIC_TYPES.get(self.fabric_type)
-
 
     ## ------------------------- Misc Methods ------------------------- ##
 
@@ -1009,7 +1093,7 @@ class Item:
                 flat_tags.append(tag)
 
         return any(t in self.tags for t in flat_tags)
-    
+
     def has_tags(self, *tags: str | list[str]) -> bool:
         """
         Check if the item has all of the given tags.
@@ -1031,7 +1115,7 @@ class Item:
                 flat_tags.append(tag)
 
         return all(t in self.tags for t in flat_tags)
-    
+
     def has_category(self, *categories: str | list[str]) -> bool:
         """
         Check if the item has any of the given categories.
@@ -1054,7 +1138,7 @@ class Item:
                 flat_categories.append(cat)
 
         return any(cat in self.item_categories for cat in flat_categories)
-    
+
     ## ------------------------- Properties ------------------------- ##
 
     # --- Core --- #
@@ -1076,7 +1160,7 @@ class Item:
         return get_script_path(self.file, prefer="item")
 
     @property
-    def item_id(self): 
+    def item_id(self):
         return self._item_id
 
     @property
@@ -1086,7 +1170,7 @@ class Item:
     @property
     def id_type(self):
         return self._id_type
-    
+
     @property
     def page(self):
         if self._page is None or self._has_page is None:
@@ -1098,7 +1182,7 @@ class Item:
                 self._page = self.name_en
                 self._has_page = False
         return self._page
-    
+
     @property
     def has_page(self):
         if self._has_page is None:
@@ -1112,26 +1196,31 @@ class Item:
     @property
     def name(self):
         current_lang = Language.get()
-        if not hasattr(self, '_name_cache') or self._name_cache.get('lang') != current_lang:
-            self._name_cache = {
-                'lang': current_lang,
-                'value': self._find_name()
-            }
-        return self._name_cache['value']
+        if (
+            not hasattr(self, "_name_cache")
+            or self._name_cache.get("lang") != current_lang
+        ):
+            self._name_cache = {"lang": current_lang, "value": self._find_name()}
+        return self._name_cache["value"]
+
     @name.setter
     def name(self, value):
         # Clear the cache to force re-fetch on next access
-        if hasattr(self, '_name_cache'):
-            delattr(self, '_name_cache')
+        if hasattr(self, "_name_cache"):
+            delattr(self, "_name_cache")
 
     @property
     def name_en(self):
-        if not hasattr(self, '_name_en_cache') or self._name_en_cache.get('lang') != 'en':
+        if (
+            not hasattr(self, "_name_en_cache")
+            or self._name_en_cache.get("lang") != "en"
+        ):
             self._name_en_cache = {
-                'lang': 'en',
-                'value': self._find_name(language="en")
+                "lang": "en",
+                "value": self._find_name(language="en"),
             }
-        return self._name_en_cache['value']
+        return self._name_en_cache["value"]
+
     @name_en.setter
     def name_en(self, value):
         self._name_en = value
@@ -1141,790 +1230,1495 @@ class Item:
         if self._wiki_link is None:
             self._wiki_link = util.link(self.page, self.name)
         return self._wiki_link
-    
+
     @property
     def icon(self):
         return self.get_icon()
-    
+
     @property
     def icons(self) -> list[str]:
         return self.get_icon(format=False, all_icons=True, cycling=False)
-    
+
     ## ------------------------- Script Properties ------------------------- ##
 
     # --- Base --- #
     @property
-    def type(self) -> str: return self.get_default("Type")
+    def type(self) -> str:
+        return self.get_default("ItemType")
+
     @property
-    def raw_display_category(self) -> str: return self.get_default("DisplayCategory")
+    def raw_display_category(self) -> str:
+        return self.get_default("DisplayCategory")
+
     @property
     def display_category(self) -> str:
-        if not hasattr(self, '_display_category'):
+        if not hasattr(self, "_display_category"):
             from scripts.utils import categories
+
             self._display_category = categories.get_cat_link(self.raw_display_category)
         return self._display_category
+
     @property
     def display_category_name(self) -> str:
         current_lang = Language.get()
-        if not hasattr(self, '_display_category_name_cache') or self._display_category_name_cache.get('lang') != current_lang:
+        if (
+            not hasattr(self, "_display_category_name_cache")
+            or self._display_category_name_cache.get("lang") != current_lang
+        ):
             self._display_category_name_cache = {
-                'lang': current_lang,
-                'value': Translate.get("IGUI_ItemCat_" + (self.raw_display_category or "Unknown"))
+                "lang": current_lang,
+                "value": Translate.get(
+                    "IGUI_ItemCat_" + (self.raw_display_category or "Unknown")
+                ),
             }
-        return self._display_category_name_cache['value']
+        return self._display_category_name_cache["value"]
+
     @property
-    def display_name(self) -> str: return self.get_default("DisplayName")
+    def display_name(self) -> str:
+        return self.get_default("DisplayName")
+
     @property
-    def always_welcome_gift(self) -> bool: return bool(self.get_default("AlwaysWelcomeGift"))
+    def always_welcome_gift(self) -> bool:
+        return bool(self.get_default("AlwaysWelcomeGift"))
+
     @property
-    def tags(self) -> list: return self.get_default("Tags")
+    def tags(self) -> list:
+        return self.get_default("Tags")
+
     @property
-    def guid(self) -> str: return self.clothing_item.guid if self.clothing_item else None
+    def guid(self) -> str:
+        return self.clothing_item.guid if self.clothing_item else None
 
     # --- Icon/Model/Animation --- #
     @property
-    def raw_icon(self) -> str|None: return self.get_default("Icon")
+    def raw_icon(self) -> str | None:
+        return self.get_default("Icon")
+
     @property
-    def icons_for_texture(self) -> list: return self.get_default("IconsForTexture")
+    def icons_for_texture(self) -> list:
+        return self.get_default("IconsForTexture")
+
     @property
-    def static_model(self) -> str|None: return self.get_default("StaticModel")
+    def static_model(self) -> str | None:
+        return self.get_default("StaticModel")
+
     @property
-    def world_static_model(self) -> str|None: return self.get_default("WorldStaticModel")
+    def world_static_model(self) -> str | None:
+        return self.get_default("WorldStaticModel")
+
     @property
-    def physics_object(self) -> str|None: return self.get_default("PhysicsObject")
+    def physics_object(self) -> str | None:
+        return self.get_default("PhysicsObject")
+
     @property
-    def placed_sprite(self) -> str|None: return self.get_default("PlacedSprite")
+    def placed_sprite(self) -> str | None:
+        return self.get_default("PlacedSprite")
+
     @property
-    def weapon_sprite(self) -> str|None: return self.get_default("WeaponSprite")
+    def weapon_sprite(self) -> str | None:
+        return self.get_default("WeaponSprite")
+
     @property
-    def eat_type(self) -> str|None: return self.get_default("EatType")
+    def eat_type(self) -> str | None:
+        return self.get_default("EatType")
+
     @property
-    def swing_anim(self) -> str: return self.get_default("SwingAnim")
+    def swing_anim(self) -> str:
+        return self.get_default("SwingAnim")
+
     @property
-    def idle_anim(self) -> str: return self.get_default("IdleAnim")
+    def idle_anim(self) -> str:
+        return self.get_default("IdleAnim")
+
     @property
-    def run_anim(self) -> str: return self.get_default("RunAnim")
+    def run_anim(self) -> str:
+        return self.get_default("RunAnim")
+
     @property
-    def static_models_by_index(self) -> list: return self.get_default("StaticModelsByIndex")
+    def static_models_by_index(self) -> list:
+        return self.get_default("StaticModelsByIndex")
+
     @property
-    def world_static_models_by_index(self) -> list: return self.get_default("WorldStaticModelsByIndex")
+    def world_static_models_by_index(self) -> list:
+        return self.get_default("WorldStaticModelsByIndex")
+
     @property
-    def primary_anim_mask(self) -> str|None: return self.get_default("PrimaryAnimMask")
+    def primary_anim_mask(self) -> str | None:
+        return self.get_default("PrimaryAnimMask")
+
     @property
-    def secondary_anim_mask(self) -> str|None: return self.get_default("SecondaryAnimMask")
+    def secondary_anim_mask(self) -> str | None:
+        return self.get_default("SecondaryAnimMask")
+
     @property
-    def world_object_sprite(self) -> str|None: return self.get_default("WorldObjectSprite")
+    def world_object_sprite(self) -> str | None:
+        return self.get_default("WorldObjectSprite")
+
     @property
-    def read_type(self) -> str|None: return self.get_default("ReadType")
+    def read_type(self) -> str | None:
+        return self.get_default("ReadType")
+
     @property
-    def scale_world_icon(self) -> float: return float(self.get_default("ScaleWorldIcon"))
+    def scale_world_icon(self) -> float:
+        return float(self.get_default("ScaleWorldIcon"))
+
     @property
-    def use_world_item(self) -> bool: return bool(self.get_default("UseWorldItem"))
+    def use_world_item(self) -> bool:
+        return bool(self.get_default("UseWorldItem"))
+
     @property
-    def weapon_sprites_by_index(self) -> list: return self.get_default("WeaponSpritesByIndex")
+    def weapon_sprites_by_index(self) -> list:
+        return self.get_default("WeaponSpritesByIndex")
+
     @property
-    def color_blue(self) -> int: return int(self.get_default("ColorBlue"))
+    def color_blue(self) -> int:
+        return int(self.get_default("ColorBlue"))
+
     @property
-    def color_green(self) -> int: return int(self.get_default("ColorGreen"))
+    def color_green(self) -> int:
+        return int(self.get_default("ColorGreen"))
+
     @property
-    def color_red(self) -> int: return int(self.get_default("ColorRed"))
+    def color_red(self) -> int:
+        return int(self.get_default("ColorRed"))
+
     @property
-    def icon_color_mask(self) -> str|None: return self.get_default("IconColorMask")
+    def icon_color_mask(self) -> str | None:
+        return self.get_default("IconColorMask")
+
     @property
-    def icon_fluid_mask(self) -> str|None: return self.get_default("IconFluidMask")
+    def icon_fluid_mask(self) -> str | None:
+        return self.get_default("IconFluidMask")
+
     @property
-    def dig_type(self) -> str|None: return self.get_default("DigType")
+    def dig_type(self) -> str | None:
+        return self.get_default("DigType")
+
     @property
-    def pour_type(self) -> str|None: return self.get_default("PourType")
+    def pour_type(self) -> str | None:
+        return self.get_default("PourType")
 
     # --- Sound --- #
     @property
-    def place_multiple_sound(self) -> str|None: return self.get_default("PlaceMultipleSound")
+    def place_multiple_sound(self) -> str | None:
+        return self.get_default("PlaceMultipleSound")
+
     @property
-    def place_one_sound(self) -> str|None: return self.get_default("PlaceOneSound")
+    def place_one_sound(self) -> str | None:
+        return self.get_default("PlaceOneSound")
+
     @property
-    def cooking_sound(self) -> str|None: return self.get_default("CookingSound")
+    def cooking_sound(self) -> str | None:
+        return self.get_default("CookingSound")
+
     @property
-    def swing_sound(self) -> str: return self.get_default("SwingSound")
+    def swing_sound(self) -> str:
+        return self.get_default("SwingSound")
+
     @property
-    def close_sound(self) -> str|None: return self.get_default("CloseSound")
+    def close_sound(self) -> str | None:
+        return self.get_default("CloseSound")
+
     @property
-    def open_sound(self) -> str|None: return self.get_default("OpenSound")
+    def open_sound(self) -> str | None:
+        return self.get_default("OpenSound")
+
     @property
-    def put_in_sound(self) -> str|None: return self.get_default("PutInSound")
+    def put_in_sound(self) -> str | None:
+        return self.get_default("PutInSound")
+
     @property
-    def break_sound(self) -> str|None: return self.get_default("BreakSound")
+    def break_sound(self) -> str | None:
+        return self.get_default("BreakSound")
+
     @property
-    def door_hit_sound(self) -> str: return self.get_default("DoorHitSound")
+    def door_hit_sound(self) -> str:
+        return self.get_default("DoorHitSound")
+
     @property
-    def drop_sound(self) -> str|None: return self.get_default("DropSound")
+    def drop_sound(self) -> str | None:
+        return self.get_default("DropSound")
+
     @property
-    def hit_floor_sound(self) -> str: return self.get_default("HitFloorSound")
+    def hit_floor_sound(self) -> str:
+        return self.get_default("HitFloorSound")
+
     @property
-    def hit_sound(self) -> str: return self.get_default("HitSound")
+    def hit_sound(self) -> str:
+        return self.get_default("HitSound")
+
     @property
-    def aim_release_sound(self) -> str|None: return self.get_default("AimReleaseSound")
+    def aim_release_sound(self) -> str | None:
+        return self.get_default("AimReleaseSound")
+
     @property
-    def bring_to_bear_sound(self) -> str|None: return self.get_default("BringToBearSound")
+    def bring_to_bear_sound(self) -> str | None:
+        return self.get_default("BringToBearSound")
+
     @property
-    def click_sound(self) -> str: return self.get_default("ClickSound")
+    def click_sound(self) -> str:
+        return self.get_default("ClickSound")
+
     @property
-    def eject_ammo_sound(self) -> str|None: return self.get_default("EjectAmmoSound")
+    def eject_ammo_sound(self) -> str | None:
+        return self.get_default("EjectAmmoSound")
+
     @property
-    def eject_ammo_start_sound(self) -> str|None: return self.get_default("EjectAmmoStartSound")
+    def eject_ammo_start_sound(self) -> str | None:
+        return self.get_default("EjectAmmoStartSound")
+
     @property
-    def eject_ammo_stop_sound(self) -> str|None: return self.get_default("EjectAmmoStopSound")
+    def eject_ammo_stop_sound(self) -> str | None:
+        return self.get_default("EjectAmmoStopSound")
+
     @property
-    def equip_sound(self) -> str|None: return self.get_default("EquipSound")
+    def equip_sound(self) -> str | None:
+        return self.get_default("EquipSound")
+
     @property
-    def custom_eat_sound(self) -> str|None: return self.get_default("CustomEatSound")
+    def custom_eat_sound(self) -> str | None:
+        return self.get_default("CustomEatSound")
+
     @property
-    def impact_sound(self) -> str: return self.get_default("ImpactSound")
+    def impact_sound(self) -> str:
+        return self.get_default("ImpactSound")
+
     @property
-    def insert_ammo_sound(self) -> str|None: return self.get_default("InsertAmmoSound")
+    def insert_ammo_sound(self) -> str | None:
+        return self.get_default("InsertAmmoSound")
+
     @property
-    def insert_ammo_start_sound(self) -> str|None: return self.get_default("InsertAmmoStartSound")
+    def insert_ammo_start_sound(self) -> str | None:
+        return self.get_default("InsertAmmoStartSound")
+
     @property
-    def insert_ammo_stop_sound(self) -> str|None: return self.get_default("InsertAmmoStopSound")
+    def insert_ammo_stop_sound(self) -> str | None:
+        return self.get_default("InsertAmmoStopSound")
+
     @property
-    def damaged_sound(self) -> str|None: return self.get_default("DamagedSound")
+    def damaged_sound(self) -> str | None:
+        return self.get_default("DamagedSound")
+
     @property
-    def unequip_sound(self) -> str|None: return self.get_default("UnequipSound")
+    def unequip_sound(self) -> str | None:
+        return self.get_default("UnequipSound")
+
     @property
-    def rack_sound(self) -> str|None: return self.get_default("RackSound")
+    def rack_sound(self) -> str | None:
+        return self.get_default("RackSound")
+
     @property
-    def npc_sound_boost(self) -> float: return float(self.get_default("NPCSoundBoost"))
+    def npc_sound_boost(self) -> float:
+        return float(self.get_default("NPCSoundBoost"))
+
     @property
-    def sound_parameter(self) -> str|None: return self.get_default("SoundParameter")
+    def sound_parameter(self) -> str | None:
+        return self.get_default("SoundParameter")
+
     @property
-    def sound_map(self) -> dict: return self.get_default("SoundMap", {})
+    def sound_map(self) -> dict:
+        return self.get_default("SoundMap", {})
+
     @property
-    def fill_from_dispenser_sound(self) -> str|None: return self.get_default("FillFromDispenserSound")
+    def fill_from_dispenser_sound(self) -> str | None:
+        return self.get_default("FillFromDispenserSound")
+
     @property
-    def fill_from_lake_sound(self) -> str|None: return self.get_default("FillFromLakeSound")
+    def fill_from_lake_sound(self) -> str | None:
+        return self.get_default("FillFromLakeSound")
+
     @property
-    def fill_from_tap_sound(self) -> str|None: return self.get_default("FillFromTapSound")
+    def fill_from_tap_sound(self) -> str | None:
+        return self.get_default("FillFromTapSound")
+
     @property
-    def fill_from_toilet_sound(self) -> str|None: return self.get_default("FillFromToiletSound")
+    def fill_from_toilet_sound(self) -> str | None:
+        return self.get_default("FillFromToiletSound")
 
     # --- Weight/Container --- #
     @property
-    def weight(self) -> float | int: return util.convert_int(float(self.get_default("Weight")))
+    def weight(self) -> float | int:
+        return util.convert_int(float(self.get_default("Weight")))
+
     @property
-    def capacity(self) -> int: return int(self.get_default("Capacity"))
+    def capacity(self) -> int:
+        return int(self.get_default("Capacity"))
+
     @property
-    def weight_reduction(self) -> int: return int(self.get_default("WeightReduction"))
+    def weight_reduction(self) -> int:
+        return int(self.get_default("WeightReduction"))
+
     @property
-    def accept_item_function(self) -> str|None: return self.get_default("AcceptItemFunction")
+    def accept_item_function(self) -> str | None:
+        return self.get_default("AcceptItemFunction")
+
     @property
-    def weight_modifier(self) -> float | int: return util.convert_int(float(self.get_default("WeightModifier")))
+    def weight_modifier(self) -> float | int:
+        return util.convert_int(float(self.get_default("WeightModifier")))
+
     @property
-    def weapon_weight(self) -> float | int: return util.convert_int(float(self.get_default("WeaponWeight")))
+    def weapon_weight(self) -> float | int:
+        return util.convert_int(float(self.get_default("WeaponWeight")))
+
     @property
-    def max_item_size(self) -> float | int: return util.convert_int(float(self.get_default("MaxItemSize")))
+    def max_item_size(self) -> float | int:
+        return util.convert_int(float(self.get_default("MaxItemSize")))
+
     @property
-    def weight_empty(self) -> float | int: return util.convert_int(float(self.get_default("WeightEmpty")))
+    def weight_empty(self) -> float | int:
+        return util.convert_int(float(self.get_default("WeightEmpty")))
 
     # --- Recipes/Condition/Replace/Usage --- #
     @property
-    def evolved_recipe(self) -> dict: return self.get_default("EvolvedRecipe")
+    def evolved_recipe(self) -> dict:
+        return self.get_default("EvolvedRecipe")
+
     @property
-    def evolved_recipe_name(self) -> str|None: return self.get_default("EvolvedRecipeName")
-    @property #TODO: should these be CraftRecipe objects?
-    def researchable_recipes(self) -> list: return self.get_default("ResearchableRecipes", self.get_default("ResearchableRecipe"))
-    @property #TODO: should these be CraftRecipe objects?
-    def teached_recipes(self) -> list: return self.get_default("Teachedrecipes")
+    def evolved_recipe_name(self) -> str | None:
+        return self.get_default("EvolvedRecipeName")
+
+    @property  # TODO: should these be CraftRecipe objects?
+    def researchable_recipes(self) -> list:
+        return self.get_default(
+            "ResearchableRecipes", self.get_default("ResearchableRecipe")
+        )
+
+    @property  # TODO: should these be CraftRecipe objects?
+    def teached_recipes(self) -> list:
+        return self.get_default("Teachedrecipes")
+
     @property
-    def sharpness(self) -> float | int: return util.convert_int(float(self.get_default("Sharpness")))
+    def sharpness(self) -> float | int:
+        return util.convert_int(float(self.get_default("Sharpness")))
+
     @property
-    def head_condition(self) -> float | int: return util.convert_int(float(self.get_default("HeadCondition")))
+    def head_condition(self) -> float | int:
+        return util.convert_int(float(self.get_default("HeadCondition")))
+
     @property
-    def head_condition_lower_chance_multiplier(self) -> float | int: return util.convert_int(float(self.get_default("HeadConditionLowerChanceMultiplier")))
+    def head_condition_lower_chance_multiplier(self) -> float | int:
+        return util.convert_int(
+            float(self.get_default("HeadConditionLowerChanceMultiplier"))
+        )
+
     @property
-    def condition_lower_chance_one_in(self) -> int: return int(self.get_default("ConditionLowerChanceOneIn"))
+    def condition_lower_chance_one_in(self) -> int:
+        return int(self.get_default("ConditionLowerChanceOneIn"))
+
     @property
-    def can_attach(self) -> bool: return bool(self.get_default("CanAttach"))
+    def can_attach(self) -> bool:
+        return bool(self.get_default("CanAttach"))
+
     @property
-    def can_detach(self) -> bool: return bool(self.get_default("CanDetach"))
+    def can_detach(self) -> bool:
+        return bool(self.get_default("CanDetach"))
+
     @property
-    def condition_max(self) -> int: return int(self.get_default("ConditionMax"))
+    def condition_max(self) -> int:
+        return int(self.get_default("ConditionMax"))
+
     @property
-    def replace_on_use(self) -> str|None: return self.get_default("ReplaceOnUse")
+    def replace_on_use(self) -> str | None:
+        return self.get_default("ReplaceOnUse")
+
     @property
-    def replace_on_use_on(self) -> str|None: return self.get_default("ReplaceOnUseOn")
+    def replace_on_use_on(self) -> str | None:
+        return self.get_default("ReplaceOnUseOn")
+
     @property
-    def consolidate_option(self) -> str|None: return self.get_default("ConsolidateOption")
+    def consolidate_option(self) -> str | None:
+        return self.get_default("ConsolidateOption")
+
     @property
-    def use_delta(self) -> float | int: return util.convert_int(float(self.get_default("UseDelta")))
+    def use_delta(self) -> float | int:
+        return util.convert_int(float(self.get_default("UseDelta")))
+
     @property
-    def use_while_equipped(self) -> bool: return bool(self.get_default("UseWhileEquipped"))
+    def use_while_equipped(self) -> bool:
+        return bool(self.get_default("UseWhileEquipped"))
+
     @property
-    def use_self(self) -> bool: return bool(self.get_default("UseSelf"))
+    def use_self(self) -> bool:
+        return bool(self.get_default("UseSelf"))
+
     @property
-    def replace_on_deplete(self) -> str|None: return self.get_default("ReplaceOnDeplete")
+    def replace_on_deplete(self) -> str | None:
+        return self.get_default("ReplaceOnDeplete")
+
     @property
-    def remove_on_broken(self) -> bool: return bool(self.get_default("RemoveOnBroken"))
+    def remove_on_broken(self) -> bool:
+        return bool(self.get_default("RemoveOnBroken"))
+
     @property
-    def without_drainable(self) -> str|None: return self.get_default("WithoutDrainable")
+    def without_drainable(self) -> str | None:
+        return self.get_default("WithoutDrainable")
+
     @property
-    def with_drainable(self) -> str|None: return self.get_default("WithDrainable")
+    def with_drainable(self) -> str | None:
+        return self.get_default("WithDrainable")
+
     @property
-    def ticks_per_equip_use(self) -> int: return int(self.get_default("ticksPerEquipUse"))
+    def ticks_per_equip_use(self) -> int:
+        return int(self.get_default("ticksPerEquipUse"))
+
     @property
-    def can_be_reused(self) -> bool: return bool(self.get_default("CanBeReused"))
+    def can_be_reused(self) -> bool:
+        return bool(self.get_default("CanBeReused"))
+
     @property
-    def head_condition_max(self) -> float | int: return util.convert_int(float(self.get_default("HeadConditionMax")))
+    def head_condition_max(self) -> float | int:
+        return util.convert_int(float(self.get_default("HeadConditionMax")))
+
     @property
-    def disappear_on_use(self) -> bool: return bool(self.get_default("DisappearOnUse"))
+    def disappear_on_use(self) -> bool:
+        return bool(self.get_default("DisappearOnUse"))
+
     @property
-    def cant_be_consolided(self) -> bool: return bool(self.get_default("cantBeConsolided"))
+    def cant_be_consolided(self) -> bool:
+        return bool(self.get_default("cantBeConsolided"))
+
     @property
-    def use_while_unequipped(self) -> bool: return bool(self.get_default("UseWhileUnequipped"))
+    def use_while_unequipped(self) -> bool:
+        return bool(self.get_default("UseWhileUnequipped"))
+
     @property
-    def equipped_no_sprint(self) -> bool: return bool(self.get_default("EquippedNoSprint"))
+    def equipped_no_sprint(self) -> bool:
+        return bool(self.get_default("EquippedNoSprint"))
+
     @property
-    def protect_from_rain_when_equipped(self) -> bool: return bool(self.get_default("ProtectFromRainWhenEquipped"))
+    def protect_from_rain_when_equipped(self) -> bool:
+        return bool(self.get_default("ProtectFromRainWhenEquipped"))
+
     @property
-    def replace_on_cooked(self) -> list: return self.get_default("ReplaceOnCooked")
+    def replace_on_cooked(self) -> list:
+        return self.get_default("ReplaceOnCooked")
+
     @property
-    def item_after_cleaning(self) -> str|None: return self.get_default("ItemAfterCleaning")
+    def item_after_cleaning(self) -> str | None:
+        return self.get_default("ItemAfterCleaning")
+
     @property
-    def can_barricade(self) -> bool: return bool(self.get_default("CanBarricade"))
+    def can_barricade(self) -> bool:
+        return bool(self.get_default("CanBarricade"))
+
     @property
-    def keep_on_deplete(self) -> bool: return bool(self.get_default("KeepOnDeplete"))
+    def keep_on_deplete(self) -> bool:
+        return bool(self.get_default("KeepOnDeplete"))
+
     @property
-    def chance_to_spawn_damaged(self) -> int: return int(self.get_default("ChanceToSpawnDamaged"))
+    def chance_to_spawn_damaged(self) -> int:
+        return int(self.get_default("ChanceToSpawnDamaged"))
+
     @property
-    def metal_value(self) -> float | int: return util.convert_int(float(self.get_default("MetalValue")))
+    def metal_value(self) -> float | int:
+        return util.convert_int(float(self.get_default("MetalValue")))
 
     # --- Food --- #
     @property
-    def food_type(self) -> str|None: return self.get_default("FoodType")
+    def food_type(self) -> str | None:
+        return self.get_default("FoodType")
+
     @property
-    def days_fresh(self) -> int|None: return self.get_default("DaysFresh")
+    def days_fresh(self) -> int | None:
+        return self.get_default("DaysFresh")
+
     @property
-    def days_totally_rotten(self) -> int|None: return self.get_default("DaysTotallyRotten")
+    def days_totally_rotten(self) -> int | None:
+        return self.get_default("DaysTotallyRotten")
+
     @property
-    def hunger_change(self) -> float | int: return util.convert_int(float(self.get_default("HungerChange")))
+    def hunger_change(self) -> float | int:
+        return util.convert_int(float(self.get_default("HungerChange")))
+
     @property
-    def thirst_change(self) -> float | int: return util.convert_int(float(self.get_default("ThirstChange")))
+    def thirst_change(self) -> float | int:
+        return util.convert_int(float(self.get_default("ThirstChange")))
+
     @property
-    def calories(self) -> float | int: return util.convert_int(float(self.get_default("Calories")))
+    def calories(self) -> float | int:
+        return util.convert_int(float(self.get_default("Calories")))
+
     @property
-    def carbohydrates(self) -> float | int: return util.convert_int(float(self.get_default("Carbohydrates")))
+    def carbohydrates(self) -> float | int:
+        return util.convert_int(float(self.get_default("Carbohydrates")))
+
     @property
-    def lipids(self) -> float | int: return util.convert_int(float(self.get_default("Lipids")))
+    def lipids(self) -> float | int:
+        return util.convert_int(float(self.get_default("Lipids")))
+
     @property
-    def proteins(self) -> float | int: return util.convert_int(float(self.get_default("Proteins")))
+    def proteins(self) -> float | int:
+        return util.convert_int(float(self.get_default("Proteins")))
+
     @property
-    def is_cookable(self) -> bool: return bool(self.get_default("IsCookable"))
+    def is_cookable(self) -> bool:
+        return bool(self.get_default("IsCookable"))
+
     @property
-    def minutes_to_cook(self) -> int: return int(self.get_default("MinutesToCook"))
+    def minutes_to_cook(self) -> int:
+        return int(self.get_default("MinutesToCook"))
+
     @property
-    def minutes_to_burn(self) -> int: return int(self.get_default("MinutesToBurn"))
+    def minutes_to_burn(self) -> int:
+        return int(self.get_default("MinutesToBurn"))
+
     @property
-    def remove_unhappiness_when_cooked(self) -> bool: return bool(self.get_default("RemoveUnhappinessWhenCooked"))
+    def remove_unhappiness_when_cooked(self) -> bool:
+        return bool(self.get_default("RemoveUnhappinessWhenCooked"))
+
     @property
-    def bad_cold(self) -> bool: return bool(self.get_default("BadCold"))
+    def bad_cold(self) -> bool:
+        return bool(self.get_default("BadCold"))
+
     @property
-    def bad_in_microwave(self) -> bool: return bool(self.get_default("BadInMicrowave"))
+    def bad_in_microwave(self) -> bool:
+        return bool(self.get_default("BadInMicrowave"))
+
     @property
-    def dangerous_uncooked(self) -> bool: return bool(self.get_default("DangerousUncooked"))
+    def dangerous_uncooked(self) -> bool:
+        return bool(self.get_default("DangerousUncooked"))
+
     @property
-    def good_hot(self) -> bool: return bool(self.get_default("GoodHot"))
+    def good_hot(self) -> bool:
+        return bool(self.get_default("GoodHot"))
+
     @property
-    def cant_eat(self) -> bool: return bool(self.get_default("CantEat"))
+    def cant_eat(self) -> bool:
+        return bool(self.get_default("CantEat"))
+
     @property
-    def cant_be_frozen(self) -> bool: return bool(self.get_default("CantBeFrozen"))
+    def cant_be_frozen(self) -> bool:
+        return bool(self.get_default("CantBeFrozen"))
+
     @property
-    def animal_feed_type(self) -> str|None: return self.get_default("AnimalFeedType")
+    def animal_feed_type(self) -> str | None:
+        return self.get_default("AnimalFeedType")
+
     @property
-    def packaged(self) -> bool: return bool(self.get_default("Packaged"))
+    def packaged(self) -> bool:
+        return bool(self.get_default("Packaged"))
+
     @property
-    def spice(self) -> bool: return bool(self.get_default("Spice"))
+    def spice(self) -> bool:
+        return bool(self.get_default("Spice"))
+
     @property
-    def canned_food(self) -> bool: return bool(self.get_default("CannedFood"))
+    def canned_food(self) -> bool:
+        return bool(self.get_default("CannedFood"))
+
     @property
-    def replace_on_rotten(self) -> str|None: return self.get_default("ReplaceOnRotten")
+    def replace_on_rotten(self) -> str | None:
+        return self.get_default("ReplaceOnRotten")
+
     @property
-    def eat_time(self) -> int: return int(self.get_default("EatTime"))
+    def eat_time(self) -> int:
+        return int(self.get_default("EatTime"))
+
     @property
-    def remove_negative_effect_on_cooked(self) -> bool: return bool(self.get_default("RemoveNegativeEffectOnCooked"))
+    def remove_negative_effect_on_cooked(self) -> bool:
+        return bool(self.get_default("RemoveNegativeEffectOnCooked"))
 
     # --- Effects/Medical --- #
     @property
-    def unhappy_change(self) -> float | int: return util.convert_int(float(self.get_default("UnhappyChange")))
+    def unhappy_change(self) -> float | int:
+        return util.convert_int(float(self.get_default("UnhappyChange")))
+
     @property
-    def boredom_change(self) -> float | int: return util.convert_int(float(self.get_default("BoredomChange")))
+    def boredom_change(self) -> float | int:
+        return util.convert_int(float(self.get_default("BoredomChange")))
+
     @property
-    def stress_change(self) -> float | int: return util.convert_int(float(self.get_default("StressChange")))
+    def stress_change(self) -> float | int:
+        return util.convert_int(float(self.get_default("StressChange")))
+
     @property
-    def reduce_food_sickness(self) -> int: return int(self.get_default("ReduceFoodSickness"))
+    def reduce_food_sickness(self) -> int:
+        return int(self.get_default("ReduceFoodSickness"))
+
     @property
-    def endurance_change(self) -> float | int: return util.convert_int(float(self.get_default("EnduranceChange")))
+    def endurance_change(self) -> float | int:
+        return util.convert_int(float(self.get_default("EnduranceChange")))
+
     @property
-    def poison_power(self) -> int: return int(self.get_default("PoisonPower"))
+    def poison_power(self) -> int:
+        return int(self.get_default("PoisonPower"))
+
     @property
-    def medical(self) -> bool: return bool(self.get_default("Medical"))
+    def medical(self) -> bool:
+        return bool(self.get_default("Medical"))
+
     @property
-    def alcoholic(self) -> bool: return bool(self.get_default("Alcoholic"))
+    def alcoholic(self) -> bool:
+        return bool(self.get_default("Alcoholic"))
+
     @property
-    def bandage_power(self) -> float | int: return util.convert_int(float(self.get_default("BandagePower")))
+    def bandage_power(self) -> float | int:
+        return util.convert_int(float(self.get_default("BandagePower")))
+
     @property
-    def can_bandage(self) -> bool: return bool(self.get_default("CanBandage"))
+    def can_bandage(self) -> bool:
+        return bool(self.get_default("CanBandage"))
+
     @property
-    def alcohol_power(self) -> float | int: return util.convert_int(float(self.get_default("AlcoholPower")))
+    def alcohol_power(self) -> float | int:
+        return util.convert_int(float(self.get_default("AlcoholPower")))
+
     @property
-    def reduce_infection_power(self) -> float | int: return util.convert_int(float(self.get_default("ReduceInfectionPower")))
+    def reduce_infection_power(self) -> float | int:
+        return util.convert_int(float(self.get_default("ReduceInfectionPower")))
+
     @property
-    def fatigue_change(self) -> float | int: return util.convert_int(float(self.get_default("FatigueChange")))
+    def fatigue_change(self) -> float | int:
+        return util.convert_int(float(self.get_default("FatigueChange")))
+
     @property
-    def flu_reduction(self) -> int: return int(self.get_default("FluReduction"))
+    def flu_reduction(self) -> int:
+        return int(self.get_default("FluReduction"))
+
     @property
-    def herbalist_type(self) -> str|None: return self.get_default("HerbalistType")
+    def herbalist_type(self) -> str | None:
+        return self.get_default("HerbalistType")
+
     @property
-    def pain_reduction(self) -> int: return int(self.get_default("PainReduction"))
+    def pain_reduction(self) -> int:
+        return int(self.get_default("PainReduction"))
 
     # --- Weapon --- #
     @property
-    def explosion_power(self) -> int: return int(self.get_default("ExplosionPower"))
-    @property
-    def explosion_range(self) -> int: return int(self.get_default("ExplosionRange"))
-    @property
-    def explosion_sound(self) -> str|None: return self.get_default("ExplosionSound")
-    @property
-    def knockdown_mod(self) -> float | int: return util.convert_int(float(self.get_default("KnockdownMod")))
-    @property
-    def max_damage(self) -> float | int: return util.convert_int(float(self.get_default("MaxDamage")))
-    @property
-    def max_hit_count(self) -> int: return int(self.get_default("MaxHitCount"))
-    @property
-    def max_range(self) -> float | int: return util.convert_int(float(self.get_default("MaxRange")))
-    @property
-    def min_damage(self) -> float | int: return util.convert_int(float(self.get_default("MinDamage")))
-    @property
-    def minimum_swing_time(self) -> float | int: return util.convert_int(float(self.get_default("MinimumSwingTime")))
-    @property
-    def swing_amount_before_impact(self) -> float | int: return util.convert_int(float(self.get_default("SwingAmountBeforeImpact")))
-    @property
-    def swing_time(self) -> float | int: return util.convert_int(float(self.get_default("SwingTime")))
-    @property
-    def trigger_explosion_timer(self) -> int: return int(self.get_default("TriggerExplosionTimer"))
-    @property
-    def can_be_placed(self) -> bool: return bool(self.get_default("CanBePlaced"))
-    @property
-    def can_be_remote(self) -> bool: return bool(self.get_default("CanBeRemote"))
-    @property
-    def explosion_timer(self) -> int: return int(self.get_default("ExplosionTimer"))
-    @property
-    def sensor_range(self) -> int: return int(self.get_default("SensorRange"))
-    @property
-    def alarm_sound(self) -> str|None: return self.get_default("AlarmSound")
-    @property
-    def sound_radius(self) -> int: return int(self.get_default("SoundRadius"))
-    @property
-    def reload_time_modifier(self) -> float | int: return util.convert_int(float(self.get_default("ReloadTimeModifier")))
-    @property
-    def mount_on(self) -> list: return self.get_default("MountOn")
-    @property
-    def part_type(self) -> str|None: return self.get_default("PartType")
-    @property
-    def attachment_type(self) -> str|None: return self.get_default("AttachmentType")
-    @property
-    def base_speed(self) -> float | int: return util.convert_int(float(self.get_default("BaseSpeed")))
-    @property
-    def categories(self) -> list: return self.get_default("Categories")
-    @property
-    def crit_dmg_multiplier(self) -> float | int: return util.convert_int(float(self.get_default("CritDmgMultiplier")))
-    @property
-    def critical_chance(self) -> float | int: return util.convert_int(float(self.get_default("CriticalChance")))
-    @property
-    def door_damage(self) -> int: return int(self.get_default("DoorDamage"))
-    @property
-    def knock_back_on_no_death(self) -> bool: return bool(self.get_default("KnockBackOnNoDeath"))
-    @property
-    def min_angle(self) -> float | int: return util.convert_int(float(self.get_default("MinAngle")))
-    @property
-    def min_range(self) -> float | int: return util.convert_int(float(self.get_default("MinRange")))
-    @property
-    def push_back_mod(self) -> float | int: return util.convert_int(float(self.get_default("PushBackMod")))
-    @property
-    def splat_blood_on_no_death(self) -> bool: return bool(self.get_default("SplatBloodOnNoDeath"))
-    @property
-    def splat_number(self) -> int: return int(self.get_default("SplatNumber"))
-    @property
-    def subcategory(self) -> str|None: return self.get_default("SubCategory")
-    @property
-    def tree_damage(self) -> int: return int(self.get_default("TreeDamage"))
-    @property
-    def weapon_length(self) -> float | int: return util.convert_int(float(self.get_default("WeaponLength")))
-    @property
-    def projectile_spread_modifier(self) -> float | int: return util.convert_int(float(self.get_default("ProjectileSpreadModifier")))
-    @property
-    def max_range_modifier(self) -> float | int: return util.convert_int(float(self.get_default("MaxRangeModifier")))
-    @property
-    def angle_falloff(self) -> bool: return bool(self.get_default("AngleFalloff"))
-    @property
-    def have_chamber(self) -> bool: return bool(self.get_default("HaveChamber"))
-    @property
-    def insert_all_bullets_reload(self) -> bool: return bool(self.get_default("InsertAllBulletsReload"))
-    @property
-    def projectile_spread(self) -> float | int: return util.convert_int(float(self.get_default("ProjectileSpread")))
-    @property
-    def projectile_weight_center(self) -> float | int: return util.convert_int(float(self.get_default("ProjectileWeightCenter")))
-    @property
-    def rack_after_shoot(self) -> bool: return bool(self.get_default("RackAfterShoot"))
-    @property
-    def range_falloff(self) -> bool: return bool(self.get_default("RangeFalloff"))
-    @property
-    def other_hand_use(self) -> bool: return bool(self.get_default("OtherHandUse"))
-    @property
-    def other_hand_require(self) -> str|None: return self.get_default("OtherHandRequire")
-    @property
-    def fire_power(self) -> int: return int(self.get_default("FirePower"))
-    @property
-    def fire_range(self) -> int: return int(self.get_default("FireRange"))
-    @property
-    def noise_range(self) -> int: return int(self.get_default("NoiseRange"))
-    @property
-    def aiming_time_modifier(self) -> float | int: return util.convert_int(float(self.get_default("AimingTimeModifier")))
-    @property
-    def hit_chance_modifier(self) -> int: return int(self.get_default("HitChanceModifier"))
-    @property
-    def noise_duration(self) -> int: return int(self.get_default("NoiseDuration"))
-    @property
-    def recoil_delay_modifier(self) -> float | int: return util.convert_int(float(self.get_default("RecoilDelayModifier")))
-    @property
-    def remote_controller(self) -> bool: return bool(self.get_default("RemoteController"))
-    @property
-    def remote_range(self) -> int: return int(self.get_default("RemoteRange"))
-    @property
-    def manually_remove_spent_rounds(self) -> bool: return bool(self.get_default("ManuallyRemoveSpentRounds"))
-    @property
-    def explosion_duration(self) -> int: return int(self.get_default("ExplosionDuration"))
-    @property
-    def smoke_range(self) -> int: return int(self.get_default("SmokeRange"))
-    @property
-    def count_(self) -> int: return int(self.get_default("Count"))
-    @property
-    def ammo_type(self) -> str|None: return self.get_default("AmmoType")
-    @property
-    def can_stack(self) -> bool: return bool(self.get_default("CanStack"))
-    @property
-    def gun_type(self) -> str|None: return self.get_default("GunType")
-    @property
-    def max_ammo(self) -> int: return int(self.get_default("MaxAmmo"))
-    @property
-    def aiming_perk_crit_modifier(self) -> int: return int(self.get_default("AimingPerkCritModifier"))
-    @property
-    def aiming_perk_hit_chance_modifier(self) -> float: return float(self.get_default("AimingPerkHitChanceModifier"))
-    @property
-    def aiming_perk_min_angle_modifier(self) -> float: return float(self.get_default("AimingPerkMinAngleModifier"))
-    @property
-    def aiming_perk_range_modifier(self) -> float: return float(self.get_default("AimingPerkRangeModifier"))
-    @property
-    def aiming_time(self) -> int: return int(self.get_default("AimingTime"))
-    @property
-    def ammo_box(self) -> str|None: return self.get_default("AmmoBox")
-    @property
-    def fire_mode(self) -> str|None: return self.get_default("FireMode")
-    @property
-    def fire_mode_possibilities(self) -> list: return self.get_default("FireModePossibilities")
-    @property
-    def cyclic_rate_multiplier(self) -> float: return float(self.get_default("CyclicRateMultiplier"))
-    @property
-    def hit_chance(self) -> int: return int(self.get_default("HitChance"))
-    @property
-    def is_aimed_firearm(self) -> bool: return bool(self.get_default("IsAimedFirearm"))
-    @property
-    def jam_gun_chance(self) -> float: return float(self.get_default("JamGunChance"))
-    @property
-    def magazine_type(self) -> str|None: return self.get_default("MagazineType")
-    @property
-    def min_sight_range(self) -> float | int: return util.convert_int(float(self.get_default("MinSightRange")))
-    @property
-    def max_sight_range(self) -> float | int: return util.convert_int(float(self.get_default("MaxSightRange")))
-    @property
-    def model_weapon_part(self) -> str|None: return self.get_default("ModelWeaponPart")
-    @property
-    def multiple_hit_condition_affected(self) -> bool: return bool(self.get_default("MultipleHitConditionAffected"))
-    @property
-    def piercing_bullets(self) -> bool: return bool(self.get_default("PiercingBullets"))
-    @property
-    def projectile_count(self) -> int: return int(self.get_default("ProjectileCount"))
-    @property
-    def ranged(self) -> bool: return bool(self.get_default("Ranged"))
-    @property
-    def recoil_delay(self) -> int: return int(self.get_default("RecoilDelay"))
-    @property
-    def reload_time(self) -> int: return int(self.get_default("ReloadTime"))
-    @property
-    def requires_equipped_both_hands(self) -> bool: return bool(self.get_default("RequiresEquippedBothHands"))
-    @property
-    def share_damage(self) -> bool: return bool(self.get_default("ShareDamage"))
-    @property
-    def shell_fall_sound(self) -> str|None: return self.get_default("ShellFallSound")
-    @property
-    def sound_gain(self) -> float: return float(self.get_default("SoundGain"))
-    @property
-    def sound_volume(self) -> int: return int(self.get_default("SoundVolume"))
-    @property
-    def splat_size(self) -> float: return float(self.get_default("SplatSize"))
-    @property
-    def stop_power(self) -> float: return float(self.get_default("StopPower"))
-    @property
-    def to_hit_modifier(self) -> float: return float(self.get_default("ToHitModifier"))
-    @property
-    def two_hand_weapon(self) -> bool: return bool(self.get_default("TwoHandWeapon"))
-    @property
-    def use_endurance(self) -> bool: return bool(self.get_default("UseEndurance"))
-    @property
-    def weapon_reload_type(self) -> str|None: return self.get_default("WeaponReloadType")
-    @property
-    def clip_size(self) -> int: return int(self.get_default("ClipSize"))
-    @property
-    def damage_category(self) -> str|None: return self.get_default("DamageCategory")
-    @property
-    def damage_make_hole(self) -> bool: return bool(self.get_default("DamageMakeHole"))
-    @property
-    def hit_angle_mod(self) -> float: return float(self.get_default("HitAngleMod"))
-    @property
-    def endurance_mod(self) -> float: return float(self.get_default("EnduranceMod"))
-    @property
-    def low_light_bonus(self) -> float: return float(self.get_default("LowLightBonus"))
-    @property
-    def always_knockdown(self) -> bool: return bool(self.get_default("AlwaysKnockdown"))
-    @property
-    def aiming_mod(self) -> float: return float(self.get_default("AimingMod"))
-    @property
-    def is_aimed_hand_weapon(self) -> bool: return bool(self.get_default("IsAimedHandWeapon"))
-    @property
-    def cant_attack_with_lowest_endurance(self) -> bool: return bool(self.get_default("CantAttackWithLowestEndurance"))
-    @property
-    def close_kill_move(self) -> str|None: return self.get_default("CloseKillMove")
+    def explosion_power(self) -> int:
+        return int(self.get_default("ExplosionPower"))
+
+    @property
+    def explosion_range(self) -> int:
+        return int(self.get_default("ExplosionRange"))
+
+    @property
+    def explosion_sound(self) -> str | None:
+        return self.get_default("ExplosionSound")
+
+    @property
+    def knockdown_mod(self) -> float | int:
+        return util.convert_int(float(self.get_default("KnockdownMod")))
+
+    @property
+    def max_damage(self) -> float | int:
+        return util.convert_int(float(self.get_default("MaxDamage")))
+
+    @property
+    def max_hit_count(self) -> int:
+        return int(self.get_default("MaxHitCount"))
+
+    @property
+    def max_range(self) -> float | int:
+        return util.convert_int(float(self.get_default("MaxRange")))
+
+    @property
+    def min_damage(self) -> float | int:
+        return util.convert_int(float(self.get_default("MinDamage")))
+
+    @property
+    def minimum_swing_time(self) -> float | int:
+        return util.convert_int(float(self.get_default("MinimumSwingTime")))
+
+    @property
+    def swing_amount_before_impact(self) -> float | int:
+        return util.convert_int(float(self.get_default("SwingAmountBeforeImpact")))
+
+    @property
+    def swing_time(self) -> float | int:
+        return util.convert_int(float(self.get_default("SwingTime")))
+
+    @property
+    def trigger_explosion_timer(self) -> int:
+        return int(self.get_default("TriggerExplosionTimer"))
+
+    @property
+    def can_be_placed(self) -> bool:
+        return bool(self.get_default("CanBePlaced"))
+
+    @property
+    def can_be_remote(self) -> bool:
+        return bool(self.get_default("CanBeRemote"))
+
+    @property
+    def explosion_timer(self) -> int:
+        return int(self.get_default("ExplosionTimer"))
+
+    @property
+    def sensor_range(self) -> int:
+        return int(self.get_default("SensorRange"))
+
+    @property
+    def alarm_sound(self) -> str | None:
+        return self.get_default("AlarmSound")
+
+    @property
+    def sound_radius(self) -> int:
+        return int(self.get_default("SoundRadius"))
+
+    @property
+    def reload_time_modifier(self) -> float | int:
+        return util.convert_int(float(self.get_default("ReloadTimeModifier")))
+
+    @property
+    def mount_on(self) -> list:
+        return self.get_default("MountOn")
+
+    @property
+    def part_type(self) -> str | None:
+        return self.get_default("PartType")
+
+    @property
+    def attachment_type(self) -> str | None:
+        return self.get_default("AttachmentType")
+
+    @property
+    def base_speed(self) -> float | int:
+        return util.convert_int(float(self.get_default("BaseSpeed")))
+
+    @property
+    def categories(self) -> list:
+        return self.get_default("Categories")
+
+    @property
+    def crit_dmg_multiplier(self) -> float | int:
+        return util.convert_int(float(self.get_default("CritDmgMultiplier")))
+
+    @property
+    def critical_chance(self) -> float | int:
+        return util.convert_int(float(self.get_default("CriticalChance")))
+
+    @property
+    def door_damage(self) -> int:
+        return int(self.get_default("DoorDamage"))
+
+    @property
+    def knock_back_on_no_death(self) -> bool:
+        return bool(self.get_default("KnockBackOnNoDeath"))
+
+    @property
+    def min_angle(self) -> float | int:
+        return util.convert_int(float(self.get_default("MinAngle")))
+
+    @property
+    def min_range(self) -> float | int:
+        return util.convert_int(float(self.get_default("MinRange")))
+
+    @property
+    def push_back_mod(self) -> float | int:
+        return util.convert_int(float(self.get_default("PushBackMod")))
+
+    @property
+    def splat_blood_on_no_death(self) -> bool:
+        return bool(self.get_default("SplatBloodOnNoDeath"))
+
+    @property
+    def splat_number(self) -> int:
+        return int(self.get_default("SplatNumber"))
+
+    @property
+    def subcategory(self) -> str | None:
+        return self.get_default("SubCategory")
+
+    @property
+    def tree_damage(self) -> int:
+        return int(self.get_default("TreeDamage"))
+
+    @property
+    def weapon_length(self) -> float | int:
+        return util.convert_int(float(self.get_default("WeaponLength")))
+
+    @property
+    def projectile_spread_modifier(self) -> float | int:
+        return util.convert_int(float(self.get_default("ProjectileSpreadModifier")))
+
+    @property
+    def max_range_modifier(self) -> float | int:
+        return util.convert_int(float(self.get_default("MaxRangeModifier")))
+
+    @property
+    def angle_falloff(self) -> bool:
+        return bool(self.get_default("AngleFalloff"))
+
+    @property
+    def have_chamber(self) -> bool:
+        return bool(self.get_default("HaveChamber"))
+
+    @property
+    def insert_all_bullets_reload(self) -> bool:
+        return bool(self.get_default("InsertAllBulletsReload"))
+
+    @property
+    def projectile_spread(self) -> float | int:
+        return util.convert_int(float(self.get_default("ProjectileSpread")))
+
+    @property
+    def projectile_weight_center(self) -> float | int:
+        return util.convert_int(float(self.get_default("ProjectileWeightCenter")))
+
+    @property
+    def rack_after_shoot(self) -> bool:
+        return bool(self.get_default("RackAfterShoot"))
+
+    @property
+    def range_falloff(self) -> bool:
+        return bool(self.get_default("RangeFalloff"))
+
+    @property
+    def other_hand_use(self) -> bool:
+        return bool(self.get_default("OtherHandUse"))
+
+    @property
+    def other_hand_require(self) -> str | None:
+        return self.get_default("OtherHandRequire")
+
+    @property
+    def fire_power(self) -> int:
+        return int(self.get_default("FirePower"))
+
+    @property
+    def fire_range(self) -> int:
+        return int(self.get_default("FireRange"))
+
+    @property
+    def noise_range(self) -> int:
+        return int(self.get_default("NoiseRange"))
+
+    @property
+    def aiming_time_modifier(self) -> float | int:
+        return util.convert_int(float(self.get_default("AimingTimeModifier")))
+
+    @property
+    def hit_chance_modifier(self) -> int:
+        return int(self.get_default("HitChanceModifier"))
+
+    @property
+    def noise_duration(self) -> int:
+        return int(self.get_default("NoiseDuration"))
+
+    @property
+    def recoil_delay_modifier(self) -> float | int:
+        return util.convert_int(float(self.get_default("RecoilDelayModifier")))
+
+    @property
+    def remote_controller(self) -> bool:
+        return bool(self.get_default("RemoteController"))
+
+    @property
+    def remote_range(self) -> int:
+        return int(self.get_default("RemoteRange"))
+
+    @property
+    def manually_remove_spent_rounds(self) -> bool:
+        return bool(self.get_default("ManuallyRemoveSpentRounds"))
+
+    @property
+    def explosion_duration(self) -> int:
+        return int(self.get_default("ExplosionDuration"))
+
+    @property
+    def smoke_range(self) -> int:
+        return int(self.get_default("SmokeRange"))
+
+    @property
+    def count_(self) -> int:
+        return int(self.get_default("Count"))
+
+    @property
+    def ammo_type(self) -> str | None:
+        return self.get_default("AmmoType")
+
+    @property
+    def can_stack(self) -> bool:
+        return bool(self.get_default("CanStack"))
+
+    @property
+    def gun_type(self) -> str | None:
+        return self.get_default("GunType")
+
+    @property
+    def max_ammo(self) -> int:
+        return int(self.get_default("MaxAmmo"))
+
+    @property
+    def aiming_perk_crit_modifier(self) -> int:
+        return int(self.get_default("AimingPerkCritModifier"))
+
+    @property
+    def aiming_perk_hit_chance_modifier(self) -> float:
+        return float(self.get_default("AimingPerkHitChanceModifier"))
+
+    @property
+    def aiming_perk_min_angle_modifier(self) -> float:
+        return float(self.get_default("AimingPerkMinAngleModifier"))
+
+    @property
+    def aiming_perk_range_modifier(self) -> float:
+        return float(self.get_default("AimingPerkRangeModifier"))
+
+    @property
+    def aiming_time(self) -> int:
+        return int(self.get_default("AimingTime"))
+
+    @property
+    def ammo_box(self) -> str | None:
+        return self.get_default("AmmoBox")
+
+    @property
+    def fire_mode(self) -> str | None:
+        return self.get_default("FireMode")
+
+    @property
+    def fire_mode_possibilities(self) -> list:
+        return self.get_default("FireModePossibilities")
+
+    @property
+    def cyclic_rate_multiplier(self) -> float:
+        return float(self.get_default("CyclicRateMultiplier"))
+
+    @property
+    def hit_chance(self) -> int:
+        return int(self.get_default("HitChance"))
+
+    @property
+    def is_aimed_firearm(self) -> bool:
+        return bool(self.get_default("IsAimedFirearm"))
+
+    @property
+    def jam_gun_chance(self) -> float:
+        return float(self.get_default("JamGunChance"))
+
+    @property
+    def magazine_type(self) -> str | None:
+        return self.get_default("MagazineType")
+
+    @property
+    def min_sight_range(self) -> float | int:
+        return util.convert_int(float(self.get_default("MinSightRange")))
+
+    @property
+    def max_sight_range(self) -> float | int:
+        return util.convert_int(float(self.get_default("MaxSightRange")))
+
+    @property
+    def model_weapon_part(self) -> str | None:
+        return self.get_default("ModelWeaponPart")
+
+    @property
+    def multiple_hit_condition_affected(self) -> bool:
+        return bool(self.get_default("MultipleHitConditionAffected"))
+
+    @property
+    def piercing_bullets(self) -> bool:
+        return bool(self.get_default("PiercingBullets"))
+
+    @property
+    def projectile_count(self) -> int:
+        return int(self.get_default("ProjectileCount"))
+
+    @property
+    def ranged(self) -> bool:
+        return bool(self.get_default("Ranged"))
+
+    @property
+    def recoil_delay(self) -> int:
+        return int(self.get_default("RecoilDelay"))
+
+    @property
+    def reload_time(self) -> int:
+        return int(self.get_default("ReloadTime"))
+
+    @property
+    def requires_equipped_both_hands(self) -> bool:
+        return bool(self.get_default("RequiresEquippedBothHands"))
+
+    @property
+    def share_damage(self) -> bool:
+        return bool(self.get_default("ShareDamage"))
+
+    @property
+    def shell_fall_sound(self) -> str | None:
+        return self.get_default("ShellFallSound")
+
+    @property
+    def sound_gain(self) -> float:
+        return float(self.get_default("SoundGain"))
+
+    @property
+    def sound_volume(self) -> int:
+        return int(self.get_default("SoundVolume"))
+
+    @property
+    def splat_size(self) -> float:
+        return float(self.get_default("SplatSize"))
+
+    @property
+    def stop_power(self) -> float:
+        return float(self.get_default("StopPower"))
+
+    @property
+    def to_hit_modifier(self) -> float:
+        return float(self.get_default("ToHitModifier"))
+
+    @property
+    def two_hand_weapon(self) -> bool:
+        return bool(self.get_default("TwoHandWeapon"))
+
+    @property
+    def use_endurance(self) -> bool:
+        return bool(self.get_default("UseEndurance"))
+
+    @property
+    def weapon_reload_type(self) -> str | None:
+        return self.get_default("WeaponReloadType")
+
+    @property
+    def clip_size(self) -> int:
+        return int(self.get_default("ClipSize"))
+
+    @property
+    def damage_category(self) -> str | None:
+        return self.get_default("DamageCategory")
+
+    @property
+    def damage_make_hole(self) -> bool:
+        return bool(self.get_default("DamageMakeHole"))
+
+    @property
+    def hit_angle_mod(self) -> float:
+        return float(self.get_default("HitAngleMod"))
+
+    @property
+    def endurance_mod(self) -> float:
+        return float(self.get_default("EnduranceMod"))
+
+    @property
+    def low_light_bonus(self) -> float:
+        return float(self.get_default("LowLightBonus"))
+
+    @property
+    def always_knockdown(self) -> bool:
+        return bool(self.get_default("AlwaysKnockdown"))
+
+    @property
+    def aiming_mod(self) -> float:
+        return float(self.get_default("AimingMod"))
+
+    @property
+    def is_aimed_hand_weapon(self) -> bool:
+        return bool(self.get_default("IsAimedHandWeapon"))
+
+    @property
+    def cant_attack_with_lowest_endurance(self) -> bool:
+        return bool(self.get_default("CantAttackWithLowestEndurance"))
+
+    @property
+    def close_kill_move(self) -> str | None:
+        return self.get_default("CloseKillMove")
 
     # --- Clothing --- #
     @property
     def body_location(self) -> BodyLocation | None:
         loc = self.get_default("BodyLocation")
         return BodyLocation(loc) if loc else None
+
     @property
-    def clothing_item(self) -> ClothingItem|None:
+    def clothing_item(self) -> ClothingItem | None:
         value = self.get_default("ClothingItem")
         if value:
             return ClothingItem(value)
         return None
+
     @property
     def can_be_equipped(self) -> BodyLocation | None:
         loc = self.get_default("CanBeEquipped")
         return BodyLocation(loc) if loc else None
+
     @property
-    def run_speed_modifier(self) -> float | int: return util.convert_int(float(self.get_default("RunSpeedModifier")))
+    def run_speed_modifier(self) -> float | int:
+        return util.convert_int(float(self.get_default("RunSpeedModifier")))
+
     @property
-    def blood_location(self) -> BloodLocationList|None:
+    def blood_location(self) -> BloodLocationList | None:
         value = self.get_default("BloodLocation")
         if value:
             locations = [BloodLocation(v) for v in value]
             return BloodLocationList(locations)
         return None
+
     @property
-    def can_have_holes(self) -> bool: return bool(self.get_default("CanHaveHoles"))
+    def can_have_holes(self) -> bool:
+        return bool(self.get_default("CanHaveHoles"))
+
     @property
-    def chance_to_fall(self) -> int: return int(self.get_default("ChanceToFall"))
+    def chance_to_fall(self) -> int:
+        return int(self.get_default("ChanceToFall"))
+
     @property
-    def insulation(self) -> float | int: return util.convert_int(float(self.get_default("Insulation")))
+    def insulation(self) -> float | int:
+        return util.convert_int(float(self.get_default("Insulation")))
+
     @property
-    def wind_resistance(self) -> float | int: return util.convert_int(float(self.get_default("WindResistance")))
+    def wind_resistance(self) -> float | int:
+        return util.convert_int(float(self.get_default("WindResistance")))
+
     @property
-    def fabric_type(self) -> str|None: return self.get_default("FabricType")
+    def fabric_type(self) -> str | None:
+        return self.get_default("FabricType")
+
     @property
-    def scratch_defense(self) -> float | int: return util.convert_int(float(self.get_default("ScratchDefense")))
+    def scratch_defense(self) -> float | int:
+        return util.convert_int(float(self.get_default("ScratchDefense")))
+
     @property
-    def discomfort_modifier(self) -> float | int: return util.convert_int(float(self.get_default("DiscomfortModifier")))
+    def discomfort_modifier(self) -> float | int:
+        return util.convert_int(float(self.get_default("DiscomfortModifier")))
+
     @property
-    def water_resistance(self) -> float | int: return util.convert_int(float(self.get_default("WaterResistance")))
+    def water_resistance(self) -> float | int:
+        return util.convert_int(float(self.get_default("WaterResistance")))
+
     @property
-    def bite_defense(self) -> float | int: return util.convert_int(float(self.get_default("BiteDefense")))
+    def bite_defense(self) -> float | int:
+        return util.convert_int(float(self.get_default("BiteDefense")))
+
     @property
-    def attachment_replacement(self) -> str|None: return self.get_default("AttachmentReplacement")
+    def attachment_replacement(self) -> str | None:
+        return self.get_default("AttachmentReplacement")
+
     @property
-    def clothing_item_extra(self) -> str|None: return self.get_default("ClothingItemExtra")
+    def clothing_item_extra(self) -> str | None:
+        return self.get_default("ClothingItemExtra")
+
     @property
-    def clothing_item_extra_option(self) -> str|None: return self.get_default("ClothingItemExtraOption")
+    def clothing_item_extra_option(self) -> str | None:
+        return self.get_default("ClothingItemExtraOption")
+
     @property
-    def replace_in_second_hand(self) -> str|None: return self.get_default("ReplaceInSecondHand")
+    def replace_in_second_hand(self) -> str | None:
+        return self.get_default("ReplaceInSecondHand")
+
     @property
-    def replace_in_primary_hand(self) -> str|None: return self.get_default("ReplaceInPrimaryHand")
+    def replace_in_primary_hand(self) -> str | None:
+        return self.get_default("ReplaceInPrimaryHand")
+
     @property
-    def corpse_sickness_defense(self) -> float | int: return util.convert_int(float(self.get_default("CorpseSicknessDefense")))
+    def corpse_sickness_defense(self) -> float | int:
+        return util.convert_int(float(self.get_default("CorpseSicknessDefense")))
+
     @property
-    def hearing_modifier(self) -> float | int: return util.convert_int(float(self.get_default("HearingModifier")))
+    def hearing_modifier(self) -> float | int:
+        return util.convert_int(float(self.get_default("HearingModifier")))
+
     @property
-    def neck_protection_modifier(self) -> float | int: return util.convert_int(float(self.get_default("NeckProtectionModifier")))
+    def neck_protection_modifier(self) -> float | int:
+        return util.convert_int(float(self.get_default("NeckProtectionModifier")))
+
     @property
-    def visual_aid(self) -> bool: return bool(self.get_default("VisualAid"))
+    def visual_aid(self) -> bool:
+        return bool(self.get_default("VisualAid"))
+
     @property
-    def vision_modifier(self) -> float | int: return util.convert_int(float(self.get_default("VisionModifier")))
+    def vision_modifier(self) -> float | int:
+        return util.convert_int(float(self.get_default("VisionModifier")))
+
     @property
-    def attachments_provided(self) -> list: return self.get_default("AttachmentsProvided")
+    def attachments_provided(self) -> list:
+        return self.get_default("AttachmentsProvided")
+
     @property
-    def combat_speed_modifier(self) -> float | int: return util.convert_int(float(self.get_default("CombatSpeedModifier")))
+    def combat_speed_modifier(self) -> float | int:
+        return util.convert_int(float(self.get_default("CombatSpeedModifier")))
+
     @property
-    def bullet_defense(self) -> float | int: return util.convert_int(float(self.get_default("BulletDefense")))
+    def bullet_defense(self) -> float | int:
+        return util.convert_int(float(self.get_default("BulletDefense")))
+
     @property
-    def stomp_power(self) -> float | int: return util.convert_int(float(self.get_default("StompPower")))
+    def stomp_power(self) -> float | int:
+        return util.convert_int(float(self.get_default("StompPower")))
 
     # --- Tooltip/Menu --- #
     @property
-    def tooltip(self) -> str|None: return Translate.get(self.get_default("Tooltip", self.get_default("ToolTip")))
+    def tooltip(self) -> str | None:
+        return Translate.get(self.get_default("Tooltip", self.get_default("ToolTip")))
+
     @property
-    def custom_context_menu(self) -> str|None: return self.get_default("CustomContextMenu")
+    def custom_context_menu(self) -> str | None:
+        return self.get_default("CustomContextMenu")
+
     @property
-    def clothing_extra_submenu(self) -> str|None: return self.get_default("ClothingExtraSubmenu", self.get_default("clothingExtraSubmenu"))
+    def clothing_extra_submenu(self) -> str | None:
+        return self.get_default(
+            "ClothingExtraSubmenu", self.get_default("clothingExtraSubmenu")
+        )
 
     # --- Lua Functions --- #
     @property
-    def on_create(self) -> str|None: return self.get_default("OnCreate")
+    def on_create(self) -> str | None:
+        return self.get_default("OnCreate")
+
     @property
-    def on_break(self) -> str|None: return self.get_default("OnBreak")
+    def on_break(self) -> str | None:
+        return self.get_default("OnBreak")
+
     @property
-    def on_cooked(self) -> str|None: return self.get_default("OnCooked")
+    def on_cooked(self) -> str | None:
+        return self.get_default("OnCooked")
+
     @property
-    def on_eat(self) -> str|None: return self.get_default("OnEat")
+    def on_eat(self) -> str | None:
+        return self.get_default("OnEat")
 
     # --- Electrical/Light --- #
     @property
-    def accept_media_type(self) -> int: return int(self.get_default("AcceptMediaType"))
+    def accept_media_type(self) -> int:
+        return int(self.get_default("AcceptMediaType"))
+
     @property
-    def media_category(self) -> str|None: return self.get_default("MediaCategory")
+    def media_category(self) -> str | None:
+        return self.get_default("MediaCategory")
+
     @property
-    def base_volume_range(self) -> float | int: return util.convert_int(float(self.get_default("BaseVolumeRange")))
+    def base_volume_range(self) -> float | int:
+        return util.convert_int(float(self.get_default("BaseVolumeRange")))
+
     @property
-    def is_high_tier(self) -> bool: return bool(self.get_default("IsHighTier"))
+    def is_high_tier(self) -> bool:
+        return bool(self.get_default("IsHighTier"))
+
     @property
-    def is_portable(self) -> bool: return bool(self.get_default("IsPortable"))
+    def is_portable(self) -> bool:
+        return bool(self.get_default("IsPortable"))
+
     @property
-    def is_television(self) -> bool: return bool(self.get_default("IsTelevision"))
+    def is_television(self) -> bool:
+        return bool(self.get_default("IsTelevision"))
+
     @property
-    def max_channel(self) -> int: return int(self.get_default("MaxChannel"))
+    def max_channel(self) -> int:
+        return int(self.get_default("MaxChannel"))
+
     @property
-    def mic_range(self) -> int: return int(self.get_default("MicRange"))
+    def mic_range(self) -> int:
+        return int(self.get_default("MicRange"))
+
     @property
-    def min_channel(self) -> int: return int(self.get_default("MinChannel"))
+    def min_channel(self) -> int:
+        return int(self.get_default("MinChannel"))
+
     @property
-    def no_transmit(self) -> bool: return bool(self.get_default("NoTransmit"))
+    def no_transmit(self) -> bool:
+        return bool(self.get_default("NoTransmit"))
+
     @property
-    def transmit_range(self) -> int: return int(self.get_default("TransmitRange"))
+    def transmit_range(self) -> int:
+        return int(self.get_default("TransmitRange"))
+
     @property
-    def two_way(self) -> bool: return bool(self.get_default("TwoWay"))
+    def two_way(self) -> bool:
+        return bool(self.get_default("TwoWay"))
+
     @property
-    def uses_battery(self) -> bool: return bool(self.get_default("UsesBattery"))
+    def uses_battery(self) -> bool:
+        return bool(self.get_default("UsesBattery"))
+
     @property
-    def require_in_hand_or_inventory(self) -> list: return self.get_default("RequireInHandOrInventory")
+    def require_in_hand_or_inventory(self) -> list:
+        return self.get_default("RequireInHandOrInventory")
+
     @property
-    def activated_item(self) -> bool: return bool(self.get_default("ActivatedItem"))
+    def activated_item(self) -> bool:
+        return bool(self.get_default("ActivatedItem"))
+
     @property
-    def light_distance(self) -> int: return int(self.get_default("LightDistance"))
+    def light_distance(self) -> int:
+        return int(self.get_default("LightDistance"))
+
     @property
-    def light_strength(self) -> float | int: return util.convert_int(float(self.get_default("LightStrength")))
+    def light_strength(self) -> float | int:
+        return util.convert_int(float(self.get_default("LightStrength")))
+
     @property
-    def torch_cone(self) -> bool: return bool(self.get_default("TorchCone"))
+    def torch_cone(self) -> bool:
+        return bool(self.get_default("TorchCone"))
+
     @property
-    def torch_dot(self) -> float | int: return util.convert_int(float(self.get_default("TorchDot")))
+    def torch_dot(self) -> float | int:
+        return util.convert_int(float(self.get_default("TorchDot")))
 
     # --- Vehicle Parts --- #
     @property
-    def vehicle_part_model(self) -> str|None: return self.get_default("VehiclePartModel")
+    def vehicle_part_model(self) -> str | None:
+        return self.get_default("VehiclePartModel")
+
     @property
-    def brake_force(self) -> float | int: return util.convert_int(float(self.get_default("brakeForce")))
+    def brake_force(self) -> float | int:
+        return util.convert_int(float(self.get_default("brakeForce")))
+
     @property
-    def engine_loudness(self) -> float | int: return util.convert_int(float(self.get_default("EngineLoudness")))
+    def engine_loudness(self) -> float | int:
+        return util.convert_int(float(self.get_default("EngineLoudness")))
+
     @property
-    def condition_lower_standard(self) -> float | int: return util.convert_int(float(self.get_default("ConditionLowerStandard")))
+    def condition_lower_standard(self) -> float | int:
+        return util.convert_int(float(self.get_default("ConditionLowerStandard")))
+
     @property
-    def condition_lower_offroad(self) -> float | int: return util.convert_int(float(self.get_default("ConditionLowerOffroad")))
+    def condition_lower_offroad(self) -> float | int:
+        return util.convert_int(float(self.get_default("ConditionLowerOffroad")))
+
     @property
-    def suspension_damping(self) -> float | int: return util.convert_int(float(self.get_default("SuspensionDamping")))
+    def suspension_damping(self) -> float | int:
+        return util.convert_int(float(self.get_default("SuspensionDamping")))
+
     @property
-    def suspension_compression(self) -> float | int: return util.convert_int(float(self.get_default("SuspensionCompression")))
+    def suspension_compression(self) -> float | int:
+        return util.convert_int(float(self.get_default("SuspensionCompression")))
+
     @property
-    def wheel_friction(self) -> float | int: return util.convert_int(float(self.get_default("WheelFriction")))
+    def wheel_friction(self) -> float | int:
+        return util.convert_int(float(self.get_default("WheelFriction")))
+
     @property
-    def vehicle_type(self) -> int: return int(self.get_default("VehicleType"))
+    def vehicle_type(self) -> int:
+        return int(self.get_default("VehicleType"))
+
     @property
-    def max_capacity(self) -> int: return int(self.get_default("MaxCapacity"))
+    def max_capacity(self) -> int:
+        return int(self.get_default("MaxCapacity"))
+
     @property
-    def mechanics_item(self) -> bool: return bool(self.get_default("MechanicsItem"))
+    def mechanics_item(self) -> bool:
+        return bool(self.get_default("MechanicsItem"))
+
     @property
-    def condition_affects_capacity(self) -> bool: return bool(self.get_default("ConditionAffectsCapacity"))
+    def condition_affects_capacity(self) -> bool:
+        return bool(self.get_default("ConditionAffectsCapacity"))
 
     # --- Literature --- #
     @property
-    def can_be_write(self) -> bool: return bool(self.get_default("CanBeWrite"))
+    def can_be_write(self) -> bool:
+        return bool(self.get_default("CanBeWrite"))
+
     @property
-    def page_to_write(self) -> int: return int(self.get_default("PageToWrite"))
+    def page_to_write(self) -> int:
+        return int(self.get_default("PageToWrite"))
+
     @property
-    def map(self) -> str|None: return self.get_default("Map")
+    def map(self) -> str | None:
+        return self.get_default("Map")
+
     @property
-    def lvl_skill_trained(self) -> int: return int(self.get_default("LvlSkillTrained"))
+    def lvl_skill_trained(self) -> int:
+        return int(self.get_default("LvlSkillTrained"))
+
     @property
-    def num_levels_trained(self) -> int: return int(self.get_default("NumLevelsTrained"))
+    def num_levels_trained(self) -> int:
+        return int(self.get_default("NumLevelsTrained"))
+
     @property
-    def number_of_pages(self) -> int: return int(self.get_default("NumberOfPages"))
+    def number_of_pages(self) -> int:
+        return int(self.get_default("NumberOfPages"))
+
     @property
-    def skill_trained(self) -> SkillBook|None:
+    def skill_trained(self) -> SkillBook | None:
         if not hasattr(self, "_skill_trained"):
             raw_skill_trained = self.get("SkillTrained")
-            self._skill_trained = SkillBook(raw_skill_trained) if raw_skill_trained else None
+            self._skill_trained = (
+                SkillBook(raw_skill_trained) if raw_skill_trained else None
+            )
         return self._skill_trained
 
     # --- Misc Flags --- #
     @property
-    def is_dung(self) -> bool: return bool(self.get_default("IsDung"))
+    def is_dung(self) -> bool:
+        return bool(self.get_default("IsDung"))
+
     @property
-    def survival_gear(self) -> bool: return bool(self.get_default("SurvivalGear"))
+    def survival_gear(self) -> bool:
+        return bool(self.get_default("SurvivalGear"))
+
     @property
-    def fishing_lure(self) -> bool: return bool(self.get_default("FishingLure"))
+    def fishing_lure(self) -> bool:
+        return bool(self.get_default("FishingLure"))
+
     @property
-    def trap(self) -> bool: return bool(self.get_default("Trap"))
+    def trap(self) -> bool:
+        return bool(self.get_default("Trap"))
+
     @property
-    def padlock(self) -> bool: return bool(self.get_default("Padlock"))
+    def padlock(self) -> bool:
+        return bool(self.get_default("Padlock"))
+
     @property
-    def digital_padlock(self) -> bool: return bool(self.get_default("DigitalPadlock"))
+    def digital_padlock(self) -> bool:
+        return bool(self.get_default("DigitalPadlock"))
+
     @property
-    def can_store_water(self) -> bool: return bool(self.get_default("CanStoreWater"))
+    def can_store_water(self) -> bool:
+        return bool(self.get_default("CanStoreWater"))
+
     @property
-    def is_water_source(self) -> bool: return bool(self.get_default("IsWaterSource"))
+    def is_water_source(self) -> bool:
+        return bool(self.get_default("IsWaterSource"))
+
     @property
-    def wet(self) -> bool: return bool(self.get_default("Wet"))
+    def wet(self) -> bool:
+        return bool(self.get_default("Wet"))
+
     @property
-    def cosmetic(self) -> bool: return bool(self.get_default("Cosmetic"))
+    def cosmetic(self) -> bool:
+        return bool(self.get_default("Cosmetic"))
+
     @property
-    def obsolete(self) -> bool: return bool(self.get_default("OBSOLETE"))
+    def obsolete(self) -> bool:
+        return bool(self.get_default("OBSOLETE"))
 
     # --- Misc --- #
     @property
-    def fire_fuel_ratio(self) -> float: return float(self.get_default("FireFuelRatio"))
+    def fire_fuel_ratio(self) -> float:
+        return float(self.get_default("FireFuelRatio"))
+
     @property
-    def rain_factor(self) -> float | int: return util.convert_int(float(self.get_default("RainFactor")))
+    def rain_factor(self) -> float | int:
+        return util.convert_int(float(self.get_default("RainFactor")))
+
     @property
-    def wet_cooldown(self) -> float | int: return util.convert_int(float(self.get_default("WetCooldown")))
+    def wet_cooldown(self) -> float | int:
+        return util.convert_int(float(self.get_default("WetCooldown")))
+
     @property
-    def origin_x(self) -> float: return float(self.get_default("OriginX"))
+    def origin_x(self) -> float:
+        return float(self.get_default("OriginX"))
+
     @property
-    def origin_y(self) -> float: return float(self.get_default("OriginY"))
+    def origin_y(self) -> float:
+        return float(self.get_default("OriginY"))
+
     @property
-    def origin_z(self) -> float: return float(self.get_default("OriginZ"))
+    def origin_z(self) -> float:
+        return float(self.get_default("OriginZ"))
+
     @property
-    def item_when_dry(self) -> str|None: return self.get_default("ItemWhenDry")
+    def item_when_dry(self) -> str | None:
+        return self.get_default("ItemWhenDry")
+
     @property
-    def spawn_with(self) -> list: return self.get_default("SpawnWith")
+    def spawn_with(self) -> list:
+        return self.get_default("SpawnWith")
+
     @property
-    def make_up_type(self) -> str|None: return self.get_default("MakeUpType")
+    def make_up_type(self) -> str | None:
+        return self.get_default("MakeUpType")
+
     @property
-    def shout_type(self) -> str|None: return self.get_default("ShoutType")
+    def shout_type(self) -> str | None:
+        return self.get_default("ShoutType")
+
     @property
-    def shout_multiplier(self) -> float: return float(self.get_default("ShoutMultiplier"))
+    def shout_multiplier(self) -> float:
+        return float(self.get_default("ShoutMultiplier"))
 
     # --- Components --- #
 
@@ -1936,22 +2730,21 @@ class Item:
     @property
     def fluid_container(self) -> FluidContainer:
         """Returns the item's FluidContainer component."""
-        if not hasattr(self, '_fluid_container'):
+        if not hasattr(self, "_fluid_container"):
             self._fluid_container = FluidContainer(self.get_component("FluidContainer"))
         return self._fluid_container
 
     @property
     def durability(self) -> Durability:
         """Returns the item's Durability component."""
-        if not hasattr(self, '_durability'):
+        if not hasattr(self, "_durability"):
             self._durability = Durability(self.get_component("Durability"))
         return self._durability
 
-
     # --- Inferred Properties --- #
-    
+
     @property
-    def skill(self) -> Skill|None:
+    def skill(self) -> Skill | None:
         """
         Returns the primary skill associated with the item, if any.
         """
@@ -1960,7 +2753,7 @@ class Item:
         return self._skill
 
     @property
-    def weight_full(self) -> int|float:
+    def weight_full(self) -> int | float:
         """
         Returns the item's total weight when full, whether with fluids or items.
         Rounded to 2 decimal places, returns an int if no remainder.
@@ -1978,18 +2771,17 @@ class Item:
             return int(total_weight)
         else:
             return total_weight
-        
+
     @property
     def weapons(self) -> list["Item"]:
         if not hasattr(self, "_weapons"):
             self._weapons = []
             if self.mount_on:
                 self._weapons.extend([Item(weapon) for weapon in self.mount_on])
-                
 
             if self.gun_type:
                 self._weapons.append(Item(self.gun_type))
-            
+
             if self.raw_display_category == "Ammo":
                 for item_id, item in Item.items():
                     if (item.ammo_type or item.ammo_box) and item.type == "Weapon":
@@ -1998,11 +2790,10 @@ class Item:
                         elif Item(item.ammo_box) == self:
                             self._weapons.append(item)
 
-
         return self._weapons
-    
+
     @property
-    def burn_time(self) -> str|None:
+    def burn_time(self) -> str | None:
         """
         Returns the burn time the item provides.
         """
@@ -2018,17 +2809,19 @@ class Item:
         """
         if hasattr(self, "_should_burn"):
             return self._should_burn
-        
+
         self._should_burn = True
         # Logic copied from 'ISCampingMenu.shouldBurn()'
-        is_clothing = self.get("Type", "").lower() == "clothing"
+        is_clothing = self.get("ItemType", "").lower() == "clothing"
         fabric_type = self.get("FabricType")
-        if is_clothing and not fabric_type: self._should_burn = False
-        if is_clothing and fabric_type == "Leather": self._should_burn = False
+        if is_clothing and not fabric_type:
+            self._should_burn = False
+        if is_clothing and fabric_type == "Leather":
+            self._should_burn = False
         return self._should_burn
 
     @property
-    def is_tinder(self) -> bool|None:
+    def is_tinder(self) -> bool | None:
         """
         Returns whether the item is valid tinder.
         Based on game logic from `ISCampingMenu.isValidTinder()`.
@@ -2036,28 +2829,36 @@ class Item:
         """
         if hasattr(self, "_is_tinder"):
             return self._is_tinder
-        
-        if not self.should_burn: return
+
+        if not self.should_burn:
+            return
 
         if Item._burn_data is None:
             Item.load_burn_data()
-        
+
         fuel_data = Item._burn_data
         campingLightFireType = fuel_data["campingLightFireType"]
         campingLightFireCategory = fuel_data["campingLightFireCategory"]
 
         # Logic copied from 'ISCampingMenu.isValidTinder()'
-        category = self.get("Type")
+        category = self.get("ItemType")
         id_type = self._id_type
 
         self._is_tinder = self.has_tag("IsFireTinder")
-        if campingLightFireType.get(id_type) or campingLightFireCategory.get(category): self._is_tinder = True
-        if campingLightFireType.get(id_type) and campingLightFireType.get(id_type) == 0: self._is_tinder = False
-        if campingLightFireCategory.get(category) and campingLightFireCategory.get(category) == 0: self._is_tinder = False
-        if self.has_tag("NotFireTinder"): self._is_tinder = False
+        if campingLightFireType.get(id_type) or campingLightFireCategory.get(category):
+            self._is_tinder = True
+        if campingLightFireType.get(id_type) and campingLightFireType.get(id_type) == 0:
+            self._is_tinder = False
+        if (
+            campingLightFireCategory.get(category)
+            and campingLightFireCategory.get(category) == 0
+        ):
+            self._is_tinder = False
+        if self.has_tag("NotFireTinder"):
+            self._is_tinder = False
 
         return self._is_tinder
-    
+
     @property
     def models(self) -> list[str]:
         """
@@ -2069,19 +2870,18 @@ class Item:
         textures_dir = Path(get_media_dir()) / "textures"
         models = None
 
-
         if self.clothing_item:
             model_path = self.clothing_item.texture_choices
             if not model_path:
                 model_path = self.clothing_item.base_textures
-            
+
             # Remove filepath and capitalize
             if model_path:
                 if isinstance(model_path, str):
                     model_path = [model_path]
 
                 models = []
-                
+
                 # Check the file path and get the correct capitalisation for the model texture
                 for model_value in model_path:
                     model_value = os.path.normpath(model_value).replace(os.sep, "/")
@@ -2106,25 +2906,33 @@ class Item:
             models = self.world_static_models_by_index or self.weapon_sprites_by_index
 
         if models is None:
-            models = self.world_static_model or self.weapon_sprite or self.static_model or self.world_object_sprite or ""
+            models = (
+                self.world_static_model
+                or self.weapon_sprite
+                or self.static_model
+                or self.world_object_sprite
+                or ""
+            )
 
-        if models == '':
+        if models == "":
             self._models = models
             echo.warning(f"{self.item_id} has no model value.")
             return models
-        
+
         if not isinstance(models, list):
             models = [models]
-        
+
         # Remove Ground suffix
-        models = [model.replace('_Ground', '').replace('Ground', '') for model in models]
-        
+        models = [
+            model.replace("_Ground", "").replace("Ground", "") for model in models
+        ]
+
         # Add suffix and extension
         models = [f"{value}_Model.png" for value in models]
 
         self._models = models
         return models
-    
+
     @property
     def skill_multiplier(self) -> float:
         """
@@ -2135,46 +2943,50 @@ class Item:
             return 1
 
         return self.skill_trained.get_multiplier(self.lvl_skill_trained)
-    
+
     @property
     def foraging_penalty(self) -> float:
         loc = self.body_location or self.can_be_equipped
         if not loc:
             return 0.0
-        
+
         # Hardcoded exceptions in foragSystem.doGlassesCheck
         if self.item_id in ("Base.Glasses_Normal", "Base.Glasses_Reading"):
             return 0.0
-        
+
         if Item._forage_clothing_penalties is None:
             Item._parse_foraging_penalties()
-        
+
         if loc.location_id in Item._forage_clothing_penalties:
             return Item._forage_clothing_penalties.get(loc.location_id)
-        
+
         return 0.0
-    
+
     @property
     def body_parts(self) -> list[str]:
         return self.get_body_parts(do_link=False, raw_id=True, default=[])
-    
+
     @property
     def vehicle_type_name(self) -> int:
         current_lang = Language.get()
-        if not hasattr(self, '_vehicle_type_name_cache') or self._vehicle_type_name_cache.get('lang') != current_lang:
+        if (
+            not hasattr(self, "_vehicle_type_name_cache")
+            or self._vehicle_type_name_cache.get("lang") != current_lang
+        ):
             self._vehicle_type_name_cache = {
-                'lang': current_lang,
-                'value': Translate.get(f"IGUI_VehicleType_{self.vehicle_type}")
+                "lang": current_lang,
+                "value": Translate.get(f"IGUI_VehicleType_{self.vehicle_type}"),
             }
-        return self._vehicle_type_name_cache['value']
-    
+        return self._vehicle_type_name_cache["value"]
+
     @property
     def item_categories(self) -> list[str]:
         from scripts.utils import categories
+
         if not hasattr(self, "_item_categories"):
             self._item_categories = categories.find_all_categories(self)
         return self._item_categories
-        
+
     @property
     def units(self):
         return round(1 / self.use_delta, 0)
@@ -2183,49 +2995,81 @@ class Item:
     def material_item(self):
         if self.fabric_type:
             mat = self.fabric_type
-        elif self.has_tag("SmeltableIronLarge", "SmeltableIronMedium", "SmeltableIronMediumPlus", "SmeltableIronSmall", "IronSource", "IronOre"):
+        elif self.has_tag(
+            "SmeltableIronLarge",
+            "SmeltableIronMedium",
+            "SmeltableIronMediumPlus",
+            "SmeltableIronSmall",
+            "IronSource",
+            "IronOre",
+        ):
             mat = "Iron"
-        elif self.has_tag("SmeltableSteelLarge", "SmeltableSteelMedium", "SmeltableSteelMediumPlus", "SmeltableSteelSmall", "SteelMaterial"):
+        elif self.has_tag(
+            "SmeltableSteelLarge",
+            "SmeltableSteelMedium",
+            "SmeltableSteelMediumPlus",
+            "SmeltableSteelSmall",
+            "SteelMaterial",
+        ):
             mat = "Steel"
-        elif self.has_tag("GoldScrap", "SmallGoldScrap", "SmallerGoldScrap", "SmallestGoldScrap", "TinyGoldScrap"):
+        elif self.has_tag(
+            "GoldScrap",
+            "SmallGoldScrap",
+            "SmallerGoldScrap",
+            "SmallestGoldScrap",
+            "TinyGoldScrap",
+        ):
             mat = "Gold"
         elif self.has_tag("Aluminum", "ScrapAluminum", "ScrapAluminumLarge"):
             mat = "Aluminum"
-        elif self.has_tag("SilverScrap", "SmallSilverScrap", "SmallerSilverScrap", "SmallestSilverScrap", "TinySilverScrap"):
+        elif self.has_tag(
+            "SilverScrap",
+            "SmallSilverScrap",
+            "SmallerSilverScrap",
+            "SmallestSilverScrap",
+            "TinySilverScrap",
+        ):
             mat = "Silver"
-        elif self.has_tag("Brass", "ScrapBrass"): #Not yet in the game (42.10.0)
+        elif self.has_tag("Brass", "ScrapBrass"):  # Not yet in the game (42.10.0)
             mat = "Brass"
-        elif self.has_tag("ScrapLargeCopper", "ScrapSmallCopper", "CopperOre", "CopperSource"):
+        elif self.has_tag(
+            "ScrapLargeCopper", "ScrapSmallCopper", "CopperOre", "CopperSource"
+        ):
             mat = "Copper"
         else:
             mat = None
-        
+
         if not mat:
             return None
-        
+
         if mat not in Item._material_map:
-            echo.warning(f"Found a material '{mat}' not in 'MATERIAL_MAP' for {self.item_id}.")
+            echo.warning(
+                f"Found a material '{mat}' not in 'MATERIAL_MAP' for {self.item_id}."
+            )
             return None
         return Item(Item._material_map.get(mat))
-    
+
     @property
     def material(self):
         mat = self.material_item
         if not self.material_item:
             return None
-        
+
         if mat.item_id not in Item._material_map_flipped:
-            echo.warning(f"Found a material '{mat.item_id}' not in 'MATERIAL_MAP_FLIPPED' for {self.item_id}.")
+            echo.warning(
+                f"Found a material '{mat.item_id}' not in 'MATERIAL_MAP_FLIPPED' for {self.item_id}."
+            )
             return None
-        
+
         return mat.get_icon(custom_name=Item._material_map_flipped.get(mat.item_id)[0])
-    
-    @property 
+
+    @property
     def foraging(self):
         from scripts.objects.forage import ForagingItem
+
         instance = ForagingItem(self.id_type)
         return instance if instance.valid else None
-    
+
     @property
     def vehicle_part(self) -> "VehiclePartItem | None":
         """
@@ -2241,7 +3085,7 @@ class Item:
                 if self.get("VehicleType", 0)
                 else self.item_id
             )
-            self.part_item_id = base_id # For vehicle part checking
+            self.part_item_id = base_id  # For vehicle part checking
 
             self._vehicle_part = (
                 VehiclePartItem.from_item(self)
@@ -2250,21 +3094,22 @@ class Item:
             )
 
         return self._vehicle_part
-    
+
     @property
-    def vehicle_part_types(self) -> list["VehiclePart"]:        
+    def vehicle_part_types(self) -> list["VehiclePart"]:
         if not hasattr(self, "_vehicle_part_types"):
             if self.vehicle_part:
                 # Convert list to set and back to remove duplicates
                 self._vehicle_part_types = list(set(self.vehicle_part.vehicle_parts))
             else:
                 self._vehicle_part_types = None
-        
+
         return self._vehicle_part_types
-    
+
     @property
     def fish(self) -> "Fish | None":
         from scripts.objects.fish import Fish
+
         if Fish.exists(self.item_id):
             return Fish(self.item_id)
         else:
@@ -2274,4 +3119,3 @@ class Item:
 if __name__ == "__main__":
     item = Item("Base.Pop")
     print(item.name)
-   
