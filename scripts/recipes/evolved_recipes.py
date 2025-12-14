@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import os
 from tqdm import tqdm
 from scripts.core.constants import ITEM_DIR, PBAR_FORMAT

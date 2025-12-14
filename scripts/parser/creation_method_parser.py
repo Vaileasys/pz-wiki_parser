@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Parser for MainCreationMethods.lua file to extract traits and occupations data with translation support.
 """

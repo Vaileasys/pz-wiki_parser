@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Project Zomboid Wiki Crafting Recipe Processor
 
