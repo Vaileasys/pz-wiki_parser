@@ -71,7 +71,7 @@ goto fail
 @rem Setup the command line
 
 set CLASSPATH=
-set MODULE_PATH=%APP_HOME%\lib\ZomboidDecompiler.jar;%APP_HOME%\lib\vineflower-1.11.1-module.jar;%APP_HOME%\lib\json-20250107.jar;%APP_HOME%\lib\picocli-4.7.6.jar;%APP_HOME%\lib\annotations-26.0.2.jar;%APP_HOME%\lib\asm-9.8.jar;%APP_HOME%\lib\snakeyaml-engine-2.10.jar
+set MODULE_PATH=%APP_HOME%\lib\ZomboidDecompiler.jar;%APP_HOME%\lib\vineflower-1.11.2-module.jar;%APP_HOME%\lib\json-20250107.jar;%APP_HOME%\lib\picocli-4.7.6.jar;%APP_HOME%\lib\annotations-26.0.2.jar;%APP_HOME%\lib\asm-9.8.jar;%APP_HOME%\lib\snakeyaml-engine-2.10.jar
 
 @rem Execute ZomboidDecompiler
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %ZOMBOID_DECOMPILER_OPTS%  -classpath "%CLASSPATH%" --module-path "%MODULE_PATH%" --module com.github.zomboiddecompiler/com.github.zomboiddecompiler.commands.Decompile %*
