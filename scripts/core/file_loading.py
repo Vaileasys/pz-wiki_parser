@@ -18,29 +18,36 @@ from scripts.utils import echo
 
 _game_file_map_cache = {}
 
+
 def get_game_dir():
     """Return the base directory where the game is installed."""
     return config.get_game_directory()
+
 
 def get_media_dir():
     """Return the path to the media folder within the game directory."""
     return os.path.join(get_game_dir(), "media")
 
+
 def get_lua_dir():
     """Return the path to the 'media/lua' directory."""
     return os.path.join(get_media_dir(), "lua")
+
 
 def get_scripts_dir():
     """Return the path to the 'media/scripts' directory."""
     return os.path.join(get_media_dir(), "scripts")
 
+
 def get_maps_dir():
     """Return the path to the 'media/maps' directory."""
     return os.path.join(get_media_dir(), "maps")
 
+
 def get_clothing_dir():
     """Return the path to the 'media/clothing' directory."""
     return os.path.join(get_media_dir(), "clothing")
+
 
 BASE_MEDIA_DIRS = {
     "lua": get_lua_dir(),
@@ -50,7 +57,9 @@ BASE_MEDIA_DIRS = {
 }
 
 
-def map_dir(base_dir, extension=None, media_type="scripts", suppress=False, exclude_ext=None):
+def map_dir(
+    base_dir, extension=None, media_type="scripts", suppress=False, exclude_ext=None
+):
     """
     Maps all files with the given extension in a directory.
 
@@ -66,9 +75,7 @@ def map_dir(base_dir, extension=None, media_type="scripts", suppress=False, excl
 
     echo.info(f"Generating directory map for '{media_type}'...")
 
-    BLACKLIST = {
-        "tempNotWorking": {"folder": True, "type": "scripts"}
-    }
+    BLACKLIST = {"tempNotWorking": {"folder": True, "type": "scripts"}}
 
     mapping = {}
     exclude_ext = set(exclude_ext or [])
@@ -77,14 +84,17 @@ def map_dir(base_dir, extension=None, media_type="scripts", suppress=False, excl
 
     for root, dirs, files in os.walk(base_dir):
         dirs[:] = [
-            d for d in dirs
+            d
+            for d in dirs
             if not (
-                d in BLACKLIST and BLACKLIST[d]["folder"]
-                and (BLACKLIST[d]["type"] == media_type or BLACKLIST[d]["type"] == "all")
+                d in BLACKLIST
+                and BLACKLIST[d]["folder"]
+                and (
+                    BLACKLIST[d]["type"] == media_type or BLACKLIST[d]["type"] == "all"
+                )
             )
         ]
 
-        
         for file in files:
             if extension and not file.endswith(extension):
                 continue
@@ -97,10 +107,14 @@ def map_dir(base_dir, extension=None, media_type="scripts", suppress=False, excl
             # Skip blacklisted files
             if name in BLACKLIST:
                 entry = BLACKLIST[name]
-                if not entry["folder"] and (entry["type"] == media_type or entry["type"] == "all"):
+                if not entry["folder"] and (
+                    entry["type"] == media_type or entry["type"] == "all"
+                ):
                     continue
 
-            rel_path = os.path.relpath(os.path.join(root, file), base_dir).replace(os.path.sep, "/")
+            rel_path = os.path.relpath(os.path.join(root, file), base_dir).replace(
+                os.path.sep, "/"
+            )
 
             if name in mapping:
                 mapping[name].append(rel_path)
@@ -110,7 +124,7 @@ def map_dir(base_dir, extension=None, media_type="scripts", suppress=False, excl
                         duplicate_cache.append(name)
             else:
                 mapping[name] = [rel_path]
-                
+
     duplicate_cache.clear()
 
     return mapping
@@ -119,6 +133,7 @@ def map_dir(base_dir, extension=None, media_type="scripts", suppress=False, excl
 def map_game_files(suppress=False):
     from scripts.core.version import Version
     from scripts.core.cache import save_cache, load_cache
+
     """
     Maps script and lua files, then saves to cache.
 
@@ -135,15 +150,17 @@ def map_game_files(suppress=False):
     if cache_version != Version.get():
         scripts = map_dir(get_scripts_dir(), ".txt", "scripts", suppress=suppress)
         lua = map_dir(get_lua_dir(), ".lua", "lua", suppress=suppress)
-        maps = map_dir(get_maps_dir(), media_type="maps", suppress=suppress, exclude_ext=[".lotheader", ".png", ".bin", ".lotpack", ".zip", ".bak"])
-        clothing = map_dir(get_clothing_dir(), ".xml", media_type="clothing", suppress=suppress)
+        maps = map_dir(
+            get_maps_dir(),
+            media_type="maps",
+            suppress=suppress,
+            exclude_ext=[".lotheader", ".png", ".bin", ".lotpack", ".zip", ".bak"],
+        )
+        clothing = map_dir(
+            get_clothing_dir(), ".xml", media_type="clothing", suppress=suppress
+        )
 
-        mapping = {
-            "scripts": scripts,
-            "lua": lua,
-            "maps": maps,
-            "clothing": clothing
-        }
+        mapping = {"scripts": scripts, "lua": lua, "maps": maps, "clothing": clothing}
 
         _game_file_map_cache = mapping
         save_cache(mapping, "game_file_map.json", suppress=suppress)
@@ -191,7 +208,13 @@ def get_game_file_map() -> dict:
 
 ## -------------------- Get files -------------------- ##
 
-def get_files_by_type(filenames: str | list[str] = None, media_type: str = "scripts", prefer: str = None, prefix: str = None) -> list[str]:
+
+def get_files_by_type(
+    filenames: str | list[str] = None,
+    media_type: str = "scripts",
+    prefer: str = None,
+    prefix: str = None,
+) -> list[str]:
     """
     Resolves filenames to absolute paths using the file map for the specified media type.
 
@@ -228,26 +251,41 @@ def get_files_by_type(filenames: str | list[str] = None, media_type: str = "scri
                 abs_path = os.path.join(base_dir, rel_path)
                 paths.append(abs_path)
         else:
-            echo.warning(f"{media_type.capitalize()} file '{filename}' not found in map.")
+            echo.warning(
+                f"{media_type.capitalize()} file '{filename}' not found in map."
+            )
 
     return sorted(paths)
 
 
-def get_script_files(filenames: str | list[str] = None, media_type: str = "scripts", prefer: str = None, prefix: str = None) -> list[str]:
+def get_script_files(
+    filenames: str | list[str] = None,
+    media_type: str = "scripts",
+    prefer: str = None,
+    prefix: str = None,
+) -> list[str]:
     """Return absolute paths to script files, filtering by filenames, duplicates, or prefix."""
-    return get_files_by_type(filenames, media_type=media_type, prefer=prefer, prefix=prefix)
+    return get_files_by_type(
+        filenames, media_type=media_type, prefer=prefer, prefix=prefix
+    )
 
 
-def get_lua_files(filenames: str | list[str] = None, media_type: str = "lua", prefer: str = None) -> list[str]:
+def get_lua_files(
+    filenames: str | list[str] = None, media_type: str = "lua", prefer: str = None
+) -> list[str]:
     """Return absolute paths to Lua files, optionally filtering by name or preference keyword."""
     return get_files_by_type(filenames, media_type=media_type, prefer=prefer)
 
 
-def get_clothing_files(filenames: str | list[str] = None, media_type: str = "clothing", prefer: str = None) -> list[str]:
+def get_clothing_files(
+    filenames: str | list[str] = None, media_type: str = "clothing", prefer: str = None
+) -> list[str]:
     """Return absolute paths to clothing XML files, with optional name or preference filtering."""
     return get_files_by_type(filenames, media_type=media_type, prefer=prefer)
 
+
 ## -------------------- Get rel path -------------------- ##
+
 
 def get_relpath_by_type(name: str, media_type: str, prefer: str = None) -> str | None:
     """
@@ -270,15 +308,19 @@ def get_script_relpath(name: str, prefer: str = None) -> str | None:
     """Return the relative path of a script file by name, optionally prioritising a substring."""
     return get_relpath_by_type(name, media_type="scripts", prefer=prefer)
 
+
 def get_lua_relpath(name: str, prefer: str = None) -> str | None:
     """Return the relative path of a Lua file by name, optionally prioritising a substring."""
     return get_relpath_by_type(name, media_type="lua", prefer=prefer)
+
 
 def get_clothing_relpath(name: str, prefer: str = None) -> str | None:
     """Return the relative path of a clothing file by name, optionally prioritizing a substring."""
     return get_relpath_by_type(name, media_type="clothing", prefer=prefer)
 
+
 ## -------------------- Get abs path -------------------- ##
+
 
 def get_abs_path_by_type(name: str, media_type: str, prefer: str = None) -> str | None:
     """
@@ -294,33 +336,39 @@ def get_abs_path_by_type(name: str, media_type: str, prefer: str = None) -> str 
     """
     rel_path = get_relpath_by_type(name, media_type, prefer=prefer)
     if rel_path:
-        base_dir = BASE_MEDIA_DIRS.get(media_type, get_media_dir()) # fallback to media root if unknown
+        base_dir = BASE_MEDIA_DIRS.get(
+            media_type, get_media_dir()
+        )  # fallback to media root if unknown
         return os.path.join(base_dir, rel_path.replace("/", os.sep))
     return None
 
-def get_script_path(name: str, media_type: str = "scripts", prefer: str = None) -> str | None:
+
+def get_script_path(
+    name: str, media_type: str = "scripts", prefer: str = None
+) -> str | None:
     """Return the absolute path to a script file by name, optionally prioritizing a substring."""
     return get_abs_path_by_type(name, media_type=media_type, prefer=prefer)
+
 
 def get_lua_path(name: str, media_type: str = "lua", prefer: str = None) -> str | None:
     """Return the absolute path to a Lua file by name, optionally prioritizing a substring."""
     return get_abs_path_by_type(name, media_type=media_type, prefer=prefer)
 
-def get_clothing_path(name: str, media_type: str = "clothing", prefer: str = None) -> str | None:
+
+def get_clothing_path(
+    name: str, media_type: str = "clothing", prefer: str = None
+) -> str | None:
     """Return the absolute path to a clothing file by name, optionally prioritizing a substring."""
     return get_abs_path_by_type(name, media_type=media_type, prefer=prefer)
 
 
 ## -------------------- Helpers -------------------- ##
 
+
 def build_file_map(base_dir: Path, name: str = "unknown") -> dict[str, Path]:
     """Get a mapping of relative file paths to absolute paths."""
     print(f"Building file map for {name}...")
-    return {
-        str(f.relative_to(base_dir)): f
-        for f in base_dir.rglob("*")
-        if f.is_file()
-    }
+    return {str(f.relative_to(base_dir)): f for f in base_dir.rglob("*") if f.is_file()}
 
 
 def hash_file(path: Path) -> str:
@@ -333,25 +381,26 @@ def hash_file(path: Path) -> str:
 
 ## -------------------- General file access -------------------- ##
 
+
 def load_json(path: str) -> dict:
     """Load JSON data from a file. Returns empty dict on failure."""
     if not os.path.exists(path):
         echo.warning(f"Failed to load JSON from {path} – path does not exist")
         return {}
     try:
-        with open(path, 'r', encoding='utf-8') as file:
+        with open(path, "r", encoding="utf-8") as file:
             return json.load(file)
     except (json.JSONDecodeError, OSError) as e:
         echo.warning(f"Failed to load JSON from {path} – {e}")
         return {}
 
 
-def save_json(path:str, data:dict) -> bool:
+def save_json(path: str, data: dict) -> bool:
     """Save dictionary data to a JSON file. Returns True if successful."""
     try:
         output_path = Path(path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        with output_path.open('w', encoding='utf-8') as file:
+        with output_path.open("w", encoding="utf-8") as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
         return True
     except OSError as e:
@@ -380,11 +429,16 @@ def read_file(path: str) -> str:
         echo.warning(f"Could not decode file as UTF-8: {path}")
     except OSError as e:
         echo.warning(f"OS error while reading {path}: {e}")
-    
+
     return ""
 
 
-def write_file(content:list[str], rel_path:str="output.txt", root_path:str=OUTPUT_LANG_DIR, suppress:bool=False):
+def write_file(
+    content: list[str],
+    rel_path: str = "output.txt",
+    root_path: str = OUTPUT_LANG_DIR,
+    suppress: bool = False,
+):
     """
     Writes content to a file, creating directories as needed.
 
@@ -394,7 +448,7 @@ def write_file(content:list[str], rel_path:str="output.txt", root_path:str=OUTPU
         root_path (str): Root path to prepend to `rel_path`. {language_code} will be formatted to current language code.
         clear_root (bool): If True, deletes all contents under `root_path` before writing.
         suppress (bool): If True, suppresses info messages.
-    
+
     Returns:
         Path: Directory where the file was saved.
     """
@@ -403,7 +457,7 @@ def write_file(content:list[str], rel_path:str="output.txt", root_path:str=OUTPU
     output_dir.mkdir(parents=True, exist_ok=True)
 
     if output_path.suffix:
-        with open(output_path, 'w', encoding='utf-8') as file:
+        with open(output_path, "w", encoding="utf-8") as file:
             file.write("\n".join(content))
         if not suppress:
             echo.info(f"File saved to '{output_path}'")
@@ -434,15 +488,16 @@ def load_file(rel_path, root_path=None):
         return file_str.splitlines()
     return []
 
+
 def clear_dir(directory: str = OUTPUT_LANG_DIR, suppress: bool = False) -> Path:
     """
     Delete the contents of a directory at `root_path/rel_path`.
     Only deletes contents under `PROJECT_ROOT`.
-    
+
     Args:
         directory (str): Directory to clear (automatically formats `language_code`).
         suppress (bool): If True, suppress warning/info messages.
-    
+
     Returns:
         Path: The absolute path to the directory that was cleared.
     """
@@ -451,20 +506,26 @@ def clear_dir(directory: str = OUTPUT_LANG_DIR, suppress: bool = False) -> Path:
     root_abs = root_rel.resolve()
 
     if not root_abs.exists():
+        # Ensure it's in the project root before creating
+        try:
+            root_abs.relative_to(PROJECT_ROOT)
+        except ValueError:
+            if not suppress:
+                echo.warning(f"Skipping clear: '{root_rel}' is outside project root.")
+            return root_abs
+
+        # Create the directory if it doesn't exist
+        root_abs.mkdir(parents=True, exist_ok=True)
         if not suppress:
-            echo.info(f"Directory does not exist: '{root_rel}'")
+            echo.info(f"Created directory: '{root_rel}'")
         return root_abs
-    
+
     # Ensure it's in the project root
     try:
         root_abs.relative_to(PROJECT_ROOT)
     except ValueError:
         if not suppress:
             echo.warning(f"Skipping clear: '{root_rel}' is outside project root.")
-        return root_abs
-
-    if not root_abs.exists():
-        echo.warning(f"Cannot clear non-existent directory: '{root_rel}'")
         return root_abs
 
     # Delete contents
@@ -481,6 +542,8 @@ def clear_dir(directory: str = OUTPUT_LANG_DIR, suppress: bool = False) -> Path:
 
 
 if __name__ == "__main__":
-#    print(get_game_file_map())
+    #    print(get_game_file_map())
     result = map_game_files()
-    echo.success(f"Mapped {len(result['scripts'])} script files, {len(result['lua'])} lua files and {len(result['maps'])} maps files.")
+    echo.success(
+        f"Mapped {len(result['scripts'])} script files, {len(result['lua'])} lua files and {len(result['maps'])} maps files."
+    )

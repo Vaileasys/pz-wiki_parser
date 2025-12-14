@@ -12,7 +12,15 @@ from scripts.parser.recipe_parser import parse_recipe_block, parse_construction_
 from scripts.utils import echo, color
 
 PREFIX_BLACKLIST = {
-    "item": ["MakeUp_", "ZedDmg_", "Wound_", "Bandage_", "F_Hair_", "M_Hair_", "M_Beard_"]
+    "item": [
+        "MakeUp_",
+        "ZedDmg_",
+        "Wound_",
+        "Bandage_",
+        "F_Hair_",
+        "M_Hair_",
+        "M_Beard_",
+    ]
 }
 
 COLON_SEPARATOR = ["fixing", "evolvedrecipe"]
@@ -31,31 +39,85 @@ COLON_SEPARATOR = ["fixing", "evolvedrecipe"]
 SCRIPT_CONFIGS = {
     "item": {
         "list_keys": [
-            "SoundMap", "fluid", "ModelWeaponPart", "Tags", "Categories", "ClothingItemExtra", "ClothingItemExtraOption", "ResearchableRecipes",
-            "StaticModelsByIndex", "WorldStaticModelsByIndex", "WeaponSpritesByIndex", "MountOn", "AttachmentsProvided"
+            "SoundMap",
+            "fluid",
+            "ModelWeaponPart",
+            "Tags",
+            "Categories",
+            "ClothingItemExtra",
+            "ClothingItemExtraOption",
+            "ResearchableRecipes",
+            "StaticModelsByIndex",
+            "WorldStaticModelsByIndex",
+            "WeaponSpritesByIndex",
+            "MountOn",
+            "AttachmentsProvided",
         ],
-        "list_keys_semicolon": ["Tags", "ResearchableRecipes", "IconsForTexture", "StaticModelsByIndex", "WorldStaticModelsByIndex", "ClothingItemExtra",
-            "ClothingItemExtraOption", "BloodLocation", "AttachmentsProvided", "TeachedRecipes", "Categories", "StaticModel", "WeaponSpritesByIndex","MountOn"
+        "list_keys_semicolon": [
+            "Tags",
+            "ResearchableRecipes",
+            "IconsForTexture",
+            "StaticModelsByIndex",
+            "WorldStaticModelsByIndex",
+            "ClothingItemExtra",
+            "ClothingItemExtraOption",
+            "BloodLocation",
+            "AttachmentsProvided",
+            "TeachedRecipes",
+            "LearnedRecipes",
+            "Categories",
+            "StaticModel",
+            "WeaponSpritesByIndex",
+            "MountOn",
         ],
         "list_keys_slash": ["RequireInHandOrInventory", "FireModePossibilities"],
-        "dict_keys_space": ["SoundMap"]
+        "dict_keys_space": ["SoundMap"],
     },
     "vehicle": {
         "list_keys": ["template"],
-        "list_keys_semicolon": ["specialKeyRing", "leftCol", "rightCol", "zombieType", "itemType"],
+        "list_keys_semicolon": [
+            "specialKeyRing",
+            "leftCol",
+            "rightCol",
+            "zombieType",
+            "itemType",
+        ],
         "dict_keys_colon": ["skills"],
-        "list_keys_space": ["offset", "rotate", "extents", "extentsOffset", "centerOfMassOffset", "shadowExtents", "shadowOffset", "physicsChassisShape", "xywh"]
+        "list_keys_space": [
+            "offset",
+            "rotate",
+            "extents",
+            "extentsOffset",
+            "centerOfMassOffset",
+            "shadowExtents",
+            "shadowOffset",
+            "physicsChassisShape",
+            "xywh",
+        ],
     },
     "template": {
         "list_keys": ["template"],
-        "list_keys_semicolon": ["requireInstalled", "requireUninstalled", "leftCol", "rightCol", "itemType"],
-        "list_keys_space": ["offset", "rotate", "extents", "extentsOffset", "centerOfMassOffset", "shadowOffset", "physicsChassisShape", "xywh", "angle"],
+        "list_keys_semicolon": [
+            "requireInstalled",
+            "requireUninstalled",
+            "leftCol",
+            "rightCol",
+            "itemType",
+        ],
+        "list_keys_space": [
+            "offset",
+            "rotate",
+            "extents",
+            "extentsOffset",
+            "centerOfMassOffset",
+            "shadowOffset",
+            "physicsChassisShape",
+            "xywh",
+            "angle",
+        ],
         "dict_keys_colon": ["skills"],
     },
-    "model": {
-        "list_keys": [],
-        "list_keys_space": ["offset", "rotate"]
-    },
+    "model": {"list_keys": [], "list_keys_space": ["offset", "rotate"]},
     "fixing": {
         "list_keys_semicolon": ["Require"],
         "dict_keys_equal": ["GlobalItem"],
@@ -81,11 +143,9 @@ SCRIPT_CONFIGS = {
             "dbg_entity_test_resources",
             "x_entity_channels_test",
             "x_entity_test",
-            "items_debug"
+            "items_debug",
         ],
-        "folder_blacklist": [
-            "tempNotWorking"
-        ]
+        "folder_blacklist": ["tempNotWorking"],
     },
     "entity": {
         "file_blacklist": [
@@ -104,11 +164,9 @@ SCRIPT_CONFIGS = {
             "dbg_entity_test_resources",
             "x_entity_channels_test",
             "x_entity_test",
-            "items_debug"
+            "items_debug",
         ],
-        "folder_blacklist": [
-            "tempNotWorking"
-        ],
+        "folder_blacklist": ["tempNotWorking"],
         # Handled through recipe_parser
         "list_keys": ["row"],
         "list_keys_space": ["row"],
@@ -125,15 +183,17 @@ SCRIPT_CONFIGS = {
         "dict_keys_equal": ["ItemsRequired", "SkillRequired", "XP"],
         "list_keys_semicolon": ["ItemsRequired", "PreviousStage"],
     },
-    "animationsMesh": {
-        "list_keys": ["animationDirectory"]
-    },
-    "timedAction": {
-        "list_keys_semicolon": ["muscleStrainParts"]
-    },
+    "animationsMesh": {"list_keys": ["animationDirectory"]},
+    "timedAction": {"list_keys_semicolon": ["muscleStrainParts"]},
     "ragdoll": {
-        "list_keys_space": ["constraintAxisA", "constraintAxisB", "constraintPositionOffsetA", "constraintPositionOffsetB", "constraintLimit"]
-    }
+        "list_keys_space": [
+            "constraintAxisA",
+            "constraintAxisB",
+            "constraintPositionOffsetA",
+            "constraintPositionOffsetB",
+            "constraintLimit",
+        ]
+    },
 }
 
 # Cached scripts
@@ -141,8 +201,10 @@ script_cache = {}
 
 ## ------------------------- Post Processing ------------------------- ##
 
+
 def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -> dict:
     """Injects and merges template! and template entries into each script definition."""
+
     def recursive_merge(destination: dict, source: dict):
         """Recursively adds values from source into destination, without overwriting existing ones."""
         for key, value in source.items():
@@ -158,7 +220,13 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
                     # Existing non-dict value, don't overwrite
                     pass
 
-    def merge_template(script_data: dict, template_path: str, script_id: str, script_type: str, template_dict: dict) -> dict:
+    def merge_template(
+        script_data: dict,
+        template_path: str,
+        script_id: str,
+        script_type: str,
+        template_dict: dict,
+    ) -> dict:
         """Merges a template into the script data."""
         module = script_id.split(".", 1)[0]
 
@@ -168,19 +236,25 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
             base_template_id = f"{module}.{script_type}_{parts[0]}"
             base_template = template_dict.get(base_template_id)
             if not base_template:
-                echo.warning(f"[{script_id}] base template '{base_template_id}' not found.")
+                echo.warning(
+                    f"[{script_id}] base template '{base_template_id}' not found."
+                )
                 return script_data
 
             # Walk through nested templates
             current_template = base_template
             for key in parts[1:]:
                 if current_template is None:
-                    echo.warning(f"[{script_id}] template path '{template_path}' is incomplete at '{key}'.")
+                    echo.warning(
+                        f"[{script_id}] template path '{template_path}' is incomplete at '{key}'."
+                    )
                     return script_data
                 current_template = current_template.get(key)
 
             if current_template is None:
-                echo.warning(f"[{script_id}] could not fully walk path '{template_path}'.")
+                echo.warning(
+                    f"[{script_id}] could not fully walk path '{template_path}'."
+                )
                 return script_data
 
             # Build path inside script_data
@@ -189,7 +263,9 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
                 if key not in dest:
                     dest[key] = {}
                 elif not isinstance(dest[key], dict):
-                    echo.warning(f"[{script_id}] expected dict at '{key}' but found {type(dest[key])}.")
+                    echo.warning(
+                        f"[{script_id}] expected dict at '{key}' but found {type(dest[key])}."
+                    )
                     return script_data
                 dest = dest[key]
 
@@ -198,9 +274,11 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
             if final_key not in dest:
                 dest[final_key] = copy.deepcopy(current_template)
             else:
-                if isinstance(dest[final_key], dict) and isinstance(current_template, dict):
+                if isinstance(dest[final_key], dict) and isinstance(
+                    current_template, dict
+                ):
                     recursive_merge(dest[final_key], current_template)
-            
+
             # Handle wildcard inheritance, e.g., Seat* → SeatFrontLeft
             if len(parts) >= 2 and parts[1] == "part":
                 part_name = final_key
@@ -229,7 +307,9 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
             sub_template_list = template.get("template")
             if sub_template_list:
                 for sub_temp in sub_template_list:
-                    script_data = merge_template(script_data, sub_temp, script_id, script_type, template_dict)
+                    script_data = merge_template(
+                        script_data, sub_temp, script_id, script_type, template_dict
+                    )
 
             # Merge fields into script_data
             for key, value in template.items():
@@ -251,12 +331,16 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
         # Inject and merge template! into vehicle data
         template_name = script_data.get("template!")
         if template_name:
-            script_data = merge_template(script_data, template_name, script_id, script_type, template_dict)
+            script_data = merge_template(
+                script_data, template_name, script_id, script_type, template_dict
+            )
 
         # Inject and merge 'template'
         template_list = list(script_data.get("template", []))
         for temp in template_list:
-            script_data = merge_template(script_data, temp, script_id, script_type, template_dict)
+            script_data = merge_template(
+                script_data, temp, script_id, script_type, template_dict
+            )
 
         # Remove templates
         script_data.pop("template!", None)
@@ -265,6 +349,7 @@ def inject_templates(script_dict: dict, script_type: str, template_dict: dict) -
         updated_dict[script_id] = script_data
 
     return updated_dict
+
 
 def post_process(script_dict: dict, script_type: str):
     """Applies post-processing logic based on script type."""
@@ -275,10 +360,12 @@ def post_process(script_dict: dict, script_type: str):
 
     return script_dict
 
+
 ## ------------------------- Split Handlers ------------------------- ##
 def split_list(value: str, character: str) -> list:
     """Splits by a specific character and normalises as a list"""
     return [normalise(v) for v in value.strip().split(character) if v.strip()]
+
 
 def split_dict(value: list[str], character: str) -> dict:
     """Splits at a specific character and normalises as a dict."""
@@ -300,33 +387,41 @@ def split_dict(value: list[str], character: str) -> dict:
             result[key] = True
     return result
 
+
 def split_pipe_list(value: str) -> list:
     """Splits at pipes `|` and normalises as a list."""
     return split_list(value, "|")
+
 
 def split_slash_list(value: str) -> list:
     """Splits at slashes `/` and normalises as a list."""
     return split_list(value, "/")
 
+
 def split_space_list(value: str) -> list:
     """Splits at spaces ` ` and normalises as a list."""
     return split_list(value, " ")
+
 
 def split_semicolon_list(value: str) -> list:
     """Splits at semicolons `;` and normalises as a list."""
     return split_list(value, ";")
 
+
 def split_colon_list(value: str) -> list:
     """Splits at colons `:` and normalises as a list."""
     return split_list(value, ":")
+
 
 def split_colon_dict(value: list[str]) -> dict:
     """Splits at colons `:` and normalises as a dict."""
     return split_dict(value, ":")
 
+
 def split_equal_dict(value: list[str]) -> dict:
     """Splits at equals `=` and normalises as a dict."""
     return split_dict(value, "=")
+
 
 def split_space_dict(value: list[str]) -> dict:
     """Splits at spaces ` ` and normalises as a dict."""
@@ -335,10 +430,11 @@ def split_space_dict(value: list[str]) -> dict:
 
 ## ------------------------- Special Cases ------------------------- ##
 
+
 def parse_evolved_recipe(value: str, block_id: str = "Unknown") -> dict:
     """Special case for processing values of 'EvolvedRecipe'."""
     result = {}
-    entries = value.split(';')
+    entries = value.split(";")
 
     for entry in entries:
         entry = entry.strip()
@@ -346,19 +442,20 @@ def parse_evolved_recipe(value: str, block_id: str = "Unknown") -> dict:
             continue
 
         is_cooked = False
-        if '|' in entry:
-            entry, modifier = entry.split('|', 1)
+        if "|" in entry:
+            entry, modifier = entry.split("|", 1)
             if modifier.strip().lower() == "cooked":
                 is_cooked = True
 
-        if ':' not in entry:
+        if ":" not in entry:
             echo.warning(f"[{block_id}] No ':' in 'EvolvedRecipe' value: {value}")
             continue
 
-        name, amount = entry.split(':', 1)
+        name, amount = entry.split(":", 1)
         result[normalise(name)] = [normalise(amount), is_cooked]
 
     return result
+
 
 def parse_fluid(value: str, block_id: str = "Unknown") -> list[list]:
     """Special case for processing values of 'fluid'."""
@@ -368,12 +465,13 @@ def parse_fluid(value: str, block_id: str = "Unknown") -> list[list]:
     for entry in entries:
         if not entry:
             continue
-        parts = [normalise(p) for p in entry.split(':') if p.strip()]
+        parts = [normalise(p) for p in entry.split(":") if p.strip()]
         if len(parts) >= 2:
             result.append(parts)
         else:
             result.append([entry])
     return result
+
 
 def parse_fixer(value: str, block_id: str = "Unknown") -> dict:
     """Special case for processing values of 'fixer'."""
@@ -384,8 +482,8 @@ def parse_fixer(value: str, block_id: str = "Unknown") -> dict:
         return fixer_data
 
     item_entry = entries[0]
-    if '=' in item_entry:
-        item_name, item_amount = item_entry.split('=', 1)
+    if "=" in item_entry:
+        item_name, item_amount = item_entry.split("=", 1)
         item_name = normalise(item_name)
         item_amount = normalise(item_amount)
     else:
@@ -394,29 +492,27 @@ def parse_fixer(value: str, block_id: str = "Unknown") -> dict:
 
     skill_dict = {}
     for entry in entries[1:]:
-        if '=' in entry:
-            skill, level = entry.split('=', 1)
+        if "=" in entry:
+            skill, level = entry.split("=", 1)
             skill_dict[normalise(skill)] = normalise(level)
         else:
             echo.warning(f"[{block_id}] Invalid skill entry in Fixer: '{entry}'")
 
-    fixer_data[item_name] = {
-        "Amount": item_amount,
-        "Skill": skill_dict
-    }
+    fixer_data[item_name] = {"Amount": item_amount, "Skill": skill_dict}
 
     return fixer_data
+
 
 def parse_item_mapper(lines: list[str], block_id: str = "Unknown") -> dict:
     """Special case for processing values of 'itemMapper'."""
     mapper = {}
 
     for line in lines:
-        line = line.strip().rstrip(',')
+        line = line.strip().rstrip(",")
         if not line or line == "}":
             continue
 
-        match = re.match(r'^([\w\.]+)\s*=\s*([\w\.]+)', line)
+        match = re.match(r"^([\w\.]+)\s*=\s*([\w\.]+)", line)
         if not match:
             echo.warning(f"[{block_id}] Malformed itemMapper line: '{line}'")
             continue
@@ -427,7 +523,9 @@ def parse_item_mapper(lines: list[str], block_id: str = "Unknown") -> dict:
 
         # Reverse the key-value to be: 'input: output'
         if input_ in mapper:
-            echo.warning(f"[{block_id}] Duplicate input '{input_}' in itemMapper: already mapped to '{mapper[input_]}'")
+            echo.warning(
+                f"[{block_id}] Duplicate input '{input_}' in itemMapper: already mapped to '{mapper[input_]}'"
+            )
         mapper[input_] = output
 
     return mapper
@@ -435,24 +533,24 @@ def parse_item_mapper(lines: list[str], block_id: str = "Unknown") -> dict:
 
 ## ------------------------- Compare version changes ------------------------- ##
 
+
 def compare_script_versions(script_type: str = None):
     """
     Compares current script data against the cached version(s).
     If script_type is empty, runs for all cached types.
     """
+
     def run_comparison(stype: str):
-        old_data, old_version = load_cache(f"parsed_{stype}_data.json", f"{stype}", get_version=True)
+        old_data, old_version = load_cache(
+            f"parsed_{stype}_data.json", f"{stype}", get_version=True
+        )
         if not old_data:
             echo.warning(f"No previous version found for '{stype}'. Skipping.")
             return
 
         new_data = extract_script_data(stype, use_cache=False, cache_result=False)
 
-        result = {
-            "Added": [],
-            "Removed": [],
-            "Changes": {}
-        }
+        result = {"Added": [], "Removed": [], "Changes": {}}
 
         old_ids = set(old_data.keys())
         new_ids = set(new_data.keys())
@@ -498,7 +596,10 @@ def compare_script_versions(script_type: str = None):
 
 ## ------------------------- Process Values ------------------------- ##
 
-def process_value(key: str, value: str, block_id: str = "Unknown", script_type: str = "") -> str | list | dict:
+
+def process_value(
+    key: str, value: str, block_id: str = "Unknown", script_type: str = ""
+) -> str | list | dict:
     """
     Processes a raw value string into its appropriate type based on key and script type rules.
     Applies special handling for known keys and uses config-based rules to convert values into lists or dictionaries based on separators.
@@ -597,14 +698,22 @@ def normalise(value: str) -> str | int | float | bool:
     Returns:
         str | int | float | bool: The value converted to its appropriate type.
     """
-    value = value.strip().rstrip(',')
+    value = value.strip().rstrip(",")
+
+    # Remove 'base:' prefix if present (at start or after semicolons)
+    if value.lower().startswith("base:"):
+        value = value[5:]
+    # Handle 'base:' after semicolons in semicolon-separated values
+    if ";base:" in value.lower():
+        value = re.sub(r";base:", ";", value, flags=re.IGNORECASE)
+
     lower = value.lower()
 
     if lower in ("true", "false"):
         return lower == "true"
 
     # Java-style float suffix
-    if value.lower().endswith('f'):
+    if value.lower().endswith("f"):
         stripped = value[:-1]
         try:
             return float(stripped)
@@ -612,12 +721,13 @@ def normalise(value: str) -> str | int | float | bool:
             pass
 
     try:
-        return float(value) if '.' in value else int(value)
+        return float(value) if "." in value else int(value)
     except ValueError:
         return value
 
 
 ## ------------------------- Core Parser ------------------------- ##
+
 
 def remove_comments(lines: list[str]) -> list[str]:
     """
@@ -665,7 +775,9 @@ def remove_comments(lines: list[str]) -> list[str]:
     return cleaned_lines
 
 
-def parse_key_value_line(line: str, data: dict, block_id: str = "Unknown", script_type: str = "") -> None:
+def parse_key_value_line(
+    line: str, data: dict, block_id: str = "Unknown", script_type: str = ""
+) -> None:
     """
     Parses a single key-value line and inserts or merges it into the provided data dictionary.
     Supports both '=' and ':' as separators, applies script-type-specific processing rules, and handles merging of values, lists, and nested dictionaries.
@@ -679,13 +791,13 @@ def parse_key_value_line(line: str, data: dict, block_id: str = "Unknown", scrip
     Returns:
         None
     """
-    match = re.match(r'^([^\s:=]+)\s*[:=]\s*(.+)', line)
+    match = re.match(r"^([^\s:=]+)\s*[:=]\s*(.+)", line)
     if not match:
         return
 
     key, value = match.groups()
     key = key.strip()
-    value = value.strip().rstrip(',')
+    value = value.strip().rstrip(",")
 
     # Always process the value using the config rules
     processed = process_value(key, value, block_id, script_type)
@@ -706,7 +818,9 @@ def parse_key_value_line(line: str, data: dict, block_id: str = "Unknown", scrip
                 if k not in existing:
                     existing[k] = v
                 elif existing[k] != v:
-                    echo.warning(f"[{block_id}] Duplicate subkey '{k}' in '{key}' with different value: '{v}' – existing: '{existing[k]}'")
+                    echo.warning(
+                        f"[{block_id}] Duplicate subkey '{k}' in '{key}' with different value: '{v}' – existing: '{existing[k]}'"
+                    )
 
         # Merge list-style values
         elif isinstance(existing, list):
@@ -720,14 +834,18 @@ def parse_key_value_line(line: str, data: dict, block_id: str = "Unknown", scrip
 
         # Conflict between single values
         elif existing != processed:
-            echo.debug(f"[{block_id}] Duplicate key '{key}'. Replacing '{color.style(existing, color.RED)}' with '{color.style(processed, color.GREEN)}'")
+            echo.debug(
+                f"[{block_id}] Duplicate key '{key}'. Replacing '{color.style(existing, color.RED)}' with '{color.style(processed, color.GREEN)}'"
+            )
             data[key] = processed
 
     else:
         data[key] = processed
 
 
-def parse_block(lines: list[str], block_id: str = "Unknown", script_type: str = "") -> dict:
+def parse_block(
+    lines: list[str], block_id: str = "Unknown", script_type: str = ""
+) -> dict:
     """
     Parse a block of script lines into a nested dictionary.
 
@@ -739,12 +857,13 @@ def parse_block(lines: list[str], block_id: str = "Unknown", script_type: str = 
     Returns:
         dict: Parsed block as a structured dictionary.
     """
+
     def is_nested_block_start(lines: list[str]) -> bool:
         """Checks if any line is followed by '{', indicating a nested block."""
         for i in range(len(lines) - 1):
             line = lines[i].strip()
             next_line = lines[i + 1].strip()
-            if re.match(r'^\w+(?:\s+[\w*/@]+)?$', line) and next_line == "{":
+            if re.match(r"^\w+(?:\s+[\w*/@]+)?$", line) and next_line == "{":
                 return True
         return False
 
@@ -753,7 +872,7 @@ def parse_block(lines: list[str], block_id: str = "Unknown", script_type: str = 
     while i < len(lines):
         line = lines[i].strip()
 
-        block_match = re.match(r'^(\w+)(?:\s+([\w*/]+))?$', line)
+        block_match = re.match(r"^(\w+)(?:\s+([\w*/]+))?$", line)
         # Check if this line starts a new nested block
         if block_match and i + 1 < len(lines) and lines[i + 1].strip() == "{":
             block_type, block_name = block_match.groups()
@@ -775,13 +894,15 @@ def parse_block(lines: list[str], block_id: str = "Unknown", script_type: str = 
             has_nested_block = is_nested_block_start(stripped_block_lines)
 
             # Assign a separator based on the script type
-            separator = r':' if script_type in COLON_SEPARATOR else r'='
+            separator = r":" if script_type in COLON_SEPARATOR else r"="
 
             # Special case for 'itemMapper' block type
             if block_type == "itemMapper":
                 block_data = parse_item_mapper(stripped_block_lines, block_id)
             # Determine whether to parse this block recursively (nested structure or key-value pairs)
-            elif has_nested_block or any(re.search(separator, ln) for ln in stripped_block_lines):
+            elif has_nested_block or any(
+                re.search(separator, ln) for ln in stripped_block_lines
+            ):
                 block_data = parse_block(stripped_block_lines, block_id, script_type)
             else:
                 block_data = [normalise(ln) for ln in stripped_block_lines if ln != "}"]
@@ -800,57 +921,59 @@ def parse_block(lines: list[str], block_id: str = "Unknown", script_type: str = 
 def is_blacklisted(filepath: str, script_type: str) -> bool:
     """
     Check if a file should be blacklisted based on file and folder blacklists.
-    
+
     Args:
         filepath (str): Path to the file to check
         script_type (str): Type of script being parsed
-        
+
     Returns:
         bool: True if file should be blacklisted, False otherwise
     """
     path = Path(filepath)
     config = SCRIPT_CONFIGS.get(script_type, {})
-    
+
     # Check file blacklist
     if path.stem in config.get("file_blacklist", []):
         echo.info(f"Skipping blacklisted file: '{path.stem}'")
         return True
-        
+
     # Check folder blacklist
     for folder in config.get("folder_blacklist", []):
         if folder in str(path):
             echo.info(f"Skipping file in blacklisted folder '{folder}': '{path.stem}'")
             return True
-            
+
     return False
 
 
-def parse_entity_block(lines: list[str], entity_name: str, script_type: str = "entity") -> dict:
+def parse_entity_block(
+    lines: list[str], entity_name: str, script_type: str = "entity"
+) -> dict:
     """
     Parse an entity block to extract component data.
-    
+
     Args:
         lines (list[str]): Lines within the entity block
         entity_name (str): Name of the entity
         script_type (str): Script type (should be "entity")
-        
+
     Returns:
         dict: Parsed entity data with flattened component fields
     """
     entity_data = {}
     i = 0
-    
+
     while i < len(lines):
         line = lines[i].strip()
-        
+
         # Check for component blocks
-        component_match = re.match(r'^component\s+(\w+)$', line)
+        component_match = re.match(r"^component\s+(\w+)$", line)
         if component_match and i + 1 < len(lines) and lines[i + 1].strip() == "{":
             component_name = component_match.group(1)
             i += 2
             component_lines = []
             block_depth = 1
-            
+
             while i < len(lines):
                 next_line = lines[i].strip()
                 block_depth += next_line.count("{")
@@ -859,13 +982,13 @@ def parse_entity_block(lines: list[str], entity_name: str, script_type: str = "e
                 i += 1
                 if block_depth <= 0:
                     break
-            
+
             cleaned = remove_comments(component_lines)
-            
+
             # Skip CraftRecipe component as it's handled by parse_construction_recipe
             if component_name != "CraftRecipe":
                 component_data = parse_block(cleaned, entity_name, script_type)
-                
+
                 # Flatten component data into entity data
                 # For SpriteConfig, extract key fields at the top level
                 if component_name == "SpriteConfig":
@@ -873,7 +996,7 @@ def parse_entity_block(lines: list[str], entity_name: str, script_type: str = "e
                     for key, value in component_data.items():
                         if key not in ("face", "ScriptType", "SourceFile"):
                             entity_data[key] = value
-                    
+
                     # Handle face data specially to extract sprite outputs
                     if "face" in component_data:
                         sprite_outputs = {}
@@ -884,35 +1007,46 @@ def parse_entity_block(lines: list[str], entity_name: str, script_type: str = "e
                                     row_data = layer_data["row"]
                                     if isinstance(row_data, list):
                                         # Filter out False/None values from sprite lists
-                                        sprite_outputs[face_dir] = [s for s in row_data if s and isinstance(s, str)]
+                                        sprite_outputs[face_dir] = [
+                                            s
+                                            for s in row_data
+                                            if s and isinstance(s, str)
+                                        ]
                                     elif isinstance(row_data, str):
                                         sprite_outputs[face_dir] = [row_data]
-                        
+
                         if sprite_outputs:
                             entity_data["spriteOutputs"] = sprite_outputs
-                    
+
                     # Keep corner data if present
                     if "corner" in component_data:
                         entity_data["corner"] = component_data["corner"]
                 else:
                     # For other components, store them under their component name
                     entity_data[component_name] = component_data
-            
+
             continue
-        
+
         i += 1
-    
+
     return entity_data
 
 
 def check_cache_version(script_type: str):
-    cached_data, cached_version = load_cache(f"parsed_{script_type}_data.json", f"{script_type}", get_version=True)
+    cached_data, cached_version = load_cache(
+        f"parsed_{script_type}_data.json", f"{script_type}", get_version=True
+    )
     if cached_version == Version.get():
         return cached_data
     return {}
 
 
-def extract_script_data(script_type: str, do_post_processing: bool = True, cache_result: bool = True, use_cache = True) -> dict[str, dict]:
+def extract_script_data(
+    script_type: str,
+    do_post_processing: bool = True,
+    cache_result: bool = True,
+    use_cache=True,
+) -> dict[str, dict]:
     """
     Parses all script files of a given script type, extracting blocks into dictionaries keyed by FullType (i.e. [Module].[Type])
 
@@ -928,27 +1062,34 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
     # Clear memory cache
     if not use_cache or config.get_debug_mode():
         script_cache = {}
-    
+
     # Get script_type from cache if it's already been parsed.
     if script_type in script_cache:
         return script_cache[script_type]
-    
+
     # Try load from disk cache if not debug mode
     if use_cache and not config.get_debug_mode():
         # Try to load cache from local storage
         saved_cache_data = check_cache_version(script_type)
         if saved_cache_data:
-            script_cache[script_type] = saved_cache_data # Cache in memory for next run
+            script_cache[script_type] = saved_cache_data  # Cache in memory for next run
             return saved_cache_data
 
     script_dict = {}
-    entity_dict = {} # special case for entity
+    entity_dict = {}  # special case for entity
     script_files = get_script_files()
 
     if not script_files:
         echo.warning("No script files found.")
 
-    with tqdm(total=len(script_files), desc=f"Parsing {script_type} files", unit=" files", bar_format=PBAR_FORMAT, unit_scale=True, leave=False) as pbar:
+    with tqdm(
+        total=len(script_files),
+        desc=f"Parsing {script_type} files",
+        unit=" files",
+        bar_format=PBAR_FORMAT,
+        unit_scale=True,
+        leave=False,
+    ) as pbar:
         for filepath in script_files:
             pbar.set_postfix_str(f"Parsing: '{Path(filepath).stem[:30]}'")
 
@@ -983,7 +1124,7 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
                 recipes = parse_construction_recipe(full_text)
 
                 entity_dict = {}
-                
+
                 # First pass: get recipe data
                 for recipe in recipes:
                     name = recipe.get("name")
@@ -992,43 +1133,50 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
 
                     # Best‑effort: find which file contains the entity definition
                     source_file = next(
-                        (Path(p).stem for p, t in file_texts.items()
-                        if re.search(rf'\bentity\s+{re.escape(name)}\b', t)),
-                        "unknown"
+                        (
+                            Path(p).stem
+                            for p, t in file_texts.items()
+                            if re.search(rf"\bentity\s+{re.escape(name)}\b", t)
+                        ),
+                        "unknown",
                     )
 
                     recipe["ScriptType"] = script_type
                     recipe["SourceFile"] = source_file
                     entity_dict[name] = recipe
-                
+
                 # Second pass: parse full entity structure to get additional fields
                 for filepath, text in file_texts.items():
                     lines = remove_comments(text.splitlines())
                     module = None
                     i = 0
-                    
+
                     while i < len(lines):
                         line = lines[i].strip()
                         if not line:
                             i += 1
                             continue
-                        
+
                         # Get module name
-                        if match := re.match(r'^module\s+(\w+)', line):
+                        if match := re.match(r"^module\s+(\w+)", line):
                             module = match.group(1)
                             i += 1
                             continue
-                        
+
                         # Detect entity block start
-                        block_match = re.match(r'^entity\s+(.+)', line)
-                        if block_match and i + 1 < len(lines) and lines[i + 1].strip() == "{":
+                        block_match = re.match(r"^entity\s+(.+)", line)
+                        if (
+                            block_match
+                            and i + 1 < len(lines)
+                            and lines[i + 1].strip() == "{"
+                        ):
                             entity_name = block_match.group(1).strip()
-                            
+
                             # Extract entity block lines
                             i += 2
                             block_lines = []
                             block_depth = 1
-                            
+
                             while i < len(lines):
                                 next_line = lines[i].strip()
                                 block_depth += next_line.count("{")
@@ -1037,11 +1185,13 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
                                 i += 1
                                 if block_depth <= 0:
                                     break
-                            
+
                             # Parse the entity block structure
                             cleaned = remove_comments(block_lines)
-                            entity_data = parse_entity_block(cleaned, entity_name, script_type)
-                            
+                            entity_data = parse_entity_block(
+                                cleaned, entity_name, script_type
+                            )
+
                             # Merge with existing recipe data if present
                             if entity_name in entity_dict:
                                 entity_dict[entity_name].update(entity_data)
@@ -1049,9 +1199,9 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
                                 entity_data["ScriptType"] = script_type
                                 entity_data["SourceFile"] = Path(filepath).stem
                                 entity_dict[entity_name] = entity_data
-                            
+
                             continue
-                        
+
                         i += 1
 
                 save_cache(entity_dict, "parsed_entity_data.json")
@@ -1071,13 +1221,13 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
                     continue
 
                 # Get the module name (e.g., 'module Base')
-                if match := re.match(r'^module\s+(\w+)', line):
+                if match := re.match(r"^module\s+(\w+)", line):
                     module = match.group(1)
                     i += 1
                     continue
 
                 # Detect block start (e.g., 'item Axe {')
-                block_match = re.match(r'^(\w+)\s+(.+)', line)
+                block_match = re.match(r"^(\w+)\s+(.+)", line)
                 if block_match and i + 1 < len(lines) and lines[i + 1].strip() == "{":
                     block_type, block_name = block_match.groups()
                     if block_name is not None:
@@ -1085,7 +1235,13 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
 
                     # Skip blacklisted prefixes (e.g., 'MakeUp_' for items)
                     blacklist = PREFIX_BLACKLIST.get(script_type, [])
-                    if block_type == script_type and module and not any(block_name.startswith(prefix) for prefix in blacklist):
+                    if (
+                        block_type == script_type
+                        and module
+                        and not any(
+                            block_name.startswith(prefix) for prefix in blacklist
+                        )
+                    ):
                         current_id = f"{module}.{block_name}"
 
                         if script_type == "craftRecipe":
@@ -1127,9 +1283,9 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
                     continue
 
                 i += 1
-            
+
             pbar.update(1)
-    
+
     if do_post_processing:
         script_dict = post_process(script_dict, script_type)
 
@@ -1155,24 +1311,69 @@ def extract_script_data(script_type: str, do_post_processing: bool = True, cache
 def main(run_directly=False):
     menu = {
         "0": {"script_type": "", "desc": "Run all available script types."},
-        "1": {"script_type": "item", "desc": "Game items like tools, food, and materials."},
+        "1": {
+            "script_type": "item",
+            "desc": "Game items like tools, food, and materials.",
+        },
         "2": {"script_type": "fluid", "desc": "Liquids, like water or fuel."},
         "3": {"script_type": "vehicle", "desc": "Vehicles and their properties."},
         "4": {"script_type": "template", "desc": "Vehicles and their properties."},
-        "5": {"script_type": "evolvedrecipe", "desc": "Recipes that enhance food items with optional ingredients."},
-        "6": {"script_type": "uniquerecipe", "desc": "Special one-off recipes with fixed inputs and results."},
-        "7": {"script_type": "craftRecipe", "desc": f"Standard crafting recipes for items and upgrades. {color.style('[uses recipe_parser]', color.YELLOW)}"},
-        "8": {"script_type": "entity", "desc": f"World objects with buildable or interactive components. {color.style('[uses recipe_parser]', color.YELLOW)}"},
-        "9": {"script_type": "energy", "desc": "Energy effects like visual charges or particle trails."},
-        "10": {"script_type": "multistagebuild", "desc": "Construction stages for buildable structures."},
-        "11": {"script_type": "model", "desc": "3D model definitions for in-game rendering."},
-        "12": {"script_type": "animation", "desc": "Animation sequences and frame data for characters or items."},
-        "13": {"script_type": "animationsMesh", "desc": "Mesh overlays tied to animations, such as effects or shadows."},
-        "14": {"script_type": "mannequin", "desc": "Definitions for mannequin poses and appearances."},
-        "15": {"script_type": "timedAction", "desc": "Timed gameplay actions like crafting or using items."},
-        "16": {"script_type": "physicsHitReaction", "desc": "Physical reactions to hits."},
-        "17": {"script_type": "ragdoll", "desc": "Physics constraints for ragdoll body parts."},
-        "18": {"script_type": "sound", "desc": "Sound event triggers and configurations."},
+        "5": {
+            "script_type": "evolvedrecipe",
+            "desc": "Recipes that enhance food items with optional ingredients.",
+        },
+        "6": {
+            "script_type": "uniquerecipe",
+            "desc": "Special one-off recipes with fixed inputs and results.",
+        },
+        "7": {
+            "script_type": "craftRecipe",
+            "desc": f"Standard crafting recipes for items and upgrades. {color.style('[uses recipe_parser]', color.YELLOW)}",
+        },
+        "8": {
+            "script_type": "entity",
+            "desc": f"World objects with buildable or interactive components. {color.style('[uses recipe_parser]', color.YELLOW)}",
+        },
+        "9": {
+            "script_type": "energy",
+            "desc": "Energy effects like visual charges or particle trails.",
+        },
+        "10": {
+            "script_type": "multistagebuild",
+            "desc": "Construction stages for buildable structures.",
+        },
+        "11": {
+            "script_type": "model",
+            "desc": "3D model definitions for in-game rendering.",
+        },
+        "12": {
+            "script_type": "animation",
+            "desc": "Animation sequences and frame data for characters or items.",
+        },
+        "13": {
+            "script_type": "animationsMesh",
+            "desc": "Mesh overlays tied to animations, such as effects or shadows.",
+        },
+        "14": {
+            "script_type": "mannequin",
+            "desc": "Definitions for mannequin poses and appearances.",
+        },
+        "15": {
+            "script_type": "timedAction",
+            "desc": "Timed gameplay actions like crafting or using items.",
+        },
+        "16": {
+            "script_type": "physicsHitReaction",
+            "desc": "Physical reactions to hits.",
+        },
+        "17": {
+            "script_type": "ragdoll",
+            "desc": "Physics constraints for ragdoll body parts.",
+        },
+        "18": {
+            "script_type": "sound",
+            "desc": "Sound event triggers and configurations.",
+        },
     }
 
     while True:
@@ -1198,6 +1399,7 @@ def main(run_directly=False):
         else:
             echo.info(f"Processing '{script_type}'...")
             extract_script_data(script_type)
+
 
 if __name__ == "__main__":
     main(run_directly=True)
