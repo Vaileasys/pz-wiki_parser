@@ -53,7 +53,7 @@ def get_unit_tool_ids() -> list[str]:
     unit_tool_ids = []
 
     for item_id, item in Item.all().items():
-        if item.type == "Drainable":
+        if item.type == "drainable":
             unit_tool_ids.append(item_id)
 
     _unit_tool_ids_cache = unit_tool_ids
@@ -513,7 +513,10 @@ def process_workstation(recipe: dict, build_data: dict) -> str:
         "dryleatherlarge": "Large Leather Drying Rack",
         "dryleathermedium": "Medium Leather Drying Rack",
         "dryleathersmall": "Small Leather Drying Rack",
-        "dryingrackgrain": ["Large Plant Drying Rack", "Simple Large Plant Drying Rack"],
+        "dryingrackgrain": [
+            "Large Plant Drying Rack",
+            "Simple Large Plant Drying Rack",
+        ],
         "dryingrackherb": ["Small Plant Drying Rack", "Simple Small Plant Drying Rack"],
         "tanleather": "Tannin Barrel",
         "metalbandsaw": "Metal Bandsaw",

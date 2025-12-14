@@ -11,9 +11,14 @@ TABLE_PATH = os.path.join(TABLES_DIR, "tool_table.json")
 
 table_map = {}
 
+
 def generate_data(item: Item):
     table_type = find_table_type(item)
-    columns = table_map.get(table_type) if table_map.get(table_type) is not None else table_map.get("default")
+    columns = (
+        table_map.get(table_type)
+        if table_map.get(table_type) is not None
+        else table_map.get("default")
+    )
 
     item_dict = {}
 
@@ -21,13 +26,17 @@ def generate_data(item: Item):
     item_dict["name"] = item.wiki_link if "name" in columns else None
     item_dict["weight"] = util.convert_int(item.weight) if "weight" in columns else None
     if "weapon" in columns:
-        if item.type == "Weapon":
-            item_dict["weapon"] = util.tick(text="Can be used as a weapon", link="Weapon")
+        if item.type == "weapon":
+            item_dict["weapon"] = util.tick(
+                text="Can be used as a weapon", link="Weapon"
+            )
         else:
-            item_dict["weapon"] = util.cross(text="Cannot be used as a weapon", link="Weapon")
+            item_dict["weapon"] = util.cross(
+                text="Cannot be used as a weapon", link="Weapon"
+            )
     item_dict["types"] = find_types(item) if "types" in columns else None
     item_dict["category"] = item.display_category if "category" in columns else None
-        
+
     item_dict["item_id"] = item.item_id if "item_id" in columns else None
 
     # Remove any values that are None
@@ -41,7 +50,7 @@ def generate_data(item: Item):
 
     # Add item_name for sorting
     item_dict["item_name"] = item.name
-    
+
     return item_dict
 
 
@@ -57,7 +66,14 @@ def find_types(item: Item):
         types.append("Awl")
     if item.has_tag("ChopTree"):
         types.append("Axe")
-    if item.has_tag("Hammer", "BallPeenHammer", "SmithingHammer", "ClubHammer", "HammerStone", "Mallet"):
+    if item.has_tag(
+        "Hammer",
+        "BallPeenHammer",
+        "SmithingHammer",
+        "ClubHammer",
+        "HammerStone",
+        "Mallet",
+    ):
         types.append("Hammer")
     if item.has_tag("SewingNeedle"):
         types.append("Needle")
@@ -141,7 +157,7 @@ def find_types(item: Item):
         types.append("Mortar and Pestle")
     if item.has_tag("Scythe"):
         types.append("Scythe")
-    
+
     if not types:
         return "-"
     return "<br>".join(sorted(types))
@@ -161,7 +177,7 @@ def find_crafting_categories(item: Item):
         categories.add("Farming")
     if item.has_category("medical"):
         categories.add("Medical")
-    
+
     categories = list(categories)
 
     if not categories:
@@ -175,17 +191,23 @@ def find_table_type(item: Item):
         return "other"
     return "tool"
 
+
 def process_items() -> dict:
     items = {}
     item_count = 0
     item_count_sub = 0
 
     # Get items
-    with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+    with tqdm(
+        total=Item.count(),
+        desc="Processing items",
+        bar_format=PBAR_FORMAT,
+        unit=" items",
+        leave=False,
+    ) as pbar:
         for item_id, item in Item.items():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
             if item.has_category("tool"):
-
                 item_dict = generate_data(item)
 
                 crafting_categories = find_crafting_categories(item)
@@ -198,14 +220,16 @@ def process_items() -> dict:
 
                     item_count_sub += 1
 
-
                 item_count += 1
-        
+
             pbar.update(1)
 
-    echo.info(f"Finished processing {item_count_sub} ({item_count} unique) items for {len(items)} tables.")
-    
+    echo.info(
+        f"Finished processing {item_count_sub} ({item_count} unique) items for {len(items)} tables."
+    )
+
     return items
+
 
 def main():
     Language.get()
@@ -216,7 +240,16 @@ def main():
 
     save_cache(items, "temp_data.json")
 
-    table_helper.create_tables("tool_item_list", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="tool_item_list", combine_tables=False)
+    table_helper.create_tables(
+        "tool_item_list",
+        items,
+        table_map=table_map,
+        columns=column_headings,
+        suppress=True,
+        bot_flag_type="tool_item_list",
+        combine_tables=False,
+    )
+
 
 if __name__ == "__main__":
     main()

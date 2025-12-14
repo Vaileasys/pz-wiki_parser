@@ -9,9 +9,14 @@ TABLE_PATH = os.path.join(TABLES_DIR, "security_table.json")
 
 table_map = {}
 
+
 def generate_data(item: Item):
     table_type = find_table_type(item)
-    columns = table_map.get(table_type) if table_map.get(table_type) is not None else table_map.get("default")
+    columns = (
+        table_map.get(table_type)
+        if table_map.get(table_type) is not None
+        else table_map.get("default")
+    )
 
     item_dict = {}
 
@@ -21,7 +26,7 @@ def generate_data(item: Item):
     if "type" in columns:
         if item.has_tag("Lock"):
             item_dict["type"] = "Lock"
-        elif item.type == "Key":
+        elif item.type == "key":
             item_dict["type"] = "Key"
         else:
             item_dict["type"] = "-"
@@ -36,7 +41,7 @@ def generate_data(item: Item):
         if item.id_type == "KeyPadlock":
             locks.append(Item("Base.Padlock").wiki_link)
         item_dict["lock_unlock"] = "<br>".join(locks) if locks else "-"
-        
+
     item_dict["item_id"] = item.item_id if "item_id" in columns else None
 
     # Remove any values that are None
@@ -47,19 +52,26 @@ def generate_data(item: Item):
 
     # Add item_name for sorting
     item_dict["item_name"] = item.name
-    
+
     return table_type, item_dict
 
 
 def find_table_type(item: Item):
     return "security"
 
+
 def process_items() -> dict:
     items = {}
     item_count = 0
 
     # Get items
-    with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+    with tqdm(
+        total=Item.count(),
+        desc="Processing items",
+        bar_format=PBAR_FORMAT,
+        unit=" items",
+        leave=False,
+    ) as pbar:
         for item_id, item in Item.items():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
             if item.has_category("security"):
@@ -72,12 +84,13 @@ def process_items() -> dict:
                 items[table_type].append(item_dict)
 
                 item_count += 1
-        
+
             pbar.update(1)
 
     echo.info(f"Finished processing {item_count} items for {len(items)} tables.")
-    
+
     return items
+
 
 def main():
     Language.get()
@@ -86,7 +99,16 @@ def main():
 
     items = process_items()
 
-    table_helper.create_tables("security_item_list", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="security_item_list", combine_tables=False)
+    table_helper.create_tables(
+        "security_item_list",
+        items,
+        table_map=table_map,
+        columns=column_headings,
+        suppress=True,
+        bot_flag_type="security_item_list",
+        combine_tables=False,
+    )
+
 
 if __name__ == "__main__":
     main()

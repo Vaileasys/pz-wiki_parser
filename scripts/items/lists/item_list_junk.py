@@ -9,9 +9,14 @@ TABLE_PATH = os.path.join(TABLES_DIR, "junk_table.json")
 
 table_map = {}
 
+
 def generate_data(item: Item):
     table_type = find_table_type(item)
-    columns = table_map.get(table_type) if table_map.get(table_type) is not None else table_map.get("default")
+    columns = (
+        table_map.get(table_type)
+        if table_map.get(table_type) is not None
+        else table_map.get("default")
+    )
 
     item_dict = {}
 
@@ -19,15 +24,23 @@ def generate_data(item: Item):
     item_dict["name"] = item.wiki_link if "name" in columns else None
     item_dict["weight"] = util.convert_int(item.weight) if "weight" in columns else None
     if "weapon" in columns:
-        if item.type == "Weapon":
-            item_dict["weapon"] = util.tick(text="Can be used as a weapon", link="Weapon")
+        if item.type == "weapon":
+            item_dict["weapon"] = util.tick(
+                text="Can be used as a weapon", link="Weapon"
+            )
         else:
-            item_dict["weapon"] = util.cross(text="Cannot be used as a weapon", link="Weapon")
-    item_dict["original"] = find_original_item(item) if "original" in columns else None #TODO: add 'On' lua parser, e.g. OnBreak.
+            item_dict["weapon"] = util.cross(
+                text="Cannot be used as a weapon", link="Weapon"
+            )
+    item_dict["original"] = (
+        find_original_item(item) if "original" in columns else None
+    )  # TODO: add 'On' lua parser, e.g. OnBreak.
     if "capacity" in columns:
         if item.fluid_container:
-            item_dict["capacity"] = f"{util.convert_int(item.fluid_container.capacity)} L"
-        elif item.type == "Drainable":
+            item_dict["capacity"] = (
+                f"{util.convert_int(item.fluid_container.capacity)} L"
+            )
+        elif item.type == "drainable":
             item_dict["capacity"] = f"{util.convert_int(1 / item.use_delta)} units"
         else:
             item_dict["capacity"] = "-"
@@ -42,7 +55,7 @@ def generate_data(item: Item):
 
     # Add item_name for sorting
     item_dict["item_name"] = item.name
-    
+
     return table_type, item_dict
 
 
@@ -56,23 +69,31 @@ def find_original_item(item: Item):
 def find_table_type(item: Item):
     if item.is_dung:
         return "dung"
-    if (item.custom_context_menu == "Smoke"
+    if (
+        item.custom_context_menu == "Smoke"
         or item.has_tag("Smokable", "Tobacco", "ChewingTobacco", "RollingPaper")
         or item.id_type in ("CigarettePack", "CanPipe", "CigaretteCarton")
-        ):
+    ):
         return "smoking"
-    if item.type == "Literature":
+    if item.type == "literature":
         return "literature"
     if "broken" in item.id_type.lower():
         return "broken"
-    return "other"    
+    return "other"
+
 
 def process_items() -> dict:
     items = {}
     item_count = 0
 
     # Get items
-    with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+    with tqdm(
+        total=Item.count(),
+        desc="Processing items",
+        bar_format=PBAR_FORMAT,
+        unit=" items",
+        leave=False,
+    ) as pbar:
         for item_id, item in Item.items():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
             if item.has_category("junk"):
@@ -85,12 +106,13 @@ def process_items() -> dict:
                 items[table_type].append(item_dict)
 
                 item_count += 1
-        
+
             pbar.update(1)
 
     echo.info(f"Finished processing {item_count} items for {len(items)} tables.")
-    
+
     return items
+
 
 def main():
     Language.get()
@@ -99,7 +121,16 @@ def main():
 
     items = process_items()
 
-    table_helper.create_tables("junk_item_list", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="junk_item_list", combine_tables=False)
+    table_helper.create_tables(
+        "junk_item_list",
+        items,
+        table_map=table_map,
+        columns=column_headings,
+        suppress=True,
+        bot_flag_type="junk_item_list",
+        combine_tables=False,
+    )
+
 
 if __name__ == "__main__":
     main()

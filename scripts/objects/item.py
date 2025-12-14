@@ -2784,7 +2784,7 @@ class Item:
 
             if self.raw_display_category == "Ammo":
                 for item_id, item in Item.items():
-                    if (item.ammo_type or item.ammo_box) and item.type == "Weapon":
+                    if (item.ammo_type or item.ammo_box) and item.type == "weapon":
                         if Item(item.ammo_type) == self:
                             self._weapons.append(item)
                         elif Item(item.ammo_box) == self:

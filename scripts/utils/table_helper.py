@@ -4,6 +4,7 @@ Generates wiki-formatted tables for Project Zomboid.
 This module loads item data, builds structured tables with translations and formatting,
 and writes them as individual or combined output files for use on the PZwiki.
 """
+
 import os
 from pathlib import Path
 from scripts.core.language import Translate
@@ -11,13 +12,15 @@ from scripts.core.constants import ITEM_DIR, BOT_FLAG, BOT_FLAG_END
 from scripts.core import file_loading
 from scripts.utils import echo
 
-DEF_TABLE_HEADER = '{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"'
-DEF_TABLE_FOOTER = '|}'
+DEF_TABLE_HEADER = (
+    '{| class="wikitable theme-red sortable sticky-column" style="text-align: center;"'
+)
+DEF_TABLE_FOOTER = "|}"
 TABLE_WRAP_BEFORE = '<div class="scroll-x">\n'
-TABLE_WRAP_AFTER = '\n</div>'
+TABLE_WRAP_AFTER = "\n</div>"
 
 
-def get_table_data(path:str, extra_keys:str|list=None):
+def get_table_data(path: str, extra_keys: str | list = None):
     """
     Loads table data and optionally extracts extra keys from the JSON file.
 
@@ -51,7 +54,9 @@ def get_table_data(path:str, extra_keys:str|list=None):
     return map, headings
 
 
-def get_column_headings(table_type:str, table_map:dict, columns:dict, drop_keys: set[str] = None):
+def get_column_headings(
+    table_type: str, table_map: dict, columns: dict, drop_keys: set[str] = None
+):
     """
     Builds the list of column headings for a given table type.
 
@@ -73,7 +78,9 @@ def get_column_headings(table_type:str, table_map:dict, columns:dict, drop_keys:
     drop_keys = drop_keys or set()
 
     if isinstance(column_def, list):
-        return [columns.get(key, f'! {key}') for key in column_def if key not in drop_keys]
+        return [
+            columns.get(key, f"! {key}") for key in column_def if key not in drop_keys
+        ]
     elif isinstance(column_def, dict):
         filtered_def = {k: v for k, v in column_def.items() if k not in drop_keys}
         return generate_column_headings(filtered_def, columns)
@@ -101,12 +108,12 @@ def generate_column_headings(column_def: dict, headings: dict) -> list:
 
     for key, val in column_def.items():
         if "parent" not in val:
-            heading = headings.get(key, f'! {key}')
+            heading = headings.get(key, f"! {key}")
             colspan = val.get("colspan", 1)
             rowspan = val.get("rowspan", 1)
 
             if "children" in val:
-                top_row.append(f'! colspan={colspan} | {heading.lstrip("! ").strip()}')
+                top_row.append(f"! colspan={colspan} | {heading.lstrip('! ').strip()}")
 
                 for child in val["children"]:
                     child_val = column_def.get(child, {})
@@ -117,14 +124,16 @@ def generate_column_headings(column_def: dict, headings: dict) -> list:
                             attr_parts.append(f'{attr_key}="{child_val[attr_key]}"')
 
                     attr_str = " ".join(attr_parts)
-                    sub_heading = headings.get(child, f'! {child}')
+                    sub_heading = headings.get(child, f"! {child}")
                     if attr_str:
-                        sub_row.append(f'! {attr_str} | {sub_heading.lstrip("! ").strip()}')
+                        sub_row.append(
+                            f"! {attr_str} | {sub_heading.lstrip('! ').strip()}"
+                        )
                     else:
                         sub_row.append(sub_heading)
 
             else:
-                top_row.append(f'! rowspan={rowspan} | {heading.lstrip("! ").strip()}')
+                top_row.append(f"! rowspan={rowspan} | {heading.lstrip('! ').strip()}")
 
     result = top_row.copy()
     if sub_row:
@@ -135,20 +144,20 @@ def generate_column_headings(column_def: dict, headings: dict) -> list:
 
 
 def generate_table(
-        table_type: str,
-        data: dict,
-        column_headings: list,
-        table_header: str = DEF_TABLE_HEADER,
-        table_footer: str = DEF_TABLE_FOOTER,
-        caption_top: str = None,
-        caption_bottom: str = None,
-        caption: str = None,
-        table_before: str = None,
-        table_after: str = None,
-        do_bot_flag: bool = True,
-        bot_flag_type: str = "table",
-        do_horizontal_scroll: bool = True
-        ) -> list:
+    table_type: str,
+    data: dict,
+    column_headings: list,
+    table_header: str = DEF_TABLE_HEADER,
+    table_footer: str = DEF_TABLE_FOOTER,
+    caption_top: str = None,
+    caption_bottom: str = None,
+    caption: str = None,
+    table_before: str = None,
+    table_after: str = None,
+    do_bot_flag: bool = True,
+    bot_flag_type: str = "table",
+    do_horizontal_scroll: bool = True,
+) -> list:
     """
     Generates a full wiki-formatted table for the given data and headings.
 
@@ -170,7 +179,7 @@ def generate_table(
     Returns:
         list[str]: The full table as a list of wiki lines.
     """
-    
+
     content = []
 
     table_wrap_before = TABLE_WRAP_BEFORE if do_horizontal_scroll else ""
@@ -179,16 +188,26 @@ def generate_table(
     table_before = "" if table_before is None else table_before
     table_after = "" if table_after is None else table_after
 
-    bot_flag_start = BOT_FLAG.format(type=bot_flag_type, id=table_type.replace(" ", "_")) if do_bot_flag else ''
-    bot_flag_end = BOT_FLAG_END.format(type=bot_flag_type, id=table_type.replace(" ", "_")) if do_bot_flag else ''
+    bot_flag_start = (
+        BOT_FLAG.format(type=bot_flag_type, id=table_type.replace(" ", "_"))
+        if do_bot_flag
+        else ""
+    )
+    bot_flag_end = (
+        BOT_FLAG_END.format(type=bot_flag_type, id=table_type.replace(" ", "_"))
+        if do_bot_flag
+        else ""
+    )
 
     content.append(bot_flag_start + table_wrap_before + table_before + table_header)
 
     if caption_top and not caption:
-        content.append(f'|+ style="caption-side:top; font-weight:normal; | {caption_top}', '|-')
-    
+        content.append(
+            f'|+ style="caption-side:top; font-weight:normal; | {caption_top}', "|-"
+        )
+
     if caption:
-        content.append('|+ ' + caption)
+        content.append("|+ " + caption)
 
     content.extend(column_headings)
 
@@ -197,12 +216,17 @@ def generate_table(
         item_content.append("|-")
         for value in list(item.values()):
             item_content.append(f"| {value}")
-        
+
         content.extend(item_content)
 
     if caption_bottom and not caption_top and not caption:
-        content.extend(['|-', f'|+ style="caption-side:bottom; font-weight:normal; border: none;" | <div style="text-wrap: white-space: nowrap; overflow: auto;"><div style="white-space: normal; display: inline-block;">{caption_bottom}</div></div>'])
-    
+        content.extend(
+            [
+                "|-",
+                f'|+ style="caption-side:bottom; font-weight:normal; border: none;" | <div style="text-wrap: white-space: nowrap; overflow: auto;"><div style="white-space: normal; display: inline-block;">{caption_bottom}</div></div>',
+            ]
+        )
+
     content.append(table_footer + table_after + table_after_after + bot_flag_end)
 
     # Get translations
@@ -259,22 +283,22 @@ def remove_empty_columns(all_food_data: dict[str, list[dict]]) -> dict[str, set]
 
 
 def create_tables(
-        item_type: str,
-        all_data: dict,
-        columns: dict,
-        table_map: dict = {},
-        table_header = DEF_TABLE_HEADER,
-        table_footer = DEF_TABLE_FOOTER,
-        caption = None,
-        caption_top = None,
-        caption_bottom = None,
-        combine_tables: bool = True,
-        root_path: str = os.path.join(ITEM_DIR, "lists"),
-        do_bot_flag: bool = True,
-        bot_flag_type: str = "table",
-        suppress: bool = False,
-        drop_empty_columns: bool = False
-        ):
+    item_type: str,
+    all_data: dict,
+    columns: dict,
+    table_map: dict = {},
+    table_header=DEF_TABLE_HEADER,
+    table_footer=DEF_TABLE_FOOTER,
+    caption=None,
+    caption_top=None,
+    caption_bottom=None,
+    combine_tables: bool = True,
+    root_path: str = os.path.join(ITEM_DIR, "lists"),
+    do_bot_flag: bool = True,
+    bot_flag_type: str = "table",
+    suppress: bool = False,
+    drop_empty_columns: bool = False,
+):
     """
     Creates and writes individual and/or combined item tables for each table type.
 
@@ -294,7 +318,7 @@ def create_tables(
         bot_flag_type (str): The identifier used in bot flag comments. Defaults to "table".
         suppress (bool): If True, suppresses terminal output except for final success message.
         drop_empty_columns (bool): If True, removes columns that are empty in all rows for each table type. Defaults to False.
-        
+
     Returns:
         None
     """
@@ -305,8 +329,10 @@ def create_tables(
         removed_columns = remove_empty_columns(all_data)
 
     all_tables = []
-    for table_type, data in sorted(all_data.items()):
+    rel_path = None
+    output_dir = None
 
+    for table_type, data in sorted(all_data.items()):
         content = []
 
         # Reset captions per table
@@ -325,19 +351,39 @@ def create_tables(
             item.pop("item_name", None)
 
         drop = removed_columns.get(table_type, set())
-        column_headings = get_column_headings(table_type, table_map, columns, drop_keys=drop)
+        column_headings = get_column_headings(
+            table_type, table_map, columns, drop_keys=drop
+        )
 
-        content.extend(generate_table(table_type, data, column_headings, table_header, table_footer, caption_bottom=local_caption_bottom, caption_top=local_caption_top, caption=local_caption, do_bot_flag=do_bot_flag, bot_flag_type=bot_flag_type))
+        content.extend(
+            generate_table(
+                table_type,
+                data,
+                column_headings,
+                table_header,
+                table_footer,
+                caption_bottom=local_caption_bottom,
+                caption_top=local_caption_top,
+                caption=local_caption,
+                do_bot_flag=do_bot_flag,
+                bot_flag_type=bot_flag_type,
+            )
+        )
         rel_path = os.path.join(item_type, table_type + ".txt")
-        output_dir = file_loading.write_file(content, rel_path=rel_path, root_path=root_path, suppress=suppress)
+        output_dir = file_loading.write_file(
+            content, rel_path=rel_path, root_path=root_path, suppress=suppress
+        )
 
         if combine_tables:
-            all_tables.extend([f'=={table_type.replace("_", " ").capitalize()}=='])
+            all_tables.extend([f"=={table_type.replace('_', ' ').capitalize()}=="])
             all_tables.extend(content)
 
     if combine_tables:
         rel_path = os.path.join(item_type, "all_tables.txt")
-        file_loading.write_file(all_tables, rel_path=rel_path, root_path=root_path, suppress=suppress)
+        output_dir = file_loading.write_file(
+            all_tables, rel_path=rel_path, root_path=root_path, suppress=suppress
+        )
 
-    tables_name = Path(rel_path).parent.name.replace("_", " ").capitalize()
-    echo.success(f"{tables_name} tables written to '{output_dir}'")
+    if rel_path and output_dir:
+        tables_name = Path(rel_path).parent.name.replace("_", " ").capitalize()
+        echo.success(f"{tables_name} tables written to '{output_dir}'")

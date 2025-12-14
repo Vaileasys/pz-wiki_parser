@@ -9,20 +9,26 @@ from scripts.core.cache import save_cache
 
 TABLE_HEADER = (
     '{{| class="wikitable theme-red sortable mw-collapsible{wiki_class}" id="contents-{item_id}"',
-    '! Icon',
-    '! Name',
-    '! Chance')
+    "! Icon",
+    "! Name",
+    "! Chance",
+)
 
-TABLE_CAPTION = '|+ style="white-space:nowrap; border:none; font-weight:normal; font-size: 1em;" | '
+TABLE_CAPTION = (
+    '|+ style="white-space:nowrap; border:none; font-weight:normal; font-size: 1em;" | '
+)
 
 TABLE_FOOTER = "|}"
 
 distribution_data = distribution_container_parser.get_distribution_data()
-output_dir = Path(OUTPUT_LANG_DIR.format(language_code=Language.get())) / "item" / "container_contents"
+output_dir = (
+    Path(OUTPUT_LANG_DIR.format(language_code=Language.get()))
+    / "item"
+    / "container_contents"
+)
 
 
 def get_probabilities(container_data):
-
     def calculate_probabilities(items_list, total_rolls, only_one=False):
         """Calculates the probability of each item appearing at least once."""
         item_weights = {}
@@ -81,16 +87,18 @@ def get_probabilities(container_data):
         normal_prob = normal_items.get(item, 0) / 100
         junk_prob = junk_items_dict.get(item, 0) / 100
 
-        combined_prob = normal_prob + junk_prob - (normal_prob * junk_prob) # P(A or B)
-        combined_prob = round(combined_prob * 100, 2) # Convert to percentage with 2 decimal places
-        combined_prob = min(combined_prob, 100) # Cap at 100%
+        combined_prob = normal_prob + junk_prob - (normal_prob * junk_prob)  # P(A or B)
+        combined_prob = round(
+            combined_prob * 100, 2
+        )  # Convert to percentage with 2 decimal places
+        combined_prob = min(combined_prob, 100)  # Cap at 100%
 
         combined_probabilities[item] = combined_prob
 
     return {
         "items": combined_probabilities
-#        "junk": junk_prob
-        }
+        #        "junk": junk_prob
+    }
 
 
 def find_distro_key(search_dict, search_key):
@@ -120,11 +128,17 @@ def get_items():
     container_dict = {}
 
     # Get items
-    with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+    with tqdm(
+        total=Item.count(),
+        desc="Processing items",
+        bar_format=PBAR_FORMAT,
+        unit=" items",
+        leave=False,
+    ) as pbar:
         for item_id in Item.all():
             item = Item(item_id)
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
-            if item.type == "Container":
+            if item.type == "container":
                 has_distro, item_contents = process_item(item.id_type)
 
                 if not has_distro:
@@ -134,13 +148,19 @@ def get_items():
                 container_dict[item_id] = item_contents
 
             pbar.update(1)
-           
+
     return container_dict
 
 
 def write_to_file(data: dict):
     output_dir.mkdir(parents=True, exist_ok=True)
-    with tqdm(total=len(data), desc="Writing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+    with tqdm(
+        total=len(data),
+        desc="Writing items",
+        bar_format=PBAR_FORMAT,
+        unit=" items",
+        leave=False,
+    ) as pbar:
         for item_id, item_lists in data.items():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
 
@@ -156,7 +176,9 @@ def write_to_file(data: dict):
                 wiki_class = " mw-collapsed"
             else:
                 wiki_class = ""
-            table_header_mod = "\n".join(TABLE_HEADER).format(wiki_class=wiki_class, item_id=item_id)
+            table_header_mod = "\n".join(TABLE_HEADER).format(
+                wiki_class=wiki_class, item_id=item_id
+            )
 
             table.append(table_header_mod)
 
@@ -164,7 +186,9 @@ def write_to_file(data: dict):
 
             table.append(table_caption_mod)
 
-            item_lists["items"] = dict(sorted(item_lists["items"].items(), key=lambda x: x[1], reverse=True))
+            item_lists["items"] = dict(
+                sorted(item_lists["items"].items(), key=lambda x: x[1], reverse=True)
+            )
 
             for content_item_id, chance in item_lists["items"].items():
                 item = Item(content_item_id)
@@ -179,17 +203,17 @@ def write_to_file(data: dict):
                     echo.warning(f"No data found for '{item.item_id}'")
                     icon = "[[File:Question_On.png]]"
                     wiki_link = content_item_id
-                    
+
                 else:
                     icon = item.icon
                     wiki_link = item.wiki_link
 
                 table_entry = f"|-\n| {icon}\n| {wiki_link}\n| {chance}%"
                 table.append(table_entry)
-            
+
             table.append(TABLE_FOOTER)
 
-            with open(output_file, 'w', encoding='utf-8') as file:
+            with open(output_file, "w", encoding="utf-8") as file:
                 file.write("\n".join(table))
 
             pbar.update(1)
@@ -198,7 +222,6 @@ def write_to_file(data: dict):
 
 
 def main():
-    
     items = get_items()
     save_cache(items, "container_contents.json")
     write_to_file(items)

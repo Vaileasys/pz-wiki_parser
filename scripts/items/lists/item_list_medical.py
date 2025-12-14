@@ -10,18 +10,27 @@ TABLE_PATH = os.path.join(TABLES_DIR, "medical_table.json")
 
 table_map = {}
 
+
 def generate_data(item: Item):
     table_type = find_table_type(item)
-    columns = table_map.get(table_type) if table_map.get(table_type) is not None else table_map.get("default")
+    columns = (
+        table_map.get(table_type)
+        if table_map.get(table_type) is not None
+        else table_map.get("default")
+    )
 
     item_dict = {}
 
     item_dict["icon"] = item.icon if "icon" in columns else None
     item_dict["name"] = item.wiki_link if "name" in columns else None
     item_dict["weight"] = util.convert_int(item.weight) if "weight" in columns else None
-    item_dict["hunger"] = util.convert_int(item.hunger_change or "-") if "hunger" in columns else None
-    item_dict["fresh"] = item.days_fresh or "-" if "fresh" in  columns else None
-    item_dict["rotten"] = item.days_totally_rotten or "-" if "rotten" in  columns else None
+    item_dict["hunger"] = (
+        util.convert_int(item.hunger_change or "-") if "hunger" in columns else None
+    )
+    item_dict["fresh"] = item.days_fresh or "-" if "fresh" in columns else None
+    item_dict["rotten"] = (
+        item.days_totally_rotten or "-" if "rotten" in columns else None
+    )
     item_dict["effect"] = find_effect(item) if "effect" in columns else None
     if "alcohol_power" in columns:
         alcohol_power = item.alcohol_power
@@ -31,7 +40,9 @@ def generate_data(item: Item):
                 if fluid.alcohol:
                     alcohol_power = fluid.alcohol
         item_dict["alcohol_power"] = util.convert_int(alcohol_power)
-    item_dict["bandage_power"] = util.convert_int(item.bandage_power) if "bandage_power" in columns else None
+    item_dict["bandage_power"] = (
+        util.convert_int(item.bandage_power) if "bandage_power" in columns else None
+    )
     item_dict["capacity"] = (item.capacity or "-") if "capacity" in columns else None
 
     item_dict["item_id"] = item.item_id if "item_id" in columns else None
@@ -44,7 +55,7 @@ def generate_data(item: Item):
 
     # Add item_name for sorting
     item_dict["item_name"] = item.name
-    
+
     return table_type, item_dict
 
 
@@ -63,14 +74,16 @@ def find_effect(item: Item):
         "panic": util.link("Panic", "panic"),
         "fatigue": util.link("Tired", "fatigue"),
         "Suture Needle": util.link("Suture Needle"),
-        "broken glass": util.link("Health", "broken glass", anchor="Lodged Glass Shard"),
+        "broken glass": util.link(
+            "Health", "broken glass", anchor="Lodged Glass Shard"
+        ),
         "bullets": util.link("Health", "bullets", anchor="Lodged Bullet"),
         "zombification": util.link("Knox Infection", "zombification"),
         "sleep": util.link("Sleep", "sleep"),
         "anxious": util.link("Stressed", "anxious"),
         "poultice": util.link("Poultice", "poultice"),
         "bandage": util.link("Bandage", "bandage"),
-        "Bandages": util.link("Bandage", "Bandages")
+        "Bandages": util.link("Bandage", "Bandages"),
     }
     if item.tooltip and item.get("ToolTip") != "Tooltip_UseOnHealthPanel":
         effect = item.tooltip
@@ -78,13 +91,13 @@ def find_effect(item: Item):
             if key in effect:
                 effect = effect.replace(key, link)
 
-    elif item.type == "Clothing":
+    elif item.type == "clothing":
         effect = util.link("Clothing")
-    elif item.type == "Weapon":
+    elif item.type == "weapon":
         effect = util.link("Weapon")
     else:
         effect = "-"
-    
+
     return effect
 
 
@@ -96,35 +109,44 @@ def find_table_type(item: Item):
     if item.fluid_container:
         if item.fluid_container.has_fluid("Alcohol"):
             return "disinfectant"
-    if (item.food_type == "Herb"
+    if (
+        item.food_type == "Herb"
         or item.has_tag("Comfrey")
         or item.has_tag("HerbalTea")
         or item.has_tag("Plantain")
         or item.has_tag("WildGarlic")
-        ):
+    ):
         return "herb"
     if any(x in item.id_type for x in ("Cataplasm", "Poultice")):
         return "poultice"
-    if item.has_tag("Pills") or item.type == "Food":
+    if item.has_tag("Pills") or item.type == "food":
         return "pharmaceutical"
-    if item.type == "Container" or "Box" in item.id_type:
+    if item.type == "container" or "Box" in item.id_type:
         return "package"
-    if (item.has_tag("RemoveBullet")
+    if (
+        item.has_tag("RemoveBullet")
         or item.has_tag("RemoveGlass")
         or item.has_tag("Scissors")
         or item.has_tag("Sharpenable")
         or item.has_tag("MortarPestle")
         or "Needle" in item.id_type
-        ):
+    ):
         return "tools"
-    return "other"    
+    return "other"
+
 
 def process_items() -> dict:
     items = {}
     item_count = 0
 
     # Get items
-    with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+    with tqdm(
+        total=Item.count(),
+        desc="Processing items",
+        bar_format=PBAR_FORMAT,
+        unit=" items",
+        leave=False,
+    ) as pbar:
         for item_id, item in Item.items():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
             if item.has_category("medical"):
@@ -137,12 +159,13 @@ def process_items() -> dict:
                 items[table_type].append(item_dict)
 
                 item_count += 1
-        
+
             pbar.update(1)
 
     echo.info(f"Finished processing {item_count} items for {len(items)} tables.")
-    
+
     return items
+
 
 def main():
     Language.get()
@@ -151,7 +174,16 @@ def main():
 
     items = process_items()
 
-    table_helper.create_tables("medical_item_list", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="medical_item_list", combine_tables=False)
+    table_helper.create_tables(
+        "medical_item_list",
+        items,
+        table_map=table_map,
+        columns=column_headings,
+        suppress=True,
+        bot_flag_type="medical_item_list",
+        combine_tables=False,
+    )
+
 
 if __name__ == "__main__":
     main()

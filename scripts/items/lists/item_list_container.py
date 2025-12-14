@@ -31,25 +31,58 @@ def find_accept_item(item: Item):
     # From AcceptItemFunction.lua (42.7.0)
     ITEM_MAP = {
         "AmmoStrap_Bullets": {
-            "Ammo": {"page": "Ammo (tag)", "text": "Ammo", "image": "{{Tag Ammo}}"}, # tag
-            "ShotgunShell": {"page": "ShotgunShell (tag)", "text": "ShotgunShell", "image": "{{Tag ShotgunShell}}"} # tag
+            "Ammo": {
+                "page": "Ammo (tag)",
+                "text": "Ammo",
+                "image": "{{Tag Ammo}}",
+            },  # tag
+            "ShotgunShell": {
+                "page": "ShotgunShell (tag)",
+                "text": "ShotgunShell",
+                "image": "{{Tag ShotgunShell}}",
+            },  # tag
         },
         "AmmoStrap_Shells": {
-            "ShotgunShell": {"page": "ShotgunShell (tag)", "text": "ShotgunShell", "image": "{{Tag ShotgunShell}}"} # tag
+            "ShotgunShell": {
+                "page": "ShotgunShell (tag)",
+                "text": "ShotgunShell",
+                "image": "{{Tag ShotgunShell}}",
+            }  # tag
         },
         "KeyRing": {
-            "Key": {"page": "Security", "text": "Keys", "image": "category-Key"}, # category
-            "FitsKeyRing": {"page": "FitsKeyRing (tag)", "image": "{{Tag FitsKeyRing}}"}, # tag
+            "Key": {
+                "page": "Security",
+                "text": "Keys",
+                "image": "category-Key",
+            },  # category
+            "FitsKeyRing": {
+                "page": "FitsKeyRing (tag)",
+                "image": "{{Tag FitsKeyRing}}",
+            },  # tag
         },
         "HolsterShoulder": {
-            "PistolMagazine": {"page": "PistolMagazine (tag)", "image": "{{Tag PistolMagazine}}"}, # tag
-            "MaxItems": {"text": "2 items max."} # text (custom)
+            "PistolMagazine": {
+                "page": "PistolMagazine (tag)",
+                "image": "{{Tag PistolMagazine}}",
+            },  # tag
+            "MaxItems": {"text": "2 items max."},  # text (custom)
         },
         "Wallet": {
-            "Map": {"page": "Map (item)", "text": "Maps", "image": "category-Map"}, # category
-            "Literature": {"page": "Literature", "text": "Literature", "image": "category-Literature"}, # category
-            "FitsWallet": {"page": "FitsWallet (tag)", "image": "{{Tag FitsWallet}}"}, # tag
-        }
+            "Map": {
+                "page": "Map (item)",
+                "text": "Maps",
+                "image": "category-Map",
+            },  # category
+            "Literature": {
+                "page": "Literature",
+                "text": "Literature",
+                "image": "category-Literature",
+            },  # category
+            "FitsWallet": {
+                "page": "FitsWallet (tag)",
+                "image": "{{Tag FitsWallet}}",
+            },  # tag
+        },
     }
 
     accept_item = item.accept_item_function
@@ -88,15 +121,19 @@ def find_accept_item(item: Item):
                                     cat_item_image = f"[[File:{cat_item_icon}|32x32px{link_text}|{cat_item_name}]]"
                                     if cat_item_image not in category_items_list:
                                         category_items_list.append(cat_item_image)
-                        
+
                         # Build the string joining the list
                         if len(category_items_list) > 1:
                             # Get 10 random items from the list to limit the number of items we cycle through
                             if len(category_items_list) > 10:
-                                category_items_list = random.sample(category_items_list, 10)
-                            
+                                category_items_list = random.sample(
+                                    category_items_list, 10
+                                )
+
                             category_items_str = "".join(category_items_list)
-                            string = f'<span class="cycle-img">{category_items_str}</span>'
+                            string = (
+                                f'<span class="cycle-img">{category_items_str}</span>'
+                            )
 
                         # Convert list to string if it's a single value, bypassing adding cycle-img
                         else:
@@ -105,7 +142,7 @@ def find_accept_item(item: Item):
                     # Use the image value as it's probably already an image
                     else:
                         string = image
-                    
+
                 elif page:
                     string = link(page, text)
                 else:
@@ -129,11 +166,19 @@ def get_cached_types() -> dict:
 
     # Load cache if data dict is empty
     if not category_cache:
-        category_cache, cache_version = load_cache(CACHE_FILE, get_version=True, suppress=True)
+        category_cache, cache_version = load_cache(
+            CACHE_FILE, get_version=True, suppress=True
+        )
 
     # Generate data if data dict is empty or cache is old
     if not category_cache or cache_version != Version.get():
-        with tqdm(total=Item.count(), desc="Preparing items based on 'Type'", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+        with tqdm(
+            total=Item.count(),
+            desc="Preparing items based on 'Type'",
+            bar_format=PBAR_FORMAT,
+            unit=" items",
+            leave=False,
+        ) as pbar:
             for item_id, item in Item.all().items():
                 pbar.set_postfix_str(f"Processing: {item.type[:20]} ({item_id[:20]})")
                 name = item.name
@@ -142,22 +187,37 @@ def get_cached_types() -> dict:
                 if item.type not in category_cache:
                     category_cache[item.type] = {}
 
-                category_cache[item.type][item_id] = {"name": name, "icon": icon, "page": page}
+                category_cache[item.type][item_id] = {
+                    "name": name,
+                    "icon": icon,
+                    "page": page,
+                }
                 pbar.update(1)
         echo.info("Items organised by type and cached.")
 
         save_cache(category_cache, CACHE_FILE)
-    
+
     return category_cache
 
 
 # Get the list type, for mapping the section/table
 def find_table_type(item: Item):
     if item.can_be_equipped:
-        if item.can_be_equipped.location_id == "Back":
-            return "Back"
-        return "Torso"
-    
+        echo.write(
+            f"[DEBUG] Item '{item.item_id}' - can_be_equipped: {item.can_be_equipped} (type: {type(item.can_be_equipped).__name__})"
+        )
+        if hasattr(item.can_be_equipped, "location_id"):
+            echo.write(
+                f"[DEBUG] Item '{item.item_id}' - location_id: {item.can_be_equipped.location_id}"
+            )
+            if item.can_be_equipped.location_id == "Back":
+                return "Back"
+            return "Torso"
+        else:
+            echo.warning(
+                f"[DEBUG] Item '{item.item_id}' - can_be_equipped object has no 'location_id' attribute!"
+            )
+
     if item.accept_item_function:
         heading = item.accept_item_function.replace("AcceptItemFunction.", "")
         # Try to get a name for the heading
@@ -177,28 +237,75 @@ def process_item(item: Item):
     columns = table_map.get(table_type_map[table_type], table_map["generic"])
 
     item_dict = {}
-    
+
     item_dict["icon"] = item.icon if "icon" in columns else None
     item_dict["name"] = item.wiki_link if "name" in columns else None
     item_dict["weight"] = convert_int(item.weight) if "weight" in columns else None
-    item_dict["capacity"] = (item.capacity or '-') if "capacity" in columns else None
-    item_dict["weight_reduction"] = convert_percentage(item.weight_reduction, True, True, default='-') if "weight_reduction" in columns else None
-    item_dict["weight_full"] = convert_int(item.calculate_weight()) if "weight_full" in columns else None
-    item_dict["weight_full_organized"] = convert_int(item.calculate_weight("organized")) if "weight_full_organized" in columns else None
-    item_dict["weight_full_disorganized"] = convert_int(item.calculate_weight("disorganized")) if "weight_full_disorganized" in columns else None
-    item_dict["move_speed"] = convert_percentage(item.run_speed_modifier, False, default='-') if "move_speed" in columns else None
+    item_dict["capacity"] = (item.capacity or "-") if "capacity" in columns else None
+    item_dict["weight_reduction"] = (
+        convert_percentage(item.weight_reduction, True, True, default="-")
+        if "weight_reduction" in columns
+        else None
+    )
+    item_dict["weight_full"] = (
+        convert_int(item.calculate_weight()) if "weight_full" in columns else None
+    )
+    item_dict["weight_full_organized"] = (
+        convert_int(item.calculate_weight("organized"))
+        if "weight_full_organized" in columns
+        else None
+    )
+    item_dict["weight_full_disorganized"] = (
+        convert_int(item.calculate_weight("disorganized"))
+        if "weight_full_disorganized" in columns
+        else None
+    )
+    item_dict["move_speed"] = (
+        convert_percentage(item.run_speed_modifier, False, default="-")
+        if "move_speed" in columns
+        else None
+    )
 
     if "extra_slots" in columns:
         slots = []
         for slot_id in item.attachments_provided:
             slots.append(HotbarSlot(slot_id).wiki_link)
-        item_dict["extra_slots"] = "<br>".join(slots) if slots else '-'
-    
-    item_dict["body_location"] = (item.can_be_equipped.wiki_link or '-') if "body_location" in columns else None
-    item_dict["accept_item"] = find_accept_item(item) if "accept_item" in columns else None
-    item_dict["max_item_size"] = check_zero(item.max_item_size, default='-') if "max_item_size" in columns else None
+        item_dict["extra_slots"] = "<br>".join(slots) if slots else "-"
+
+    if "body_location" in columns:
+        echo.write(f"[DEBUG] Item '{item.item_id}' - Processing body_location column")
+        echo.write(
+            f"[DEBUG] Item '{item.item_id}' - can_be_equipped value: {item.can_be_equipped} (type: {type(item.can_be_equipped).__name__})"
+        )
+        if item.can_be_equipped:
+            if hasattr(item.can_be_equipped, "wiki_link"):
+                item_dict["body_location"] = item.can_be_equipped.wiki_link or "-"
+                echo.write(
+                    f"[DEBUG] Item '{item.item_id}' - body_location set to: {item_dict['body_location']}"
+                )
+            else:
+                echo.error(
+                    f"[DEBUG] Item '{item.item_id}' - can_be_equipped has no 'wiki_link' attribute!"
+                )
+                item_dict["body_location"] = "-"
+        else:
+            echo.write(
+                f"[DEBUG] Item '{item.item_id}' - can_be_equipped is None, setting to '-'"
+            )
+            item_dict["body_location"] = "-"
+    else:
+        item_dict["body_location"] = None
+
+    item_dict["accept_item"] = (
+        find_accept_item(item) if "accept_item" in columns else None
+    )
+    item_dict["max_item_size"] = (
+        check_zero(item.max_item_size, default="-")
+        if "max_item_size" in columns
+        else None
+    )
     item_dict["item_id"] = item.item_id if "item_id" in columns else None
-    
+
     # Remove any values that are None
     item_dict = {k: v for k, v in item_dict.items() if v is not None}
 
@@ -219,11 +326,26 @@ def find_items():
     get_cached_types()
 
     # Get items
-    with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+    with tqdm(
+        total=Item.count(),
+        desc="Processing items",
+        bar_format=PBAR_FORMAT,
+        unit=" items",
+        leave=False,
+    ) as pbar:
         for item_id, item in Item.all().items():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
             if item.has_category("container"):
-                table_type, item_data = process_item(item)
+                echo.write(f"\n[DEBUG] Processing container item: {item_id}")
+                try:
+                    table_type, item_data = process_item(item)
+                except Exception as e:
+                    echo.error(f"[ERROR] Failed to process item '{item_id}': {e}")
+                    import traceback
+
+                    traceback.print_exc()
+                    pbar.update(1)
+                    continue
 
                 # Add heading to dict if it hasn't been added yet.
                 if table_type not in container_dict:
@@ -235,8 +357,10 @@ def find_items():
 
             pbar.update(1)
 
-    echo.info(f"Finished processing {item_count} items for {len(container_dict)} tables.")
-           
+    echo.info(
+        f"Finished processing {item_count} items for {len(container_dict)} tables."
+    )
+
     return container_dict
 
 
@@ -244,16 +368,26 @@ def main():
     global table_map
     global table_type_map
     Language.get()
-    table_map, column_headings, table_type_map = table_helper.get_table_data(TABLE_PATH, "type_map")
+    table_map, column_headings, table_type_map = table_helper.get_table_data(
+        TABLE_PATH, "type_map"
+    )
     items = find_items()
 
     mapped_table = {
         item_type: table_map[table_type]
         for item_type, table_type in table_type_map.items()
     }
-    
-    table_helper.create_tables("container_item_list", items, columns=column_headings, table_map=mapped_table, suppress=True, bot_flag_type="container_item_list", combine_tables=False)
-                
+
+    table_helper.create_tables(
+        "container_item_list",
+        items,
+        columns=column_headings,
+        table_map=mapped_table,
+        suppress=True,
+        bot_flag_type="container_item_list",
+        combine_tables=False,
+    )
+
 
 if __name__ == "__main__":
     main()

@@ -11,6 +11,7 @@ Typical usage:
 
 Used by the wiki parser to automatically organise and filter item data.
 """
+
 from scripts.objects.item import Item
 
 # DisplayCategory page map
@@ -88,8 +89,9 @@ category_page_map = {
     "WaterContainer": "Fluid container",
     "Water": "Fluid container",
     "WeaponPart": "Weapon part",
-    "Hidden": "Debug"
+    "Hidden": "Debug",
 }
+
 
 def get_cat_link(display_category: str) -> str:
     """
@@ -114,15 +116,19 @@ def get_cat_link(display_category: str) -> str:
     links = []
     for part in name_parts:
         match = next(
-            (key for key, val in category_page_map.items()
-             if Translate.get("IGUI_ItemCat_" + key) == part),
-            None
-            )
+            (
+                key
+                for key, val in category_page_map.items()
+                if Translate.get("IGUI_ItemCat_" + key) == part
+            ),
+            None,
+        )
 
         if match:
             links.append(util.link(category_page_map[match], part))
         else:
             from scripts.utils import echo
+
             echo.warning(f"No category found for '{display_category}'")
             links.append(part)
 
@@ -131,181 +137,325 @@ def get_cat_link(display_category: str) -> str:
 
 def is_ammo(item: Item) -> bool:
     """Return True if the item is considered ammunition."""
-    return (item.get("DisplayCategory") == "Ammo"
-            or item.has_tag("Ammo", "PistolMagazine", "RifleMagazine"))
+    return item.get("DisplayCategory") == "Ammo" or item.has_tag(
+        "Ammo", "PistolMagazine", "RifleMagazine"
+    )
+
 
 def is_clothing(item: Item) -> bool:
     """Return True if the item is clothing."""
-    return (item.type in ("Clothing", "AlarmClockClothing")
-            or item.can_be_equipped)
+    return item.type in ("clothing", "alarmclockclothing") or item.can_be_equipped
+
 
 def is_container(item: Item) -> bool:
     """Return True if the item is a container."""
-    return item.type == "Container"
+    return (
+        item.type == "container"
+        or item.get("DisplayCategory") in ("Container", "Bag")
+        or item.capacity > 0
+    )
+
 
 def is_fluid_container(item: Item) -> bool:
     return item.fluid_container
 
+
 def is_food(item: Item) -> bool:
     """Return True if the item is food or marked as food."""
-    return (item.type == "Food" 
-            or item.get("DisplayCategory") == "Food")
+    return item.type == "food" or item.get("DisplayCategory") == "Food"
+
 
 def is_fuel(item: Item) -> bool:
     """Return True if the item can be used as burnable fuel."""
     return item.burn_time
 
+
 def is_animal_part(item: Item) -> bool:
     """Return True if the item is an animal part."""
     return item.get("DisplayCategory") in ("AnimalPart", "AnimalPartWeapon")
 
+
 def is_appearance(item: Item) -> bool:
     """Return True if the item is used to modify player appearance."""
-    return (item.get("DisplayCategory") == "Appearance"
-            or item.make_up_type
-            or (item.id_type and item.id_type in ("Razor", "Scissors", "Hairgel", "Hairspray2"))
-            or item.has_tag("Razor", "Scissors", "DoHairdo", "SlickHair"))
+    return (
+        item.get("DisplayCategory") == "Appearance"
+        or item.make_up_type
+        or (
+            item.id_type
+            and item.id_type in ("Razor", "Scissors", "Hairgel", "Hairspray2")
+        )
+        or item.has_tag("Razor", "Scissors", "DoHairdo", "SlickHair")
+    )
+
 
 def is_camping(item: Item) -> bool:
     """Return True if the item is used for camping."""
     return item.get("DisplayCategory") in ("Camping")
 
+
 def is_communication(item: Item) -> bool:
     """Return True if the item is a communication appliance."""
     return item.get("DisplayCategory") in ("Communications")
+
 
 def is_cooking(item: Item) -> bool:
     """Return True if the item is a cooking utensil."""
     return item.get("DisplayCategory") in ("Cooking", "CookingWeapon")
 
+
 def is_corpse(item: Item) -> bool:
     """Return True if the item is a corpse."""
     return item.get("DisplayCategory") in ("Corpse")
 
+
 def is_entertainment(item: Item) -> bool:
     """Return True if the item is an electronic."""
-    return (item.get("DisplayCategory") in ("Entertainment")
-            #or item.has_tag("MiscElectronic")
-            )
+    return (
+        item.get("DisplayCategory") in ("Entertainment")
+        # or item.has_tag("MiscElectronic")
+    )
+
 
 def is_electronics(item: Item) -> bool:
     """Return True if the item is an electronic."""
-    return (item.get("DisplayCategory") in ("Electronics")
-            or item.has_tag("MiscElectronic"))
+    return item.get("DisplayCategory") in ("Electronics") or item.has_tag(
+        "MiscElectronic"
+    )
+
 
 def is_fire_source(item: Item) -> bool:
     """Return True if the item can be used to start a fire."""
-    return (item.get("DisplayCategory") in ("FireSource")
-            or item.has_tag("StartFire")
-            or (item.id_type and item.id_type == "PercedWood"))
+    return (
+        item.get("DisplayCategory") in ("FireSource")
+        or item.has_tag("StartFire")
+        or (item.id_type and item.id_type == "PercedWood")
+    )
+
 
 def is_literature(item: Item) -> bool:
     """Return True if the item is a book, map, or other literature."""
-    return (item.type in ("Literature", "Map")
-            or item.get("DisplayCategory") in ("Literature"))
+    return item.type in ("literature", "map") or item.get("DisplayCategory") in (
+        "Literature"
+    )
+
 
 def is_fishing(item: Item) -> bool:
     """Return True if the item is used in fishing."""
-    return (item.get("DisplayCategory") in ("Fishing", "FishingWeapon")
-            or item.has_tag("FishingHook", "FishingLine", "FishingSpear", "FishingRod", "FishingNet")
-            or item.fish)
-            #or item.fishing_lure
+    return (
+        item.get("DisplayCategory") in ("Fishing", "FishingWeapon")
+        or item.has_tag(
+            "FishingHook", "FishingLine", "FishingSpear", "FishingRod", "FishingNet"
+        )
+        or item.fish
+    )
+    # or item.fishing_lure
+
 
 def is_gardening(item: Item) -> bool:
     """Return True if the item is used in gardening."""
-    return (item.get("DisplayCategory") in ("Gardening", "GardeningWeapon")
-            or item.id_type in ("InsectRepellent", "KnapsackSprayer", "KnapsackSprayer_Stowed")
-            or item.has_tag("DigPlow", "Scythe"))
+    return (
+        item.get("DisplayCategory") in ("Gardening", "GardeningWeapon")
+        or item.id_type
+        in ("InsectRepellent", "KnapsackSprayer", "KnapsackSprayer_Stowed")
+        or item.has_tag("DigPlow", "Scythe")
+    )
+
 
 def is_household(item: Item) -> bool:
     """Return True if the item is categorised as a household item."""
-    return (item.get("DisplayCategory") in ("Household", "HouseholdWeapon")
-            or item.has_tag("Write", "Eraser", "CleanStains"))
+    return item.get("DisplayCategory") in (
+        "Household",
+        "HouseholdWeapon",
+    ) or item.has_tag("Write", "Eraser", "CleanStains")
+
 
 def is_instrument(item: Item) -> bool:
     """Return True if the item is an instrument."""
-    return (item.get("DisplayCategory") in ("Instrument", "InstrumentWeapon")
-            or item.shout_type)
+    return (
+        item.get("DisplayCategory") in ("Instrument", "InstrumentWeapon")
+        or item.shout_type
+    )
+
 
 def is_junk(item: Item) -> bool:
     """Return True if the item is classified as junk."""
-    return (item.get("DisplayCategory") in ("Junk", "JunkWeapon")
-            or item.is_dung)
+    return item.get("DisplayCategory") in ("Junk", "JunkWeapon") or item.is_dung
+
 
 def is_light_source(item: Item) -> bool:
     """Return True if the item is classified as light source."""
-    return (item.get("DisplayCategory") in ("LightSource")
-            or item.has_tag("Flashlight")
-            or (item.light_distance and item.light_strength))
+    return (
+        item.get("DisplayCategory") in ("LightSource")
+        or item.has_tag("Flashlight")
+        or (item.light_distance and item.light_strength)
+    )
+
 
 def is_material(item: Item) -> bool:
     """Return True if the item is classified as a material."""
-    return (item.get("DisplayCategory") in ("Material", "MaterialWeapon", "Paint")
-            or "RippedSheets" in item.id_type
-            or item.has_tag("Thread", "HeavyThread", "AnimalBone", "LargeAnimalBone", "SilverScrap", "GoldScrap"))
+    return (
+        item.get("DisplayCategory") in ("Material", "MaterialWeapon", "Paint")
+        or "RippedSheets" in item.id_type
+        or item.has_tag(
+            "Thread",
+            "HeavyThread",
+            "AnimalBone",
+            "LargeAnimalBone",
+            "SilverScrap",
+            "GoldScrap",
+        )
+    )
+
 
 def is_medical(item: Item) -> bool:
     """Return True if the item is used in or related to first aid."""
-    return (item.get("DisplayCategory") in ("FirstAid", "FirstAidWeapon")
-            or item.can_bandage
-            or item.medical)
+    return (
+        item.get("DisplayCategory") in ("FirstAid", "FirstAidWeapon")
+        or item.can_bandage
+        or item.medical
+    )
+
 
 def is_memento(item: Item) -> bool:
     """Return True if the item is classified as a memento."""
-    return (item.get("DisplayCategory") in ("Memento", "Animal", "Fox", "Bug", "Bunny", "Duck", "Bear", "Frog", "Badger", 
-                                            "Squirrel", "Beaver", "Mole", "Hedgehog", "Dog", "Raccoon", "Teddy Bear", "Spider")
-            or item.has_tag("IsMemento", "Dice"))
+    return item.get("DisplayCategory") in (
+        "Memento",
+        "Animal",
+        "Fox",
+        "Bug",
+        "Bunny",
+        "Duck",
+        "Bear",
+        "Frog",
+        "Badger",
+        "Squirrel",
+        "Beaver",
+        "Mole",
+        "Hedgehog",
+        "Dog",
+        "Raccoon",
+        "Teddy Bear",
+        "Spider",
+    ) or item.has_tag("IsMemento", "Dice")
+
 
 def is_security(item: Item) -> bool:
     """Return True if the item is classified as security."""
-    return (item.get("DisplayCategory") in ("Security"))
+    return item.get("DisplayCategory") in ("Security")
+
 
 def is_sport(item: Item) -> bool:
     """Return True if the item is classified as sport."""
-    return (item.get("DisplayCategory") in ("Sports", "SportsWeapon"))
+    return item.get("DisplayCategory") in ("Sports", "SportsWeapon")
+
 
 def is_tool(item: Item) -> bool:
     """Return True if the item is classified as a tool."""
-    return (item.get("DisplayCategory") in ("Tool", "ToolWeapon")
-            or item.has_tag(
-                "Screwdriver", "BoltCutters", "DrillWoodPoor", "DrillWood", "DrillMetal",
-                "Awl", "ChopTree", "Hammer", "BallPeenHammer", "SmithingHammer", "ClubHammer",
-                "HammerStone", "Mallet", "SewingNeedle", "CarpentryChisel", "MasonsChisel",
-                "MetalworkingChisel", "ClayTool", "Crowbar", "File", "SmallFiles",
-                "FleshingTool", "Saw", "SmallSaw", "CrudeSaw", "MetalSaw", "DigPlow",
-                "BottleOpener", "SharpKnife", "CanOpener", "Corkscrew", "HeadingTool",
-                "Whetstone", "KnappingTool", "KnittingNeedles", "Magnifier", "MasonsTrowel",
-                "Pliers", "MetalworkingPliers", "MetalworkingPunch", "SmallPunch",
-                "RemoveBullet", "RemoveGlass", "Scissors", "Paintbrush", "PickAxe",
-                "Wrench", "PipeWrench", "PlasterTrowel", "RailroadSpikePuller", "SiphonGas",
-                "Shear", "SheetMetalSnips", "LightMetalSnips", "CrudeTongs", "Tongs",
-                "Sledgehammer", "ClearAshes", "TakeDung", "Thimble", "ViseGrips",
-                "WeldingMask", "BlowTorch", "MixingUtensil", "FishingRod", "MortarPestle", "Scythe"))
+    return item.get("DisplayCategory") in ("Tool", "ToolWeapon") or item.has_tag(
+        "Screwdriver",
+        "BoltCutters",
+        "DrillWoodPoor",
+        "DrillWood",
+        "DrillMetal",
+        "Awl",
+        "ChopTree",
+        "Hammer",
+        "BallPeenHammer",
+        "SmithingHammer",
+        "ClubHammer",
+        "HammerStone",
+        "Mallet",
+        "SewingNeedle",
+        "CarpentryChisel",
+        "MasonsChisel",
+        "MetalworkingChisel",
+        "ClayTool",
+        "Crowbar",
+        "File",
+        "SmallFiles",
+        "FleshingTool",
+        "Saw",
+        "SmallSaw",
+        "CrudeSaw",
+        "MetalSaw",
+        "DigPlow",
+        "BottleOpener",
+        "SharpKnife",
+        "CanOpener",
+        "Corkscrew",
+        "HeadingTool",
+        "Whetstone",
+        "KnappingTool",
+        "KnittingNeedles",
+        "Magnifier",
+        "MasonsTrowel",
+        "Pliers",
+        "MetalworkingPliers",
+        "MetalworkingPunch",
+        "SmallPunch",
+        "RemoveBullet",
+        "RemoveGlass",
+        "Scissors",
+        "Paintbrush",
+        "PickAxe",
+        "Wrench",
+        "PipeWrench",
+        "PlasterTrowel",
+        "RailroadSpikePuller",
+        "SiphonGas",
+        "Shear",
+        "SheetMetalSnips",
+        "LightMetalSnips",
+        "CrudeTongs",
+        "Tongs",
+        "Sledgehammer",
+        "ClearAshes",
+        "TakeDung",
+        "Thimble",
+        "ViseGrips",
+        "WeldingMask",
+        "BlowTorch",
+        "MixingUtensil",
+        "FishingRod",
+        "MortarPestle",
+        "Scythe",
+    )
+
 
 def is_trapping(item: Item) -> bool:
     """Return True if the item is classified as a trap."""
-    return (item.get("DisplayCategory") in ("Trapping"))
+    return item.get("DisplayCategory") in ("Trapping")
+
 
 def is_vehicle_maintenance(item: Item) -> bool:
     """Return True if the item is used for vehicle maintenance."""
-    return item.get("DisplayCategory") in ("VehicleMaintenance", "VehicleMaintenanceWeapon")
+    return item.get("DisplayCategory") in (
+        "VehicleMaintenance",
+        "VehicleMaintenanceWeapon",
+    )
+
 
 def is_weapon(item: Item) -> bool:
     """Return True if the item is a weapon."""
-    return item.type == "Weapon"
+    return item.type == "weapon"
+
 
 def is_weapon_part(item: Item) -> bool:
     """Return True if the item is a weapon part."""
-    return item.type == "WeaponPart"
+    return item.type == "weaponpart"
+
 
 def is_debug(item: Item) -> bool:
     """Return True if the item is a weapon."""
-    return (not item.get("DisplayCategory")
-            or item.get("DisplayCategory") in ("Hidden")
-            or "debug" in item.id_type.lower()
-            or "_dev_" in item.id_type.lower()
-            or "_dummy" in item.id_type.lower()
-            or "Test" in item.id_type)
+    return (
+        not item.get("DisplayCategory")
+        or item.get("DisplayCategory") in ("Hidden")
+        or "debug" in item.id_type.lower()
+        or "_dev_" in item.id_type.lower()
+        or "_dummy" in item.id_type.lower()
+        or "Test" in item.id_type
+    )
+
 
 ITEM_CHECKS = [
     (is_ammo, "ammo"),
@@ -343,14 +493,17 @@ ITEM_CHECKS = [
     (is_debug, "debug"),
 ]
 
-def find_categories(obj: object, *, do_all: bool = False, checks: list[tuple] = ITEM_CHECKS) -> list[str]:
+
+def find_categories(
+    obj: object, *, do_all: bool = False, checks: list[tuple] = ITEM_CHECKS
+) -> list[str]:
     """
     Determine categories for an object using a list of check functions. Option to return only one (default) or all.
 
     Args:
         obj (object): The object to evaluate (typically an Item).
         do_all (bool, optional): If True, return all matching categories. If False (default), return only the first match.
-        checks (list[tuple], optional): A list of (function, category_name) pairs to check against. 
+        checks (list[tuple], optional): A list of (function, category_name) pairs to check against.
                                         Each function should return a bool when passed `obj`.
 
     Returns:
@@ -364,6 +517,7 @@ def find_categories(obj: object, *, do_all: bool = False, checks: list[tuple] = 
             if check(obj):
                 return [name]
         return []
+
 
 def find_all_categories(obj: object, *, checks: list[tuple] = ITEM_CHECKS) -> list[str]:
     """
