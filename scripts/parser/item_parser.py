@@ -294,7 +294,8 @@ def parse_files(file_paths: list[str]) -> dict:
         parsed_data[item_id]["DisplayName"] = display_name
 
     # Sort parsed data by ItemType
-    parsed_data = dict(sorted(parsed_data.items(), key=lambda x: x[1]["ItemType"]))
+    # Handle cases where ItemType might be None, dict, or other non-string types
+    parsed_data = dict(sorted(parsed_data.items(), key=lambda x: str(x[1].get("ItemType", "")) if not isinstance(x[1].get("ItemType"), dict) else ""))
 
     save_cache(parsed_data, CACHE_JSON)
 

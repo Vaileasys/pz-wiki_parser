@@ -284,7 +284,7 @@ def batch_lists(lang_code):
     fluid_list_main()
     hotbar_slots_main()
 
-    named_tiles_cache_file = "named_tiles.json"
+    named_tiles_cache_file = "named_furniture.json"
     named_tiles_data, _ = load_cache(
         os.path.join(DATA_DIR, named_tiles_cache_file),
         "Named Tiles",
@@ -292,7 +292,7 @@ def batch_lists(lang_code):
     )
     generate_furniture_lists(named_tiles_data)
 
-    named_tiles_cache_file = "named_tiles.json"
+    named_tiles_cache_file = "named_furniture.json"
     named_tiles_data, _ = load_cache(
         os.path.join(DATA_DIR, named_tiles_cache_file),
         "Named Tiles",

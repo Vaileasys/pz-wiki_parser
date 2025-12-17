@@ -60,10 +60,11 @@ class EvolvedRecipe:
         if hasattr(self, "recipe_id"):
             return
 
-        if "." in recipe_id:
-            self.recipe_id = recipe_id.split(".", 1)
-        else:
-            self.recipe_id = recipe_id
+        # Ensure recipe_id is a string
+        recipe_id = str(recipe_id)
+
+        # Always store as string - the split was incorrect
+        self.recipe_id = recipe_id
 
         self.data: dict = EvolvedRecipe._recipes.get(recipe_id, {})
 
