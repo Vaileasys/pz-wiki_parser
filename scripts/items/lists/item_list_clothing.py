@@ -15,7 +15,8 @@ body_location_map = {}
 def get_body_location(body_location: str):
     """Gets the section and table for a BodyLocation"""
     for key, value in body_location_map.items():
-        if body_location in value["body_location"]:
+        # Case-insensitive comparison
+        if any(body_location.lower() == loc.lower() for loc in value["body_location"]):
             # return body location heading and table header
             return key, value["table"]
 
@@ -27,36 +28,13 @@ def get_body_location(body_location: str):
 
 def generate_data(item: Item):
     """Gets the item's properties based on the BodyLocation as defined for its table"""
-    from scripts.utils import echo
-
     notes = None
-
-    echo.write(f"[DEBUG] Processing clothing item: {item.item_id}")
-    echo.write(
-        f"[DEBUG] Item '{item.item_id}' - body_location: {item.body_location} (type: {type(item.body_location).__name__})"
-    )
-    echo.write(
-        f"[DEBUG] Item '{item.item_id}' - can_be_equipped: {item.can_be_equipped} (type: {type(item.can_be_equipped).__name__})"
-    )
 
     body_location = item.body_location or item.can_be_equipped
     if not body_location:
-        echo.warning(
-            f"[DEBUG] Item '{item.item_id}' - No body_location or can_be_equipped, skipping"
-        )
         return None, None
 
-    echo.write(
-        f"[DEBUG] Item '{item.item_id}' - Selected body_location: {body_location}"
-    )
-    if hasattr(body_location, "location_id"):
-        echo.write(
-            f"[DEBUG] Item '{item.item_id}' - location_id: {body_location.location_id}"
-        )
-    else:
-        echo.error(
-            f"[DEBUG] Item '{item.item_id}' - body_location object has no 'location_id' attribute!"
-        )
+    if not hasattr(body_location, "location_id"):
         return None, None
 
     heading, table_key = get_body_location(body_location.location_id)
@@ -167,7 +145,7 @@ def generate_data(item: Item):
         item_dict["fabric"] = fabric
 
     if "have_holes" in columns:
-        if item.body_location and item.body_location.location_id == "Shoes":
+        if item.body_location and item.body_location.location_id.lower() == "shoes":
             have_holes = "-"
         elif item.can_have_holes:
             have_holes = tick(text="Can get holes")
@@ -181,7 +159,7 @@ def generate_data(item: Item):
 
     if "condition_lower_chance" in columns:
         is_chance_based = not item.can_have_holes or (
-            item.body_location and item.body_location.location_id == "Shoes"
+            item.body_location and item.body_location.location_id.lower() == "shoes"
         )
 
         if is_chance_based:

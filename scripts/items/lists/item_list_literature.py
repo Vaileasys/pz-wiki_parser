@@ -149,6 +149,16 @@ def get_region(region_key):
 # Process items, returning the heading and row data.
 def process_item(item: Item, special_data={}):
     heading = get_list_type(item, special_data)
+    # Case-insensitive lookup in table_type_map
+    heading_key = None
+    for key in table_type_map.keys():
+        if key.lower() == heading.lower():
+            heading_key = key
+            heading = key  # Use the correctly-cased key
+            break
+    
+    if heading_key is None:
+        heading = "Other"  # Fallback
     columns = table_map.get(table_type_map[heading], table_map["generic"])
     language_code = Language.get()
     map_data = {}

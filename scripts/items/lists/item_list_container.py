@@ -136,8 +136,15 @@ def find_accept_item(item: Item):
                             )
 
                         # Convert list to string if it's a single value, bypassing adding cycle-img
-                        else:
+                        elif len(category_items_list) == 1:
                             string = category_items_list[0]
+
+                        # If no items found, use text or fallback
+                        else:
+                            if page:
+                                string = link(page, text)
+                            else:
+                                string = text
 
                     # Use the image value as it's probably already an image
                     else:
@@ -203,20 +210,10 @@ def get_cached_types() -> dict:
 # Get the list type, for mapping the section/table
 def find_table_type(item: Item):
     if item.can_be_equipped:
-        echo.write(
-            f"[DEBUG] Item '{item.item_id}' - can_be_equipped: {item.can_be_equipped} (type: {type(item.can_be_equipped).__name__})"
-        )
         if hasattr(item.can_be_equipped, "location_id"):
-            echo.write(
-                f"[DEBUG] Item '{item.item_id}' - location_id: {item.can_be_equipped.location_id}"
-            )
-            if item.can_be_equipped.location_id == "Back":
+            if item.can_be_equipped.location_id.lower() == "back":
                 return "Back"
             return "Torso"
-        else:
-            echo.warning(
-                f"[DEBUG] Item '{item.item_id}' - can_be_equipped object has no 'location_id' attribute!"
-            )
 
     if item.accept_item_function:
         heading = item.accept_item_function.replace("AcceptItemFunction.", "")
@@ -231,7 +228,15 @@ def find_table_type(item: Item):
 # Process items, returning the heading and row data.
 def process_item(item: Item):
     table_type = find_table_type(item)
-    if table_type not in table_type_map:
+    # Case-insensitive lookup in table_type_map
+    table_type_key = None
+    for key in table_type_map.keys():
+        if key.lower() == table_type.lower():
+            table_type_key = key
+            table_type = key  # Use the correctly-cased key
+            break
+
+    if table_type_key is None:
         echo.warning(f"'{table_type}' could not be found in table map.")
         table_type = "Containers"
     columns = table_map.get(table_type_map[table_type], table_map["generic"])
@@ -273,25 +278,9 @@ def process_item(item: Item):
         item_dict["extra_slots"] = "<br>".join(slots) if slots else "-"
 
     if "body_location" in columns:
-        echo.write(f"[DEBUG] Item '{item.item_id}' - Processing body_location column")
-        echo.write(
-            f"[DEBUG] Item '{item.item_id}' - can_be_equipped value: {item.can_be_equipped} (type: {type(item.can_be_equipped).__name__})"
-        )
-        if item.can_be_equipped:
-            if hasattr(item.can_be_equipped, "wiki_link"):
-                item_dict["body_location"] = item.can_be_equipped.wiki_link or "-"
-                echo.write(
-                    f"[DEBUG] Item '{item.item_id}' - body_location set to: {item_dict['body_location']}"
-                )
-            else:
-                echo.error(
-                    f"[DEBUG] Item '{item.item_id}' - can_be_equipped has no 'wiki_link' attribute!"
-                )
-                item_dict["body_location"] = "-"
+        if item.can_be_equipped and hasattr(item.can_be_equipped, "wiki_link"):
+            item_dict["body_location"] = item.can_be_equipped.wiki_link or "-"
         else:
-            echo.write(
-                f"[DEBUG] Item '{item.item_id}' - can_be_equipped is None, setting to '-'"
-            )
             item_dict["body_location"] = "-"
     else:
         item_dict["body_location"] = None
@@ -336,7 +325,6 @@ def find_items():
         for item_id, item in Item.all().items():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
             if item.has_category("container"):
-                echo.write(f"\n[DEBUG] Processing container item: {item_id}")
                 try:
                     table_type, item_data = process_item(item)
                 except Exception as e:

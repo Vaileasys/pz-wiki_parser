@@ -700,12 +700,12 @@ def normalise(value: str) -> str | int | float | bool:
     """
     value = value.strip().rstrip(",")
 
-    # Remove 'base:' prefix if present (at start or after semicolons)
+    # Remove 'base:' prefix (case insensitive) from anywhere in the value
+    # Handle at start of string
     if value.lower().startswith("base:"):
         value = value[5:]
-    # Handle 'base:' after semicolons in semicolon-separated values
-    if ";base:" in value.lower():
-        value = re.sub(r";base:", ";", value, flags=re.IGNORECASE)
+    # Handle after any separator (semicolon, comma, pipe, slash, space, colon)
+    value = re.sub(r"([;,|/\s:])base:", r"\1", value, flags=re.IGNORECASE)
 
     lower = value.lower()
 

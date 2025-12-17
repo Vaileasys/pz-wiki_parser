@@ -195,7 +195,8 @@ def generate_data(item_id: str, table_type: str):
     item = Item(item_id)
     notes = None
     for key, value in table_type_map.items():
-        if table_type in value:
+        # Case-insensitive comparison
+        if any(table_type.lower() == v.lower() for v in value):
             columns = table_map.get(key)
             break
         else:

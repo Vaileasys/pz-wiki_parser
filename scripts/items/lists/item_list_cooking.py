@@ -35,13 +35,15 @@ def generate_data(item: Item):
                 text="Cannot be used as a weapon", link="Weapon"
             )
     if "knife_type" in columns:
-        if item.has_tag("SharpKnife"):
+        # Check tags case-insensitively
+        item_tags_lower = [tag.lower() for tag in (item.tags or [])]
+        if "sharpknife" in item_tags_lower:
             item_dict["knife_type"] = util.link("SharpKnife (tag)", "Sharp")
-        elif item.has_tag("DullKnife"):
+        elif "dullknife" in item_tags_lower:
             item_dict["knife_type"] = util.link("DullKnife (tag)", "Dull")
-        elif item.has_tag("MeatCleaver"):
+        elif "meatcleaver" in item_tags_lower:
             item_dict["knife_type"] = util.link("MeatCleaver (tag)", "Meat Cleaver")
-        elif item.has_tag("PizzaCutter"):
+        elif "pizzacutter" in item_tags_lower:
             item_dict["knife_type"] = util.link("PizzaCutter (tag)", "Pizza Cutter")
     if "capacity" in columns:
         if item.fluid_container:
@@ -72,16 +74,14 @@ def generate_data(item: Item):
 
 def find_table_type(item: Item):
     global evolved_recipes
-    if item.has_tag("MixingUtensil"):
+    # Check tags case-insensitively
+    item_tags_lower = [tag.lower() for tag in (item.tags or [])]
+    
+    if "mixingutensil" in item_tags_lower:
         return "mixing_utensil"
-    if (
-        item.has_tag("DullKnife")
-        or item.has_tag("SharpKnife")
-        or item.has_tag("MeatCleaver")
-        or item.has_tag("PizzaCutter")
-    ):
+    if any(tag in item_tags_lower for tag in ["dullknife", "sharpknife", "meatcleaver", "pizzacutter"]):
         return "knife"
-    if item.has_tag("BottleOpener") or item.has_tag("CanOpener"):
+    if "bottleopener" in item_tags_lower or "canopener" in item_tags_lower:
         return "can_bottle_opener"
 
     is_evolved_recipe = False

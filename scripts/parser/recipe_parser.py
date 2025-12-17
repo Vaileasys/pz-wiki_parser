@@ -1,7 +1,32 @@
 import re
 from typing import List, Dict, Any, Tuple
 
-def parse_recipe_block(recipe_lines: List[str], block_id: str = "Unknown") -> Dict[str, Any]:
+
+def remove_base_prefix(value: str) -> str:
+    """
+    Remove 'base:' prefix (case insensitive) from anywhere in the value.
+
+    Args:
+        value (str): The input string to clean.
+
+    Returns:
+        str: The value with 'base:' prefix removed.
+    """
+    if not value or not isinstance(value, str):
+        return value
+
+    # Remove at start of string
+    if value.lower().startswith("base:"):
+        value = value[5:]
+    # Remove after any separator (semicolon, comma, pipe, slash, space, colon)
+    value = re.sub(r"([;,|/\s:])base:", r"\1", value, flags=re.IGNORECASE)
+
+    return value
+
+
+def parse_recipe_block(
+    recipe_lines: List[str], block_id: str = "Unknown"
+) -> Dict[str, Any]:
     """
     Parse a CraftRecipe block and return a structured dictionary.
     """
@@ -19,14 +44,16 @@ def parse_recipe_block(recipe_lines: List[str], block_id: str = "Unknown") -> Di
         mapper_dict: Dict[str, str] = {}
 
         for mapper_body_line in mapper_body.splitlines():
-            cleaned_line: str = re.sub(r"/\*.*?\*/", "", mapper_body_line).strip().rstrip(
-                ","
+            cleaned_line: str = (
+                re.sub(r"/\*.*?\*/", "", mapper_body_line).strip().rstrip(",")
             )
             if not cleaned_line or cleaned_line.startswith("//"):
                 continue
             if "=" in cleaned_line:
                 left_part, right_part = cleaned_line.split("=", 1)
-                mapper_dict[left_part.strip()] = right_part.strip().rstrip(",")
+                mapper_dict[remove_base_prefix(left_part.strip())] = remove_base_prefix(
+                    right_part.strip().rstrip(",")
+                )
 
         item_mappers[mapper_name] = mapper_dict
         return ""
@@ -67,7 +94,7 @@ def parse_recipe_block(recipe_lines: List[str], block_id: str = "Unknown") -> Di
             continue
 
         key: str = pair_match.group(1)
-        value: str = pair_match.group(2).strip()
+        value: str = remove_base_prefix(pair_match.group(2).strip())
         key_lowercase: str = key.lower()
 
         # skills / XP / autolearn lists
@@ -76,13 +103,21 @@ def parse_recipe_block(recipe_lines: List[str], block_id: str = "Unknown") -> Di
             if value.count(":") >= 3 and ";" not in value:
                 colon_indices = [idx for idx, ch in enumerate(value) if ch == ":"]
                 middle_colon_index = colon_indices[1]
-                value = value[:middle_colon_index] + ";" + value[middle_colon_index + 1 :]
+                value = (
+                    value[:middle_colon_index] + ";" + value[middle_colon_index + 1 :]
+                )
 
-            parts: List[str] = [part.strip() for part in value.split(";") if part.strip()]
+            parts: List[str] = [
+                remove_base_prefix(part.strip())
+                for part in value.split(";")
+                if part.strip()
+            ]
             skill_entries: List[Dict[str, Any]] = []
             for part in parts:
                 if ":" in part:
                     skill_name, skill_level_str = part.split(":", 1)
+                    skill_name = remove_base_prefix(skill_name.strip())
+                    skill_level_str = remove_base_prefix(skill_level_str.strip())
                     try:
                         skill_level: Any = int(skill_level_str)
                     except ValueError:
@@ -97,10 +132,16 @@ def parse_recipe_block(recipe_lines: List[str], block_id: str = "Unknown") -> Di
         elif key_lowercase in ("time", "timedaction"):
             recipe_dict[key] = value
         elif key_lowercase == "tags":
-            recipe_dict["tags"] = [tag.strip() for tag in value.split(";") if tag.strip()]
+            recipe_dict["tags"] = [
+                remove_base_prefix(tag.strip())
+                for tag in value.split(";")
+                if tag.strip()
+            ]
         elif ";" in value:
             recipe_dict[key] = [
-                element.strip() for element in value.split(";") if element.strip()
+                remove_base_prefix(element.strip())
+                for element in value.split(";")
+                if element.strip()
             ]
         else:
             recipe_dict[key] = value
@@ -120,7 +161,11 @@ def is_any_fluid_container(item_object: Dict[str, Any]) -> bool:
     )
 
 
-def parse_items_block(block_text: str, is_output: bool = False, recipe_dict: Dict[str, Any] = None,) -> List[Dict[str, Any]]:
+def parse_items_block(
+    block_text: str,
+    is_output: bool = False,
+    recipe_dict: Dict[str, Any] = None,
+) -> List[Dict[str, Any]]:
     """
     Parse an inputs/outputs block, preserving legacy behaviour.
     """
@@ -194,6 +239,7 @@ def parse_items_block(block_text: str, is_output: bool = False, recipe_dict: Dic
                 if all(":" in element for element in item_entry["items"]):
                     numbered_entries: List[Dict[str, Any]] = []
                     for entry_str in item_entry["items"]:
+                        entry_str = remove_base_prefix(entry_str)
                         quantity_str, raw_item_id = entry_str.split(":", 1)
                         try:
                             quantity_value = int(quantity_str.split(".")[-1])
@@ -213,6 +259,7 @@ def parse_items_block(block_text: str, is_output: bool = False, recipe_dict: Dic
                 else:
                     normalized_items: List[str] = []
                     for item_identifier in item_entry["items"]:
+                        item_identifier = remove_base_prefix(item_identifier)
                         raw_item_id = item_identifier.split(":", 1)[-1].strip()
                         if not raw_item_id.startswith("Base."):
                             raw_item_id = f"Base.{raw_item_id}"
@@ -227,7 +274,9 @@ def parse_items_block(block_text: str, is_output: bool = False, recipe_dict: Dic
 
 
 def parse_fluid_line(line: str) -> Dict[str, Any]:
-    pattern = re.compile(r"^([+-])fluid\s+([\d\.]+)\s+(?:\[(.*?)\]|(\S+))", re.IGNORECASE)
+    pattern = re.compile(
+        r"^([+-])fluid\s+([\d\.]+)\s+(?:\[(.*?)\]|(\S+))", re.IGNORECASE
+    )
     match = pattern.match(line)
     if not match:
         return None
@@ -236,9 +285,15 @@ def parse_fluid_line(line: str) -> Dict[str, Any]:
     bracket_content: str = match.group(3)
     single_identifier: str = match.group(4)
     items_list: List[str] = (
-        [element.strip() for element in re.split(r"[;,]", bracket_content) if element.strip()]
+        [
+            remove_base_prefix(element.strip())
+            for element in re.split(r"[;,]", bracket_content)
+            if element.strip()
+        ]
         if bracket_content
-        else ([single_identifier.strip()] if single_identifier else [])
+        else (
+            [remove_base_prefix(single_identifier.strip())] if single_identifier else []
+        )
     )
     return {"sign": sign, "amount": amount, "items": items_list}
 
@@ -251,7 +306,11 @@ def parse_energy_line(line: str) -> Dict[str, Any]:
     amount: float = float(match.group(1))
     energy_type: str = match.group(2)
     modifiers: str = match.group(3).strip() or None
-    energy_entry: Dict[str, Any] = {"energy": True, "amount": amount, "type": energy_type}
+    energy_entry: Dict[str, Any] = {
+        "energy": True,
+        "amount": amount,
+        "type": energy_type,
+    }
     if modifiers:
         energy_entry["modifiers"] = modifiers
     return energy_entry
@@ -263,27 +322,40 @@ def parse_item_line(line: str) -> Dict[str, Any]:
     if not match:
         return None
     count_value: int = int(match.group(1))
-    remaining_text: str = re.sub(r"/\*.*?\*/", "", match.group(2), flags=re.DOTALL).strip()
+    remaining_text: str = re.sub(
+        r"/\*.*?\*/", "", match.group(2), flags=re.DOTALL
+    ).strip()
     entry_dict: Dict[str, Any] = {"count": count_value}
 
-    remaining_text = re.sub(r"mappers?\[.*?\]", "", remaining_text, flags=re.IGNORECASE).strip()
+    remaining_text = re.sub(
+        r"mappers?\[.*?\]", "", remaining_text, flags=re.IGNORECASE
+    ).strip()
 
     mapper_search = re.search(r"mapper\s*:\s*(\S+)", remaining_text, re.IGNORECASE)
     if mapper_search:
         entry_dict["mapper"] = mapper_search.group(1)
-        remaining_text = remaining_text[: mapper_search.start()] + remaining_text[mapper_search.end() :]
+        remaining_text = (
+            remaining_text[: mapper_search.start()]
+            + remaining_text[mapper_search.end() :]
+        )
 
     mode_search = re.search(r"mode\s*:\s*(\S+)", remaining_text, re.IGNORECASE)
     if mode_search:
         entry_dict["mode"] = mode_search.group(1).capitalize()
-        remaining_text = remaining_text[: mode_search.start()] + remaining_text[mode_search.end() :]
+        remaining_text = (
+            remaining_text[: mode_search.start()] + remaining_text[mode_search.end() :]
+        )
 
     tags_search = re.search(r"tags\[(.*?)\]", remaining_text, re.IGNORECASE)
     if tags_search:
         entry_dict["tags"] = [
-            tag.strip() for tag in re.split(r"[;,]", tags_search.group(1)) if tag.strip()
+            remove_base_prefix(tag.strip())
+            for tag in re.split(r"[;,]", tags_search.group(1))
+            if tag.strip()
         ]
-        remaining_text = remaining_text[: tags_search.start()] + remaining_text[tags_search.end() :]
+        remaining_text = (
+            remaining_text[: tags_search.start()] + remaining_text[tags_search.end() :]
+        )
 
     flag_list: List[str] = []
     while True:
@@ -291,9 +363,16 @@ def parse_item_line(line: str) -> Dict[str, Any]:
         if not flags_search:
             break
         flag_list.extend(
-            [flag.strip() for flag in re.split(r"[;,]", flags_search.group(1)) if flag.strip()]
+            [
+                flag.strip()
+                for flag in re.split(r"[;,]", flags_search.group(1))
+                if flag.strip()
+            ]
         )
-        remaining_text = remaining_text[: flags_search.start()] + remaining_text[flags_search.end() :]
+        remaining_text = (
+            remaining_text[: flags_search.start()]
+            + remaining_text[flags_search.end() :]
+        )
     if flag_list:
         entry_dict["flags"] = flag_list
 
@@ -307,13 +386,16 @@ def parse_item_line(line: str) -> Dict[str, Any]:
         if not bracket_search:
             break
         for item_identifier in re.split(r"[;,]", bracket_search.group(1)):
-            item_identifier = item_identifier.strip()
+            item_identifier = remove_base_prefix(item_identifier.strip())
             if item_identifier:
                 item_identifiers.append(
-                    item_identifier if item_identifier.startswith("Base.") else f"Base.{item_identifier}"
+                    item_identifier
+                    if item_identifier.startswith("Base.")
+                    else f"Base.{item_identifier}"
                 )
         remaining_text = (
-            remaining_text[: bracket_search.start()] + remaining_text[bracket_search.end() :]
+            remaining_text[: bracket_search.start()]
+            + remaining_text[bracket_search.end() :]
         )
 
     if item_identifiers:
@@ -323,7 +405,7 @@ def parse_item_line(line: str) -> Dict[str, Any]:
         if fallback_items:
             entry_dict["items"] = [
                 itm if itm.startswith("Base.") else f"Base.{itm}"
-                for itm in re.split(r"[;,]", fallback_items)
+                for itm in re.split(r"[;,]", remove_base_prefix(fallback_items))
                 if itm.strip()
             ]
 
@@ -358,7 +440,9 @@ def parse_module_block(full_text: str) -> List[Dict[str, str]]:
     return module_entries
 
 
-def parse_module_skin_mapping(module_block: str) -> Dict[str, Dict[str, Dict[str, str]]]:
+def parse_module_skin_mapping(
+    module_block: str,
+) -> Dict[str, Dict[str, Dict[str, str]]]:
     skin_mapping: Dict[str, Dict[str, Dict[str, str]]] = {}
     skin_pattern = re.compile(r"xuiSkin\s+(\w+)\s*\{", re.IGNORECASE)
     pattern_position: int = 0
@@ -377,12 +461,18 @@ def parse_module_skin_mapping(module_block: str) -> Dict[str, Dict[str, Dict[str
             if not entity_match:
                 break
             entity_style: str = entity_match.group(1)
-            entity_block, entity_next_position = extract_block(skin_block, entity_match.end() - 1)
+            entity_block, entity_next_position = extract_block(
+                skin_block, entity_match.end() - 1
+            )
 
-            display_name_match = re.search(r"DisplayName\s*=\s*([^,\n]+)", entity_block, re.IGNORECASE)
+            display_name_match = re.search(
+                r"DisplayName\s*=\s*([^,\n]+)", entity_block, re.IGNORECASE
+            )
             icon_match = re.search(r"Icon\s*=\s*([^,\n]+)", entity_block, re.IGNORECASE)
             entity_entries[entity_style] = {
-                "DisplayName": display_name_match.group(1).strip() if display_name_match else None,
+                "DisplayName": display_name_match.group(1).strip()
+                if display_name_match
+                else None,
                 "Icon": icon_match.group(1).strip() if icon_match else None,
             }
             entity_position = entity_next_position
@@ -402,7 +492,9 @@ def parse_entity_blocks(module_block: str) -> List[Dict[str, Any]]:
         if not entity_match:
             break
         entity_name: str = entity_match.group(1)
-        entity_block, next_position = extract_block(module_block, entity_match.end() - 1)
+        entity_block, next_position = extract_block(
+            module_block, entity_match.end() - 1
+        )
 
         component_pattern = re.compile(r"component\s+(\S+)\s*\{", re.IGNORECASE)
         component_position: int = 0
@@ -418,11 +510,19 @@ def parse_entity_blocks(module_block: str) -> List[Dict[str, Any]]:
             component_position = component_next_position
 
         ui_config_block: str = component_blocks.get("UiConfig", "")
-        skin_name_match = re.search(r"xuiSkin\s*=\s*(\S+)", ui_config_block, re.IGNORECASE)
-        skin_name: str = skin_name_match.group(1).rstrip(",") if skin_name_match else None
+        skin_name_match = re.search(
+            r"xuiSkin\s*=\s*(\S+)", ui_config_block, re.IGNORECASE
+        )
+        skin_name: str = (
+            skin_name_match.group(1).rstrip(",") if skin_name_match else None
+        )
 
-        entity_style_match = re.search(r"entityStyle\s*=\s*(\S+)", ui_config_block, re.IGNORECASE)
-        entity_style: str = entity_style_match.group(1).rstrip(",") if entity_style_match else None
+        entity_style_match = re.search(
+            r"entityStyle\s*=\s*(\S+)", ui_config_block, re.IGNORECASE
+        )
+        entity_style: str = (
+            entity_style_match.group(1).rstrip(",") if entity_style_match else None
+        )
 
         entity_list.append(
             {
@@ -441,7 +541,9 @@ def parse_sprite_config(block_text: str) -> Tuple[Dict[str, List[str]], float]:
     sprite_mapping: Dict[str, List[str]] = {}
     base_health: float = None
 
-    base_health_match = re.search(r"skillBaseHealth\s*=\s*([\d\.]+)", block_text, re.IGNORECASE)
+    base_health_match = re.search(
+        r"skillBaseHealth\s*=\s*([\d\.]+)", block_text, re.IGNORECASE
+    )
     if base_health_match:
         try:
             base_health = float(base_health_match.group(1))
@@ -456,10 +558,14 @@ def parse_sprite_config(block_text: str) -> Tuple[Dict[str, List[str]], float]:
             break
         face_block, next_position = extract_block(block_text, face_match.end() - 1)
 
-        row_matches: List[str] = re.findall(r"row\s*=\s*([^,}\n]+)", face_block, re.IGNORECASE)
+        row_matches: List[str] = re.findall(
+            r"row\s*=\s*([^,}\n]+)", face_block, re.IGNORECASE
+        )
         row_entries: List[str] = []
         for row_entry in row_matches:
-            row_entries.extend(item.strip() for item in row_entry.split() if item.strip())
+            row_entries.extend(
+                item.strip() for item in row_entry.split() if item.strip()
+            )
 
         sprite_mapping[face_match.group(1)] = row_entries
         search_position = next_position
@@ -515,7 +621,7 @@ def parse_construction_recipe(full_text: str) -> List[Dict[str, Any]]:
                     recipe_output["outputs"] = [
                         {
                             "displayName": skin_entry_mapping.get("DisplayName"),
-                            "icon":        skin_entry_mapping.get("Icon"),
+                            "icon": skin_entry_mapping.get("Icon"),
                         }
                     ]
 
