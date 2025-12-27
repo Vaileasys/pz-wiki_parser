@@ -1,7 +1,7 @@
 {
   "en": {
-    "intro_template": "{article} '''{lowercase_name}''' {verb} {subsequent_article} [[item]] in [[Project Zomboid]].",
-    "plural_intro_template": "'''{lowercase_name}''' {verb} {subsequent_article} [[item]] in [[Project Zomboid]].",
+    "intro_template": "{article} '''{lowercase_name}''' {verb} {subsequent_article} item.",
+    "plural_intro_template": "'''{lowercase_name}''' {verb} {subsequent_article} item.",
     "headers": {
       "Usage": "Usage",
       "Obtaining": "Obtaining",
