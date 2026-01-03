@@ -13,11 +13,11 @@ table_map = {}
 
 
 def find_table_type(item: Item):
-    if item.type == "map":
+    if item.item_type == "map":
         return "Literature"
-    elif item.type in ("food", "drainable", "normal", "moveable"):
+    elif item.item_type in ("food", "drainable", "normal", "moveable"):
         return "Miscellaneous"
-    return item.type
+    return item.item_type
 
 
 def process_item(item: Item):

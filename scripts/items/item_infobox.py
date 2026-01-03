@@ -80,7 +80,7 @@ def generate_item_data(item: Item, language_code: str = None):
     # -------------- PROPERTIES --------------#
     param["weight_reduction"] = item.weight_reduction
     param["max_units"] = (
-        item.use_delta if item.get("UseDelta") or item.type == "drainable" else None
+        item.use_delta if item.get("UseDelta") or item.item_type == "drainable" else None
     )
     param["fluid_capacity"] = (
         util.convert_unit(item.fluid_container.capacity, unit="L")
@@ -89,9 +89,9 @@ def generate_item_data(item: Item, language_code: str = None):
     )
     param["equipped"] = (
         "Two-handed"
-        if item.type == "weapon" and item.two_hand_weapon
+        if item.item_type == "weapon" and item.two_hand_weapon
         else "One-handed"
-        if item.type == "weapon"
+        if item.item_type == "weapon"
         else param.get("equipped")
     )
     param["body_location"] = (
@@ -136,7 +136,7 @@ def generate_item_data(item: Item, language_code: str = None):
     )
     param["clip_size"] = (
         item.max_ammo
-        if (item.has_tag("PistolMagazine", "RifleMagazine") or item.type == "weapon")
+        if (item.has_tag("PistolMagazine", "RifleMagazine") or item.item_type == "weapon")
         else item.clip_size
     )
     param["material"] = (
@@ -221,12 +221,12 @@ def generate_item_data(item: Item, language_code: str = None):
     param["transmit_range"] = item.transmit_range
     param["min_channel"] = (
         util.convert_unit(item.min_channel, "Hz", "k", "M")
-        if item.type == "radio"
+        if item.item_type == "radio"
         else None
     )
     param["max_channel"] = (
         util.convert_unit(item.max_channel, "Hz", "k", "M")
-        if item.type == "radio"
+        if item.item_type == "radio"
         else None
     )
     param["max_capacity"] = item.get("MaxCapacity")
@@ -255,27 +255,27 @@ def generate_item_data(item: Item, language_code: str = None):
     # -------------- PERFORMANCE --------------#
     # Unused
     # param["damage_type"] = None
-    param["min_damage"] = item.min_damage if item.type == "weapon" else None
-    param["max_damage"] = item.max_damage if item.type == "weapon" else None
-    param["door_damage"] = item.door_damage if item.type == "weapon" else None
-    param["tree_damage"] = item.tree_damage if item.type == "weapon" else None
+    param["min_damage"] = item.min_damage if item.item_type == "weapon" else None
+    param["max_damage"] = item.max_damage if item.item_type == "weapon" else None
+    param["door_damage"] = item.door_damage if item.item_type == "weapon" else None
+    param["tree_damage"] = item.tree_damage if item.item_type == "weapon" else None
     param["sharpness"] = item.sharpness
-    param["min_range"] = item.min_range if item.type == "weapon" else None
-    param["max_range"] = item.max_range if item.type == "weapon" else None
-    param["min_range_mod"] = item.min_sight_range if item.type == "weapon" else None
-    param["max_range_mod"] = item.max_sight_range if item.type == "weapon" else None
+    param["min_range"] = item.min_range if item.item_type == "weapon" else None
+    param["max_range"] = item.max_range if item.item_type == "weapon" else None
+    param["min_range_mod"] = item.min_sight_range if item.item_type == "weapon" else None
+    param["max_range_mod"] = item.max_sight_range if item.item_type == "weapon" else None
     param["recoil_delay"] = item.recoil_delay or item.recoil_delay_modifier
     param["sound_radius"] = item.sound_radius
     param["base_speed"] = (
         item.base_speed
-        if item.type == "weapon" and not item.has_tag("Firearm")
+        if item.item_type == "weapon" and not item.has_tag("Firearm")
         else None
     )
-    param["push_back"] = item.push_back_mod if item.type == "weapon" else None
-    param["knockdown"] = item.knockdown_mod if item.type == "weapon" else None
+    param["push_back"] = item.push_back_mod if item.item_type == "weapon" else None
+    param["knockdown"] = item.knockdown_mod if item.item_type == "weapon" else None
     param["aiming_time"] = item.aiming_time or item.aiming_time_modifier
     param["reload_time"] = item.reload_time or item.aiming_time_modifier
-    param["crit_chance"] = item.critical_chance if item.type == "weapon" else None
+    param["crit_chance"] = item.critical_chance if item.item_type == "weapon" else None
     param["crit_multiplier"] = util.check_zero(item.crit_dmg_multiplier)
     # Unused
     # param["angle_mod"] = item.projectile_spread_modifier  # 'AngleModifier' removed in b42
@@ -667,7 +667,7 @@ def process_items(item_id_list: list, language_code: str = None) -> None:
     ) as pbar:
         for item_id in item_id_list:
             item = Item(item_id)
-            pbar.set_postfix_str(f"Processing: {item.type} ({item_id[:30]})")
+            pbar.set_postfix_str(f"Processing: {item.item_type} ({item_id[:30]})")
             infobox_data = generate_item_data(item, language_code)
             infobox_data = util.enumerate_params(infobox_data, numbered_params)
             content = build_infobox(infobox_data)

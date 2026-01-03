@@ -138,7 +138,7 @@ def get_items():
         for item_id in Item.all():
             item = Item(item_id)
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
-            if item.type == "container":
+            if item.item_type == "container":
                 has_distro, item_contents = process_item(item.id_type)
 
                 if not has_distro:

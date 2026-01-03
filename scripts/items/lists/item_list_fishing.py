@@ -25,7 +25,7 @@ def generate_data(item: Item):
     item_dict["weight"] = util.convert_int(item.weight) if "weight" in columns else None
     item_dict["type"] = find_type(item) if "type" in columns else None
     if "weapon" in columns:
-        if item.type == "weapon":
+        if item.item_type == "weapon":
             weapon = util.tick(text="Can be used as a weapon", link="Weapon")
         else:
             weapon = util.cross(text="Cannot be used as a weapon", link="Weapon")

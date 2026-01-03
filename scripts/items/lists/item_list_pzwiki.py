@@ -63,7 +63,7 @@ def generate_item_list():
         for item_id in Item.keys():
             item = Item(item_id)
 
-            pbar.set_postfix_str(f"Processing: {item.type} ({item_id[:30]})")
+            pbar.set_postfix_str(f"Processing: {item.item_type} ({item_id[:30]})")
 
             category = item.display_category_name
 

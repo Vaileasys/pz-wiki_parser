@@ -24,7 +24,7 @@ def generate_data(item: Item):
     item_dict["name"] = item.wiki_link if "name" in columns else None
     item_dict["weight"] = util.convert_int(item.weight) if "weight" in columns else None
     if "weapon" in columns:
-        if item.type == "weapon":
+        if item.item_type == "weapon":
             item_dict["weapon"] = util.tick(
                 text="Can be used as a weapon", link="Weapon"
             )
@@ -37,7 +37,7 @@ def generate_data(item: Item):
             item_dict["capacity"] = (
                 str(util.convert_int(item.fluid_container.capacity)) + " L"
             )
-        elif item.type == "drainable":
+        elif item.item_type == "drainable":
             item_dict["capacity"] = util.convert_int(1 / item.use_delta) + " units"
         elif item.capacity:
             item_dict["capacity"] = util.convert_int(item.capacity)
@@ -66,11 +66,11 @@ def generate_data(item: Item):
 
 
 def find_table_type(item: Item):
-    if item.type in ("clothing", "alarmclockclothing"):
+    if item.item_type in ("clothing", "alarmclockclothing"):
         return "clothing"
-    if item.type == "literature":
+    if item.item_type == "literature":
         return "literature"
-    if item.type == "container":
+    if item.item_type == "container":
         return "container"
     if item.fluid_container:
         return "fluid_container"

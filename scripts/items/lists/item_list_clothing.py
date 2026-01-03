@@ -51,7 +51,7 @@ def generate_data(item: Item):
         item_dict["body_location"] = body_location.wiki_link if body_location else "-"
 
     if "display_time" in columns:
-        if item.type == "alarmclockclothing":
+        if item.item_type == "alarmclockclothing":
             item_dict["display_time"] = "True"
         else:
             item_dict["display_time"] = "-"
@@ -220,7 +220,7 @@ def find_items():
     ) as pbar:
         for item_id in Item.all():
             item = Item(item_id)
-            pbar.set_postfix_str(f"Processing: {item.type} ({item_id[:30]})")
+            pbar.set_postfix_str(f"Processing: {item.item_type} ({item_id[:30]})")
             if item.has_category("clothing"):
                 # filter out blacklisted items and 'Reverse' variants
                 if not item.id_type.startswith(blacklist) and not item.id_type.endswith(

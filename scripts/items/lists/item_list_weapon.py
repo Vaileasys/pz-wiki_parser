@@ -424,7 +424,7 @@ def find_table_type(item_id):
     item = Item(item_id)
     table_type = None
 
-    if item.type == "weapon":
+    if item.item_type == "weapon":
         skill = item.categories
         if skill:
             # Melee
@@ -444,7 +444,7 @@ def find_table_type(item_id):
         elif item.raw_display_category == "Explosives":
             # Explosives
             table_type = "explosive"
-    elif item.type == "weaponpart":
+    elif item.item_type == "weaponpart":
         # Weapon parts
         table_type = "weapon_part"
     elif item.item_id in box_types:

@@ -187,14 +187,14 @@ def get_cached_types() -> dict:
             leave=False,
         ) as pbar:
             for item_id, item in Item.all().items():
-                pbar.set_postfix_str(f"Processing: {item.type[:20]} ({item_id[:20]})")
+                pbar.set_postfix_str(f"Processing: {item.item_type[:20]} ({item_id[:20]})")
                 name = item.name
                 icon = item.get_icon(False, False)
                 page = item.page
-                if item.type not in category_cache:
-                    category_cache[item.type] = {}
+                if item.item_type not in category_cache:
+                    category_cache[item.item_type] = {}
 
-                category_cache[item.type][item_id] = {
+                category_cache[item.item_type][item_id] = {
                     "name": name,
                     "icon": icon,
                     "page": page,
