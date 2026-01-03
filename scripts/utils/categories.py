@@ -71,6 +71,8 @@ category_page_map = {
     "Mole": "Memento",
     "Hedgehog": "Memento",
     "Dog": "Memento",
+    "Goblin": "Memento",
+    "Eye": "Memento",
     "Raccoon": "Memento",
     "Teddy Bear": "Memento",
     "Spider": "Memento",
@@ -90,6 +92,7 @@ category_page_map = {
     "Water": "Fluid container",
     "WeaponPart": "Weapon part",
     "Hidden": "Debug",
+    "Generic": "Debug"
 }
 
 
