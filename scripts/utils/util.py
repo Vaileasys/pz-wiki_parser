@@ -286,17 +286,26 @@ def convert_unit(value: float, unit: str, start_prefix: str = "", force_prefix: 
     return f"{base_value} {prefixes[start_index]}{unit}"
 
 
-def split_camel_case(text: str) -> str:
+def split_camel_case(text: str, sep: str = " ", preserve_caps: bool = True) -> str:
     """
-    Add spaces between words in a camel case string.
+    Add separator between words in a camel case string.
 
     Args:
         text (str): A camelCase or PascalCase string.
+        sep (str): String used to join split parts.
+        preserve_caps (bool): Keep consecutive capital letters together.
 
     Returns:
-        str: The string with spaces added between words.
+        str: The string with separators added between words.
     """
-    return re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', text)
+    if not preserve_caps:
+        return re.sub(r'(?<=[a-z])(?=[A-Z])', sep, text)
+
+    parts = re.findall(
+        r"[A-Z]+(?=[A-Z][a-z]|$)|[A-Z]?[a-z]+|\d+",
+        text
+    )
+    return sep.join(parts)
 
 
 def tick(text: str = None, link: str = None):

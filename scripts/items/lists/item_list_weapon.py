@@ -78,7 +78,7 @@ def generate_ammo_data(item_id: str, table_type: str):
         if (
             all_item_data.get(n_item_id, {}).get("TableType")
             in table_type_map.get("firearm")
-            and Item(n_item_id).ammo_type == round_id
+            and Item.get_id_from_key(Item(n_item_id).ammo_type) == round_id
         ):
             weapons.append(n_item_id)
             continue
@@ -86,7 +86,7 @@ def generate_ammo_data(item_id: str, table_type: str):
         # Get magazine
         if (
             all_item_data.get(n_item_id, {}).get("TableType") == "magazine"
-            and Item(n_item_id).ammo_type == round_id
+            and Item.get_id_from_key(Item(n_item_id).ammo_type) == round_id
         ):
             magazine = n_item_id
 
@@ -222,7 +222,7 @@ def generate_data(item_id: str, table_type: str):
             notes = "<nowiki>*</nowiki><<jaw_stab_desc>>"
         item_dict["equipped"] = Translate.get_wiki(equipped)
     if "ammo" in columns:
-        item_dict["ammo"] = Item(item.ammo_type).icon if item.ammo_type else "-"
+        item_dict["ammo"] = Item(Item.get_id_from_key(item.ammo_type)).icon if item.ammo_type else "-"
     item_dict["capacity"] = (
         (item.max_ammo or item.clip_size) if "capacity" in columns else None
     )

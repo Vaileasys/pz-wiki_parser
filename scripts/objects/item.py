@@ -40,6 +40,7 @@ class Item:
     """
 
     _items = None  # Shared cache for all items
+    _item_key_cache = None  # Cache for generated ItemKeys
     _instances = {}
     _icon_cache_files = None
     _burn_data = None
@@ -355,6 +356,9 @@ class Item:
 
         if Item._items is None:
             Item._load_items()
+        if Item._item_key_cache is None:
+            Item._generate_item_keys()
+        
 
         item_id = self.fix_item_id(item_id)
 
@@ -409,6 +413,21 @@ class Item:
         """
         raw_data = script_parser.extract_script_data("item")
         cls._items = {k: cls._lower_keys(v) for k, v in raw_data.items()}
+    
+    # NOTE: This is a 'best guess' - ItemKey is hardcoded in Java, which may need to be parsed for consistency.
+    @classmethod
+    def _generate_item_keys(cls):
+        """
+        Generates and caches ItemKeys for all loaded items.
+        """
+        if cls._item_key_cache is None:
+            cls._item_key_cache = {}
+
+        for item_id in cls._items:
+            item_key = cls.gen_item_key(item_id)
+            cls._item_key_cache[item_id] = item_key
+        
+        save_cache(cls._item_key_cache, "item_key_cache.json")
 
     @classmethod
     def _parse_foraging_penalties(cls):
@@ -457,6 +476,60 @@ class Item:
 
         logger.write(f"No Item ID found for '{item_id}'")
         return item_id
+    
+    # NOTE: This is a 'best guess' - ItemKey is hardcoded in Java, which may need to be parsed for consistency.
+    @classmethod
+    def gen_item_key(cls, item_id: str) -> str:
+        """
+        Generates the ItemKey used in Java from the item ID.
+
+        Args:
+            item_id (str): Full item ID ('Module.Item').
+        Returns:
+            str: The generated ItemKey.
+        """
+        id_parts = item_id.split(".", 1)
+        id_type = id_parts[1] if len(id_parts) == 2 else id_parts[0]
+        
+        # special cases
+        if id_type == "44Clip":
+            return "clip_44"
+        elif id_type == "45Clip":
+            return "clip_45"
+        elif id_type == "556Clip":
+            return "clip_556"
+        elif id_type == "9mmClip":
+            return "clip_9mm"
+        elif id_type == "223Bullets":
+            return "bullets_223"
+        elif id_type == "308Bullets":
+            return "bullets_308"
+        elif id_type == "556Bullets":
+            return "bullets_556"
+        elif id_type == "Bullets9mm":
+            return "bullets_9mm"
+        
+        return util.split_camel_case(id_type, sep="_").lower()
+    
+    @classmethod
+    def get_id_from_key(cls, item_key: str) -> str:
+        """
+        Retrieves the full item ID corresponding to a given ItemKey.
+
+        Args:
+            item_key (str): The ItemKey to look up.
+
+        Returns:
+            str: The corresponding full item ID, or None if not found.
+        """
+        if cls._item_key_cache is None:
+            cls._generate_item_keys()
+        
+        for item_id, key in cls._item_key_cache.items():
+            if key == item_key:
+                return item_id
+        
+        return None
 
     @classmethod
     def all(cls):
@@ -1245,6 +1318,14 @@ class Item:
     @property
     def item_type(self) -> str:
         return self.get_default("ItemType")
+    
+    @property
+    def item_key(self) -> str:
+        if not hasattr(self, "_item_key"):
+            if Item._item_key_cache is None:
+                Item._generate_item_keys()
+            self._item_key = Item._item_key_cache.get(self._item_id)
+        return self._item_key
 
     @property
     def raw_display_category(self) -> str:
@@ -2126,7 +2207,10 @@ class Item:
 
     @property
     def ammo_type(self) -> str | None:
-        return self.get_default("AmmoType")
+        value: str = self.get_default("AmmoType")
+        if value.startswith("base:"):
+            value = value[5:]
+        return value
 
     @property
     def can_stack(self) -> bool:
