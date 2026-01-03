@@ -1156,6 +1156,9 @@ class Item:
         """
         if not self.tags:
             return False
+        
+        # Normalise item tags once - tags are lowercase in item scripts in 42.13
+        item_tags = {t.lower() for t in self.tags}
 
         # Flatten input in case a list is passed
         flat_tags = []
@@ -1165,7 +1168,7 @@ class Item:
             else:
                 flat_tags.append(tag)
 
-        return any(t in self.tags for t in flat_tags)
+        return any(t.lower() in item_tags for t in flat_tags)
 
     def has_tags(self, *tags: str | list[str]) -> bool:
         """
@@ -1179,6 +1182,9 @@ class Item:
         """
         if not self.tags:
             return False
+        
+        # Normalise item tags once - tags are lowercase in item scripts in 42.13
+        item_tags = {t.lower() for t in self.tags}
 
         flat_tags = []
         for tag in tags:
@@ -1187,7 +1193,7 @@ class Item:
             else:
                 flat_tags.append(tag)
 
-        return all(t in self.tags for t in flat_tags)
+        return all(t.lower() in item_tags for t in flat_tags)
 
     def has_category(self, *categories: str | list[str]) -> bool:
         """
