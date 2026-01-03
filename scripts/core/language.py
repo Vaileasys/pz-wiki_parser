@@ -23,7 +23,7 @@ LANGUAGE_CODES = {
     'id': {"encoding": "UTF-8", "language": "Indonesian"},
     'it': {"encoding": "UTF-8", "language": "Italian"},
     'ja': {"encoding": "UTF-8", "language": "Japanese", "code": "JP"},
-    'ko': {"encoding": "UTF-16", "language": "Korean"},
+    'ko': {"encoding": "UTF-8", "language": "Korean"},
     'nl': {"encoding": "UTF-8", "language": "Dutch"},
     'no': {"encoding": "UTF-8", "language": "Norwegian"},
     'ph': {"encoding": "UTF-8", "language": "Filipino"},
