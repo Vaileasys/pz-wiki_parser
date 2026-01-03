@@ -193,7 +193,7 @@ class Translate:
                 return translations[value_no_underscore].strip()
 
         if not suppress_warnings:
-            echo.warning(f"Missing translation for key '{key}' or '{property_value}' in language '{lang_code}'")
+            echo.debug(f"Missing translation for key '{key}' or '{property_value}' in language '{lang_code}'")
         
         return (default or property_value).strip()
 
