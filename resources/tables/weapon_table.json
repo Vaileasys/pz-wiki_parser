@@ -162,14 +162,14 @@
     },
     "type_map": {
         "melee": [
-            "Axe",
-            "Blunt",
-            "SmallBlunt",
-            "LongBlade",
-            "SmallBlade",
-            "Spear",
-            "Improvised",
-            "Unarmed"
+            "axe",
+            "blunt",
+            "smallblunt",
+            "longblade",
+            "smallblade",
+            "spear",
+            "improvised",
+            "unarmed"
         ],
         "firearm": [
             "handgun",
