@@ -14,7 +14,7 @@ from scripts.core.file_loading import get_script_path, get_media_dir
 from scripts.core.language import Language, Translate
 from scripts.utils import lua_helper, echo, util
 from scripts.core import logger
-from scripts.core.constants import RESOURCE_DIR
+from scripts.core.constants import RESOURCE_DIR, ITEM_KEY_PATH
 from scripts.core.cache import load_cache, save_cache
 from scripts.core.version import Version
 from scripts.core.page_manager import get_pages
@@ -41,6 +41,7 @@ class Item:
 
     _items = None  # Shared cache for all items
     _item_key_cache = None  # Cache for generated ItemKeys
+    _item_key_reverse = {}  # Cache for reverse lookup of ItemKeys to item IDs
     _instances = {}
     _icon_cache_files = None
     _burn_data = None
@@ -414,7 +415,6 @@ class Item:
         raw_data = script_parser.extract_script_data("item")
         cls._items = {k: cls._lower_keys(v) for k, v in raw_data.items()}
     
-    # NOTE: This is a 'best guess' - ItemKey is hardcoded in Java, which may need to be parsed for consistency.
     @classmethod
     def _generate_item_keys(cls):
         """
@@ -422,10 +422,31 @@ class Item:
         """
         if cls._item_key_cache is None:
             cls._item_key_cache = {}
-
-        for item_id in cls._items:
-            item_key = cls.gen_item_key(item_id)
-            cls._item_key_cache[item_id] = item_key
+        
+        raw_data, data_version = load_cache(ITEM_KEY_PATH, "item key data", get_version=True)
+        if data_version != Version.get():
+            from scripts.parser import item_key_parser
+            while True:
+                user_input = input("Item key cache is outdated. Regenerate? (Y/N):\n> ").strip().lower()
+                if user_input == "n":
+                    data = raw_data.copy()
+                    break
+                elif user_input == "y":
+                    echo.info("Regenerating item key cache...")
+                    item_key_parser.main(update=True)
+                    data = load_cache(ITEM_KEY_PATH, "item key data", suppress=True)
+                    break
+                else:
+                    echo.warning("Invalid input. Please enter 'Y' or 'N'.")
+        else:
+            data = raw_data.copy()
+        
+        flat_data = {}
+        for group in data.values():
+            flat_data.update(group)
+        
+        cls._item_key_cache = flat_data
+        cls._item_key_reverse = {v: k for k, v in flat_data.items()}
         
         save_cache(cls._item_key_cache, "item_key_cache.json")
 
@@ -477,42 +498,8 @@ class Item:
         logger.write(f"No Item ID found for '{item_id}'")
         return item_id
     
-    # NOTE: This is a 'best guess' - ItemKey is hardcoded in Java, which may need to be parsed for consistency.
     @classmethod
-    def gen_item_key(cls, item_id: str) -> str:
-        """
-        Generates the ItemKey used in Java from the item ID.
-
-        Args:
-            item_id (str): Full item ID ('Module.Item').
-        Returns:
-            str: The generated ItemKey.
-        """
-        id_parts = item_id.split(".", 1)
-        id_type = id_parts[1] if len(id_parts) == 2 else id_parts[0]
-        
-        # special cases
-        if id_type == "44Clip":
-            return "clip_44"
-        elif id_type == "45Clip":
-            return "clip_45"
-        elif id_type == "556Clip":
-            return "clip_556"
-        elif id_type == "9mmClip":
-            return "clip_9mm"
-        elif id_type == "223Bullets":
-            return "bullets_223"
-        elif id_type == "308Bullets":
-            return "bullets_308"
-        elif id_type == "556Bullets":
-            return "bullets_556"
-        elif id_type == "Bullets9mm":
-            return "bullets_9mm"
-        
-        return util.split_camel_case(id_type, sep="_").lower()
-    
-    @classmethod
-    def get_id_from_key(cls, item_key: str) -> str:
+    def get_id_from_key(cls, item_key: str) -> str | None:
         """
         Retrieves the full item ID corresponding to a given ItemKey.
 
@@ -522,14 +509,15 @@ class Item:
         Returns:
             str: The corresponding full item ID, or None if not found.
         """
-        if cls._item_key_cache is None:
+        if cls._item_key_reverse is None:
             cls._generate_item_keys()
         
-        for item_id, key in cls._item_key_cache.items():
-            if key == item_key:
-                return item_id
+        value = cls._item_key_reverse.get(item_key.upper())
         
-        return None
+        if not value:
+            echo.warning(f"ItemKey '{item_key}' could not be found in the ItemKey data.")
+        
+        return value
 
     @classmethod
     def all(cls):
@@ -2216,6 +2204,10 @@ class Item:
         value: str = self.get_default("AmmoType")
         if value.startswith("base:"):
             value = value[5:]
+        if Item.get_id_from_key(value):
+            value = Item.get_id_from_key(value)
+        else:
+            echo.warning(f"AmmoType '{value}' for item '{self.item_id}' not found.")
         return value
 
     @property

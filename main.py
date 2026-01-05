@@ -283,6 +283,11 @@ menu_structure = {
                 "name": "Manual tile stitcher",
                 "description": "Manually stitch tile sprites.",
             },
+            "9": {
+                "module": "scripts.parser.item_key_parser",
+                "name": "Generate item keys",
+                "description": "Parses itemKey declarations from the game's Java files.",
+            },
         },
     },
     "9": {
