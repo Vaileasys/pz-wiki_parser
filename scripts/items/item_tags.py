@@ -81,7 +81,7 @@ def write_tag_table():
                     for item in tag_data
                 )
 
-                file.write(f'|- id="tag-{tag}"\n| [[{tag} (tag)|{tag}]] || {tag_items}\n')
+                file.write(f'|- id="tag-{tag}"\n| [[{tag} (tag)|base:{tag}]] || {tag_items}\n')
                 pbar.update(1)
             file.write('|}')
     echo.success(f"Tags table completed. File can be found in '{output_file}'")
