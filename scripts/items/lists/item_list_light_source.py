@@ -24,7 +24,7 @@ def generate_data(item: Item):
     item_dict["name"] = item.wiki_link if "name" in columns else None
     item_dict["weight"] = util.convert_int(item.weight) if "weight" in columns else None
     if "weapon" in columns:
-        if item.type == "weapon":
+        if item.item_type == "weapon":
             item_dict["weapon"] = util.tick(
                 text="Can be used as a weapon", link="Weapon"
             )

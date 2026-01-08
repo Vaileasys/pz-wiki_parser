@@ -95,7 +95,7 @@ def get_parts(part: dict, breed: AnimalBreed):
         hook_max = base_max * 1.2
 
         # Game's check for applying meatRatio is if it's a Food object
-        if item.type == "food":
+        if item.item_type == "food":
             ground_min *= breed.meat_ratio[0]
             ground_max *= breed.meat_ratio[1]
             hook_min *= breed.meat_ratio[0]

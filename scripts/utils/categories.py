@@ -71,6 +71,8 @@ category_page_map = {
     "Mole": "Memento",
     "Hedgehog": "Memento",
     "Dog": "Memento",
+    "Goblin": "Memento",
+    "Eye": "Memento",
     "Raccoon": "Memento",
     "Teddy Bear": "Memento",
     "Spider": "Memento",
@@ -90,6 +92,7 @@ category_page_map = {
     "Water": "Fluid container",
     "WeaponPart": "Weapon part",
     "Hidden": "Debug",
+    "Generic": "Debug"
 }
 
 
@@ -144,13 +147,13 @@ def is_ammo(item: Item) -> bool:
 
 def is_clothing(item: Item) -> bool:
     """Return True if the item is clothing."""
-    return item.type in ("clothing", "alarmclockclothing") or item.can_be_equipped
+    return item.item_type in ("clothing", "alarmclockclothing") or item.can_be_equipped
 
 
 def is_container(item: Item) -> bool:
     """Return True if the item is a container."""
     return (
-        item.type == "container"
+        item.item_type == "container"
         or item.get("DisplayCategory") in ("Container", "Bag")
         or item.capacity > 0
     )
@@ -162,7 +165,7 @@ def is_fluid_container(item: Item) -> bool:
 
 def is_food(item: Item) -> bool:
     """Return True if the item is food or marked as food."""
-    return item.type == "food" or item.get("DisplayCategory") == "Food"
+    return item.item_type == "food" or item.get("DisplayCategory") == "Food"
 
 
 def is_fuel(item: Item) -> bool:
@@ -234,7 +237,7 @@ def is_fire_source(item: Item) -> bool:
 
 def is_literature(item: Item) -> bool:
     """Return True if the item is a book, map, or other literature."""
-    return item.type in ("literature", "map") or item.get("DisplayCategory") in (
+    return item.item_type in ("literature", "map") or item.get("DisplayCategory") in (
         "Literature"
     )
 
@@ -437,12 +440,12 @@ def is_vehicle_maintenance(item: Item) -> bool:
 
 def is_weapon(item: Item) -> bool:
     """Return True if the item is a weapon."""
-    return item.type == "weapon"
+    return item.item_type == "weapon"
 
 
 def is_weapon_part(item: Item) -> bool:
     """Return True if the item is a weapon part."""
-    return item.type == "weaponpart"
+    return item.item_type == "weaponpart"
 
 
 def is_debug(item: Item) -> bool:

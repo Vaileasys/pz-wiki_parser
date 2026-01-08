@@ -61,19 +61,12 @@ If the first time setup fails, you will have to add the resources manually by fo
 ---
 
 # Resources
-These steps are only required if any of the first time set up failed.
+The resources directory contains resources used by various scripts, such as custom translations, wiki page dictionary, and more.
 
-### Lua
-Add the following Lua files to `resources`, all are found within `ProjectZomboid\projectzomboid\media\lua\`:
-
-1. `shared\Distributions.lua`
-2. `shared\ProceduralDistributions.lua`
-3. `shared\Foraging\forageDefinitions.lua`
-4. `server\Vehicles\VehicleDistributions.lua`
-5. `shared\Definitions\AttachedWeaponDefinitions.lua`
-
-
-_`texture_names.json` and `page_name_dictionary.json` are included with the package. `texture_names.json` can be updated with the **Update textures** tool script._
+Useful resources not specific to this project include:
+* `texture_names.json`: A dictionary of the game's texture names, including item icons and build icons. _Updated with the **Update textures** tool script._
+* `page_dictionary.json`: A dictionary of each wiki page with the IDs and categories on them.
+* `item_keys.json`: A list of each item's `ItemKey` declaration from `ItemKey.class`. _Updated with the **Item key parser** tool script._
 
 ---
 

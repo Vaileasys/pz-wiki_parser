@@ -54,7 +54,7 @@ def generate_data(item: Item):
     Returns:
         dict | None: Dictionary of parameters for the template, or None if not applicable.
     """
-    if item.type == "food" and (item.is_cookable or item.get("DaysTotallyRotten")):
+    if item.item_type == "food" and (item.is_cookable or item.get("DaysTotallyRotten")):
         try:
             perishable = "true" if item.get("DaysTotallyRotten") else None
 

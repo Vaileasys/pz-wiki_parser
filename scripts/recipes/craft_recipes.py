@@ -53,7 +53,7 @@ def get_unit_tool_ids() -> list[str]:
     unit_tool_ids = []
 
     for item_id, item in Item.all().items():
-        if item.type == "drainable":
+        if item.item_type == "drainable":
             unit_tool_ids.append(item_id)
 
     _unit_tool_ids_cache = unit_tool_ids

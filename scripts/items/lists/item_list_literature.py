@@ -35,10 +35,10 @@ def get_list_type(item: Item, special_data):
     if "map_id" in special_data:
         return "Annotated maps"
 
-    display_category = item.raw_display_category or item.type
+    display_category = item.raw_display_category or item.item_type
 
     # Map/Cartography
-    if item.type == "map":
+    if item.item_type == "map":
         return "Maps"
 
     # Writable
@@ -350,9 +350,9 @@ def get_items():
         unit=" items",
     ) as pbar:
         for item_id, item in Item.items():
-            pbar.set_postfix_str(f"Processing: {item.type} ({item_id[:30]})")
+            pbar.set_postfix_str(f"Processing: {item.item_type} ({item_id[:30]})")
             if (
-                item.type in ("literature", "map")
+                item.item_type in ("literature", "map")
                 or item.raw_display_category == "Literature"
             ):
                 heading, item_dict = process_item(item)

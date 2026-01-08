@@ -26,7 +26,7 @@ def generate_data(item: Item):
     if "type" in columns:
         if item.has_tag("Lock"):
             item_dict["type"] = "Lock"
-        elif item.type == "key":
+        elif item.item_type == "key":
             item_dict["type"] = "Key"
         else:
             item_dict["type"] = "-"

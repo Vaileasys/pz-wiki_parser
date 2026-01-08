@@ -283,7 +283,7 @@ def generate_tags_dict():
         with tqdm(total=Item.count(), desc="Generating tag data", bar_format=PBAR_FORMAT, unit=" items") as pbar:
             for item_id in Item.all():
                 item = Item(item_id)
-                pbar.set_postfix_str(f'Processing: {item.type} ({item_id[:30]})')
+                pbar.set_postfix_str(f'Processing: {item.item_type} ({item_id[:30]})')
                 if item.tags:
                     name = item.name
                     page = item.page

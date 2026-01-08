@@ -25,7 +25,7 @@ def generate_data(item: Item):
     item_dict["name"] = item.wiki_link if "name" in columns else None
     item_dict["weight"] = util.convert_int(item.weight) if "weight" in columns else None
     if "weapon" in columns:
-        if item.type == "weapon":
+        if item.item_type == "weapon":
             item_dict["weapon"] = util.tick(
                 text="Can be used as a weapon", link="Weapon"
             )
@@ -142,7 +142,7 @@ def generate_data(item: Item):
     if "capacity" in columns:
         item_dict["capacity"] = (
             f"{util.convert_int(item.units)} units"
-            if (item.get("UseDelta") or item.type == "drainable")
+            if (item.get("UseDelta") or item.item_type == "drainable")
             else "-"
         )
     #    item_dict["product"] = find_product(item) if "product" in columns else None

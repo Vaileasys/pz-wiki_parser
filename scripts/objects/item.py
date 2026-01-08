@@ -14,7 +14,7 @@ from scripts.core.file_loading import get_script_path, get_media_dir
 from scripts.core.language import Language, Translate
 from scripts.utils import lua_helper, echo, util
 from scripts.core import logger
-from scripts.core.constants import RESOURCE_DIR
+from scripts.core.constants import RESOURCE_DIR, ITEM_KEY_PATH
 from scripts.core.cache import load_cache, save_cache
 from scripts.core.version import Version
 from scripts.core.page_manager import get_pages
@@ -40,6 +40,8 @@ class Item:
     """
 
     _items = None  # Shared cache for all items
+    _item_key_cache = None  # Cache for generated ItemKeys
+    _item_key_reverse = {}  # Cache for reverse lookup of ItemKeys to item IDs
     _instances = {}
     _icon_cache_files = None
     _burn_data = None
@@ -355,6 +357,9 @@ class Item:
 
         if Item._items is None:
             Item._load_items()
+        if Item._item_key_cache is None:
+            Item._generate_item_keys()
+        
 
         item_id = self.fix_item_id(item_id)
 
@@ -409,6 +414,41 @@ class Item:
         """
         raw_data = script_parser.extract_script_data("item")
         cls._items = {k: cls._lower_keys(v) for k, v in raw_data.items()}
+    
+    @classmethod
+    def _generate_item_keys(cls):
+        """
+        Generates and caches ItemKeys for all loaded items.
+        """
+        if cls._item_key_cache is None:
+            cls._item_key_cache = {}
+        
+        raw_data, data_version = load_cache(ITEM_KEY_PATH, "item key data", get_version=True)
+        if data_version != Version.get():
+            from scripts.parser import item_key_parser
+            while True:
+                user_input = input("Item key cache is outdated. Regenerate? (Y/N):\n> ").strip().lower()
+                if user_input == "n":
+                    data = raw_data.copy()
+                    break
+                elif user_input == "y":
+                    echo.info("Regenerating item key cache...")
+                    item_key_parser.main(update=True)
+                    data = load_cache(ITEM_KEY_PATH, "item key data", suppress=True)
+                    break
+                else:
+                    echo.warning("Invalid input. Please enter 'Y' or 'N'.")
+        else:
+            data = raw_data.copy()
+        
+        flat_data = {}
+        for group in data.values():
+            flat_data.update(group)
+        
+        cls._item_key_cache = flat_data
+        cls._item_key_reverse = {v: k for k, v in flat_data.items()}
+        
+        save_cache(cls._item_key_cache, "item_key_cache.json")
 
     @classmethod
     def _parse_foraging_penalties(cls):
@@ -457,6 +497,27 @@ class Item:
 
         logger.write(f"No Item ID found for '{item_id}'")
         return item_id
+    
+    @classmethod
+    def get_id_from_key(cls, item_key: str) -> str | None:
+        """
+        Retrieves the full item ID corresponding to a given ItemKey.
+
+        Args:
+            item_key (str): The ItemKey to look up.
+
+        Returns:
+            str: The corresponding full item ID, or None if not found.
+        """
+        if cls._item_key_reverse is None:
+            cls._generate_item_keys()
+        
+        value = cls._item_key_reverse.get(item_key.upper())
+        
+        if not value:
+            echo.warning(f"ItemKey '{item_key}' could not be found in the ItemKey data.")
+        
+        return value
 
     @classmethod
     def all(cls):
@@ -1083,6 +1144,9 @@ class Item:
         """
         if not self.tags:
             return False
+        
+        # Normalise item tags once - tags are lowercase in item scripts in 42.13
+        item_tags = {t.lower() for t in self.tags}
 
         # Flatten input in case a list is passed
         flat_tags = []
@@ -1092,7 +1156,7 @@ class Item:
             else:
                 flat_tags.append(tag)
 
-        return any(t in self.tags for t in flat_tags)
+        return any(t.lower() in item_tags for t in flat_tags)
 
     def has_tags(self, *tags: str | list[str]) -> bool:
         """
@@ -1106,6 +1170,9 @@ class Item:
         """
         if not self.tags:
             return False
+        
+        # Normalise item tags once - tags are lowercase in item scripts in 42.13
+        item_tags = {t.lower() for t in self.tags}
 
         flat_tags = []
         for tag in tags:
@@ -1114,7 +1181,7 @@ class Item:
             else:
                 flat_tags.append(tag)
 
-        return all(t in self.tags for t in flat_tags)
+        return all(t.lower() in item_tags for t in flat_tags)
 
     def has_category(self, *categories: str | list[str]) -> bool:
         """
@@ -1243,8 +1310,16 @@ class Item:
 
     # --- Base --- #
     @property
-    def type(self) -> str:
+    def item_type(self) -> str:
         return self.get_default("ItemType")
+    
+    @property
+    def item_key(self) -> str:
+        if not hasattr(self, "_item_key"):
+            if Item._item_key_cache is None:
+                Item._generate_item_keys()
+            self._item_key = Item._item_key_cache.get(self._item_id)
+        return self._item_key
 
     @property
     def raw_display_category(self) -> str:
@@ -2126,7 +2201,14 @@ class Item:
 
     @property
     def ammo_type(self) -> str | None:
-        return self.get_default("AmmoType")
+        value: str = self.get_default("AmmoType")
+        if value.startswith("base:"):
+            value = value[5:]
+        if Item.get_id_from_key(value):
+            value = Item.get_id_from_key(value)
+        else:
+            echo.warning(f"AmmoType '{value}' for item '{self.item_id}' not found.")
+        return value
 
     @property
     def can_stack(self) -> bool:
@@ -2784,7 +2866,7 @@ class Item:
 
             if self.raw_display_category == "Ammo":
                 for item_id, item in Item.items():
-                    if (item.ammo_type or item.ammo_box) and item.type == "weapon":
+                    if (item.ammo_type or item.ammo_box) and item.item_type == "weapon":
                         if Item(item.ammo_type) == self:
                             self._weapons.append(item)
                         elif Item(item.ammo_box) == self:

@@ -68,7 +68,7 @@ def find_table_type(item: Item):
         return "light_bulb"
     if (
         item.has_tag("MiscElectronic")
-        or item.type == "radio"
+        or item.item_type == "radio"
         or item.has_tag("TVRemote")
         or item.item_id in CraftRecipe("DismantleMiscElectronics").input_items
         or item.item_id in CraftRecipe("DismantleElectronics").input_items

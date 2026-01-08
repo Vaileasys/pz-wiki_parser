@@ -91,9 +91,9 @@ def find_effect(item: Item):
             if key in effect:
                 effect = effect.replace(key, link)
 
-    elif item.type == "clothing":
+    elif item.item_type == "clothing":
         effect = util.link("Clothing")
-    elif item.type == "weapon":
+    elif item.item_type == "weapon":
         effect = util.link("Weapon")
     else:
         effect = "-"
@@ -119,9 +119,9 @@ def find_table_type(item: Item):
         return "herb"
     if any(x in item.id_type for x in ("Cataplasm", "Poultice")):
         return "poultice"
-    if item.has_tag("Pills") or item.type == "food":
+    if item.has_tag("Pills") or item.item_type == "food":
         return "pharmaceutical"
-    if item.type == "container" or "Box" in item.id_type:
+    if item.item_type == "container" or "Box" in item.id_type:
         return "package"
     if (
         item.has_tag("RemoveBullet")

@@ -227,7 +227,7 @@ def find_items():
     nutrition_items: dict[str, Item] = {}
 
     for item_id, item in Item.items():
-        if item.type == "food" or item.display_category == "Food":
+        if item.item_type == "food" or item.display_category == "Food":
             food_items[item_id] = item
 
             if item.get("Calories"):

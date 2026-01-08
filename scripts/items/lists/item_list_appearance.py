@@ -48,7 +48,7 @@ def generate_data(item: Item):
             item_dict["capacity"] = (
                 f"{util.convert_int(item.fluid_container.capacity)} L"
             )
-        elif item.get("UseDelta") or item.type == "drainable":
+        elif item.get("UseDelta") or item.item_type == "drainable":
             item_dict["capacity"] = f"{util.convert_int(item.units)} units"
         else:
             item_dict["capacity"] = "-"
