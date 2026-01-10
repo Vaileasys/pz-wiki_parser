@@ -82,6 +82,7 @@ def process_categories() -> None:
     """
     root_path = os.path.join(FORAGING_DIR.format(language_code=Language.get()), "infoboxes")
     clear_dir(directory=root_path)
+    output_dir = root_path
     for category_id, category in ForageCategory.all().items():
         infobox_data = generate_data(category)
         if not infobox_data:

@@ -679,6 +679,20 @@ class ForageSystem:
         inject = """
         function require(module) return {} end
         forageSystem = {}
+        
+        -- Mock CharacterProfession to return profession names
+        local profession_meta = {
+            __index = function(t, key)
+                local profession = {
+                    _name = key,
+                    getName = function(self)
+                        return self._name
+                    end
+                }
+                return profession
+            end
+        }
+        CharacterProfession = setmetatable({}, profession_meta)
         """
 
         lua_runtime = load_lua_file("forageSkills.lua", inject_lua=inject)
