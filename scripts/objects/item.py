@@ -2202,6 +2202,8 @@ class Item:
     @property
     def ammo_type(self) -> str | None:
         value: str = self.get_default("AmmoType")
+        if value is None:
+            return None
         if value.startswith("base:"):
             value = value[5:]
         if Item.get_id_from_key(value):
