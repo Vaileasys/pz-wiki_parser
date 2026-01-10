@@ -34,19 +34,19 @@ def find_accept_item(item: Item):
             "Ammo": {
                 "page": "Ammo (tag)",
                 "text": "Ammo",
-                "image": "{{Tag Ammo}}",
+                "image": "{{Tag ammo}}",
             },  # tag
             "ShotgunShell": {
                 "page": "ShotgunShell (tag)",
                 "text": "ShotgunShell",
-                "image": "{{Tag ShotgunShell}}",
+                "image": "{{Tag shotgunshell}}",
             },  # tag
         },
         "AmmoStrap_Shells": {
             "ShotgunShell": {
                 "page": "ShotgunShell (tag)",
                 "text": "ShotgunShell",
-                "image": "{{Tag ShotgunShell}}",
+                "image": "{{Tag shotgunshell}}",
             }  # tag
         },
         "KeyRing": {
@@ -57,13 +57,13 @@ def find_accept_item(item: Item):
             },  # category
             "FitsKeyRing": {
                 "page": "FitsKeyRing (tag)",
-                "image": "{{Tag FitsKeyRing}}",
+                "image": "{{Tag fitskeyring}}",
             },  # tag
         },
         "HolsterShoulder": {
             "PistolMagazine": {
                 "page": "PistolMagazine (tag)",
-                "image": "{{Tag PistolMagazine}}",
+                "image": "{{Tag pistolmagazine}}",
             },  # tag
             "MaxItems": {"text": "2 items max."},  # text (custom)
         },
@@ -80,7 +80,7 @@ def find_accept_item(item: Item):
             },  # category
             "FitsWallet": {
                 "page": "FitsWallet (tag)",
-                "image": "{{Tag FitsWallet}}",
+                "image": "{{Tag fitswallet}}",
             },  # tag
         },
     }
