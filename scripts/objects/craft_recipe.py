@@ -16,8 +16,12 @@ class CraftRecipeInput:
         return self.data.get("items")
 
     @property
-    def count(self) -> int:
-        return int(self.data.get("count", 1))
+    def count(self):
+        """Return formatted count: 'min-max' string for variable counts, int for fixed counts."""
+        count_data = self.data.get("count", 1)
+        if isinstance(count_data, dict) and count_data.get("variable"):
+            return f"{count_data['min']}-{count_data['max']}"
+        return int(count_data) if count_data else 1
 
     @property
     def mode(self) -> int:
@@ -49,8 +53,12 @@ class CraftRecipeOutput:
         return self.data.get("mapper")
 
     @property
-    def count(self) -> int:
-        return int(self.data.get("count", 1))
+    def count(self):
+        """Return formatted count: 'min-max' string for variable counts, int for fixed counts."""
+        count_data = self.data.get("count", 1)
+        if isinstance(count_data, dict) and count_data.get("variable"):
+            return f"{count_data['min']}-{count_data['max']}"
+        return int(count_data) if count_data else 1
 
     def __repr__(self):
         return f"<CraftRecipeOutput {recipe.recipe_id}>"

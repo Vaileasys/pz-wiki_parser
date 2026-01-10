@@ -78,6 +78,21 @@ def get_use_delta(item_id: str) -> float:
         return 0.1
 
 
+def format_count(count_data):
+    """
+    Format count as 'min-max' string or int for display.
+
+    Args:
+        count_data: Either an int for fixed counts or a dict with min/max/variable keys
+
+    Returns:
+        str | int: Formatted count as "min-max" string for variable counts, or int for fixed counts
+    """
+    if isinstance(count_data, dict) and count_data.get("variable"):
+        return f"{count_data['min']}-{count_data['max']}"
+    return int(count_data) if count_data else 1
+
+
 def fluid_rgb(fluid_id):
     """
     Get RGB color values for a fluid type.
@@ -162,9 +177,10 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
         if input_entry.get("mode") == "Keep" and "fluidModifier" not in input_entry:
             continue
 
-        quantity = input_entry.get(
+        count_data = input_entry.get(
             "count", input_entry.get("amount", input_entry.get("index", 1))
         )
+        quantity = format_count(count_data)
 
         ingredient_counter += 1
         key = f"ingredient{ingredient_counter}"
@@ -408,7 +424,8 @@ def process_tools(recipe: dict, build_data: dict) -> str:
             continue
 
         lines: list[str] = []
-        count = inp.get("count", 1)  # Get the count for this input
+        count_data = inp.get("count", 1)  # Get the count for this input
+        count = format_count(count_data)
 
         # Tags
         if "tags" in inp:
@@ -574,11 +591,12 @@ def process_output_mapper(recipe: dict, mapper_key: str) -> list[str]:
         return []
 
     # Look for the count on the matching output entry; default to 1
-    output_amount = 1
+    output_amount_data = 1
     for out in recipe.get("outputs", []):
         if out.get("mapper") == mapper_key:
-            output_amount = out.get("count", 1)
+            output_amount_data = out.get("count", 1)
             break
+    output_amount = format_count(output_amount_data)
 
     formatted_lines: list[str] = []
     for raw_output_key in mapper_data.keys():
@@ -649,7 +667,8 @@ def process_products(recipe: dict, build_data: dict) -> str:
             for out in outputs:
                 icon_ref = out.get("icon")
                 label = out.get("displayName", product_name)
-                count = out.get("count", 1)
+                count_data = out.get("count", 1)
+                count = format_count(count_data)
 
                 if icon_ref:
                     img, size = icon_ref, "64x128px"
@@ -730,7 +749,8 @@ def process_products(recipe: dict, build_data: dict) -> str:
 
         # Item outputs
         if "items" in out:
-            qty = out.get("count", out.get("index", 1))
+            qty_data = out.get("count", out.get("index", 1))
+            qty = format_count(qty_data)
             for rid in out["items"]:
                 item_obj = Item(rid)
                 icon_filename = item_obj.get_icon(False, False, False)

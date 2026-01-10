@@ -317,15 +317,30 @@ def parse_energy_line(line: str) -> Dict[str, Any]:
 
 
 def parse_item_line(line: str) -> Dict[str, Any]:
-    pattern = re.compile(r"^item\s+(\d+)\s+(.*)$", re.IGNORECASE)
-    match = pattern.match(line)
-    if not match:
-        return None
-    count_value: int = int(match.group(1))
-    remaining_text: str = re.sub(
-        r"/\*.*?\*/", "", match.group(2), flags=re.DOTALL
-    ).strip()
-    entry_dict: Dict[str, Any] = {"count": count_value}
+    # Try to match variable[min:max] pattern first
+    variable_pattern = re.compile(r"^item\s+variable\[(\d+):(\d+)\]\s+(.*)$", re.IGNORECASE)
+    variable_match = variable_pattern.match(line)
+    
+    if variable_match:
+        # Handle variable count
+        min_value: int = int(variable_match.group(1))
+        max_value: int = int(variable_match.group(2))
+        remaining_text: str = re.sub(
+            r"/\*.*?\*/", "", variable_match.group(3), flags=re.DOTALL
+        ).strip()
+        entry_dict: Dict[str, Any] = {"count": {"min": min_value, "max": max_value, "variable": True}}
+    else:
+        # Fall back to fixed count pattern
+        pattern = re.compile(r"^item\s+([\d.]+)\s+(.*)$", re.IGNORECASE)
+        match = pattern.match(line)
+        if not match:
+            return None
+        count_str = match.group(1)
+        count_value = float(count_str) if '.' in count_str else int(count_str)
+        remaining_text: str = re.sub(
+            r"/\*.*?\*/", "", match.group(2), flags=re.DOTALL
+        ).strip()
+        entry_dict: Dict[str, Any] = {"count": count_value}
 
     remaining_text = re.sub(
         r"mappers?\[.*?\]", "", remaining_text, flags=re.IGNORECASE
