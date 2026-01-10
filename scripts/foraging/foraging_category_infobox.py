@@ -9,8 +9,6 @@ from scripts.core.constants import FORAGING_DIR, PBAR_FORMAT
 from scripts.core.language import Language
 from scripts.core.file_loading import write_file, clear_dir
 
-ROOT_PATH = os.path.join(FORAGING_DIR.format(language_code=Language.get()), "infoboxes")
-
 def generate_data(category: ForageCategory) -> str:
     """
     Generates an infobox for a foraging category.
@@ -81,18 +79,21 @@ def build_infobox(infobox_data: dict) -> list[str]:
 def process_categories() -> None:
     """
     Generates infoboxes for a list of specific category IDs and writes output files.
-    """ 
-    clear_dir(directory=ROOT_PATH)
+    """
+    root_path = os.path.join(FORAGING_DIR.format(language_code=Language.get()), "infoboxes")
+    clear_dir(directory=root_path)
     for category_id, category in ForageCategory.all().items():
         infobox_data = generate_data(category)
         if not infobox_data:
             continue
         content = build_infobox(infobox_data)
-        output_dir = write_file(content, category_id + ".txt", root_path=ROOT_PATH, suppress=True)
+        output_dir = write_file(content, category_id + ".txt", root_path=root_path, suppress=True)
     echo.success(f"Files saved to '{output_dir}'.")
 
 
-def main():
+def main(lang_code: str = None):
+    if lang_code:
+        Language.set(lang_code)
     process_categories()
 
 if __name__ == "__main__":

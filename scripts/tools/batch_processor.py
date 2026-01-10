@@ -277,6 +277,8 @@ def batch_lists(lang_code):
     from scripts.lists.furniture_list import generate_furniture_lists
     from scripts.lists.furniture_surfaces_list import generate_surface_list
     from scripts.lists.hotbar_slots import main as hotbar_slots_main
+    from scripts.foraging.foraging_list import main as foraging_list_main
+    from scripts.foraging.foraging_category_infobox import (main as foraging_category_infobox_main)
 
     attachment_list_main()
     body_parts_list_main()
@@ -299,6 +301,10 @@ def batch_lists(lang_code):
         get_version=True,
     )
     generate_surface_list(named_tiles_data)
+
+    # Foraging scripts
+    foraging_list_main(lang_code)
+    foraging_category_infobox_main(lang_code)
 
 
 def batch_animals(lang_code):

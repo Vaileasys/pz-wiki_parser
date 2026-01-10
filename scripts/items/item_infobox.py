@@ -80,7 +80,9 @@ def generate_item_data(item: Item, language_code: str = None):
     # -------------- PROPERTIES --------------#
     param["weight_reduction"] = item.weight_reduction
     param["max_units"] = (
-        item.use_delta if item.get("UseDelta") or item.item_type == "drainable" else None
+        item.use_delta
+        if item.get("UseDelta") or item.item_type == "drainable"
+        else None
     )
     param["fluid_capacity"] = (
         util.convert_unit(item.fluid_container.capacity, unit="L")
@@ -136,7 +138,10 @@ def generate_item_data(item: Item, language_code: str = None):
     )
     param["clip_size"] = (
         item.max_ammo
-        if (item.has_tag("PistolMagazine", "RifleMagazine") or item.item_type == "weapon")
+        if (
+            item.has_tag("PistolMagazine", "RifleMagazine")
+            or item.item_type == "weapon"
+        )
         else item.clip_size
     )
     param["material"] = (
@@ -262,8 +267,12 @@ def generate_item_data(item: Item, language_code: str = None):
     param["sharpness"] = item.sharpness
     param["min_range"] = item.min_range if item.item_type == "weapon" else None
     param["max_range"] = item.max_range if item.item_type == "weapon" else None
-    param["min_range_mod"] = item.min_sight_range if item.item_type == "weapon" else None
-    param["max_range_mod"] = item.max_sight_range if item.item_type == "weapon" else None
+    param["min_range_mod"] = (
+        item.min_sight_range if item.item_type == "weapon" else None
+    )
+    param["max_range_mod"] = (
+        item.max_sight_range if item.item_type == "weapon" else None
+    )
     param["recoil_delay"] = item.recoil_delay or item.recoil_delay_modifier
     param["sound_radius"] = item.sound_radius
     param["base_speed"] = (

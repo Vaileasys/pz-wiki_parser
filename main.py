@@ -237,6 +237,11 @@ menu_structure = {
                 "name": "Outfits",
                 "description": "Process outfits.",
             },
+            "8": {
+                "module": "scripts.foraging.foraging_list",
+                "name": "Foraging list",
+                "description": "Generate foraging item tables.",
+            },
         },
     },
     "8": {
