@@ -293,6 +293,11 @@ menu_structure = {
                 "name": "Generate item keys",
                 "description": "Parses itemKey declarations from the game's Java files.",
             },
+            "10": {
+                "module": "scripts.tools.page_name_checker",
+                "name": "Page name checker",
+                "description": "Compare item page names with item names and report differences.",
+            },
         },
     },
     "9": {
