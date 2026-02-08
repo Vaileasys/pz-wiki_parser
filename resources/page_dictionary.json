@@ -1634,9 +1634,9 @@
         },
         "Medicinal plants": {
             "categories": [
+                "Foraging",
                 "Food",
-                "First aid",
-                "Foraging"
+                "First aid"
             ],
             "category_id": [
                 "MedicinalPlants"
@@ -1684,8 +1684,8 @@
         },
         "Wild herbs": {
             "categories": [
-                "Food",
                 "Wild herbs",
+                "Food",
                 "Foraging"
             ],
             "category_id": [
@@ -1694,9 +1694,9 @@
         },
         "Wild plants": {
             "categories": [
+                "Foraging",
                 "Food",
-                "Wild plants",
-                "Foraging"
+                "Wild plants"
             ],
             "category_id": [
                 "WildPlants"
@@ -1878,8 +1878,8 @@
         },
         "Acoustic Guitar": {
             "categories": [
-                "Long blunt weapons",
-                "Instruments"
+                "Instruments",
+                "Long blunt weapons"
             ],
             "item_id": [
                 "Base.GuitarAcoustic"
@@ -1887,8 +1887,8 @@
         },
         "Adhesive Tape": {
             "categories": [
-                "Repair materials",
-                "Materials"
+                "Materials",
+                "Repair materials"
             ],
             "item_id": [
                 "Base.Scotchtape"
@@ -2125,8 +2125,8 @@
         },
         "Aluminum Foil": {
             "categories": [
-                "Metal",
-                "Materials"
+                "Materials",
+                "Metal"
             ],
             "item_id": [
                 "Base.Aluminum"
@@ -2494,8 +2494,8 @@
         },
         "Apple Pie Slice": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.PieApple"
@@ -2619,8 +2619,8 @@
         },
         "Avocado": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Avocado"
@@ -2696,8 +2696,8 @@
         },
         "Bacon": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Bacon"
@@ -2705,8 +2705,8 @@
         },
         "Bacon Bits": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.BaconBits"
@@ -2714,8 +2714,8 @@
         },
         "Bacon Strip": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.BaconRashers"
@@ -2756,8 +2756,8 @@
         },
         "Bag of Concrete Powder": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.ConcretePowder"
@@ -2781,8 +2781,8 @@
         },
         "Bag of Plaster Powder": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PlasterPowder"
@@ -2806,8 +2806,8 @@
         },
         "Bagel": {
             "categories": [
-                "Perishable food",
-                "Grains"
+                "Grains",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.BagelPlain"
@@ -2815,8 +2815,8 @@
         },
         "Baguette": {
             "categories": [
-                "Perishable food",
-                "Grains"
+                "Grains",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Baguette",
@@ -2834,8 +2834,8 @@
         },
         "Baking Soda": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.BakingSoda"
@@ -2877,8 +2877,8 @@
         "Ball-peen Hammer": {
             "categories": [
                 "Short blunt weapons",
-                "Carpentry tools",
-                "Tools"
+                "Tools",
+                "Carpentry tools"
             ],
             "item_id": [
                 "Base.BallPeenHammer",
@@ -2942,8 +2942,8 @@
         },
         "Baloney": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Baloney"
@@ -2951,8 +2951,8 @@
         },
         "Baloney Slices": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.BaloneySlice"
@@ -2977,8 +2977,8 @@
         },
         "Bandage": {
             "categories": [
-                "Medical items",
-                "First aid materials"
+                "First aid materials",
+                "Medical items"
             ],
             "item_id": [
                 "Base.Bandage",
@@ -3035,8 +3035,8 @@
         },
         "Banjo": {
             "categories": [
-                "Short blunt weapons",
-                "Instruments"
+                "Instruments",
+                "Short blunt weapons"
             ],
             "item_id": [
                 "Base.Banjo"
@@ -3060,9 +3060,9 @@
         },
         "Barbed Wire": {
             "categories": [
-                "Carpentry materials",
+                "Materials",
                 "Metal",
-                "Materials"
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.BarbedWire"
@@ -3513,8 +3513,8 @@
         },
         "Basil": {
             "categories": [
-                "Non-perishable food",
                 "Wild herbs",
+                "Non-perishable food",
                 "Spices"
             ],
             "item_id": [
@@ -3556,9 +3556,9 @@
         },
         "Bass": {
             "categories": [
+                "Seafood",
                 "Perishable food",
-                "Fish",
-                "Seafood"
+                "Fish"
             ],
             "item_id": [
                 "Base.Bass"
@@ -3698,8 +3698,8 @@
         },
         "Beef Patty": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.MeatPatty"
@@ -3749,8 +3749,8 @@
         },
         "Bell Pepper": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.BellPepper"
@@ -4136,8 +4136,8 @@
         },
         "Black Beans": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Blackbeans"
@@ -4170,8 +4170,8 @@
         },
         "Black Electric Bass": {
             "categories": [
-                "Long blunt weapons",
-                "Instruments"
+                "Instruments",
+                "Long blunt weapons"
             ],
             "item_id": [
                 "Base.GuitarElectricBassBlack"
@@ -4179,8 +4179,8 @@
         },
         "Black Electric Guitar": {
             "categories": [
-                "Long blunt weapons",
-                "Instruments"
+                "Instruments",
+                "Long blunt weapons"
             ],
             "item_id": [
                 "Base.GuitarElectricBlack"
@@ -4304,8 +4304,8 @@
         },
         "Black Sage": {
             "categories": [
-                "Medicinal plants",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Medicinal plants"
             ],
             "item_id": [
                 "Base.BlackSage"
@@ -4393,8 +4393,8 @@
         },
         "Bleach Bottle": {
             "categories": [
-                "Drinks",
-                "Household"
+                "Household",
+                "Drinks"
             ],
             "item_id": [
                 "Base.Bleach"
@@ -4477,8 +4477,8 @@
         },
         "Blue Electric Bass": {
             "categories": [
-                "Long blunt weapons",
-                "Instruments"
+                "Instruments",
+                "Long blunt weapons"
             ],
             "item_id": [
                 "Base.GuitarElectricBassBlue"
@@ -4486,8 +4486,8 @@
         },
         "Blue Electric Guitar": {
             "categories": [
-                "Long blunt weapons",
-                "Instruments"
+                "Instruments",
+                "Long blunt weapons"
             ],
             "item_id": [
                 "Base.GuitarElectricBlue"
@@ -4519,8 +4519,8 @@
         },
         "Blueberry Pie Slice": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.PieBlueberry"
@@ -5204,8 +5204,8 @@
         },
         "Bottle of Disinfectant": {
             "categories": [
-                "Medical items",
-                "First aid materials"
+                "First aid materials",
+                "Medical items"
             ],
             "item_id": [
                 "Base.Disinfectant"
@@ -5221,8 +5221,8 @@
         },
         "Bottle of Gasoline": {
             "categories": [
-                "Equipment",
-                "Materials"
+                "Materials",
+                "Equipment"
             ],
             "item_id": [
                 "Base.WaterBottlePetrol",
@@ -5260,8 +5260,8 @@
         },
         "Bourbon": {
             "categories": [
-                "Drinks",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Drinks"
             ],
             "item_id": [
                 "Base.WhiskeyFull"
@@ -5294,8 +5294,8 @@
         },
         "Bowl of Beans": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.BeanBowl"
@@ -5311,8 +5311,8 @@
         },
         "Bowl of Cereal": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.CerealBowl"
@@ -5328,8 +5328,8 @@
         },
         "Bowl of Noodle Soup": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.NoodleSoup"
@@ -5337,8 +5337,8 @@
         },
         "Bowl of Oatmeal": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Oatmeal"
@@ -5354,8 +5354,8 @@
         },
         "Bowl of Soup": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.SoupBowl",
@@ -5807,10 +5807,10 @@
         },
         "Box of Nails": {
             "categories": [
-                "Repair materials",
-                "Carpentry materials",
+                "Materials",
                 "Metal",
-                "Materials"
+                "Carpentry materials",
+                "Repair materials"
             ],
             "item_id": [
                 "Base.NailsBox"
@@ -5819,8 +5819,8 @@
         "Box of Paperclips": {
             "categories": [
                 "Fishing materials",
-                "Metal",
-                "Materials"
+                "Materials",
+                "Metal"
             ],
             "item_id": [
                 "Base.PaperclipBox"
@@ -5836,9 +5836,9 @@
         },
         "Box of Screws": {
             "categories": [
-                "Welding materials",
+                "Materials",
                 "Metal",
-                "Materials"
+                "Welding materials"
             ],
             "item_id": [
                 "Base.ScrewsBox"
@@ -6118,8 +6118,8 @@
         },
         "Bread": {
             "categories": [
-                "Perishable food",
-                "Grains"
+                "Grains",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Bread"
@@ -6135,8 +6135,8 @@
         },
         "Bread (dough)": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.BreadDough"
@@ -6144,9 +6144,9 @@
         },
         "Bread Knife": {
             "categories": [
-                "Short blade weapons",
                 "Tools",
-                "Cooking tools"
+                "Cooking tools",
+                "Short blade weapons"
             ],
             "item_id": [
                 "Base.BreadKnife"
@@ -6154,8 +6154,8 @@
         },
         "Bread Slices": {
             "categories": [
-                "Perishable food",
-                "Grains"
+                "Grains",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.BreadSlices"
@@ -6275,8 +6275,8 @@
         },
         "Broccoli": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Broccoli"
@@ -6300,8 +6300,8 @@
         },
         "Brochure": {
             "categories": [
-                "Junk",
-                "Literature"
+                "Literature",
+                "Junk"
             ],
             "item_id": [
                 "Base.Brochure"
@@ -6672,8 +6672,8 @@
         },
         "Bucket of Concrete": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.BucketConcreteFull"
@@ -6681,8 +6681,8 @@
         },
         "Bucket of Plaster": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.BucketPlasterFull"
@@ -6860,8 +6860,8 @@
         },
         "Bullets Bandolier": {
             "categories": [
-                "Accessories",
-                "Wearable containers"
+                "Wearable containers",
+                "Accessories"
             ],
             "item_id": [
                 "Base.AmmoStrap_Bullets",
@@ -7039,8 +7039,8 @@
         },
         "Butter": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.Butter"
@@ -7048,9 +7048,9 @@
         },
         "Butter Knife": {
             "categories": [
-                "Short blade weapons",
                 "Tools",
-                "Cooking tools"
+                "Cooking tools",
+                "Short blade weapons"
             ],
             "item_id": [
                 "Base.ButterKnife"
@@ -7104,8 +7104,8 @@
         },
         "CD": {
             "categories": [
-                "CDs",
-                "Entertainment"
+                "Entertainment",
+                "CDs"
             ],
             "item_id": [
                 "Base.Disc_Retail"
@@ -7113,9 +7113,9 @@
         },
         "CD Player": {
             "categories": [
-                "Electrical",
+                "Electronics",
                 "Entertainment",
-                "Electronics"
+                "Electrical"
             ],
             "item_id": [
                 "Base.CDplayer"
@@ -7123,8 +7123,8 @@
         },
         "Cabbage": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Cabbage"
@@ -7181,8 +7181,8 @@
         },
         "Cake Preparation": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.CakePrep"
@@ -7190,9 +7190,9 @@
         },
         "Cake Slice": {
             "categories": [
+                "Prepared food",
                 "Perishable food",
-                "Sweets",
-                "Prepared food"
+                "Sweets"
             ],
             "item_id": [
                 "Base.CakeSlice"
@@ -7254,8 +7254,8 @@
         },
         "Camera": {
             "categories": [
-                "Electrical",
-                "Electronics"
+                "Electronics",
+                "Electrical"
             ],
             "item_id": [
                 "Base.Camera"
@@ -7321,8 +7321,8 @@
         },
         "Can of Oats": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.OatsRaw"
@@ -7410,8 +7410,8 @@
         },
         "Canned Beans": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.TinnedBeans",
@@ -7420,8 +7420,8 @@
         },
         "Canned Carrots": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.CannedCarrots2",
@@ -7430,8 +7430,8 @@
         },
         "Canned Chili": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.CannedChili",
@@ -7440,8 +7440,8 @@
         },
         "Canned Corn": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.CannedCorn",
@@ -7450,8 +7450,8 @@
         },
         "Canned Corned Beef": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.CannedCornedBeef",
@@ -7460,8 +7460,8 @@
         },
         "Canned Dog Food": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.Dogfood",
@@ -7470,8 +7470,8 @@
         },
         "Canned Evaporated Milk": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.CannedMilk",
@@ -7480,8 +7480,8 @@
         },
         "Canned Fruit Beverage": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.CannedFruitBeverage",
@@ -7490,8 +7490,8 @@
         },
         "Canned Fruit Cocktail": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.CannedFruitCocktail",
@@ -7500,8 +7500,8 @@
         },
         "Canned Mushroom Soup": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.CannedMushroomSoup",
@@ -7510,8 +7510,8 @@
         },
         "Canned Peaches": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.CannedPeaches",
@@ -7520,8 +7520,8 @@
         },
         "Canned Peas": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.CannedPeas",
@@ -7530,8 +7530,8 @@
         },
         "Canned Pineapple": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.CannedPineapple",
@@ -7540,8 +7540,8 @@
         },
         "Canned Potato": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.CannedPotato2",
@@ -7550,8 +7550,8 @@
         },
         "Canned Sardines": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.CannedSardines",
@@ -7560,8 +7560,8 @@
         },
         "Canned Spaghetti Bolognese": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.CannedBolognese",
@@ -7570,8 +7570,8 @@
         },
         "Canned Tomato": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.CannedTomato2",
@@ -7580,8 +7580,8 @@
         },
         "Canned Tuna": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.TunaTin",
@@ -7590,8 +7590,8 @@
         },
         "Canned Vegetable Soup": {
             "categories": [
-                "Canned food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Canned food"
             ],
             "item_id": [
                 "Base.TinnedSoup",
@@ -7812,8 +7812,8 @@
         },
         "Carrots": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Carrots"
@@ -8085,8 +8085,8 @@
         },
         "Caterpillar (American lady)": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.AmericanLadyCaterpillar"
@@ -8094,8 +8094,8 @@
         },
         "Caterpillar (banded woolly bear)": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.BandedWoolyBearCaterpillar"
@@ -8103,8 +8103,8 @@
         },
         "Caterpillar (monarch)": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.MonarchCaterpillar"
@@ -8112,8 +8112,8 @@
         },
         "Caterpillar (sawfly larva)": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.SawflyLarva"
@@ -8121,8 +8121,8 @@
         },
         "Caterpillar (silk moth)": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.SilkMothCaterpillar"
@@ -8130,8 +8130,8 @@
         },
         "Caterpillar (swallowtail)": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.SwallowtailCaterpillar"
@@ -8164,8 +8164,8 @@
         },
         "Centipede": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.Centipede",
@@ -8286,8 +8286,8 @@
         },
         "Cereal": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.Cereal"
@@ -8319,8 +8319,8 @@
         },
         "Chair Leg": {
             "categories": [
-                "Short blunt weapons",
-                "Household"
+                "Household",
+                "Short blunt weapons"
             ],
             "item_id": [
                 "Base.ChairLeg"
@@ -8510,8 +8510,8 @@
         },
         "Cherry Pie Slice": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Pie"
@@ -8601,8 +8601,8 @@
         },
         "Chicken Foot": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.ChickenFoot"
@@ -8627,8 +8627,8 @@
         },
         "Chicken Leg": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Chicken"
@@ -8669,8 +8669,8 @@
         },
         "Chips - Barbecue": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.Crisps2"
@@ -8678,8 +8678,8 @@
         },
         "Chips - Plain": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.Crisps"
@@ -8687,8 +8687,8 @@
         },
         "Chips - Salt & Vinegar": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.Crisps3"
@@ -8696,8 +8696,8 @@
         },
         "Chips - Sour Cream & Onion": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.Crisps4"
@@ -8705,8 +8705,8 @@
         },
         "Chives": {
             "categories": [
-                "Non-perishable food",
                 "Wild herbs",
+                "Non-perishable food",
                 "Spices"
             ],
             "item_id": [
@@ -9011,8 +9011,8 @@
         },
         "Cilantro": {
             "categories": [
-                "Non-perishable food",
                 "Wild herbs",
+                "Non-perishable food",
                 "Spices"
             ],
             "item_id": [
@@ -9105,8 +9105,8 @@
         "Claw Hammer": {
             "categories": [
                 "Short blunt weapons",
-                "Carpentry tools",
-                "Tools"
+                "Tools",
+                "Carpentry tools"
             ],
             "item_id": [
                 "Base.Hammer",
@@ -9305,14 +9305,6 @@
                 "Base.CeramicTeacupUnfired"
             ]
         },
-        "Clay Teacup (Unfired) (glazed)": {
-            "categories": [
-                "Materials"
-            ],
-            "item_id": [
-                "Base.CeramicTeacupGlazedUnfired"
-            ]
-        },
         "Clay Tile (Unfired)": {
             "categories": [
                 "Materials"
@@ -9368,8 +9360,8 @@
         "Club Hammer": {
             "categories": [
                 "Short blunt weapons",
-                "Carpentry tools",
-                "Tools"
+                "Tools",
+                "Carpentry tools"
             ],
             "item_id": [
                 "Base.ClubHammer",
@@ -9394,8 +9386,8 @@
         },
         "Cockroach": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.Cockroach"
@@ -9411,8 +9403,8 @@
         },
         "Cocoa Powder": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.CocoaPowder"
@@ -9420,8 +9412,8 @@
         },
         "Coffee": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.Coffee2"
@@ -9445,8 +9437,8 @@
         },
         "Cola": {
             "categories": [
-                "Drinks",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Drinks"
             ],
             "item_id": [
                 "Base.Pop2"
@@ -9454,8 +9446,8 @@
         },
         "Cold Pack": {
             "categories": [
-                "First aid materials",
-                "Materials"
+                "Materials",
+                "First aid materials"
             ],
             "item_id": [
                 "Base.Coldpack"
@@ -9557,8 +9549,8 @@
         },
         "Common Mallow": {
             "categories": [
-                "Medicinal plants",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Medicinal plants"
             ],
             "item_id": [
                 "Base.CommonMallow"
@@ -9598,8 +9590,8 @@
         },
         "Cone": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.Cone"
@@ -9820,8 +9812,8 @@
         },
         "Cordless Phone": {
             "categories": [
-                "Electrical",
-                "Electronics"
+                "Electronics",
+                "Electrical"
             ],
             "item_id": [
                 "Base.CordlessPhone"
@@ -9845,8 +9837,8 @@
         },
         "Corn": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Corn"
@@ -9862,8 +9854,8 @@
         },
         "Corn Flour": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.Cornflour"
@@ -9871,8 +9863,8 @@
         },
         "Cornbread": {
             "categories": [
-                "Perishable food",
-                "Grains"
+                "Grains",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Cornbread"
@@ -9968,8 +9960,8 @@
         },
         "Cotton Balls": {
             "categories": [
-                "Medical items",
-                "First aid materials"
+                "First aid materials",
+                "Medical items"
             ],
             "item_id": [
                 "Base.CottonBalls",
@@ -10101,8 +10093,8 @@
         },
         "Crackers": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.Crackers"
@@ -10439,6 +10431,15 @@
                 "Base.Hat_CrashHelmet"
             ]
         },
+        "Crash Helmet (Motorcycle)": {
+            "categories": [
+                "Helmets"
+            ],
+            "item_id": [
+                "Base.Hat_CrashHelmetFULL",
+                "Base.Hat_CrashHelmetFULL_Black"
+            ]
+        },
         "Crash Helmet - Police": {
             "categories": [],
             "item_id": [
@@ -10464,8 +10465,8 @@
         },
         "Crayfish": {
             "categories": [
-                "Perishable food",
-                "Seafood"
+                "Seafood",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Crayfish"
@@ -10506,8 +10507,8 @@
         },
         "Cricket": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.Cricket"
@@ -10534,8 +10535,8 @@
         },
         "Croissant": {
             "categories": [
-                "Perishable food",
-                "Grains"
+                "Grains",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Croissant"
@@ -10570,12 +10571,20 @@
         "Crowbar": {
             "categories": [
                 "Long blunt weapons",
-                "Carpentry tools",
-                "Tools"
+                "Tools",
+                "Carpentry tools"
             ],
             "item_id": [
                 "Base.Crowbar",
                 "Base.CrowbarForged"
+            ]
+        },
+        "Crucible": {
+            "categories": [
+                "Materials"
+            ],
+            "item_id": [
+                "Base.CeramicCrucible"
             ]
         },
         "Crude Bench Vise": {
@@ -10621,8 +10630,8 @@
         "Crude Stone Axe": {
             "categories": [
                 "Axes",
-                "Carpentry tools",
-                "Tools"
+                "Tools",
+                "Carpentry tools"
             ],
             "item_id": [
                 "Base.AxeStone"
@@ -10839,8 +10848,8 @@
         },
         "Daikon": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Daikon"
@@ -11220,9 +11229,9 @@
         },
         "Denim Strips": {
             "categories": [
-                "Fabric",
+                "Materials",
                 "Tailoring materials",
-                "Materials"
+                "Fabric"
             ],
             "item_id": [
                 "Base.DenimStrips",
@@ -11371,8 +11380,8 @@
         },
         "Diet Cola": {
             "categories": [
-                "Drinks",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Drinks"
             ],
             "item_id": [
                 "Base.Pop"
@@ -11380,9 +11389,9 @@
         },
         "Digital Watch": {
             "categories": [
-                "Electrical",
+                "Electronics",
                 "Jewelry",
-                "Electronics"
+                "Electrical"
             ],
             "item_id": [
                 "Base.WristWatch_Right_DigitalRed",
@@ -11393,9 +11402,9 @@
         },
         "Digital Watch - Metallic Dress Style": {
             "categories": [
-                "Electrical",
+                "Electronics",
                 "Jewelry",
-                "Electronics"
+                "Electrical"
             ],
             "item_id": [
                 "Base.WristWatch_Right_DigitalDress",
@@ -11440,8 +11449,8 @@
         },
         "Disposable Camera": {
             "categories": [
-                "Electrical",
-                "Electronics"
+                "Electronics",
+                "Electrical"
             ],
             "item_id": [
                 "Base.CameraDisposable"
@@ -11567,10 +11576,10 @@
         },
         "Door Hinge": {
             "categories": [
-                "Carpentry materials",
-                "Welding materials",
+                "Materials",
                 "Metal",
-                "Materials"
+                "Carpentry materials",
+                "Welding materials"
             ],
             "item_id": [
                 "Base.Hinge"
@@ -11578,9 +11587,9 @@
         },
         "Doorknob": {
             "categories": [
-                "Carpentry materials",
+                "Materials",
                 "Metal",
-                "Materials"
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.Doorknob"
@@ -11620,8 +11629,8 @@
         },
         "Dough": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Dough"
@@ -11673,8 +11682,8 @@
         },
         "Drumstick": {
             "categories": [
-                "Short blunt weapons",
-                "Instruments"
+                "Instruments",
+                "Short blunt weapons"
             ],
             "item_id": [
                 "Base.Drumstick"
@@ -11698,8 +11707,8 @@
         },
         "Dry Ramen Noodles": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.Ramen"
@@ -11715,8 +11724,8 @@
         },
         "Duct Tape": {
             "categories": [
-                "Repair materials",
-                "Materials"
+                "Materials",
+                "Repair materials"
             ],
             "item_id": [
                 "Base.DuctTape"
@@ -11764,8 +11773,8 @@
         },
         "Dumbbell": {
             "categories": [
-                "Short blunt weapons",
-                "Sports"
+                "Sports",
+                "Short blunt weapons"
             ],
             "item_id": [
                 "Base.DumbBell",
@@ -11842,8 +11851,8 @@
         },
         "Earbuds": {
             "categories": [
-                "Electrical",
-                "Electronics"
+                "Electronics",
+                "Electrical"
             ],
             "item_id": [
                 "Base.Earbuds"
@@ -11915,8 +11924,8 @@
         },
         "Edamame": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Edamame"
@@ -11924,8 +11933,8 @@
         },
         "Egg": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Egg"
@@ -11933,8 +11942,8 @@
         },
         "Egg (Boiled)": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.EggBoiled"
@@ -11942,8 +11951,8 @@
         },
         "Egg (Poached)": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.EggPoached"
@@ -11951,8 +11960,8 @@
         },
         "Egg (Scrambled)": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.EggScrambled"
@@ -11960,8 +11969,8 @@
         },
         "Egg Carton": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.EggCarton"
@@ -11978,8 +11987,8 @@
         },
         "Eggplant": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Eggplant"
@@ -13063,8 +13072,8 @@
         "Firefighter Axe": {
             "categories": [
                 "Axes",
-                "Carpentry tools",
-                "Tools"
+                "Tools",
+                "Carpentry tools"
             ],
             "item_id": [
                 "Base.Axe"
@@ -13176,10 +13185,10 @@
         },
         "First Aid Kit": {
             "categories": [
-                "First aid tools",
-                "Medical items",
+                "Tools",
                 "Handheld containers",
-                "Tools"
+                "Medical items",
+                "First aid tools"
             ],
             "item_id": [
                 "Base.FirstAidKit",
@@ -13223,8 +13232,8 @@
         },
         "Fish Fillet": {
             "categories": [
-                "Perishable food",
-                "Seafood"
+                "Seafood",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.FishFillet"
@@ -13248,8 +13257,8 @@
         },
         "Fish Roe": {
             "categories": [
-                "Perishable food",
-                "Seafood"
+                "Seafood",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.FishRoe"
@@ -13265,8 +13274,8 @@
         },
         "Fish Sushi": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.SushiFish"
@@ -13338,8 +13347,8 @@
         },
         "Fishing Line": {
             "categories": [
-                "Fishing materials",
-                "Materials"
+                "Materials",
+                "Fishing materials"
             ],
             "item_id": [
                 "Base.FishingLine"
@@ -13355,8 +13364,8 @@
         },
         "Fishing Rod": {
             "categories": [
-                "Long blunt weapons",
                 "Tools",
+                "Long blunt weapons",
                 "Fishing tools"
             ],
             "item_id": [
@@ -13365,8 +13374,8 @@
         },
         "Fishing Rod without Line": {
             "categories": [
-                "Long blunt weapons",
                 "Tools",
+                "Long blunt weapons",
                 "Fishing tools"
             ],
             "item_id": [
@@ -13375,8 +13384,8 @@
         },
         "Fishing Satchel": {
             "categories": [
-                "Memento",
-                "Wearable containers"
+                "Wearable containers",
+                "Memento"
             ],
             "item_id": [
                 "Base.Bag_Satchel_Fishing"
@@ -13384,9 +13393,9 @@
         },
         "Fishing Tackle (blue)": {
             "categories": [
-                "Fishing materials",
+                "Materials",
                 "Tools",
-                "Materials"
+                "Fishing materials"
             ],
             "item_id": [
                 "Base.FishingTackle"
@@ -13394,9 +13403,9 @@
         },
         "Fishing Tackle (orange)": {
             "categories": [
-                "Fishing materials",
+                "Materials",
                 "Tools",
-                "Materials"
+                "Fishing materials"
             ],
             "item_id": [
                 "Base.FishingTackle2"
@@ -13420,8 +13429,8 @@
         },
         "Flashlight": {
             "categories": [
-                "Light sources",
-                "Electronics"
+                "Electronics",
+                "Light sources"
             ],
             "item_id": [
                 "Base.HandTorch"
@@ -13438,8 +13447,8 @@
         },
         "Flashlight - Heavy Duty": {
             "categories": [
-                "Light sources",
-                "Electronics"
+                "Electronics",
+                "Light sources"
             ],
             "item_id": [
                 "Base.Torch"
@@ -13543,8 +13552,8 @@
         },
         "Flier": {
             "categories": [
-                "Junk",
-                "Literature"
+                "Literature",
+                "Junk"
             ],
             "item_id": [
                 "Base.Flier"
@@ -13552,8 +13561,8 @@
         },
         "Flier: Nolan's Used Cars": {
             "categories": [
-                "Junk",
-                "Literature"
+                "Literature",
+                "Junk"
             ],
             "item_id": [
                 "Base.Flier_Nolans"
@@ -13620,8 +13629,8 @@
         },
         "Flour": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.Flour2"
@@ -13637,8 +13646,8 @@
         },
         "Flute": {
             "categories": [
-                "Short blunt weapons",
-                "Instruments"
+                "Instruments",
+                "Short blunt weapons"
             ],
             "item_id": [
                 "Base.Flute"
@@ -13808,9 +13817,9 @@
         },
         "Fork": {
             "categories": [
-                "Short blade weapons",
                 "Tools",
-                "Cooking tools"
+                "Cooking tools",
+                "Short blade weapons"
             ],
             "item_id": [
                 "Base.Fork"
@@ -13968,8 +13977,8 @@
         },
         "Fried Shrimp": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.ShrimpFried",
@@ -14083,8 +14092,8 @@
         },
         "Fruit Jam": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.JamFruit"
@@ -14109,9 +14118,9 @@
         },
         "Frying Pan": {
             "categories": [
-                "Short blunt weapons",
                 "Tools",
-                "Cooking tools"
+                "Cooking tools",
+                "Short blunt weapons"
             ],
             "item_id": [
                 "Base.Pan",
@@ -14271,9 +14280,9 @@
         },
         "Garbage Bag": {
             "categories": [
-                "Carpentry materials",
+                "Materials",
                 "Handheld containers",
-                "Materials"
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.Garbagebag",
@@ -14419,8 +14428,8 @@
         },
         "Gas Can": {
             "categories": [
-                "Tools",
-                "Mechanics tools"
+                "Mechanics tools",
+                "Tools"
             ],
             "item_id": [
                 "Base.PetrolCan"
@@ -14551,8 +14560,8 @@
         },
         "Generator - Lectromax": {
             "categories": [
-                "Electrical",
-                "Electronics"
+                "Electronics",
+                "Electrical"
             ],
             "item_id": [
                 "Base.Generator"
@@ -14689,8 +14698,8 @@
         },
         "Ginger (Pickled)": {
             "categories": [
-                "Perishable food",
                 "Vegetables",
+                "Perishable food",
                 "Spices"
             ],
             "item_id": [
@@ -14699,8 +14708,8 @@
         },
         "Ginger Ale": {
             "categories": [
-                "Drinks",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Drinks"
             ],
             "item_id": [
                 "Base.Pop3"
@@ -14724,8 +14733,8 @@
         },
         "Ginseng": {
             "categories": [
-                "Medicinal plants",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Medicinal plants"
             ],
             "item_id": [
                 "Base.Ginseng"
@@ -14920,8 +14929,8 @@
         },
         "Glue": {
             "categories": [
-                "Repair materials",
-                "Materials"
+                "Materials",
+                "Repair materials"
             ],
             "item_id": [
                 "Base.Glue"
@@ -15019,8 +15028,8 @@
         },
         "Gold Coin": {
             "categories": [
-                "Memento",
-                "Materials"
+                "Materials",
+                "Memento"
             ],
             "item_id": [
                 "Base.GoldCoin"
@@ -15306,8 +15315,8 @@
         },
         "Graham Crackers": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.GrahamCrackers"
@@ -15348,8 +15357,8 @@
         },
         "Granola Bar": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.GranolaBar"
@@ -15407,8 +15416,8 @@
         },
         "Grasshopper": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.Grasshopper"
@@ -15416,8 +15425,8 @@
         },
         "Gravy": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Gravy"
@@ -15425,8 +15434,8 @@
         },
         "Gravy Mix": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.GravyMix"
@@ -15482,9 +15491,9 @@
         },
         "Griddle Pan": {
             "categories": [
-                "Short blunt weapons",
                 "Tools",
-                "Cooking tools"
+                "Cooking tools",
+                "Short blunt weapons"
             ],
             "item_id": [
                 "Base.GridlePan"
@@ -15509,8 +15518,8 @@
         },
         "Ground Beef": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.MincedMeat"
@@ -15567,8 +15576,8 @@
         },
         "Gum": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.Gum"
@@ -15665,8 +15674,8 @@
         },
         "Habanero": {
             "categories": [
-                "Perishable food",
                 "Vegetables",
+                "Perishable food",
                 "Spices"
             ],
             "item_id": [
@@ -15864,8 +15873,8 @@
         },
         "Ham": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Ham"
@@ -15873,8 +15882,8 @@
         },
         "Ham Slice": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.HamSlice"
@@ -15907,8 +15916,8 @@
         "Hand Fork": {
             "categories": [
                 "Farming tools",
-                "Short blade weapons",
-                "Tools"
+                "Tools",
+                "Short blade weapons"
             ],
             "item_id": [
                 "Base.HandFork"
@@ -15962,8 +15971,8 @@
         },
         "Handheld Game Console": {
             "categories": [
-                "Electrical",
-                "Electronics"
+                "Electronics",
+                "Electrical"
             ],
             "item_id": [
                 "Base.VideoGame"
@@ -16056,8 +16065,8 @@
         "Hatchet": {
             "categories": [
                 "Axes",
-                "Carpentry tools",
-                "Tools"
+                "Tools",
+                "Carpentry tools"
             ],
             "item_id": [
                 "Base.HandAxe",
@@ -16118,8 +16127,8 @@
         },
         "Headphones": {
             "categories": [
-                "Electrical",
-                "Electronics"
+                "Electronics",
+                "Electrical"
             ],
             "item_id": [
                 "Base.Headphones"
@@ -16166,15 +16175,6 @@
             ],
             "rm_guid": [
                 "1fadc63a-ff45-4da3-82bd-a842a45cb446"
-            ]
-        },
-        "Helmet - Motorcycle": {
-            "categories": [
-                "Helmets"
-            ],
-            "item_id": [
-                "Base.Hat_CrashHelmetFULL",
-                "Base.Hat_CrashHelmetFULL_Black"
             ]
         },
         "Hemp": {
@@ -16351,6 +16351,14 @@
                 "Base.Bag_HideSack"
             ]
         },
+        "Hide Sleeping Bag": {
+            "categories": [
+                "Camping"
+            ],
+            "item_id": [
+                "Base.SleepingBag_Hide"
+            ]
+        },
         "Hide Sleeping Bag (Packed)": {
             "categories": [
                 "Camping"
@@ -16425,8 +16433,8 @@
         },
         "High-end Camera": {
             "categories": [
-                "Electrical",
-                "Electronics"
+                "Electronics",
+                "Electrical"
             ],
             "item_id": [
                 "Base.CameraExpensive"
@@ -16623,8 +16631,8 @@
         },
         "Holster - Shoulder": {
             "categories": [
-                "Accessories",
-                "Wearable containers"
+                "Wearable containers",
+                "Accessories"
             ],
             "item_id": [
                 "Base.HolsterShoulder"
@@ -16632,8 +16640,8 @@
         },
         "Home Alarm": {
             "categories": [
-                "Electrical",
-                "Electronics"
+                "Electronics",
+                "Electrical"
             ],
             "item_id": [
                 "Base.HomeAlarm"
@@ -16668,8 +16676,8 @@
         },
         "Honey": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.Honey"
@@ -16869,9 +16877,9 @@
         },
         "Hunting Knife": {
             "categories": [
-                "Short blade weapons",
                 "Tools",
-                "Cooking tools"
+                "Cooking tools",
+                "Short blade weapons"
             ],
             "item_id": [
                 "Base.HuntingKnife",
@@ -17281,8 +17289,8 @@
         },
         "Instant Popcorn": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.Popcorn"
@@ -17378,8 +17386,8 @@
         },
         "Iron Ingot": {
             "categories": [
-                "Metal",
-                "Materials"
+                "Materials",
+                "Metal"
             ],
             "item_id": [
                 "Base.IronIngot"
@@ -17435,9 +17443,9 @@
         },
         "Iron Pipe": {
             "categories": [
-                "Short blunt weapons",
+                "Materials",
                 "Welding materials",
-                "Materials"
+                "Short blunt weapons"
             ],
             "item_id": [
                 "Base.MetalPipe"
@@ -17520,8 +17528,8 @@
         },
         "Jack": {
             "categories": [
-                "Tools",
-                "Mechanics tools"
+                "Mechanics tools",
+                "Tools"
             ],
             "item_id": [
                 "Base.Jack"
@@ -17529,9 +17537,9 @@
         },
         "Jack-o'-lantern": {
             "categories": [
+                "Prepared food",
                 "Perishable food",
-                "Fruit",
-                "Prepared food"
+                "Fruit"
             ],
             "item_id": [
                 "Base.HalloweenPumpkin"
@@ -17569,16 +17577,6 @@
                 "Base.Jacket_NavyBlue"
             ]
         },
-        "Jacket - Suit": {
-            "categories": [
-                "Jackets"
-            ],
-            "item_id": [
-                "Base.Suit_JacketTINT",
-                "Base.Suit_Jacket",
-                "Base.Suit_Jacket_White"
-            ]
-        },
         "Jacket - Varsity": {
             "categories": [
                 "Jackets"
@@ -17597,8 +17595,8 @@
         },
         "Jalapeno": {
             "categories": [
-                "Perishable food",
                 "Vegetables",
+                "Perishable food",
                 "Spices"
             ],
             "item_id": [
@@ -17664,9 +17662,9 @@
         },
         "Jar of Bell Peppers": {
             "categories": [
-                "Perishable food",
                 "Pickled food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.CannedBellPepper"
@@ -17682,9 +17680,9 @@
         },
         "Jar of Broccoli": {
             "categories": [
-                "Perishable food",
                 "Pickled food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.CannedBroccoli"
@@ -17700,9 +17698,9 @@
         },
         "Jar of Cabbage": {
             "categories": [
-                "Perishable food",
                 "Pickled food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.CannedCabbage"
@@ -17718,9 +17716,9 @@
         },
         "Jar of Carrots": {
             "categories": [
-                "Perishable food",
                 "Pickled food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.CannedCarrots"
@@ -17736,9 +17734,9 @@
         },
         "Jar of Eggplants": {
             "categories": [
-                "Perishable food",
                 "Pickled food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.CannedEggplant"
@@ -17762,9 +17760,9 @@
         },
         "Jar of Leeks": {
             "categories": [
-                "Perishable food",
                 "Pickled food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.CannedLeek"
@@ -17780,9 +17778,9 @@
         },
         "Jar of Potatoes": {
             "categories": [
-                "Perishable food",
                 "Pickled food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.CannedPotato"
@@ -17798,9 +17796,9 @@
         },
         "Jar of Radishes": {
             "categories": [
-                "Perishable food",
                 "Pickled food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.CannedRedRadish"
@@ -17816,9 +17814,9 @@
         },
         "Jar of Tomatoes": {
             "categories": [
-                "Perishable food",
                 "Pickled food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.CannedTomato"
@@ -18119,8 +18117,8 @@
         },
         "Juice Box": {
             "categories": [
-                "Drinks",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Drinks"
             ],
             "item_id": [
                 "Base.JuiceBox",
@@ -18250,8 +18248,8 @@
         },
         "Kettle": {
             "categories": [
-                "Fluid containers",
                 "Tools",
+                "Fluid containers",
                 "Cooking tools"
             ],
             "item_id": [
@@ -18284,8 +18282,8 @@
         },
         "Key Lime Pie Slice": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.PieKeyLime"
@@ -18327,8 +18325,8 @@
         },
         "Key Ring - American Eagle": {
             "categories": [
-                "Memento",
-                "Key rings"
+                "Key rings",
+                "Memento"
             ],
             "item_id": [
                 "Base.KeyRing_EagleFlag"
@@ -18360,8 +18358,8 @@
         },
         "Key Ring - Eight Ball": {
             "categories": [
-                "Memento",
-                "Key rings"
+                "Key rings",
+                "Memento"
             ],
             "item_id": [
                 "Base.KeyRing_EightBall"
@@ -18425,8 +18423,8 @@
         },
         "Key Ring - Panther": {
             "categories": [
-                "Memento",
-                "Key rings"
+                "Key rings",
+                "Memento"
             ],
             "item_id": [
                 "Base.KeyRing_Panther"
@@ -18434,8 +18432,8 @@
         },
         "Key Ring - Pine Tree": {
             "categories": [
-                "Memento",
-                "Key rings"
+                "Key rings",
+                "Memento"
             ],
             "item_id": [
                 "Base.KeyRing_PineTree"
@@ -18443,8 +18441,8 @@
         },
         "Key Ring - Praying Hands": {
             "categories": [
-                "Memento",
-                "Key rings"
+                "Key rings",
+                "Memento"
             ],
             "item_id": [
                 "Base.KeyRing_PrayingHands"
@@ -18460,8 +18458,8 @@
         },
         "Key Ring - Rainbow Star": {
             "categories": [
-                "Memento",
-                "Key rings"
+                "Key rings",
+                "Memento"
             ],
             "item_id": [
                 "Base.KeyRing_RainbowStar"
@@ -18477,8 +18475,8 @@
         },
         "Key Ring - Sexy": {
             "categories": [
-                "Memento",
-                "Key rings"
+                "Key rings",
+                "Memento"
             ],
             "item_id": [
                 "Base.KeyRing_Sexy"
@@ -18494,8 +18492,8 @@
         },
         "Key Ring - Spiffos": {
             "categories": [
-                "Memento",
-                "Key rings"
+                "Key rings",
+                "Memento"
             ],
             "item_id": [
                 "Base.KeyRing_Spiffos"
@@ -18503,8 +18501,8 @@
         },
         "Key Ring - Stinky Face": {
             "categories": [
-                "Memento",
-                "Key rings"
+                "Key rings",
+                "Memento"
             ],
             "item_id": [
                 "Base.KeyRing_StinkyFace"
@@ -18512,8 +18510,8 @@
         },
         "Key Ring - West Maple Country Club": {
             "categories": [
-                "Memento",
-                "Key rings"
+                "Key rings",
+                "Memento"
             ],
             "item_id": [
                 "Base.KeyRing_WestMaple"
@@ -18529,8 +18527,8 @@
         },
         "Keytar": {
             "categories": [
-                "Long blunt weapons",
-                "Instruments"
+                "Instruments",
+                "Long blunt weapons"
             ],
             "item_id": [
                 "Base.Keytar"
@@ -18567,9 +18565,9 @@
         },
         "Kitchen Knife": {
             "categories": [
-                "Short blade weapons",
                 "Tools",
-                "Cooking tools"
+                "Cooking tools",
+                "Short blade weapons"
             ],
             "item_id": [
                 "Base.KitchenKnife",
@@ -18966,14 +18964,6 @@
             ],
             "item_id": [
                 "Base.LargeBranch"
-            ]
-        },
-        "Large Ceramic Crucible": {
-            "categories": [
-                "Materials"
-            ],
-            "item_id": [
-                "Base.CeramicCrucible"
             ]
         },
         "Large Ceramic Crucible with Iron": {
@@ -19427,9 +19417,9 @@
         },
         "Leather Strips": {
             "categories": [
-                "Fabric",
+                "Materials",
                 "Tailoring materials",
-                "Materials"
+                "Fabric"
             ],
             "item_id": [
                 "Base.LeatherStrips",
@@ -19615,8 +19605,8 @@
         },
         "Leek": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Leek"
@@ -19665,8 +19655,8 @@
         },
         "Lemon Meringue Pie Slice": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.PieLemonMeringue"
@@ -19674,8 +19664,8 @@
         },
         "Lemongrass": {
             "categories": [
-                "Medicinal plants",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Medicinal plants"
             ],
             "item_id": [
                 "Base.LemonGrass"
@@ -19703,8 +19693,8 @@
         },
         "Letter Opener": {
             "categories": [
-                "Short blade weapons",
-                "Household"
+                "Household",
+                "Short blade weapons"
             ],
             "item_id": [
                 "Base.LetterOpener"
@@ -19712,8 +19702,8 @@
         },
         "Lettuce": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Lettuce"
@@ -19756,9 +19746,9 @@
         },
         "Light Bulb": {
             "categories": [
-                "Electrical materials",
                 "Vehicle parts",
-                "Materials"
+                "Materials",
+                "Electrical materials"
             ],
             "item_id": [
                 "Base.LightBulb"
@@ -19766,8 +19756,8 @@
         },
         "Light Bulb - Blue": {
             "categories": [
-                "Electrical materials",
-                "Materials"
+                "Materials",
+                "Electrical materials"
             ],
             "item_id": [
                 "Base.LightBulbBlue"
@@ -19775,8 +19765,8 @@
         },
         "Light Bulb - Cyan": {
             "categories": [
-                "Electrical materials",
-                "Materials"
+                "Materials",
+                "Electrical materials"
             ],
             "item_id": [
                 "Base.LightBulbCyan"
@@ -19784,8 +19774,8 @@
         },
         "Light Bulb - Green": {
             "categories": [
-                "Electrical materials",
-                "Materials"
+                "Materials",
+                "Electrical materials"
             ],
             "item_id": [
                 "Base.LightBulbGreen"
@@ -19793,8 +19783,8 @@
         },
         "Light Bulb - Magenta": {
             "categories": [
-                "Electrical materials",
-                "Materials"
+                "Materials",
+                "Electrical materials"
             ],
             "item_id": [
                 "Base.LightBulbMagenta"
@@ -19802,8 +19792,8 @@
         },
         "Light Bulb - Orange": {
             "categories": [
-                "Electrical materials",
-                "Materials"
+                "Materials",
+                "Electrical materials"
             ],
             "item_id": [
                 "Base.LightBulbOrange"
@@ -19811,8 +19801,8 @@
         },
         "Light Bulb - Pink": {
             "categories": [
-                "Electrical materials",
-                "Materials"
+                "Materials",
+                "Electrical materials"
             ],
             "item_id": [
                 "Base.LightBulbPink"
@@ -19820,8 +19810,8 @@
         },
         "Light Bulb - Purple": {
             "categories": [
-                "Electrical materials",
-                "Materials"
+                "Materials",
+                "Electrical materials"
             ],
             "item_id": [
                 "Base.LightBulbPurple"
@@ -19829,8 +19819,8 @@
         },
         "Light Bulb - Red": {
             "categories": [
-                "Electrical materials",
-                "Materials"
+                "Materials",
+                "Electrical materials"
             ],
             "item_id": [
                 "Base.LightBulbRed"
@@ -19838,8 +19828,8 @@
         },
         "Light Bulb - Yellow": {
             "categories": [
-                "Electrical materials",
-                "Materials"
+                "Materials",
+                "Electrical materials"
             ],
             "item_id": [
                 "Base.LightBulbYellow"
@@ -19952,9 +19942,9 @@
         },
         "Little Bait Fish": {
             "categories": [
+                "Seafood",
                 "Perishable food",
-                "Fish",
-                "Seafood"
+                "Fish"
             ],
             "item_id": [
                 "Base.BaitFish"
@@ -19984,8 +19974,8 @@
         },
         "Lobster": {
             "categories": [
-                "Perishable food",
-                "Seafood"
+                "Seafood",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Lobster"
@@ -20001,9 +19991,9 @@
         },
         "Log": {
             "categories": [
+                "Materials",
                 "Wood",
-                "Carpentry materials",
-                "Materials"
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.Log"
@@ -20011,9 +20001,9 @@
         },
         "Log Stack - Four": {
             "categories": [
+                "Materials",
                 "Wood",
-                "Carpentry materials",
-                "Materials"
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.LogStacks4"
@@ -20021,9 +20011,9 @@
         },
         "Log Stack - Three": {
             "categories": [
+                "Materials",
                 "Wood",
-                "Carpentry materials",
-                "Materials"
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.LogStacks3"
@@ -20031,9 +20021,9 @@
         },
         "Log Stack - Two": {
             "categories": [
+                "Materials",
                 "Wood",
-                "Carpentry materials",
-                "Materials"
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.LogStacks2"
@@ -20384,8 +20374,8 @@
         },
         "Lug Wrench": {
             "categories": [
-                "Tools",
-                "Mechanics tools"
+                "Mechanics tools",
+                "Tools"
             ],
             "item_id": [
                 "Base.LugWrench"
@@ -20541,8 +20531,8 @@
         },
         "Mac and Cheese": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.Macandcheese"
@@ -20582,8 +20572,8 @@
         },
         "Machete": {
             "categories": [
-                "Long blade weapons",
                 "Tools",
+                "Long blade weapons",
                 "Cooking tools"
             ],
             "item_id": [
@@ -21601,8 +21591,8 @@
         },
         "Maggots": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.Maggots"
@@ -21717,8 +21707,8 @@
         },
         "Makeshift Fishing Rod": {
             "categories": [
-                "Long blunt weapons",
                 "Tools",
+                "Long blunt weapons",
                 "Fishing tools"
             ],
             "item_id": [
@@ -21735,10 +21725,10 @@
         },
         "Makeshift Radio": {
             "categories": [
-                "Appliances",
-                "Communications",
+                "Vehicle parts",
                 "Entertainment",
-                "Vehicle parts"
+                "Appliances",
+                "Communications"
             ],
             "item_id": [
                 "Base.RadioMakeShift"
@@ -21762,8 +21752,8 @@
         },
         "Maki": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Maki"
@@ -21994,8 +21984,8 @@
         },
         "Marmalade": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.JamMarmalade"
@@ -22131,9 +22121,9 @@
         },
         "Meat Cleaver": {
             "categories": [
-                "Short blade weapons",
                 "Tools",
-                "Cooking tools"
+                "Cooking tools",
+                "Short blade weapons"
             ],
             "item_id": [
                 "Base.MeatCleaver",
@@ -22512,8 +22502,8 @@
         "Mildew Spray": {
             "categories": [
                 "Farming tools",
-                "Farming materials",
-                "Tools"
+                "Tools",
+                "Farming materials"
             ],
             "item_id": [
                 "Base.GardeningSprayMilk"
@@ -22903,8 +22893,8 @@
         },
         "Millipede": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.Millipede",
@@ -23217,8 +23207,8 @@
         },
         "Muffin": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.MuffinGeneric"
@@ -23315,8 +23305,8 @@
         },
         "Mug": {
             "categories": [
-                "Fluid containers",
                 "Tools",
+                "Fluid containers",
                 "Cooking tools"
             ],
             "item_id": [
@@ -23393,8 +23383,8 @@
         },
         "Mushrooms": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.MushroomGeneric1",
@@ -23434,8 +23424,8 @@
         },
         "Mutton Chop": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.MuttonChop"
@@ -23462,10 +23452,10 @@
         },
         "Nails": {
             "categories": [
-                "Repair materials",
-                "Carpentry materials",
+                "Materials",
                 "Metal",
-                "Materials"
+                "Carpentry materials",
+                "Repair materials"
             ],
             "item_id": [
                 "Base.Nails"
@@ -23479,22 +23469,6 @@
                 "Base.Necklace_Crucifix"
             ]
         },
-        "Necklace - Pearl": {
-            "categories": [
-                "Jewelry"
-            ],
-            "item_id": [
-                "Base.Necklace_Pearl"
-            ]
-        },
-        "Necklace - Pig Tusks": {
-            "categories": [
-                "Jewelry"
-            ],
-            "item_id": [
-                "Base.Necklace_BoarTusk_Multi"
-            ]
-        },
         "Necklace - Yin and Yang Symbol": {
             "categories": [
                 "Jewelry"
@@ -23505,10 +23479,10 @@
         },
         "Needle": {
             "categories": [
-                "First aid tools",
-                "Medical items",
+                "Tools",
                 "Tailoring tools",
-                "Tools"
+                "Medical items",
+                "First aid tools"
             ],
             "item_id": [
                 "Base.Needle"
@@ -23662,8 +23636,8 @@
         },
         "Notched Plank": {
             "categories": [
-                "Camping",
-                "Wood"
+                "Wood",
+                "Camping"
             ],
             "item_id": [
                 "Base.PercedWood"
@@ -23807,9 +23781,9 @@
         },
         "Old Television": {
             "categories": [
-                "Appliances",
                 "Communications",
-                "Entertainment"
+                "Entertainment",
+                "Appliances"
             ],
             "item_id": [
                 "Base.TvAntique"
@@ -23875,8 +23849,8 @@
         },
         "Omelette": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.EggOmelette",
@@ -23906,8 +23880,8 @@
         },
         "Onion": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Onion"
@@ -23931,8 +23905,8 @@
         },
         "Onion Slices": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.OnionRings"
@@ -23987,8 +23961,8 @@
         },
         "Orange Soda": {
             "categories": [
-                "Drinks",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Drinks"
             ],
             "item_id": [
                 "Base.PopBottle"
@@ -23996,8 +23970,8 @@
         },
         "Oregano": {
             "categories": [
-                "Non-perishable food",
                 "Wild herbs",
+                "Non-perishable food",
                 "Spices"
             ],
             "item_id": [
@@ -24107,8 +24081,8 @@
         },
         "Oysters": {
             "categories": [
-                "Perishable food",
-                "Seafood"
+                "Seafood",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Oysters"
@@ -24181,8 +24155,8 @@
         },
         "Packaged Corn": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.CornFrozen"
@@ -24190,8 +24164,8 @@
         },
         "Packaged Peas": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Peas"
@@ -24199,8 +24173,8 @@
         },
         "Packaged Vegetables": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.MixedVegetables"
@@ -24305,8 +24279,8 @@
         },
         "Paint - Black": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PaintBlack"
@@ -24314,8 +24288,8 @@
         },
         "Paint - Blue": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PaintBlue"
@@ -24323,8 +24297,8 @@
         },
         "Paint - Brown": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PaintBrown"
@@ -24332,8 +24306,8 @@
         },
         "Paint - Cyan": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PaintCyan"
@@ -24341,8 +24315,8 @@
         },
         "Paint - Gray": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PaintGrey"
@@ -24350,8 +24324,8 @@
         },
         "Paint - Green": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PaintGreen"
@@ -24359,8 +24333,8 @@
         },
         "Paint - Light Blue": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PaintLightBlue"
@@ -24368,8 +24342,8 @@
         },
         "Paint - Light Brown": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PaintLightBrown"
@@ -24377,8 +24351,8 @@
         },
         "Paint - Orange": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PaintOrange"
@@ -24386,8 +24360,8 @@
         },
         "Paint - Pink": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PaintPink"
@@ -24395,8 +24369,8 @@
         },
         "Paint - Purple": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PaintPurple"
@@ -24404,8 +24378,8 @@
         },
         "Paint - Red": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PaintRed"
@@ -24413,8 +24387,8 @@
         },
         "Paint - Turquoise": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PaintTurquoise"
@@ -24422,8 +24396,8 @@
         },
         "Paint - White": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PaintWhite"
@@ -24431,8 +24405,8 @@
         },
         "Paint - Yellow": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.PaintYellow"
@@ -24458,8 +24432,8 @@
         },
         "Pancake Mix": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.PancakeMix"
@@ -24545,36 +24519,12 @@
                 "Base.Trousers_PrisonGuard"
             ]
         },
-        "Pants - Shell Suit": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
-                "Base.Trousers_Shellsuit_TINT",
-                "Base.Trousers_Shellsuit_Black",
-                "Base.Trousers_Shellsuit_Blue",
-                "Base.Trousers_Shellsuit_Green",
-                "Base.Trousers_Shellsuit_Pink",
-                "Base.Trousers_Shellsuit_Teal"
-            ]
-        },
         "Pants - Sheriff Deputy": {
             "categories": [
                 "Pants"
             ],
             "item_id": [
                 "Base.Trousers_Sheriff"
-            ]
-        },
-        "Pants - Suit": {
-            "categories": [
-                "Pants"
-            ],
-            "item_id": [
-                "Base.Trousers_SuitWhite_White",
-                "Base.Trousers_Suit",
-                "Base.Trousers_SuitTEXTURE",
-                "Base.Trousers_SuitWhite"
             ]
         },
         "Paper Bag": {
@@ -25038,8 +24988,8 @@
         "Paperclip": {
             "categories": [
                 "Fishing materials",
-                "Metal",
-                "Materials"
+                "Materials",
+                "Metal"
             ],
             "item_id": [
                 "Base.Paperclip"
@@ -25122,8 +25072,8 @@
         },
         "Parsley": {
             "categories": [
-                "Non-perishable food",
                 "Wild herbs",
+                "Non-perishable food",
                 "Spices"
             ],
             "item_id": [
@@ -25174,8 +25124,8 @@
         },
         "Pasta": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.Pasta",
@@ -25223,8 +25173,8 @@
         },
         "Peanut Butter": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.PeanutButter"
@@ -25241,8 +25191,8 @@
         },
         "Peanuts": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.Peanuts"
@@ -25262,6 +25212,7 @@
                 "Jewelry"
             ],
             "item_id": [
+                "Base.Necklace_Pearl",
                 "Base.Necklacepearl"
             ]
         },
@@ -25360,8 +25311,8 @@
         },
         "Pepperoni": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Pepperoni"
@@ -25369,9 +25320,9 @@
         },
         "Perch": {
             "categories": [
+                "Seafood",
                 "Perishable food",
-                "Fish",
-                "Seafood"
+                "Fish"
             ],
             "item_id": [
                 "Base.Perch"
@@ -25397,8 +25348,8 @@
         "Pest Flies Spray": {
             "categories": [
                 "Farming tools",
-                "Farming materials",
-                "Tools"
+                "Tools",
+                "Farming materials"
             ],
             "item_id": [
                 "Base.GardeningSprayCigarettes"
@@ -25670,8 +25621,8 @@
         },
         "Pie Preparation": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.PiePrep"
@@ -25736,9 +25687,9 @@
         },
         "Pike": {
             "categories": [
+                "Seafood",
                 "Perishable food",
-                "Fish",
-                "Seafood"
+                "Fish"
             ],
             "item_id": [
                 "Base.Pike"
@@ -25754,8 +25705,8 @@
         },
         "Pillbug": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.Pillbug"
@@ -25871,8 +25822,8 @@
         },
         "Pizza Slice": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Pizza"
@@ -25880,8 +25831,8 @@
         },
         "Plain Muffins": {
             "categories": [
-                "Perishable food",
-                "Prepared food"
+                "Prepared food",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.BakingTray_Muffin",
@@ -25890,10 +25841,10 @@
         },
         "Plank": {
             "categories": [
+                "Materials",
                 "Wood",
                 "Carpentry materials",
-                "Long blunt weapons",
-                "Materials"
+                "Long blunt weapons"
             ],
             "item_id": [
                 "Base.Plank"
@@ -26109,8 +26060,8 @@
         },
         "Plunger": {
             "categories": [
-                "Short blunt weapons",
-                "Household"
+                "Household",
+                "Short blunt weapons"
             ],
             "item_id": [
                 "Base.Plunger"
@@ -26285,9 +26236,9 @@
         },
         "Pop Can": {
             "categories": [
-                "Junk",
+                "Materials",
                 "Metal",
-                "Materials"
+                "Junk"
             ],
             "item_id": [
                 "Base.Pop2Empty",
@@ -26305,8 +26256,8 @@
         },
         "Poppy Bagel": {
             "categories": [
-                "Perishable food",
-                "Grains"
+                "Grains",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.BagelPoppy"
@@ -26362,8 +26313,8 @@
         },
         "Pork Chop": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.PorkChop"
@@ -26395,8 +26346,8 @@
         },
         "Pot": {
             "categories": [
-                "Fluid containers",
                 "Tools",
+                "Fluid containers",
                 "Cooking tools"
             ],
             "item_id": [
@@ -26406,8 +26357,8 @@
         },
         "Potato": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Potato"
@@ -26547,10 +26498,10 @@
         },
         "Premium Technologies Radio": {
             "categories": [
-                "Appliances",
-                "Communications",
+                "Vehicle parts",
                 "Entertainment",
-                "Vehicle parts"
+                "Appliances",
+                "Communications"
             ],
             "item_id": [
                 "Base.RadioRed"
@@ -26558,9 +26509,9 @@
         },
         "Premium Technologies Television": {
             "categories": [
-                "Appliances",
                 "Communications",
-                "Entertainment"
+                "Entertainment",
+                "Appliances"
             ],
             "item_id": [
                 "Base.TvWideScreen"
@@ -26644,8 +26595,8 @@
         },
         "Pretzel": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.Pretzel"
@@ -26753,8 +26704,8 @@
         },
         "Propane Tank": {
             "categories": [
-                "Welding materials",
-                "Materials"
+                "Materials",
+                "Welding materials"
             ],
             "item_id": [
                 "Base.PropaneTank"
@@ -27076,8 +27027,8 @@
         },
         "Radish": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.RedRadish"
@@ -27101,12 +27052,12 @@
         },
         "Rag": {
             "categories": [
-                "Medical items",
-                "Materials",
-                "Fabric",
                 "Household",
                 "First aid materials",
-                "Tailoring materials"
+                "Materials",
+                "Fabric",
+                "Tailoring materials",
+                "Medical items"
             ],
             "item_id": [
                 "Base.RippedSheets",
@@ -27418,8 +27369,8 @@
         },
         "Razor": {
             "categories": [
-                "Junk",
-                "Appearance"
+                "Appearance",
+                "Junk"
             ],
             "item_id": [
                 "Base.Razor"
@@ -27558,8 +27509,8 @@
         },
         "Red Electric Bass": {
             "categories": [
-                "Long blunt weapons",
-                "Instruments"
+                "Instruments",
+                "Long blunt weapons"
             ],
             "item_id": [
                 "Base.GuitarElectricBassRed"
@@ -27567,8 +27518,8 @@
         },
         "Red Electric Guitar": {
             "categories": [
-                "Long blunt weapons",
-                "Instruments"
+                "Instruments",
+                "Long blunt weapons"
             ],
             "item_id": [
                 "Base.GuitarElectricRed"
@@ -27593,8 +27544,8 @@
         },
         "Red Wine": {
             "categories": [
-                "Drinks",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Drinks"
             ],
             "item_id": [
                 "Base.Wine2"
@@ -27683,8 +27634,8 @@
         },
         "Remote Controller (Long-Range)": {
             "categories": [
-                "Electrical materials",
-                "Materials"
+                "Materials",
+                "Electrical materials"
             ],
             "item_id": [
                 "Base.RemoteCraftedV3"
@@ -27692,8 +27643,8 @@
         },
         "Remote Controller (Medium-Range)": {
             "categories": [
-                "Electrical materials",
-                "Materials"
+                "Materials",
+                "Electrical materials"
             ],
             "item_id": [
                 "Base.RemoteCraftedV2"
@@ -27701,8 +27652,8 @@
         },
         "Remote Controller (Short-Range)": {
             "categories": [
-                "Electrical materials",
-                "Materials"
+                "Materials",
+                "Electrical materials"
             ],
             "item_id": [
                 "Base.RemoteCraftedV1"
@@ -27813,8 +27764,8 @@
         },
         "Rice": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.Rice"
@@ -27855,8 +27806,8 @@
         },
         "Rice Paper": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.RicePaper"
@@ -28029,9 +27980,9 @@
         },
         "Rolling Pin": {
             "categories": [
-                "Short blunt weapons",
                 "Tools",
-                "Cooking tools"
+                "Cooking tools",
+                "Short blunt weapons"
             ],
             "item_id": [
                 "Base.RollingPin"
@@ -28056,8 +28007,8 @@
         },
         "Rope": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.Rope"
@@ -28105,8 +28056,8 @@
         },
         "Rosemary": {
             "categories": [
-                "Non-perishable food",
                 "Wild herbs",
+                "Non-perishable food",
                 "Spices"
             ],
             "item_id": [
@@ -28392,8 +28343,8 @@
         },
         "Sack of Dirt": {
             "categories": [
-                "Farming materials",
-                "Materials"
+                "Materials",
+                "Farming materials"
             ],
             "item_id": [
                 "Base.Dirtbag"
@@ -28401,8 +28352,8 @@
         },
         "Sack of Gravel": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.Gravelbag"
@@ -28410,8 +28361,8 @@
         },
         "Sack of Sand": {
             "categories": [
-                "Carpentry materials",
-                "Materials"
+                "Materials",
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.Sandbag"
@@ -28435,8 +28386,8 @@
         },
         "Sage": {
             "categories": [
-                "Non-perishable food",
                 "Wild herbs",
+                "Non-perishable food",
                 "Spices"
             ],
             "item_id": [
@@ -28472,8 +28423,8 @@
         },
         "Salami": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Salami"
@@ -28481,8 +28432,8 @@
         },
         "Salami Slices": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.SalamiSlice"
@@ -28490,8 +28441,8 @@
         },
         "Salmon": {
             "categories": [
-                "Perishable food",
-                "Seafood"
+                "Seafood",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Salmon"
@@ -28654,9 +28605,9 @@
         },
         "Saucepan": {
             "categories": [
-                "Short blunt weapons",
                 "Fluid containers",
-                "Tools"
+                "Tools",
+                "Short blunt weapons"
             ],
             "item_id": [
                 "Base.Saucepan"
@@ -28672,8 +28623,8 @@
         },
         "Sausage": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Sausage"
@@ -28713,8 +28664,8 @@
         },
         "Saxophone": {
             "categories": [
-                "Long blunt weapons",
-                "Instruments"
+                "Instruments",
+                "Long blunt weapons"
             ],
             "item_id": [
                 "Base.Saxophone"
@@ -28738,8 +28689,8 @@
         },
         "Scanner Module": {
             "categories": [
-                "Electrical materials",
-                "Materials"
+                "Materials",
+                "Electrical materials"
             ],
             "item_id": [
                 "Base.ScannerModule"
@@ -28793,11 +28744,11 @@
         },
         "Scissors": {
             "categories": [
-                "Stationery",
-                "Appearance",
+                "Tailoring tools",
                 "Tools",
-                "Short blade weapons",
-                "Tailoring tools"
+                "Appearance",
+                "Stationery",
+                "Short blade weapons"
             ],
             "item_id": [
                 "Base.Scissors"
@@ -28829,9 +28780,9 @@
         },
         "Scrap Metal": {
             "categories": [
-                "Welding materials",
+                "Materials",
                 "Metal",
-                "Materials"
+                "Welding materials"
             ],
             "item_id": [
                 "Base.ScrapMetal"
@@ -28979,9 +28930,9 @@
         },
         "Scrap Wood": {
             "categories": [
+                "Materials",
                 "Wood",
-                "Carpentry materials",
-                "Materials"
+                "Carpentry materials"
             ],
             "item_id": [
                 "Base.UnusableWood"
@@ -29013,12 +28964,12 @@
         },
         "Screwdriver": {
             "categories": [
+                "Welding tools",
+                "Mechanics tools",
                 "Tools",
                 "Electrical tools",
-                "Welding tools",
-                "Short blade weapons",
                 "Carpentry tools",
-                "Mechanics tools"
+                "Short blade weapons"
             ],
             "item_id": [
                 "Base.Screwdriver",
@@ -29027,9 +28978,9 @@
         },
         "Screws": {
             "categories": [
-                "Welding materials",
+                "Materials",
                 "Metal",
-                "Materials"
+                "Welding materials"
             ],
             "item_id": [
                 "Base.Screws"
@@ -29082,8 +29033,8 @@
         },
         "Security Pass Key Ring": {
             "categories": [
-                "Memento",
-                "Key rings"
+                "Key rings",
+                "Memento"
             ],
             "item_id": [
                 "Base.KeyRing_SecurityPass"
@@ -29611,8 +29562,8 @@
         },
         "Sesame Bagel": {
             "categories": [
-                "Perishable food",
-                "Grains"
+                "Grains",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.BagelSesame"
@@ -29820,9 +29771,9 @@
         },
         "Sewing Kit": {
             "categories": [
-                "Tailoring tools",
                 "Tools",
-                "Handheld containers"
+                "Handheld containers",
+                "Tailoring tools"
             ],
             "item_id": [
                 "Base.SewingKit"
@@ -29968,9 +29919,9 @@
         },
         "Sheet": {
             "categories": [
-                "Fabric",
+                "Materials",
                 "Tailoring materials",
-                "Materials"
+                "Fabric"
             ],
             "item_id": [
                 "Base.Sheet"
@@ -29978,9 +29929,9 @@
         },
         "Sheet Metal Scrap": {
             "categories": [
-                "Welding materials",
+                "Materials",
                 "Metal",
-                "Materials"
+                "Welding materials"
             ],
             "item_id": [
                 "Base.UnusableMetal"
@@ -29996,9 +29947,9 @@
         },
         "Sheet Rope": {
             "categories": [
-                "Fabric",
+                "Materials",
                 "Carpentry materials",
-                "Materials"
+                "Fabric"
             ],
             "item_id": [
                 "Base.SheetRope"
@@ -30040,6 +29991,19 @@
                 "Base.Jacket_Shellsuit_Green",
                 "Base.Jacket_Shellsuit_Pink",
                 "Base.Jacket_Shellsuit_Teal"
+            ]
+        },
+        "Shell Suit Pants": {
+            "categories": [
+                "Pants"
+            ],
+            "item_id": [
+                "Base.Trousers_Shellsuit_TINT",
+                "Base.Trousers_Shellsuit_Black",
+                "Base.Trousers_Shellsuit_Blue",
+                "Base.Trousers_Shellsuit_Green",
+                "Base.Trousers_Shellsuit_Pink",
+                "Base.Trousers_Shellsuit_Teal"
             ]
         },
         "Shells Bandolier": {
@@ -30489,8 +30453,8 @@
         },
         "Shrimp": {
             "categories": [
-                "Perishable food",
-                "Seafood"
+                "Seafood",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Shrimp"
@@ -31136,8 +31100,8 @@
         "Sledgehammer": {
             "categories": [
                 "Long blunt weapons",
-                "Carpentry tools",
-                "Tools"
+                "Tools",
+                "Carpentry tools"
             ],
             "item_id": [
                 "Base.Sledgehammer",
@@ -31177,14 +31141,6 @@
                 "Base.SleepingBag_RedPlaid_Packed"
             ]
         },
-        "Sleeping Bag - Hide": {
-            "categories": [
-                "Camping"
-            ],
-            "item_id": [
-                "Base.SleepingBag_Hide"
-            ]
-        },
         "Sleeping Pills": {
             "categories": [
                 "Medical items"
@@ -31222,8 +31178,8 @@
         },
         "Slug": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.Slug",
@@ -31606,8 +31562,8 @@
         },
         "Snail": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.Snail"
@@ -31881,8 +31837,8 @@
         },
         "Speaker": {
             "categories": [
-                "Electrical",
-                "Electronics"
+                "Electronics",
+                "Electrical"
             ],
             "item_id": [
                 "Base.Speaker"
@@ -31898,8 +31854,8 @@
         },
         "Spear with Bread Knife": {
             "categories": [
-                "Spears",
                 "Tools",
+                "Spears",
                 "Fishing tools"
             ],
             "item_id": [
@@ -31908,8 +31864,8 @@
         },
         "Spear with Butter Knife": {
             "categories": [
-                "Spears",
                 "Tools",
+                "Spears",
                 "Fishing tools"
             ],
             "item_id": [
@@ -31926,8 +31882,8 @@
         },
         "Spear with Fork": {
             "categories": [
-                "Spears",
                 "Tools",
+                "Spears",
                 "Fishing tools"
             ],
             "item_id": [
@@ -31944,8 +31900,8 @@
         },
         "Spear with Hand Fork": {
             "categories": [
-                "Spears",
                 "Tools",
+                "Spears",
                 "Fishing tools"
             ],
             "item_id": [
@@ -31954,8 +31910,8 @@
         },
         "Spear with Hunting Knife": {
             "categories": [
-                "Spears",
                 "Tools",
+                "Spears",
                 "Fishing tools"
             ],
             "item_id": [
@@ -31964,8 +31920,8 @@
         },
         "Spear with Ice Pick": {
             "categories": [
-                "Spears",
                 "Tools",
+                "Spears",
                 "Fishing tools"
             ],
             "item_id": [
@@ -31974,8 +31930,8 @@
         },
         "Spear with Kitchen Knife": {
             "categories": [
-                "Spears",
                 "Tools",
+                "Spears",
                 "Fishing tools"
             ],
             "item_id": [
@@ -31992,8 +31948,8 @@
         },
         "Spear with Letter Opener": {
             "categories": [
-                "Spears",
                 "Tools",
+                "Spears",
                 "Fishing tools"
             ],
             "item_id": [
@@ -32034,8 +31990,8 @@
         },
         "Spear with Machete": {
             "categories": [
-                "Spears",
                 "Tools",
+                "Spears",
                 "Fishing tools"
             ],
             "item_id": [
@@ -32060,8 +32016,8 @@
         },
         "Spear with Scalpel": {
             "categories": [
-                "Spears",
                 "Tools",
+                "Spears",
                 "Fishing tools"
             ],
             "item_id": [
@@ -32070,8 +32026,8 @@
         },
         "Spear with Scissors": {
             "categories": [
-                "Spears",
                 "Tools",
+                "Spears",
                 "Fishing tools"
             ],
             "item_id": [
@@ -32088,8 +32044,8 @@
         },
         "Spear with Screwdriver": {
             "categories": [
-                "Spears",
                 "Tools",
+                "Spears",
                 "Fishing tools"
             ],
             "item_id": [
@@ -32114,8 +32070,8 @@
         },
         "Spear with Spoon": {
             "categories": [
-                "Spears",
                 "Tools",
+                "Spears",
                 "Fishing tools"
             ],
             "item_id": [
@@ -32296,6 +32252,14 @@
             ],
             "item_id": [
                 "Base.SpiffoTail"
+            ]
+        },
+        "Spiffo Tie": {
+            "categories": [
+                "Memento"
+            ],
+            "item_id": [
+                "Base.Tie_Full_Spiffo"
             ]
         },
         "Spiffo Tie - Clip-on": {
@@ -32529,9 +32493,9 @@
         },
         "Spoon": {
             "categories": [
-                "Short blade weapons",
                 "Tools",
-                "Cooking tools"
+                "Cooking tools",
+                "Short blade weapons"
             ],
             "item_id": [
                 "Base.Spoon"
@@ -32599,8 +32563,8 @@
         },
         "Squid": {
             "categories": [
-                "Perishable food",
-                "Seafood"
+                "Seafood",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Squid"
@@ -32608,8 +32572,8 @@
         },
         "Squid Calamari": {
             "categories": [
-                "Perishable food",
-                "Seafood"
+                "Seafood",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.SquidCalamari"
@@ -32689,8 +32653,8 @@
         },
         "Steak": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Steak"
@@ -32818,9 +32782,9 @@
         },
         "Steel Rod": {
             "categories": [
-                "Short blunt weapons",
+                "Materials",
                 "Welding materials",
-                "Materials"
+                "Short blunt weapons"
             ],
             "item_id": [
                 "Base.MetalBar"
@@ -32852,9 +32816,9 @@
         },
         "Steel Sheet": {
             "categories": [
-                "Welding materials",
+                "Materials",
                 "Metal",
-                "Materials"
+                "Welding materials"
             ],
             "item_id": [
                 "Base.SheetMetal"
@@ -32862,9 +32826,9 @@
         },
         "Steel Sheet - Small": {
             "categories": [
-                "Welding materials",
+                "Materials",
                 "Metal",
-                "Materials"
+                "Welding materials"
             ],
             "item_id": [
                 "Base.SmallSheetMetal"
@@ -33023,8 +32987,8 @@
         "Stone Hammer": {
             "categories": [
                 "Short blunt weapons",
-                "Carpentry tools",
-                "Tools"
+                "Tools",
+                "Carpentry tools"
             ],
             "item_id": [
                 "Base.HammerStone"
@@ -33032,9 +32996,9 @@
         },
         "Stone Knife": {
             "categories": [
-                "Short blade weapons",
                 "Tools",
-                "Cooking tools"
+                "Cooking tools",
+                "Short blade weapons"
             ],
             "item_id": [
                 "Base.FlintKnife"
@@ -33312,10 +33276,10 @@
         },
         "Sturdy Stick": {
             "categories": [
-                "Wood",
                 "Fishing materials",
                 "Materials",
-                "Camping"
+                "Camping",
+                "Wood"
             ],
             "item_id": [
                 "Base.WoodenStick"
@@ -33364,6 +33328,27 @@
                 "Base.SugarPacket"
             ]
         },
+        "Suit Jacket": {
+            "categories": [
+                "Jackets"
+            ],
+            "item_id": [
+                "Base.Suit_JacketTINT",
+                "Base.Suit_Jacket",
+                "Base.Suit_Jacket_White"
+            ]
+        },
+        "Suit Pants": {
+            "categories": [
+                "Pants"
+            ],
+            "item_id": [
+                "Base.Trousers_SuitWhite_White",
+                "Base.Trousers_Suit",
+                "Base.Trousers_SuitTEXTURE",
+                "Base.Trousers_SuitWhite"
+            ]
+        },
         "Suitcase": {
             "categories": [
                 "type=Baggage"
@@ -33401,9 +33386,9 @@
         },
         "Sunfish": {
             "categories": [
+                "Seafood",
                 "Perishable food",
-                "Fish",
-                "Seafood"
+                "Fish"
             ],
             "item_id": [
                 "Base.Panfish"
@@ -33427,8 +33412,8 @@
         },
         "Sunflower Seeds": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.SunflowerSeeds"
@@ -33829,7 +33814,7 @@
                 "Base.Tshirt_PoloTINT"
             ]
         },
-        "T-shirt - Ranger (green)": {
+        "T-shirt - Ranger": {
             "categories": [
                 "T-shirts"
             ],
@@ -33934,8 +33919,8 @@
         },
         "TV Dinner": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.TVDinner"
@@ -33943,8 +33928,8 @@
         },
         "TV Remote": {
             "categories": [
-                "Electrical",
-                "Electronics"
+                "Electronics",
+                "Electrical"
             ],
             "item_id": [
                 "Base.Remote"
@@ -33981,8 +33966,8 @@
         },
         "Taco Shell": {
             "categories": [
-                "Perishable food",
-                "Grains"
+                "Grains",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.TacoShell"
@@ -34212,8 +34197,8 @@
         },
         "Tea Bag": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.Teabag2"
@@ -34221,8 +34206,8 @@
         },
         "Teacup": {
             "categories": [
-                "Fluid containers",
                 "Tools",
+                "Fluid containers",
                 "Cooking tools"
             ],
             "item_id": [
@@ -34299,8 +34284,8 @@
         },
         "Tent Kit": {
             "categories": [
-                "Items",
-                "Camping"
+                "Camping",
+                "Items"
             ],
             "item_id": [
                 "Base.CampingTentKit2"
@@ -34331,8 +34316,8 @@
         },
         "Termites": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.Termites"
@@ -34794,11 +34779,11 @@
         },
         "Thread": {
             "categories": [
-                "Medical items",
+                "First aid materials",
                 "Materials",
                 "Fabric",
-                "First aid materials",
-                "Tailoring materials"
+                "Tailoring materials",
+                "Medical items"
             ],
             "item_id": [
                 "Base.Thread"
@@ -34817,8 +34802,8 @@
         },
         "Thyme": {
             "categories": [
-                "Non-perishable food",
                 "Wild herbs",
+                "Non-perishable food",
                 "Spices"
             ],
             "item_id": [
@@ -34864,14 +34849,6 @@
             ],
             "item_id": [
                 "Base.Tie_Worn"
-            ]
-        },
-        "Tie - Spiffo": {
-            "categories": [
-                "Memento"
-            ],
-            "item_id": [
-                "Base.Tie_Full_Spiffo"
             ]
         },
         "Tights - Black": {
@@ -34930,9 +34907,9 @@
         },
         "Timer": {
             "categories": [
-                "Electrical materials",
+                "Materials",
                 "Electronics",
-                "Materials"
+                "Electrical materials"
             ],
             "item_id": [
                 "Base.Timer"
@@ -34948,8 +34925,8 @@
         },
         "Tin Can": {
             "categories": [
-                "Metal",
-                "Materials"
+                "Materials",
+                "Metal"
             ],
             "item_id": [
                 "Base.TinCanEmpty",
@@ -35081,8 +35058,8 @@
         },
         "Tire Pump": {
             "categories": [
-                "Tools",
-                "Mechanics tools"
+                "Mechanics tools",
+                "Tools"
             ],
             "item_id": [
                 "Base.TirePump"
@@ -35143,8 +35120,8 @@
         },
         "Tissue": {
             "categories": [
-                "Medical items",
-                "First aid materials"
+                "First aid materials",
+                "Medical items"
             ],
             "item_id": [
                 "Base.Tissue"
@@ -35184,8 +35161,8 @@
         },
         "Tofu": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Tofu"
@@ -35210,9 +35187,9 @@
         },
         "Toilet Paper": {
             "categories": [
-                "Junk",
+                "Materials",
                 "First aid materials",
-                "Materials"
+                "Junk"
             ],
             "item_id": [
                 "Base.ToiletPaper"
@@ -35220,8 +35197,8 @@
         },
         "Tomato": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Tomato"
@@ -35331,8 +35308,8 @@
         },
         "Tortilla": {
             "categories": [
-                "Perishable food",
-                "Grains"
+                "Grains",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Tortilla"
@@ -35340,8 +35317,8 @@
         },
         "Tortilla Chips": {
             "categories": [
-                "Grains",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Grains"
             ],
             "item_id": [
                 "Base.TortillaChips",
@@ -35547,8 +35524,8 @@
         },
         "Tree Branch": {
             "categories": [
-                "Wood",
-                "Materials"
+                "Materials",
+                "Wood"
             ],
             "item_id": [
                 "Base.TreeBranch2"
@@ -35628,9 +35605,9 @@
         },
         "Trout": {
             "categories": [
+                "Seafood",
                 "Perishable food",
-                "Fish",
-                "Seafood"
+                "Fish"
             ],
             "item_id": [
                 "Base.Trout"
@@ -35638,8 +35615,8 @@
         },
         "Trumpet": {
             "categories": [
-                "Long blunt weapons",
-                "Instruments"
+                "Instruments",
+                "Long blunt weapons"
             ],
             "item_id": [
                 "Base.Trumpet"
@@ -35896,6 +35873,14 @@
                 "Base.Necklace_BoarTusk"
             ]
         },
+        "Tusks Necklace": {
+            "categories": [
+                "Jewelry"
+            ],
+            "item_id": [
+                "Base.Necklace_BoarTusk_Multi"
+            ]
+        },
         "Tweezers": {
             "categories": [
                 "First aid tools",
@@ -35917,8 +35902,8 @@
         },
         "Twigs": {
             "categories": [
-                "Wood",
-                "Materials"
+                "Materials",
+                "Wood"
             ],
             "item_id": [
                 "Base.Twigs"
@@ -36035,12 +36020,20 @@
         },
         "Underwear": {
             "categories": [
-                "Underpants",
-                "Household"
+                "Household",
+                "Underpants"
             ],
             "item_id": [
                 "Base.Underwear1",
                 "Base.Underwear2"
+            ]
+        },
+        "Unfired Teacup": {
+            "categories": [
+                "Materials"
+            ],
+            "item_id": [
+                "Base.CeramicTeacupGlazedUnfired"
             ]
         },
         "Unlabeled Can of Food": {
@@ -36091,10 +36084,10 @@
         },
         "ValuTech Radio": {
             "categories": [
-                "Appliances",
-                "Communications",
+                "Vehicle parts",
                 "Entertainment",
-                "Vehicle parts"
+                "Appliances",
+                "Communications"
             ],
             "item_id": [
                 "Base.RadioBlack"
@@ -36102,9 +36095,9 @@
         },
         "ValuTech Television": {
             "categories": [
-                "Appliances",
                 "Communications",
-                "Entertainment"
+                "Entertainment",
+                "Appliances"
             ],
             "item_id": [
                 "Base.TvBlack"
@@ -36177,8 +36170,8 @@
         },
         "Violin": {
             "categories": [
-                "Short blunt weapons",
-                "Instruments"
+                "Instruments",
+                "Short blunt weapons"
             ],
             "item_id": [
                 "Base.Violin"
@@ -36609,8 +36602,8 @@
         },
         "Welder Mask": {
             "categories": [
-                "Welding tools",
                 "Masks",
+                "Welding tools",
                 "Tools"
             ],
             "item_id": [
@@ -36651,9 +36644,9 @@
         },
         "Welding Rods": {
             "categories": [
-                "Welding materials",
+                "Materials",
                 "Metal",
-                "Materials"
+                "Welding materials"
             ],
             "item_id": [
                 "Base.WeldingRods"
@@ -36821,8 +36814,8 @@
         },
         "White Wine": {
             "categories": [
-                "Drinks",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Drinks"
             ],
             "item_id": [
                 "Base.Wine"
@@ -36849,8 +36842,8 @@
         },
         "Wild Eggs": {
             "categories": [
-                "Perishable food",
-                "Protein"
+                "Protein",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.WildEggs"
@@ -36950,9 +36943,9 @@
         },
         "Wire": {
             "categories": [
-                "Welding materials",
+                "Materials",
                 "Metal",
-                "Materials"
+                "Welding materials"
             ],
             "item_id": [
                 "Base.Wire"
@@ -36985,8 +36978,8 @@
         "Wood Axe": {
             "categories": [
                 "Axes",
-                "Carpentry tools",
-                "Tools"
+                "Tools",
+                "Carpentry tools"
             ],
             "item_id": [
                 "Base.WoodAxe",
@@ -37019,8 +37012,8 @@
         },
         "Wood Glue": {
             "categories": [
-                "Repair materials",
-                "Materials"
+                "Materials",
+                "Repair materials"
             ],
             "item_id": [
                 "Base.Woodglue"
@@ -37325,8 +37318,8 @@
         },
         "Wooden Spear (crafted)": {
             "categories": [
-                "Spears",
                 "Tools",
+                "Spears",
                 "Fishing tools"
             ],
             "item_id": [
@@ -37418,8 +37411,8 @@
         },
         "Worm": {
             "categories": [
-                "Insects",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Insects"
             ],
             "item_id": [
                 "Base.Worm"
@@ -37427,9 +37420,9 @@
         },
         "Wrench": {
             "categories": [
-                "Short blunt weapons",
                 "Tools",
-                "Mechanics tools"
+                "Mechanics tools",
+                "Short blunt weapons"
             ],
             "item_id": [
                 "Base.Wrench"
@@ -37532,8 +37525,8 @@
         },
         "Yarn": {
             "categories": [
-                "Fabric",
-                "Materials"
+                "Materials",
+                "Fabric"
             ],
             "item_id": [
                 "Base.Yarn"
@@ -37541,8 +37534,8 @@
         },
         "Yeast": {
             "categories": [
-                "Miscellaneous food",
-                "Non-perishable food"
+                "Non-perishable food",
+                "Miscellaneous food"
             ],
             "item_id": [
                 "Base.Yeast"
@@ -37690,8 +37683,8 @@
         },
         "Zucchini": {
             "categories": [
-                "Perishable food",
-                "Vegetables"
+                "Vegetables",
+                "Perishable food"
             ],
             "item_id": [
                 "Base.Zucchini"
@@ -41235,10 +41228,10 @@
     "skill": {
         "Agriculture": {
             "categories": [
-                "Farming skills",
+                "Farming",
                 "Skills",
                 "Guides",
-                "Farming"
+                "Farming skills"
             ],
             "skill_id": [
                 "Farming"
@@ -41246,8 +41239,8 @@
         },
         "Aiming": {
             "categories": [
-                "Combat skills",
-                "Skills"
+                "Skills",
+                "Combat skills"
             ],
             "skill_id": [
                 "Aiming"
@@ -41255,9 +41248,9 @@
         },
         "Animal Care": {
             "categories": [
-                "Farming skills",
                 "Skills",
-                "Guides"
+                "Guides",
+                "Farming skills"
             ],
             "skill_id": [
                 "Husbandry"
@@ -41265,8 +41258,8 @@
         },
         "Axe (skill)": {
             "categories": [
-                "Combat skills",
-                "Skills"
+                "Skills",
+                "Combat skills"
             ],
             "skill_id": [
                 "Axe"
@@ -41274,8 +41267,8 @@
         },
         "Blacksmithing": {
             "categories": [
-                "Crafting skills",
-                "Skills"
+                "Skills",
+                "Crafting skills"
             ],
             "skill_id": [
                 "Blacksmith"
@@ -41283,9 +41276,9 @@
         },
         "Butchering": {
             "categories": [
-                "Farming skills",
                 "Skills",
-                "Guides"
+                "Guides",
+                "Farming skills"
             ],
             "skill_id": [
                 "Butchering"
@@ -41293,10 +41286,10 @@
         },
         "Carpentry": {
             "categories": [
-                "Crafting skills",
                 "Carpentry",
                 "Skills",
-                "Guides"
+                "Guides",
+                "Crafting skills"
             ],
             "skill_id": [
                 "Woodwork"
@@ -41304,9 +41297,9 @@
         },
         "Carving": {
             "categories": [
+                "Guides",
                 "Crafting skills",
-                "Skills",
-                "Guides"
+                "Skills"
             ],
             "skill_id": [
                 "Carving"
@@ -41314,9 +41307,9 @@
         },
         "Cooking": {
             "categories": [
-                "Crafting skills",
                 "Skills",
-                "Guides"
+                "Guides",
+                "Crafting skills"
             ],
             "skill_id": [
                 "Cooking"
@@ -41324,9 +41317,9 @@
         },
         "Electrical": {
             "categories": [
-                "Crafting skills",
                 "Skills",
-                "Guides"
+                "Guides",
+                "Crafting skills"
             ],
             "skill_id": [
                 "Electricity"
@@ -41344,10 +41337,10 @@
         },
         "Fishing": {
             "categories": [
-                "Skills",
                 "Survivalist skills",
-                "Fishing",
-                "Guides"
+                "Skills",
+                "Guides",
+                "Fishing"
             ],
             "skill_id": [
                 "Fishing"
@@ -41365,9 +41358,9 @@
         "Foraging": {
             "categories": [
                 "Foraging",
-                "Survivalist skills",
                 "Skills",
-                "Guides"
+                "Guides",
+                "Survivalist skills"
             ],
             "skill_id": [
                 "PlantScavenging"
@@ -41375,9 +41368,9 @@
         },
         "Glassmaking": {
             "categories": [
-                "Crafting skills",
                 "Skills",
-                "Guides"
+                "Guides",
+                "Crafting skills"
             ],
             "skill_id": [
                 "Glassmaking"
@@ -41385,9 +41378,9 @@
         },
         "Knapping": {
             "categories": [
-                "Crafting skills",
                 "Skills",
-                "Guides"
+                "Guides",
+                "Crafting skills"
             ],
             "skill_id": [
                 "FlintKnapping"
@@ -41404,8 +41397,8 @@
         },
         "Long Blade": {
             "categories": [
-                "Combat skills",
-                "Skills"
+                "Skills",
+                "Combat skills"
             ],
             "skill_id": [
                 "LongBlade"
@@ -41413,8 +41406,8 @@
         },
         "Long Blunt": {
             "categories": [
-                "Combat skills",
-                "Skills"
+                "Skills",
+                "Combat skills"
             ],
             "skill_id": [
                 "Blunt"
@@ -41422,8 +41415,8 @@
         },
         "Maintenance": {
             "categories": [
-                "Combat skills",
-                "Skills"
+                "Skills",
+                "Combat skills"
             ],
             "skill_id": [
                 "Maintenance"
@@ -41431,9 +41424,9 @@
         },
         "Masonry": {
             "categories": [
-                "Crafting skills",
                 "Skills",
-                "Guides"
+                "Guides",
+                "Crafting skills"
             ],
             "skill_id": [
                 "Masonry"
@@ -41441,8 +41434,8 @@
         },
         "Mechanics": {
             "categories": [
-                "Crafting skills",
-                "Skills"
+                "Skills",
+                "Crafting skills"
             ],
             "skill_id": [
                 "Mechanics"
@@ -41459,9 +41452,9 @@
         },
         "Pottery": {
             "categories": [
-                "Crafting skills",
                 "Skills",
-                "Guides"
+                "Guides",
+                "Crafting skills"
             ],
             "skill_id": [
                 "Pottery"
@@ -41469,8 +41462,8 @@
         },
         "Reloading": {
             "categories": [
-                "Combat skills",
-                "Skills"
+                "Skills",
+                "Combat skills"
             ],
             "skill_id": [
                 "Reloading"
@@ -41487,8 +41480,8 @@
         },
         "Short Blade": {
             "categories": [
-                "Combat skills",
-                "Skills"
+                "Skills",
+                "Combat skills"
             ],
             "skill_id": [
                 "SmallBlade"
@@ -41496,8 +41489,8 @@
         },
         "Short Blunt": {
             "categories": [
-                "Combat skills",
-                "Skills"
+                "Skills",
+                "Combat skills"
             ],
             "skill_id": [
                 "SmallBlunt"
@@ -41514,8 +41507,8 @@
         },
         "Spear": {
             "categories": [
-                "Combat skills",
-                "Skills"
+                "Skills",
+                "Combat skills"
             ],
             "skill_id": [
                 "Spear"
@@ -41532,8 +41525,8 @@
         },
         "Tailoring": {
             "categories": [
-                "Crafting skills",
                 "Skills",
+                "Crafting skills",
                 "Tailoring"
             ],
             "skill_id": [
@@ -41552,10 +41545,10 @@
         },
         "Trapping": {
             "categories": [
-                "Skills",
-                "Survivalist skills",
                 "Trapping",
-                "Guides"
+                "Skills",
+                "Guides",
+                "Survivalist skills"
             ],
             "skill_id": [
                 "Trapping"
@@ -41563,10 +41556,10 @@
         },
         "Welding": {
             "categories": [
-                "Crafting skills",
-                "Metalworking",
                 "Skills",
-                "Guides"
+                "Guides",
+                "Crafting skills",
+                "Metalworking"
             ],
             "skill_id": [
                 "MetalWelding"
@@ -41680,8 +41673,8 @@
         },
         "Advanced Forge": {
             "categories": [
-                "Blacksmithing",
                 "Workstations",
+                "Blacksmithing",
                 "Building"
             ],
             "sprite_id": [
@@ -41699,8 +41692,8 @@
         },
         "Advanced Furnace": {
             "categories": [
-                "Blacksmithing",
                 "Workstations",
+                "Blacksmithing",
                 "Building"
             ],
             "sprite_id": [
@@ -41716,8 +41709,8 @@
             "categories": [
                 "Workstations",
                 "Tiles",
-                "Pottery",
-                "Building"
+                "Building",
+                "Pottery"
             ],
             "sprite_id": [
                 "crafted_01_58",
@@ -41752,8 +41745,8 @@
         "Amphora": {
             "categories": [
                 "Tiles",
-                "Pottery",
-                "Building"
+                "Building",
+                "Pottery"
             ],
             "sprite_id": [
                 "crafted_04_32",
@@ -42352,9 +42345,9 @@
         "Big Metal Pole Fence": {
             "categories": [
                 "Tiles",
+                "Building",
                 "Welding",
-                "Fences",
-                "Building"
+                "Fences"
             ],
             "sprite_id": [
                 "constructedobjects_01_77",
@@ -42365,8 +42358,8 @@
             "categories": [
                 "Gates",
                 "Tiles",
-                "Welding",
-                "Building"
+                "Building",
+                "Welding"
             ],
             "sprite_id": [
                 "fixtures_doors_fences_01_25",
@@ -42411,9 +42404,9 @@
         "Big Wire Fence": {
             "categories": [
                 "Tiles",
+                "Building",
                 "Welding",
-                "Fences",
-                "Building"
+                "Fences"
             ],
             "sprite_id": [
                 "fencing_01_57",
@@ -42424,8 +42417,8 @@
             "categories": [
                 "Gates",
                 "Tiles",
-                "Welding",
-                "Building"
+                "Building",
+                "Welding"
             ],
             "sprite_id": [
                 "fixtures_doors_fences_01_129",
@@ -43253,9 +43246,9 @@
         },
         "Brick Doorframe": {
             "categories": [
-                "Building",
                 "Tiles",
-                "Masonry"
+                "Masonry",
+                "Building"
             ],
             "sprite_id": [
                 "walls_exterior_house_01_31",
@@ -43291,9 +43284,9 @@
         },
         "Brick Wall": {
             "categories": [
-                "Building",
                 "Tiles",
-                "Masonry"
+                "Masonry",
+                "Building"
             ],
             "sprite_id": [
                 "walls_exterior_house_01_21",
@@ -43304,9 +43297,9 @@
         },
         "Brick Window Frame": {
             "categories": [
-                "Building",
                 "Tiles",
-                "Masonry"
+                "Masonry",
+                "Building"
             ],
             "sprite_id": [
                 "walls_exterior_house_01_29",
@@ -43517,8 +43510,8 @@
         },
         "Butcher Hook": {
             "categories": [
-                "Carpentry",
                 "Farming",
+                "Carpentry",
                 "Building"
             ],
             "sprite_id": [
@@ -43527,8 +43520,8 @@
         },
         "Butter Churn": {
             "categories": [
-                "Tiles",
                 "Farming",
+                "Tiles",
                 "Building"
             ],
             "item_id": [
@@ -43776,8 +43769,8 @@
         },
         "Charcoal Burning Barrel": {
             "categories": [
-                "Blacksmithing",
                 "Workstations",
+                "Blacksmithing",
                 "Building"
             ],
             "sprite_id": [
@@ -43789,8 +43782,8 @@
         },
         "Charcoal Burning Pile": {
             "categories": [
-                "Blacksmithing",
                 "Workstations",
+                "Blacksmithing",
                 "Building"
             ],
             "sprite_id": [
@@ -43864,8 +43857,8 @@
         },
         "Chicken Hutch (Dark Wood)": {
             "categories": [
-                "Carpentry",
                 "Farming",
+                "Carpentry",
                 "Building"
             ],
             "sprite_id": [
@@ -43877,8 +43870,8 @@
         },
         "Chicken Hutch (Light Wood)": {
             "categories": [
-                "Carpentry",
                 "Farming",
+                "Carpentry",
                 "Building"
             ],
             "sprite_id": [
@@ -44295,10 +44288,10 @@
         },
         "Composter": {
             "categories": [
-                "Carpentry",
                 "Farming",
-                "Container tiles",
-                "Building"
+                "Carpentry",
+                "Building",
+                "Container tiles"
             ],
             "sprite_id": [
                 "carpentry_02_116",
@@ -44530,8 +44523,8 @@
         },
         "Crude Small Wooden Bookcase": {
             "categories": [
-                "Carpentry",
                 "Tiles",
+                "Carpentry",
                 "Building"
             ],
             "sprite_id": [
@@ -44568,8 +44561,8 @@
         },
         "Crude Wooden Bookcase": {
             "categories": [
-                "Tiles",
                 "Container_tiles",
+                "Tiles",
                 "Building"
             ],
             "sprite_id": [
@@ -44593,8 +44586,8 @@
         "Crude Wooden Fence": {
             "categories": [
                 "Carpentry",
-                "Fences",
-                "Building"
+                "Building",
+                "Fences"
             ],
             "sprite_id": [
                 "crafted_04_123",
@@ -44603,8 +44596,8 @@
         },
         "Crude Wooden Stool": {
             "categories": [
-                "Carpentry",
                 "Tiles",
+                "Carpentry",
                 "Building"
             ],
             "sprite_id": [
@@ -44614,8 +44607,8 @@
         },
         "Crude Wooden Table": {
             "categories": [
-                "Carpentry",
                 "Tiles",
+                "Carpentry",
                 "Building"
             ],
             "sprite_id": [
@@ -44989,8 +44982,8 @@
         "Dirt Floor": {
             "categories": [
                 "Tiles",
-                "Floors",
-                "Building"
+                "Building",
+                "Floors"
             ],
             "sprite_id": [
                 "blends_natural_01_64"
@@ -45046,8 +45039,8 @@
         },
         "Dome Kiln": {
             "categories": [
-                "Blacksmithing",
                 "Workstations",
+                "Blacksmithing",
                 "Building"
             ],
             "sprite_id": [
@@ -45087,8 +45080,8 @@
             "categories": [
                 "Gates",
                 "Tiles",
-                "Welding",
-                "Building"
+                "Building",
+                "Welding"
             ],
             "sprite_id": [
                 "fixtures_doors_fences_01_82",
@@ -45105,8 +45098,8 @@
             "categories": [
                 "Gates",
                 "Tiles",
-                "Welding",
-                "Building"
+                "Building",
+                "Welding"
             ],
             "sprite_id": [
                 "fixtures_doors_fences_01_66",
@@ -45138,8 +45131,8 @@
         },
         "Double Wooden Shelves": {
             "categories": [
-                "Carpentry",
                 "Tiles",
+                "Carpentry",
                 "Building"
             ],
             "sprite_id": [
@@ -45620,9 +45613,9 @@
         },
         "Fire Pit (Stone Blocks)": {
             "categories": [
-                "Building",
                 "Tiles",
-                "Masonry"
+                "Masonry",
+                "Building"
             ],
             "sprite_id": [
                 "camping_03_19"
@@ -45630,9 +45623,9 @@
         },
         "Fire Pit (Stones)": {
             "categories": [
-                "Building",
                 "Tiles",
-                "Masonry"
+                "Masonry",
+                "Building"
             ],
             "sprite_id": [
                 "camping_03_16"
@@ -45640,8 +45633,8 @@
         },
         "Fishing Net": {
             "categories": [
-                "Tools",
-                "Fishing tools"
+                "Fishing tools",
+                "Tools"
             ],
             "item_id": [
                 "Base.FishingNet"
@@ -46062,8 +46055,8 @@
         "Gravel Floor": {
             "categories": [
                 "Tiles",
-                "Floors",
-                "Building"
+                "Building",
+                "Floors"
             ],
             "sprite_id": [
                 "blends_street_01_55"
@@ -46665,8 +46658,8 @@
         },
         "Grindstone": {
             "categories": [
-                "Blacksmithing",
                 "Workstations",
+                "Blacksmithing",
                 "Building"
             ],
             "item_id": [
@@ -46793,8 +46786,8 @@
             "categories": [
                 "Workstations",
                 "Tiles",
-                "Pottery",
-                "Building"
+                "Building",
+                "Pottery"
             ],
             "item_id": [
                 "Moveables.{sprite_id}"
@@ -46867,8 +46860,8 @@
         },
         "Heckle Comb": {
             "categories": [
-                "Tiles",
                 "Farming",
+                "Tiles",
                 "Building"
             ],
             "item_id": [
@@ -46913,7 +46906,7 @@
                 "Hemp"
             ]
         },
-        "Hide Sleeping Bag": {
+        "Hide Sleeping Bag (tile)": {
             "categories": [
                 "Tiles"
             ],
@@ -47540,8 +47533,8 @@
         },
         "Large Plant Drying Rack": {
             "categories": [
-                "Tiles",
                 "Farming",
+                "Tiles",
                 "Building"
             ],
             "sprite_id": [
@@ -47718,8 +47711,8 @@
         "Lean-to Shelter": {
             "categories": [
                 "Tiles",
-                "Camping",
-                "Building"
+                "Building",
+                "Camping"
             ],
             "sprite_id": [
                 "camping_03_2",
@@ -47749,8 +47742,8 @@
         "Leather Shelter": {
             "categories": [
                 "Tiles",
-                "Camping",
-                "Building"
+                "Building",
+                "Camping"
             ],
             "sprite_id": [
                 "camping_03_44",
@@ -47967,8 +47960,8 @@
         "Log Doorframe": {
             "categories": [
                 "Carpentry",
-                "Walls",
-                "Building"
+                "Building",
+                "Walls"
             ],
             "sprite_id": [
                 "walls_logs_51",
@@ -47978,8 +47971,8 @@
         "Log Fence": {
             "categories": [
                 "Carpentry",
-                "Fences",
-                "Building"
+                "Building",
+                "Fences"
             ],
             "sprite_id": [
                 "crafted_04_115",
@@ -48034,8 +48027,8 @@
         "Log Wall": {
             "categories": [
                 "Carpentry",
-                "Walls",
-                "Building"
+                "Building",
+                "Walls"
             ],
             "sprite_id": [
                 "carpentry_02_81",
@@ -48045,8 +48038,8 @@
         "Log Window Frame": {
             "categories": [
                 "Carpentry",
-                "Walls",
-                "Building"
+                "Building",
+                "Walls"
             ],
             "sprite_id": [
                 "walls_logs_49",
@@ -48148,8 +48141,8 @@
         "Long Metal Feeding Trough": {
             "categories": [
                 "Farming",
-                "Welding",
-                "Building"
+                "Building",
+                "Welding"
             ],
             "sprite_id": [
                 "location_farm_accesories_01_32",
@@ -48198,8 +48191,8 @@
         },
         "Long Wooden Feeding Trough": {
             "categories": [
-                "Carpentry",
                 "Farming",
+                "Carpentry",
                 "Building"
             ],
             "sprite_id": [
@@ -48689,8 +48682,8 @@
         },
         "Medium Leather Drying Rack": {
             "categories": [
-                "Tiles",
                 "Farming",
+                "Tiles",
                 "Building"
             ],
             "sprite_id": [
@@ -48714,8 +48707,8 @@
         "Metal Barrel Oven": {
             "categories": [
                 "Tiles",
-                "Welding",
-                "Building"
+                "Building",
+                "Welding"
             ],
             "sprite_id": [
                 "crafted_05_4",
@@ -48726,8 +48719,8 @@
         },
         "Metal Counter": {
             "categories": [
-                "Container tiles",
-                "Welding"
+                "Welding",
+                "Container tiles"
             ],
             "item_id": [
                 "Base.Mov_SteelCounter"
@@ -48745,8 +48738,8 @@
         },
         "Metal Counter Corner": {
             "categories": [
-                "Container tiles",
-                "Welding"
+                "Welding",
+                "Container tiles"
             ],
             "sprite_id": [
                 "crafted_05_24",
@@ -48761,8 +48754,8 @@
         },
         "Metal Crate": {
             "categories": [
-                "Container tiles",
-                "Welding"
+                "Welding",
+                "Container tiles"
             ],
             "item_id": [
                 "Moveables.{sprite_id}"
@@ -48777,10 +48770,10 @@
         },
         "Metal Door": {
             "categories": [
-                "Tiles",
-                "Welding",
                 "Doors",
-                "Building"
+                "Tiles",
+                "Building",
+                "Welding"
             ],
             "sprite_id": [
                 "fixtures_doors_01_69",
@@ -48792,9 +48785,9 @@
         "Metal Doorframe": {
             "categories": [
                 "Tiles",
-                "Walls",
+                "Building",
                 "Welding",
-                "Building"
+                "Walls"
             ],
             "sprite_id": [
                 "constructedobjects_01_75",
@@ -48826,9 +48819,9 @@
         "Metal Fence": {
             "categories": [
                 "Tiles",
+                "Building",
                 "Welding",
-                "Fences",
-                "Building"
+                "Fences"
             ],
             "sprite_id": [
                 "constructedobjects_01_81",
@@ -48840,9 +48833,9 @@
         "Metal Floor": {
             "categories": [
                 "Tiles",
+                "Building",
                 "Welding",
-                "Floors",
-                "Building"
+                "Floors"
             ],
             "sprite_id": [
                 "constructedobjects_01_86"
@@ -48862,8 +48855,8 @@
             "categories": [
                 "Gates",
                 "Tiles",
-                "Welding",
-                "Building"
+                "Building",
+                "Welding"
             ],
             "sprite_id": [
                 "fixtures_doors_fences_01_29",
@@ -48872,9 +48865,9 @@
         },
         "Metal Shelves": {
             "categories": [
-                "Container tiles",
+                "Building",
                 "Welding",
-                "Building"
+                "Container tiles"
             ],
             "item_id": [
                 "Moveables.{TileID}"
@@ -48892,8 +48885,8 @@
             "categories": [
                 "Stairs",
                 "Tiles",
-                "Welding",
-                "Building"
+                "Building",
+                "Welding"
             ],
             "sprite_id": [
                 "constructedobjects_01_90",
@@ -48919,9 +48912,9 @@
         "Metal Wall": {
             "categories": [
                 "Tiles",
-                "Walls",
+                "Building",
                 "Welding",
-                "Building"
+                "Walls"
             ],
             "sprite_id": [
                 "constructedobjects_01_65",
@@ -48933,9 +48926,9 @@
         "Metal Wall Frame": {
             "categories": [
                 "Tiles",
-                "Walls",
+                "Building",
                 "Welding",
-                "Building"
+                "Walls"
             ],
             "sprite_id": [
                 "constructedobjects_01_69",
@@ -48959,9 +48952,9 @@
         "Metal Window Frame": {
             "categories": [
                 "Tiles",
-                "Walls",
+                "Building",
                 "Welding",
-                "Building"
+                "Walls"
             ],
             "item_id": [
                 "Moveables.{sprite_id}"
@@ -48977,8 +48970,8 @@
             "categories": [
                 "Gates",
                 "Tiles",
-                "Welding",
-                "Building"
+                "Building",
+                "Welding"
             ],
             "sprite_id": [
                 "fixtures_doors_fences_01_17",
@@ -50244,8 +50237,8 @@
             "categories": [
                 "Workstations",
                 "Tiles",
-                "Pottery",
-                "Building"
+                "Building",
+                "Pottery"
             ],
             "sprite_id": [
                 "crafted_01_69",
@@ -50258,8 +50251,8 @@
             "categories": [
                 "Workstations",
                 "Tiles",
-                "Pottery",
-                "Building"
+                "Building",
+                "Pottery"
             ],
             "sprite_id": [
                 "crafted_01_65",
@@ -50270,8 +50263,8 @@
         },
         "Primitive Forge": {
             "categories": [
-                "Blacksmithing",
                 "Workstations",
+                "Blacksmithing",
                 "Building"
             ],
             "sprite_id": [
@@ -50283,8 +50276,8 @@
         },
         "Primitive Furnace": {
             "categories": [
-                "Blacksmithing",
                 "Workstations",
+                "Blacksmithing",
                 "Building"
             ],
             "sprite_id": [
@@ -50296,8 +50289,8 @@
             "categories": [
                 "Workstations",
                 "Tiles",
-                "Pottery",
-                "Building"
+                "Building",
+                "Pottery"
             ],
             "sprite_id": [
                 "crafted_01_56",
@@ -50800,8 +50793,8 @@
         },
         "Ripple Comb": {
             "categories": [
-                "Tiles",
                 "Farming",
+                "Tiles",
                 "Building"
             ],
             "item_id": [
@@ -51059,8 +51052,8 @@
         "Sand Floor": {
             "categories": [
                 "Tiles",
-                "Floors",
-                "Building"
+                "Building",
+                "Floors"
             ],
             "sprite_id": [
                 "blends_natural_01_5"
@@ -51069,8 +51062,8 @@
         "Sandbag Wall": {
             "categories": [
                 "Carpentry",
-                "Fences",
-                "Building"
+                "Building",
+                "Fences"
             ],
             "sprite_id": [
                 "carpentry_02_15",
@@ -51116,8 +51109,8 @@
         },
         "Scutching Board": {
             "categories": [
-                "Tiles",
                 "Farming",
+                "Tiles",
                 "Building"
             ],
             "item_id": [
@@ -51286,9 +51279,9 @@
         },
         "Short Brick Wall": {
             "categories": [
-                "Building",
                 "Tiles",
-                "Masonry"
+                "Masonry",
+                "Building"
             ],
             "sprite_id": [
                 "walls_exterior_house_01_37",
@@ -51297,8 +51290,8 @@
         },
         "Short Wooden Feeding Trough": {
             "categories": [
-                "Carpentry",
                 "Farming",
+                "Carpentry",
                 "Building"
             ],
             "sprite_id": [
@@ -51345,8 +51338,8 @@
         },
         "Simple Forge": {
             "categories": [
-                "Blacksmithing",
                 "Workstations",
+                "Blacksmithing",
                 "Building"
             ],
             "sprite_id": [
@@ -51360,8 +51353,8 @@
         },
         "Simple Furnace": {
             "categories": [
-                "Blacksmithing",
                 "Workstations",
+                "Blacksmithing",
                 "Building"
             ],
             "sprite_id": [
@@ -51371,10 +51364,10 @@
         },
         "Simple Large Plant Drying Rack": {
             "categories": [
-                "Carpentry",
-                "Tiles",
                 "Farming",
-                "Building"
+                "Tiles",
+                "Building",
+                "Carpentry"
             ],
             "sprite_id": [
                 "vegetation_drying_01_233",
@@ -51389,10 +51382,10 @@
         },
         "Simple Loom": {
             "categories": [
-                "Carpentry",
-                "Tiles",
                 "Farming",
-                "Building"
+                "Tiles",
+                "Building",
+                "Carpentry"
             ],
             "item_id": [
                 "Moveables.{sprite_id}"
@@ -51428,10 +51421,10 @@
         },
         "Simple Small Plant Drying Rack": {
             "categories": [
-                "Carpentry",
-                "Tiles",
                 "Farming",
-                "Building"
+                "Tiles",
+                "Building",
+                "Carpentry"
             ],
             "sprite_id": [
                 "vegetation_drying_01_217",
@@ -51586,8 +51579,8 @@
         },
         "Small Leather Drying Rack": {
             "categories": [
-                "Tiles",
                 "Farming",
+                "Tiles",
                 "Building"
             ],
             "sprite_id": [
@@ -51611,9 +51604,9 @@
         },
         "Small Metal Locker": {
             "categories": [
-                "Container tiles",
+                "Building",
                 "Welding",
-                "Building"
+                "Container tiles"
             ],
             "item_id": [
                 "Base.Mov_GreenWallLocker"
@@ -51643,9 +51636,9 @@
         "Small Metal Wire Fence": {
             "categories": [
                 "Tiles",
+                "Building",
                 "Welding",
-                "Fences",
-                "Building"
+                "Fences"
             ],
             "sprite_id": [
                 "fencing_01_25",
@@ -51682,8 +51675,8 @@
         },
         "Small Plant Drying Rack": {
             "categories": [
-                "Tiles",
                 "Farming",
+                "Tiles",
                 "Building"
             ],
             "sprite_id": [
@@ -51774,8 +51767,8 @@
         },
         "Small Wooden Bookcase": {
             "categories": [
-                "Carpentry",
                 "Container_tiles",
+                "Carpentry",
                 "Building"
             ],
             "sprite_id": [
@@ -51791,10 +51784,10 @@
         },
         "Small Wooden Table": {
             "categories": [
-                "Carpentry",
                 "Tiles",
-                "Tables",
-                "Building"
+                "Carpentry",
+                "Building",
+                "Tables"
             ],
             "sprite_id": [
                 "carpentry_01_60",
@@ -51837,10 +51830,10 @@
         },
         "Softening Beam": {
             "categories": [
-                "Carpentry",
-                "Tiles",
                 "Farming",
-                "Building"
+                "Tiles",
+                "Building",
+                "Carpentry"
             ],
             "item_id": [
                 "Moveables.{sprite_id}"
@@ -52069,10 +52062,10 @@
         },
         "Spinning Wheel": {
             "categories": [
-                "Carpentry",
-                "Tiles",
                 "Farming",
-                "Building"
+                "Tiles",
+                "Building",
+                "Carpentry"
             ],
             "item_id": [
                 "Moveables.{sprite_id}"
@@ -52229,9 +52222,9 @@
         },
         "Stone Cabinet": {
             "categories": [
-                "Building",
                 "Tiles",
-                "Masonry"
+                "Masonry",
+                "Building"
             ],
             "sprite_id": [
                 "crafted_04_40",
@@ -52242,8 +52235,8 @@
         },
         "Stone Cairn": {
             "categories": [
-                "Decorations",
-                "Building"
+                "Building",
+                "Decorations"
             ],
             "sprite_id": [
                 "location_community_cemetary_01_30"
@@ -52251,9 +52244,9 @@
         },
         "Stone Doorframe": {
             "categories": [
-                "Building",
                 "Tiles",
-                "Masonry"
+                "Masonry",
+                "Building"
             ],
             "sprite_id": [
                 "walls_logs_107",
@@ -52262,9 +52255,9 @@
         },
         "Stone Mill": {
             "categories": [
-                "Building",
                 "Farming",
-                "Masonry"
+                "Masonry",
+                "Building"
             ],
             "sprite_id": [
                 "crafted_02_45"
@@ -52272,9 +52265,9 @@
         },
         "Stone Quern": {
             "categories": [
+                "Farming",
                 "Tiles",
                 "Building",
-                "Farming",
                 "Masonry"
             ],
             "item_id": [
@@ -52286,9 +52279,9 @@
         },
         "Stone Wall": {
             "categories": [
-                "Building",
                 "Tiles",
-                "Masonry"
+                "Masonry",
+                "Building"
             ],
             "sprite_id": [
                 "walls_logs_97",
@@ -52297,9 +52290,9 @@
         },
         "Stone Window Frame": {
             "categories": [
-                "Building",
                 "Tiles",
-                "Masonry"
+                "Masonry",
+                "Building"
             ],
             "sprite_id": [
                 "walls_logs_105",
@@ -52526,10 +52519,10 @@
         },
         "Tannin Barrel": {
             "categories": [
-                "Carpentry",
-                "Tiles",
                 "Farming",
-                "Building"
+                "Tiles",
+                "Building",
+                "Carpentry"
             ],
             "item_id": [
                 "Moveables.{sprite_id}"
@@ -52541,8 +52534,8 @@
         "Tarp Shelter": {
             "categories": [
                 "Tiles",
-                "Camping",
-                "Building"
+                "Building",
+                "Camping"
             ],
             "sprite_id": [
                 "camping_03_14",
@@ -52664,9 +52657,9 @@
         },
         "Tile Floor": {
             "categories": [
-                "Building",
                 "Tiles",
-                "Masonry"
+                "Masonry",
+                "Building"
             ],
             "sprite_id": [
                 "floors_exterior_tilesandstone_01_6"
@@ -54039,9 +54032,9 @@
         "Wood Table with Drawer": {
             "categories": [
                 "Carpentry",
-                "Container tiles",
+                "Building",
                 "Tables",
-                "Building"
+                "Container tiles"
             ],
             "item_id": [
                 "Moveables.{TileID}"
@@ -54078,8 +54071,8 @@
         "Wooden Bed": {
             "categories": [
                 "Carpentry",
-                "Building",
-                "Beds"
+                "Beds",
+                "Building"
             ],
             "item_id": [
                 "Moveables.{sprite_id}"
@@ -54105,8 +54098,8 @@
         "Wooden Bookcase": {
             "categories": [
                 "Carpentry",
-                "Container tiles",
-                "Building"
+                "Building",
+                "Container tiles"
             ],
             "sprite_id": [
                 "carpentry_02_64",
@@ -54122,8 +54115,8 @@
         "Wooden Chair": {
             "categories": [
                 "Carpentry",
-                "Chairs",
-                "Building"
+                "Building",
+                "Chairs"
             ],
             "item_id": [
                 "Moveables.{sprite_id}"
@@ -54145,8 +54138,8 @@
         },
         "Wooden Coffin": {
             "categories": [
-                "Carpentry",
                 "Tiles",
+                "Carpentry",
                 "Building"
             ],
             "sprite_id": [
@@ -54163,8 +54156,8 @@
         "Wooden Counter": {
             "categories": [
                 "Carpentry",
-                "Container tiles",
-                "Building"
+                "Building",
+                "Container tiles"
             ],
             "sprite_id": [
                 "carpentry_02_33",
@@ -54184,8 +54177,8 @@
         "Wooden Counter Corner": {
             "categories": [
                 "Carpentry",
-                "Container tiles",
-                "Building"
+                "Building",
+                "Container tiles"
             ],
             "item_id": [
                 "Moveables.{TileID}"
@@ -54221,8 +54214,8 @@
         "Wooden Cross": {
             "categories": [
                 "Carpentry",
-                "Decorations",
-                "Building"
+                "Building",
+                "Decorations"
             ],
             "item_id": [
                 "Moveables.{sprite_id}"
@@ -54236,8 +54229,8 @@
         },
         "Wooden Door": {
             "categories": [
-                "Carpentry",
                 "Doors",
+                "Carpentry",
                 "Building"
             ],
             "sprite_id": [
@@ -54252,8 +54245,8 @@
         "Wooden Doorframe": {
             "categories": [
                 "Carpentry",
-                "Walls",
-                "Building"
+                "Building",
+                "Walls"
             ],
             "sprite_id": [
                 "walls_exterior_wooden_01_55",
@@ -54267,8 +54260,8 @@
         "Wooden Fence": {
             "categories": [
                 "Carpentry",
-                "Fences",
-                "Building"
+                "Building",
+                "Fences"
             ],
             "sprite_id": [
                 "carpentry_02_41",
@@ -54293,8 +54286,8 @@
         "Wooden Fence Post": {
             "categories": [
                 "Carpentry",
-                "Fences",
-                "Building"
+                "Building",
+                "Fences"
             ],
             "sprite_id": [
                 "fencing_01_19"
@@ -54302,10 +54295,10 @@
         },
         "Wooden Flashlight Pillar": {
             "categories": [
-                "Carpentry",
                 "Tiles",
-                "Lights",
-                "Building"
+                "Carpentry",
+                "Building",
+                "Lights"
             ],
             "item_id": [
                 "Moveables.{sprite_id}"
@@ -54320,8 +54313,8 @@
         "Wooden Floor": {
             "categories": [
                 "Carpentry",
-                "Floors",
-                "Building"
+                "Building",
+                "Floors"
             ],
             "sprite_id": [
                 "carpentry_02_58",
@@ -54367,8 +54360,8 @@
         "Wooden Pole": {
             "categories": [
                 "Carpentry",
-                "Walls",
-                "Building"
+                "Building",
+                "Walls"
             ],
             "sprite_id": [
                 "walls_exterior_wooden_01_27"
@@ -54377,8 +54370,8 @@
         "Wooden Shelf": {
             "categories": [
                 "Carpentry",
-                "Container tiles",
-                "Building"
+                "Building",
+                "Container tiles"
             ],
             "item_id": [
                 "Moveables.{sprite_id}"
@@ -54409,8 +54402,8 @@
         "Wooden Sign": {
             "categories": [
                 "Carpentry",
-                "Decorations",
-                "Building"
+                "Building",
+                "Decorations"
             ],
             "sprite_id": [
                 "constructedobjects_signs_01_11",
@@ -54433,8 +54426,8 @@
         },
         "Wooden Stairs": {
             "categories": [
-                "Carpentry",
                 "Stairs",
+                "Carpentry",
                 "Building"
             ],
             "sprite_id": [
@@ -54460,10 +54453,10 @@
         },
         "Wooden Table": {
             "categories": [
-                "Carpentry",
                 "Tiles",
-                "Tables",
-                "Building"
+                "Carpentry",
+                "Building",
+                "Tables"
             ],
             "sprite_id": [
                 "carpentry_01_24",
@@ -54497,8 +54490,8 @@
         "Wooden Wall": {
             "categories": [
                 "Carpentry",
-                "Walls",
-                "Building"
+                "Building",
+                "Walls"
             ],
             "sprite_id": [
                 "walls_exterior_wooden_01_45",
@@ -54512,8 +54505,8 @@
         "Wooden Wall Frame": {
             "categories": [
                 "Carpentry",
-                "Walls",
-                "Building"
+                "Building",
+                "Walls"
             ],
             "sprite_id": [
                 "carpentry_02_101",
@@ -54523,8 +54516,8 @@
         "Wooden Window Frame": {
             "categories": [
                 "Carpentry",
-                "Walls",
-                "Building"
+                "Building",
+                "Walls"
             ],
             "sprite_id": [
                 "walls_exterior_wooden_01_53",
@@ -54537,8 +54530,8 @@
         },
         "Wooden Windows": {
             "categories": [
-                "Carpentry",
                 "Tiles",
+                "Carpentry",
                 "Building"
             ],
             "sprite_id": [
@@ -54643,8 +54636,8 @@
         },
         "Yellow Wall Locker": {
             "categories": [
-                "Container tiles",
-                "Welding"
+                "Welding",
+                "Container tiles"
             ],
             "item_id": [
                 "Base.Mov_YellowWallLocker"
