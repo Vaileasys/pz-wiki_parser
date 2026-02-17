@@ -1001,7 +1001,7 @@ def process_requirements(recipe: dict, literature_data: dict) -> tuple[str, str]
             requirements_work["skillbooks"].append(book_name)
 
     # Schematics from literature spawns
-    for category, spawn_list in literature_data.get("SpecialLootSpawns", {}).items():
+    for category, spawn_list in (literature_data.get("SpecialLootSpawns") or {}).items():
         if raw_recipe_name in spawn_list:
             requirements_work["schematics"].append(category)
 
