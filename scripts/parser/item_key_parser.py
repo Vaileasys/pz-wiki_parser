@@ -13,7 +13,7 @@ CLASS_RE = re.compile(r'public\s+static\s+class\s+(\w+)')
 ITEM_RE = re.compile(
     r'public\s+static\s+final\s+ItemKey\s+(\w+)\s*=\s*\w+\("([^"]+)"\)'
 )
-JAVA_PATH = Path("output/ZomboidDecompiler/zombie/scripting/objects", "ItemKey.java")
+JAVA_PATH = Path("output/ZomboidDecompiler/source/zombie/scripting/objects", "ItemKey.java")
 OUTPUT_PATH = Path(constants.OUTPUT_DIR) / "item_keys.json"
 RES_PATH = Path(constants.ITEM_KEY_PATH)
 
