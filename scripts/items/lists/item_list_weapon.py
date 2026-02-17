@@ -477,7 +477,7 @@ def find_boxes():
         "OpenBoxOfShotgunShells": "box",
         "OpenBoxOfBullets50": "box",
         "OpenBoxOfBullets20": "box",
-        "OpenCartonOfBullets": "carton",
+        "OpenCarton12": "carton",
     }
 
     for recipe_id in AMMO_RECIPES:
