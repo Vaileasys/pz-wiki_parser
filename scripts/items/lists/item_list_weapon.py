@@ -39,10 +39,16 @@ def generate_ammo_data(item_id: str, table_type: str):
         carton_q = 1
         # Get box
         box_id = box_data.get("contents")
-        box_q = box_data.get("quantity")
+        box_q = box_data.get("quantity") or 1
         # Get round
-        round_id = box_types.get(box_id, {}).get("contents")
-        round_q = box_types.get(box_id, {}).get("quantity") * box_q
+        box_entry = box_types.get(box_id, {})
+        if box_entry:
+            round_id = box_entry.get("contents")
+            qty = box_entry.get("quantity")
+            round_q = (qty * box_q) if qty is not None else box_q
+        else:
+            round_id = None
+            round_q = None
     elif table_type == "box":
         # Get box
         box_id = item_id
@@ -54,7 +60,8 @@ def generate_ammo_data(item_id: str, table_type: str):
         for key, value in box_types.items():
             if value.get("contents") == box_id:
                 carton_id = key
-                carton_q = value.get("quantity") * box_q
+                qty = value.get("quantity")
+                carton_q = (qty * box_q) if qty is not None else box_q
                 break
     elif table_type == "round":
         # Get round
@@ -70,7 +77,8 @@ def generate_ammo_data(item_id: str, table_type: str):
         for key, value in box_types.items():
             if value.get("contents") == box_id:
                 carton_id = key
-                carton_q = value.get("quantity") * box_q
+                qty = value.get("quantity")
+                carton_q = (qty * box_q) if (qty is not None and box_q is not None) else None
                 break
 
     for n_item_id in Item.all():
@@ -494,6 +502,16 @@ def find_boxes():
                 box_types[value] = {
                     "type": AMMO_RECIPES.get(recipe_id),
                     "contents": key,
+                    "quantity": count,
+                }
+
+        elif mapper == "boxType":
+            # OpenCarton12: input 1 carton -> output 12 boxes; itemMappers.boxType is box_id -> carton_id
+            item_mappers = recipe.item_mappers.get(mapper, {})
+            for box_id, carton_id in item_mappers.items():
+                box_types[carton_id] = {
+                    "type": AMMO_RECIPES.get(recipe_id),
+                    "contents": box_id,
                     "quantity": count,
                 }
 
