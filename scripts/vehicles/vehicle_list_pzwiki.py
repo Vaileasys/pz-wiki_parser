@@ -8,7 +8,7 @@ def generate_table(data):
     content = []
 
     for vtype in sorted(data.keys()):
-        content.append(f"=={vtype}==")
+        content.append(f"== {vtype} ==")
         content.append('{| class="wikitable theme-red sortable" style="text-align: center;"')
         content.append("! Model")
         content.append("! Name")

@@ -14,13 +14,10 @@ from scripts.animals import animal_infobox, animal_products, animal_stages, anim
 ANIM_DIR = ANIMAL_DIR.format(language_code=Language.get())
 article = "a" # A grammatical article, either "A" or "An"
 
-def generate_header(breed: AnimalBreed):
+def get_category_link(breed: AnimalBreed):
     """
-    Generates the header for the article.
+    Resolve the category link ({{ll|Category:...}}) for the article footer.
     """
-    header = "{{{{Header|Project Zomboid|World|AI|Animals|{category}}}}}"
-    page_version = f"{{{{Page version|{Version.get()}}}}}"
-
     group_name = breed.animal.group_name_en
     category_plural = {
         "Sheep": "Sheep",
@@ -28,9 +25,15 @@ def generate_header(breed: AnimalBreed):
         "Deer": "Deer"
     }
     category = group_name + "s" if group_name not in category_plural else category_plural[group_name]
-    header = header.format(category=category)
+    return f"{{{{ll|Category:{category}}}}}"
 
-    return [header, page_version]
+
+def generate_header(breed: AnimalBreed):
+    """
+    Generates the header for the article: static LangSwitch + Navbar, then page version.
+    """
+    page_version = f"{{{{Page version|{Version.get()}}}}}"
+    return ["{{LangSwitch}}\n{{Navbar animals}}", page_version]
 
 def generate_intro(breed: AnimalBreed):
     """
@@ -454,6 +457,8 @@ def process_animal(breed: AnimalBreed):
 
     content.append("\n== Navigation ==")
     content.append("{{Navbox animals}}")
+    content.append("")
+    content.append(get_category_link(breed))
 
     rel_path = breed.full_breed_id + ".txt"
     write_file(content, rel_path=rel_path, root_path=output_dir, suppress=True)

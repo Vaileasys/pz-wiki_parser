@@ -226,7 +226,7 @@ def main():
     with open(OUTPUT_PATH, 'w', encoding='utf-8') as output_file, open(logging_file_path, 'w', encoding='utf-8') as log_file:
         for element in root:
             if element.tag == 'Adverts':
-                output_file.write("==Adverts==\n")
+                output_file.write("== Adverts ==\n")
                 log_file.write("Starting Adverts\n")
                 broadcast_entry_count = process_broadcast_entries(
                     element.findall('.//BroadcastEntry'),
@@ -238,7 +238,7 @@ def main():
                 channel_entry_lines += 1
 
             elif element.tag == 'Channels':
-                output_file.write("==Channels==\n")
+                output_file.write("== Channels ==\n")
                 log_file.write("Starting Channels\n")
 
                 for channel_entry in element.findall('ChannelEntry'):
@@ -253,7 +253,7 @@ def main():
                         f'cat="{channel_cat}" '
                         f'freq="{channel_freq}"\n'
                     )
-                    output_file.write(f"==={channel_name}===\n")
+                    output_file.write(f"=== {channel_name} ===\n")
                     broadcast_entry_count = process_broadcast_entries(
                         channel_entry.findall('.//BroadcastEntry'),
                         output_file,

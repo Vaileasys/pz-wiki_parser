@@ -386,7 +386,7 @@ def write_to_file(item_id, literature_titles, literature_type):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     with open(output_path, "w", encoding="utf-8") as file:
-        file.write(f"=={item_id}==\n")
+        file.write(f"== {item_id} ==\n")
         if literature_type == "book":
             # No subjects
             if len(literature_titles) == 1 and "Default" in literature_titles:
@@ -400,7 +400,7 @@ def write_to_file(item_id, literature_titles, literature_type):
                 # Subjects
                 for subject in sorted(literature_titles):
                     titles = sorted(literature_titles[subject])
-                    file.write(f"==={subject}===\n")
+                    file.write(f"=== {subject} ===\n")
                     file.write(
                         '<div class="list-columns" style="column-width: 450px; max-width: 1500px;">\n'
                     )
@@ -430,7 +430,7 @@ def write_to_file(item_id, literature_titles, literature_type):
                 # Subjects
                 for subject in sorted(literature_titles):
                     titles = sorted(literature_titles[subject])
-                    file.write(f"==={subject}===\n")
+                    file.write(f"=== {subject} ===\n")
                     file.write(
                         '<div class="list-columns" style="column-width: 400px; max-width: 900px;">\n'
                     )
@@ -459,7 +459,7 @@ def write_to_file(item_id, literature_titles, literature_type):
             file.write(
                 "A schematic can be read, teaching the player [[crafting]] recipes.\n\n"
             )
-            file.write("===Learned recipes===\n")
+            file.write("=== Learned recipes ===\n")
             file.write(
                 f"The following are the recipes this schematic can include. Each schematic can contain up to 5 recipes, "
                 f"with a {100 - multiple_chance}% chance of having only 1. Each additional recipe beyond the first has an equal probability.\n"
@@ -476,7 +476,7 @@ def write_to_file(item_id, literature_titles, literature_type):
             content.append(
                 "A recipe can be read, teaching the player a [[Crafting|cooking]] recipe.\n"
             )
-            content.append("===Learned recipes===")
+            content.append("=== Learned recipes ===")
             content.append(
                 "The following are the recipes that this can include. Only 1 recipe will be included."
             )

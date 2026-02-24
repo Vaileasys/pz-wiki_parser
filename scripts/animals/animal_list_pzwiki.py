@@ -32,7 +32,7 @@ def main():
     content: list[str] = []
 
     for i, group_name in enumerate(group_names):
-        content.append(f"=={group_name}==")
+        content.append(f"== {group_name} ==")
 
         table_header(content)
 

@@ -15,18 +15,19 @@ VEH_DIR = VEHICLE_DIR.format(language_code=Language.get())
 
 VEHICLE_BLACKLIST = ["Base.SportsCar_ez", "Base.ModernCar_Martin"]
 
-def generate_header(vehicle: Vehicle):
-    header = "{{{{Header|Project Zomboid|Vehicles|{category}}}}}"
-    page_version = f"{{{{Page version|{Version.get()}}}}}"
-
+def get_category_link(vehicle: Vehicle):
+    """Resolve the category for the article footer using the same logic as the old header."""
     if vehicle.is_trailer:
         category = "Trailers"
     else:
         vehicle_type = vehicle.get_vehicle_type().capitalize()
         category = vehicle_type + " vehicles"
-    header = header.format(category=category)
+    return f"{{{{ll|Category:{category}}}}}"
 
-    return [header, page_version]
+
+def generate_header(vehicle: Vehicle):
+    page_version = f"{{{{Page version|{Version.get()}}}}}"
+    return ["{{LangSwitch}}\n{{Navbar vehicles}}", page_version]
 
 
 def generate_intro(vehicle: Vehicle):
@@ -67,13 +68,13 @@ def generate_overview(vehicle: Vehicle):
 
     # Lightbar
     if vehicle.get_has_lightbar():
-        content.append("===Lightbar===")
+        content.append("=== Lightbar ===")
         content.append(f"The {vehicle.get_name()} features a {link('lightbar')}, which includes a siren.")
     
     # Key Rings
     key_rings = vehicle.get_special_key_ring()
     if key_rings:
-        content.append("===Key rings===")
+        content.append("=== Key rings ===")
         content.append(f"One of the following key rings can spawn along with the vehicle:")
         for item_type in key_rings:
             item = Item(item_type)
@@ -82,7 +83,7 @@ def generate_overview(vehicle: Vehicle):
     # Outfits
     zombie_types = vehicle.get_zombie_type()
     if zombie_types:
-        content.append("===Outfits===")
+        content.append("=== Outfits ===")
         content.append(f"The vehicle will spawn with zombies in the following [[outfit]]s:")
         for outfit in zombie_types:
             content.extend(check_outfit_exists(outfit))
@@ -100,9 +101,9 @@ def generate_mechanics(vehicle: Vehicle):
 
     if vehicle.is_burnt or vehicle.is_wreck:
         vehicle_type = "Burnt" if vehicle.is_burnt else "Wrecked"
-        content.extend(["\n===Dismantling===", DISMANTLING.format(vehicle_type=vehicle_type)])
+        content.extend(["\n=== Dismantling ===", DISMANTLING.format(vehicle_type=vehicle_type)])
     if not vehicle.is_burnt:
-        content.extend(["\n===Parts===", "The table below shows a list of parts this vehicle can have and the requirements to install/uninstall."])
+        content.extend(["\n=== Parts ===", "The table below shows a list of parts this vehicle can have and the requirements to install/uninstall."])
         content.extend(load_file(rel_path=os.path.join("vehicle_parts", vehicle.vehicle_id + ".txt"), root_path=VEH_DIR))
 
     return content
@@ -158,25 +159,27 @@ def process_vehicle(vehicle_id):
     content.extend(intro_content)
 
     if overview_content:
-        content.append("\n==Overview==")
+        content.append("\n== Overview ==")
         content.extend(overview_content)
 
     if mechanics_content:
-        content.append("\n==Mechanics==")
+        content.append("\n== Mechanics ==")
         content.extend(mechanics_content)
     
     if location_content:
-        content.append("\n==Location==")
+        content.append("\n== Location ==")
         content.extend(location_content)
 
     if variants_content:
-        content.append("\n==Variants==")
+        content.append("\n== Variants ==")
         content.extend(variants_content)
 
-    content.append("\n==See also==")
+    content.append("\n== See also ==")
     content.extend(see_also_content)
 
     content.append("\n{{Navbox vehicles}}")
+    content.append("")
+    content.append(get_category_link(vehicle))
 
     rel_path = vehicle_id + ".txt"
     write_file(content, rel_path=rel_path, root_path=output_dir, suppress=True)

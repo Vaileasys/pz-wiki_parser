@@ -593,7 +593,7 @@ def generate_furniture_lists(named_tiles_data: dict) -> None:
 
         if isinstance(subs, dict):
             for sub_name, rules in subs.items():
-                text += f"=={sub_name}==\n" + header_line
+                text += f"== {sub_name} ==\n" + header_line
 
                 # Special Comfort → Beds
                 if category == "Comfort" and sub_name == "Beds":
