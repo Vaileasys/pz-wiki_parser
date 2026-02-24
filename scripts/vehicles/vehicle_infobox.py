@@ -10,7 +10,9 @@ from scripts.utils import echo
 from scripts.core.constants import VEHICLE_DIR
 from scripts.utils.util import convert_int, link, enumerate_params, check_zero
 
-ROOT_DIR = os.path.join(VEHICLE_DIR.format(language_code=Language.get()), "infoboxes")
+def get_root_dir():
+    """Get the root directory for vehicle infoboxes."""
+    return os.path.join(VEHICLE_DIR.format(language_code=Language.get()), "infoboxes")
 
 
 def get_vehicle():
@@ -97,14 +99,15 @@ def process_vehicle(vehicle_id):
             content.append(f"|{key}={value}")
         content.append("}}")
 
-        write_file(content, rel_path=rel_path, root_path=ROOT_DIR, suppress=True)
+        write_file(content, rel_path=rel_path, root_path=get_root_dir(), suppress=True)
 
 
 def automatic_extraction():
     # Create 'output_dir'
-    if os.path.exists(ROOT_DIR):
-        shutil.rmtree(ROOT_DIR)
-    os.makedirs(ROOT_DIR)
+    root_dir = get_root_dir()
+    if os.path.exists(root_dir):
+        shutil.rmtree(root_dir)
+    os.makedirs(root_dir)
 
     for vehicle_id in Vehicle.keys():
         process_vehicle(vehicle_id)
@@ -126,12 +129,12 @@ def main(pre_choice:str=None):
 
         if choice == '1':
             automatic_extraction()
-            echo.success(f"Extraction complete, the files can be found in '{ROOT_DIR}'.")
+            echo.success(f"Extraction complete, the files can be found in '{get_root_dir()}'.")
             break
         elif choice == '2':
             vehicle_id = get_vehicle()
             process_vehicle(vehicle_id)
-            echo.success(f"Extraction complete, the file can be found in '{ROOT_DIR}'.")
+            echo.success(f"Extraction complete, the file can be found in '{get_root_dir()}'.")
             break
         elif choice == 'q':
             break

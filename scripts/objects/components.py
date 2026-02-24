@@ -85,7 +85,7 @@ class FluidContainer:
     @property
     def capacity(self):
         """Return the container’s fluid capacity (int)."""
-        return self.data.get("capacity", 0)
+        return self.data.get("Capacity", 0)
 
     @property
     def custom_drink_sound(self):

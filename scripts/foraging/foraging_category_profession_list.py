@@ -6,8 +6,6 @@ from scripts.core.constants import FORAGING_DIR, BOT_FLAG, BOT_FLAG_END
 from scripts.core.file_loading import write_file, clear_dir
 from scripts.utils import echo, util
 
-root_dir = Path(FORAGING_DIR.format(language_code=Language.get()))
-
 
 def generate_data(profession: Occupation | Trait, category: ForageCategory) -> dict:
     parameters = {
@@ -60,7 +58,11 @@ def build_table(data_list: list, category: str, prof_type: str, root_path: str):
     write_file(content, rel_path=rel_path, root_path=str(root_path), suppress=True)
 
 
-def main():
+def main(lang_code: str = None):
+    if lang_code:
+        Language.set(lang_code)
+    
+    root_dir = Path(FORAGING_DIR.format(language_code=Language.get()))
     occupation_name = "occupation"
     trait_name = "trait"
     occupation_path = str(root_dir / (occupation_name + "_table"))

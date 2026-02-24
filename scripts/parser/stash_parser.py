@@ -3,8 +3,9 @@ from lupa import LuaRuntime
 from scripts.core.version import Version
 from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache, load_cache
+from scripts.core.file_loading import get_lua_dir
 
-STASH_DIRECTORY = os.path.join("resources", "lua", "stashes")
+STASH_DIRECTORY = os.path.join(get_lua_dir(), "shared", "StashDescriptions")
 CACHE_JSON = "stash_data.json"
 
 stash_data = {}

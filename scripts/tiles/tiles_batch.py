@@ -1,43 +1,36 @@
-#!/usr/bin/env python3
-"""
-Project Zomboid Wiki Tile Processing Orchestrator
-
-This script orchestrates the complete tile processing pipeline for the Project Zomboid Wiki.
-It manages cache generation, data parsing, and the generation of various wiki components
-including infoboxes, code snippets, scrapping tables, and complete articles.
-
-The script handles:
-- Cache management and validation
-- Data parsing from game files
-- Generation of wiki components
-- Article assembly and organization
-- List generation for furniture and crafting surfaces
-"""
-
 import os
 
 from scripts.core.cache import load_cache
-from scripts.core.constants import DATA_DIR
+from scripts.core.constants import DATA_DIR, CACHE_DIR
 from scripts.core.version import Version
-from scripts.core.language import Language
 from scripts.utils import echo
 
 # parsers
 from scripts.parser.tiles_parser import main as parse_tiles
 from scripts.parser.movable_definitions_parser import main as parse_movable_definitions
 from scripts.tiles.named_furniture_filter import main as parse_named_furniture
+from scripts.parser.script_parser import extract_script_data
 
 # generators
 from scripts.tiles.tiles_infobox import generate_infoboxes
 from scripts.tiles.tiles_codesnip import generate_codesnips
 from scripts.tiles.tiles_scrapping import generate_scrapping_tables
 from scripts.tiles.tiles_article import generate_tile_articles
+from scripts.tiles.tiles_container_mapping import main as generate_container_mapping
+from scripts.tiles.entity_article import main as generate_entity_articles
+from scripts.tiles.entity_health import main as generate_entity_health
 from scripts.lists.furniture_list import generate_furniture_lists
 from scripts.lists.furniture_surfaces_list import generate_surface_list
 
 TILE_CACHE_FILE = "tiles_data.json"
 NAMED_FURNITURE_CACHE_FILE = "named_furniture.json"
 MOVABLE_DEFINITIONS_CACHE_FILE = "movable_definitions.json"
+ENTITY_CACHE_FILE = "parsed_entity_data.json"
+
+
+def parse_entities():
+    """Wrapper function to parse entity data."""
+    extract_script_data("entity")
 
 
 def generate_cache(cache_path: str, cache_label: str, parser_func, game_version: str):
@@ -68,9 +61,12 @@ def generate_cache(cache_path: str, cache_label: str, parser_func, game_version:
         return None, None
 
 
-def main():
+def main(lang_code):
     """
     Main execution function for the tile processing pipeline.
+
+    Args:
+        lang_code (str): Language code to process
 
     This function:
     1. Ensures all necessary caches are present and up-to-date
@@ -85,24 +81,38 @@ def main():
     """
     os.makedirs(DATA_DIR, exist_ok=True)
     game_version = Version.get()
-    lang_code    = Language.get()
 
-    tile_path   = os.path.join(DATA_DIR, TILE_CACHE_FILE)
-    named_path  = os.path.join(DATA_DIR, NAMED_FURNITURE_CACHE_FILE)
-    defs_path   = os.path.join(DATA_DIR, MOVABLE_DEFINITIONS_CACHE_FILE)
+    tile_path = os.path.join(DATA_DIR, TILE_CACHE_FILE)
+    named_path = os.path.join(DATA_DIR, NAMED_FURNITURE_CACHE_FILE)
+    defs_path = os.path.join(DATA_DIR, MOVABLE_DEFINITIONS_CACHE_FILE)
+    entity_path = os.path.join(CACHE_DIR, ENTITY_CACHE_FILE)
 
-    tiles_data, _        = generate_cache(tile_path,   "Tiles",               parse_tiles,               game_version)
-    named_tiles_data, _  = generate_cache(named_path,  "Named Tiles",         parse_named_furniture,     game_version)
-    movable_defs_data, _ = generate_cache(defs_path,   "Movable Definitions", parse_movable_definitions, game_version)
+    tiles_data, _ = generate_cache(tile_path, "Tiles", parse_tiles, game_version)
+    named_tiles_data, _ = generate_cache(
+        named_path, "Named Tiles", parse_named_furniture, game_version
+    )
+    movable_defs_data, _ = generate_cache(
+        defs_path, "Movable Definitions", parse_movable_definitions, game_version
+    )
+    entity_data, _ = generate_cache(
+        entity_path, "Entities", parse_entities, game_version
+    )
 
-    if tiles_data is None or named_tiles_data is None or movable_defs_data is None:
+    if (
+        tiles_data is None
+        or named_tiles_data is None
+        or movable_defs_data is None
+        or entity_data is None
+    ):
         echo.error("One or more caches failed to load.")
         return
 
     echo.success("All caches loaded")
 
     echo.info("Generating infoboxes")
-    infoboxes = generate_infoboxes(named_tiles_data, movable_defs_data, lang_code, game_version)
+    infoboxes = generate_infoboxes(
+        named_tiles_data, movable_defs_data, lang_code, game_version
+    )
     echo.success("Infoboxes generated")
 
     echo.info("Generating CodeSnips")
@@ -111,9 +121,7 @@ def main():
 
     echo.info("Generating Scrapping tables")
     scrapping = generate_scrapping_tables(
-        tiles=      named_tiles_data,
-        definitions=movable_defs_data,
-        lang_code=  lang_code
+        tiles=named_tiles_data, definitions=movable_defs_data, lang_code=lang_code
     )
     echo.success("Scrapping tables generated")
 
@@ -129,5 +137,14 @@ def main():
     generate_surface_list(named_tiles_data)
     echo.success("Crafting surfaces list generated")
 
-if __name__ == "__main__":
-    main()
+    echo.info("Generating container mapping")
+    generate_container_mapping(tiles_data, lang_code)
+    echo.success("Container mapping generated")
+
+    echo.info("Generating entity articles")
+    generate_entity_articles(lang_code, entity_data)
+    echo.success("Entity articles generated")
+
+    echo.info("Generating entity health templates")
+    generate_entity_health(lang_code, entity_data)
+    echo.success("Entity health templates generated")

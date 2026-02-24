@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Project Zomboid Wiki Crafting Recipe Processor
 
@@ -17,7 +16,9 @@ The script handles:
 - Lua table generation for templates
 """
 
-import os, re
+import os
+import re
+from scripts.core.file_loading import get_lua_path
 from tqdm import tqdm
 from collections import defaultdict
 from scripts.core.constants import PBAR_FORMAT, CACHE_DIR
@@ -40,19 +41,19 @@ def get_unit_tool_ids() -> list[str]:
     """
     Get list of item IDs that should be treated as unit tools.
     Finds all items with Type "Drainable" from the item data cache.
-    
+
     Returns:
         list[str]: List of item IDs that are unit tools (drainable items)
     """
     global _unit_tool_ids_cache
-    
+
     if _unit_tool_ids_cache is not None:
         return _unit_tool_ids_cache
-        
+
     unit_tool_ids = []
-    
+
     for item_id, item in Item.all().items():
-        if item.type == "Drainable":
+        if item.item_type == "drainable":
             unit_tool_ids.append(item_id)
 
     _unit_tool_ids_cache = unit_tool_ids
@@ -75,6 +76,21 @@ def get_use_delta(item_id: str) -> float:
         return float(use_delta) if use_delta else 0.1
     except (ValueError, TypeError):
         return 0.1
+
+
+def format_count(count_data):
+    """
+    Format count as 'min-max' string or int for display.
+
+    Args:
+        count_data: Either an int for fixed counts or a dict with min/max/variable keys
+
+    Returns:
+        str | int: Formatted count as "min-max" string for variable counts, or int for fixed counts
+    """
+    if isinstance(count_data, dict) and count_data.get("variable"):
+        return f"{count_data['min']}-{count_data['max']}"
+    return int(count_data) if count_data else 1
 
 
 def fluid_rgb(fluid_id):
@@ -110,12 +126,7 @@ def fluid_rgb(fluid_id):
         if not fluid.valid:
             raise ValueError(f"No fluid found for ID: {fluid_id}")
 
-        return {
-            "name": fluid.name,
-            "R":    fluid.r,
-            "G":    fluid.g,
-            "B":    fluid.b
-        }
+        return {"name": fluid.name, "R": fluid.r, "G": fluid.g, "B": fluid.b}
 
     except Exception as error:
         raise RuntimeError(f"Error processing fluid '{fluid_id}': {error}")
@@ -166,9 +177,10 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
         if input_entry.get("mode") == "Keep" and "fluidModifier" not in input_entry:
             continue
 
-        quantity = input_entry.get("count",
-                     input_entry.get("amount",
-                     input_entry.get("index", 1)))
+        count_data = input_entry.get(
+            "count", input_entry.get("amount", input_entry.get("index", 1))
+        )
+        quantity = format_count(count_data)
 
         ingredient_counter += 1
         key = f"ingredient{ingredient_counter}"
@@ -205,12 +217,14 @@ def process_ingredients(recipe: dict, build_data: dict) -> str:
                     rid = rid.strip()
                     if not rid.startswith("Base."):
                         rid = f"Base.{rid}"
-                    parsed.append({
-                        "raw": rid,
-                        "amount": amt,
-                        "translated": safe_name_lookup(rid),
-                        "is_unit": rid in unit_tool_ids
-                    })
+                    parsed.append(
+                        {
+                            "raw": rid,
+                            "amount": amt,
+                            "translated": safe_name_lookup(rid),
+                            "is_unit": rid in unit_tool_ids,
+                        }
+                    )
                 info["numbered_list"] = True
                 info["items"] = parsed
 
@@ -410,7 +424,8 @@ def process_tools(recipe: dict, build_data: dict) -> str:
             continue
 
         lines: list[str] = []
-        count = inp.get("count", 1)  # Get the count for this input
+        count_data = inp.get("count", 1)  # Get the count for this input
+        count = format_count(count_data)
 
         # Tags
         if "tags" in inp:
@@ -495,6 +510,15 @@ def process_workstation(recipe: dict, build_data: dict) -> str:
 
     workstation_mapping = {
         "anysurfacecraft": "Any surface",
+        "primitiveforge": "Primitive Forge",
+        "forge": "Simple Forge",
+        "advancedforge": "Advanced Forge",
+        "domekiln": "Dome Kiln",
+        "kilnlarge": "Advanced Kiln",
+        "kilnsmall": "Primitive Kiln",
+        "primitivefurnace": "Primitive Furnace",
+        "furnace": "Simple Furnace",
+        "advancedfurnace": "Advanced Furnace",
         "choppingblock": "Chopping Block",
         "coffeemachine": "Coffee Machine",
         "grindstone": "Grindstone",
@@ -503,21 +527,18 @@ def process_workstation(recipe: dict, build_data: dict) -> str:
         "stone_mill": "Stone Mill",
         "stone_quern": "Stone Quern",
         "churnbucket": "Butter Churn",
-        "dryleatherlarge": "Leather Drying Rack (Large)",
-        "dryleathermedium": "Leather Drying Rack (Medium)",
-        "dryleathersmall": "Leather Drying Rack (Small)",
-        "tanleather": "Tanning Barrel",
-        "advancedforge": "Advanced Forge",
-        "dryingrackgrain": "Large Plant Drying Rack",
-        "dryingrackherb": "Small Plant Drying Rack",
-        "forge": "Forge",
-        "primitivefurnace": "Primitive Furnace",
-        "furnace": "Furnace",
-        "advancedfurnace": "Advanced Furnace",
+        "dryleatherlarge": "Large Leather Drying Rack",
+        "dryleathermedium": "Medium Leather Drying Rack",
+        "dryleathersmall": "Small Leather Drying Rack",
+        "dryingrackgrain": [
+            "Large Plant Drying Rack",
+            "Simple Large Plant Drying Rack",
+        ],
+        "dryingrackherb": ["Small Plant Drying Rack", "Simple Small Plant Drying Rack"],
+        "tanleather": "Tannin Barrel",
         "metalbandsaw": "Metal Bandsaw",
         "potterywheel": "Pottery Wheel",
         "potterybench": "Pottery Bench",
-        "primitiveforge": "Primitive Forge",
         "removeflesh": "Softening Beam",
         "removefur": "Softening Beam",
         "spinningwheel": "Spinning Wheel",
@@ -525,18 +546,22 @@ def process_workstation(recipe: dict, build_data: dict) -> str:
         "whetstone": "Whetstone",
         "toaster": "Toaster",
         "handpress": "Hand Press",
-        "domekiln": "Kiln - Dome",
-        "kilnlarge": "Advanced Kiln",
-        "kilnsmall": "Primitive Kiln",
         "heckling": "Heckle Comb",
         "rippling": "Ripple Comb",
         "scutching": "Scutching Board",
+        "woodcharcoal": ["Charcoal Burning Pile", "Charcoal Burning Barrel"],
     }
 
     for tag_identifier in tag_list:
-        workstation_name = workstation_mapping.get(tag_identifier.lower())
-        if workstation_name:
-            return f"[[{workstation_name}]]"
+        workstation_value = workstation_mapping.get(tag_identifier.lower())
+        if workstation_value:
+            # Handle multiple workstations (list) or single workstation (string)
+            if isinstance(workstation_value, list):
+                # Format: [[Workstation1]]<br>or<br>[[Workstation2]]
+                workstation_links = [f"[[{ws}]]" for ws in workstation_value]
+                return "<br>or<br>".join(workstation_links)
+            else:
+                return f"[[{workstation_value}]]"
 
     return "''none''"
 
@@ -566,11 +591,12 @@ def process_output_mapper(recipe: dict, mapper_key: str) -> list[str]:
         return []
 
     # Look for the count on the matching output entry; default to 1
-    output_amount = 1
+    output_amount_data = 1
     for out in recipe.get("outputs", []):
         if out.get("mapper") == mapper_key:
-            output_amount = out.get("count", 1)
+            output_amount_data = out.get("count", 1)
             break
+    output_amount = format_count(output_amount_data)
 
     formatted_lines: list[str] = []
     for raw_output_key in mapper_data.keys():
@@ -612,7 +638,7 @@ def process_products(recipe: dict, build_data: dict) -> str:
     base_label = raw_label or raw_name
 
     for key in (base_label.replace(" ", ""), base_label.replace(" ", "_")):
-        product_name = Translate.get(key)
+        product_name = Translate.get(key, property_key="TeachedRecipes")
         if product_name and product_name != key:  # found a real translation?
             break
     else:  # ran through both keys
@@ -620,7 +646,7 @@ def process_products(recipe: dict, build_data: dict) -> str:
 
     display_name = product_name.replace("_", " ")
 
-    recipe_name = Translate.get(raw_name)
+    recipe_name = Translate.get(raw_name, property_key="TeachedRecipes")
     products_markup = f"products=<small>''{recipe_name}''</small><br>"
 
     display_name = display_name.replace("Construct ", "")
@@ -641,7 +667,8 @@ def process_products(recipe: dict, build_data: dict) -> str:
             for out in outputs:
                 icon_ref = out.get("icon")
                 label = out.get("displayName", product_name)
-                count = out.get("count", 1)
+                count_data = out.get("count", 1)
+                count = format_count(count_data)
 
                 if icon_ref:
                     img, size = icon_ref, "64x128px"
@@ -722,13 +749,14 @@ def process_products(recipe: dict, build_data: dict) -> str:
 
         # Item outputs
         if "items" in out:
-            qty = out.get("count", out.get("index", 1))
+            qty_data = out.get("count", out.get("index", 1))
+            qty = format_count(qty_data)
             for rid in out["items"]:
                 item_obj = Item(rid)
                 icon_filename = item_obj.get_icon(False, False, False)
                 wiki_link = item_obj.wiki_link
                 item_lines.append(
-                    f"[[File:{icon_filename}|64x64px|class=pixelart]]<br>{wiki_link} ×{qty}"
+                    f"[[File:{icon_filename}|64x64px|class=pixelart|link={wiki_link}]]<br>{wiki_link} ×{qty}"
                 )
 
     # Assemble sections
@@ -756,8 +784,15 @@ def process_products(recipe: dict, build_data: dict) -> str:
             products_markup += "<br>"
         products_markup += "<br>".join(energy_lines)
 
-    # Fallback
+    # Handle sharpening blade recipes with empty outputs
     if products_markup.endswith("<br>") and products_markup.count("<br>") == 1:
+        on_create = recipe.get("OnCreate", "")
+        if on_create in [
+            "RecipeCodeOnCreate.sharpenBlade",
+            "RecipeCodeOnCreate.sharpenBladeGrindstone",
+        ]:
+            products_markup += "Sharpened Blade"
+            return products_markup
         return "products=<small>''none''</small>"
 
     return products_markup
@@ -787,7 +822,7 @@ def process_xp(recipe: dict, build_data: dict) -> str:
         "Woodwork": "Carpentry",
         "MetalWelding": "Welding",
         "FlintKnapping": "Knapping",
-        "Blacksmith": "Metalworking",
+        "Blacksmith": "Blacksmithing",
         "Electricity": "Electrical",
         "LargeBlade": "Long Blade",
     }
@@ -966,7 +1001,7 @@ def process_requirements(recipe: dict, literature_data: dict) -> tuple[str, str]
             requirements_work["skillbooks"].append(book_name)
 
     # Schematics from literature spawns
-    for category, spawn_list in literature_data.get("SpecialLootSpawns", {}).items():
+    for category, spawn_list in (literature_data.get("SpecialLootSpawns") or {}).items():
         if raw_recipe_name in spawn_list:
             requirements_work["schematics"].append(category)
 
@@ -974,7 +1009,7 @@ def process_requirements(recipe: dict, literature_data: dict) -> tuple[str, str]
     try:
         lua_lines = (
             open(
-                os.path.join("resources", "lua", "MainCreationMethods.lua"),
+                get_lua_path("MainCreationMethods"),
                 encoding="utf-8",
             )
             .read()
@@ -1084,6 +1119,10 @@ def output_item_article_lists(
         return isinstance(item_id, str) and "*" not in item_id
 
     def expand_tag(tag: str) -> list[str]:
+        # Skip expanding SharpKnife tag to avoid overfilling templates with tool items
+        if tag.lower() == "sharpknife":
+            return []
+
         return [
             entry["item_id"]
             for entry in tag_to_items_map.get(tag, [])
@@ -1211,6 +1250,30 @@ def output_item_article_lists(
         with open(path, "w", encoding="utf-8") as fh:
             fh.write(content)
 
+    # Build a mapping of item_id to all item_ids on the same page(s)
+    # This allows us to merge recipes for items that share a page
+    item_to_page_items = {}  # item_id -> set of all item_ids (including itself) on same page(s)
+
+    all_item_ids = (
+        set(usage_by_crafting.keys())
+        | set(production_by_item.keys())
+        | set(usage_by_building.keys())
+    )
+
+    for iid in all_item_ids:
+        pages = page_manager.get_pages(iid, "item_id")
+        if pages:
+            # Get all item IDs from all pages this item appears on
+            related_items = set()
+            for page in pages:
+                page_ids = page_manager.get_ids(page, "item_id")
+                if page_ids:
+                    related_items.update(page_ids)
+            item_to_page_items[iid] = related_items
+        else:
+            # If no page found, just use the item itself
+            item_to_page_items[iid] = {iid}
+
     # Collect data for pages
     crafting_whatitcrafts_pages = defaultdict(set)  # page_name -> set of recipe names
     crafting_howtocraft_pages = defaultdict(set)
@@ -1219,8 +1282,15 @@ def output_item_article_lists(
     # Generate individual files and collect page data
     # whatitcrafts (crafting)
     for iid, names in usage_by_crafting.items():
+        # Merge recipes from all items on the same page(s)
+        merged_names = set(names)
+        related_items = item_to_page_items.get(iid, {iid})
+        for related_id in related_items:
+            if related_id in usage_by_crafting:
+                merged_names.update(usage_by_crafting[related_id])
+
         tid = f"{iid}_whatitcrafts"
-        content = render_template(tid, names)
+        content = render_template(tid, merged_names)
 
         # Write individual file
         safe_filename = f"{sanitize_filename(tid)}.txt"
@@ -1230,14 +1300,21 @@ def output_item_article_lists(
         pages = page_manager.get_pages(iid, "item_id")
         if pages:
             for page in pages:
-                crafting_whatitcrafts_pages[page].update(names)
+                crafting_whatitcrafts_pages[page].update(merged_names)
         else:
-            crafting_whatitcrafts_pages["Unknown_Items"].update(names)
+            crafting_whatitcrafts_pages["Unknown_Items"].update(merged_names)
 
     # howtocraft (crafting)
     for iid, names in production_by_item.items():
+        # Merge recipes from all items on the same page(s)
+        merged_names = set(names)
+        related_items = item_to_page_items.get(iid, {iid})
+        for related_id in related_items:
+            if related_id in production_by_item:
+                merged_names.update(production_by_item[related_id])
+
         tid = f"{iid}_howtocraft"
-        content = render_template(tid, names)
+        content = render_template(tid, merged_names)
 
         # Write individual file
         safe_filename = f"{sanitize_filename(tid)}.txt"
@@ -1247,14 +1324,21 @@ def output_item_article_lists(
         pages = page_manager.get_pages(iid, "item_id")
         if pages:
             for page in pages:
-                crafting_howtocraft_pages[page].update(names)
+                crafting_howtocraft_pages[page].update(merged_names)
         else:
-            crafting_howtocraft_pages["Unknown_Items"].update(names)
+            crafting_howtocraft_pages["Unknown_Items"].update(merged_names)
 
     # constructionwhatitcrafts (building)
     for iid, names in usage_by_building.items():
+        # Merge recipes from all items on the same page(s)
+        merged_names = set(names)
+        related_items = item_to_page_items.get(iid, {iid})
+        for related_id in related_items:
+            if related_id in usage_by_building:
+                merged_names.update(usage_by_building[related_id])
+
         tid = f"{iid}_constructionwhatitcrafts"
-        content = render_template(tid, names)
+        content = render_template(tid, merged_names)
 
         # Write individual file
         safe_filename = f"{sanitize_filename(tid)}.txt"
@@ -1264,9 +1348,9 @@ def output_item_article_lists(
         pages = page_manager.get_pages(iid, "item_id")
         if pages:
             for page in pages:
-                building_whatitcrafts_pages[page].update(names)
+                building_whatitcrafts_pages[page].update(merged_names)
         else:
-            building_whatitcrafts_pages["Unknown_Items"].update(names)
+            building_whatitcrafts_pages["Unknown_Items"].update(merged_names)
 
     # Generate page-combined files
     # crafting whatitcrafts pages
@@ -1311,7 +1395,7 @@ def output_skill_usage(recipe_data_map: dict[str, dict]) -> None:
         "Woodwork": "Carpentry",
         "MetalWelding": "Welding",
         "FlintKnapping": "Knapping",
-        "Blacksmith": "Metalworking",
+        "Blacksmith": "Blacksmithing",
         "Electricity": "Electrical",
     }
 
@@ -1429,6 +1513,225 @@ def output_category_usage(recipe_data_map: dict[str, dict]) -> None:
             file_handle.write("\n".join(lines))
 
 
+def output_workstation_usage(recipe_data_map: dict[str, dict]) -> None:
+    """
+    Generate wiki markup for workstation usage.
+
+    Args:
+        recipe_data_map (dict[str, dict]): Recipe data.
+
+    Creates files documenting which recipes require each workstation,
+    organized by crafting vs building recipes.
+    """
+    os.makedirs(os.path.join("output", "recipes", "workstation"), exist_ok=True)
+
+    crafting_workstation_usage: defaultdict[str, set[str]] = defaultdict(set)
+    building_workstation_usage: defaultdict[str, set[str]] = defaultdict(set)
+
+    def sanitize_filename(name: str) -> str:
+        """Sanitize a string to be safe for use as a filename using percent encoding."""
+        replacements = {
+            ":": "%3A",
+            '"': "%22",
+            "<": "%3C",
+            ">": "%3E",
+            "|": "%7C",
+            "?": "%3F",
+            "*": "%2A",
+            "/": "%2F",
+            "\\": "%5C",
+            " ": "_",
+        }
+        sanitized = name
+        for invalid_char, replacement in replacements.items():
+            sanitized = sanitized.replace(invalid_char, replacement)
+
+        # Remove any trailing spaces or dots (Windows doesn't like these)
+        sanitized = sanitized.rstrip(" .")
+
+        return sanitized
+
+    for recipe_identifier, recipe_data in recipe_data_map.items():
+        is_building_recipe = bool(recipe_data.get("construction", False))
+        workstation_markup = recipe_data.get("workstation", "''none''")
+
+        if workstation_markup and workstation_markup != "''none''":
+            workstation_names = re.findall(r"\[\[([^\]]+)\]\]", workstation_markup)
+            if workstation_names:
+                target_map = (
+                    building_workstation_usage
+                    if is_building_recipe
+                    else crafting_workstation_usage
+                )
+                # Add recipe to each workstation's set
+                for workstation_name in workstation_names:
+                    target_map[workstation_name].add(recipe_identifier)
+
+    tier_hierarchies = {
+        "Simple Furnace": ["Primitive Furnace"],
+        "Advanced Furnace": ["Simple Furnace", "Primitive Furnace"],
+        "Simple Forge": ["Primitive Forge"],
+        "Advanced Forge": ["Simple Forge", "Primitive Forge"],
+        "Dome Kiln": ["Primitive Kiln"],
+        "Advanced Kiln": ["Dome Kiln", "Primitive Kiln"],
+    }
+
+    # Cascade recipes from lower tiers to higher tiers
+    def cascade_recipes(usage_map: defaultdict[str, set[str]]) -> None:
+        """Add recipes from lower tier workstations to higher tier ones."""
+        for higher_tier, lower_tiers in tier_hierarchies.items():
+            for lower_tier in lower_tiers:
+                if lower_tier in usage_map and usage_map[lower_tier]:
+                    usage_map[higher_tier].update(usage_map[lower_tier])
+
+    cascade_recipes(crafting_workstation_usage)
+    cascade_recipes(building_workstation_usage)
+
+    # Write out templates for crafting recipes
+    for workstation, recipes in crafting_workstation_usage.items():
+        if recipes:
+            lines = (
+                [
+                    "{{Crafting/sandbox|header=Crafting recipe table|ID="
+                    + sanitize_filename(workstation)
+                    + "_crafting"
+                ]
+                + [f"|{r}" for r in sorted(recipes)]
+                + ["}}"]
+            )
+            safe_filename = f"{sanitize_filename(workstation)}_crafting.txt"
+            with open(
+                os.path.join("output", "recipes", "workstation", safe_filename),
+                "w",
+                encoding="utf-8",
+            ) as file_handle:
+                file_handle.write("\n".join(lines))
+
+    # Write out templates for building recipes
+    for workstation, recipes in building_workstation_usage.items():
+        if recipes:  # Only write if there are recipes
+            lines = (
+                [
+                    "{{Building|header=Building recipe table|ID="
+                    + sanitize_filename(workstation)
+                    + "_building"
+                ]
+                + [f"|{r}" for r in sorted(recipes)]
+                + ["}}"]
+            )
+            safe_filename = f"{sanitize_filename(workstation)}_building.txt"
+            with open(
+                os.path.join("output", "recipes", "workstation", safe_filename),
+                "w",
+                encoding="utf-8",
+            ) as file_handle:
+                file_handle.write("\n".join(lines))
+
+
+def output_tag_usage(
+    crafting_recipe_map: dict[str, dict], building_recipe_map: dict[str, dict]
+) -> None:
+    """
+    Generate wiki markup for tag usage.
+
+    Args:
+        crafting_recipe_map (dict[str, dict]): Crafting recipe data.
+        building_recipe_map (dict[str, dict]): Building recipe data.
+
+    Creates files documenting which recipes use each tag,
+    organized by crafting vs building recipes.
+    """
+    os.makedirs(os.path.join("output", "recipes", "crafting", "tags"), exist_ok=True)
+    os.makedirs(os.path.join("output", "recipes", "building", "tags"), exist_ok=True)
+
+    # Collect tag usage by recipe from raw recipe data
+    tag_usage_crafting: defaultdict[str, set[str]] = defaultdict(set)
+    tag_usage_building: defaultdict[str, set[str]] = defaultdict(set)
+
+    def collect_tags_from_recipe(
+        recipe_id: str, recipe_data: dict, tag_usage_dict: defaultdict[str, set[str]]
+    ) -> None:
+        """Collect all tags used in a recipe (recipe-level tags + input tags)."""
+        # Recipe-level tags
+        recipe_tags = recipe_data.get("tags", [])
+        for tag in recipe_tags:
+            tag_usage_dict[tag].add(recipe_id)
+
+        # Input tags (ingredients and tools)
+        inputs = recipe_data.get("inputs", [])
+        for input_item in inputs:
+            input_tags = input_item.get("tags", [])
+            for tag in input_tags:
+                tag_usage_dict[tag].add(recipe_id)
+
+    # Process crafting recipes
+    for recipe_id, recipe_data in crafting_recipe_map.items():
+        collect_tags_from_recipe(recipe_id, recipe_data, tag_usage_crafting)
+
+    # Process building recipes
+    for recipe_id, recipe_data in building_recipe_map.items():
+        collect_tags_from_recipe(recipe_id, recipe_data, tag_usage_building)
+
+    def render_tag_template(tag: str, recipes: set[str]) -> str:
+        header = "Crafting recipe table"
+        lines = (
+            [f"{{{{Crafting/sandbox|header={header}|item=Tag_{tag}"]
+            + [f"|{r}" for r in sorted(recipes)]
+            + ["}}"]
+        )
+        return "\n".join(lines)
+
+    def sanitize_filename(name: str) -> str:
+        """Sanitize a string to be safe for use as a filename using percent encoding."""
+        # Replace invalid filename characters with percent encoding
+        replacements = {
+            ":": "%3A",
+            '"': "%22",
+            "<": "%3C",
+            ">": "%3E",
+            "|": "%7C",
+            "?": "%3F",
+            "*": "%2A",
+            "/": "%2F",
+            "\\": "%5C",
+        }
+        sanitized = name
+        for invalid_char, replacement in replacements.items():
+            sanitized = sanitized.replace(invalid_char, replacement)
+
+        # Remove any trailing spaces or dots (Windows doesn't like these)
+        sanitized = sanitized.rstrip(" .")
+
+        return sanitized
+
+    def write_file(path: str, content: str) -> None:
+        if not content:
+            return
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(content)
+
+    # Write crafting tag files
+    for tag, recipes in tag_usage_crafting.items():
+        if recipes:
+            content = render_tag_template(tag, recipes)
+            safe_filename = f"Tag_{sanitize_filename(tag)}.txt"
+            write_file(
+                os.path.join("output", "recipes", "crafting", "tags", safe_filename),
+                content,
+            )
+
+    # Write building tag files
+    for tag, recipes in tag_usage_building.items():
+        if recipes:
+            content = render_tag_template(tag, recipes)
+            safe_filename = f"Tag_{sanitize_filename(tag)}_building.txt"
+            write_file(
+                os.path.join("output", "recipes", "building", "tags", safe_filename),
+                content,
+            )
+
+
 def output_lua_tables(recipe_data_map: dict[str, dict]) -> None:
     """
     Generate Lua tables for recipe data.
@@ -1537,9 +1840,12 @@ def output_lua_tables(recipe_data_map: dict[str, dict]) -> None:
         index_file.write("return index\n")
 
 
-def main():
+def main(batch: bool = False):
     """
     Main execution function for recipe processing.
+
+    Args:
+        batch (bool): If True, skip language initialization
 
     This function:
     1. Loads necessary data from parsers
@@ -1551,7 +1857,8 @@ def main():
     # Initialize page manager
     page_manager.init()
 
-    language_code = Language.get()
+    if not batch:
+        Language.get()
     game_version = Version.get()
 
     CRAFT_CACHE_FILE = "parsed_craftRecipe_data.json"
@@ -1560,186 +1867,155 @@ def main():
     craft_cache_path = os.path.join(CACHE_DIR, CRAFT_CACHE_FILE)
     build_cache_path = os.path.join(CACHE_DIR, BUILD_CACHE_FILE)
 
+    echo.info("Building item tags")
+    item_tags.get_tag_data()
+    item_tags.write_tag_image()
+    echo.success("Item tags built successfully")
+
+    # Craft cache
+    echo.info("Loading craft cache")
     try:
-        try:
-            echo.info("Building item tags")
-            tags_data = item_tags.get_tag_data()
-            item_tags.write_tag_image()
-        except Exception as exc:
-            echo.error(f"Error while building item tags: {exc}")
-        else:
-            echo.success("Item tags built successfully")
-
-        # Craft cache
-        try:
-            echo.info("Loading craft cache")
-            parsed_craft_data, craft_cache_version = load_cache(
-                craft_cache_path, "Craft", get_version=True
-            )
-
-            if craft_cache_version != game_version:
-                raise ValueError("Craft cache version mismatch")
-
-        except Exception as exc:
-            echo.info(f"{exc}; regenerating")
-
-            extract_script_data("craftRecipe")
-
-            parsed_craft_data, craft_cache_version = load_cache(
-                craft_cache_path, "Craft", get_version=True
-            )
-        craft_data = parsed_craft_data
-        echo.success("Craft cache ready")
-
-        # Build cache
-        try:
-            echo.info("Loading build cache")
-            parsed_build_data, build_cache_version = load_cache(
-                build_cache_path, "Build", get_version=True
-            )
-
-            if build_cache_version != game_version:
-                raise ValueError("Build cache version mismatch")
-
-        except Exception as exc:
-            echo.info(f"{exc}; regenerating")
-            extract_script_data("entity")
-
-            parsed_build_data, build_cache_version = load_cache(
-                build_cache_path, "Build", get_version=True
-            )
-        build_data = parsed_build_data
-        echo.success("Build cache ready")
-        ""
+        parsed_craft_data, craft_cache_version = load_cache(
+            craft_cache_path, "Craft", get_version=True
+        )
+        if craft_cache_version != game_version:
+            raise ValueError("Craft cache version mismatch")
     except Exception as exc:
-        echo.error(f"Error while gathering cache: {exc}")
-    else:
-        echo.success("Cache ready")
+        echo.info(f"{exc}; regenerating")
+        extract_script_data("craftRecipe")
+        parsed_craft_data, craft_cache_version = load_cache(
+            craft_cache_path, "Craft", get_version=True
+        )
+    craft_data = parsed_craft_data
+    echo.success("Craft cache ready")
+
+    # Build cache
+    echo.info("Loading build cache")
+    try:
+        parsed_build_data, build_cache_version = load_cache(
+            build_cache_path, "Build", get_version=True
+        )
+        if build_cache_version != game_version:
+            raise ValueError("Build cache version mismatch")
+    except Exception as exc:
+        echo.info(f"{exc}; regenerating")
+        extract_script_data("entity")
+        parsed_build_data, build_cache_version = load_cache(
+            build_cache_path, "Build", get_version=True
+        )
+    build_data = parsed_build_data
+    echo.success("Build cache ready")
+    echo.success("Cache ready")
 
     literature_data = literature_parser.get_literature_data()
     processed_recipe_map: dict[str, dict] = {}
 
     total_recipes = len(craft_data) + len(build_data)
 
-    try:  # Main processing loop
-        with tqdm(
-            total=total_recipes,
-            desc="Processing recipes",
-            bar_format=PBAR_FORMAT,
-            unit=" recipes",
-        ) as progress_bar:
-            # Crafting recipes
-            for recipe_id, recipe_data in craft_data.items():
-                progress_bar.set_postfix_str(f"Crafting: {recipe_id}")
-                try:
-                    ingredients_markup = process_ingredients(recipe_data, build_data)
-                    tools_markup = process_tools(recipe_data, build_data)
-                    recipes_markup, skills_markup = process_requirements(
-                        recipe_data, literature_data
-                    )
-                    workstation_markup = process_workstation(recipe_data, build_data)
-                    products_markup = process_products(recipe_data, build_data)
-                    xp_markup = process_xp(recipe_data, build_data)
+    with tqdm(
+        total=total_recipes,
+        desc="Processing recipes",
+        bar_format=PBAR_FORMAT,
+        unit=" recipes",
+    ) as progress_bar:
+        # Crafting recipes
+        for recipe_id, recipe_data in craft_data.items():
+            progress_bar.set_postfix_str(f"Crafting: {recipe_id}")
+            try:
+                ingredients_markup = process_ingredients(recipe_data, build_data)
+                tools_markup = process_tools(recipe_data, build_data)
+                recipes_markup, skills_markup = process_requirements(
+                    recipe_data, literature_data
+                )
+                workstation_markup = process_workstation(recipe_data, build_data)
+                products_markup = process_products(recipe_data, build_data)
+                xp_markup = process_xp(recipe_data, build_data)
 
-                    processed_recipe_map[recipe_id] = {
-                        "ingredients": ingredients_markup,
-                        "tools": tools_markup,
-                        "recipes": recipes_markup,
-                        "skills": skills_markup,
-                        "workstation": workstation_markup,
-                        "products": products_markup,
-                        "xp": xp_markup,
-                        "category": recipe_data.get("category", "Other"),
-                        "construction": False,
-                    }
-                except Exception as error:
-                    echo.error(
-                        f"Skipping crafting recipe '{recipe_id}' due to error: {error}"
-                    )
-                finally:
-                    progress_bar.update(1)
+                processed_recipe_map[recipe_id] = {
+                    "ingredients": ingredients_markup,
+                    "tools": tools_markup,
+                    "recipes": recipes_markup,
+                    "skills": skills_markup,
+                    "workstation": workstation_markup,
+                    "products": products_markup,
+                    "xp": xp_markup,
+                    "category": recipe_data.get("category", "Other"),
+                    "construction": False,
+                }
+            except Exception as error:
+                echo.error(
+                    f"Skipping crafting recipe '{recipe_id}' due to error: {error}"
+                )
+            finally:
+                progress_bar.update(1)
 
-            # Building recipes
-            for recipe_id, recipe_data in build_data.items():
-                progress_bar.set_postfix_str(f"Building: {recipe_id}")
-                try:
-                    ingredients_markup = process_ingredients(recipe_data, build_data)
-                    tools_markup = process_tools(recipe_data, build_data)
-                    recipes_markup, skills_markup = process_requirements(
-                        recipe_data, literature_data
-                    )
-                    workstation_markup = process_workstation(recipe_data, build_data)
-                    products_markup = process_products(recipe_data, build_data)
-                    xp_markup = process_xp(recipe_data, build_data)
+        # Building recipes
+        for recipe_id, recipe_data in build_data.items():
+            progress_bar.set_postfix_str(f"Building: {recipe_id}")
+            try:
+                ingredients_markup = process_ingredients(recipe_data, build_data)
+                tools_markup = process_tools(recipe_data, build_data)
+                recipes_markup, skills_markup = process_requirements(
+                    recipe_data, literature_data
+                )
+                workstation_markup = process_workstation(recipe_data, build_data)
+                products_markup = process_products(recipe_data, build_data)
+                xp_markup = process_xp(recipe_data, build_data)
 
-                    processed_recipe_map[recipe_id] = {
-                        "ingredients": ingredients_markup,
-                        "tools": tools_markup,
-                        "recipes": recipes_markup,
-                        "skills": skills_markup,
-                        "workstation": workstation_markup,
-                        "products": products_markup,
-                        "xp": xp_markup,
-                        "category": recipe_data.get("category", "Other"),
-                        "construction": True,
-                    }
-                except Exception as error:
-                    echo.warning(
-                        f"Skipping building recipe '{recipe_id}' due to error: {error}"
-                    )
-                finally:
-                    progress_bar.update(1)
+                processed_recipe_map[recipe_id] = {
+                    "ingredients": ingredients_markup,
+                    "tools": tools_markup,
+                    "recipes": recipes_markup,
+                    "skills": skills_markup,
+                    "workstation": workstation_markup,
+                    "products": products_markup,
+                    "xp": xp_markup,
+                    "category": recipe_data.get("category", "Other"),
+                    "construction": True,
+                }
+            except Exception as error:
+                echo.warning(
+                    f"Skipping building recipe '{recipe_id}' due to error: {error}"
+                )
+            finally:
+                progress_bar.update(1)
 
-    except Exception as exc:
-        echo.error(f"Error while running main processing loop: {exc}")
+    echo.success("Recipes processed.")
 
-    else:
-        echo.success("Recipes processed.")
+    echo.info("Mapping item tags")
+    tag_map = build_tag_to_items_map()
+    echo.success("Item tags mapped")
 
-    try:  # Begin outputting
-        try:
-            echo.info("Mapping item tags")
-            tag_map = build_tag_to_items_map()
-        except Exception as exc:
-            echo.error(f"Error while mapping item tags: {exc}")
-            tag_map = {}
-        else:
-            echo.success("Item tags mapped")
+    echo.info("Writing skill usage")
+    output_skill_usage(processed_recipe_map)
+    echo.success("Skill usage written")
 
-        try:
-            echo.info("Writing skill usage")
-            output_skill_usage(processed_recipe_map)
-        except Exception as exc:
-            echo.error(f"Error while writing skill usage: {exc}")
-        else:
-            echo.success("Skill usage written")
+    echo.info("Writing category usage")
+    output_category_usage(processed_recipe_map)
+    echo.success("Category usage written")
 
-        try:
-            echo.info("Writing category usage")
-            output_category_usage(processed_recipe_map)
-        except Exception as exc:
-            echo.error(f"Error while writing category usage: {exc}")
-        else:
-            echo.success("Category usage written")
+    echo.info("Writing workstation usage")
+    output_workstation_usage(processed_recipe_map)
+    echo.success("Workstation usage written")
 
-        try:
-            echo.info("Writing lua tables")
-            output_lua_tables(processed_recipe_map)
-        except Exception as exc:
-            echo.error(f"Error while writing lua tables: {exc}")
-        else:
-            echo.success("Lua tables written")
+    echo.info("Writing tag usage")
+    # Use raw recipe data like the other functions do
+    # Split raw recipes into crafting and building
+    crafting_recipes = {
+        k: v for k, v in craft_data.items() if not v.get("construction", False)
+    }
+    building_recipes = {
+        k: v for k, v in build_data.items() if v.get("construction", False)
+    }
+    output_tag_usage(crafting_recipes, building_recipes)
+    echo.success("Tag usage written")
 
-        try:
-            echo.info("Writing per-item article lists")
-            output_item_article_lists(craft_data, build_data, tag_map)
-        except Exception as exc:
-            echo.error(f"Error while writing per-item article lists: {exc}")
-        else:
-            echo.success("Item article lists written")
+    echo.info("Writing lua tables")
+    output_lua_tables(processed_recipe_map)
+    echo.success("Lua tables written")
 
-    except Exception as exc:
-        echo.error(f"Error while writing output: {exc}")
+    echo.info("Writing per-item article lists")
+    output_item_article_lists(craft_data, build_data, tag_map)
+    echo.success("Item article lists written")
 
-    else:
-        echo.success("Recipe output complete")
+    echo.success("Recipe output complete")

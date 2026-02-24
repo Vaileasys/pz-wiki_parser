@@ -1,7 +1,7 @@
 from scripts.utils import echo
 from scripts.parser import script_parser
 from scripts.core.file_loading import get_script_path
-from scripts.core.language import Translate
+from scripts.core.language import Language, Translate
 from scripts.objects.item import Item
 from scripts.utils.util import link, to_bool
 
@@ -16,8 +16,12 @@ class CraftRecipeInput:
         return self.data.get("items")
 
     @property
-    def count(self) -> int:
-        return int(self.data.get("count", 1))
+    def count(self):
+        """Return formatted count: 'min-max' string for variable counts, int for fixed counts."""
+        count_data = self.data.get("count", 1)
+        if isinstance(count_data, dict) and count_data.get("variable"):
+            return f"{count_data['min']}-{count_data['max']}"
+        return int(count_data) if count_data else 1
 
     @property
     def mode(self) -> int:
@@ -33,7 +37,7 @@ class CraftRecipeInput:
 
     def __repr__(self):
         return f"<CraftRecipeInput {recipe.recipe_id}>"
-    
+
 
 class CraftRecipeOutput:
     def __init__(self, data: dict, recipe: "CraftRecipe"):
@@ -49,8 +53,12 @@ class CraftRecipeOutput:
         return self.data.get("mapper")
 
     @property
-    def count(self) -> int:
-        return int(self.data.get("count", 1))
+    def count(self):
+        """Return formatted count: 'min-max' string for variable counts, int for fixed counts."""
+        count_data = self.data.get("count", 1)
+        if isinstance(count_data, dict) and count_data.get("variable"):
+            return f"{count_data['min']}-{count_data['max']}"
+        return int(count_data) if count_data else 1
 
     def __repr__(self):
         return f"<CraftRecipeOutput {recipe.recipe_id}>"
@@ -122,7 +130,7 @@ class CraftRecipe:
 
     def __repr__(self):
         return f"<CraftRecipe {self.recipe_id}>"
-    
+
     ## ---------------- Object Methods ---------------- ##
 
     def has_tag(self, tag: str) -> bool:
@@ -136,7 +144,7 @@ class CraftRecipe:
             bool: True if the tag is present, False otherwise.
         """
         return tag in self.tags
-    
+
     @property
     def input_items(self) -> list[str]:
         """
@@ -173,7 +181,7 @@ class CraftRecipe:
             self._input_items = list(items)
 
         return self._input_items
-    
+
     @property
     def output_items(self) -> list[str]:
         """
@@ -197,7 +205,7 @@ class CraftRecipe:
                             items.add(key)
 
             self._output_items = list(items)
-            
+
         return self._output_items
 
     ## ---------------- Properties ---------------- ##
@@ -209,22 +217,37 @@ class CraftRecipe:
     @property
     def file(self):
         return self.data.get("SourceFile")
-    
+
     @property
     def path(self):
         return get_script_path(self.file, prefer=self.script_type)
 
     @property
     def name(self):
-        if self._name is None:
-            self._name = Translate.get(self.recipe_id, default=Translate.get("Recipe_" + self.recipe_id, default=self.recipe_id))
-        return self._name
+        current_lang = Language.get()
+        if (
+            not hasattr(self, "_name_cache")
+            or self._name_cache.get("lang") != current_lang
+        ):
+            self._name_cache = {
+                "lang": current_lang,
+                "value": Translate.get(self.recipe_id, property_key="TeachedRecipes"),
+            }
+        return self._name_cache["value"]
 
     @property
     def name_en(self):
-        if self._name_en is None:
-            self._name_en = Translate.get(self.recipe_id, lang_code="en")
-        return self._name_en
+        if (
+            not hasattr(self, "_name_en_cache")
+            or self._name_en_cache.get("lang") != "en"
+        ):
+            self._name_en_cache = {
+                "lang": "en",
+                "value": Translate.get(
+                    self.recipe_id, property_key="TeachedRecipes", lang_code="en"
+                ),
+            }
+        return self._name_en_cache["value"]
 
     @property
     def wiki_link(self):
@@ -259,7 +282,7 @@ class CraftRecipe:
     @property
     def category(self):
         return self.data.get("category", "Miscellaneous")
-    
+
     @property
     def category_link(self):
         if not hasattr(self, "_category_link"):
@@ -299,7 +322,7 @@ class CraftRecipe:
     @property
     def need_to_be_learned(self) -> bool:
         return to_bool(self.data.get("needToBeLearn", False))
-    
+
     @property
     def allow_batch_craft(self) -> bool:
         return to_bool(self.data.get("AllowBatchCraft", False))
@@ -318,10 +341,17 @@ class CraftRecipe:
 
     @property
     def tooltip(self):
-        if not hasattr(self, "_tooltip"):
+        current_lang = Language.get()
+        if (
+            not hasattr(self, "_tooltip_cache")
+            or self._tooltip_cache.get("lang") != current_lang
+        ):
             tooltip = self.data.get("ToolTip")
-            self._tooltip = Translate.get(tooltip) if tooltip else None
-        return self._tooltip
+            self._tooltip_cache = {
+                "lang": current_lang,
+                "value": Translate.get(tooltip) if tooltip else None,
+            }
+        return self._tooltip_cache["value"]
 
     @property
     def skill_required(self) -> list[dict]:
@@ -345,9 +375,9 @@ class CraftRecipe:
             meta_recipe = self.data.get("MetaRecipe")
             self._meta_recipe = CraftRecipe(meta_recipe) if meta_recipe else None
         return self._meta_recipe
-    
+
     ## ----------------- Entity Properties ----------------- ##
-    
+
     @property
     def is_entity(self) -> bool:
         return self.script_type.lower() == "entity"
@@ -372,10 +402,9 @@ class CraftRecipe:
         return self.data.get("skillBaseHealth")
 
 
-
 if __name__ == "__main__":
     recipe = CraftRecipe("MakeForearmBulletproofVestArmor")
     print(recipe.output_items)
     inputs = recipe.inputs
-    #for input in inputs:
+    # for input in inputs:
     #    print(input.items)

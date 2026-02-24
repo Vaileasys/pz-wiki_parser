@@ -5,12 +5,14 @@ import scripts.parser.distribution_parser as distribution_parser
 from scripts.core import page_manager
 from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache, load_cache
+from scripts.core.file_loading import get_lua_dir
 from scripts.utils.categories import find_all_categories
 from scripts.utils import lua_helper
 from scripts.objects.item import Item
 from scripts.objects.fish import Fish
+from scripts.utils import echo
 
-cache_path = os.path.join(DATA_DIR, "distributions")
+cache_path = os.path.join(DATA_DIR, "cache", "distributions")
 
 # Dictionary to store changes for reference across the script
 item_name_changes = {}
@@ -103,12 +105,16 @@ def process_json(file_paths):
                     count += len(items)
 
         elif file_key == "stories":
-            for story_key, items in data.items():
-                for item in items:
-                    # Update item name if found in the dictionary
-                    item = load_item_dictionary(item)
-                    item_list.add(item)
-                    count += 1
+            # New structure: {"story_types": {"random_building": {"RBBar": {"items": [...]}}}}
+            story_types = data.get("story_types", {})
+            for story_type_name, stories in story_types.items():
+                for story_id, story_data in stories.items():
+                    items = story_data.get("items", [])
+                    for item in items:
+                        # Update item name if found in the dictionary
+                        item = load_item_dictionary(item)
+                        item_list.add(item)
+                        count += 1
 
         elif file_key == "fishing":
             for fish_item_id, fish_data in data.items():
@@ -231,9 +237,9 @@ def process_json(file_paths):
 
         item_counts[file_key] = count
 
-    print(f"Unique items found: {len(item_list)}")
+    echo.info(f"Unique items found: {len(item_list)}")
     for file_key, count in item_counts.items():
-        print(f"Total items found in {file_key}: {count}")
+        echo.info(f"Total items found in {file_key}: {count}")
 
     os.makedirs(os.path.join("output", "en", "item", "distributions"), exist_ok=True)
     with open(
@@ -259,7 +265,14 @@ def build_item_json(
     butchering_data,
     attached_weapons_data,
     container_contents_data,
+    outfits_data=None,
 ):
+    # Load outfit data once for all items if not provided
+    if outfits_data is None:
+        from scripts.parser.outfit_parser import get_outfits
+
+        outfits_data = get_outfits()
+
     def get_container_info(item_name):
         containers_info = []
         unique_entries = set()
@@ -617,34 +630,52 @@ def build_item_json(
     def get_clothing_info(item_name, clothing_data):
         clothing_matches = []
 
+        # Try to resolve the item name using the same logic as outfits.py
+        resolved_item_names = set()
+
+        # Add the original item name
+        resolved_item_names.add(item_name)
+
+        # Try to resolve using Item.fix_item_id as fallback
+        try:
+            fixed_item_id = Item.fix_item_id(item_name)
+            if fixed_item_id != item_name:
+                resolved_item_names.add(fixed_item_id)
+        except:
+            # If Item.fix_item_id fails, continue with just the original name
+            pass
+
         for gender_outfits in ["FemaleOutfits", "MaleOutfits"]:
             gender_outfits_data = clothing_data.get(gender_outfits, {})
-            gender = "Female" if gender_outfits == "FemaleOutfits" else "Male"
 
             for outfit_name, outfit_details in gender_outfits_data.items():
                 items = outfit_details.get("Items", {})
 
-                outfit_name = outfit_name.replace("_", "")
-                outfit_name = re.sub(r"(?<!^)(?=[A-Z])", " ", outfit_name)
-
-                if item_name in items:
-                    clothing_matches.append(
-                        {
-                            "GUID": outfit_details.get("GUID", ""),
-                            "outfit_name": f"{outfit_name} ({gender.lower()})",
-                            "Chance": items[item_name],
-                        }
-                    )
+                # Check if any of our resolved item names appear in the clothing data
+                for resolved_name in resolved_item_names:
+                    if resolved_name in items:
+                        clothing_matches.append(
+                            {
+                                "GUID": outfit_details.get("GUID", ""),
+                                "outfit_name": get_outfit_link(outfit_name),
+                                "Chance": items[resolved_name],
+                            }
+                        )
+                        break  # Only add once per outfit
 
         return clothing_matches
 
     def get_story_info(item_name):
         matching_stories = []
-        for story_category, items in stories_data.items():
-            if item_name in items:
-                matching_stories.append(
-                    {"id": story_category, "link": get_story_link(story_category)}
-                )
+        # New structure: iterate through story_types
+        story_types = stories_data.get("story_types", {})
+        for story_type_name, stories in story_types.items():
+            for story_id, story_data in stories.items():
+                items = story_data.get("items", [])
+                if item_name in items:
+                    matching_stories.append(
+                        {"id": story_id, "link": get_story_link(story_id)}
+                    )
         return matching_stories
 
     def get_story_link(story_category):
@@ -656,6 +687,8 @@ def build_item_json(
             return "Building stories"
         elif story_category.startswith("RVS"):
             return "Vehicle stories"
+        elif story_category.startswith("RDS"):
+            return "Survivor stories"
         else:
             return "Randomized stories"
 
@@ -839,7 +872,7 @@ def build_item_json(
 
         return container_matches
 
-    def get_attached_weapon_info(item_name, attached_weapons_data):
+    def get_attached_weapon_info(item_name, attached_weapons_data, outfits_data=None):
         """
         Calculate effective spawn chances for attached weapons based on the Java implementation.
 
@@ -862,10 +895,11 @@ def build_item_json(
         definitions_data = attached_weapons_data.get("AttachedWeaponDefinitions", {})
         outfit_definitions_data = definitions_data.get("attachedWeaponCustomOutfit", {})
 
-        # Load outfit data for link generation
-        from scripts.parser.outfit_parser import get_outfits
+        # Load outfit data for link generation if not provided
+        if outfits_data is None:
+            from scripts.parser.outfit_parser import get_outfits
 
-        outfits_data = get_outfits()
+            outfits_data = get_outfits()
 
         def get_days_from_outfit_name(outfit_name):
             """Helper function to determine days required based on outfit name"""
@@ -946,10 +980,12 @@ def build_item_json(
 
         # Process outfit-specific definitions
         for outfit_name, outfit_config in outfit_definitions_data.items():
+            # Extract the raw outfit ID by removing gender suffixes
+            raw_outfit_id = extract_raw_outfit_id(outfit_name)
             outfit_base_chance = outfit_config.get("chance", 0) / 100.0
             outfit_weapons = outfit_config.get("weapons", [])
 
-            # Check outfit name for time period
+            # Check outfit name for time period (use original name for time detection)
             outfit_days_required = get_days_from_outfit_name(outfit_name)
             if (
                 outfit_days_required == 0
@@ -1009,8 +1045,8 @@ def build_item_json(
                     attached_weapon_matches.append(
                         {
                             "outfit": get_outfit_link(
-                                outfit_name, outfits_data
-                            ),  # Convert outfit name to link
+                                raw_outfit_id, outfits_data
+                            ),  # Convert raw outfit ID to link
                             "definition_id": definition["id"],
                             "effective_chance": round(effective_chance_percentage, 2),
                             "days_required": definition[
@@ -1026,7 +1062,10 @@ def build_item_json(
             all_mentioned_outfits.update(definition["outfit_filter"])
 
         for outfit_name in all_mentioned_outfits:
-            # Check outfit name for time period
+            # Extract the raw outfit ID by removing gender suffixes
+            raw_outfit_id = extract_raw_outfit_id(outfit_name)
+
+            # Check outfit name for time period (use original name for time detection)
             outfit_days_required = get_days_from_outfit_name(outfit_name)
             if (
                 outfit_days_required == 0
@@ -1078,8 +1117,8 @@ def build_item_json(
                         attached_weapon_matches.append(
                             {
                                 "outfit": get_outfit_link(
-                                    outfit_name, outfits_data
-                                ),  # Convert outfit name to link
+                                    raw_outfit_id, outfits_data
+                                ),  # Convert raw outfit ID to link
                                 "definition_id": definition["id"],
                                 "effective_chance": round(
                                     effective_chance_percentage, 2
@@ -1103,11 +1142,255 @@ def build_item_json(
             "Fishing": get_fishing_info(item_name),
             "Butchering": get_butchering_info(item_name),
             "AttachedWeapons": get_attached_weapon_info(
-                item_name, attached_weapons_data
+                item_name, attached_weapons_data, outfits_data
             ),
         }
 
     save_cache(all_items, "all_items.json", cache_path)
+
+
+def merge_case_insensitive_duplicates(items_dict):
+    """
+    Merge items that have the same ID but different capitalization.
+    
+    This prevents issues where items like "Bag_Schoolbag" and "Bag_SchoolBag" 
+    are treated as separate items, causing later overwrites and split index entries.
+    
+    Args:
+        items_dict (dict): Dictionary of item_id -> item_data
+        
+    Returns:
+        dict: Deduplicated dictionary with merged data
+    """
+    # Build a mapping of lowercase IDs to all their variants
+    lowercase_to_variants = {}
+    for item_id in items_dict.keys():
+        lowercase_id = item_id.lower()
+        if lowercase_id not in lowercase_to_variants:
+            lowercase_to_variants[lowercase_id] = []
+        lowercase_to_variants[lowercase_id].append(item_id)
+    
+    # Find duplicates
+    duplicates = {
+        lower_id: variants 
+        for lower_id, variants in lowercase_to_variants.items() 
+        if len(variants) > 1
+    }
+    
+    if duplicates:
+        echo.info(f"Found {len(duplicates)} case-insensitive duplicate item groups")
+
+    merged_items = {}
+    processed = set()
+    
+    for item_id, item_data in items_dict.items():
+        lowercase_id = item_id.lower()
+
+        if item_id in processed:
+            continue
+
+        if lowercase_id not in duplicates:
+            merged_items[item_id] = item_data
+            continue
+
+        variants = duplicates[lowercase_id]
+        preferred_id = None
+        best_score = -1
+        
+        for variant_id in variants:
+            variant_data = items_dict[variant_id]
+            
+            # Calculate a score based on data richness
+            score = 0
+            has_clothing = bool(variant_data.get("Clothing"))
+            has_containers = bool(variant_data.get("Containers"))
+            has_vehicles = bool(variant_data.get("Vehicles"))
+            has_foraging = bool(variant_data.get("Foraging"))
+            has_fishing = bool(variant_data.get("Fishing"))
+            has_butchering = bool(variant_data.get("Butchering"))
+            has_stories = bool(variant_data.get("Stories"))
+            has_attached_weapons = bool(variant_data.get("AttachedWeapons"))
+
+            # Prefer items with clothing spawns
+            if has_clothing:
+                score += 100
+            
+            # Add points for each type of data
+            score += (
+                (len(variant_data.get("Containers", [])) if has_containers else 0) +
+                (len(variant_data.get("Vehicles", [])) if has_vehicles else 0) +
+                (10 if has_foraging else 0) +
+                (10 if has_fishing else 0) +
+                (len(variant_data.get("Butchering", [])) if has_butchering else 0) +
+                (len(variant_data.get("Stories", [])) if has_stories else 0) +
+                (len(variant_data.get("AttachedWeapons", [])) if has_attached_weapons else 0)
+            )
+            
+            if score > best_score:
+                best_score = score
+                preferred_id = variant_id
+        
+        # If no preferred ID found use first alphabetically
+        if preferred_id is None:
+            preferred_id = sorted(variants)[0]
+        
+        # Merge all data
+        merged_data = {
+            "Containers": [],
+            "Vehicles": [],
+            "Stories": [],
+            "Clothing": [],
+            "Foraging": None,
+            "Fishing": None,
+            "Butchering": [],
+            "AttachedWeapons": []
+        }
+        
+        for variant_id in variants:
+            variant_data = items_dict[variant_id]
+            
+            # Merge containers
+            if variant_data.get("Containers"):
+                merged_data["Containers"].extend(variant_data["Containers"])
+            
+            # Merge vehicles
+            if variant_data.get("Vehicles"):
+                merged_data["Vehicles"].extend(variant_data["Vehicles"])
+            
+            # Merge stories
+            if variant_data.get("Stories"):
+                merged_data["Stories"].extend(variant_data["Stories"])
+            
+            # Merge clothing
+            if variant_data.get("Clothing"):
+                merged_data["Clothing"].extend(variant_data["Clothing"])
+            
+            # For foraging, keep the first non-None value
+            if variant_data.get("Foraging") and merged_data["Foraging"] is None:
+                merged_data["Foraging"] = variant_data["Foraging"]
+            
+            # For fishing, keep the first non-None value
+            if variant_data.get("Fishing") and merged_data["Fishing"] is None:
+                merged_data["Fishing"] = variant_data["Fishing"]
+            
+            # Merge butchering
+            if variant_data.get("Butchering"):
+                merged_data["Butchering"].extend(variant_data["Butchering"])
+            
+            # Merge attached weapons
+            if variant_data.get("AttachedWeapons"):
+                merged_data["AttachedWeapons"].extend(variant_data["AttachedWeapons"])
+
+        # Remove duplicates from merged lists
+        # For containers
+        if merged_data["Containers"]:
+            seen_containers = set()
+            unique_containers = []
+            for container in merged_data["Containers"]:
+                key = (
+                    container.get("Room", ""),
+                    container.get("Container", ""),
+                    container.get("Chance", 0),
+                    container.get("Rolls", 0)
+                )
+                if key not in seen_containers:
+                    seen_containers.add(key)
+                    unique_containers.append(container)
+            merged_data["Containers"] = unique_containers
+        
+        # For vehicles
+        if merged_data["Vehicles"]:
+            seen_vehicles = set()
+            unique_vehicles = []
+            for vehicle in merged_data["Vehicles"]:
+                key = (
+                    vehicle.get("Type", ""),
+                    vehicle.get("Container", ""),
+                    vehicle.get("Chance", 0),
+                    vehicle.get("Rolls", 0)
+                )
+                if key not in seen_vehicles:
+                    seen_vehicles.add(key)
+                    unique_vehicles.append(vehicle)
+            merged_data["Vehicles"] = unique_vehicles
+        
+        # For stories
+        if merged_data["Stories"]:
+            seen_stories = set()
+            unique_stories = []
+            for story in merged_data["Stories"]:
+                key = (story.get("id", ""), story.get("link", ""))
+                if key not in seen_stories:
+                    seen_stories.add(key)
+                    unique_stories.append(story)
+            merged_data["Stories"] = unique_stories
+        
+        # For clothing
+        if merged_data["Clothing"]:
+            seen_clothing = set()
+            unique_clothing = []
+            for clothing in merged_data["Clothing"]:
+                key = (
+                    clothing.get("outfit_name", ""),
+                    clothing.get("Chance", 0),
+                    clothing.get("GUID", "")
+                )
+                if key not in seen_clothing:
+                    seen_clothing.add(key)
+                    unique_clothing.append(clothing)
+            merged_data["Clothing"] = unique_clothing
+
+        # For butchering
+        if merged_data["Butchering"]:
+            seen_butchering = set()
+            unique_butchering = []
+            for butcher in merged_data["Butchering"]:
+                key = (butcher.get("animal", ""), butcher.get("amount", ""))
+                if key not in seen_butchering:
+                    seen_butchering.add(key)
+                    unique_butchering.append(butcher)
+            merged_data["Butchering"] = unique_butchering
+
+        # For attached weapons
+        if merged_data["AttachedWeapons"]:
+            seen_weapons = set()
+            unique_weapons = []
+            for weapon in merged_data["AttachedWeapons"]:
+                key = (
+                    weapon.get("outfit", ""),
+                    weapon.get("definition_id", ""),
+                    weapon.get("days_required", 0),
+                    weapon.get("effective_chance", 0)
+                )
+                if key not in seen_weapons:
+                    seen_weapons.add(key)
+                    unique_weapons.append(weapon)
+            merged_data["AttachedWeapons"] = unique_weapons
+        
+        # Clean up empty lists/None values
+        if not merged_data["Containers"]:
+            del merged_data["Containers"]
+        if not merged_data["Vehicles"]:
+            del merged_data["Vehicles"]
+        if not merged_data["Stories"]:
+            del merged_data["Stories"]
+        if not merged_data["Clothing"]:
+            del merged_data["Clothing"]
+        if merged_data["Foraging"] is None:
+            del merged_data["Foraging"]
+        if merged_data["Fishing"] is None:
+            del merged_data["Fishing"]
+        if not merged_data["Butchering"]:
+            del merged_data["Butchering"]
+        if not merged_data["AttachedWeapons"]:
+            del merged_data["AttachedWeapons"]
+
+        merged_items[preferred_id] = merged_data
+
+        for variant_id in variants:
+            processed.add(variant_id)
+    
+    return merged_items
 
 
 def build_tables(category_items, index):
@@ -1348,9 +1631,16 @@ def build_tables(category_items, index):
 
                 zones = foraging.get("zones", {})
                 if zones:
-                    zone_items = [
-                        f'["{zone}"] = {value}' for zone, value in zones.items()
-                    ]
+                    from scripts.core.language import Translate
+                    zone_items = []
+                    zone_data = []
+                    for zone_id, value in zones.items():
+                        translated_zone = Translate.get(f'IGUI_SearchMode_Zone_Names_{zone_id}') or zone_id
+                        zone_link = f"[[{translated_zone}]]"
+                        zone_data.append((translated_zone, zone_link, value))
+                    zone_data.sort(key=lambda x: x[0])
+                    for _, zone_link, value in zone_data:
+                        zone_items.append(f'["{zone_link}"] = {value}')
                     foraging_props.append(f"{{{', '.join(zone_items)}}}")
                 else:
                     foraging_props.append("{}")
@@ -1643,8 +1933,6 @@ def combine_items_by_page(all_items):
     # Dictionary to map secondary items to their primary item
     item_mapping = {}
 
-    print("Combining items by page...")
-
     # Build a mapping of item IDs to their pages and primary IDs
     item_to_page_info = {}
 
@@ -1686,7 +1974,7 @@ def combine_items_by_page(all_items):
                 "is_primary": item_id == primary_id,
             }
 
-    print(f"Found {len(item_to_page_info)} items with page mappings")
+    echo.info(f"Found {len(item_to_page_info)} items with page mappings")
 
     # First pass: Process all items that have page mappings
     for item_id, item_data in all_items.items():
@@ -1826,7 +2114,6 @@ def combine_items_by_page(all_items):
             processed_items.add(item_id)
 
     # Third pass: Remove duplicates in each list
-    print("Removing duplicates...")
     for item_id, item_data in combined_items.items():
         # Remove duplicate container entries
         if item_data.get("Containers"):
@@ -1928,14 +2215,14 @@ def combine_items_by_page(all_items):
                         unique_attached_weapons.append(weapon)
                 item_data["AttachedWeapons"] = unique_attached_weapons
 
-    # Print statistics
+    # Statistics
     original_count = len(all_items)
     combined_count = len(combined_items)
 
-    print(f"Original item count: {original_count}")
-    print(f"Combined item count: {combined_count}")
-    print(f"Reduced by: {original_count - combined_count} items")
-    print(f"Number of secondary items combined: {len(item_mapping)}")
+    echo.info(f"Original item count: {original_count}")
+    echo.info(f"Combined item count: {combined_count}")
+    echo.info(f"Reduced by: {original_count - combined_count} items")
+    echo.info(f"Number of secondary items combined: {len(item_mapping)}")
 
     # Save the mapping for reference
     save_cache(item_mapping, "item_page_mapping.json", cache_path)
@@ -1943,46 +2230,52 @@ def combine_items_by_page(all_items):
     return combined_items
 
 
-def translate_outfit_name(outfit_label):
-    """Convert an outfit ID to a readable name, following outfit_parser.py's rules."""
-    # Add spaces before capital letters, but skip if preceded by "KY"
-    name_with_spaces = re.sub(r"(?<!^)(?<!KY)(?=[A-Z])", " ", outfit_label)
-    name_with_spaces = name_with_spaces.replace("_", " ")
-    # Ensure only one space between words
-    return re.sub(r"\s+", " ", name_with_spaces).strip()
+def extract_raw_outfit_id(outfit_name):
+    """
+    Extract the raw outfit ID by removing gender suffixes.
+
+    Args:
+        outfit_name (str): Outfit name like "Armor Test Kelly Gang (male)"
+
+    Returns:
+        str: Raw outfit ID like "ArmorTestKellyGang"
+    """
+    # Remove gender suffixes
+    if outfit_name.endswith(" (male)"):
+        return outfit_name[:-7]  # Remove " (male)"
+    elif outfit_name.endswith(" (female)"):
+        return outfit_name[:-9]  # Remove " (female)"
+    else:
+        return outfit_name
 
 
 def get_outfit_link(outfit_id, outfits_data=None):
     """
-    Convert an outfit ID to a wiki link. Uses male version by default unless only female exists.
-    Returns link in format [[Name (gender)|Name]] with sentence case display.
+    Convert an outfit ID to a wiki link using the page dictionary.
 
     Args:
         outfit_id: The outfit identifier (e.g., "ArmyInstructor")
-        outfits_data: Optional dictionary containing outfit data from outfit_parser
+        outfits_data: Optional dictionary containing outfit data (no longer used for linking)
 
     Returns:
-        A wiki link to the outfit page (e.g., "[[Army Instructor (male)|Army instructor]]")
+        A wiki link to the outfit page if found in page dictionary, otherwise the raw ID
     """
-    if outfits_data is None:
-        from scripts.parser.outfit_parser import get_outfits
+    # Import page_manager to check for outfit pages
+    from scripts.core import page_manager
 
-        outfits_data = get_outfits()
+    # Initialize page_manager to ensure data is loaded
+    page_manager.init()
 
-    translated_name = translate_outfit_name(outfit_id)
+    # Check if there's a page for this outfit_id in the page dictionary
+    pages = page_manager.get_pages(outfit_id, id_type="outfit_id")
 
-    # Convert to sentence case for display (first letter capital, rest lowercase)
-    display_name = translated_name[0].upper() + translated_name[1:].lower()
+    if pages and len(pages) > 0:
+        # Use the first page found (there should typically be only one)
+        page_name = pages[0]
+        return f"{page_name}"
 
-    # Check if outfit exists in male/female versions
-    in_male = outfit_id in outfits_data.get("MaleOutfits", {})
-    in_female = outfit_id in outfits_data.get("FemaleOutfits", {})
-
-    # Default to male unless only female exists
-    if in_male or not in_female:
-        return f"[[{translated_name} (male)|{display_name}]]"
-    else:
-        return f"[[{translated_name} (female)|{display_name}]]"
+    # If no page found, return the raw ID
+    return outfit_id
 
 
 def main():
@@ -1990,25 +2283,38 @@ def main():
     Main function to process and generate distribution data files.
 
     This function:
-    1. Parses distribution data from various sources
-    2. Processes items and builds JSON data
-    3. Combines items that share the same wiki page
-    4. Categorizes items by type
-    5. Generates Lua data files by category
-    6. Creates an index file
+    1. Checks if decompiler has run successfully
+    2. Parses distribution data from various sources
+    3. Processes items and builds JSON data
+    4. Combines items that share the same wiki page
+    5. Categorizes items by type
+    6. Generates Lua data files by category
+    7. Creates an index file
+
+    Returns:
+        bool: True if processing completed successfully, False otherwise
     """
+    # Run distribution parser and check if it was successful
+    if not distribution_parser.main():
+        echo.error(
+            "Distribution parser failed to run due to missing Java or decompiler issues."
+        )
+        echo.info("Cannot continue with item distribution processing.")
+        return False
 
     file_paths = {
         "proceduraldistributions": os.path.join(
-            DATA_DIR, "distributions", "proceduraldistributions.json"
+            DATA_DIR, "cache", "distributions", "proceduraldistributions.json"
         ),
-        "foraging": os.path.join(DATA_DIR, "distributions", "foraging.json"),
+        "foraging": os.path.join(DATA_DIR, "cache", "distributions", "foraging.json"),
         "vehicle_distributions": os.path.join(
-            DATA_DIR, "distributions", "vehicle_distributions.json"
+            DATA_DIR, "cache", "distributions", "vehicle_distributions.json"
         ),
-        "clothing": os.path.join(DATA_DIR, "distributions", "clothing.json"),
-        "stories": os.path.join(DATA_DIR, "distributions", "stories.json"),
-        "distributions": os.path.join(DATA_DIR, "distributions", "distributions.json"),
+        "clothing": os.path.join(DATA_DIR, "cache", "distributions", "clothing.json"),
+        "stories": os.path.join(DATA_DIR, "cache", "distributions", "stories.json"),
+        "distributions": os.path.join(
+            DATA_DIR, "cache", "distributions", "distributions.json"
+        ),
         "fishing": os.path.join(DATA_DIR, "cache", "parsed_fish_data.json"),
     }
 
@@ -2027,26 +2333,26 @@ def main():
     save_cache(parsed_data, "attached_weapon_definitions.json", cache_path)
 
     # Parse distribution data
-    print("Parsing distribution data...")
+    echo.info("Parsing distribution data...")
     distribution_parser.main()
 
     # Parse container contents (this depends on distribution data being available)
-    print("Parsing container contents...")
+    echo.info("Parsing container contents...")
     from scripts.parser.distribution_parser import parse_container_contents
 
     parse_container_contents(cache_path)
 
     # Process item list and build JSON data
-    print("Processing item list...")
+    echo.info("Processing item list...")
     file_paths["butchering"] = os.path.join(
-        DATA_DIR, "distributions", "butchering_data.json"
+        DATA_DIR, "cache", "distributions", "butchering_data.json"
     )
     file_paths["container_contents"] = os.path.join(
-        DATA_DIR, "distributions", "container_contents.json"
+        DATA_DIR, "cache", "distributions", "container_contents.json"
     )
     item_list = process_json(file_paths)
 
-    print("Building item JSON data...")
+    echo.info("Building item JSON data...")
     procedural_data = load_cache(file_paths["proceduraldistributions"])
     distribution_data = load_cache(file_paths["distributions"])
     vehicle_data = load_cache(file_paths["vehicle_distributions"])
@@ -2055,13 +2361,20 @@ def main():
     stories_data = load_cache(file_paths["stories"])
     butchering_data_loaded = load_cache(file_paths["butchering"])
     attached_weapons_data = load_cache(
-        os.path.join(DATA_DIR, "distributions", "attached_weapon_definitions.json")
+        os.path.join(
+            DATA_DIR, "cache", "distributions", "attached_weapon_definitions.json"
+        )
     )
 
     # Load container contents data
     container_contents_data = load_cache(
-        os.path.join(DATA_DIR, "distributions", "container_contents.json")
+        os.path.join(DATA_DIR, "cache", "distributions", "container_contents.json")
     )
+
+    # Load outfits data once for all items
+    from scripts.parser.outfit_parser import get_outfits
+
+    outfits_data = get_outfits()
 
     build_item_json(
         item_list,
@@ -2075,16 +2388,15 @@ def main():
         butchering_data_loaded,
         attached_weapons_data,
         container_contents_data,
+        outfits_data,
     )
 
-    # Load all_items and combine items by page
-    print("Loading and combining items by page...")
-    all_items = load_cache(os.path.join(DATA_DIR, "distributions", "all_items.json"))
+    all_items = load_cache(
+        os.path.join(DATA_DIR, "cache", "distributions", "all_items.json")
+    )
     combined_items = combine_items_by_page(all_items)
     save_cache(combined_items, "combined_items.json", cache_path)
 
-    # Initialize language before categorization
-    print("Initializing language...")
     from scripts.core.language import Language
 
     Language.set("en")  # Set to english to avoid user input
@@ -2092,8 +2404,10 @@ def main():
 
     Translate.load()
 
+    # Merge case-insensitive duplicates before categorization
+    combined_items = merge_case_insensitive_duplicates(combined_items)
+
     # Categorize items
-    print("Categorizing items...")
     category_items = {}
     index = {}
     processed_items = set()  # Track which items have been assigned to a category
@@ -2166,15 +2480,15 @@ def main():
             category_items["misc"][item_id] = item_data
             index["misc"].append(item_id)
             processed_items.add(item_id)
-            print(f"Error processing {item_id}: {e}")
+            echo.error(f"Error processing {item_id}: {e}")
 
     # Generate Lua data files by category
-    print("Generating Lua data files...")
     build_tables(category_items, index)
 
     # Calculate missing items
-    print("Calculating missing items...")
-    itemname_path = os.path.join("resources", "Translate", "EN", "ItemName_EN.txt")
+    itemname_path = os.path.join(
+        get_lua_dir(), "shared", "Translate", "EN", "ItemName_EN.txt"
+    )
     itemlist_path = os.path.join(
         "output", "en", "item", "distributions", "Item_list.txt"
     )
@@ -2183,7 +2497,9 @@ def main():
     )
 
     calculate_missing_items(itemname_path, itemlist_path, missing_items_path)
-    print("Script completed successfully.")
+    echo.success("Script completed successfully.")
+
+    return True
 
 
 if __name__ == "__main__":

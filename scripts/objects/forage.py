@@ -2,6 +2,7 @@ import os
 from scripts.objects.profession import Occupation, Trait
 from scripts.core.cache import load_cache
 from scripts.core.constants import CACHE_DIR
+from scripts.core.file_loading import get_lua_path
 from scripts.parser import distribution_parser
 from scripts.objects.item import Item
 from scripts.utils import util
@@ -26,7 +27,7 @@ class ForagingItem:
 
     def __init__(self, item_id: str):
         self._id = item_id
-        self._data = self.load().get(item_id, {})
+        self._data: dict = self.load().get(item_id, {})
 
     @classmethod
     def load(cls) -> dict:
@@ -35,7 +36,7 @@ class ForagingItem:
             return cls._foraging
 
         if not os.path.exists(FORAGING_CACHE_PATH):
-            forage_definitions_path = os.path.join("resources", "lua", "forageDefinitions.lua")
+            forage_definitions_path = get_lua_path("forageDefinitions")
             distribution_parser.parse_foraging(forage_definitions_path, DISTRIBUTIONS_DIR)
 
         cls._foraging = load_cache(FORAGING_CACHE_PATH) or {}
@@ -69,6 +70,29 @@ class ForagingItem:
     def _translate_month(self, month: int):
         from scripts.core.language import Translate
         return Translate.get(f"Sandbox_StartMonth_option{month}")
+    
+    def has_category(self, *category_ids: str | list[str]) -> bool:
+        """
+        Check if the foraging item is in any of the given categories.
+
+        Args:
+            *category_ids (str | list[str]): One or more category IDs. Can be individual strings or lists of strings.
+
+        Returns:
+            bool: True if the item is in at least one of the categories.
+        """
+        if not self.categories:
+            return False
+
+        # Flatten input
+        flat_ids = []
+        for cid in category_ids:
+            if isinstance(cid, list):
+                flat_ids.extend(cid)
+            else:
+                flat_ids.append(cid)
+
+        return any(cid in self.categories for cid in flat_ids)
 
     @property
     def id(self) -> str:
@@ -655,6 +679,20 @@ class ForageSystem:
         inject = """
         function require(module) return {} end
         forageSystem = {}
+        
+        -- Mock CharacterProfession to return profession names
+        local profession_meta = {
+            __index = function(t, key)
+                local profession = {
+                    _name = key,
+                    getName = function(self)
+                        return self._name
+                    end
+                }
+                return profession
+            end
+        }
+        CharacterProfession = setmetatable({}, profession_meta)
         """
 
         lua_runtime = load_lua_file("forageSkills.lua", inject_lua=inject)
@@ -844,4 +882,6 @@ class ForageSystem:
         return cls.load().get("lightPenaltyCutoff")
 
 if __name__ == "__main__":
-    print(ForageSystem.load())
+    #print(ForageSystem.load())
+    print(ForagingItem("Leech").has_category("Insects"))
+    print(ForagingItem("Leech").categories)

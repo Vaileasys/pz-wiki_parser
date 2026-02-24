@@ -7,6 +7,7 @@ import os
 import struct
 from scripts.core.constants import DATA_DIR
 from scripts.core.cache import save_cache
+from scripts.core.file_loading import get_media_dir
 
 IsoFlagType = {
     'collideW': 0, 'collideN': 1, 'solidfloor': 2, 'noStart': 3, 'windowW': 4,
@@ -448,21 +449,28 @@ class IsoWorld:
             self.set_open_door_properties(base, defs)
 
 def main():
-    input_folder = os.path.join('resources', 'tiles')
+    media_dir = get_media_dir()
     os.makedirs(DATA_DIR, exist_ok=True)
 
     IsoSpriteManager()
     world = IsoWorld()
 
-    for fname in sorted(os.listdir(input_folder)):
-        if fname.endswith('.tiles'):
-            world.load_tile_definitions_property_strings(os.path.join(input_folder, fname))
+    # Find all .tiles files in media directory
+    tiles_files = []
+    for root, dirs, files in os.walk(media_dir):
+        for fname in files:
+            if fname.endswith('.tiles'):
+                tiles_files.append(os.path.join(root, fname))
+
+    # Load tile definition property strings from all .tiles files
+    for tiles_file in sorted(tiles_files):
+        world.load_tile_definitions_property_strings(tiles_file)
     world.set_custom_property_values()
     world.generate_tile_property_lookup_tables()
 
-    for fname in sorted(os.listdir(input_folder)):
-        if fname.endswith('.tiles'):
-            world.read_tile_definitions(os.path.join(input_folder, fname), 1)
+    # Read tile definitions from all .tiles files
+    for tiles_file in sorted(tiles_files):
+        world.read_tile_definitions(tiles_file, 1)
 
     combined = {k: spr.to_json() for k, spr in world.tiles.items()}
     save_cache(combined, 'tiles_data.json', DATA_DIR)

@@ -69,6 +69,7 @@ def generate_hotbar_slots():
     global hotbar_slots
     global attachment_types
     global attachment_items
+    
     hotbar_slots = hotbar_data
     for slot, slot_data in hotbar_data.items():
         slot_name = hotbar_slots[slot].get("name")
@@ -92,8 +93,9 @@ def generate_hotbar_slots():
                         "icon": icon,
                     }
                     attachment_items["AttachmentsProvided"][item_id] = new_item_data
+        
         # Sort items by 'name'
-        attachment_items["AttachmentsProvided"] = dict(sorted(attachment_items["AttachmentsProvided"].items(), key=lambda item: item[1]["name"]))
+        attachment_items["AttachmentsProvided"] = dict(sorted(attachment_items["AttachmentsProvided"].items(), key=lambda item: str(item[1].get("name", "")) if item[1].get("name") is not None else ""))
         
         for attachment, attachment_name in slot_data.get("attachments", {}).items():
             if attachment not in attachment_types:
@@ -114,13 +116,15 @@ def generate_hotbar_slots():
                                 "icon": icon,
                             }
                             attachment_items["AttachmentType"][item_id] = new_item_data
+        
         # Sort items by 'name'
-        attachment_items["AttachmentType"] = dict(sorted(attachment_items["AttachmentType"].items(), key=lambda item: item[1]["name"]))
+        attachment_items["AttachmentType"] = dict(sorted(attachment_items["AttachmentType"].items(), key=lambda item: str(item[1].get("name", "")) if item[1].get("name") is not None else ""))
+        
         # Sort attachment types by key
-        attachment_types = {key: attachment_types[key] for key in sorted(attachment_types)}
+        attachment_types = {key: attachment_types[key] for key in sorted(attachment_types, key=lambda k: str(k) if k is not None else "")}
 
     # Sort slots by 'name'
-    hotbar_slots = dict(sorted(hotbar_slots.items(), key=lambda item: item[1]["name"]))
+    hotbar_slots = dict(sorted(hotbar_slots.items(), key=lambda item: str(item[1].get("name", "")) if item[1].get("name") is not None else ""))
 
     save_cache(attachment_items, "attachment_items.json", suppress=_suppress)
     save_cache(hotbar_slots, "hotbar_slots.json", suppress=_suppress)
@@ -371,13 +375,44 @@ def generate_data():
     attachment_types, attachment_types_version = load_cache("attachment_types.json", "attachment types", get_version=True)
     attachment_items, attachment_items_version = load_cache("attachment_items.json", "attachment items", get_version=True)
 
+    # Validate loaded data - check for corrupt data structures
+    needs_regeneration = False
     if (hotbar_slots_version != game_version or 
         attachment_types_version != game_version or 
         attachment_items_version != game_version or
         hotbar_slots_version == {} or 
         attachment_types_version == {} or 
         attachment_items_version == {}):
+        needs_regeneration = True
+    
+    # Additional validation: check if data contains dict values where strings are expected
+    if not needs_regeneration and hotbar_slots:
+        try:
+            for slot_id, slot_data in hotbar_slots.items():
+                if isinstance(slot_data.get("name"), dict):
+                    echo.warning(f"Corrupted cache detected: hotbar_slots contains dict for name in slot {slot_id}")
+                    needs_regeneration = True
+                    break
+        except Exception as e:
+            echo.warning(f"Error validating hotbar_slots cache: {e}")
+            needs_regeneration = True
+    
+    if not needs_regeneration and attachment_items:
+        try:
+            for category in ["AttachmentsProvided", "AttachmentType"]:
+                if category in attachment_items:
+                    for item_id, item_data in attachment_items[category].items():
+                        if isinstance(item_data.get("name"), dict):
+                            echo.warning(f"Corrupted cache detected: attachment_items[{category}] contains dict for name in item {item_id}")
+                            needs_regeneration = True
+                            break
+                if needs_regeneration:
+                    break
+        except Exception as e:
+            echo.warning(f"Error validating attachment_items cache: {e}")
+            needs_regeneration = True
 
+    if needs_regeneration:
         hotbar_slots = {}
         attachment_types = {}
         attachment_items = attachment_items_def

@@ -210,65 +210,65 @@ class Fluid:
     # --- Properties --- #
 
     @property
-    def properties(self):
+    def properties(self) -> dict:
         """Return the 'Properties' block or an empty dict."""
         return self.data.get("Properties", {})
 
     @property
-    def fatigue_change(self):
-        return self.properties.get("fatigueChange", 0)
+    def fatigue_change(self) -> float|int:
+        return util.convert_int(self.properties.get("fatigueChange", 0))
 
     @property
-    def hunger_change(self):
-        return self.properties.get("hungerChange", 0)
+    def hunger_change(self) -> float|int:
+        return util.convert_int(self.properties.get("HungerChange", 0))
 
     @property
-    def stress_change(self):
-        return self.properties.get("stressChange", 0)
+    def stress_change(self) -> float|int:
+        return util.convert_int(self.properties.get("StressChange", 0))
 
     @property
-    def thirst_change(self):
-        return self.properties.get("thirstChange", 0)
+    def thirst_change(self) -> float|int:
+        return util.convert_int(self.properties.get("ThirstChange", 0))
 
     @property
-    def unhappy_change(self):
-        return self.properties.get("unhappyChange", 0)
+    def unhappy_change(self) -> float|int:
+        return util.convert_int(self.properties.get("UnhappyChange", 0))
 
     @property
-    def calories(self):
-        return self.properties.get("calories", 0)
+    def calories(self) -> float|int:
+        return util.convert_int(self.properties.get("Calories", 0))
 
     @property
-    def carbohydrates(self):
-        return self.properties.get("carbohydrates", 0)
+    def carbohydrates(self) -> float|int:
+        return util.convert_int(self.properties.get("Carbohydrates", 0))
 
     @property
-    def lipids(self):
-        return self.properties.get("lipids", 0)
+    def lipids(self) -> float|int:
+        return util.convert_int(self.properties.get("Lipids", 0))
 
     @property
-    def proteins(self):
-        return self.properties.get("proteins", 0)
+    def proteins(self) -> float|int:
+        return util.convert_int(self.properties.get("Proteins", 0))
 
     @property
-    def alcohol(self):
-        return self.properties.get("alcohol", 0)
+    def alcohol(self) -> float|int:
+        return util.convert_int(self.properties.get("alcohol", 0))
 
     @property
-    def flu_reduction(self):
-        return self.properties.get("fluReduction", 0)
+    def flu_reduction(self) -> float|int:
+        return util.convert_int(self.properties.get("fluReduction", 0))
 
     @property
-    def pain_reduction(self):
-        return self.properties.get("painReduction", 0)
+    def pain_reduction(self) -> float|int:
+        return util.convert_int(self.properties.get("painReduction", 0))
 
     @property
-    def endurance_change(self):
-        return self.properties.get("enduranceChange", 0)
+    def endurance_change(self) -> float|int:
+        return util.convert_int(self.properties.get("enduranceChange", 0))
 
     @property
-    def food_sickness_reduction(self):
-        return self.properties.get("foodSicknessReduction", 0)
+    def food_sickness_reduction(self) -> float|int:
+        return util.convert_int(self.properties.get("foodSicknessReduction", 0))
     
     # --- Poison --- #
 
@@ -395,5 +395,5 @@ class FluidBlendList:
 if __name__ == "__main__":
     Language.get()
 
-    fluid = Fluid("Base.Acid")
-    print(f'Page: {fluid.page}')
+    fluid = Fluid("Base.AnimalMilk")
+    print(fluid.hunger_change)

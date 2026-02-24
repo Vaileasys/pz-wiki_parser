@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-import importlib, sys, os
+import importlib
+import sys
+import os
 from scripts.core import config_manager as config, setup, logger, cache
 from scripts.core.language import Language
 from scripts.utils import echo, color
@@ -12,6 +14,11 @@ menu_structure = {
         "sub_options": None,
     },
     "1": {
+        "name": "Batches",
+        "description": "",
+        "module": "scripts.tools.batch_processor",
+    },
+    "2": {
         "name": "Items",
         "description": "",
         "sub_options": {
@@ -62,7 +69,7 @@ menu_structure = {
             },
         },
     },
-    "2": {
+    "3": {
         "name": "Fluids",
         "description": "",
         "sub_options": {
@@ -80,22 +87,6 @@ menu_structure = {
                 "module": "scripts.fluids.fluid_article",
                 "name": "Fluid article",
                 "description": "Generate articles for fluids.",
-            },
-        },
-    },
-    "3": {
-        "name": "Tiles",
-        "description": "",
-        "sub_options": {
-            "1": {
-                "module": "scripts.tiles.tiles_batch",
-                "name": "Tile batch",
-                "description": "Process tiles.",
-            },
-            "2": {
-                "module": "scripts.tiles.tiles_stitcher",
-                "name": "Tile stitcher",
-                "description": "Stitch tile sprites.",
             },
         },
     },
@@ -175,6 +166,36 @@ menu_structure = {
                 "name": "Animal list (maintenance)",
                 "description": "Generate animal list for the 'PZwiki:Animal_list' page.",
             },
+            "2": {
+                "module": "scripts.animals.animal_article",
+                "name": "Animal article",
+                "description": "Generate articles for animals. Runs the required modules automatically.",
+            },
+            "3": {
+                "module": "scripts.animals.animal_infobox",
+                "name": "Animal infobox",
+                "description": "Generate animal infoboxes.",
+            },
+            "4": {
+                "module": "scripts.animals.animal_food",
+                "name": "Animal food list",
+                "description": "Generate list of foods for each animal.",
+            },
+            "5": {
+                "module": "scripts.animals.animal_products",
+                "name": "Animal products",
+                "description": "Generate product tables for animals.",
+            },
+            "6": {
+                "module": "scripts.animals.animal_genes",
+                "name": "Animal genes",
+                "description": "Generate tables of genes for animals.",
+            },
+            "7": {
+                "module": "scripts.animals.animal_stages",
+                "name": "Animal stages",
+                "description": "Generate tables of stages for animals.",
+            },
         },
     },
     "7": {
@@ -212,9 +233,14 @@ menu_structure = {
                 "description": "Generate the fluid table.",
             },
             "7": {
-                "module": "scripts.parser.outfit_parser",
-                "name": "Outfit list",
-                "description": "Parse outfit xml files.",
+                "module": "scripts.misc.outfits",
+                "name": "Outfits",
+                "description": "Process outfits.",
+            },
+            "8": {
+                "module": "scripts.foraging.foraging_list",
+                "name": "Foraging list",
+                "description": "Generate foraging item tables.",
             },
         },
     },
@@ -242,6 +268,36 @@ menu_structure = {
                 "name": "Version differences",
                 "description": "Generate a diff between 2 versions of the game, showing line-by-line differences.",
             },
+            "5": {
+                "module": "scripts.parser.creation_method_parser",
+                "name": "Creation methods parser",
+                "description": "Parse MainCreationMethods.lua to extract traits and occupations data.",
+            },
+            "6": {
+                "module": "scripts.tools.outfit_images",
+                "name": "Outfit images",
+                "description": "Process outfit images: crop, remove greenscreen background, and output to images folder.",
+            },
+            "7": {
+                "module": "scripts.tiles.tiles_stitcher",
+                "name": "Tile stitcher",
+                "description": "Stitch tile sprites.",
+            },
+            "8": {
+                "module": "scripts.tools.manual_tile_stitcher",
+                "name": "Manual tile stitcher",
+                "description": "Manually stitch tile sprites.",
+            },
+            "9": {
+                "module": "scripts.parser.item_key_parser",
+                "name": "Generate item keys",
+                "description": "Parses itemKey declarations from the game's Java files.",
+            },
+            "10": {
+                "module": "scripts.tools.page_name_checker",
+                "name": "Page name checker",
+                "description": "Compare item page names with item names and report differences.",
+            },
         },
     },
     "9": {
@@ -268,6 +324,16 @@ menu_structure = {
                 "name": "Spawn points",
                 "description": "Parse spawn points file.",
             },
+            "6": {
+                "module": "scripts.misc.item_merger",
+                "name": "Item merger",
+                "description": "Helper script for generating a json for items to merge.",
+            },
+            "7": {
+                "module": "scripts.misc.test",
+                "name": "Test module",
+                "description": "Run a test script.",
+            },
         },
     },
 }
@@ -289,11 +355,12 @@ settings_structure = {
         "module": "core.language",
     },
     "3": {"name": "Clear cache", "description": "Clear the data cache."},
-    "4": {
+    "4": {"name": "Remove output", "description": "Delete all generated output files."},
+    "5": {
         "name": "Toggle debug",
         "description": f"Toggle debug mode, to show or hide debug prints. Current: {config.get_debug_mode()}",
     },
-    "5": {
+    "6": {
         "name": "Run First Time Setup",
         "description": "Run the initial setup again.",
         "module": "setup",
@@ -372,10 +439,25 @@ def navigate_menu(menu, is_root=False, title=None):
                 navigate_menu(settings_structure, title=name)
             elif name == "Clear cache":
                 cache.clear_cache()
+            elif name == "Remove output":
+                import shutil
+                import os
+
+                output_dir = os.path.join(os.path.dirname(__file__), "output")
+                if os.path.exists(output_dir):
+                    for item in os.listdir(output_dir):
+                        item_path = os.path.join(output_dir, item)
+                        if os.path.isdir(item_path):
+                            shutil.rmtree(item_path)
+                        else:
+                            os.remove(item_path)
+                    echo.info("Output directory contents removed.")
+                else:
+                    echo.info("Output directory does not exist.")
             elif name == "Toggle debug":
                 new_debug = not config.get_debug_mode()
                 config.set_debug_mode(new_debug)
-                settings_structure["4"]["description"] = (
+                settings_structure["5"]["description"] = (
                     f"Toggle debug mode, to show or hide debug prints. Current: {new_debug}"
                 )
             elif name == "Run First Time Setup":

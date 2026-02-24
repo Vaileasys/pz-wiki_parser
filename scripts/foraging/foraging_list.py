@@ -104,7 +104,9 @@ def process_items() -> dict:
     
     return items
 
-def main():
+def main(lang_code: str = None):
+    if lang_code:
+        Language.set(lang_code)
     Language.get()
     global table_map
     table_map, column_headings = table_helper.get_table_data(TABLE_PATH)

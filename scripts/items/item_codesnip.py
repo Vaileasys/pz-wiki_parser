@@ -1,6 +1,7 @@
 import os
 from concurrent.futures import ThreadPoolExecutor
 from scripts.core.version import Version
+from scripts.core.file_loading import get_scripts_dir
 
 
 def extract_code_snippet(line_number, lines):
@@ -59,7 +60,7 @@ def process_file(file_path, version, output_dir):
 def main():
     game_version = Version.get()
     output_dir = os.path.join("output", "en", "item", "codesnips")
-    resources_dir = os.path.join("resources", "scripts")
+    resources_dir = get_scripts_dir()
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)

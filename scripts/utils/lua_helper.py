@@ -1,10 +1,19 @@
 import os
+import re
 from lupa import LuaRuntime, LuaError
 from scripts.core.file_loading import get_lua_files, read_file, get_lua_dir
 from scripts.core.cache import save_cache
 from scripts.utils import echo
 
-def load_lua_file(lua_files: str | list[str], lua_runtime: LuaRuntime = None, dependencies: list[str] = None, inject_lua: str = None, prefer: str = None, media_type: str = "lua") -> LuaRuntime:
+
+def load_lua_file(
+    lua_files: str | list[str],
+    lua_runtime: LuaRuntime = None,
+    dependencies: list[str] = None,
+    inject_lua: str = None,
+    prefer: str = None,
+    media_type: str = "lua",
+) -> LuaRuntime:
     """
     Loads and executes Lua files in the given Lua runtime.
 
@@ -25,10 +34,14 @@ def load_lua_file(lua_files: str | list[str], lua_runtime: LuaRuntime = None, de
             f"{lua_path}/client/?.lua",
             f"{lua_path}/server/?.lua",
         ]
-        lua_runtime.execute("package.path = package.path .. ';" + ";".join(extra_paths) + "'")
+        lua_runtime.execute(
+            "package.path = package.path .. ';" + ";".join(extra_paths) + "'"
+        )
 
     if inject_lua:
-        lua_runtime.execute("\n\n".join(inject_lua) if isinstance(inject_lua, list) else inject_lua)
+        lua_runtime.execute(
+            "\n\n".join(inject_lua) if isinstance(inject_lua, list) else inject_lua
+        )
 
     try:
         # Load dependencies
@@ -62,16 +75,29 @@ def lua_to_python(lua_data: object, _depth: int = 0) -> object:
     """
     if _depth > 20:
         return "<Max recursion reached>"
-    
+
     try:
         # Return basic values
         if isinstance(lua_data, (float, int, bool, str, type(None))):
+            # Remove 'base:' prefix from strings if present
+            if isinstance(lua_data, str):
+                value = lua_data
+                if value.lower().startswith("base:"):
+                    value = value[5:]
+                # Handle 'base:' after semicolons in semicolon-separated values
+                if ";base:" in value.lower():
+                    value = re.sub(r";base:", ";", value, flags=re.IGNORECASE)
+                return value
             return lua_data
 
         # Determine whether it's a list (array) or dict (table)
-        if type(lua_data).__name__ == '_LuaTable':
+        if type(lua_data).__name__ == "_LuaTable":
             # Skip keys starting with `__`
-            keys = [k for k in lua_data.keys() if not (isinstance(k, str) and k.startswith("__"))]
+            keys = [
+                k
+                for k in lua_data.keys()
+                if not (isinstance(k, str) and k.startswith("__"))
+            ]
             is_array = all(isinstance(k, int) for k in keys)
 
             if is_array:
@@ -86,10 +112,12 @@ def lua_to_python(lua_data: object, _depth: int = 0) -> object:
                         value = lua_data[k]
                         python_key = lua_to_python(k, _depth=_depth + 1)
 
-                        if type(value).__name__ == '_LuaFunction':
+                        if type(value).__name__ == "_LuaFunction":
                             function_items[python_key] = str(value)
                         else:
-                            regular_items[python_key] = lua_to_python(value, _depth=_depth + 1)
+                            regular_items[python_key] = lua_to_python(
+                                value, _depth=_depth + 1
+                            )
                     except Exception as e:
                         echo.error(f"Error converting key {k!r}: {e}")
                         continue
@@ -119,7 +147,17 @@ def parse_lua_tables(lua_runtime: LuaRuntime, tables: list[str] = None) -> dict:
     globals_dict = lua_runtime.globals()
 
     STANDARD_LUA_LIBS = {
-        "math", "os", "io", "string", "table", "debug", "coroutine", "package", "utf8", "python", "_G"
+        "math",
+        "os",
+        "io",
+        "string",
+        "table",
+        "debug",
+        "coroutine",
+        "package",
+        "utf8",
+        "python",
+        "_G",
     }
 
     if tables:
@@ -134,7 +172,7 @@ def parse_lua_tables(lua_runtime: LuaRuntime, tables: list[str] = None) -> dict:
                 echo.warning(f"Table '{table_name}' not found.")
     else:
         for key, value in globals_dict.items():
-            if key not in STANDARD_LUA_LIBS and type(value).__name__ == '_LuaTable':
+            if key not in STANDARD_LUA_LIBS and type(value).__name__ == "_LuaTable":
                 parsed_data[key] = lua_to_python(value)
 
     return parsed_data
@@ -143,7 +181,7 @@ def parse_lua_tables(lua_runtime: LuaRuntime, tables: list[str] = None) -> dict:
 ## ------------------------- EVERYTHING BENEATH HERE IS FOR TESTING/EXAMPLE ------------------------- ##
 
 
-LUA_CLUTTER_TABLES = ("""
+LUA_CLUTTER_TABLES = """
     ClutterTables = ClutterTables or setmetatable({}, {
         __index = function(_, key)
             return setmetatable({}, {
@@ -153,8 +191,8 @@ LUA_CLUTTER_TABLES = ("""
             })
         end
     })
-""")
-LUA_BAGS_AND_CONTAINERS = ("""
+"""
+LUA_BAGS_AND_CONTAINERS = """
     BagsAndContainers = BagsAndContainers or setmetatable({}, {
         __index = function(_, key)
             return setmetatable({}, {
@@ -164,8 +202,8 @@ LUA_BAGS_AND_CONTAINERS = ("""
             })
         end
     })
-""")
-LUA_EVENTS = ("""
+"""
+LUA_EVENTS = """
     local function fallback()
         return setmetatable({}, {
             __index = function(_, key)
@@ -187,7 +225,7 @@ LUA_EVENTS = ("""
             return fallback()
         end
     })
-""")
+"""
 # Inject lua: Foraging - initialises and stubs Events table
 if __name__ == "__main__":
     lua_runtime = load_lua_file("forageSystem.lua", inject_lua=LUA_EVENTS)
@@ -225,11 +263,15 @@ DISTRIBUTION_LUA_FILES = [
     "Distributions.lua",
 ]
 if __name__ == "__main__":
-    lua_runtime = load_lua_file(DISTRIBUTION_LUA_FILES) # Initialise and load lua files into lua environment
-    parsed_data = parse_lua_tables(lua_runtime) # Get all the tables and convert to python data
-    save_cache(parsed_data, "distributions_all.json") # Save to json file
+    lua_runtime = load_lua_file(
+        DISTRIBUTION_LUA_FILES
+    )  # Initialise and load lua files into lua environment
+    parsed_data = parse_lua_tables(
+        lua_runtime
+    )  # Get all the tables and convert to python data
+    save_cache(parsed_data, "distributions_all.json")  # Save to json file
 
-LUA_COPY_TABLE = ("""
+LUA_COPY_TABLE = """
     function copyTable(tbl)
         local copy = {}
         for k, v in pairs(tbl) do
@@ -241,18 +283,18 @@ LUA_COPY_TABLE = ("""
         end
         return copy
     end
-""")
+"""
 ANIMAL_FILES = [
-    'ChickenDefinitions.lua',
-    'CowDefinitions.lua',
-    'DeerDefinitions.lua',
-    'MouseDefinitions.lua',
-    'PigDefinitions.lua',
-    'RabbitDefinitions.lua',
-    'RaccoonDefinitions.lua',
-    'RatDefinitions.lua',
-    'SheepDefinitions.lua',
-    'TurkeyDefinitions.lua',
+    "ChickenDefinitions.lua",
+    "CowDefinitions.lua",
+    "DeerDefinitions.lua",
+    "MouseDefinitions.lua",
+    "PigDefinitions.lua",
+    "RabbitDefinitions.lua",
+    "RaccoonDefinitions.lua",
+    "RatDefinitions.lua",
+    "SheepDefinitions.lua",
+    "TurkeyDefinitions.lua",
 ]
 if __name__ == "__main__":
     lua_runtime = load_lua_file(ANIMAL_FILES, inject_lua=LUA_COPY_TABLE)
@@ -268,7 +310,9 @@ VEHICLE_DIST_FILES = [
     "VehicleDistributions.lua",
 ]
 if __name__ == "__main__":
-    lua_runtime = load_lua_file(VEHICLE_DIST_FILES, inject_lua=[LUA_EVENTS, LUA_CLUTTER_TABLES])
+    lua_runtime = load_lua_file(
+        VEHICLE_DIST_FILES, inject_lua=[LUA_EVENTS, LUA_CLUTTER_TABLES]
+    )
     parsed_data = parse_lua_tables(lua_runtime, tables=["VehicleDistributions[1]"])
     parsed_data = dict(sorted(parsed_data["VehicleDistributions[1]"].items()))
     save_cache(parsed_data, "vehicles.json")
@@ -276,14 +320,18 @@ if __name__ == "__main__":
 # Table: Parse a specific table
 TABLES = ["PrintMediaDefinitions"]
 FILES_LIST = [
-    'SpecialItemData_Books.lua',
-    'SpecialItemData_Comics.lua',
-    'SpecialItemData_Magazines.lua',
-    'SpecialItemData_Misc.lua',
-    'SpecialItemData_Photos.lua',
-    'PrintMediaDefinitions.lua'
+    "SpecialItemData_Books.lua",
+    "SpecialItemData_Comics.lua",
+    "SpecialItemData_Magazines.lua",
+    "SpecialItemData_Misc.lua",
+    "SpecialItemData_Photos.lua",
+    "PrintMediaDefinitions.lua",
 ]
 if __name__ == "__main__":
-    lua_runtime = load_lua_file(FILES_LIST) # Initialise and load lua files into lua environment
-    parsed_data = parse_lua_tables(lua_runtime, tables=TABLES) # Get only the defined tables and convert to python data
-    save_cache(parsed_data, "literature2.json") # Save to json file
+    lua_runtime = load_lua_file(
+        FILES_LIST
+    )  # Initialise and load lua files into lua environment
+    parsed_data = parse_lua_tables(
+        lua_runtime, tables=TABLES
+    )  # Get only the defined tables and convert to python data
+    save_cache(parsed_data, "literature2.json")  # Save to json file

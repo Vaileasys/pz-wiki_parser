@@ -1,265 +1,296 @@
 import os
 from tqdm import tqdm
-from scripts.parser import item_parser, evolvedrecipe_parser
-from scripts.objects.craft_recipe import CraftRecipe
+
 from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
-from scripts.utils import utility, lua_helper, table_helper, util
 from scripts.core.cache import save_cache
+from scripts.utils import table_helper, echo
+from scripts.objects.item import Item
+from scripts.objects.forage import ForagingItem
+from scripts.objects.craft_recipe import CraftRecipe
+from scripts.objects.evolved_recipe import EvolvedRecipe
 
 TABLE_PATH = os.path.join(TABLES_DIR, "food_table.json")
 
-evolvedrecipe_products = []
+evolvedrecipe_results = []
+evolvedrecipe_base = []
 recipe_products = []
 forage_categories = {}
 table_map = {}
 
 
-def generate_data(item_id, item_data):
-    table_type = item_data.get("TableType")
-    columns = table_map.get(table_type) if table_map.get(table_type) is not None else table_map.get("default")
+def generate_data(item: Item, table_type: str):
+    columns = (
+        table_map.get(table_type)
+        if table_map.get(table_type) is not None
+        else table_map.get("default")
+    )
 
-    item = {}
+    item_dict = {}
 
-    item_name = utility.get_name(item_id, item_data)
-
-    item["icon"] = utility.get_icon(item_id, True, True, True) if "icon" in columns else None
-    item["name"] = util.link(utility.get_page(item_id, item_name), item_name) if "name" in columns else None
-    item["weight"] = item_data.get("Weight", "1") if "weight" in columns else None
-    item["hunger"] = item_data.get("HungerChange", "-") if "hunger" in columns else None
-    item["thirst"] = item_data.get("ThirstChange", "-") if "thirst" in columns else None
-    item["calories"] = item_data.get("Calories", "-") if "calories" in columns else None
-    item["carbohydrates"] = item_data.get("Carbohydrates", "-") if "carbohydrates" in columns else None
-    item["lipids"] = item_data.get("Lipids", "-") if "lipids" in columns else None
-    item["proteins"] = item_data.get("Proteins", "-") if "proteins" in columns else None
+    item_dict["icon"] = item.icon if "icon" in columns else None
+    item_dict["name"] = item.wiki_link if "name" in columns else None
+    item_dict["weight"] = item.weight if "weight" in columns else None
+    item_dict["hunger"] = (item.hunger_change or "-") if "hunger" in columns else None
+    if "hunger_weight" in columns:
+        hunger_weight = (
+            item.hunger_change / item.weight
+            if item.weight and item.hunger_change
+            else None
+        )
+        if not hunger_weight:
+            item_dict["hunger_weight"] = "-"
+        else:
+            item_dict["hunger_weight"] = f"{hunger_weight:.0f}"
+    item_dict["thirst"] = (item.thirst_change or "-") if "thirst" in columns else None
+    item_dict["calories"] = (
+        ((item.calories if item.get("Calories") else "-") or "0")
+        if "calories" in columns
+        else None
+    )
+    item_dict["carbohydrates"] = (
+        ((item.carbohydrates if item.get("Carbohydrates") else "-") or "0")
+        if "carbohydrates" in columns
+        else None
+    )
+    item_dict["lipids"] = (
+        ((item.lipids if item.get("Lipids") else "-") or "0")
+        if "lipids" in columns
+        else None
+    )
+    item_dict["proteins"] = (
+        ((item.proteins if item.get("Proteins") else "-") or "0")
+        if "proteins" in columns
+        else None
+    )
     if "unhappiness" in columns:
-        unhappiness = item_data.get("UnhappyChange")
-        if unhappiness is not None and item_data.get("RemoveUnhappinessWhenCooked", "").lower() == "true":
-            item["unhappiness"] = f"{unhappiness}*"
-        elif unhappiness is not None:
-            item["unhappiness"] = unhappiness
+        unhappiness = item.unhappy_change
+        if unhappiness and item.remove_unhappiness_when_cooked:
+            item_dict["unhappiness"] = f"{unhappiness}*"
+        elif unhappiness:
+            item_dict["unhappiness"] = unhappiness
         else:
-            item["unhappiness"] = "-"
-    item["boredom"] = item_data.get("BoredomChange", "-") if "boredom" in columns else None
-    item["stress"] = item_data.get("StressChange", "-") if "stress" in columns else None
-    item["fatigue"] = item_data.get("FatigueChange", "-") if "fatigue" in columns else None
-    item["alcohol"] = item_data.get("Alcoholic", "-") if "alcohol" in columns else None
-    if "sickness" in columns: #TODO: look at raw food
-        if item_data.get("ReduceFoodSickness"):
-            item["sickness"] = item_data.get("ReduceFoodSickness")
-        elif item_data.get("DangerousUncooked"):
-            item["sickness"] = "?"
+            item_dict["unhappiness"] = "-"
+    item_dict["boredom"] = (
+        (item.boredom_change or "-") if "boredom" in columns else None
+    )
+    item_dict["stress"] = (item.stress_change or "-") if "stress" in columns else None
+    item_dict["fatigue"] = (
+        (item.fatigue_change or "-") if "fatigue" in columns else None
+    )
+    item_dict["alcohol"] = (item.alcoholic or "-") if "alcohol" in columns else None
+    if "sickness" in columns:  # TODO: look at raw food
+        if item.reduce_food_sickness:
+            item_dict["sickness"] = item.reduce_food_sickness
+        elif item.dangerous_uncooked:
+            item_dict["sickness"] = "?"
         else:
-            item["sickness"] = "-"
-    item["poison"] = item_data.get("PoisonPower", "-") if "poison" in columns else None
-    item["fresh"] = item_data.get("DaysFresh", "-") if "fresh" in columns else None
-    item["rotten"] = item_data.get("DaysTotallyRotten", "-") if "rotten" in columns else None
-    item["cooked"] = item_data.get("MinutesToCook", "-") if "cooked" in columns else None
-    item["burned"] = item_data.get("MinutesToBurn", "-") if "burned" in columns else None
+            item_dict["sickness"] = "-"
+    item_dict["poison"] = (item.poison_power or "-") if "poison" in columns else None
+    item_dict["fresh"] = (item.days_fresh or "∞") if "fresh" in columns else None
+    item_dict["rotten"] = (
+        (item.days_totally_rotten or "∞") if "rotten" in columns else None
+    )
+    item_dict["cooked"] = (
+        ((item.minutes_to_cook if item.is_cookable else "-") or "-")
+        if "cooked" in columns
+        else None
+    )
+    item_dict["burned"] = (
+        ((item.minutes_to_burn if item.is_cookable else "-") or "-")
+        if "burned" in columns
+        else None
+    )
     if "spice" in columns:
-        if item_data.get("Spice", "").lower() == "true":
-            item["spice"] = '[[File:UI Tick.png|link=|Used as spice in cooking]]'
+        if item.spice:
+            item_dict["spice"] = "[[File:UI Tick.png|link=|Used as spice in cooking]]"
         else:
-            item["spice"] = '[[File:UI Cross.png|link=|Used as ingredient in cooking]]'
-    item["item_id"] = item_id if "item_id" in columns else None
+            item_dict["spice"] = (
+                "[[File:UI Cross.png|link=|Used as ingredient in cooking]]"
+            )
+    item_dict["item_id"] = item.item_id if "item_id" in columns else None
 
     # Remove any values that are None
-    item = {k: v for k, v in item.items() if v is not None}
+    item_dict = {k: v for k, v in item_dict.items() if v is not None}
 
     # Ensure column order is correct
-    item = {key: item[key] for key in columns if key in item}
+    item_dict = {key: item_dict[key] for key in columns if key in item_dict}
 
     # Add item_name for sorting
-    item["item_name"] = item_name
+    item_dict["item_name"] = item.name
 
-    return item
+    return item_dict
 
 
-def find_table_type(item_id, item_data):
-    type_name = item_id.split(".")[1]
-    display_name = item_data.get("DisplayName", "")
+def find_table_type(item: Item):
+    display_name = item.name_en
     table_type = None
-    if type_name in evolvedrecipe_products or item_id in evolvedrecipe_products:
-        table_type = "Evolved_recipes"
+    if item.id_type in evolvedrecipe_results or item.item_id in evolvedrecipe_results:
+        table_type = "evolved_recipes"
+    elif item.id_type in evolvedrecipe_base or item.item_id in evolvedrecipe_base:
+        table_type = "evolved_recipes_base"
     elif "Canned" in display_name or "Can of Food" in display_name:
-        table_type = "Canned"
+        table_type = "canned"
+    elif "Jar of" in display_name and item.id_type.startswith("Canned"):
+        table_type = "pickled"
     else:
-        food_type = item_data.get("FoodType", "").lower()
-        if food_type == "egg":
-            table_type = "Egg"
-        elif item_id in forage_categories["WildPlants"]:
-            table_type = "Wild_plants"
-        elif food_type == "herb" or item_id in forage_categories["WildHerbs"]:
-            table_type = "Herb"
-        elif item_id in forage_categories["MedicinalPlants"] or item_id in forage_categories["Medical"]:
-            table_type = "Medicinal"
-        elif food_type in ("vegetable", "vegetables", "mushroom", "greens", "hotpepper") or item_id in forage_categories["Vegetables"] or item_id in forage_categories["Mushrooms"]:
-            table_type = "Vegetables"
-        elif food_type in ("fruits", "citrus", "berry") or item_id in forage_categories["Berries"] or item_id in forage_categories["Fruits"]:
-            table_type = "Fruits"
-        elif food_type in ("meat", "poultry", "bacon", "beef", "sausage", "venison"):
-            table_type = "Meat"
-        elif food_type in ("seafood", "fish", "roe") or "Fish" in item_data.get("Icon", item_data.get("IconsForTexture", "")):
-            table_type = "Seafood"
-        elif food_type == "Insect" or item_id in forage_categories["Insects"] or item_id in forage_categories["FishBait"]:
-            table_type = "Insect"
+        food_type = item.food_type.lower() if item.food_type else ""
+        foraging_item = ForagingItem(item.id_type)
+        if food_type == "egg" or item.id_type in ("EggCarton"):
+            table_type = "egg"
+        elif food_type == "candy" or item.id_type in (
+            "CandyPackage",
+            "Lollipop",
+            "MintCandy",
+            "Gum",
+            "Chocolate",
+        ):
+            table_type = "candy"
+        elif food_type == "herb" or foraging_item.has_category("WildHerbs"):
+            table_type = "herb"
+        elif (
+            food_type
+            in ("vegetable", "vegetables", "mushroom", "greens", "hotpepper", "bean")
+            or foraging_item.has_category("Vegetables", "Mushrooms")
+            or item.id_type in ("Squash", "PumpkinSliced", "PumpkinSmashed")
+        ):
+            table_type = "vegetable"
+        elif food_type in ("fruits", "citrus", "berry") or foraging_item.has_category(
+            "Berries", "Fruits"
+        ):
+            table_type = "fruit"
+        elif food_type in (
+            "meat",
+            "poultry",
+            "bacon",
+            "beef",
+            "sausage",
+            "venison",
+        ) or item.id_type in ("HotdogPack"):
+            table_type = "meat"
+        elif (
+            food_type in ("seafood", "fish", "roe")
+            or item.has_tag("FishMeat")
+            or "Fish" in display_name
+            or item.id_type in ("Mussels")
+        ):
+            table_type = "seafood"
+        elif food_type == "insect" or foraging_item.has_category("Insects", "FishBait"):
+            table_type = "insect"
         elif food_type == "game" or "Dead" in display_name:
-            table_type = "Game"
-        elif any(x in display_name for x in ("Head", "Animal")) and "Sunflower" not in display_name:
-            table_type = "Animal_parts"
-        elif item_id in recipe_products:
-            table_type = "Prepared"
-        elif food_type in ("bread", "pasta", "rice"):
-            table_type = "Grains"
-        elif any(x in display_name for x in ("Dung", "Droppings")):
-            table_type = "Droppings"
-        elif item_data.get("Spice", "").lower() == "true":
-            table_type = "Spice"
-        elif food_type in ("cheese", "chocolate", "cocoa", "coffee", "oil", "nut", "seed", "stock", "sugar", "tea", "thickener", "catfood", "dogfood"):
-            table_type = "Miscellaneous"
-        elif food_type == "" or food_type == "noexplicit":
-            table_type = "Other"
-        else:
-            table_type = food_type
+            table_type = "game"
+        elif item.item_id in recipe_products:
+            table_type = "prepared"
+        elif (
+            food_type in ("bread", "pasta", "rice")
+            or item.id_type in ("BunsHamburger", "BunsHotdog")
+            or ""
+        ):
+            table_type = "grains"
+        elif item.spice:
+            table_type = "spice"
+        elif (
+            foraging_item.has_category("WildPlants")
+            or "Sheaf" in item.id_type
+            or "Rippled" in item.id_type
+            or "Tuft" in item.id_type
+            or "Hemp" in item.id_type
+            or "Hops" in item.id_type
+            or "Dried" in item.id_type
+        ):
+            table_type = "plant"
+        elif food_type in (
+            "cheese",
+            "chocolate",
+            "cocoa",
+            "coffee",
+            "oil",
+            "nut",
+            "seed",
+            "stock",
+            "sugar",
+            "tea",
+            "thickener",
+            "catfood",
+            "dogfood",
+            "noexplicit",
+        ):
+            table_type = "miscellaneous"
+        elif food_type:
+            table_type = item.food_type
 
-    item_data["TableType"] = table_type
-
-    return table_type, item_data
-
-
-def parse_foraging():
-    LUA_EVENTS = ("""
-        package = package or {}
-        package.preload = package.preload or {}
-
-        -- Stub Foraging modules
-        package.preload["Foraging/forageSystem"] = function() return {} end
-        package.preload["Foraging/forageDefinitions"] = function() return {} end
-
-        -- Stub global engine function
-        function getTexture(name)
-            return {
-                getName = function() return name end
-            }
-        end
-
-        -- Generic fallback for missing globals
-        local function fallback()
-            return setmetatable({}, {
-                __index = function(_, key)
-                    return function() return tostring(key) end
-                end
-            })
-        end
-
-        Events = Events or {}
-
-        setmetatable(Events, {
-            __index = function(_, key)
-                return fallback()
-            end
-        })
-
-        setmetatable(_G, {
-            __index = function(_, key)
-                return fallback()
-            end
-        })
-    """)
-
-    lua_files = [
-        "forageDefinitions.lua",
-        "forageSystem.lua",
-        "Ammo.lua",
-        "Animals.lua",
-        "Artifacts.lua",
-        "Berries.lua",
-        "Bones.lua",
-        "Clothing.lua",
-        "CraftingMaterials.lua",
-        "DeadAnimals.lua",
-        "Firewood.lua",
-        "ForestRarities.lua",
-        "Fruits.lua",
-        "Herbs.lua",
-        "Insects.lua",
-        "Junk.lua",
-        "JunkFood.lua",
-        "JunkWeapons.lua",
-        "Medical.lua",
-        "MedicinalPlants.lua",
-        "Mushrooms.lua",
-        "Stones.lua",
-        "Trash.lua",
-        "Vegetables.lua",
-        "WildPlants.lua",
-    ]
-    # Inject lua: Foraging - initialises and stubs Events table
-    lua_runtime = lua_helper.load_lua_file(lua_files, inject_lua=LUA_EVENTS)
-    parsed_data = lua_helper.parse_lua_tables(lua_runtime)
-    all_forage_data = parsed_data["forageSystem"]["forageDefinitions"]
-    save_cache(all_forage_data, "foraging_2.json")
-
-    global forage_categories
-    forage_items = {}
-    for forage_name, forage_data in all_forage_data.items():
-        item_id = forage_data.get("type")
-        categories = forage_data.get("categories", [])
-        if item_id is not None:
-            forage_items[item_id] = categories
-
-        for category in categories:
-            if category not in forage_categories:
-                forage_categories[category] = []
-            forage_categories[category].append(item_id)
-    
-    save_cache(forage_items, "forage_items.json")
-    save_cache(forage_categories, "forage_categories.json")
+    return table_type if table_type else "miscellaneous"
 
 
 def find_items():
-    all_item_data = item_parser.get_item_data()
-    food_items = {}
-    nutrition_items = {}
+    food_items: dict[str, Item] = {}
+    nutrition_items: dict[str, Item] = {}
 
-    for item_id, item_data in all_item_data.items():
-        item_type = item_data.get("Type", "")
-        if item_type.lower() == "food":
-            food_items[item_id] = item_data
+    for item_id, item in Item.items():
+        if item.item_type == "food" or item.display_category == "Food":
+            food_items[item_id] = item
 
-            if item_data.get("Calories"):
-                nutrition_items[item_id] = item_data
-    
+            if item.get("Calories"):
+                nutrition_items[item_id] = item
+
     return food_items, nutrition_items
 
 
 def main():
     global language_code
-    global evolvedrecipe_products
+    global evolvedrecipe_results
+    global evolvedrecipe_base
     global recipe_products
     global table_map
     language_code = Language.get()
-    evolvedrecipe_data = evolvedrecipe_parser.get_evolvedrecipe_data()
     table_map, column_headings = table_helper.get_table_data(TABLE_PATH)
-    #parse_foraging()
 
-    cooking_recipe_data = {}
-    for recipe_id in CraftRecipe.keys():
-        recipe = CraftRecipe(recipe_id)
-        if recipe.category == "Cooking" and recipe.xp_award:
-            cooking_recipe_data[recipe_id] = recipe.data
+    # cooking_recipe_data = {}
+    for recipe_id, recipe in CraftRecipe.all().items():
+        blacklisted_recipes = [
+            "SlicePumpkin",
+            "SliceWatermelon",
+            "SmashPumpkin",
+            "SmashWatermelon",
+            "OpenPackOfBuns",
+            "OpenCandyPackage",
+            "OpenMacAndCheese",
+            "PutEggsInCarton",
+            "OpenEggCarton",
+        ]
+        # Skip blacklisted recipes
+        if recipe_id in blacklisted_recipes:
+            continue
+
+        if recipe.category == "Cooking":
+            # cooking_recipe_data[recipe_id] = recipe.data
             # Get output items directly from the CraftRecipe object
             recipe_products.extend(recipe.output_items)
-    
-    save_cache(cooking_recipe_data, "cooking_recipe_data.json")
+
+    # save_cache(cooking_recipe_data, "cooking_recipe_data.json")
     save_cache({"recipes": recipe_products}, "recipe_products_data.json")
 
-
     # Store all evolvedrecipe products in a list for determining section
-    for recipe, recipe_data in evolvedrecipe_data.items():
-        evolvedrecipe_products.append(recipe_data.get("ResultItem"))
+    for er in EvolvedRecipe.values():
+        result = er.result_item
+        if result and result.valid:
+            evolvedrecipe_results.append(result.item_id)
+        else:
+            echo.warning(f"EvolvedRecipe with invalid result item: {er.recipe_id}")
 
-    with tqdm(total=0, desc="Preparing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+        base = er.base_item
+        if base and base.valid:
+            evolvedrecipe_base.append(base.item_id)
+        else:
+            echo.warning(f"EvolvedRecipe with invalid base item: {er.recipe_id}")
+
+    with tqdm(
+        total=0,
+        desc="Preparing items",
+        bar_format=PBAR_FORMAT,
+        unit=" items",
+        leave=False,
+    ) as pbar:
         food_items, nutrition_items = find_items()
 
         # Update the total once we know how many items
@@ -268,31 +299,59 @@ def main():
 
         all_food_data = {"nutrition": []}
 
-        # FIXME: parse_foraging() is broken
         # Process food items
-#        for item_id, item_data in food_items.items():
-#            pbar.set_postfix_str(f'Generating: Food ({item_id[:30]})')
-#            table_type, item_data = find_table_type(item_id, item_data)
-#            food_data = generate_data(item_id, item_data)
-#
-#            if table_type not in all_food_data:
-#                all_food_data[table_type] = []
-#            
-#            all_food_data[table_type].append(food_data)
-#
-#            pbar.update(1)
+        for item_id, item in food_items.items():
+            pbar.set_postfix_str(f"Generating: Food ({item_id[:40]})")
+
+            # Blacklisted types of items
+            if item.has_tag("Smokable", "Feather"):
+                continue
+            # Animal parts
+            if (
+                any(x in item.name_en for x in ("Head", "Animal"))
+                and "Sunflower" not in item.name_en
+            ):
+                continue
+            # Droppings
+            if any(x in item.name_en for x in ("Dung", "Droppings")):
+                continue
+            if item.foraging:
+                if (
+                    item.foraging.has_category("MedicinalPlants", "Medical")
+                    and not item.hunger_change
+                ):
+                    continue
+            if item.eat_type == "pipe":
+                continue
+
+            table_type = find_table_type(item)
+            food_data = generate_data(item, table_type)
+
+            if table_type not in all_food_data:
+                all_food_data[table_type] = []
+
+            all_food_data[table_type].append(food_data)
+
+            pbar.update(1)
 
         # Process nutrition items
-        for item_id, item_data in nutrition_items.items():
-            pbar.set_postfix_str(f'Generating: Nutrition ({item_id[:30]})')
-            item_data["TableType"] = "nutrition"
-            nutrition_data = generate_data(item_id, item_data)
+        for item_id, item in nutrition_items.items():
+            pbar.set_postfix_str(f"Generating: Nutrition ({item_id[:40]})")
+            nutrition_data = generate_data(item, "nutrition")
             all_food_data["nutrition"].append(nutrition_data)
 
             pbar.update(1)
 
         pbar.set_postfix_str("Creating tables...")
-        table_helper.create_tables("food_item_list", all_food_data, table_map=table_map, columns=column_headings, bot_flag_type="food_item_list", combine_tables=False)
+        table_helper.create_tables(
+            "food_item_list",
+            all_food_data,
+            table_map=table_map,
+            columns=column_headings,
+            bot_flag_type="food_item_list",
+            combine_tables=False,
+            drop_empty_columns=True,
+        )
 
 
 if __name__ == "__main__":

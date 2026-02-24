@@ -11,9 +11,14 @@ TABLE_PATH = os.path.join(TABLES_DIR, "cooking_table.json")
 table_map = {}
 evolved_recipes = {}
 
+
 def generate_data(item: Item):
     table_type = find_table_type(item)
-    columns = table_map.get(table_type) if table_map.get(table_type) is not None else table_map.get("default")
+    columns = (
+        table_map.get(table_type)
+        if table_map.get(table_type) is not None
+        else table_map.get("default")
+    )
 
     item_dict = {}
 
@@ -21,30 +26,38 @@ def generate_data(item: Item):
     item_dict["name"] = item.wiki_link if "name" in columns else None
     item_dict["weight"] = util.convert_int(item.weight) if "weight" in columns else None
     if "weapon" in columns:
-        if item.type == "Weapon":
-            item_dict["weapon"] = util.tick(text="Can be used as a weapon", link="Weapon")
+        if item.item_type == "weapon":
+            item_dict["weapon"] = util.tick(
+                text="Can be used as a weapon", link="Weapon"
+            )
         else:
-            item_dict["weapon"] = util.cross(text="Cannot be used as a weapon", link="Weapon")
+            item_dict["weapon"] = util.cross(
+                text="Cannot be used as a weapon", link="Weapon"
+            )
     if "knife_type" in columns:
-        if item.has_tag("SharpKnife"):
+        # Check tags case-insensitively
+        item_tags_lower = [tag.lower() for tag in (item.tags or [])]
+        if "sharpknife" in item_tags_lower:
             item_dict["knife_type"] = util.link("SharpKnife (tag)", "Sharp")
-        elif item.has_tag("DullKnife"):
+        elif "dullknife" in item_tags_lower:
             item_dict["knife_type"] = util.link("DullKnife (tag)", "Dull")
-        elif item.has_tag("MeatCleaver"):
+        elif "meatcleaver" in item_tags_lower:
             item_dict["knife_type"] = util.link("MeatCleaver (tag)", "Meat Cleaver")
-        elif item.has_tag("PizzaCutter"):
+        elif "pizzacutter" in item_tags_lower:
             item_dict["knife_type"] = util.link("PizzaCutter (tag)", "Pizza Cutter")
     if "capacity" in columns:
         if item.fluid_container:
-            item_dict["capacity"] = f"{util.convert_int(item.fluid_container.capacity)} L"
-        elif item.get("UseDelta") or item.type == "Drainable":
+            item_dict["capacity"] = (
+                f"{util.convert_int(item.fluid_container.capacity)} L"
+            )
+        elif item.get("UseDelta") or item.item_type == "drainable":
             item_dict["capacity"] = f"{util.convert_int(item.units)} units"
         else:
             item_dict["capacity"] = "-"
     if "evolved_recipe" in columns:
         recipes = evolved_recipes.get(item.item_id, ["-"])
         item_dict["evolved_recipe"] = "<br>".join(recipes)
-    
+
     item_dict["item_id"] = item.item_id if "item_id" in columns else None
 
     # Remove any values that are None
@@ -55,17 +68,20 @@ def generate_data(item: Item):
 
     # Add item_name for sorting
     item_dict["item_name"] = item.name
-    
+
     return table_type, item_dict
 
 
 def find_table_type(item: Item):
     global evolved_recipes
-    if item.has_tag("MixingUtensil"):
+    # Check tags case-insensitively
+    item_tags_lower = [tag.lower() for tag in (item.tags or [])]
+    
+    if "mixingutensil" in item_tags_lower:
         return "mixing_utensil"
-    if item.has_tag("DullKnife") or item.has_tag("SharpKnife") or item.has_tag("MeatCleaver") or item.has_tag("PizzaCutter"):
+    if any(tag in item_tags_lower for tag in ["dullknife", "sharpknife", "meatcleaver", "pizzacutter"]):
         return "knife"
-    if item.has_tag("BottleOpener") or item.has_tag("CanOpener"):
+    if "bottleopener" in item_tags_lower or "canopener" in item_tags_lower:
         return "can_bottle_opener"
 
     is_evolved_recipe = False
@@ -73,21 +89,27 @@ def find_table_type(item: Item):
         if evolved_recipe.base_item.item_id == item.item_id:
             is_evolved_recipe = True
             if item.item_id not in evolved_recipes:
-                evolved_recipes[item.item_id] = [] #set
+                evolved_recipes[item.item_id] = []  # set
             evolved_recipes[item.item_id].append(evolved_recipe.wiki_link)
 
     if is_evolved_recipe:
         return "evolved_recipe"
-    
+
     return "other"
-    
+
 
 def process_items() -> dict:
     items = {}
     item_count = 0
 
     # Get items
-    with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
+    with tqdm(
+        total=Item.count(),
+        desc="Processing items",
+        bar_format=PBAR_FORMAT,
+        unit=" items",
+        leave=False,
+    ) as pbar:
         for item_id, item in Item.items():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
             if item.has_category("cooking"):
@@ -100,12 +122,13 @@ def process_items() -> dict:
                 items[table_type].append(item_dict)
 
                 item_count += 1
-        
+
             pbar.update(1)
 
     echo.info(f"Finished processing {item_count} items for {len(items)} tables.")
-    
+
     return items
+
 
 def main():
     Language.get()
@@ -114,7 +137,16 @@ def main():
 
     items = process_items()
 
-    table_helper.create_tables("cooking_item_list", items, table_map=table_map, columns=column_headings, suppress=True, bot_flag_type="cooking_item_list", combine_tables=False)
+    table_helper.create_tables(
+        "cooking_item_list",
+        items,
+        table_map=table_map,
+        columns=column_headings,
+        suppress=True,
+        bot_flag_type="cooking_item_list",
+        combine_tables=False,
+    )
+
 
 if __name__ == "__main__":
     main()

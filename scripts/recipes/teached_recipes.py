@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Project Zomboid Wiki Taught Recipes Generator
 
@@ -23,12 +22,16 @@ from scripts.parser import metarecipe_parser
 from scripts.core.file_loading import write_file
 from scripts.core.constants import OUTPUT_DIR, PBAR_FORMAT
 from scripts.core import page_manager
+from scripts.core.language import Language
 from scripts.utils import echo
 
 
-def main():
+def main(batch: bool = False):
     """
     Main execution function for taught recipes generation.
+
+    Args:
+        batch (bool): If True, skip language initialization
 
     This function:
     1. Loads parsed item data
@@ -42,6 +45,8 @@ def main():
     - output/recipes/teachedrecipes/id/ (individual item files)
     - output/recipes/teachedrecipes/page/ (page-combined files)
     """
+    if not batch:
+        Language.get()
     # Initialize page manager
     page_manager.init()
 
@@ -57,6 +62,10 @@ def main():
 
     # Collect data for pages
     page_recipes = defaultdict(list)  # page_name -> list of (item_id, expanded_recipes)
+
+    # Build a mapping of item_id to all item_ids on the same page(s)
+    # This allows us to merge recipes for items that share a page
+    item_to_page_items = {}  # item_id -> set of all item_ids (including itself) on same page(s)
 
     # First pass: collect all items and organize by pages
     items_with_taught = {}
@@ -86,6 +95,21 @@ def main():
         else:
             pass
 
+    # Build item_to_page_items mapping after collecting all items
+    for iid in items_with_taught.keys():
+        pages = page_manager.get_pages(iid, "item_id")
+        if pages:
+            # Get all item IDs from all pages this item appears on
+            related_items = set()
+            for page in pages:
+                page_ids = page_manager.get_ids(page, "item_id")
+                if page_ids:
+                    related_items.update(page_ids)
+            item_to_page_items[iid] = related_items
+        else:
+            # If no page found, just use the item itself
+            item_to_page_items[iid] = {iid}
+
     # Second pass: generate individual files
     for item_id, expanded_recipes in tqdm(
         items_with_taught.items(),
@@ -93,12 +117,19 @@ def main():
         bar_format=PBAR_FORMAT,
         leave=False,
     ):
+        # Merge recipes from all items on the same page(s)
+        all_recipes = set(expanded_recipes)
+        related_items = item_to_page_items.get(item_id, {item_id})
+        for related_id in related_items:
+            if related_id != item_id and related_id in items_with_taught:
+                all_recipes.update(items_with_taught[related_id])
+
         content = [
             f"<!-- Bot flag|TeachedRecipes|id={item_id} -->",  # TODO: change to 'BOT_FLAG' constant
             "Reading this item will teach the following recipes:",
         ]
 
-        for recipe in expanded_recipes:
+        for recipe in sorted(all_recipes):
             recipe_link = CraftRecipe(recipe).wiki_link
             content.append(f"*{recipe_link}")
 

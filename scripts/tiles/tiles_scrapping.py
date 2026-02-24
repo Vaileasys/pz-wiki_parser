@@ -1,15 +1,3 @@
-#!/usr/bin/env python3
-"""
-Project Zomboid Wiki Scrapping Table Generator
-
-This script generates wiki tables for item scrapping and breakage information in Project Zomboid.
-It processes tile definitions to create formatted MediaWiki tables showing what materials
-can be obtained from disassembling or breaking various objects in the game.
-
-The script handles both disassembly (intentional scrapping) and breakage (destruction)
-mechanics, generating separate tables for each process with relevant drop rates and quantities.
-"""
-
 import os
 from scripts.objects.item import Item
 from scripts.utils import echo

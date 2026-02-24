@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Project Zomboid Wiki Infobox Generator
 
@@ -42,7 +41,7 @@ _PERK_TO_SKILL = {
     'Perks.Woodwork': '{{ll|Carpentry}}',
     'Perks.Electricity': '{{ll|Electrical}}',
     'Perks.Farming': '{{ll|Farming}}',
-    'Perks.MetalWelding': '{{ll|Metalworking}}',
+    'Perks.MetalWelding': '{{ll|Welding}}',
     'Perks.Strength': '{{ll|Strength}}',
     'Perks.MAX': 'Unknown',
 }

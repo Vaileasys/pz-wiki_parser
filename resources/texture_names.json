@@ -2017,6 +2017,9 @@
         "Keychain_Panther.png",
         "Keychain_PineTree.png",
         "Keychain_PrayingHands.png",
+        "Keychain_Racer12.png",
+        "Keychain_Racer34.png",
+        "Keychain_Racer58.png",
         "Keychain_RainbowStar.png",
         "Keychain_RubberDuck.png",
         "Keychain_SexyLady.png",
@@ -3725,6 +3728,7 @@
         "TatoDots.png",
         "Teabag.png",
         "Teacup.png",
+        "Teacup_Mask.png",
         "TeddyBear_Crafted.png",
         "TeddyBear_Crafted2.png",
         "Teeth_Mammal.png",
@@ -4391,5 +4395,5 @@
         "Build_WoodPole_Tall.png",
         "Build_WoodSign.png"
     ],
-    "version": "42.11.0"
+    "version": "42.12.0"
 }

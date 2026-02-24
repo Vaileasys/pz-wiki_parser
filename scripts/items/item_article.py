@@ -98,7 +98,7 @@ def load_cache():
     - Research recipes: output/recipes/researchrecipes/id/*.txt
     - Teached recipes: output/recipes/teachedrecipes/id/*.txt
     - Building recipes: output/recipes/building/id/*.txt
-    - Distribution data: data/distributions/all_items.json
+    - Distribution data: data/cache/distributions/all_items.json
     - Usage sections:
       - Weapon: output/en/item/usage/weapon/{id_type or id}.txt
       - Clothing: output/en/item/usage/clothing/{id_type or id}.txt
@@ -311,7 +311,7 @@ def load_cache():
                     total_errors += 1
 
                 pbar.update(1)
-    all_items_path = os.path.join(DATA_DIR, "distributions", "all_items.json")
+    all_items_path = os.path.join(DATA_DIR, "cache", "distributions", "all_items.json")
 
     try:
         _all_items_data = file_loading.load_json(all_items_path)
@@ -427,7 +427,6 @@ def create_header(item, translation_data, language_code="en"):
         "Appearance": "{{Header|Project Zomboid|Items|Miscellaneous items|Appearance}}",
         "AnimalPart": "{{Header|Project Zomboid|Items|Miscellaneous items|Animal parts}}",
         "AnimalPartWeapon": "{{Header|Project Zomboid|Items|Miscellaneous items|Animal parts}}",
-
     }
 
     skill_type_dict = {
@@ -672,7 +671,7 @@ def create_usage(item_data, translation_data):
             max_hit_count=max_hit_count,
         )
 
-        weapon_section = f"==={weapon_header}===\n{weapon_text}"
+        weapon_section = f"=== {weapon_header} ===\n{weapon_text}"
 
         if item.condition_max and item.condition_max > 0 and condition_text_template:
             condition_lower_chance_one_in = item.condition_lower_chance_one_in or 10
@@ -686,7 +685,7 @@ def create_usage(item_data, translation_data):
                 condition_lower_chance_one_in=condition_lower_chance_one_in,
             )
 
-            weapon_section += f"\n\n===={condition_header}====\n{condition_text}"
+            weapon_section += f"\n\n==== {condition_header} ====\n{condition_text}"
 
         return weapon_section
 
@@ -726,7 +725,7 @@ def create_usage(item_data, translation_data):
             if tag in tool_texts:
                 tool_text += " " + tool_texts[tag]
 
-        return f"==={tool_header}===\n{tool_text}"
+        return f"=== {tool_header} ===\n{tool_text}"
 
     def create_usage_fuel():
         """
@@ -759,7 +758,7 @@ def create_usage(item_data, translation_data):
             translated_name=translated_name, burn_time=burn_time
         )
 
-        return f"==={fuel_header}===\n{fuel_text}"
+        return f"=== {fuel_header} ===\n{fuel_text}"
 
     def create_usage_clothing():
         """
@@ -777,7 +776,7 @@ def create_usage(item_data, translation_data):
         item = Item(item_id_full or item_id_type)
 
         has_body_location = item.get("BodyLocation") is not None
-        is_clothing_type = item.get("Type") == "Clothing"
+        is_clothing_type = item.get("ItemType") == "Clothing"
 
         if not has_body_location and not is_clothing_type:
             return None
@@ -795,7 +794,7 @@ def create_usage(item_data, translation_data):
         translated_name = item.name.lower()
         clothing_text = clothing_text_template.format(translated_name=translated_name)
 
-        clothing_section = f"==={clothing_header}===\n{clothing_text}"
+        clothing_section = f"=== {clothing_header} ===\n{clothing_text}"
 
         if has_body_location and item.body_location and body_part_table_template:
             body_part_cached = None
@@ -808,7 +807,7 @@ def create_usage(item_data, translation_data):
                 body_part_text = body_part_table_template.format(
                     item_id=item.item_id, body_part_cached=body_part_cached
                 )
-                clothing_section += f"\n\n===={body_part_header}====\n{body_part_text}"
+                clothing_section += f"\n\n==== {body_part_header} ====\n{body_part_text}"
 
         return clothing_section
 
@@ -840,7 +839,7 @@ def create_usage(item_data, translation_data):
         if not food_text_template:
             return None
 
-        food_section = f"==={food_header}===\n{food_text_template}"
+        food_section = f"=== {food_header} ===\n{food_text_template}"
 
         consumable_properties_content = None
         if item_id_full:
@@ -853,7 +852,7 @@ def create_usage(item_data, translation_data):
             )
 
         if consumable_properties_content:
-            food_section += f"\n\n===={consumable_properties_header}====\n{consumable_properties_content}"
+            food_section += f"\n\n==== {consumable_properties_header} ====\n{consumable_properties_content}"
 
         return food_section
 
@@ -871,7 +870,7 @@ def create_usage(item_data, translation_data):
             return None
         item = Item(item_id_full or item_id_type)
 
-        if item.get("Type") != "Container" or item.get("Capacity", 0) <= 0:
+        if item.get("ItemType") != "Container" or item.get("Capacity", 0) <= 0:
             return None
 
         usage_headers = translation_data.get("Usage_headers", {})
@@ -889,7 +888,7 @@ def create_usage(item_data, translation_data):
             article=article, item_lower=item_lower
         )
 
-        return f"==={container_header}===\n{container_text}"
+        return f"=== {container_header} ===\n{container_text}"
 
     def create_usage_container_contents():
         """
@@ -933,7 +932,7 @@ def create_usage(item_data, translation_data):
             article=article, item_lower=item_lower
         )
 
-        return f"==={contents_header}===\n{contents_text}\n{contents_cache}"
+        return f"=== {contents_header} ===\n{contents_text}\n{contents_cache}"
 
     def create_usage_fluid_container():
         """
@@ -989,7 +988,7 @@ def create_usage(item_data, translation_data):
             article=article, item_lower=item_lower, capacity=capacity_ml
         )
 
-        return f"==={fluid_container_header}===\n{fluid_container_text}"
+        return f"=== {fluid_container_header} ===\n{fluid_container_text}"
 
     def create_usage_crafting():
         """
@@ -1079,7 +1078,7 @@ def create_usage(item_data, translation_data):
 
         # If we have crafting content, add header, text and content
         if crafting_content:
-            crafting_content_parts.append(f"==={crafting_header}===")
+            crafting_content_parts.append(f"=== {crafting_header} ===")
             crafting_content_parts.append(crafting_text)
             crafting_content_parts.append(crafting_content)
 
@@ -1091,23 +1090,23 @@ def create_usage(item_data, translation_data):
                 evolved_recipes_content,
             ]
         ):
-            crafting_content_parts.append(f"==={crafting_header}===")
+            crafting_content_parts.append(f"=== {crafting_header} ===")
 
         # Add learned recipes if available
         if teached_recipes_content:
-            crafting_content_parts.append(f"\n===={learned_recipes_header}====")
+            crafting_content_parts.append(f"\n==== {learned_recipes_header} ====")
             crafting_content_parts.append(learned_recipes_text)
             crafting_content_parts.append(teached_recipes_content)
 
         # Add evolved recipes if available
         if evolved_recipes_content:
-            crafting_content_parts.append(f"\n===={evolved_recipes_header}====")
+            crafting_content_parts.append(f"\n==== {evolved_recipes_header} ====")
             crafting_content_parts.append(evolved_recipes_text)
             crafting_content_parts.append(evolved_recipes_content)
 
         # Add researchable recipes if available
         if researchable_recipes_content:
-            crafting_content_parts.append(f"\n===={researchable_recipes_header}====")
+            crafting_content_parts.append(f"\n==== {researchable_recipes_header} ====")
             # Don't add the text template since it's already included in the content
             crafting_content_parts.append(researchable_recipes_content)
 
@@ -1150,7 +1149,7 @@ def create_usage(item_data, translation_data):
                 "It is used as an ingredient in the following building recipes.",
             )
 
-            return f"==={building_header}===\n{building_text}\n{building_content}"
+            return f"=== {building_header} ===\n{building_text}\n{building_content}"
 
         return None
 
@@ -1187,7 +1186,7 @@ def create_usage(item_data, translation_data):
         if section is not None
     ]
 
-    content = [f"=={usage_header}==\n{call_to_action}"]
+    content = [f"== {usage_header} ==\n{call_to_action}"]
 
     if sections:
         content.extend(sections)
@@ -1223,7 +1222,7 @@ def create_obtaining(item_data, translation_data):
         cache_key = f"{item_id}_howtocraft"
         if cache_key in _crafting_cache:
             content = _crafting_cache[cache_key]
-            return f"==={recipes_header}===\n{content}"
+            return f"=== {recipes_header} ===\n{content}"
 
         return None
 
@@ -1243,7 +1242,7 @@ def create_obtaining(item_data, translation_data):
         loot_header = obtaining_headers.get("Loot", "Loot")
 
         if _all_items_data and item_id_type in _all_items_data:
-            return f"==={loot_header}===\n{{{{Loot|{item_id_type}}}}}"
+            return f"=== {loot_header} ===\n{{{{Loot|{item_id_type}}}}}"
 
         return None
 
@@ -1259,7 +1258,7 @@ def create_obtaining(item_data, translation_data):
     obtaining_header = headers.get("Obtaining", "Obtaining")
     content = "\n\n".join(sections)
 
-    return f"=={obtaining_header}==\n{content}"
+    return f"== {obtaining_header} ==\n{content}"
 
 
 def create_history(item_data, translation_data):
@@ -1294,7 +1293,7 @@ def create_history(item_data, translation_data):
         fallback_id = item_id_full or item_id_type
         content = f"{{{{HistoryTable|\n|item_id={fallback_id}\n}}}}"
 
-    return f"=={history_header}==\n{content}"
+    return f"== {history_header} ==\n{content}"
 
 
 def create_code(item_data, translation_data):
@@ -1325,7 +1324,7 @@ def create_code(item_data, translation_data):
         return ""
 
     code_box = f"{{{{CodeBox|\n{inner}\n}}}}"
-    return f"=={code_header}==\n{code_box}"
+    return f"== {code_header} ==\n{code_box}"
 
 
 def create_navigation(translation_data):
@@ -1340,7 +1339,7 @@ def create_navigation(translation_data):
     """
     headers = translation_data.get("headers", {})
     navigation_header = headers.get("Navigation", "Navigation")
-    return f"=={navigation_header}==\n{{{{Navbox items}}}}"
+    return f"== {navigation_header} ==\n{{{{Navbox items}}}}"
 
 
 def create_articles():
