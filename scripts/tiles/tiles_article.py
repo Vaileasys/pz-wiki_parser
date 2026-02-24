@@ -212,12 +212,12 @@ def generate_tile_articles(tiles_data, infoboxes, codesnips, scrappings):
         if tile_name.lower().endswith('s'):
             # plural
             display_name = tile_name.capitalize()
-            intro = f"'''{display_name}''' are a [[tile]] in [[Project Zomboid]].\n"
+            intro = f"'''{display_name}''' are a [[tile]].\n"
         else:
             # singular
             first_char = tile_name[0] if tile_name else ''
             article_word = 'An' if first_char.lower() in 'aeiou' else 'A'
-            intro = f"{article_word} '''{tile_name.lower()}''' is a [[tile]] in [[Project Zomboid]].\n"
+            intro = f"{article_word} '''{tile_name.lower()}''' is a [[tile]].\n"
 
         usage = process_usage(tile_name, tile_data, scrappings)
         codesnip = process_codesnip(tile_data, codesnips)
