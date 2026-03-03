@@ -36,8 +36,9 @@ class ForagingItem:
             return cls._foraging
 
         if not os.path.exists(FORAGING_CACHE_PATH):
-            forage_definitions_path = get_lua_path("forageDefinitions")
-            distribution_parser.parse_foraging(forage_definitions_path, DISTRIBUTIONS_DIR)
+            # forage_definitions_path = get_lua_path("forageDefinitions")
+            # distribution_parser.parse_foraging(forage_definitions_path, DISTRIBUTIONS_DIR)
+            distribution_parser.parse_foraging(DISTRIBUTIONS_DIR)
 
         cls._foraging = load_cache(FORAGING_CACHE_PATH) or {}
         print(FORAGING_CACHE_PATH)
