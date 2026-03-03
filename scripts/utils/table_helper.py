@@ -375,7 +375,7 @@ def create_tables(
         )
 
         if combine_tables:
-            all_tables.extend([f"=={table_type.replace('_', ' ').capitalize()}=="])
+            all_tables.extend([f"== {table_type.replace('_', ' ').capitalize()} =="])
             all_tables.extend(content)
 
     if combine_tables:

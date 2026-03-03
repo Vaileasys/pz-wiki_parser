@@ -168,12 +168,12 @@ def generate_main_page(room_to_containers: dict):
         "|source=[https://github.com/Vaileasys/pz-wiki_parser/ (Wiki parser)]}}\n\n"
         "This page lists all rooms and their corresponding containers. Each room is linked to its respective letter page where detailed item spawns can be found.\n\n"
         "'''Warning: Everything below has been programmatically generated - any changes made will be lost on the next update!'''\n\n"
-        "==Room list==\n"
+        "== Room list ==\n"
         '{| class="wikitable theme-blue sortable"\n|-\n'
         "! Room !! Containers\n|-\n"
     )
 
-    footer_text = "\n|}\n\n==See also==\n*{{ll|Mapping}}\n\n== Navigation ==\n{{Navbox modding}}\n\n{{ll|Category:Mapping}}\n"
+    footer_text = "\n|}\n\n== See also ==\n*{{ll|Mapping}}\n\n== Navigation ==\n{{Navbox modding}}\n\n{{ll|Category:Mapping}}\n"
 
     output_lines = [header_text]
 

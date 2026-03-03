@@ -76,7 +76,7 @@ def construct_zone_list(data):
 def generate_zone_article(data):
     for name, location_content in data.items():
         content = []
-        content.append("==Locations==")
+        content.append("== Locations ==")
         content.extend(location_content)
 
         vehicles = get_zone_defs().get(name.lower(), {}).get("vehicles", {})
@@ -93,7 +93,7 @@ def generate_zone_article(data):
             vehicles_content.append(f"* {veh_name} ({vehicle_id}) ({veh_spawn_chance}%)")
         
         if vehicles_content:
-            content.append("==Vehicles==")
+            content.append("== Vehicles ==")
             content.extend(vehicles_content)
 
 

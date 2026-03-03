@@ -468,7 +468,8 @@ def create_articles(outfit_data, page_dict, output_dir, story_outfits_data=None)
     def create_header():
         """Create the header section of the article"""
         version = config_manager.get_version()
-        return f"""{{{{Header|Project Zomboid|World|Lore|Outfits}}}}
+        return f"""{{{{LangSwitch}}}}
+{{{{Navbar lore}}}}
 {{{{Page version|{version}}}}}
 """
 

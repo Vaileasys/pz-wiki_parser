@@ -25,7 +25,7 @@ def format_recipe_info(recipe):
 
     # Starting Item Section
     if recipe.base_item:
-        lines.append("===Evolved recipe===\n====Starting item====")
+        lines.append("=== Evolved recipe ===\n==== Starting item ====")
         # Get just the first icon filename without any formatting
         # Use get_icon with all_icons=False to get only the first icon
         icon_name = (
@@ -42,7 +42,7 @@ def format_recipe_info(recipe):
         lines.append("")
 
     # Ingredients Section
-    lines.append("====Ingredients====")
+    lines.append("==== Ingredients ====")
 
     # Recipe description
     description = [
@@ -120,31 +120,31 @@ def format_recipe_info(recipe):
 
     # Add Regular Ingredients
     if regular_ingredients:
-        lines.append("=====Regular=====")
+        lines.append("===== Regular =====")
         lines.extend(regular_ingredients)
         lines.append("")
 
     # Add Canned Ingredients
     if canned_ingredients:
-        lines.append("=====Canned=====")
+        lines.append("===== Canned =====")
         lines.extend(canned_ingredients)
         lines.append("")
 
     # Add Packaged Ingredients
     if packaged_ingredients:
-        lines.append("=====Packaged=====")
+        lines.append("===== Packaged =====")
         lines.extend(packaged_ingredients)
         lines.append("")
 
     # Add Ingredients that Require Cooking
     if cooked_ingredients:
-        lines.append("=====Requires cooking=====")
+        lines.append("===== Requires cooking =====")
         lines.extend(cooked_ingredients)
         lines.append("")
 
     # Add Spices
     if spices:
-        lines.append("=====Condiments & spices=====")
+        lines.append("===== Condiments & spices =====")
         lines.extend(spices)
         lines.append("")
 

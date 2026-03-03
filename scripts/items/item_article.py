@@ -370,80 +370,74 @@ def get_article_for_item(item_name, language_code="en"):
     return "An" if starts_with_vowel else "A"
 
 
-def create_header(item, translation_data, language_code="en"):
+def get_category_link(item):
     """
-    Create the header markup using logic adapted from the legacy generator.
+    Resolve the category link ({{ll|Category:...}}) for an item for use in the footer.
 
     Args:
         item (Item): Item instance
-        translation_data (dict): Translation data
-        language_code (str): Language code
 
     Returns:
-        str: Header markup
+        str: Category link markup, e.g. {{ll|Category:Materials}}
     """
-
-    # Mapping adapted from legacy generate_header
     category_dict = {
         "Weapon": "use_skill_type",
         "Tool/Weapon": "use_skill_type",
         "Tool / Weapon": "use_skill_type",
         "Weapon - Crafted": "use_skill_type",
-        "Explosives": "{{Header|Project Zomboid|Items|Weapons|Explosives}}",
-        "Ammo": "{{Header|Project Zomboid|Items|Weapons|Firearms|Ammo}}",
-        "Material": "{{Header|Project Zomboid|Items|Materials}}",
-        "Materials": "{{Header|Project Zomboid|Items|Materials}}",
-        "Accessory": "{{Header|Project Zomboid|Items|Clothing}}",
-        "Clothing": "{{Header|Project Zomboid|Items|Clothing}}",
-        "Tool": "{{Header|Project Zomboid|Items|Equipment|Tools}}",
-        "Tools": "{{Header|Project Zomboid|Items|Equipment|Tools}}",
-        "Junk": "{{Header|Project Zomboid|Items|Miscellaneous items|Junk}}",
-        "Mole": "{{Header|Project Zomboid|Items|Miscellaneous items|Plush toys}}",
-        "Raccoon": "{{Header|Project Zomboid|Items|Miscellaneous items|Plush toys}}",
-        "Squirrel": "{{Header|Project Zomboid|Items|Miscellaneous items|Plush toys}}",
-        "Fox": "{{Header|Project Zomboid|Items|Miscellaneous items|Plush toys}}",
-        "Badger": "{{Header|Project Zomboid|Items|Miscellaneous items|Plush toys}}",
-        "Beaver": "{{Header|Project Zomboid|Items|Miscellaneous items|Plush toys}}",
-        "Bunny": "{{Header|Project Zomboid|Items|Miscellaneous items|Plush toys}}",
-        "Hedgehog": "{{Header|Project Zomboid|Items|Miscellaneous items|Plush toys}}",
-        "Electronics": "{{Header|Project Zomboid|Items|Electronics}}",
-        "Weapon Part": "{{Header|Project Zomboid|Items|Weapons|Firearms|Weapon parts}}",
-        "WeaponPart": "{{Header|Project Zomboid|Items|Weapons|Firearms|Weapon parts}}",
-        "Light Source": "{{Header|Project Zomboid|Items|Equipment|Light sources}}",
-        "LightSource": "{{Header|Project Zomboid|Items|Equipment|Light sources}}",
-        "Literature": "{{Header|Project Zomboid|Items|Literature}}",
-        "Paint": "{{Header|Project Zomboid|Items|Materials}}",
-        "First Aid": "{{Header|Project Zomboid|Items|Medical items}}",
-        "FirstAid": "{{Header|Project Zomboid|Items|Medical items}}",
-        "Fishing": "{{Header|Project Zomboid|Game mechanics|Character|Skills|Fishing}}",
-        "Communication": "{{Header|Project Zomboid|Items|Electronics|Communications}}",
-        "Communications": "{{Header|Project Zomboid|Items|Electronics|Communications}}",
-        "Camping": "{{Header|Project Zomboid|Items|Equipment|Camping}}",
-        "Cartography": "{{Header|Project Zomboid|Items|Literature|Cartography}}",
-        "Cooking": "{{Header|Project Zomboid|Game mechanics|Crafting|Cooking}}",
-        "Entertainment": "{{Header|Project Zomboid|Items|Electronics|Entertainment}}",
-        "Food": "{{Header|Project Zomboid|Items|Food}}",
-        "Household": "{{Header|Project Zomboid|Items|Miscellaneous items|Household}}",
-        "Appearance": "{{Header|Project Zomboid|Items|Miscellaneous items|Appearance}}",
-        "AnimalPart": "{{Header|Project Zomboid|Items|Miscellaneous items|Animal parts}}",
-        "AnimalPartWeapon": "{{Header|Project Zomboid|Items|Miscellaneous items|Animal parts}}",
+        "Explosives": "{{ll|Category:Explosives}}",
+        "Ammo": "{{ll|Category:Ammo}}",
+        "Material": "{{ll|Category:Materials}}",
+        "Materials": "{{ll|Category:Materials}}",
+        "Accessory": "{{ll|Category:Clothing}}",
+        "Clothing": "{{ll|Category:Clothing}}",
+        "Tool": "{{ll|Category:Tools}}",
+        "Tools": "{{ll|Category:Tools}}",
+        "Junk": "{{ll|Category:Junk}}",
+        "Mole": "{{ll|Category:Plush toys}}",
+        "Raccoon": "{{ll|Category:Plush toys}}",
+        "Squirrel": "{{ll|Category:Plush toys}}",
+        "Fox": "{{ll|Category:Plush toys}}",
+        "Badger": "{{ll|Category:Plush toys}}",
+        "Beaver": "{{ll|Category:Plush toys}}",
+        "Bunny": "{{ll|Category:Plush toys}}",
+        "Hedgehog": "{{ll|Category:Plush toys}}",
+        "Electronics": "{{ll|Category:Electronics}}",
+        "Weapon Part": "{{ll|Category:Weapon parts}}",
+        "WeaponPart": "{{ll|Category:Weapon parts}}",
+        "Light Source": "{{ll|Category:Light sources}}",
+        "LightSource": "{{ll|Category:Light sources}}",
+        "Literature": "{{ll|Category:Literature}}",
+        "Paint": "{{ll|Category:Materials}}",
+        "First Aid": "{{ll|Category:Medical items}}",
+        "FirstAid": "{{ll|Category:Medical items}}",
+        "Fishing": "{{ll|Category:Fishing}}",
+        "Communication": "{{ll|Category:Communications}}",
+        "Communications": "{{ll|Category:Communications}}",
+        "Camping": "{{ll|Category:Camping}}",
+        "Cartography": "{{ll|Category:Cartography}}",
+        "Cooking": "{{ll|Category:Cooking}}",
+        "Entertainment": "{{ll|Category:Entertainment}}",
+        "Food": "{{ll|Category:Food}}",
+        "Household": "{{ll|Category:Household}}",
+        "Appearance": "{{ll|Category:Appearance}}",
+        "AnimalPart": "{{ll|Category:Animal parts}}",
+        "AnimalPartWeapon": "{{ll|Category:Animal parts}}",
     }
 
     skill_type_dict = {
-        "Long Blade": "{{Header|Project Zomboid|Items|Weapons|Melee weapons|Long blade weapons}}",
-        "Short Blade": "{{Header|Project Zomboid|Items|Weapons|Melee weapons|Short blade weapons}}",
-        "Long Blunt": "{{Header|Project Zomboid|Items|Weapons|Melee weapons|Long blunt weapons}}",
-        "Short Blunt": "{{Header|Project Zomboid|Items|Weapons|Melee weapons|Short blunt weapons}}",
-        "Spear": "{{Header|Project Zomboid|Items|Weapons|Melee weapons|Spears}}",
-        "Axe": "{{Header|Project Zomboid|Items|Weapons|Melee weapons|Axes}}",
-        "Aiming": "{{Header|Project Zomboid|Items|Weapons|Firearms}}",
-        "Firearm": "{{Header|Project Zomboid|Items|Weapons|Firearms}}",
+        "Long Blade": "{{ll|Category:Long blade weapons}}",
+        "Short Blade": "{{ll|Category:Short blade weapons}}",
+        "Long Blunt": "{{ll|Category:Long blunt weapons}}",
+        "Short Blunt": "{{ll|Category:Short blunt weapons}}",
+        "Spear": "{{ll|Category:Spears}}",
+        "Axe": "{{ll|Category:Axes}}",
+        "Aiming": "{{ll|Category:Firearms}}",
+        "Firearm": "{{ll|Category:Firearms}}",
     }
 
     item_categories = item.item_categories or []
-    header = None
-
-    # Create lowercase mapping for case-insensitive lookups
+    category_link = None
     lower_key_map: dict[str, str] = {k.lower(): k for k in category_dict.keys()}
 
     for cat in item_categories:
@@ -454,40 +448,53 @@ def create_header(item, translation_data, language_code="en"):
         if key:
             category_value = category_dict[key]
             if category_value == "use_skill_type":
-                # Determine skill type
                 skill_type = item.get_skill(raw=True) or ""
                 skill_type = re.sub(
                     r"\[\[(?:[^\|\]]*\|)?([^\|\]]+)\]\]", r"\1", skill_type
                 ).strip()
-                header = skill_type_dict.get(
-                    skill_type, "{{Header|Project Zomboid|Items|Weapons}}"
+                category_link = skill_type_dict.get(
+                    skill_type, "{{ll|Category:Weapons}}"
                 )
             else:
-                header = category_value
+                category_link = category_value
             break
 
-    if header is None:
-        header = "{{Header|Project Zomboid|Items}}"
+    if category_link is None:
+        category_link = "{{ll|Category:Items}}"
+    return category_link
 
-    translate_reason = translation_data.get("translate_reason", "")
 
-    # Get the current version from Version class
+def create_header(item, translation_data, language_code="en"):
+    """
+    Create the header markup: static LangSwitch + Navbar, then version/autogenerated (and Title/AutoT for non-en).
+
+    Args:
+        item (Item): Item instance
+        translation_data (dict): Translation data
+        language_code (str): Language code
+
+    Returns:
+        str: Header markup
+    """
     from scripts.core.version import Version
 
     version_number = Version.get()
+    translate_reason = translation_data.get("translate_reason", "")
+    static_top = "{{LangSwitch}}\n{{Navbar items}}"
 
     if language_code == "en":
-        full_header = f"{header}\n{{{{Page version|{version_number}}}}}\n{{{{Autogenerated|B42}}}}"
-    else:
-        full_header = (
-            f"{{{{Title|{item.name}}}}}\n"
-            f"{header}\n"
+        return (
+            f"{static_top}\n"
             f"{{{{Page version|{version_number}}}}}\n"
-            f"{{{{Autogenerated|B42}}}}\n"
-            f"{{{{AutoT|{translate_reason}}}}}"
+            f"{{{{Autogenerated|B42}}}}"
         )
-
-    return full_header
+    return (
+        f"{static_top}\n"
+        f"{{{{Title|{item.name}}}}}\n"
+        f"{{{{Page version|{version_number}}}}}\n"
+        f"{{{{Autogenerated|B42}}}}\n"
+        f"{{{{AutoT|{translate_reason}}}}}"
+    )
 
 
 def create_intro(item_data, translation_data, language_code="en"):
@@ -1373,6 +1380,7 @@ def create_articles():
 
             # Sections
             header = create_header(item, translation_data, language_code)
+            category_link = get_category_link(item)
             infobox = create_infobox(item)
             intro = create_intro(item_data, translation_data, language_code)
             usage = create_usage(item_data, translation_data)
@@ -1392,7 +1400,7 @@ def create_articles():
 
             special_section = "\n".join(special_parts) if special_parts else ""
 
-            # Rest of the sections with double newlines
+            # Rest of the sections with double newlines (footer is navigation)
             regular_parts = [
                 section
                 for section in [
@@ -1411,6 +1419,9 @@ def create_articles():
             else:
                 content = special_section or "\n\n".join(regular_parts)
 
+            # Category link goes underneath the footer (navigation)
+            if category_link:
+                content = content + "\n\n" + category_link
             content = content.strip()
 
             # Use id without module (e.g., remove "Base.")
