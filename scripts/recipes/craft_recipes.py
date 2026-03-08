@@ -28,6 +28,7 @@ from scripts.core.cache import load_cache
 from scripts.core import page_manager
 from scripts.parser.script_parser import extract_script_data
 from scripts.parser import literature_parser
+from scripts.parser import metarecipe_parser
 from scripts.objects.fluid import Fluid
 from scripts.objects.item import Item
 from scripts.utils import echo
@@ -1001,7 +1002,9 @@ def process_requirements(recipe: dict, literature_data: dict) -> tuple[str, str]
             requirements_work["skillbooks"].append(book_name)
 
     # Schematics from literature spawns
-    for category, spawn_list in (literature_data.get("SpecialLootSpawns") or {}).items():
+    for category, spawn_list in (
+        literature_data.get("SpecialLootSpawns") or {}
+    ).items():
         if raw_recipe_name in spawn_list:
             requirements_work["schematics"].append(category)
 
@@ -1061,6 +1064,95 @@ def process_requirements(recipe: dict, literature_data: dict) -> tuple[str, str]
     recipes_string = process_recipes({"requirements": requirements_work})
     skills_string = process_skills({"requirements": requirements_work})
     return recipes_string, skills_string
+
+
+def build_research_items_map(
+    craft_data: dict, build_data: dict
+) -> dict[str, list[str]]:
+    """
+    Build a reverse mapping of recipe_id -> list of item IDs that can research that recipe.
+
+    This is the reverse of researchrecipes.py: instead of listing which recipes an item
+    can teach, this lists which items can be used to research/unlock a given recipe.
+
+    Two sources are combined:
+    - Items whose ResearchableRecipes property lists this recipe (after meta expansion).
+    - Items that are outputs of this recipe when the recipe requires skill or auto-learn.
+
+    Args:
+        craft_data (dict): Raw crafting recipe data keyed by recipe_id.
+        build_data (dict): Raw building/entity recipe data keyed by recipe_id.
+
+    Returns:
+        dict[str, list[str]]: recipe_id -> sorted list of item IDs.
+    """
+    all_recipe_data = {**craft_data, **build_data}
+    recipe_to_items: defaultdict[str, set[str]] = defaultdict(set)
+
+    # Method 1: items whose ResearchableRecipes property includes this recipe
+    for item_id, item in Item.all().items():
+        researchable = item.researchable_recipes
+        if not researchable:
+            continue
+        if not isinstance(researchable, list):
+            researchable = [researchable]
+        expanded = metarecipe_parser.expand_recipe_list(researchable)
+        for recipe_id in expanded:
+            if recipe_id in all_recipe_data:
+                recipe_to_items[recipe_id].add(item_id)
+
+    # Method 2: items that are products of a recipe with skill/auto-learn requirements
+    for recipe_id, recipe_data in all_recipe_data.items():
+        has_skill = bool(recipe_data.get("SkillRequired"))
+        has_auto_learn = bool(
+            recipe_data.get("AutoLearnAll") or recipe_data.get("AutoLearnAny")
+        )
+        if not (has_skill or has_auto_learn):
+            continue
+        for output in recipe_data.get("outputs", []):
+            for out_item_id in output.get("items", []):
+                if isinstance(out_item_id, str):
+                    recipe_to_items[recipe_id].add(out_item_id)
+
+    return {rid: sorted(items) for rid, items in recipe_to_items.items()}
+
+
+def process_research_items(
+    recipe_id: str, research_items_map: dict[str, list[str]]
+) -> str:
+    """
+    Generate a collapsible wiki list of items that can be researched to learn this recipe.
+
+    Args:
+        recipe_id (str): The recipe identifier.
+        research_items_map (dict[str, list[str]]): Mapping from recipe_id to item IDs.
+
+    Returns:
+        str: Wiki markup for a collapsible list, or empty string if none.
+    """
+    item_ids = research_items_map.get(recipe_id, [])
+    if not item_ids:
+        return ""
+
+    item_links = []
+    for item_id in item_ids:
+        try:
+            item = Item(item_id)
+            item_links.append(f"{item.icon} {item.wiki_link}")
+        except Exception:
+            item_links.append(f"[[{item_id}]]")
+
+    if not item_links:
+        return ""
+
+    content = "<br>".join(item_links)
+    return (
+        "Researchable from:"
+        '<div class="mw-collapsible mw-collapsed" style="text-align:center;">'
+        '<div class="mw-collapsible-content" style="text-align:left;">'
+        f"{content}"
+        "</div></div>"
+    )
 
 
 def build_tag_to_items_map() -> dict[str, list[dict[str, str]]]:
@@ -1910,6 +2002,10 @@ def main(batch: bool = False):
     literature_data = literature_parser.get_literature_data()
     processed_recipe_map: dict[str, dict] = {}
 
+    echo.info("Building research items map")
+    research_items_map = build_research_items_map(craft_data, build_data)
+    echo.success("Research items map built")
+
     total_recipes = len(craft_data) + len(build_data)
 
     with tqdm(
@@ -1930,6 +2026,15 @@ def main(batch: bool = False):
                 workstation_markup = process_workstation(recipe_data, build_data)
                 products_markup = process_products(recipe_data, build_data)
                 xp_markup = process_xp(recipe_data, build_data)
+                research_items_markup = process_research_items(
+                    recipe_id, research_items_map
+                )
+                if research_items_markup:
+                    recipes_markup = (
+                        recipes_markup + "<br>" + research_items_markup
+                        if recipes_markup
+                        else research_items_markup
+                    )
 
                 processed_recipe_map[recipe_id] = {
                     "ingredients": ingredients_markup,
@@ -1961,6 +2066,15 @@ def main(batch: bool = False):
                 workstation_markup = process_workstation(recipe_data, build_data)
                 products_markup = process_products(recipe_data, build_data)
                 xp_markup = process_xp(recipe_data, build_data)
+                research_items_markup = process_research_items(
+                    recipe_id, research_items_map
+                )
+                if research_items_markup:
+                    recipes_markup = (
+                        recipes_markup + "<br>" + research_items_markup
+                        if recipes_markup
+                        else research_items_markup
+                    )
 
                 processed_recipe_map[recipe_id] = {
                     "ingredients": ingredients_markup,
