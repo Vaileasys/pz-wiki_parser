@@ -8,33 +8,33 @@ from scripts.utils import echo
 suppress_warnings = False
 
 LANGUAGE_CODES = {
-    'ar': {"encoding": "CP1252", "language": "Arabic"},
-    'ca': {"encoding": "ISO-8859-15", "language": "Catalan"},
-    'zh-hant': {"encoding": "UTF-8", "language": "Traditional Chinese (zh-Hant)", "code": "CH"},
-    'zh-hans': {"encoding": "UTF-8", "language": "Simplified Chinese (zh-Hans)", "code": "CN"},
-    'cs': {"encoding": "Cp1250", "language": "Czech"},
-    'da': {"encoding": "UTF-8", "language": "Danish"},
-    'de': {"encoding": "UTF-8", "language": "German"},
-    'en': {"encoding": "UTF-8", "language": "English"},
-    'es': {"encoding": "UTF-8", "language": "Spanish"},
-    'fi': {"encoding": "UTF-8", "language": "Finnish"},
-    'fr': {"encoding": "UTF-8", "language": "French"},
-    'hu': {"encoding": "UTF-8", "language": "Hungarian"},
-    'id': {"encoding": "UTF-8", "language": "Indonesian"},
-    'it': {"encoding": "UTF-8", "language": "Italian"},
-    'ja': {"encoding": "UTF-8", "language": "Japanese", "code": "JP"},
-    'ko': {"encoding": "UTF-8", "language": "Korean"},
-    'nl': {"encoding": "UTF-8", "language": "Dutch"},
-    'no': {"encoding": "UTF-8", "language": "Norwegian"},
-    'ph': {"encoding": "UTF-8", "language": "Filipino"},
-    'pl': {"encoding": "UTF-8", "language": "Polish"},
-    'pt': {"encoding": "UTF-8", "language": "Portuguese"},
-    'pt-br': {"encoding": "UTF-8", "language": "Portuguese (Brazilian)", "code": "PTBR"},
-    'ro': {"encoding": "UTF-8", "language": "Romanian"},
-    'ru': {"encoding": "UTF-8", "language": "Russian"},
-    'th': {"encoding": "UTF-8", "language": "Thai"},
-    'tr': {"encoding": "UTF-8", "language": "Turkish"},
-    'uk': {"encoding": "UTF-8", "language": "Ukrainian", "code": "UA"}
+    'ar': {"language": "Arabic"},
+    'ca': {"language": "Catalan"},
+    'zh-hant': {"language": "Traditional Chinese (zh-Hant)", "code": "CH"},
+    'zh-hans': {"language": "Simplified Chinese (zh-Hans)", "code": "CN"},
+    'cs': {"language": "Czech"},
+    'da': {"language": "Danish"},
+    'de': {"language": "German"},
+    'en': {"language": "English"},
+    'es': {"language": "Spanish"},
+    'fi': {"language": "Finnish"},
+    'fr': {"language": "French"},
+    'hu': {"language": "Hungarian"},
+    'id': {"language": "Indonesian"},
+    'it': {"language": "Italian"},
+    'ja': {"language": "Japanese", "code": "JP"},
+    'ko': {"language": "Korean"},
+    'nl': {"language": "Dutch"},
+    'no': {"language": "Norwegian"},
+    'ph': {"language": "Filipino"},
+    'pl': {"language": "Polish"},
+    'pt': {"language": "Portuguese"},
+    'pt-br': {"language": "Portuguese (Brazilian)", "code": "PTBR"},
+    'ro': {"language": "Romanian"},
+    'ru': {"language": "Russian"},
+    'th': {"language": "Thai"},
+    'tr': {"language": "Turkish"},
+    'uk': {"language": "Ukrainian", "code": "UA"}
 }
 
 class Language:
@@ -124,7 +124,7 @@ class Translate:
     _CACHE_JSON = "translations_data.json"
 
     _PROPERTY_PREFIXES = {
-        'DisplayName': "ItemName_",
+        'DisplayName': "", # Obsolete for JSON translations
         'DisplayCategory': "IGUI_ItemCat_",
         'Categories': "IGUI_perks_",
         'SubCategory': "IGUI_perks_",
@@ -151,10 +151,10 @@ class Translate:
     }
 
     _FILE_WHITELIST = (
-        "ItemName_", "IG_UI_", "Recipes_", "Tooltip_",
-        "EvolvedRecipeName_", "Fluids_", "Wiki_", "UI_",
-        "Print_Text_", "Print_Media_", "Recorded_Media_", "Stash_",
-        "ContextMenu_", "Farming_", "Sandbox_"
+        "ItemName", "IG_UI", "Recipes", "Tooltip",
+        "EvolvedRecipeName", "Fluids", "Wiki", "UI",
+        "Print_Text", "Print_Media", "Recorded_Media", "Stash",
+        "ContextMenu", "Farming", "Sandbox"
     )
 
 
@@ -251,49 +251,24 @@ class Translate:
             raise FileNotFoundError(f"No translation folder: {base_dirs}")
 
         parsed = {}
-        encoding = Language.get_encoding(wiki_code)
 
         for base_dir in base_dirs:
             for root, _, files in os.walk(base_dir):
                 for name in files:
                     if not any(name.startswith(prefix) for prefix in cls._FILE_WHITELIST):
                         continue
-
-                    path = os.path.join(root, name)
-                    if name.endswith(".json"):
-                        try:
-                            with open(path, 'r', encoding="UTF-8") as f:
-                                parsed.update(json.load(f))
-                        except Exception as e:
-                            echo.error(f"JSON error in {name}: {e}")
+                    if not name.endswith(".json"):
                         continue
 
+                    path = os.path.join(root, name)
                     try:
-                        with open(path, 'r', encoding=encoding) as f:
-                            for line in f:
-                                line = cls._remove_comments(line).strip()
-                                if '=' not in line or '{' in line or '}' in line:
-                                    continue
-                                key, val = [x.strip() for x in line.split('=', 1)]
-                                if val.endswith(','): val = val[:-1].strip()
-                                if val.startswith('"'): val = val[1:]
-                                if val.endswith('"'): val = val[:-1]
-                                parsed[key] = val
-                    except UnicodeDecodeError as e:
-                        echo.error(f"Couldn't decode {name}: {e}")
+                        with open(path, 'r', encoding="UTF-8") as f:
+                            parsed.update(json.load(f))
                     except Exception as e:
-                        echo.error(f"TXT error in {name}: {e}")
+                        echo.error(f"JSON error in {name}: {e}")
 
         return parsed
 
-
-    ## ------------------------- Helpers ------------------------- ##
-
-    @staticmethod
-    def _remove_comments(line: str) -> str:
-        if line.strip().startswith('--'):
-            return ''
-        return re.split(r'--', line, maxsplit=1)[0].strip()
 
 def main():
     Language.init()

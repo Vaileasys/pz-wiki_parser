@@ -2487,7 +2487,7 @@ def main():
 
     # Calculate missing items
     itemname_path = os.path.join(
-        get_lua_dir(), "shared", "Translate", "EN", "ItemName_EN.txt"
+        get_lua_dir(), "shared", "Translate", "EN", "ItemName.json"
     )
     itemlist_path = os.path.join(
         "output", "en", "item", "distributions", "Item_list.txt"
