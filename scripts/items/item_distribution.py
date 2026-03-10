@@ -1152,13 +1152,13 @@ def build_item_json(
 def merge_case_insensitive_duplicates(items_dict):
     """
     Merge items that have the same ID but different capitalization.
-    
-    This prevents issues where items like "Bag_Schoolbag" and "Bag_SchoolBag" 
+
+    This prevents issues where items like "Bag_Schoolbag" and "Bag_SchoolBag"
     are treated as separate items, causing later overwrites and split index entries.
-    
+
     Args:
         items_dict (dict): Dictionary of item_id -> item_data
-        
+
     Returns:
         dict: Deduplicated dictionary with merged data
     """
@@ -1169,20 +1169,20 @@ def merge_case_insensitive_duplicates(items_dict):
         if lowercase_id not in lowercase_to_variants:
             lowercase_to_variants[lowercase_id] = []
         lowercase_to_variants[lowercase_id].append(item_id)
-    
+
     # Find duplicates
     duplicates = {
-        lower_id: variants 
-        for lower_id, variants in lowercase_to_variants.items() 
+        lower_id: variants
+        for lower_id, variants in lowercase_to_variants.items()
         if len(variants) > 1
     }
-    
+
     if duplicates:
         echo.info(f"Found {len(duplicates)} case-insensitive duplicate item groups")
 
     merged_items = {}
     processed = set()
-    
+
     for item_id, item_data in items_dict.items():
         lowercase_id = item_id.lower()
 
@@ -1196,10 +1196,10 @@ def merge_case_insensitive_duplicates(items_dict):
         variants = duplicates[lowercase_id]
         preferred_id = None
         best_score = -1
-        
+
         for variant_id in variants:
             variant_data = items_dict[variant_id]
-            
+
             # Calculate a score based on data richness
             score = 0
             has_clothing = bool(variant_data.get("Clothing"))
@@ -1214,26 +1214,30 @@ def merge_case_insensitive_duplicates(items_dict):
             # Prefer items with clothing spawns
             if has_clothing:
                 score += 100
-            
+
             # Add points for each type of data
             score += (
-                (len(variant_data.get("Containers", [])) if has_containers else 0) +
-                (len(variant_data.get("Vehicles", [])) if has_vehicles else 0) +
-                (10 if has_foraging else 0) +
-                (10 if has_fishing else 0) +
-                (len(variant_data.get("Butchering", [])) if has_butchering else 0) +
-                (len(variant_data.get("Stories", [])) if has_stories else 0) +
-                (len(variant_data.get("AttachedWeapons", [])) if has_attached_weapons else 0)
+                (len(variant_data.get("Containers", [])) if has_containers else 0)
+                + (len(variant_data.get("Vehicles", [])) if has_vehicles else 0)
+                + (10 if has_foraging else 0)
+                + (10 if has_fishing else 0)
+                + (len(variant_data.get("Butchering", [])) if has_butchering else 0)
+                + (len(variant_data.get("Stories", [])) if has_stories else 0)
+                + (
+                    len(variant_data.get("AttachedWeapons", []))
+                    if has_attached_weapons
+                    else 0
+                )
             )
-            
+
             if score > best_score:
                 best_score = score
                 preferred_id = variant_id
-        
+
         # If no preferred ID found use first alphabetically
         if preferred_id is None:
             preferred_id = sorted(variants)[0]
-        
+
         # Merge all data
         merged_data = {
             "Containers": [],
@@ -1243,40 +1247,40 @@ def merge_case_insensitive_duplicates(items_dict):
             "Foraging": None,
             "Fishing": None,
             "Butchering": [],
-            "AttachedWeapons": []
+            "AttachedWeapons": [],
         }
-        
+
         for variant_id in variants:
             variant_data = items_dict[variant_id]
-            
+
             # Merge containers
             if variant_data.get("Containers"):
                 merged_data["Containers"].extend(variant_data["Containers"])
-            
+
             # Merge vehicles
             if variant_data.get("Vehicles"):
                 merged_data["Vehicles"].extend(variant_data["Vehicles"])
-            
+
             # Merge stories
             if variant_data.get("Stories"):
                 merged_data["Stories"].extend(variant_data["Stories"])
-            
+
             # Merge clothing
             if variant_data.get("Clothing"):
                 merged_data["Clothing"].extend(variant_data["Clothing"])
-            
+
             # For foraging, keep the first non-None value
             if variant_data.get("Foraging") and merged_data["Foraging"] is None:
                 merged_data["Foraging"] = variant_data["Foraging"]
-            
+
             # For fishing, keep the first non-None value
             if variant_data.get("Fishing") and merged_data["Fishing"] is None:
                 merged_data["Fishing"] = variant_data["Fishing"]
-            
+
             # Merge butchering
             if variant_data.get("Butchering"):
                 merged_data["Butchering"].extend(variant_data["Butchering"])
-            
+
             # Merge attached weapons
             if variant_data.get("AttachedWeapons"):
                 merged_data["AttachedWeapons"].extend(variant_data["AttachedWeapons"])
@@ -1291,13 +1295,13 @@ def merge_case_insensitive_duplicates(items_dict):
                     container.get("Room", ""),
                     container.get("Container", ""),
                     container.get("Chance", 0),
-                    container.get("Rolls", 0)
+                    container.get("Rolls", 0),
                 )
                 if key not in seen_containers:
                     seen_containers.add(key)
                     unique_containers.append(container)
             merged_data["Containers"] = unique_containers
-        
+
         # For vehicles
         if merged_data["Vehicles"]:
             seen_vehicles = set()
@@ -1307,13 +1311,13 @@ def merge_case_insensitive_duplicates(items_dict):
                     vehicle.get("Type", ""),
                     vehicle.get("Container", ""),
                     vehicle.get("Chance", 0),
-                    vehicle.get("Rolls", 0)
+                    vehicle.get("Rolls", 0),
                 )
                 if key not in seen_vehicles:
                     seen_vehicles.add(key)
                     unique_vehicles.append(vehicle)
             merged_data["Vehicles"] = unique_vehicles
-        
+
         # For stories
         if merged_data["Stories"]:
             seen_stories = set()
@@ -1324,7 +1328,7 @@ def merge_case_insensitive_duplicates(items_dict):
                     seen_stories.add(key)
                     unique_stories.append(story)
             merged_data["Stories"] = unique_stories
-        
+
         # For clothing
         if merged_data["Clothing"]:
             seen_clothing = set()
@@ -1333,7 +1337,7 @@ def merge_case_insensitive_duplicates(items_dict):
                 key = (
                     clothing.get("outfit_name", ""),
                     clothing.get("Chance", 0),
-                    clothing.get("GUID", "")
+                    clothing.get("GUID", ""),
                 )
                 if key not in seen_clothing:
                     seen_clothing.add(key)
@@ -1360,13 +1364,13 @@ def merge_case_insensitive_duplicates(items_dict):
                     weapon.get("outfit", ""),
                     weapon.get("definition_id", ""),
                     weapon.get("days_required", 0),
-                    weapon.get("effective_chance", 0)
+                    weapon.get("effective_chance", 0),
                 )
                 if key not in seen_weapons:
                     seen_weapons.add(key)
                     unique_weapons.append(weapon)
             merged_data["AttachedWeapons"] = unique_weapons
-        
+
         # Clean up empty lists/None values
         if not merged_data["Containers"]:
             del merged_data["Containers"]
@@ -1389,7 +1393,7 @@ def merge_case_insensitive_duplicates(items_dict):
 
         for variant_id in variants:
             processed.add(variant_id)
-    
+
     return merged_items
 
 
@@ -1497,27 +1501,46 @@ def build_tables(category_items, index):
         f.write("--]]\n\n")
         f.write("local data = {\n")
 
-    def effective_chance_calc(rolls, chance):
+    def get_loot_rarity(item_id):
+        """
+        Return the loot rarity multiplier for an item based on its type and tags.
+
+        Returns 2.0 for ranged weapons, weapon parts, or items tagged FirearmLoot.
+        Returns 0.4 for keys and key rings.
+        Returns 0.6 for everything else (apocalypse default).
+        """
+        item = Item(item_id)
+        item_type = (item.item_type or "").lower()
+
+        is_ranged_weapon = item_type in ("weapon", "base:weapon") and item.ranged
+        is_weapon_part = item_type in ("weaponpart", "base:weaponpart")
+        has_firearm_loot = item.has_tag("firearmloot")
+
+        if is_ranged_weapon or is_weapon_part or has_firearm_loot:
+            return 2.0
+
+        is_key = item_type in ("key", "keyring") or item.has_tag("KeyRing")
+        if is_key:
+            return 0.4
+
+        return 0.6
+
+    def effective_chance_calc(rolls, chance, item_id=None):
         """
         Calculate the overall spawn chance (%) over `rolls` attempts,
         given per‐roll `chance`, a loot rarity modifier, luck multiplier,
         raw zombie density, zombie population loot effect, and a global loot multiplier.
         """
-        loot_rarity = 0.6  # apocalypse default
-        luck_multiplier = 1  # apocalypse default
-        density = 0.1536470651626587  # median of various locations, mostly towns and residential sections
-        pop_loot_effect = 10  # apocalypse default
-        global_multiplier = 1  # apocalypse default
+        loot_rarity = get_loot_rarity(item_id) if item_id else 0.6
+        global_multiplier = 1
 
-        density_factor = density * pop_loot_effect
-        threshold = (
-            chance * 100 * loot_rarity * luck_multiplier + density_factor
-        ) * global_multiplier
-
-        # per‐roll probability
+        threshold = chance * 100 * loot_rarity * global_multiplier
         probability = threshold / 10000
 
-        # probability of at least one success in 'rolls' tries
+        if probability >= 1.0:
+            # Guaranteed spawn every roll — express as expected count
+            return round(rolls * 100.0, 2)
+
         return round((1 - (1 - probability) ** rolls) * 100, 2)
 
     # Function to write items to file
@@ -1542,7 +1565,7 @@ def build_tables(category_items, index):
                     if room == "Any":
                         effective_chance = chance  # Container contents already have calculated probability
                     else:
-                        effective_chance = effective_chance_calc(rolls, chance)
+                        effective_chance = effective_chance_calc(rolls, chance, item_id)
 
                     container_data.append((effective_chance, room, container_name))
 
@@ -1564,7 +1587,7 @@ def build_tables(category_items, index):
                     chance = vehicle.get("Chance", 0)
                     rolls = vehicle.get("Rolls", 0)
 
-                    effective_chance = effective_chance_calc(rolls, chance)
+                    effective_chance = effective_chance_calc(rolls, chance, item_id)
 
                     vehicle_data.append((effective_chance, type_, container))
 
@@ -1632,10 +1655,14 @@ def build_tables(category_items, index):
                 zones = foraging.get("zones", {})
                 if zones:
                     from scripts.core.language import Translate
+
                     zone_items = []
                     zone_data = []
                     for zone_id, value in zones.items():
-                        translated_zone = Translate.get(f'IGUI_SearchMode_Zone_Names_{zone_id}') or zone_id
+                        translated_zone = (
+                            Translate.get(f"IGUI_SearchMode_Zone_Names_{zone_id}")
+                            or zone_id
+                        )
                         zone_link = f"[[{translated_zone}]]"
                         zone_data.append((translated_zone, zone_link, value))
                     zone_data.sort(key=lambda x: x[0])
