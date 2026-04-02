@@ -23,18 +23,21 @@ _TOOL_TYPE_MAP = {
     "Hammer": "tag", "Shovel": "tag",
     "Wrench": "tool", "Electrician": "tool",
     "Crowbar": "tool", "Cutter": "tag",
+    "Screwdriver": "tool",
 }
 
 _TOOL_VALUE_MAP = {
     "Hammer": "Hammer", "Shovel": "DigPlow",
     "Wrench": "Wrench", "Electrician": "Screwdriver",
     "Crowbar": "Crowbar", "Cutter": "Cutter",
+    "Screwdriver": "Screwdriver",
 }
 
 _TOOL_SKILL_MAP = {
     "Hammer": "{{ll|Carpentry}}", "Shovel": "{{ll|Farming}}",
     "Wrench": "None", "Electrician": "{{ll|Electrical}}",
     "Crowbar": "{{ll|Carpentry}}", "Cutter": "{{ll|Carpentry}}",
+    "Screwdriver": "{{ll|Electrical}}",
 }
 
 _PERK_TO_SKILL = {
@@ -503,10 +506,13 @@ def build_misc_params(tile_list: List[dict], definitions: Dict[str, dict], lang_
         pt = tile_entry["pickup_tool"]
         if pt and not added_flags["pickup"]:
             tt = _TOOL_TYPE_MAP.get(pt)
-            if tt == "tool":
-                pickup_tool_line = f"|pickup_tool={{{{ll|{_TOOL_VALUE_MAP[pt]}}}}}\n"
+            pt_value = _TOOL_VALUE_MAP.get(pt)
+            if pt_value is None:
+                echo.warning(f"Unknown pickup_tool '{pt}' — not in _TOOL_VALUE_MAP, skipping")
+            elif tt == "tool":
+                pickup_tool_line = f"|pickup_tool={{{{ll|{pt_value}}}}}\n"
             else:
-                if _TOOL_VALUE_MAP[pt] == "Cutter":
+                if pt_value == "Cutter":
                     tag_links = []
                     for cutter_item in ("SharpKnife", "Scissors"):
                         link = (f"Item tag/{lang_code}#tag-{cutter_item}"
@@ -516,10 +522,10 @@ def build_misc_params(tile_list: List[dict], definitions: Dict[str, dict], lang_
                     extras = ["{{ll|Kitchen Knife}}", "{{ll|Scissors}}", "{{ll|Hunting Knife}}", "{{ll|Chipped Stone}}"]
                     pickup_tool_line = "|pickup_tool=" + "<br>".join(tag_links + extras) + "\n"
                 else:
-                    link = (f"Item tag/{lang_code}#tag-{_TOOL_VALUE_MAP[pt]}"
+                    link = (f"Item tag/{lang_code}#tag-{pt_value}"
                             if lang_code.lower() != "en"
-                            else f"Item tag#tag-{_TOOL_VALUE_MAP[pt]}")
-                    pickup_tool_line = f"|pickup_tool=[[{link}|{_TOOL_VALUE_MAP[pt]} ({tag_value})]]\n"
+                            else f"Item tag#tag-{pt_value}")
+                    pickup_tool_line = f"|pickup_tool=[[{link}|{pt_value} ({tag_value})]]\n"
             added_flags["pickup"] = True
             skill_val = _TOOL_SKILL_MAP.get(pt, "None")
             if skill_val != "None":
@@ -532,10 +538,13 @@ def build_misc_params(tile_list: List[dict], definitions: Dict[str, dict], lang_
         pl = tile_entry["place_tool"]
         if pl and not added_flags["place"]:
             tt = _TOOL_TYPE_MAP.get(pl)
-            if tt == "tool":
-                place_tool_line = f"|place_tool={{{{ll|{_TOOL_VALUE_MAP[pl]}}}}}\n"
+            pl_value = _TOOL_VALUE_MAP.get(pl)
+            if pl_value is None:
+                echo.warning(f"Unknown place_tool '{pl}' — not in _TOOL_VALUE_MAP, skipping")
+            elif tt == "tool":
+                place_tool_line = f"|place_tool={{{{ll|{pl_value}}}}}\n"
             else:
-                if _TOOL_VALUE_MAP[pl] == "Cutter":
+                if pl_value == "Cutter":
                     tag_links = []
                     for cutter_item in ("SharpKnife", "Scissors"):
                         link = (f"Item tag/{lang_code}#tag-{cutter_item}"
@@ -544,10 +553,10 @@ def build_misc_params(tile_list: List[dict], definitions: Dict[str, dict], lang_
                         tag_links.append(f"[[{link}|{cutter_item} ({tag_value})]]")
                     place_tool_line = "|place_tool=" + "<br>".join(tag_links) + "\n"
                 else:
-                    link = (f"Item tag/{lang_code}#tag-{_TOOL_VALUE_MAP[pl]}"
+                    link = (f"Item tag/{lang_code}#tag-{pl_value}"
                             if lang_code.lower() != "en"
-                            else f"Item tag#tag-{_TOOL_VALUE_MAP[pl]}")
-                    place_tool_line = f"|place_tool=[[{link}|{_TOOL_VALUE_MAP[pl]} ({tag_value})]]\n"
+                            else f"Item tag#tag-{pl_value}")
+                    place_tool_line = f"|place_tool=[[{link}|{pl_value} ({tag_value})]]\n"
             added_flags["place"] = True
 
     if not pickup_tool_line and any(w != "-" for w in weight_values):
