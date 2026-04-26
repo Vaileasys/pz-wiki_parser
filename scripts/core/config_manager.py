@@ -7,7 +7,7 @@ CONFIG_DEFAULTS = {
     "Settings": {
         "first_time_run": 'false',
         "default_language": 'en',
-        "version": '42.8.1',
+        "version": '42.17.0',
         "debug_mode": 'false',
         "game_directory": 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\ProjectZomboid',
         "zomboid_decompiler": '', # path for the ZomboidDecompiler.bat
