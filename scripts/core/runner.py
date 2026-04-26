@@ -14,7 +14,7 @@ is_pwb = bool(cfg.get_pywikibot())
 def run_batch_file(batch_path: str, name: str = None, args: list[str] = None):
     if not is_windows:
         echo.error("Batch files can only be run on Windows.")
-        return
+        return False
     
     if not name:
         name = Path(batch_path).name
@@ -24,12 +24,21 @@ def run_batch_file(batch_path: str, name: str = None, args: list[str] = None):
     if args:
         command += args
 
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    result = subprocess.run(command, shell=False, capture_output=True, text=True)
 
-    echo.info(result.stdout)
+    if result.stdout:
+        echo.info(result.stdout)
+
     if result.stderr:
         echo.error(f"There was a problem running {name}")
         echo.write(result.stderr, style_func=color.error)
+        return False
+
+    if result.returncode != 0:
+        echo.error(f"{name} exited with code {result.returncode}")
+        return False
+
+    return True
 
 def run_python_file(script_path: str, name: str = None):
     if not name:
@@ -46,8 +55,10 @@ def run_python_file(script_path: str, name: str = None):
     echo.info(result.stdout)
     if result.stderr:
         echo.error(f"There was a problem running {name}")
-        echo.error(result.stderr)
-
+        echo.write(result.stderr, style_func=color.error)
+        return False
+    
+    return True
 
 def run_zomboid_decompiler():
     print(color.style("ZomboidDecompiler", color.BLUE))
@@ -58,13 +69,15 @@ def run_zomboid_decompiler():
     else:
         executable_name = 'ZomboidDecompiler'
     
-    decompiler_path = os.path.join('resources', 'ZomboidDecompiler', 'bin', executable_name)
+    decompiler_path = os.path.join(cfg.get_zomboid_decompiler()) or os.path.join('resources', 'ZomboidDecompiler', 'bin', executable_name) 
     game_path = Path(cfg.get_game_directory())
     output_path = Path(OUTPUT_DIR) / "ZomboidDecompiler"
     
     # Run the command
     if is_windows:
-        run_batch_file(decompiler_path, args=[str(game_path), str(output_path)])
+        success = run_batch_file(decompiler_path, args=[str(game_path), str(output_path)])
+        if not success:
+            return True
     else:
         # Ensure the executable has execute permissions on Linux
         import stat
@@ -96,7 +109,9 @@ def run_pywikibot():
 
         cfg.set_pywikibot(choice)
     
-    run_python_file(cfg.get_pywikibot())
+    success = run_python_file(cfg.get_pywikibot())
+    if not success:
+        return True
 
     echo.success("Pywikibot process completed.")
 
