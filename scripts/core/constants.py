@@ -14,6 +14,7 @@ LUA_STUB_PATH = os.path.join(LUA_PATH, "stubs")
 # Resource directories
 TABLES_DIR = os.path.join(RESOURCE_DIR, "tables")
 ITEM_KEY_PATH = os.path.join(RESOURCE_DIR, "item_keys.json")
+ITEM_BODY_LOCATIONS_PATH = os.path.join(RESOURCE_DIR, "item_body_locations.json")
 
 # Output directories
 LOGGING_DIR = os.path.join(OUTPUT_DIR, "logging")

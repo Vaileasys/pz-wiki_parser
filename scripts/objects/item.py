@@ -414,7 +414,7 @@ class Item:
         """
         raw_data = script_parser.extract_script_data("item")
         cls._items = {k: cls._lower_keys(v) for k, v in raw_data.items()}
-    
+
     @classmethod
     def _generate_item_keys(cls):
         """
@@ -423,18 +423,18 @@ class Item:
         if cls._item_key_cache is None:
             cls._item_key_cache = {}
         
-        raw_data, data_version = load_cache(ITEM_KEY_PATH, "item key data", get_version=True)
+        raw_data, data_version = load_cache(ITEM_KEY_PATH, "Item key", get_version=True)
         if data_version != Version.get():
-            from scripts.parser import item_key_parser
+            from scripts.parser import java_parser
             while True:
-                user_input = input("Item key cache is outdated. Regenerate? (Y/N):\n> ").strip().lower()
+                user_input = input("ItemKey cache is outdated. Regenerate? (Y/N):\n> ").strip().lower()
                 if user_input == "n":
                     data = raw_data.copy()
                     break
                 elif user_input == "y":
                     echo.info("Regenerating item key cache...")
-                    item_key_parser.main(update=True)
-                    data = load_cache(ITEM_KEY_PATH, "item key data", suppress=True)
+                    java_parser.update_item_keys(is_update=True)
+                    data = load_cache(ITEM_KEY_PATH, "Item key", suppress=True)
                     break
                 else:
                     echo.warning("Invalid input. Please enter 'Y' or 'N'.")

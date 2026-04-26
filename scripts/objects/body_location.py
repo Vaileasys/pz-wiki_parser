@@ -1,13 +1,19 @@
 import re
-from scripts.core.language import Translate, Language
-from scripts.core.cache import save_cache
+
+from scripts.core.constants import ITEM_BODY_LOCATIONS_PATH
+from scripts.core.version import Version
+from scripts.core.language import Translate
+from scripts.core.cache import load_cache, save_cache
 from scripts.core.file_loading import get_lua_files, read_file
 from scripts.utils.util import to_bool, link
+from scripts.utils import echo
 
 class BodyLocation:
     _raw_data = None
     _all_data = None
     _items = None
+    _item_body_location_cache = None  # Cache for generated ItemBodyLocations
+    _item_body_location_reverse = {}  # Cache for reverse lookup of ItemBodyLocations to item IDs
     _instances = {}
 
     ## --------------- Class Methods --------------- ##
@@ -15,8 +21,9 @@ class BodyLocation:
     @classmethod
     def _load_data(cls):
         cls._parse_locations()
+        cls._generate_item_body_locations()
         cls._parse_items()
-        cls._rearrange_data()
+        cls._transform_data()
 
     @classmethod
     def _parse_locations(cls):
@@ -31,46 +38,48 @@ class BodyLocation:
         multi_items = {}
 
         file = read_file(file_path).splitlines()
+        ARG = r'ItemBodyLocation\.([A-Z0-9_]+)'
+        
         for line in file:
             line = line.strip()
             if line.startswith("--") or not line:
                 continue
 
-            m = re.match(r'local\s+group\s*=\s*BodyLocations\.getGroup\("([^"]+)"\)', line)
+            m = re.match(rf'local\s+group\s*=\s*BodyLocations\.getGroup\("([^"]+)"\)', line)
             if m:
                 group_name = m.group(1)
                 continue
-
-            m = re.match(r'group:getOrCreateLocation\("([^"]+)"\)', line)
+            
+            m = re.match(rf'group:getOrCreateLocation\({ARG}\)', line)
             if m:
                 locations.append(m.group(1))
                 continue
 
-            m = re.match(r'group:setExclusive\("([^"]+)",\s*"([^"]+)"\)', line)
+            m = re.match(rf'group:setExclusive\({ARG},\s*{ARG}\)', line)
             if m:
                 key, value = m.group(1), m.group(2)
                 exclusives.setdefault(key, []).append(value)
                 continue
 
-            m = re.match(r'group:setHideModel\("([^"]+)",\s*"([^"]+)"\)', line)
+            m = re.match(rf'group:setHideModel\({ARG},\s*{ARG}\)', line)
             if m:
                 key, value = m.group(1), m.group(2)
                 hide_models.setdefault(key, []).append(value)
                 continue
 
-            m = re.match(r'group:setAltModel\("([^"]+)",\s*"([^"]+)"\)', line)
+            m = re.match(rf'group:setAltModel\({ARG},\s*{ARG}\)', line)
             if m:
                 key, value = m.group(1), m.group(2)
                 alt_models.setdefault(key, []).append(value)
                 continue
 
-            m = re.match(r'group:setMultiItem\("([^"]+)",\s*(true|false)\)', line)
+            m = re.match(rf'group:setMultiItem\({ARG},\s*(true|false)\)', line)
             if m:
                 key, value = m.group(1), m.group(2)
                 multi_items[key] = to_bool(value)
                 continue
 
-            m = re.match(r'group:getLocation\("([^"]+)"\):addAlias\("([^"]+)"\)', line)
+            m = re.match(rf'group:getLocation\({ARG}\):addAlias\({ARG}\)', line)
             if m:
                 key, value = m.group(1), m.group(2)
                 aliases.setdefault(key, []).append(value)
@@ -88,6 +97,37 @@ class BodyLocation:
         }
 
     @classmethod
+    def _generate_item_body_locations(cls):
+        """
+        Generates and caches ItemBodyLocations for all loaded items.
+        """
+        if cls._item_body_location_cache is None:
+            cls._item_body_location_cache = {}
+        
+        raw_data, data_version = load_cache(ITEM_BODY_LOCATIONS_PATH, "Item body location", get_version=True)
+        if data_version != Version.get():
+            from scripts.parser import java_parser
+            while True:
+                user_input = input("ItemBodyLocation cache is outdated. Regenerate? (Y/N):\n> ").strip().lower()
+                if user_input == "n":
+                    data = raw_data.copy()
+                    break
+                elif user_input == "y":
+                    echo.info("Regenerating item body location cache...")
+                    java_parser.update_item_body_locations(is_update=True)
+                    data = load_cache(ITEM_BODY_LOCATIONS_PATH, "Item body location", suppress=True)
+                    break
+                else:
+                    echo.warning("Invalid input. Please enter 'Y' or 'N'.")
+        else:
+            data = raw_data.copy()
+        
+        cls._item_body_location_cache = data
+        cls._item_body_location_reverse = {v: k for k, v in data.items()}
+
+        save_cache(cls._item_body_location_cache, "item_body_location_cache.json")
+
+    @classmethod
     def _parse_items(cls) -> dict:
         from scripts.objects.item import Item
 
@@ -96,7 +136,7 @@ class BodyLocation:
         for item_id in Item.all():
             item = Item(item_id)
             for key in ("CanBeEquipped", "BodyLocation"):
-                loc = item.data.get(key)
+                loc = item.get(key)
                 if loc:
                     if isinstance(loc, list):
                         for l in loc:
@@ -107,15 +147,23 @@ class BodyLocation:
         cls._items = location_items
 
     @classmethod
-    def _rearrange_data(cls) -> dict:
+    def _transform_data(cls) -> dict:
         if cls._raw_data is None:
-            cls._load_data()
+            cls._parse_locations()
+        
+        if cls._item_body_location_cache is None:
+            cls._generate_item_body_locations()
+        
+        if cls._items is None:
+            cls._parse_items()
 
         rearranged = {}
 
         for group, group_data in cls._raw_data.items():
             locations = group_data.get("Location", [])
-            for loc_id in locations:
+            for raw_loc_id in locations:
+                loc_id = cls._item_body_location_reverse.get(raw_loc_id, raw_loc_id)
+                
                 if loc_id not in rearranged:
                     rearranged[loc_id] = {
                         "Group": group,
@@ -124,22 +172,21 @@ class BodyLocation:
                         "AltModel": [],
                         "Alias": [],
                         "MultiItem": False,
-                        "Items": []  # <-- Add this
+                        "Items": []
                     }
 
-                if loc_id in group_data.get("Exclusive", {}):
-                    rearranged[loc_id]["Exclusive"].extend(group_data["Exclusive"][loc_id])
-                if loc_id in group_data.get("HideModel", {}):
-                    rearranged[loc_id]["HideModel"].extend(group_data["HideModel"][loc_id])
-                if loc_id in group_data.get("AltModel", {}):
-                    rearranged[loc_id]["AltModel"].extend(group_data["AltModel"][loc_id])
-                if loc_id in group_data.get("Alias", {}):
-                    rearranged[loc_id]["Alias"].extend(group_data["Alias"][loc_id])
-                if loc_id in group_data.get("MultiItem", {}):
-                    rearranged[loc_id]["MultiItem"] = group_data["MultiItem"][loc_id]
+                for key in ("Exclusive", "HideModel", "AltModel", "Alias"):
+                    raw_values = group_data.get(key, {}).get(raw_loc_id, [])
+                    values = [cls._item_body_location_reverse.get(v, v) for v in raw_values]
+                    rearranged[loc_id][key].extend(values)
+                
+                multi_items = group_data.get("MultiItem", {})
+                if raw_loc_id in multi_items:
+                    rearranged[loc_id]["MultiItem"] = multi_items[raw_loc_id]
 
-                if cls._items and loc_id in cls._items:
-                    rearranged[loc_id]["Items"].extend(cls._items[loc_id])
+                loc_id_key = loc_id.lower()
+                if cls._items and loc_id_key in cls._items:
+                    rearranged[loc_id]["Items"].extend(cls._items[loc_id_key])
 
         cls._all_data = rearranged
         save_cache(cls._all_data, "body_locations_data.json")
@@ -156,7 +203,7 @@ class BodyLocation:
     
     def __new__(cls, location_id: str):
         if cls._all_data is None:
-            cls._rearrange_data()
+            cls._transform_data()
 
         if location_id in cls._instances:
             return cls._instances[location_id]
@@ -168,6 +215,9 @@ class BodyLocation:
     def __init__(self, location_id: str):
         if hasattr(self, "location_id"):
             return
+        
+        if BodyLocation._item_body_location_cache is None:
+            BodyLocation._generate_item_body_locations()
 
         self.location_id: str = location_id
         self.name: str = self.location_id
@@ -211,6 +261,13 @@ class BodyLocation:
     @property
     def items(self) -> list[str]:
         return self.data.get("Items", [])
+    
+    @property
+    def lua_name(self) -> str:
+        if BodyLocation._item_body_location_cache is None:
+            BodyLocation._load_data()
+
+        return BodyLocation._item_body_location_cache.get(self.location_id, "")
 
 
 class BodyPart:

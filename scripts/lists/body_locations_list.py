@@ -27,6 +27,7 @@ def build_table(data: dict):
     content = [
         '{| class="wikitable theme-blue"',
         '! Location',
+        '! Lua constant',
         '! Exclusive locations',
         '! Hidden locations',
         '! Items'
@@ -36,6 +37,7 @@ def build_table(data: dict):
         content.extend((
             f'|- id="{v.get("location")}"',
             f'| {v.get("location")}',
+            f'| {v.get("lua_constant")}',
             f'| {v.get("exclusive")}',
             f'| {v.get("hidden")}',
             f'| {v.get("items")}'
@@ -82,6 +84,7 @@ def generate_data():
         
         location_data[location] = {
             "location": location,
+            "lua_constant": loc.lua_name,
             "exclusive": exclusive,
             "hidden": hidden,
             "items": items,
