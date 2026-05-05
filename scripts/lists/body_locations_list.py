@@ -12,7 +12,7 @@ from scripts.objects.item import Item
 from scripts.utils.util import link
 from scripts.core.file_loading import write_file
 
-OUTPUT_FILE = "bodylocations_exclusives.txt"
+OUTPUT_FILE = "body_location_list.txt"
 
 def build_table(data: dict):
     """
