@@ -1847,6 +1847,7 @@
         "Propane_Refill": "PROPANE_REFILL",
         "PropaneTank": "PROPANE_TANK",
         "RatPoison": "RAT_POISON",
+        "RagFilter": "RAG_FILTER",
         "RespiratorFilters": "RESPIRATOR_FILTERS",
         "RespiratorFiltersRecharged": "RESPIRATOR_FILTERS_RECHARGED",
         "Sandbag": "SANDBAG",
@@ -4669,7 +4670,6 @@
         "WoodenBlacksmithAnvilMold": "WOODEN_BLACKSMITH_ANVIL_MOLD",
         "WoodenBlockAnvilMold": "WOODEN_BLOCK_ANVIL_MOLD",
         "WoodenBrickMold": "WOODEN_BRICK_MOLD",
-        "WoodenCrucibleMold": "WOODEN_CRUCIBLE_MOLD",
         "WoodenCrudeBenchVisePartsMold": "WOODEN_CRUDE_BENCH_VISE_PARTS_MOLD",
         "WoodenFork": "WOODEN_FORK",
         "WoodenIngotCastMold": "WOODEN_INGOT_CAST_MOLD",
@@ -5126,5 +5126,5 @@
         "x4Scope": "X4_SCOPE",
         "x8Scope": "X8_SCOPE"
     },
-    "version": "42.17.0"
+    "version": "42.18.0"
 }
