@@ -364,7 +364,7 @@ def batch_misc(lang_code):
     def run_outfits():
         if not _mark_once("run_outfits"):
             return
-        from scripts.misc.outfits import main as outfits_main
+        from scripts.misc.outfit_articles import main as outfits_main
 
         outfits_main()
 

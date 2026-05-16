@@ -233,9 +233,9 @@ menu_structure = {
                 "description": "Generate the fluid table.",
             },
             "7": {
-                "module": "scripts.misc.outfits",
-                "name": "Outfits",
-                "description": "Process outfits.",
+                "module": "scripts.lists.outfit_list",
+                "name": "Outfit list",
+                "description": "Process outfit table.",
             },
             "8": {
                 "module": "scripts.foraging.foraging_list",
@@ -330,6 +330,11 @@ menu_structure = {
                 "description": "Helper script for generating a json for items to merge.",
             },
             "7": {
+                "module": "scripts.misc.outfit_articles",
+                "name": "Outfits",
+                "description": "Generate outfit articles.",
+            },
+            "8": {
                 "module": "scripts.misc.test",
                 "name": "Test module",
                 "description": "Run a test script.",
