@@ -29,6 +29,7 @@ FIXING_DIR = os.path.join(OUTPUT_LANG_DIR, "fixing")
 RECIPES_DIR = os.path.join(OUTPUT_LANG_DIR, "recipes")
 FORAGING_DIR = os.path.join(OUTPUT_LANG_DIR, "foraging")
 ANIMAL_DIR = os.path.join(OUTPUT_LANG_DIR, "animal")
+NAVBOX_DIR = os.path.join(OUTPUT_LANG_DIR, "navbox")
 
 # Data directories
 CACHE_DIR = os.path.join(DATA_DIR, "cache")

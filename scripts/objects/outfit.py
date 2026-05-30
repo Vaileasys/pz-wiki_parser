@@ -159,7 +159,7 @@ class Outfit:
     def navbox_section(self) -> str:
         """Navbox section name for this outfit."""
         if self.sex == "Both":
-            return "Male and female outfits"
+            return "Unisex outfits"
 
         if self.sex == "Male":
             return "Male outfits"
