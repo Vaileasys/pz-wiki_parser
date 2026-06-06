@@ -2864,7 +2864,8 @@ class Item:
                 self._weapons.extend([Item(weapon) for weapon in self.mount_on])
 
             if self.gun_type:
-                self._weapons.append(Item(self.gun_type))
+                gun_types = self.gun_type.split(";")
+                self._weapons.extend([Item(gun_type.strip()) for gun_type in gun_types if gun_type.strip()])
 
             if self.raw_display_category == "Ammo":
                 for item_id, item in Item.items():
