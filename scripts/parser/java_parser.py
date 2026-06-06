@@ -1,17 +1,19 @@
 import re
 from pathlib import Path
 
-from scripts.core import constants, cache
+from scripts.core import cache
+from scripts.core.constants import DECOMPILED_DIR, OUTPUT_DIR, ITEM_KEY_PATH, ITEM_BODY_LOCATIONS_PATH
 from scripts.utils import echo
 
 CLASS_RE = re.compile(r'public\s+static\s+class\s+(\w+)')
-GAME_VERSION_RE = re.compile(r'GameVersion\s+gameVersion\s*=\s*new\s+GameVersion\((\d+),\s*(\d+),\s*"([^"]*)"\)')
-BUILD_VERSION_RE = re.compile(r'private\s+static\s+final\s+int\s+buildVersion\s*=\s*(\d+)')
 
 
 def parse_game_version()  -> list[int, int, int]:
     """Parse game version from Core.java."""
-    java_path = Path("output/ZomboidDecompiler/source/zombie/core", "Core.java")
+    GAME_VERSION_RE = re.compile(r'GameVersion\s+gameVersion\s*=\s*new\s+GameVersion\((\d+),\s*(\d+),\s*"([^"]*)"\)')
+    BUILD_VERSION_RE = re.compile(r'private\s+static\s+final\s+int\s+buildVersion\s*=\s*(\d+)')    
+    
+    java_path = Path(DECOMPILED_DIR, "source/zombie/core", "Core.java")
     if not java_path.exists():
         echo.error(f"Java file '{java_path}' does not exist. Ensure you have setup and run the ZomboidDecompiler.")
         return []
@@ -114,23 +116,24 @@ def process_registry(
     return data
 
 def update_item_keys(is_update: bool = False) -> dict:
-    java_path = Path("output/ZomboidDecompiler/source/zombie/scripting/objects", "ItemKey.java")
+    java_path = Path(DECOMPILED_DIR, "source/zombie/scripting/objects", "ItemKey.java")
     return process_registry(
         java_type = "ItemKey",
         java_path = java_path,
-        output_path = Path(constants.OUTPUT_DIR) / "item_keys.json",
-        res_path = Path(constants.ITEM_KEY_PATH),
+        output_path = Path(OUTPUT_DIR) / "item_keys.json",
+        res_path = Path(ITEM_KEY_PATH),
         grouped = True,
         is_update = is_update
     )
+    
 
 def update_item_body_locations(is_update: bool = False) -> dict:
-    java_path = Path("output/ZomboidDecompiler/source/zombie/scripting/objects", "ItemBodyLocation.java")
+    java_path = Path(DECOMPILED_DIR, "source/zombie/scripting/objects", "ItemBodyLocation.java")
     return process_registry(
         java_type = "ItemBodyLocation",
         java_path = java_path,
-        output_path = Path(constants.OUTPUT_DIR) / "item_body_locations.json",
-        res_path = Path(constants.ITEM_BODY_LOCATIONS_PATH),
+        output_path = Path(OUTPUT_DIR) / "item_body_locations.json",
+        res_path = Path(ITEM_BODY_LOCATIONS_PATH),
         is_update = is_update
     )
 

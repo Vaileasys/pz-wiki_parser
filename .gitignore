@@ -37,6 +37,7 @@ resources/lua/*
 
 # Misc
 config.ini
+*.log
 
 # Editor directories and files
 __pycache__/

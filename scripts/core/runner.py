@@ -6,7 +6,7 @@ import os
 
 from scripts.utils import echo, color
 from scripts.core import config_manager as cfg
-from scripts.core.constants import OUTPUT_DIR
+from scripts.core.constants import DECOMPILED_DIR
 
 is_windows = platform.system() == "Windows"
 is_pwb = bool(cfg.get_pywikibot())
@@ -60,7 +60,7 @@ def run_python_file(script_path: str, name: str = None):
     
     return True
 
-def run_zomboid_decompiler():
+def run_zomboid_decompiler() -> bool:
     print(color.style("ZomboidDecompiler", color.BLUE))
     
     # Determine the executable based on OS
@@ -71,7 +71,7 @@ def run_zomboid_decompiler():
     
     decompiler_path = os.path.join(cfg.get_zomboid_decompiler()) or os.path.join('resources', 'ZomboidDecompiler', 'bin', executable_name) 
     game_path = Path(cfg.get_game_directory())
-    output_path = Path(OUTPUT_DIR) / "ZomboidDecompiler"
+    output_path = Path(DECOMPILED_DIR)
     
     # Run the command
     if is_windows:
