@@ -103,8 +103,9 @@ def save_new_texture_data():
 def main():
     global textures_data
     textures_data = load_existing_textures()
-    #get_texture_names(ICON_DIR)
-    #copy_new_textures(ICON_DIR)
+    
+    get_texture_names(ICON_DIR)
+    copy_new_textures(ICON_DIR)
 
     # Prefixes to be skipped
     prefix_blacklist = ["Item", "Build", "Zombie", "Male", "Male", "Puddles", "Bob", "BobZ", "BobZ2", "BobZ3", "F", "Hair"]

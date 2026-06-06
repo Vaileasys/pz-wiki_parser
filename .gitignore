@@ -17,6 +17,7 @@ logs/
 #!resources/item_descriptors.json
 #!resources/skills.json
 #!resources/tables/
+resources/icons/
 
 ## Translations
 resources/Translate/*
