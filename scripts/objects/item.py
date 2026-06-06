@@ -960,13 +960,13 @@ class Item:
         TRAITS = {"organized": 1.3, "disorganized": 0.7}
 
         trait_mod = TRAITS.get(trait, 1.0)
-
-        if self.weight_reduction == 0:
-            weight_full = (self.weight * 0.3) + (self.capacity * trait_mod)
+        
+        if self.weight_reduction > 1:
+            reduction = self.weight_reduction / 100
         else:
-            weight_full = (self.weight * 0.3) + (self.capacity * trait_mod) * (
-                self.weight_reduction / 100
-            )
+            reduction = self.weight_reduction
+        
+        weight_full = self.weight * 0.3 + (self.capacity * trait_mod) * (1 - reduction)
 
         return round(weight_full, 2)
 
@@ -3201,5 +3201,8 @@ class Item:
 
 
 if __name__ == "__main__":
-    item = Item("Base.Pop")
-    print(item.name)
+    item = Item("Base.Bag_BigHikingBag")
+    print("Weight:", str(item.weight))
+    print("Full:", str(item.weight_full))
+    print("Calculated:", str(item.calculate_weight()))
+    print("Weight reduction:", str(item.weight_reduction))
