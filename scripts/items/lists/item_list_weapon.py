@@ -1,16 +1,16 @@
 import os
 from tqdm import tqdm
 from scripts.core.language import Language, Translate
-from scripts.utils import table_helper, echo, util
-from scripts.utils.util import format_positive, convert_int
+from scripts.utils import table_helper, util
+from scripts.utils.util import convert_int
 from scripts.objects.item import Item
 from scripts.objects.fixing import Fixing
-from scripts.objects.craft_recipe import CraftRecipe
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
+from scripts.items.groups.weapon_groups import WeaponGroups
+from scripts.items.groups.ammo_groups import AmmoGroups
 
 TABLE_PATH = os.path.join(TABLES_DIR, "weapon_table.json")
 
-box_types = {}
 table_map = {}
 table_type_map = {}
 all_item_data = {}  # Cache for each item's `TableType`
@@ -22,106 +22,6 @@ def check_fixing(item_id):
     if fixing.valid:
         return f"[[File:UI Tick.png|link=Condition{Language.get_subpage()}#<<repairing>>|<<repairable>>]]"
     return f"[[File:UI Cross.png|link=Condition{Language.get_subpage()}#<<repairing>>|<<not_repairable>>]]"
-
-
-def generate_ammo_data(item_id: str, table_type: str):
-    box_data = box_types.get(item_id, {})
-    round_id = None
-    box_id = None
-    carton_id = None
-    magazine = None
-    weapons = []
-    item_data: dict = all_item_data.get(item_id)
-
-    if table_type == "carton":
-        # Get carton
-        carton_id = item_id
-        carton_q = 1
-        # Get box
-        box_id = box_data.get("contents")
-        box_q = box_data.get("quantity") or 1
-        # Get round
-        box_entry = box_types.get(box_id, {})
-        if box_entry:
-            round_id = box_entry.get("contents")
-            qty = box_entry.get("quantity")
-            round_q = (qty * box_q) if qty is not None else box_q
-        else:
-            round_id = None
-            round_q = None
-    elif table_type == "box":
-        # Get box
-        box_id = item_id
-        box_q = 1
-        # Get round
-        round_id = box_data.get("contents")
-        round_q = box_data.get("quantity")
-        # Get carton
-        for key, value in box_types.items():
-            if value.get("contents") == box_id:
-                carton_id = key
-                qty = value.get("quantity")
-                carton_q = (qty * box_q) if qty is not None else box_q
-                break
-    elif table_type == "round":
-        # Get round
-        round_id = item_id
-        round_q = 1
-        # Get box
-        for key, value in box_types.items():
-            if value.get("contents") == item_id:
-                box_id = key
-                box_q = value.get("quantity")
-                break
-        # Get carton
-        for key, value in box_types.items():
-            if value.get("contents") == box_id:
-                carton_id = key
-                qty = value.get("quantity")
-                carton_q = (qty * box_q) if (qty is not None and box_q is not None) else None
-                break
-
-    round_id_short = round_id.split(".", 1)[-1] if (round_id and "." in round_id) else round_id
-
-    def _ammo_matches(ammo_type_val):
-        if ammo_type_val is None:
-            return False
-        return ammo_type_val == round_id or ammo_type_val == round_id_short
-
-    firearm_types = table_type_map.get("firearm") or []
-    for n_item_id in Item.all():
-        # Get firearms
-        if (
-            all_item_data.get(n_item_id, {}).get("TableType")
-            in firearm_types
-            and _ammo_matches(Item(n_item_id).ammo_type)
-        ):
-            weapons.append(n_item_id)
-            continue
-
-        # Get magazine
-        if (
-            all_item_data.get(n_item_id, {}).get("TableType") == "magazine"
-            and _ammo_matches(Item(n_item_id).ammo_type)
-        ):
-            magazine = n_item_id
-
-    # Add data to dict
-    if carton_id and carton_id != item_id:
-        item_data["AmmoCarton"] = carton_id
-        item_data["AmmoCartonQuantity"] = carton_q
-    if box_id and box_id != item_id:
-        item_data["AmmoBox"] = box_id
-        item_data["AmmoBoxQuantity"] = box_q
-    if round_id and round_id != item_id:
-        item_data["AmmoType"] = round_id
-        item_data["AmmoTypeQuantity"] = round_q
-    if weapons:
-        item_data["Weapons"] = weapons
-    if magazine:
-        item_data["Magazine"] = magazine
-
-    return item_data
 
 
 def get_function(item: Item):
@@ -218,8 +118,9 @@ def generate_data(item_id: str, table_type: str):
         else:
             columns = table_map.get("default")
 
+    # Generate ammo data
     if table_type in ("round", "box", "carton"):
-        item_data = generate_ammo_data(item_id, table_type)
+        item_data = AmmoGroups.build_ammo_data(item_id=item_id, ammo_type=table_type, all_item_data=all_item_data)
 
     item_dict = {}
 
@@ -327,23 +228,13 @@ def generate_data(item_id: str, table_type: str):
             Item(item_data.get("Magazine")).icon if item_data.get("Magazine") else "-"
         )
     if "weapon" in columns:
-        if table_type == "magazine":
-            item_dict["weapon"] = (
-                Item(item.gun_type).icon if item.gun_type is not None else "-"
-            )
-        elif item.mount_on:
-            weapons_list = []
-            weapons = item.mount_on
-            for weapon in weapons:
-                weapons_list.append(Item(weapon).icon)
-            item_dict["weapon"] = "".join(weapons_list)
+        weapons_list = []
+        if item.mount_on or table_type == "magazine":
+            weapons_list.extend(weapon.icon for weapon in item.weapons)
         elif table_type in ("round", "box", "carton") and item_data.get("Weapons"):
-            weapons_list = []
-            for weapon in item_data.get("Weapons"):
-                weapons_list.append(Item(weapon).icon)
-            item_dict["weapon"] = "".join(weapons_list)
-        else:
-            item_dict["weapon"] = "-"
+            weapons_list.extend(Item(weapon).icon for weapon in item_data.get("Weapons"))
+        item_dict["weapon"] = item_dict["weapon"] = "".join(weapons_list) if weapons_list else "-"
+        
     item_dict["rounds"] = (
         Item(item_data.get("AmmoType")).icon + f" ({item_data.get('AmmoTypeQuantity')})"
         if "rounds" in columns
@@ -434,106 +325,27 @@ def generate_data(item_id: str, table_type: str):
     return item_dict
 
 
-def find_table_type(item_id):
-    global all_item_data
+def find_table_type(item: Item):
+    # Weapon classification
+    table_type = WeaponGroups.classify(item)
+    
+    # Ammo classification
+    if not table_type:
+        table_type = AmmoGroups.classify(item)
 
-    item = Item(item_id)
-    table_type = None
-
-    if item.item_type == "weapon":
-        skill = item.categories
-        if skill:
-            # Melee
-            # Remove "Improvised" from list if more than 1
-            if "Improvised" in skill and len(skill) > 1:
-                skill = [cat for cat in skill if cat != "Improvised"]
-                if len(skill) > 1:
-                    echo.write(f"WARNING: More than 1 skill ({','.join(skill)})")
-            table_type = skill[0]
-        elif item.subcategory == "Firearm":
-            # Firearm
-            table_type = "handgun"
-            if item.requires_equipped_both_hands:
-                table_type = "rifle"
-                if int(item.projectile_count) > 1:
-                    table_type = "shotgun"
-        elif item.raw_display_category == "Explosives":
-            # Explosives
-            table_type = "explosive"
-    elif item.item_type == "weaponpart":
-        # Weapon parts
-        table_type = "weapon_part"
-    elif item.item_id in box_types:
-        entry_type = box_types[item.item_id].get("type")
-        if entry_type == "carton":
-            box_id = box_types[item.item_id].get("contents")
-            if box_id in box_types and box_types[box_id].get("type") == "box":
-                table_type = "carton"
-        else:
-            table_type = entry_type
-    elif item.tags:
-        tags = item.tags
-        # Ammo (rounds)
-        if any(tag.lower() == "ammo" for tag in tags):
-            table_type = "round"
-        elif any(tag.lower() in {"pistolmagazine", "riflemagazine"} for tag in tags):
-            # Magazine
-            table_type = "magazine"
-
-    if table_type:
-        all_item_data[item.item_id] = {"TableType": table_type}
+    return table_type
 
 
 def find_items():
     """Finds all weapon related items and gets their table type."""
+    
     global all_item_data
-    for item_id in Item.all():
-        find_table_type(item_id)
 
-
-def find_boxes():
-    global box_types
-
-    AMMO_RECIPES = {
-        "OpenBoxOfShotgunShells": "box",
-        "OpenBoxOfBullets50": "box",
-        "OpenBoxOfBullets20": "box",
-        "OpenCarton12": "carton",
-    }
-
-    for recipe_id in AMMO_RECIPES:
-        recipe = CraftRecipe(recipe_id)
-        output = recipe.outputs[0]
-
-        mapper = output.mapper
-        count = output.count
-        items = output.items
-
-        if mapper == "ammoTypes":
-            item_mappers = recipe.item_mappers.get(mapper, {})
-            for key, value in item_mappers.items():
-                box_types[value] = {
-                    "type": AMMO_RECIPES.get(recipe_id),
-                    "contents": key,
-                    "quantity": count,
-                }
-
-        elif mapper == "boxType":
-            # OpenCarton12: input 1 carton -> output 12 boxes; itemMappers.boxType is box_id -> carton_id
-            item_mappers = recipe.item_mappers.get(mapper, {})
-            for box_id, carton_id in item_mappers.items():
-                box_types[carton_id] = {
-                    "type": AMMO_RECIPES.get(recipe_id),
-                    "contents": box_id,
-                    "quantity": count,
-                }
-
-        elif items:
-            box_types[recipe.inputs[0].items[0]] = {
-                "type": AMMO_RECIPES.get(recipe_id),
-                "contents": items[0],
-                "quantity": count,
-            }
+    for item in Item.values():
+        table_type = find_table_type(item)
+        
+        if table_type:
+            all_item_data[item.item_id] = {"TableType": table_type}
 
 
 def main():
@@ -544,7 +356,6 @@ def main():
     table_map, column_headings, table_type_map = table_helper.get_table_data(
         TABLE_PATH, "type_map"
     )
-    find_boxes()
 
     with tqdm(
         total=0,
@@ -562,8 +373,8 @@ def main():
         generated_data = {}
 
         for item_id in all_item_data:
-            item_data = all_item_data.get(item_id, {})
-            table_type = item_data.get("TableType")
+            item_data: dict = all_item_data.get(item_id, {})
+            table_type: str = item_data.get("TableType")
             pbar.set_postfix_str(f"Generating: {table_type} ({item_id[:30]})")
             if table_type is not None:
                 new_item = generate_data(item_id, table_type)
