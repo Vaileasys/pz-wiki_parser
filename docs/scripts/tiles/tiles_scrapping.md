@@ -1,22 +1,12 @@
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_infobox.md) | [Next File](tiles_stitcher.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_infobox.md) | [Next File](tiles_stitcher.md) | [Next Folder](../tools/batch_processor.md) | [Back to Index](../../index.md)
 
 # tiles_scrapping.py
 
-Project Zomboid Wiki Scrapping Table Generator
-
-This script generates wiki tables for item scrapping and breakage information in Project Zomboid.
-It processes tile definitions to create formatted MediaWiki tables showing what materials
-can be obtained from disassembling or breaking various objects in the game.
-
-The script handles both disassembly (intentional scrapping) and breakage (destruction)
-mechanics, generating separate tables for each process with relevant drop rates and quantities.
-
 ## Functions
 
-### [`generate_scrapping_tables(tiles: dict, definitions: dict, lang_code: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L17)
+### [`generate_scrapping_tables(tiles: dict, definitions: dict, lang_code: str) -> dict`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L5)
 
 Generate scrapping and breakage tables for tiles in the specified language.
-
 
 <ins>**Args:**</ins>
   - **tiles (dict)**:
@@ -27,15 +17,14 @@ Generate scrapping and breakage tables for tiles in the specified language.
       - _Language code for localization._
 
 <ins>**Returns:**</ins>
-  - **dict:**
-      - Dictionary containing generated scrapping and breakage information for each tile group.
-      - The function creates MediaWiki-formatted tables for both scrapping and breakage mechanics,
-      - saving them to separate files in the output directory.
+  - **dict**:
+      - _Dictionary containing generated scrapping and breakage information for each tile group._
+  - **The function creates MediaWiki-formatted tables for both scrapping and breakage mechanics,**:
+  - **saving them to separate files in the output directory.**:
 
-### [`_generate_disassembly_section(generic: dict, definitions: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L75)
+### [`_generate_disassembly_section(generic: dict, definitions: dict) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L63)
 
 Generate a MediaWiki table for disassembly (scrapping) information.
-
 
 <ins>**Args:**</ins>
   - **generic (dict)**:
@@ -44,14 +33,13 @@ Generate a MediaWiki table for disassembly (scrapping) information.
       - _Dictionary containing scrap item definitions and rules._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - MediaWiki-formatted table showing disassembly materials, chances, and quantities.
-      - Returns empty string if no materials are defined.
+  - **str**:
+      - _MediaWiki-formatted table showing disassembly materials, chances, and quantities._
+  - **Returns empty string if no materials are defined.**:
 
-### [`_generate_breakage_section(generic: dict, definitions: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L157)
+### [`_generate_breakage_section(generic: dict, definitions: dict) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_scrapping.py#L145)
 
 Generate a MediaWiki table for breakage (destruction) information.
-
 
 <ins>**Args:**</ins>
   - **generic (dict)**:
@@ -60,10 +48,9 @@ Generate a MediaWiki table for breakage (destruction) information.
       - _Dictionary containing material definitions for breakage._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - MediaWiki-formatted table showing breakage materials, chances, and quantities.
-      - Returns empty string if no materials are defined.
+  - **str**:
+      - _MediaWiki-formatted table showing breakage materials, chances, and quantities._
+  - **Returns empty string if no materials are defined.**:
 
 
-
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_infobox.md) | [Next File](tiles_stitcher.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_infobox.md) | [Next File](tiles_stitcher.md) | [Next Folder](../tools/batch_processor.md) | [Back to Index](../../index.md)

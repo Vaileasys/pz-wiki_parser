@@ -1,52 +1,48 @@
-[Previous Folder](../objects/attachment.md) | [Previous File](outfit_parser.md) | [Next File](recipe_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/animal.md) | [Previous File](outfit_zone_parser.md) | [Next File](recipe_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
 
 # radio_parser.py
 
 ## Functions
 
-### [`timestamp_to_datetime(timestamp: Union[int, str])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L47)
+### [`timestamp_to_datetime(timestamp: Union[int, str]) -> Tuple[str, str]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L48)
 
 Convert a timestamp to time and date strings.
-
 
 <ins>**Args:**</ins>
   - **timestamp (int or str)**:
       - _The timestamp in minutes since EPOCH._
 
 <ins>**Returns:**</ins>
-  - **Tuple[str, str]:**
-      - A tuple containing the time in 24-hour format and date in ISO format.
+  - **Tuple[str, str]**:
+      - _A tuple containing the time in 24-hour format and date in ISO format._
 
-### [`replace_cat(cat: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L64)
+### [`replace_cat(cat: str) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L65)
 
 Replace category with its replacement if available.
-
 
 <ins>**Args:**</ins>
   - **cat (str)**:
       - _The category to replace._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - The replaced category.
+  - **str**:
+      - _The replaced category._
 
-### [`replace_codes(code_part: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L76)
+### [`replace_codes(code_part: str) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L77)
 
 Replace code part with its replacement if available.
-
 
 <ins>**Args:**</ins>
   - **code_part (str)**:
       - _The code part to replace._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - The replaced code part.
+  - **str**:
+      - _The replaced code part._
 
-### [`get_person(color: dict, person_map: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L88)
+### [`get_person(color: dict, person_map: dict) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L89)
 
 Get person identifier based on color.
-
 
 <ins>**Args:**</ins>
   - **color (dict)**:
@@ -55,26 +51,24 @@ Get person identifier based on color.
       - _A mapping of color keys to person identifiers._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - The person identifier.
+  - **str**:
+      - _The person identifier._
 
-### [`get_channel_cat(channel_entry: Union[ET.Element, None])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L106)
+### [`get_channel_cat(channel_entry: Union[ET.Element, None]) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L107)
 
 Get channel category from channel entry.
-
 
 <ins>**Args:**</ins>
   - **channel_entry (ET.Element or None)**:
       - _The channel entry element._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - The channel category.
+  - **str**:
+      - _The channel category._
 
-### [`process_broadcast_entries(entries: List[ET.Element], output_file, channel_entry: Union[ET.Element, None], log_file, broadcast_entry_count: int)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L124)
+### [`process_broadcast_entries(entries: List[ET.Element], output_file, channel_entry: Union[ET.Element, None], log_file, broadcast_entry_count: int) -> int`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L125)
 
 Process broadcast entries and write to output file.
-
 
 <ins>**Args:**</ins>
   - **entries (List[ET.Element])**:
@@ -89,13 +83,12 @@ Process broadcast entries and write to output file.
       - _The current broadcast entry count._
 
 <ins>**Returns:**</ins>
-  - **int:**
-      - The updated broadcast entry count.
+  - **int**:
+      - _The updated broadcast entry count._
 
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L209)
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/radio_parser.py#L210)
 
 Main function to process the RadioData.xml and generate output.
 
 
-
-[Previous Folder](../objects/attachment.md) | [Previous File](outfit_parser.md) | [Next File](recipe_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)
+[Previous Folder](../objects/animal.md) | [Previous File](outfit_zone_parser.md) | [Next File](recipe_parser.md) | [Next Folder](../recipes/craft_recipes.md) | [Back to Index](../../index.md)

@@ -1,4 +1,4 @@
-[Previous Folder](../lists/attachment_list.md) | [Previous File](clothing_item.md) | [Next File](craft_recipe.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../navbox/navbox.md) | [Previous File](clothing_item.md) | [Next File](craft_recipe.md) | [Next Folder](../parser/creation_method_parser.md) | [Back to Index](../../index.md)
 
 # components.py
 
@@ -18,14 +18,13 @@ convenient property access and helper methods.
 ### `FluidContainer`
 
 Represents the FluidContainer component of an item or entity, holding information 
-
 about contained fluids, capacities, and mixing proportions.
 
 #### Object Methods
+
 ##### [`__init__(data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L22)
 
 Initialize a FluidContainer with raw component data.
-
 
 <ins>**Args:**</ins>
   - **data (dict)**:
@@ -35,19 +34,23 @@ Initialize a FluidContainer with raw component data.
 
 Allow FluidContainer to evaluate as False if empty, True if data exists.
 
-##### [`has_fluid()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L35)
+##### [`has_fluid(*fluids: Fluid | str | list[Fluid | str]) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L35)
 
 Check if the item contains any of the given fluids.
 
-
 <ins>**Args:**</ins>
+  - ***fluids (Fluid | str | list[Fluid | str])**:
+      - _One or more Fluid objects or fluid ID strings._
+  - **Accepts individual arguments or a list.**:
 
 <ins>**Returns:**</ins>
-  - **bool:**
-      - True if any of the fluids are present, False otherwise.
+  - **bool**:
+      - _True if any of the fluids are present, False otherwise._
 
 #### Properties
+
 ##### [`is_valid`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L70)
+
 ##### [`container_name`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L74)
 
 Return the translated container name.
@@ -75,7 +78,6 @@ Return the raw list of fluid proportions (list of floats).
 ##### [`fluid_map`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L142)
 
 Return a dictionary mapping Fluid objects to normalised proportions.
-
 If PickRandomFluid is True, all fluids are given equal weighting (1.0).
 
 ##### [`pick_random_fluid`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L165)
@@ -90,18 +92,16 @@ Return the minimum initial fill percentage (float).
 
 Return the maximum initial fill percentage (float).
 
-
 ### `Durability`
 
 Represents the Durability component of an item, including material type 
-
 and maximum hit points.
 
 #### Object Methods
+
 ##### [`__init__(data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L185)
 
 Initialize a Durability object with raw component data.
-
 
 <ins>**Args:**</ins>
   - **data (dict)**:
@@ -112,6 +112,7 @@ Initialize a Durability object with raw component data.
 Allow Durability to evaluate as False if empty, True if data exists.
 
 #### Properties
+
 ##### [`material`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L199)
 
 Return the material type (str), defaults to 'Default'.
@@ -121,5 +122,4 @@ Return the material type (str), defaults to 'Default'.
 Return the maximum hit points (int), defaults to 0.
 
 
-
-[Previous Folder](../lists/attachment_list.md) | [Previous File](clothing_item.md) | [Next File](craft_recipe.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../navbox/navbox.md) | [Previous File](clothing_item.md) | [Next File](craft_recipe.md) | [Next Folder](../parser/creation_method_parser.md) | [Back to Index](../../index.md)

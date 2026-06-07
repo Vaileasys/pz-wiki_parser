@@ -1,4 +1,4 @@
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_batch.md) | [Next File](tiles_infobox.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_batch.md) | [Next File](tiles_container_mapping.md) | [Next Folder](../tools/batch_processor.md) | [Back to Index](../../index.md)
 
 # tiles_codesnip.py
 
@@ -15,10 +15,9 @@ all generated snippets.
 
 ## Functions
 
-### [`generate_codesnips(named_tiles_data: Dict[str, Dict[str, dict]], lang_code: str, game_version: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_codesnip.py#L19)
+### [`generate_codesnips(named_tiles_data: Dict[str, Dict[str, dict]], lang_code: str, game_version: str) -> Dict[str, str]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_codesnip.py#L18)
 
 Generate a CodeSnip wikitext snippet for each tile in every named group,
-
 write each snippet to its own file, and return a mapping of
 sprite_name -> codesnip wikitext.
 
@@ -31,9 +30,8 @@ sprite_name -> codesnip wikitext.
       - _Current game version._
 
 <ins>**Returns:**</ins>
-  - **dict:**
-      - Mapping from sprite_name to its CodeSnip wikitext.
+  - **dict**:
+      - _Mapping from sprite_name to its CodeSnip wikitext._
 
 
-
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_batch.md) | [Next File](tiles_infobox.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](tiles_batch.md) | [Next File](tiles_container_mapping.md) | [Next Folder](../tools/batch_processor.md) | [Back to Index](../../index.md)

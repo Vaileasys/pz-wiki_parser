@@ -1,44 +1,197 @@
-[Previous Folder](../foraging/foraging_category_infobox.md) | [Next File](item_body_part.md) | [Next Folder](lists/item_list.md) | [Back to Index](../../index.md)
+[Previous Folder](../foraging/foraging_category_infobox.md) | [Next File](item_body_part.md) | [Next Folder](groups/ammo_groups.md) | [Back to Index](../../index.md)
 
 # item_article.py
 
 ## Functions
 
-### [`load_item_id_dictionary(dictionary_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L193)
+### [`load_translations(language_code)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L39)
 
-Loads the item_id dictionary from a given CSV file.
-
-The dictionary is expected to have the following format:
-article_name, item_id1, item_id2, ...
-The function will return a dictionary with the item_id as the key and the
-article_name as the value.
+Load translation data from JSON file for the specified language.
 
 <ins>**Args:**</ins>
-  - **dictionary_dir (str)**:
-      - _The path to the CSV file containing the item_id_
-      - _dictionary._
+  - **language_code (str)**:
+      - _The language code to load translations for_
 
 <ins>**Returns:**</ins>
-  - **dict:**
-      - A dictionary with the item_id as the key and the article_name as
-      - the value.
+  - **dict**:
+      - _Translation data for the specified language_
 
-### [`generate_intro(lowercase_name, language_code)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L229)
-### [`generate_header(category, skill_type, infobox_version, language_code, name)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L243)
-### [`generate_consumable_properties(item_id, consumables_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L326)
-### [`generate_condition(name, category, skill_type, infobox, fixing_dir, language_code)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L342)
-### [`generate_crafting(item_id, crafting_dir, teachedrecipes_dir, language_code)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L376)
-### [`generate_building(item_id, building_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L422)
-### [`generate_learned_recipes(item_id, teached_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L433)
-### [`generate_body_part(item_id, body_parts_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L444)
-### [`generate_location(original_filename, infobox_name, item_id, distribution_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L461)
-### [`generate_obtaining(item_id, crafting_dir, original_filename, infobox_name, distribution_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L475)
-### [`generate_history(item_id, history_dir, language_code)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L493)
-### [`generate_code(item_id, code_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L506)
-### [`load_infoboxes(infobox_dir)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L520)
-### [`assemble_body(name, original_filename, infobox_name, item_id, category, skill_type, infobox, consumables_dir, fixing_dir, code_dir, distribution_dir, history_dir, crafting_dir, building_dir, teachedrecipes_dir, body_parts_dir, language_code)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L542)
-### [`process_files(file_path, output_dir, consumables_dir, item_id_dict, generate_all, fixing_dir, code_dir, distribution_dir, history_dir, crafting_dir, building_dir, teached_dir, body_parts_dir, language_code, pbar)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L592)
-### [`main(run_directly)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L671)
+### [`load_page_dictionary()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L63)
+
+Load the page dictionary from page_manager and store it in memory.
+
+<ins>**Returns:**</ins>
+  - **dict**:
+      - _The flattened page dictionary_
+
+### [`load_cache()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L84)
+
+Load frequently accessed content into memory for fast lookups.
+
+Caches:
+- History entries: resources/history/{id or id_type}.txt
+- Code snippets: output/en/item/codesnips/{id_type or id}.txt
+- Body parts: output/en/item/body_parts/{id_type or id}.txt
+- Consumable properties: output/en/item/consumable_properties/{id_type or id}.txt
+- Container contents: output/en/item/container_contents/{id_type or id}.txt
+- Fixing: output/en/item/fixing/{id_type or id}.txt
+- Infoboxes: output/en/item/infoboxes/{id_type or id}.txt
+- Crafting recipes: output/recipes/crafting/id/*.txt
+- Evolved recipes: output/recipes/evolved_recipes/template/*.txt
+- Research recipes: output/recipes/researchrecipes/id/*.txt
+- Teached recipes: output/recipes/teachedrecipes/id/*.txt
+- Building recipes: output/recipes/building/id/*.txt
+- Distribution data: data/cache/distributions/all_items.json
+- Usage sections:
+  - Weapon: output/en/item/usage/weapon/{id_type or id}.txt
+  - Clothing: output/en/item/usage/clothing/{id_type or id}.txt
+  - Container: output/en/item/usage/container/{id_type or id}.txt
+  - Fluid container: output/en/item/usage/fluid_container/{id_type or id}.txt
+  - Food: output/en/item/usage/food/{id_type or id}.txt
+  - Crafting: output/en/item/usage/crafting/{id_type or id}.txt
+  - Building: output/en/item/usage/building/{id_type or id}.txt
+
+### [`get_article_for_item(item_name, language_code = 'en')`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L332)
+
+Determine the correct article for an item name.
+
+<ins>**Args:**</ins>
+  - **item_name (str)**:
+      - _The item name_
+  - **language_code (str)**:
+      - _Language code_
+
+<ins>**Returns:**</ins>
+  - **str**:
+      - _The appropriate article ("A", "An", or "")_
+
+### [`get_category_link(item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L373)
+
+Resolve the category link ({{ll|Category:...}}) for an item for use in the footer.
+
+<ins>**Args:**</ins>
+  - **item (Item)**:
+      - _Item instance_
+
+<ins>**Returns:**</ins>
+  - **str**:
+      - _Category link markup, e.g. {{ll|Category:Materials}}_
+
+### [`create_header(item, translation_data, language_code = 'en')`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L467)
+
+Create the header markup: static LangSwitch + Navbar, then version/autogenerated (and Title/AutoT for non-en).
+
+<ins>**Args:**</ins>
+  - **item (Item)**:
+      - _Item instance_
+  - **translation_data (dict)**:
+      - _Translation data_
+  - **language_code (str)**:
+      - _Language code_
+
+<ins>**Returns:**</ins>
+  - **str**:
+      - _Header markup_
+
+### [`create_intro(item_data, translation_data, language_code = 'en')`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L500)
+
+Creates the introduction section for an item article.
+
+<ins>**Args:**</ins>
+  - **item_data (dict)**:
+      - _Data about the item including name and other properties_
+  - **translation_data (dict)**:
+      - _Translation data for the current language_
+  - **language_code (str)**:
+      - _The language code (default: "en")_
+
+<ins>**Returns:**</ins>
+  - **str**:
+      - _The formatted introduction text_
+
+### [`create_infobox(item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L607)
+
+Get the infobox for an item from the cache.
+
+<ins>**Args:**</ins>
+  - **item (Item)**:
+      - _Item instance_
+
+<ins>**Returns:**</ins>
+  - **str**:
+      - _Infobox markup_
+
+### [`create_usage(item_data, translation_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L630)
+
+Creates the usage section for an item article with a call to action.
+
+<ins>**Args:**</ins>
+  - **item_data (dict)**:
+      - _Data about the item_
+  - **translation_data (dict)**:
+      - _Translation data for the current language_
+
+<ins>**Returns:**</ins>
+  - **str**:
+      - _The formatted usage section_
+
+### [`create_obtaining(item_data, translation_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L1204)
+
+Creates the obtaining section.
+
+<ins>**Args:**</ins>
+  - **item_data (dict)**:
+      - _Data about the item_
+  - **translation_data (dict)**:
+      - _Translation data for the current language_
+
+<ins>**Returns:**</ins>
+  - **str**:
+      - _The formatted obtaining section, or empty string if no data_
+
+### [`create_history(item_data, translation_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L1271)
+
+Creates the history section.
+
+<ins>**Args:**</ins>
+  - **item_data (dict)**:
+      - _Data about the item_
+  - **translation_data (dict)**:
+      - _Translation data for the current language_
+
+<ins>**Returns:**</ins>
+  - **str**:
+      - _The formatted history section_
+
+### [`create_code(item_data, translation_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L1306)
+
+Creates the code section.
+
+<ins>**Args:**</ins>
+  - **item_data (dict)**:
+      - _Data about the item_
+  - **translation_data (dict)**:
+      - _Translation data for the current language_
+
+<ins>**Returns:**</ins>
+  - **str**:
+      - _The formatted code section_
+
+### [`create_navigation(translation_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L1337)
+
+Creates the navigation section.
+
+<ins>**Args:**</ins>
+  - **translation_data (dict)**:
+      - _Translation data for the current language_
+
+<ins>**Returns:**</ins>
+  - **str**:
+      - _The formatted navigation section_
+
+### [`create_articles()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L1352)
+
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L1448)
 
 
-[Previous Folder](../foraging/foraging_category_infobox.md) | [Next File](item_body_part.md) | [Next Folder](lists/item_list.md) | [Back to Index](../../index.md)
+[Previous Folder](../foraging/foraging_category_infobox.md) | [Next File](item_body_part.md) | [Next Folder](groups/ammo_groups.md) | [Back to Index](../../index.md)

@@ -1,4 +1,4 @@
-[Previous Folder](../parser/distribution_container_parser.md) | [Next File](evolvedrecipe.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)
+[Previous Folder](../parser/creation_method_parser.md) | [Next File](evolved_recipes.md) | [Next Folder](../tiles/entity_article.md) | [Back to Index](../../index.md)
 
 # craft_recipes.py
 
@@ -20,58 +20,69 @@ The script handles:
 
 ## Functions
 
-### [`get_unit_tool_ids()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L37)
+### [`get_unit_tool_ids() -> list[str]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L41)
 
 Get list of item IDs that should be treated as unit tools.
-
 Finds all items with Type "Drainable" from the item data cache.
 
 <ins>**Returns:**</ins>
-  - **list[str]:**
-      - List of item IDs that are unit tools (drainable items)
+  - **list[str]**:
+      - _List of item IDs that are unit tools (drainable items)_
 
-### [`get_use_delta(item_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L59)
+### [`get_use_delta(item_id: str) -> float`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L64)
 
 Get the UseDelta value for a unit tool item.
-
 
 <ins>**Args:**</ins>
   - **item_id (str)**:
       - _The item ID to look up_
 
 <ins>**Returns:**</ins>
-  - **float:**
-      - The UseDelta value as a float, or 0.1 as default if not found
+  - **float**:
+      - _The UseDelta value as a float, or 0.1 as default if not found_
 
-### [`fluid_rgb(fluid_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L77)
+### [`format_count(count_data)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L82)
+
+Format count as 'min-max' string or int for display.
+
+<ins>**Args:**</ins>
+  - **count_data**:
+      - _Either an int for fixed counts or a dict with min/max/variable keys_
+
+<ins>**Returns:**</ins>
+  - **str | int**:
+      - _Formatted count as "min-max" string for variable counts, or int for fixed counts_
+
+### [`fluid_rgb(fluid_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L97)
 
 Get RGB color values for a fluid type.
 
+Raises:
+    RuntimeError: If there's an error processing the fluid.
+
+Handles:
+- Category-based fluid IDs
+- RGB value normalization
 
 <ins>**Args:**</ins>
   - **fluid_id (str)**:
       - _Fluid identifier, can be in form 'categories[Water]'._
 
 <ins>**Returns:**</ins>
-  - **dict:**
-      - Dictionary containing:
-        - name: Display name of the fluid
-        - R: Red color value (0-255)
-        - G: Green color value (0-255)
-        - B: Blue color value (0-255)
+  - **dict**:
+      - _Dictionary containing:_
+  - **- name**:
+      - _Display name of the fluid_
+  - **- R**:
+      - _Red color value (0-255)_
+  - **- G**:
+      - _Green color value (0-255)_
+  - **- B**:
+      - _Blue color value (0-255)_
 
-<ins>**Raises:**</ins>
-  - **RuntimeError:**
-      - If there's an error processing the fluid.
-
-<ins>**Handles:**</ins>
-  - Category-based fluid IDs
-  - RGB value normalization
-
-### [`process_ingredients(recipe: dict, build_data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L121)
+### [`process_ingredients(recipe: dict, build_data: dict) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L136)
 
 Process recipe ingredients into wiki markup.
-
 
 <ins>**Args:**</ins>
   - **recipe (dict)**:
@@ -80,23 +91,21 @@ Process recipe ingredients into wiki markup.
       - _Additional building recipe data._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - Wiki markup for ingredients section.
+  - **str**:
+      - _Wiki markup for ingredients section._
+  - **Handles**:
+  - **- Energy inputs**:
+  - **- Fluid ingredients with colors**:
+  - **- Numbered list ingredients**:
+  - **- Tag-based ingredients**:
+  - **- Simple item ingredients**:
+  - **- Proper grouping of "One of" vs "Each of" items**:
+  - **- Icon integration**:
+  - **- Unit items with Unit bar template**:
 
-<ins>**Handles:**</ins>
-  - Energy inputs
-  - Fluid ingredients with colors
-  - Numbered list ingredients
-  - Tag-based ingredients
-  - Simple item ingredients
-  - Proper grouping of "One of" vs "Each of" items
-  - Icon integration
-  - Unit items with Unit bar template
-
-### [`process_tools(recipe: dict, build_data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L353)
+### [`process_tools(recipe: dict, build_data: dict) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L385)
 
 Process tool requirements into wiki markup.
-
 
 <ins>**Args:**</ins>
   - **recipe (dict)**:
@@ -105,21 +114,19 @@ Process tool requirements into wiki markup.
       - _Additional building recipe data._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - Wiki markup for tools section.
+  - **str**:
+      - _Wiki markup for tools section._
+  - **Handles**:
+  - **- Individual tool requirements**:
+  - **- Tool tag groups**:
+  - **- Tool condition flags**:
+  - **- Icon integration**:
+  - **- Proper grouping of requirements**:
+  - **- Unit items with Unit bar template**:
 
-<ins>**Handles:**</ins>
-  - Individual tool requirements
-  - Tool tag groups
-  - Tool condition flags
-  - Icon integration
-  - Proper grouping of requirements
-  - Unit items with Unit bar template
-
-### [`process_workstation(recipe: dict, build_data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L452)
+### [`process_workstation(recipe: dict, build_data: dict) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L492)
 
 Process workstation requirements into wiki markup.
-
 
 <ins>**Args:**</ins>
   - **recipe (dict)**:
@@ -128,18 +135,16 @@ Process workstation requirements into wiki markup.
       - _Additional building recipe data._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - Wiki markup for workstation section.
+  - **str**:
+      - _Wiki markup for workstation section._
+  - **Handles**:
+  - **- Required crafting stations**:
+  - **- Special location requirements**:
+  - **- Building-specific workstations**:
 
-<ins>**Handles:**</ins>
-  - Required crafting stations
-  - Special location requirements
-  - Building-specific workstations
-
-### [`process_output_mapper(recipe: dict, mapper_key: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L520)
+### [`process_output_mapper(recipe: dict, mapper_key: str) -> list[str]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L570)
 
 Process output mapper strings into item lists.
-
 
 <ins>**Args:**</ins>
   - **recipe (dict)**:
@@ -148,18 +153,16 @@ Process output mapper strings into item lists.
       - _Key for the mapper to process._
 
 <ins>**Returns:**</ins>
-  - **list[str]:**
-      - List of mapped item IDs.
+  - **list[str]**:
+      - _List of mapped item IDs._
+  - **Handles**:
+  - **- Mapper resolution**:
+  - **- Item ID normalization**:
+  - **- Multiple mapper types**:
 
-<ins>**Handles:**</ins>
-  - Mapper resolution
-  - Item ID normalization
-  - Multiple mapper types
-
-### [`process_products(recipe: dict, build_data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L565)
+### [`process_products(recipe: dict, build_data: dict) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L616)
 
 Process recipe products into wiki markup.
-
 
 <ins>**Args:**</ins>
   - **recipe (dict)**:
@@ -168,20 +171,18 @@ Process recipe products into wiki markup.
       - _Additional building recipe data._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - Wiki markup for products section.
+  - **str**:
+      - _Wiki markup for products section._
+  - **Handles**:
+  - **- Standard product outputs**:
+  - **- Building recipe outputs**:
+  - **- Fluid outputs with colors**:
+  - **- Icon integration**:
+  - **- Amount formatting**:
 
-<ins>**Handles:**</ins>
-  - Standard product outputs
-  - Building recipe outputs
-  - Fluid outputs with colors
-  - Icon integration
-  - Amount formatting
-
-### [`process_xp(recipe: dict, build_data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L735)
+### [`process_xp(recipe: dict, build_data: dict) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L802)
 
 Process experience gains into wiki markup.
-
 
 <ins>**Args:**</ins>
   - **recipe (dict)**:
@@ -190,55 +191,49 @@ Process experience gains into wiki markup.
       - _Additional building recipe data._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - Wiki markup for XP section.
+  - **str**:
+      - _Wiki markup for XP section._
+  - **Handles**:
+  - **- XP amounts per skill**:
+  - **- Multiple skill XP gains**:
+  - **- Building-specific XP**:
 
-<ins>**Handles:**</ins>
-  - XP amounts per skill
-  - Multiple skill XP gains
-  - Building-specific XP
-
-### [`process_recipes(data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L773)
+### [`process_recipes(data: dict) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L840)
 
 Process recipe learning methods into wiki markup.
-
 
 <ins>**Args:**</ins>
   - **data (dict)**:
       - _Recipe data containing learning methods._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - Wiki markup for recipe learning section.
+  - **str**:
+      - _Wiki markup for recipe learning section._
+  - **Handles**:
+  - **- Skillbook requirements**:
+  - **- Auto-learn conditions**:
+  - **- Schematic requirements**:
+  - **- Trait requirements**:
 
-<ins>**Handles:**</ins>
-  - Skillbook requirements
-  - Auto-learn conditions
-  - Schematic requirements
-  - Trait requirements
-
-### [`process_skills(data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L858)
+### [`process_skills(data: dict) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L933)
 
 Process skill requirements into wiki markup.
-
 
 <ins>**Args:**</ins>
   - **data (dict)**:
       - _Recipe data containing skill requirements._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - Wiki markup for skills section.
+  - **str**:
+      - _Wiki markup for skills section._
+  - **Handles**:
+  - **- Required skill levels**:
+  - **- Multiple skill requirements**:
+  - **- Skill alternatives**:
 
-<ins>**Handles:**</ins>
-  - Required skill levels
-  - Multiple skill requirements
-  - Skill alternatives
-
-### [`process_requirements(recipe: dict, literature_data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L884)
+### [`process_requirements(recipe: dict, literature_data: dict) -> tuple[str, str]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L961)
 
 Process recipe requirements into wiki markup.
-
 
 <ins>**Args:**</ins>
   - **recipe (dict)**:
@@ -249,33 +244,65 @@ Process recipe requirements into wiki markup.
       - _Literature data for books/magazines._
 
 <ins>**Returns:**</ins>
-  - **tuple[str, str]:**
-      - (recipes_markup, skills_markup) for wiki sections.
+  - **tuple[str, str]**:
+      - _(recipes_markup, skills_markup) for wiki sections._
+  - **Handles**:
+  - **- Skill requirements**:
+  - **- Literature requirements**:
+  - **- Trait requirements**:
+  - **- Auto-learn conditions**:
 
-<ins>**Handles:**</ins>
-  - Skill requirements
-  - Literature requirements
-  - Trait requirements
-  - Auto-learn conditions
+### [`build_research_items_map(craft_data: dict, build_data: dict) -> dict[str, list[str]]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1069)
 
-### [`build_tag_to_items_map()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L977)
+Build a reverse mapping of recipe_id -> list of item IDs that can research that recipe.
+
+This is the reverse of researchrecipes.py: instead of listing which recipes an item
+can teach, this lists which items can be used to research/unlock a given recipe.
+
+Two sources are combined:
+- Items whose ResearchableRecipes property lists this recipe (after meta expansion).
+- Items that are outputs of this recipe when the recipe requires skill or auto-learn.
+
+<ins>**Args:**</ins>
+  - **craft_data (dict)**:
+      - _Raw crafting recipe data keyed by recipe_id._
+  - **build_data (dict)**:
+      - _Raw building/entity recipe data keyed by recipe_id._
+
+<ins>**Returns:**</ins>
+  - **dict[str, list[str]]**:
+      - _recipe_id -> sorted list of item IDs._
+
+### [`process_research_items(recipe_id: str, research_items_map: dict[str, list[str]]) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1120)
+
+Generate a collapsible wiki list of items that can be researched to learn this recipe.
+
+<ins>**Args:**</ins>
+  - **recipe_id (str)**:
+      - _The recipe identifier._
+  - **research_items_map (dict[str, list[str]])**:
+      - _Mapping from recipe_id to item IDs._
+
+<ins>**Returns:**</ins>
+  - **str**:
+      - _Wiki markup for a collapsible list, or empty string if none._
+
+### [`build_tag_to_items_map() -> dict[str, list[dict[str, str]]]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1158)
 
 Build mapping of tags to items.
-
 
 <ins>**Args:**</ins>
   - **parsed_item_data (dict)**:
       - _Parsed item data._
 
 <ins>**Returns:**</ins>
-  - **dict[str, list[dict[str, str]]]:**
-      - Mapping of tags to item lists.
-      - Creates a lookup table for items by their tags.
+  - **dict[str, list[dict[str, str]]]**:
+      - _Mapping of tags to item lists._
+  - **Creates a lookup table for items by their tags.**:
 
-### [`output_item_article_lists(crafting_recipe_map: dict[str, dict], building_recipe_map: dict[str, dict], tag_to_items_map: dict[str, list[dict[str, str]]])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L998)
+### [`output_item_article_lists(crafting_recipe_map: dict[str, dict], building_recipe_map: dict[str, dict], tag_to_items_map: dict[str, list[dict[str, str]]]) -> None`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1179)
 
-Generate wiki article lists for items.
-
+Generate wiki article lists for items with id and page subfolders.
 
 <ins>**Args:**</ins>
   - **crafting_recipe_map (dict[str, dict])**:
@@ -284,53 +311,75 @@ Generate wiki article lists for items.
       - _Building recipe data._
   - **tag_to_items_map (dict[str, list[dict[str, str]]])**:
       - _Tag to items mapping._
-      - _Creates files documenting how items are used in recipes,_
-      - _both as ingredients and as products._
+  - **Creates files documenting how items are used in recipes,**:
+  - **both as ingredients and as products. Organizes outputs into**:
+  - **id and page subfolders for better wiki organization.**:
 
-### [`output_skill_usage(recipe_data_map: dict[str, dict])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1134)
+### [`output_skill_usage(recipe_data_map: dict[str, dict]) -> None`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1475)
 
 Generate wiki markup for skill usage.
 
-
 <ins>**Args:**</ins>
   - **recipe_data_map (dict[str, dict])**:
       - _Recipe data._
-      - _Creates files documenting which recipes require each skill_
-      - _and what level of skill is needed._
+  - **Creates files documenting which recipes require each skill**:
+  - **and what level of skill is needed.**:
 
-### [`output_category_usage(recipe_data_map: dict[str, dict])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1182)
+### [`output_category_usage(recipe_data_map: dict[str, dict]) -> None`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1549)
 
 Generate wiki markup for category usage.
 
+<ins>**Args:**</ins>
+  - **recipe_data_map (dict[str, dict])**:
+      - _Recipe data._
+  - **Creates files documenting which recipes belong to each category**:
+  - **and outputs them in template format.**:
+
+### [`output_workstation_usage(recipe_data_map: dict[str, dict]) -> None`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1608)
+
+Generate wiki markup for workstation usage.
 
 <ins>**Args:**</ins>
   - **recipe_data_map (dict[str, dict])**:
       - _Recipe data._
-      - _Creates files documenting which recipes belong to each category_
-      - _and outputs them in template format._
+  - **Creates files documenting which recipes require each workstation,**:
+  - **organized by crafting vs building recipes.**:
 
-### [`output_lua_tables(recipe_data_map: dict[str, dict])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1215)
+### [`output_tag_usage(crafting_recipe_map: dict[str, dict], building_recipe_map: dict[str, dict]) -> None`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1723)
+
+Generate wiki markup for tag usage.
+
+<ins>**Args:**</ins>
+  - **crafting_recipe_map (dict[str, dict])**:
+      - _Crafting recipe data._
+  - **building_recipe_map (dict[str, dict])**:
+      - _Building recipe data._
+  - **Creates files documenting which recipes use each tag,**:
+  - **organized by crafting vs building recipes.**:
+
+### [`output_lua_tables(recipe_data_map: dict[str, dict]) -> None`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1827)
 
 Generate Lua tables for recipe data.
 
-
 <ins>**Args:**</ins>
   - **recipe_data_map (dict[str, dict])**:
       - _Recipe data._
-      - _Creates Lua table files that can be used by wiki templates_
-      - _to display recipe information._
+  - **Creates Lua table files that can be used by wiki templates**:
+  - **to display recipe information.**:
 
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1323)
+### [`main(batch: bool = False)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1935)
 
 Main execution function for recipe processing.
 
-This function:
-1. Loads necessary data from parsers
-2. Processes all recipes into wiki format
-3. Generates item usage documentation
-4. Creates skill usage documentation
-5. Outputs Lua tables for templates
+<ins>**Args:**</ins>
+  - **batch (bool)**:
+      - _If True, skip language initialization_
+  - **This function**:
+  - **1. Loads necessary data from parsers**:
+  - **2. Processes all recipes into wiki format**:
+  - **3. Generates item usage documentation**:
+  - **4. Creates skill usage documentation**:
+  - **5. Outputs Lua tables for templates**:
 
 
-
-[Previous Folder](../parser/distribution_container_parser.md) | [Next File](evolvedrecipe.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)
+[Previous Folder](../parser/creation_method_parser.md) | [Next File](evolved_recipes.md) | [Next Folder](../tiles/entity_article.md) | [Back to Index](../../index.md)

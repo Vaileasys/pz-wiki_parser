@@ -1,4 +1,4 @@
-[Previous Folder](../lists/attachment_list.md) | [Next File](body_location.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../navbox/navbox.md) | [Previous File](animal_part.md) | [Next File](body_location.md) | [Next Folder](../parser/creation_method_parser.md) | [Back to Index](../../index.md)
 
 # attachment.py
 
@@ -22,33 +22,30 @@ Parsed data is cached for performance and reused across components.
 ### `HotbarSlot`
 
 Represents a hotbar slot definition parsed from the game files.
-
 Provides access to slot metadata and items.
 
 #### Class Methods
+
 ##### [`_load_slots()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L33)
 
 Load and process all hotbar slot data from ISHotbarAttachDefinition.lua.
-
 This includes identifying relevant item associations.
 
-##### [`_parse_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L71)
+##### [`_parse_data() -> dict`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L71)
 
 Parse raw Lua data into a cleaned hotbar slot dictionary.
 
-
 <ins>**Returns:**</ins>
-  - **dict:**
-      - A mapping of slot_id to slot metadata.
+  - **dict**:
+      - _A mapping of slot_id to slot metadata._
 
 ##### [`_find_all_items()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L94)
 
 Populate internal item lists for type, provided, and replacement keys.
 
-##### [`_find_slot_items(slot: str, slot_data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L109)
+##### [`_find_slot_items(slot: str, slot_data: dict) -> dict`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L109)
 
 Find all items that match a slot's attachment rules.
-
 
 <ins>**Args:**</ins>
   - **slot (str)**:
@@ -57,102 +54,98 @@ Find all items that match a slot's attachment rules.
       - _The raw slot data._
 
 <ins>**Returns:**</ins>
-  - **dict:**
-      - The updated slot data with item associations.
+  - **dict**:
+      - _The updated slot data with item associations._
 
-##### [`all()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L145)
+##### [`all() -> dict[str, 'HotbarSlot']`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L145)
 
 Return all hotbar slots.
 
-
 <ins>**Returns:**</ins>
-  - **dict[str, HotbarSlot]:**
-      - A dictionary of slot_id to HotbarSlot instances.
+  - **dict[str, HotbarSlot]**:
+      - _A dictionary of slot_id to HotbarSlot instances._
 
 ##### [`keys()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L156)
 
 Return all available slot IDs.
 
-
 <ins>**Returns:**</ins>
-  - **KeysView:**
-      - The slot ID keys.
+  - **KeysView**:
+      - _The slot ID keys._
 
 ##### [`values()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L167)
 
 Return all HotbarSlot instances.
 
-
 <ins>**Returns:**</ins>
-  - **Generator[HotbarSlot]:**
-      - A generator of HotbarSlot instances.
+  - **Generator[HotbarSlot]**:
+      - _A generator of HotbarSlot instances._
 
 ##### [`count()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L178)
 
 Return the total number of hotbar slots.
 
-
 <ins>**Returns:**</ins>
-  - **int:**
-      - The number of slots.
+  - **int**:
+      - _The number of slots._
 
-##### [`exists(slot_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L189)
+##### [`exists(slot_id: str) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L189)
 
 Check if a slot exists.
-
 
 <ins>**Args:**</ins>
   - **slot_id (str)**:
       - _The slot ID to check._
 
 <ins>**Returns:**</ins>
-  - **bool:**
-      - True if the slot exists, otherwise False.
+  - **bool**:
+      - _True if the slot exists, otherwise False._
 
-##### [`get_attachment_data()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L203)
+##### [`get_attachment_data() -> dict[str, dict]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L203)
 
 Return the full attachment type structure generated during slot parsing.
 
-
 <ins>**Returns:**</ins>
-  - **dict:**
-      - Mapping of attachment_id to metadata, slots, and item IDs.
+  - **dict**:
+      - _Mapping of attachment_id to metadata, slots, and item IDs._
 
 #### Object Methods
+
 ##### [`__new__(slot_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L213)
+
 ##### [`__init__(slot_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L219)
 
 Initialise a HotbarSlot instance.
-
 
 <ins>**Args:**</ins>
   - **slot_id (str)**:
       - _The ID of the slot to load._
 
 ##### [`__repr__()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L235)
-##### [`get(key: str, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L238)
+
+##### [`get(key: str, default = None)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L238)
 
 Return a value from the raw slot data.
-
 
 <ins>**Args:**</ins>
   - **key (str)**:
       - _The key to look up._
-      - _default: A fallback value._
+  - **default**:
+      - _A fallback value._
 
 <ins>**Returns:**</ins>
-  - **Any:**
-      - The corresponding value or default.
+  - **Any**:
+      - _The corresponding value or default._
 
 #### Properties
+
 ##### [`items`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L252)
 
 Access the items associated with this hotbar slot.
 
-
 <ins>**Returns:**</ins>
-  - **HotbarSlotItems:**
-      - A dict-like wrapper for item compatibility.
+  - **HotbarSlotItems**:
+      - _A dict-like wrapper for item compatibility._
 
 ##### [`wiki_link`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L262)
 
@@ -162,43 +155,47 @@ Return a wiki-formatted link to this slot's display name.
 
 Return a wiki-formatted link using the slot ID as both label and anchor.
 
-
 ### `HotbarSlotItems`
 
 Wrapper around hotbar slot item data, providing both property access
-
 and dict-like behaviour.
 
 #### Object Methods
+
 ##### [`__init__(data: dict[str, list[str]])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L276)
 
 Initialise the item wrapper.
-
 
 <ins>**Args:**</ins>
   - **data (dict)**:
       - _A dictionary of attachment type lists._
 
-##### [`get(key: str, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L300)
+##### [`get(key: str, default = None)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L300)
 
 Get a list of items by raw key.
-
 
 <ins>**Args:**</ins>
   - **key (str)**:
       - _The internal item key._
-      - _default: A fallback if the key is missing._
+  - **default**:
+      - _A fallback if the key is missing._
 
 <ins>**Returns:**</ins>
-  - **list[str]:**
-      - A list of item IDs.
+  - **list[str]**:
+      - _A list of item IDs._
 
 ##### [`__getitem__(key)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L313)
+
 ##### [`__iter__()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L316)
+
 ##### [`__len__()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L319)
+
 ##### [`__repr__()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L322)
+
 ##### [`__str__()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L325)
+
 #### Properties
+
 ##### [`attachments`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L286)
 
 Items with a matching AttachmentType.
@@ -211,85 +208,78 @@ Items that provide this slot via AttachmentsProvided.
 
 Items that replace this slot via AttachmentReplacement.
 
-
 ### `AttachmentType`
 
 Represents an attachment point across all hotbar slots.
-
 Groups metadata and related items under a specific attachment ID.
 
 #### Class Methods
+
 ##### [`_load()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L364)
 
 Load parsed attachment data from HotbarSlot.
 
-##### [`all()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L374)
+##### [`all() -> dict[str, 'AttachmentType']`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L374)
 
 Return all attachment types as a dictionary.
 
-
 <ins>**Returns:**</ins>
-  - **dict[str, AttachmentType]:**
-      - Mapping of attachment_id to instance.
+  - **dict[str, AttachmentType]**:
+      - _Mapping of attachment_id to instance._
 
 ##### [`keys()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L385)
 
 Return all attachment type IDs.
 
-
 <ins>**Returns:**</ins>
-  - **KeysView[str]:**
-      - The attachment IDs.
+  - **KeysView[str]**:
+      - _The attachment IDs._
 
 ##### [`values()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L396)
 
 Return all AttachmentType instances.
 
-
 <ins>**Returns:**</ins>
-  - **Generator[AttachmentType]:**
-      - Generator of all instances.
+  - **Generator[AttachmentType]**:
+      - _Generator of all instances._
 
-##### [`count()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L407)
+##### [`count() -> int`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L407)
 
 Return the total number of attachment types.
 
-
 <ins>**Returns:**</ins>
-  - **int:**
-      - Count of known attachment types.
+  - **int**:
+      - _Count of known attachment types._
 
-##### [`exists(attachment_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L418)
+##### [`exists(attachment_id: str) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L418)
 
 Check if an attachment ID exists in the parsed data.
-
 
 <ins>**Args:**</ins>
   - **attachment_id (str)**:
       - _The attachment ID to check._
 
 <ins>**Returns:**</ins>
-  - **bool:**
-      - True if the attachment exists, False otherwise.
+  - **bool**:
+      - _True if the attachment exists, False otherwise._
 
 #### Object Methods
+
 ##### [`__new__(attachment_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L336)
 
 Ensure a shared instance per attachment_id.
-
 
 <ins>**Args:**</ins>
   - **attachment_id (str)**:
       - _The ID of the attachment point._
 
 <ins>**Returns:**</ins>
-  - **AttachmentType:**
-      - A shared instance of the attachment type.
+  - **AttachmentType**:
+      - _A shared instance of the attachment type._
 
 ##### [`__init__(attachment_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L351)
 
 Initialise the AttachmentType instance with parsed data.
-
 
 <ins>**Args:**</ins>
   - **attachment_id (str)**:
@@ -299,12 +289,12 @@ Initialise the AttachmentType instance with parsed data.
 
 Return a debug representation of the attachment.
 
-
 <ins>**Returns:**</ins>
-  - **str:**
-      - A string in the format <AttachmentType attachment_id>.
+  - **str**:
+      - _A string in the format <AttachmentType attachment_id>._
 
 #### Properties
+
 ##### [`valid`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L441)
 
 Whether this AttachmentType instance corresponds to known data.
@@ -330,5 +320,4 @@ Return a wiki-formatted link to this attachment type's display name.
 Return a wiki-formatted link using the attachment ID as both label and anchor.
 
 
-
-[Previous Folder](../lists/attachment_list.md) | [Next File](body_location.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../navbox/navbox.md) | [Previous File](animal_part.md) | [Next File](body_location.md) | [Next Folder](../parser/creation_method_parser.md) | [Back to Index](../../index.md)

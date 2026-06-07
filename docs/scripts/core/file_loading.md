@@ -1,4 +1,4 @@
-[Previous Folder](../roomdefine.md) | [Previous File](constants.md) | [Next File](language.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../animals/animal_article.md) | [Previous File](constants.md) | [Next File](language.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
 
 # file_loading.py
 
@@ -9,34 +9,33 @@ Provides utilities for mapping, locating, reading, and writing game-related file
 
 ## Functions
 
-### [`get_game_dir()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L20)
+### [`get_game_dir()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L21)
 
 Return the base directory where the game is installed.
 
-### [`get_media_dir()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L24)
+### [`get_media_dir()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L25)
 
 Return the path to the media folder within the game directory.
 
-### [`get_lua_dir()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L28)
+### [`get_lua_dir()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L29)
 
 Return the path to the 'media/lua' directory.
 
-### [`get_scripts_dir()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L32)
+### [`get_scripts_dir()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L33)
 
 Return the path to the 'media/scripts' directory.
 
-### [`get_maps_dir()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L36)
+### [`get_maps_dir()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L37)
 
 Return the path to the 'media/maps' directory.
 
-### [`get_clothing_dir()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L40)
+### [`get_clothing_dir()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L41)
 
 Return the path to the 'media/clothing' directory.
 
-### [`map_dir(base_dir, extension, media_type, suppress, exclude_ext)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L52)
+### [`map_dir(base_dir, extension = None, media_type = 'scripts', suppress = False, exclude_ext = None)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L53)
 
 Maps all files with the given extension in a directory.
-
 
 <ins>**Args:**</ins>
   - **base_dir (str)**:
@@ -49,26 +48,14 @@ Maps all files with the given extension in a directory.
       - _If True, hides duplicate warnings._
 
 <ins>**Returns:**</ins>
-  - **dict[str, list[str]]:**
-      - {filename: [relative_paths]}
+  - **dict[str, list[str]]**:
+      - _{filename: [relative_paths]}_
 
-### [`map_game_files(suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L116)
+### [`map_game_files(suppress = False)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L119)
 
-Maps script and lua files, then saves to cache.
-
-
-<ins>**Args:**</ins>
-  - **suppress (bool)**:
-      - _If True, hides duplicate warnings._
-
-<ins>**Returns:**</ins>
-  - **dict:**
-      - {'scripts': ..., 'lua': ...}
-
-### [`get_file_paths(mapping: dict, filename: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L151)
+### [`get_file_paths(mapping: dict, filename: str, *, prefer = None) -> list[str]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L156)
 
 Returns all matching file paths from the mapping, optionally filtered by keyword.
-
 
 <ins>**Args:**</ins>
   - **mapping (dict)**:
@@ -79,22 +66,20 @@ Returns all matching file paths from the mapping, optionally filtered by keyword
       - _Keyword to prioritise in path._
 
 <ins>**Returns:**</ins>
-  - **list[str]:**
-      - All matching paths (may be empty).
+  - **list[str]**:
+      - _All matching paths (may be empty)._
 
-### [`get_game_file_map()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L174)
+### [`get_game_file_map() -> dict`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L179)
 
 Returns the cached game file map. Loads from disk once if needed.
 
-
 <ins>**Returns:**</ins>
-  - **dict:**
-      - {'scripts': ..., 'lua': ...}
+  - **dict**:
+      - _{'scripts': ..., 'lua': ...}_
 
-### [`get_files_by_type(filenames: str | list[str], media_type: str, prefer: str, prefix: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L188)
+### [`get_files_by_type(filenames: str | list[str] = None, media_type: str = 'scripts', prefer: str = None, prefix: str = None) -> list[str]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L194)
 
 Resolves filenames to absolute paths using the file map for the specified media type.
-
 
 <ins>**Args:**</ins>
   - **filenames (str or list[str], optional)**:
@@ -107,26 +92,25 @@ Resolves filenames to absolute paths using the file map for the specified media 
       - _Only include files starting with this prefix._
 
 <ins>**Returns:**</ins>
-  - **list[str]:**
-      - Absolute file paths.
+  - **list[str]**:
+      - _Absolute file paths._
 
-### [`get_script_files(filenames: str | list[str], media_type: str, prefer: str, prefix: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L230)
+### [`get_script_files(filenames: str | list[str] = None, media_type: str = 'scripts', prefer: str = None, prefix: str = None) -> list[str]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L236)
 
 Return absolute paths to script files, filtering by filenames, duplicates, or prefix.
 
-### [`get_lua_files(filenames: str | list[str], media_type: str, prefer: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L235)
+### [`get_lua_files(filenames: str | list[str] = None, media_type: str = 'lua', prefer: str = None) -> list[str]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L241)
 
 Return absolute paths to Lua files, optionally filtering by name or preference keyword.
 
-### [`get_clothing_files(filenames: str | list[str], media_type: str, prefer: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L240)
+### [`get_clothing_files(filenames: str | list[str] = None, media_type: str = 'clothing', prefer: str = None) -> list[str]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L246)
 
 Return absolute paths to clothing XML files, with optional name or preference filtering.
 
-### [`get_relpath_by_type(name: str, media_type: str, prefer: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L246)
+### [`get_relpath_by_type(name: str, media_type: str, prefer: str = None) -> str | None`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L252)
 
 Retrieves the relative path to a file by name, as stored in the file map for the specified media type.
 
-
 <ins>**Args:**</ins>
   - **name (str)**:
       - _The filename without extension._
@@ -136,24 +120,24 @@ Retrieves the relative path to a file by name, as stored in the file map for the
       - _Keyword to prioritise among duplicates._
 
 <ins>**Returns:**</ins>
-  - str | None: The relative file path if found, else None.
+  - **str | None**:
+      - _The relative file path if found, else None._
 
-### [`get_script_relpath(name: str, prefer: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L263)
+### [`get_script_relpath(name: str, prefer: str = None) -> str | None`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L269)
 
 Return the relative path of a script file by name, optionally prioritising a substring.
 
-### [`get_lua_relpath(name: str, prefer: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L267)
+### [`get_lua_relpath(name: str, prefer: str = None) -> str | None`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L273)
 
 Return the relative path of a Lua file by name, optionally prioritising a substring.
 
-### [`get_clothing_relpath(name: str, prefer: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L271)
+### [`get_clothing_relpath(name: str, prefer: str = None) -> str | None`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L277)
 
 Return the relative path of a clothing file by name, optionally prioritizing a substring.
 
-### [`get_abs_path_by_type(name: str, media_type: str, prefer: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L277)
+### [`get_abs_path_by_type(name: str, media_type: str, prefer: str = None) -> str | None`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L283)
 
 Retrieves the absolute path to a file by name for the specified media type.
-
 
 <ins>**Args:**</ins>
   - **name (str)**:
@@ -164,37 +148,50 @@ Retrieves the absolute path to a file by name for the specified media type.
       - _Keyword to prioritise among duplicates._
 
 <ins>**Returns:**</ins>
-  - str | None: The absolute file path if found, otherwise None.
+  - **str | None**:
+      - _The absolute file path if found, otherwise None._
 
-### [`get_script_path(name: str, media_type: str, prefer: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L295)
+### [`get_script_path(name: str, media_type: str = 'scripts', prefer: str = None) -> str | None`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L301)
 
 Return the absolute path to a script file by name, optionally prioritizing a substring.
 
-### [`get_lua_path(name: str, media_type: str, prefer: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L299)
+### [`get_lua_path(name: str, media_type: str = 'lua', prefer: str = None) -> str | None`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L305)
 
 Return the absolute path to a Lua file by name, optionally prioritizing a substring.
 
-### [`get_clothing_path(name: str, media_type: str, prefer: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L303)
+### [`get_clothing_path(name: str, media_type: str = 'clothing', prefer: str = None) -> str | None`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L309)
 
 Return the absolute path to a clothing file by name, optionally prioritizing a substring.
 
-### [`read_file(path: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L310)
+### [`build_file_map(base_dir: Path, name: str = 'unknown') -> dict[str, Path]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L316)
+
+Get a mapping of relative file paths to absolute paths.
+
+### [`hash_file(path: Path) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L326)
+
+### [`load_json(path: str) -> dict`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L336)
+
+Load JSON data from a file. Returns empty dict on failure.
+
+### [`save_json(path: str, data: dict) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L349)
+
+Save dictionary data to a JSON file. Returns True if successful.
+
+### [`read_file(path: str) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L362)
 
 Reads the contents of a file as a string.
-
 
 <ins>**Args:**</ins>
   - **path (str)**:
       - _Path to the file._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - File contents.
+  - **str**:
+      - _File contents._
 
-### [`write_file(content: list[str], rel_path: str, root_path: str, suppress: bool)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L335)
+### [`write_file(content: list[str], rel_path: str = 'output.txt', root_path: str = OUTPUT_LANG_DIR, suppress: bool = False)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L387)
 
 Writes content to a file, creating directories as needed.
-
 
 <ins>**Args:**</ins>
   - **content (list[str])**:
@@ -209,13 +206,12 @@ Writes content to a file, creating directories as needed.
       - _If True, suppresses info messages._
 
 <ins>**Returns:**</ins>
-  - **Path:**
-      - Directory where the file was saved.
+  - **Path**:
+      - _Directory where the file was saved._
 
-### [`load_file(rel_path, root_path)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L364)
+### [`load_file(rel_path, root_path = None)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L416)
 
 Load a text file and return its lines as a list.
-
 
 <ins>**Args:**</ins>
   - **rel_path (str)**:
@@ -224,13 +220,12 @@ Load a text file and return its lines as a list.
       - _Root directory to join with rel_path. Defaults to 'OUTPUT_LANG_DIR'._
 
 <ins>**Returns:**</ins>
-  - **list[str]:**
-      - List of lines from the file, or an empty list if not found.
+  - **list[str]**:
+      - _List of lines from the file, or an empty list if not found._
 
-### [`clear_dir(directory: str, suppress: bool)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L385)
+### [`clear_dir(directory: str = OUTPUT_LANG_DIR, suppress: bool = False) -> Path`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L437)
 
 Delete the contents of a directory at `root_path/rel_path`.
-
 Only deletes contents under `PROJECT_ROOT`.
 
 <ins>**Args:**</ins>
@@ -240,9 +235,8 @@ Only deletes contents under `PROJECT_ROOT`.
       - _If True, suppress warning/info messages._
 
 <ins>**Returns:**</ins>
-  - **Path:**
-      - The absolute path to the directory that was cleared.
+  - **Path**:
+      - _The absolute path to the directory that was cleared._
 
 
-
-[Previous Folder](../roomdefine.md) | [Previous File](constants.md) | [Next File](language.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../animals/animal_article.md) | [Previous File](constants.md) | [Next File](language.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)

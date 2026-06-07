@@ -2,8 +2,15 @@
 
 ## scripts
 
-- [roomdefine.py](scripts/roomdefine.md)
-- [spawnpoints.py](scripts/spawnpoints.md)
+### animals
+
+- [animal_article.py](scripts/animals/animal_article.md)
+- [animal_food.py](scripts/animals/animal_food.md)
+- [animal_genes.py](scripts/animals/animal_genes.md)
+- [animal_infobox.py](scripts/animals/animal_infobox.md)
+- [animal_list_pzwiki.py](scripts/animals/animal_list_pzwiki.md)
+- [animal_products.py](scripts/animals/animal_products.md)
+- [animal_stages.py](scripts/animals/animal_stages.md)
 
 ### core
 
@@ -14,12 +21,14 @@
 - [language.py](scripts/core/language.md)
 - [logger.py](scripts/core/logger.md)
 - [page_manager.py](scripts/core/page_manager.md)
+- [runner.py](scripts/core/runner.md)
 - [setup.py](scripts/core/setup.md)
 - [version.py](scripts/core/version.md)
 
 ### fluids
 
 - [fluid_article.py](scripts/fluids/fluid_article.md)
+- [fluid_compatibility.py](scripts/fluids/fluid_compatibility.md)
 - [fluid_infobox.py](scripts/fluids/fluid_infobox.md)
 
 ### foraging
@@ -37,15 +46,20 @@
 - [item_container_contents.py](scripts/items/item_container_contents.md)
 - [item_distribution.py](scripts/items/item_distribution.md)
 - [item_fixing.py](scripts/items/item_fixing.md)
+- [item_groups.py](scripts/items/item_groups.md)
 - [item_infobox.py](scripts/items/item_infobox.md)
-- [item_infobox_legacy.py](scripts/items/item_infobox_legacy.md)
 - [item_lists.py](scripts/items/item_lists.md)
 - [item_literature_titles.py](scripts/items/item_literature_titles.md)
+- [item_recmedia_transcript.py](scripts/items/item_recmedia_transcript.md)
 - [item_tags.py](scripts/items/item_tags.md)
+
+#### groups
+
+- [ammo_groups.py](scripts/items/groups/ammo_groups.md)
+- [weapon_groups.py](scripts/items/groups/weapon_groups.md)
 
 #### lists
 
-- [item_list.py](scripts/items/lists/item_list.md)
 - [item_list_animal_part.py](scripts/items/lists/item_list_animal_part.md)
 - [item_list_appearance.py](scripts/items/lists/item_list_appearance.md)
 - [item_list_camping.py](scripts/items/lists/item_list_camping.md)
@@ -71,6 +85,7 @@
 - [item_list_material.py](scripts/items/lists/item_list_material.md)
 - [item_list_medical.py](scripts/items/lists/item_list_medical.md)
 - [item_list_memento.py](scripts/items/lists/item_list_memento.md)
+- [item_list_pzwiki.py](scripts/items/lists/item_list_pzwiki.md)
 - [item_list_security.py](scripts/items/lists/item_list_security.md)
 - [item_list_sport.py](scripts/items/lists/item_list_sport.md)
 - [item_list_tool.py](scripts/items/lists/item_list_tool.md)
@@ -87,10 +102,29 @@
 - [furniture_list.py](scripts/lists/furniture_list.md)
 - [furniture_surfaces_list.py](scripts/lists/furniture_surfaces_list.md)
 - [hotbar_slots.py](scripts/lists/hotbar_slots.md)
+- [outfit_list.py](scripts/lists/outfit_list.md)
 - [recmedia_list.py](scripts/lists/recmedia_list.md)
+
+### misc
+
+- [item_merger.py](scripts/misc/item_merger.md)
+- [outfit_articles.py](scripts/misc/outfit_articles.md)
+- [room_define.py](scripts/misc/room_define.md)
+- [spawn_points.py](scripts/misc/spawn_points.md)
+- [test.py](scripts/misc/test.md)
+
+### navbox
+
+- [navbox.py](scripts/navbox/navbox.md)
+- [navbox_outfits.py](scripts/navbox/navbox_outfits.md)
+- [navbox_schema.py](scripts/navbox/navbox_schema.md)
+- [navbox_weapons.py](scripts/navbox/navbox_weapons.md)
 
 ### objects
 
+- [animal.py](scripts/objects/animal.md)
+- [animal_gene.py](scripts/objects/animal_gene.md)
+- [animal_part.py](scripts/objects/animal_part.md)
 - [attachment.py](scripts/objects/attachment.md)
 - [body_location.py](scripts/objects/body_location.md)
 - [clothing_item.py](scripts/objects/clothing_item.md)
@@ -98,29 +132,38 @@
 - [craft_recipe.py](scripts/objects/craft_recipe.md)
 - [evolved_recipe.py](scripts/objects/evolved_recipe.md)
 - [farming.py](scripts/objects/farming.md)
+- [fish.py](scripts/objects/fish.md)
 - [fixing.py](scripts/objects/fixing.md)
 - [fluid.py](scripts/objects/fluid.md)
 - [forage.py](scripts/objects/forage.md)
 - [item.py](scripts/objects/item.md)
+- [outfit.py](scripts/objects/outfit.md)
+- [outfit_story.py](scripts/objects/outfit_story.md)
+- [outfit_zone.py](scripts/objects/outfit_zone.md)
 - [profession.py](scripts/objects/profession.md)
+- [recorded_media.py](scripts/objects/recorded_media.md)
 - [skill.py](scripts/objects/skill.md)
 - [trap.py](scripts/objects/trap.md)
 - [vehicle.py](scripts/objects/vehicle.md)
 - [vehicle_part.py](scripts/objects/vehicle_part.md)
+- [zone.py](scripts/objects/zone.md)
 
 ### parser
 
+- [creation_method_parser.py](scripts/parser/creation_method_parser.md)
 - [distribution_container_parser.py](scripts/parser/distribution_container_parser.md)
 - [distribution_parser.py](scripts/parser/distribution_parser.md)
 - [evolvedrecipe_parser.py](scripts/parser/evolvedrecipe_parser.md)
 - [item_parser.py](scripts/parser/item_parser.md)
+- [java_parser.py](scripts/parser/java_parser.md)
 - [literature_parser.py](scripts/parser/literature_parser.md)
 - [metarecipe_parser.py](scripts/parser/metarecipe_parser.md)
 - [movable_definitions_parser.py](scripts/parser/movable_definitions_parser.md)
 - [outfit_parser.py](scripts/parser/outfit_parser.md)
+- [outfit_story_parser.py](scripts/parser/outfit_story_parser.md)
+- [outfit_zone_parser.py](scripts/parser/outfit_zone_parser.md)
 - [radio_parser.py](scripts/parser/radio_parser.md)
 - [recipe_parser.py](scripts/parser/recipe_parser.md)
-- [regions_parser.py](scripts/parser/regions_parser.md)
 - [script_parser.py](scripts/parser/script_parser.md)
 - [stash_parser.py](scripts/parser/stash_parser.md)
 - [tiles_parser.py](scripts/parser/tiles_parser.md)
@@ -129,22 +172,32 @@
 ### recipes
 
 - [craft_recipes.py](scripts/recipes/craft_recipes.md)
-- [evolvedrecipe.py](scripts/recipes/evolvedrecipe.md)
+- [evolved_recipes.py](scripts/recipes/evolved_recipes.md)
 - [researchrecipes.py](scripts/recipes/researchrecipes.md)
 - [teached_recipes.py](scripts/recipes/teached_recipes.md)
 
 ### tiles
 
+- [entity_article.py](scripts/tiles/entity_article.md)
+- [entity_health.py](scripts/tiles/entity_health.md)
+- [entity_infobox.py](scripts/tiles/entity_infobox.md)
 - [named_furniture_filter.py](scripts/tiles/named_furniture_filter.md)
 - [tiles_article.py](scripts/tiles/tiles_article.md)
 - [tiles_batch.py](scripts/tiles/tiles_batch.md)
 - [tiles_codesnip.py](scripts/tiles/tiles_codesnip.md)
+- [tiles_container_mapping.py](scripts/tiles/tiles_container_mapping.md)
 - [tiles_infobox.py](scripts/tiles/tiles_infobox.md)
 - [tiles_scrapping.py](scripts/tiles/tiles_scrapping.md)
 - [tiles_stitcher.py](scripts/tiles/tiles_stitcher.md)
 
 ### tools
 
+- [batch_processor.py](scripts/tools/batch_processor.md)
+- [diff.py](scripts/tools/diff.md)
+- [generate_docs.py](scripts/tools/generate_docs.md)
+- [manual_tile_stitcher.py](scripts/tools/manual_tile_stitcher.md)
+- [outfit_images.py](scripts/tools/outfit_images.md)
+- [page_name_checker.py](scripts/tools/page_name_checker.md)
 - [update_icons.py](scripts/tools/update_icons.md)
 - [vehicle_render_data.py](scripts/tools/vehicle_render_data.md)
 
@@ -163,7 +216,7 @@
 
 - [vehicle_article.py](scripts/vehicles/vehicle_article.md)
 - [vehicle_infobox.py](scripts/vehicles/vehicle_infobox.md)
-- [vehicle_list.py](scripts/vehicles/vehicle_list.md)
-- [vehicle_list2.py](scripts/vehicles/vehicle_list2.md)
+- [vehicle_list_detailed.py](scripts/vehicles/vehicle_list_detailed.md)
+- [vehicle_list_pzwiki.py](scripts/vehicles/vehicle_list_pzwiki.md)
 - [vehicle_parts.py](scripts/vehicles/vehicle_parts.md)
 - [vehicle_spawns.py](scripts/vehicles/vehicle_spawns.md)

@@ -1,10 +1,10 @@
-[Previous Folder](../tools/update_icons.md) | [Previous File](echo.md) | [Next File](media_helper.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../tools/batch_processor.md) | [Previous File](echo.md) | [Next File](media_helper.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
 
 # lua_helper.py
 
 ## Functions
 
-### [`load_lua_file(lua_files: str | list[str], lua_runtime: LuaRuntime, dependencies: list[str], inject_lua: str, prefer: str, media_type: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/lua_helper.py#L7)
+### [`load_lua_file(lua_files: str | list[str], lua_runtime: LuaRuntime = None, dependencies: list[str] = None, inject_lua: str = None, prefer: str = None, media_type: str = 'lua') -> LuaRuntime`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/lua_helper.py#L9)
 
 Loads and executes Lua files in the given Lua runtime.
 
@@ -16,14 +16,14 @@ Loads and executes Lua files in the given Lua runtime.
 :param media_type: The section of the game file map to search.
 :return: Lua runtime.
 
-### [`lua_to_python(lua_data: object)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/lua_helper.py#L56)
+### [`lua_to_python(lua_data: object, _depth: int = 0) -> object`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/lua_helper.py#L69)
 
 Converts Lua data to its Python equivalent (dict, list, or basic value).
 
 :param lua_data: The Lua data to convert. Can be a basic type (int, float, bool, str, None), Lua table (converted to Python dict or list), or a Lua function (converted to a string).
 :return: The corresponding Python data structure (dict, list, basic type, or string).
 
-### [`parse_lua_tables(lua_runtime: LuaRuntime, tables: list[str])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/lua_helper.py#L103)
+### [`parse_lua_tables(lua_runtime: LuaRuntime, tables: list[str] = None) -> dict`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/lua_helper.py#L138)
 
 Parses Lua tables from the provided Lua runtime and converts them into Python data structures.
 
@@ -32,5 +32,4 @@ Parses Lua tables from the provided Lua runtime and converts them into Python da
 :return: Dictionary containing extracted tables with their Python data representations.
 
 
-
-[Previous Folder](../tools/update_icons.md) | [Previous File](echo.md) | [Next File](media_helper.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../tools/batch_processor.md) | [Previous File](echo.md) | [Next File](media_helper.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)

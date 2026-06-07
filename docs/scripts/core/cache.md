@@ -1,21 +1,12 @@
-[Previous Folder](../roomdefine.md) | [Next File](config_manager.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../animals/animal_article.md) | [Next File](config_manager.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
 
 # cache.py
 
 ## Functions
 
-### [`load_json(path: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L10)
-
-Load JSON data from a file. Returns empty dict on failure.
-
-### [`save_json(path: str, data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L23)
-
-Save dictionary data to a JSON file. Returns True if successful.
-
-### [`save_cache(data: dict, data_file: str, data_dir, suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L34)
+### [`save_cache(data: dict, data_file: str, data_dir = CACHE_DIR, suppress = False)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L11)
 
 Caches data by saving it to a json file.
-
 
 <ins>**Args:**</ins>
   - **data (dict)**:
@@ -27,10 +18,9 @@ Caches data by saving it to a json file.
   - **suppress (bool, optional)**:
       - _Suppress displaying warnings/print statements. Defaults to False._
 
-### [`load_cache(cache_file, cache_name, get_version, backup_old, suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L61)
+### [`load_cache(cache_file, cache_name = 'data', get_version = False, backup_old = False, suppress = False) -> dict`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L38)
 
 Loads the cache from a json file with the option to return the version of it, and back it up if it's old.
-
 
 <ins>**Args:**</ins>
   - **cache_file (str)**:
@@ -45,15 +35,14 @@ Loads the cache from a json file with the option to return the version of it, an
       - _Suppress displaying print statements (errors still displayed). Defaults to False._
 
 <ins>**Returns:**</ins>
-  - **dict:**
-      - Cached data if valid, otherwise an empty dictionary.
-  - **str:**
-      - Version of the cached data, if 'get_version' is True.
+  - **dict**:
+      - _Cached data if valid, otherwise an empty dictionary._
+  - **str**:
+      - _Version of the cached data, if 'get_version' is True._
 
-### [`clear_cache(cache_path, cache_name, suppress)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L110)
+### [`clear_cache(cache_path = CACHE_DIR, cache_name = None, suppress = False)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L87)
 
 Clears the cache at a specified file path.
-
 
 <ins>**Args:**</ins>
   - **cache_path (str)**:
@@ -64,5 +53,4 @@ Clears the cache at a specified file path.
       - _Suppress displaying print statements (errors still displayed). Defaults to False._
 
 
-
-[Previous Folder](../roomdefine.md) | [Next File](config_manager.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../animals/animal_article.md) | [Next File](config_manager.md) | [Next Folder](../fluids/fluid_article.md) | [Back to Index](../../index.md)

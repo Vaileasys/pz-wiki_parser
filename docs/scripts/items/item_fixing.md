@@ -1,4 +1,4 @@
-[Previous Folder](../foraging/foraging_category_infobox.md) | [Previous File](item_distribution.md) | [Next File](item_infobox.md) | [Next Folder](lists/item_list.md) | [Back to Index](../../index.md)
+[Previous Folder](../foraging/foraging_category_infobox.md) | [Previous File](item_distribution.md) | [Next File](item_groups.md) | [Next Folder](groups/ammo_groups.md) | [Back to Index](../../index.md)
 
 # item_fixing.py
 
@@ -37,23 +37,21 @@ Example:
 
 ## Functions
 
-### [`process_fixers(fixers: list[Fixer])`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_fixing.py#L47)
+### [`process_fixers(fixers: list[Fixer]) -> dict`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_fixing.py#L47)
 
 Process a list of Fixer objects into a dictionary of wiki template values.
-
 
 <ins>**Args:**</ins>
   - **fixers (list[Fixer])**:
       - _List of fixer items used for a single fixing entry._
 
 <ins>**Returns:**</ins>
-  - **dict:**
-      - A dictionary with fixer names, quantities, and skill requirements, formatted for wiki template usage.
+  - **dict**:
+      - _A dictionary with fixer names, quantities, and skill requirements, formatted for wiki template usage._
 
 ### [`generate_data(item: Item, fixing: Fixing)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_fixing.py#L74)
 
 Generate the base data dictionary for a fixing wiki template.
-
 
 <ins>**Args:**</ins>
   - **item (Item)**:
@@ -62,26 +60,28 @@ Generate the base data dictionary for a fixing wiki template.
       - _The corresponding fixing object._
 
 <ins>**Returns:**</ins>
-  - **dict:**
-      - A dictionary of all relevant wiki template keys and values.
+  - **dict**:
+      - _A dictionary of all relevant wiki template keys and values._
 
 ### [`generate_template(data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_fixing.py#L103)
 
 Convert a fixing data dictionary into a list of lines representing a wiki template.
-
 
 <ins>**Args:**</ins>
   - **data (dict)**:
       - _The fixing data to embed in the template._
 
 <ins>**Returns:**</ins>
-  - **list[str]:**
-      - Lines forming the complete {{Fixing}} wiki template.
+  - **list[str]**:
+      - _Lines forming the complete {{Fixing}} wiki template._
 
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_fixing.py#L125)
+### [`main(batch = False)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_fixing.py#L125)
 
 Generate and save {{Fixing}} templates for all items with fixings.
 
+<ins>**Args:**</ins>
+  - **batch (bool)**:
+      - _If True, skip language loading (for batch processing)._
 
 
-[Previous Folder](../foraging/foraging_category_infobox.md) | [Previous File](item_distribution.md) | [Next File](item_infobox.md) | [Next Folder](lists/item_list.md) | [Back to Index](../../index.md)
+[Previous Folder](../foraging/foraging_category_infobox.md) | [Previous File](item_distribution.md) | [Next File](item_groups.md) | [Next Folder](groups/ammo_groups.md) | [Back to Index](../../index.md)

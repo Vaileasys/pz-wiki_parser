@@ -1,4 +1,4 @@
-[Previous Folder](../core/cache.md) | [Next File](fluid_infobox.md) | [Next Folder](../foraging/foraging_category_infobox.md) | [Back to Index](../../index.md)
+[Previous Folder](../core/cache.md) | [Next File](fluid_compatibility.md) | [Next Folder](../foraging/foraging_category_infobox.md) | [Back to Index](../../index.md)
 
 # fluid_article.py
 
@@ -12,21 +12,25 @@ Check if a name is or contains a proper noun for capitalisation
 
 Gets similar fluids based on a calculated score.
 
-
 <ins>**Args:**</ins>
   - **fluid_id (str)**:
       - _Fluid identifier._
 
 <ins>**Returns:**</ins>
-  - **list[str]:**
-      - List of wiki links to the top 3 similar fluids.
+  - **list[str]**:
+      - _List of wiki links to the top 3 similar fluids._
 
 ### [`generate_infobox(fluid_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_article.py#L141)
+
 ### [`generate_intro(fluid: Fluid)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_article.py#L169)
+
 ### [`generate_usage(fluid: Fluid)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_article.py#L203)
+
 ### [`generate_history(fluid_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_article.py#L223)
+
 ### [`process_fluid(fluid_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_article.py#L233)
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_article.py#L267)
+
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_article.py#L270)
 
 
-[Previous Folder](../core/cache.md) | [Next File](fluid_infobox.md) | [Next Folder](../foraging/foraging_category_infobox.md) | [Back to Index](../../index.md)
+[Previous Folder](../core/cache.md) | [Next File](fluid_compatibility.md) | [Next Folder](../foraging/foraging_category_infobox.md) | [Back to Index](../../index.md)

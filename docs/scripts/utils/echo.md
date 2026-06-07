@@ -1,4 +1,4 @@
-[Previous Folder](../tools/update_icons.md) | [Previous File](color.md) | [Next File](lua_helper.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../tools/batch_processor.md) | [Previous File](color.md) | [Next File](lua_helper.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
 
 # echo.py
 
@@ -6,10 +6,9 @@ Console logging utilities with coloured output, warning control, and tqdm suppor
 
 ## Functions
 
-### [`_message(message: str, prefix: str, style_func)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L12)
+### [`_message(message: str, prefix: str, style_func, *, emit_warning: bool = False, warnings_level: int = 3)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L12)
 
 Print a coloured message with optional warning metadata.
-
 
 <ins>**Args:**</ins>
   - **message (str)**:
@@ -23,10 +22,9 @@ Print a coloured message with optional warning metadata.
   - **warnings_level (int, optional)**:
       - _Warning level threshold for display._
 
-### [`ignore_warnings(warnings_level: int, ignore: bool)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L51)
+### [`ignore_warnings(warnings_level: int = 0, ignore: bool = True)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L51)
 
 Enable or disable warning output filtering by level.
-
 
 <ins>**Args:**</ins>
   - **warnings_level (int)**:
@@ -34,10 +32,9 @@ Enable or disable warning output filtering by level.
   - **ignore (bool)**:
       - _Whether to suppress warnings below the level._
 
-### [`write(message: str, style_func)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L63)
+### [`write(message: str, style_func = None)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L63)
 
 Print a standard message safely, supporting tqdm progress bars.
-
 
 <ins>**Args:**</ins>
   - **message (str)**:
@@ -49,7 +46,6 @@ Print a standard message safely, supporting tqdm progress bars.
 
 Print an informational message in cyan.
 
-
 <ins>**Args:**</ins>
   - **message (str)**:
       - _The message text to display._
@@ -57,7 +53,6 @@ Print an informational message in cyan.
 ### [`warning(message: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L87)
 
 Print a warning message in yellow with warning context.
-
 
 <ins>**Args:**</ins>
   - **message (str)**:
@@ -67,7 +62,6 @@ Print a warning message in yellow with warning context.
 
 Print an error message in red with error context.
 
-
 <ins>**Args:**</ins>
   - **message (str)**:
       - _The error text to display._
@@ -75,7 +69,6 @@ Print an error message in red with error context.
 ### [`success(message: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L105)
 
 Print a success message in green.
-
 
 <ins>**Args:**</ins>
   - **message (str)**:
@@ -85,7 +78,6 @@ Print a success message in green.
 
 Print a debug message in magenta if debug mode is enabled.
 
-
 <ins>**Args:**</ins>
   - **message (str)**:
       - _The debug text to display._
@@ -94,11 +86,9 @@ Print a debug message in magenta if debug mode is enabled.
 
 Print a deprecation warning in magenta with warning context.
 
-
 <ins>**Args:**</ins>
   - **message (str)**:
       - _The deprecation message to display._
 
 
-
-[Previous Folder](../tools/update_icons.md) | [Previous File](color.md) | [Next File](lua_helper.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../tools/batch_processor.md) | [Previous File](color.md) | [Next File](lua_helper.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)

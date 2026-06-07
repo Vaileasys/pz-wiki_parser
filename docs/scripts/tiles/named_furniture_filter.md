@@ -1,4 +1,4 @@
-[Previous Folder](../recipes/craft_recipes.md) | [Next File](tiles_article.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](entity_infobox.md) | [Next File](tiles_article.md) | [Next Folder](../tools/batch_processor.md) | [Back to Index](../../index.md)
 
 # named_furniture_filter.py
 
@@ -18,27 +18,26 @@ The script handles:
 
 ## Functions
 
-### [`process_tiles(tiles_data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/named_furniture_filter.py#L156)
+### [`process_tiles(tiles_data: dict) -> dict`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/named_furniture_filter.py#L155)
 
 Process and organize tile data into furniture groups.
-
 
 <ins>**Args:**</ins>
   - **tiles_data (dict)**:
       - _Raw tile data from the game files._
 
 <ins>**Returns:**</ins>
-  - **dict:**
-      - Processed and organized furniture groups.
-      - The processing follows these steps:
-      - 1. Process manually defined groups from MANUAL_GROUPS
-      - 2. Group remaining tiles by their GroupName and CustomName properties
-      - 3. Within each group:
-        - Split by sprite prefix if multiple exist
-        - Handle facing directions for multi-sprite objects
-        - Group by signature for variant handling
+  - **dict**:
+      - _Processed and organized furniture groups._
+  - **The processing follows these steps**:
+  - **1. Process manually defined groups from MANUAL_GROUPS**:
+  - **2. Group remaining tiles by their GroupName and CustomName properties**:
+  - **3. Within each group**:
+  - **- Split by sprite prefix if multiple exist**:
+  - **- Handle facing directions for multi-sprite objects**:
+  - **- Group by signature for variant handling**:
 
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/named_furniture_filter.py#L289)
+### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/named_furniture_filter.py#L288)
 
 Main execution function for the named furniture filter.
 
@@ -49,5 +48,4 @@ This function:
 4. Provides progress feedback through echo messages
 
 
-
-[Previous Folder](../recipes/craft_recipes.md) | [Next File](tiles_article.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](entity_infobox.md) | [Next File](tiles_article.md) | [Next Folder](../tools/batch_processor.md) | [Back to Index](../../index.md)

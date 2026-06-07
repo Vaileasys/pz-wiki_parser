@@ -1,4 +1,4 @@
-[Previous Folder](../core/cache.md) | [Previous File](fluid_article.md) | [Next Folder](../foraging/foraging_category_infobox.md) | [Back to Index](../../index.md)
+[Previous Folder](../core/cache.md) | [Previous File](fluid_compatibility.md) | [Next Folder](../foraging/foraging_category_infobox.md) | [Back to Index](../../index.md)
 
 # fluid_infobox.py
 
@@ -13,11 +13,12 @@ Check if a fluid exists
 Generate a fluid's infobox parameters
 
 ### [`process_fluid(fluid_id)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_infobox.py#L67)
+
 ### [`automatic_extraction()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_infobox.py#L83)
-### [`main(pre_choice: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_infobox.py#L96)
+
+### [`main(pre_choice: str = None)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_infobox.py#L96)
 
 :param pre_choice: str - Automatically sets a choice without querying the user.
 
 
-
-[Previous Folder](../core/cache.md) | [Previous File](fluid_article.md) | [Next Folder](../foraging/foraging_category_infobox.md) | [Back to Index](../../index.md)
+[Previous Folder](../core/cache.md) | [Previous File](fluid_compatibility.md) | [Next Folder](../foraging/foraging_category_infobox.md) | [Back to Index](../../index.md)

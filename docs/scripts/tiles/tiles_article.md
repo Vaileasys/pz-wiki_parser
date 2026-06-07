@@ -1,4 +1,4 @@
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](named_furniture_filter.md) | [Next File](tiles_batch.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](named_furniture_filter.md) | [Next File](tiles_batch.md) | [Next Folder](../tools/batch_processor.md) | [Back to Index](../../index.md)
 
 # tiles_article.py
 
@@ -17,10 +17,9 @@ The script handles:
 
 ## Functions
 
-### [`process_usage(tile_name, tile_data, scrappings)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L21)
+### [`process_usage(tile_name, tile_data, scrappings)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L20)
 
 Build the 'Usage' section for a tile article.
-
 
 <ins>**Args:**</ins>
   - **tile_name (str)**:
@@ -31,14 +30,13 @@ Build the 'Usage' section for a tile article.
       - _Dictionary containing dismantling and breakage information._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - Formatted wiki markup for the Usage section, including property-based
-      - descriptions and dismantling/breakage information.
+  - **str**:
+      - _Formatted wiki markup for the Usage section, including property-based_
+  - **descriptions and dismantling/breakage information.**:
 
-### [`process_codesnip(tile_data, codesnips)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L122)
+### [`process_codesnip(tile_data, codesnips)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L121)
 
 Create a CodeBox section containing all CodeSnip templates for a tile group.
-
 
 <ins>**Args:**</ins>
   - **tile_data (dict)**:
@@ -47,14 +45,13 @@ Create a CodeBox section containing all CodeSnip templates for a tile group.
       - _Dictionary mapping sprite names to their CodeSnip markup._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - Formatted wiki markup for the Code section containing all relevant
-      - CodeSnip templates wrapped in a CodeBox.
+  - **str**:
+      - _Formatted wiki markup for the Code section containing all relevant_
+  - **CodeSnip templates wrapped in a CodeBox.**:
 
-### [`assemble_article(header, infobox, intro, usage, codesnip, navigation)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L144)
+### [`assemble_article(header, infobox, intro, usage, codesnip, navigation)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L143)
 
 Combine all article sections into a complete wiki article.
-
 
 <ins>**Args:**</ins>
   - **header (str)**:
@@ -71,27 +68,25 @@ Combine all article sections into a complete wiki article.
       - _Navigation template markup._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - Complete wiki article text with all sections properly formatted.
+  - **str**:
+      - _Complete wiki article text with all sections properly formatted._
 
-### [`sanitize_filename(name)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L171)
+### [`sanitize_filename(name)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L170)
 
 Convert a string into a safe filesystem filename.
-
 
 <ins>**Args:**</ins>
   - **name (str)**:
       - _Original string to convert._
 
 <ins>**Returns:**</ins>
-  - **str:**
-      - Sanitized string safe for use as a filename, with special characters
-      - replaced by underscores and spaces converted to underscores.
+  - **str**:
+      - _Sanitized string safe for use as a filename, with special characters_
+  - **replaced by underscores and spaces converted to underscores.**:
 
-### [`generate_tile_articles(tiles_data, infoboxes, codesnips, scrappings)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L191)
+### [`generate_tile_articles(tiles_data, infoboxes, codesnips, scrappings)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L190)
 
 Generate and save wiki articles for all tile groups.
-
 
 <ins>**Args:**</ins>
   - **tiles_data (dict)**:
@@ -102,11 +97,10 @@ Generate and save wiki articles for all tile groups.
       - _Dictionary mapping sprite names to their CodeSnip markup._
   - **scrappings (dict)**:
       - _Dictionary containing dismantling and breakage information._
-      - _The function generates complete wiki articles by combining various components_
-      - _and saves them to individual files in the output directory structure._
-      - _Each article includes metadata, infobox, introduction, usage information,_
-      - _code snippets, and navigation elements._
+  - **The function generates complete wiki articles by combining various components**:
+  - **and saves them to individual files in the output directory structure.**:
+  - **Each article includes metadata, infobox, introduction, usage information,**:
+  - **code snippets, and navigation elements.**:
 
 
-
-[Previous Folder](../recipes/craft_recipes.md) | [Previous File](named_furniture_filter.md) | [Next File](tiles_batch.md) | [Next Folder](../tools/update_icons.md) | [Back to Index](../../index.md)
+[Previous Folder](../recipes/craft_recipes.md) | [Previous File](named_furniture_filter.md) | [Next File](tiles_batch.md) | [Next Folder](../tools/batch_processor.md) | [Back to Index](../../index.md)

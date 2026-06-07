@@ -1,4 +1,4 @@
-[Previous Folder](../parser/distribution_container_parser.md) | [Previous File](researchrecipes.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)
+[Previous Folder](../parser/creation_method_parser.md) | [Previous File](researchrecipes.md) | [Next Folder](../tiles/entity_article.md) | [Back to Index](../../index.md)
 
 # teached_recipes.py
 
@@ -17,20 +17,23 @@ The script handles:
 
 ## Functions
 
-### [`main()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/teached_recipes.py#L26)
+### [`main(batch: bool = False)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/teached_recipes.py#L29)
 
 Main execution function for taught recipes generation.
 
-This function:
-1. Loads parsed item data
-2. Identifies items that teach recipes
-3. Generates wiki markup for each teaching item
-4. Creates individual files with recipe lists
-5. Includes proper bot flags for wiki integration
-6. Expands meta recipes into their component recipes
-The output is saved in the 'output/recipes/teachedrecipes' directory,
-with one file per teaching item.
+<ins>**Args:**</ins>
+  - **batch (bool)**:
+      - _If True, skip language initialization_
+  - **This function**:
+  - **1. Loads parsed item data**:
+  - **2. Identifies items that teach recipes**:
+  - **3. Generates wiki markup for each teaching item**:
+  - **4. Creates files organized by individual IDs and by wiki pages**:
+  - **5. Includes proper bot flags for wiki integration**:
+  - **6. Expands meta recipes into their component recipes**:
+  - **The output is saved in multiple locations**:
+  - **- output/recipes/teachedrecipes/id/ (individual item files)**:
+  - **- output/recipes/teachedrecipes/page/ (page-combined files)**:
 
 
-
-[Previous Folder](../parser/distribution_container_parser.md) | [Previous File](researchrecipes.md) | [Next Folder](../tiles/named_furniture_filter.md) | [Back to Index](../../index.md)
+[Previous Folder](../parser/creation_method_parser.md) | [Previous File](researchrecipes.md) | [Next Folder](../tiles/entity_article.md) | [Back to Index](../../index.md)

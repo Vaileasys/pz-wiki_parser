@@ -1,4 +1,4 @@
-[Previous Folder](../lists/attachment_list.md) | [Previous File](profession.md) | [Next File](trap.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../navbox/navbox.md) | [Previous File](recorded_media.md) | [Next File](trap.md) | [Next Folder](../parser/creation_method_parser.md) | [Back to Index](../../index.md)
 
 # skill.py
 
@@ -14,95 +14,120 @@ Skill book data is parsed from `XPSystem_SkillBook.lua`.
 Represents a game skill (perk), including XP thresholds and translation data.
 
 #### Class Methods
-##### [`_load_skills()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L71)
+
+##### [`_load_skills()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L69)
 
 Load skill data from skills.json.
 
-##### [`all()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L76)
+##### [`all()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L74)
 
 Return all skills as a dictionary of Skill instances.
 
-##### [`keys()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L83)
+##### [`keys()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L81)
 
 Return all skill keys.
 
-##### [`values()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L90)
+##### [`values()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L88)
 
 Yield Skill instances for all skills.
 
-##### [`count()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L97)
+##### [`count()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L95)
 
 Return the number of defined skills.
 
 #### Object Methods
+
 ##### [`__new__(perk_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L24)
+
 ##### [`__init__(perk_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L35)
-##### [`__getitem__(key)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L54)
+
+##### [`__getitem__(key)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L52)
 
 Allow dict-like access to raw skill data.
 
-##### [`__contains__(key)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L58)
+##### [`__contains__(key)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L56)
 
 Check if a key exists in the raw skill data.
 
-##### [`__bool__()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L62)
+##### [`__bool__()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L60)
 
 Return True if the skill has valid data.
 
-##### [`__repr__()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L66)
+##### [`__repr__()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L64)
 
 Return a string representation of the skill.
 
-##### [`get(key: str, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L103)
+##### [`get(key: str, default = None)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L101)
 
 Return a value from the raw data with an optional default.
 
-##### [`get_xp(level: int)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L107)
+##### [`get_xp(level: int) -> int`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L105)
 
 Return the XP required to reach the given level.
 
+#### Properties
+
+##### [`name`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L112)
+
+Localised name of the skill.
+
+##### [`name_en`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L123)
+
+English name of the skill.
+
+##### [`page`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L133)
+
+Page name for the skill.
+
+##### [`wiki_link`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L140)
+
+Wiki link for the skill.
 
 ### `SkillBook`
 
 Represents a skill book with XP multipliers for specific levels.
 
 #### Class Methods
-##### [`_load_books()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L152)
+
+##### [`_load_books()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L186)
 
 Parse SkillBook data from XPSystem_SkillBook.lua.
 
-##### [`all()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L163)
+##### [`all()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L197)
 
 Return all skill books as a dictionary of SkillBook instances.
 
 #### Object Methods
-##### [`__new__(name: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L121)
-##### [`_init(skill_book: str, data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L134)
-##### [`__bool__()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L143)
+
+##### [`__new__(name: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L155)
+
+##### [`_init(skill_book: str, data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L168)
+
+##### [`__bool__()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L177)
 
 Return True if the book has a valid associated skill.
 
-##### [`__repr__()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L147)
+##### [`__repr__()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L181)
 
 Return a string representation of the skill book.
 
-##### [`get_multiplier(level: int)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L169)
+##### [`get_multiplier(level: int) -> float`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L203)
 
 Return the XP multiplier for a given skill level.
 
 #### Properties
-##### [`name`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L186)
+
+##### [`name`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L220)
 
 Localised name of the associated skill.
 
-##### [`name_en`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L191)
+##### [`name_en`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L225)
 
 English name of the associated skill.
 
-##### [`wiki_link`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L196)
+##### [`wiki_link`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L230)
 
 Wiki link for the associated skill.
 
 
-
-[Previous Folder](../lists/attachment_list.md) | [Previous File](profession.md) | [Next File](trap.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../navbox/navbox.md) | [Previous File](recorded_media.md) | [Next File](trap.md) | [Next Folder](../parser/creation_method_parser.md) | [Back to Index](../../index.md)

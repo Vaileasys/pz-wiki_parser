@@ -1,4 +1,4 @@
-[Previous Folder](../tools/update_icons.md) | [Next File](color.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../tools/batch_processor.md) | [Next File](color.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
 
 # categories.py
 
@@ -16,139 +16,155 @@ Used by the wiki parser to automatically organise and filter item data.
 
 ## Functions
 
-### [`is_ammo(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L16)
+### [`get_cat_link(display_category: str) -> str`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L99)
+
+Returns a formatted link string for a given display category.
+
+Translates the raw DisplayCategory value, splits it by "/", and converts each
+part into a wiki link using `display_category_map`. Falls back to plain text
+if a link can't be found.
+
+<ins>**Args:**</ins>
+  - **display_category (str)**:
+      - _The raw DisplayCategory value from item data._
+
+<ins>**Returns:**</ins>
+  - **str**:
+      - _A slash-separated string of wiki links or plain text._
+
+### [`is_ammo(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L141)
 
 Return True if the item is considered ammunition.
 
-### [`is_clothing(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L21)
+### [`is_clothing(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L148)
 
 Return True if the item is clothing.
 
-### [`is_container(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L26)
+### [`is_container(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L153)
 
 Return True if the item is a container.
 
-### [`is_fluid_container(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L30)
-### [`is_food(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L33)
+### [`is_fluid_container(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L162)
+
+### [`is_food(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L166)
 
 Return True if the item is food or marked as food.
 
-### [`is_fuel(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L38)
+### [`is_fuel(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L171)
 
 Return True if the item can be used as burnable fuel.
 
-### [`is_animal_part(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L42)
+### [`is_animal_part(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L176)
 
 Return True if the item is an animal part.
 
-### [`is_appearance(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L46)
+### [`is_appearance(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L181)
 
 Return True if the item is used to modify player appearance.
 
-### [`is_camping(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L53)
+### [`is_camping(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L194)
 
 Return True if the item is used for camping.
 
-### [`is_communication(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L57)
+### [`is_communication(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L199)
 
 Return True if the item is a communication appliance.
 
-### [`is_cooking(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L61)
+### [`is_cooking(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L204)
 
 Return True if the item is a cooking utensil.
 
-### [`is_corpse(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L65)
+### [`is_corpse(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L209)
 
 Return True if the item is a corpse.
 
-### [`is_entertainment(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L69)
+### [`is_entertainment(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L214)
 
 Return True if the item is an electronic.
 
-### [`is_electronics(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L75)
+### [`is_electronics(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L222)
 
 Return True if the item is an electronic.
 
-### [`is_fire_source(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L80)
+### [`is_fire_source(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L229)
 
 Return True if the item can be used to start a fire.
 
-### [`is_literature(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L86)
+### [`is_literature(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L238)
 
 Return True if the item is a book, map, or other literature.
 
-### [`is_fishing(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L91)
+### [`is_fishing(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L245)
 
 Return True if the item is used in fishing.
 
-### [`is_gardening(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L97)
+### [`is_gardening(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L257)
 
 Return True if the item is used in gardening.
 
-### [`is_household(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L103)
+### [`is_household(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L267)
 
 Return True if the item is categorised as a household item.
 
-### [`is_instrument(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L108)
+### [`is_instrument(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L275)
 
 Return True if the item is an instrument.
 
-### [`is_junk(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L113)
+### [`is_junk(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L283)
 
 Return True if the item is classified as junk.
 
-### [`is_light_source(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L118)
+### [`is_light_source(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L288)
 
 Return True if the item is classified as light source.
 
-### [`is_material(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L124)
+### [`is_material(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L297)
 
 Return True if the item is classified as a material.
 
-### [`is_medical(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L130)
+### [`is_medical(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L313)
 
 Return True if the item is used in or related to first aid.
 
-### [`is_memento(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L136)
+### [`is_memento(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L322)
 
 Return True if the item is classified as a memento.
 
-### [`is_security(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L142)
+### [`is_security(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L345)
 
 Return True if the item is classified as security.
 
-### [`is_sport(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L146)
+### [`is_sport(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L350)
 
 Return True if the item is classified as sport.
 
-### [`is_tool(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L150)
+### [`is_tool(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L355)
 
 Return True if the item is classified as a tool.
 
-### [`is_trapping(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L168)
+### [`is_trapping(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L428)
 
 Return True if the item is classified as a trap.
 
-### [`is_vehicle_maintenance(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L172)
+### [`is_vehicle_maintenance(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L433)
 
 Return True if the item is used for vehicle maintenance.
 
-### [`is_weapon(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L176)
+### [`is_weapon(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L441)
 
 Return True if the item is a weapon.
 
-### [`is_weapon_part(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L180)
+### [`is_weapon_part(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L446)
 
 Return True if the item is a weapon part.
 
-### [`is_debug(item: Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L184)
+### [`is_debug(item: Item) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L451)
 
 Return True if the item is a weapon.
 
-### [`find_categories(obj: object)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L228)
+### [`find_categories(obj: object, *, do_all: bool = False, checks: list[tuple] = ITEM_CHECKS) -> list[str]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L500)
 
 Determine categories for an object using a list of check functions. Option to return only one (default) or all.
-
 
 <ins>**Args:**</ins>
   - **obj (object)**:
@@ -157,17 +173,16 @@ Determine categories for an object using a list of check functions. Option to re
       - _If True, return all matching categories. If False (default), return only the first match._
   - **checks (list[tuple], optional)**:
       - _A list of (function, category_name) pairs to check against._
-      - _Each function should return a bool when passed `obj`._
+  - **Each function should return a bool when passed `obj`.**:
 
 <ins>**Returns:**</ins>
-  - **list[str]:**
-      - A list of category names. Returns a single-element list if do_all is False,
-      - or multiple category names if do_all is True. Returns an empty list if no match is found.
+  - **list[str]**:
+      - _A list of category names. Returns a single-element list if do_all is False,_
+  - **or multiple category names if do_all is True. Returns an empty list if no match is found.**:
 
-### [`find_all_categories(obj: object)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L250)
+### [`find_all_categories(obj: object, *, checks: list[tuple] = ITEM_CHECKS) -> list[str]`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L525)
 
 Return all category names that match the given object.
-
 This is a shorthand for calling `find_categories` with `do_all=True`.
 
 <ins>**Args:**</ins>
@@ -177,9 +192,8 @@ This is a shorthand for calling `find_categories` with `do_all=True`.
       - _A list of (function, category_name) pairs to check against._
 
 <ins>**Returns:**</ins>
-  - **list[str]:**
-      - A list of all category names that match.
+  - **list[str]**:
+      - _A list of all category names that match._
 
 
-
-[Previous Folder](../tools/update_icons.md) | [Next File](color.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)
+[Previous Folder](../tools/batch_processor.md) | [Next File](color.md) | [Next Folder](../vehicles/vehicle_article.md) | [Back to Index](../../index.md)

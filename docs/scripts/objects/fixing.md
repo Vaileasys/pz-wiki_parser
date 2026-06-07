@@ -1,4 +1,4 @@
-[Previous Folder](../lists/attachment_list.md) | [Previous File](farming.md) | [Next File](fluid.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../navbox/navbox.md) | [Previous File](fish.md) | [Next File](fluid.md) | [Next Folder](../parser/creation_method_parser.md) | [Back to Index](../../index.md)
 
 # fixing.py
 
@@ -22,20 +22,22 @@ Represents a fixing entry for an item, containing data about how it can be repai
 This class lazily loads all fixing definitions from parsed script data and provides
 a caching mechanism to avoid duplicate instances. A Fixing object can be accessed using
 either a fixing ID, item ID or Item object.
+
 Properties:
-- fixing_id (str): The internal ID of the fixing.
-- valid (bool): Whether the fixing entry contains valid data.
-- script_type (str): Optional script type associated with the fixing.
-- file (str): The script file name where the fixing is defined.
-- path (str): The resolved file path for the fixing source.
-- module (str): The module prefix of the fixing ID.
-- id_type (str): The item identifier portion of the fixing ID.
-- requires (list[Item]): List of required items for the fix.
-- condition_modifier (float): Modifier applied to the item’s condition after repair.
-- global_items (list[GlobalItem]): Shared global items required by the fixing.
-- fixers (list[Fixer]): Fixer items, with optional skill requirements.
+    - fixing_id (str): The internal ID of the fixing.
+    - valid (bool): Whether the fixing entry contains valid data.
+    - script_type (str): Optional script type associated with the fixing.
+    - file (str): The script file name where the fixing is defined.
+    - path (str): The resolved file path for the fixing source.
+    - module (str): The module prefix of the fixing ID.
+    - id_type (str): The item identifier portion of the fixing ID.
+    - requires (list[Item]): List of required items for the fix.
+    - condition_modifier (float): Modifier applied to the item’s condition after repair.
+    - global_items (list[GlobalItem]): Shared global items required by the fixing.
+    - fixers (list[Fixer]): Fixer items, with optional skill requirements.
 
 #### Class Methods
+
 ##### [`_load_fixings()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L45)
 
 Load and cache all fixing data from script files if not already loaded.
@@ -52,29 +54,27 @@ Return an iterable of all available fixing IDs.
 
 Return a generator of all Fixing instances.
 
-##### [`count()`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L71)
+##### [`count() -> int`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L71)
 
 Return the number of available fixing definitions.
 
-##### [`exists(fixing_id: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L78)
+##### [`exists(fixing_id: str) -> bool`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L78)
 
 Check if a fixing with the given ID exists.
 
 #### Object Methods
+
 ##### [`__new__(key: str | Item)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L84)
 
 Create or return a cached Fixing instance based on a string ID or Item object.
-
 Supports matching by fixing ID, item ID, or an Item object.
 
-##### [`__init__(_: str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L136)
+##### [`__init__(_: str = None)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L136)
 
 Initialise the Fixing instance with resolved fixing ID.
 
-
-<ins>**Raises:**</ins>
-  - **RuntimeError:**
-      - If resolving the fixing ID fails.
+Raises:
+    RuntimeError: If resolving the fixing ID fails.
 
 ##### [`__getitem__(key)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L157)
 
@@ -88,11 +88,12 @@ Check if a key exists in the fixing data.
 
 Return a readable string representation of the Fixing instance.
 
-##### [`get(key: str, default)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L169)
+##### [`get(key: str, default = None)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L169)
 
 Get a value from the fixing data with an optional default.
 
 #### Properties
+
 ##### [`valid`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L174)
 
 Return True if the fixing entry contains valid data.
@@ -133,17 +134,17 @@ Return a list of GlobalItem objects required by the fixing.
 
 Return a list of Fixer objects that can be used for repair.
 
-
 ### `GlobalItem`
 
 Represents a global item required across all fixing attempts.
 
 Properties:
-- item_id (str): The item ID of the required global item.
-- amount (int): Quantity required for the fixing.
-- item (Item): The wrapped `Item` object.
+    - item_id (str): The item ID of the required global item.
+    - amount (int): Quantity required for the fixing.
+    - item (Item): The wrapped `Item` object.
 
 #### Object Methods
+
 ##### [`__init__(item_id: str, amount: int)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L236)
 
 Initialise a GlobalItem with its ID and required amount.
@@ -153,23 +154,24 @@ Initialise a GlobalItem with its ID and required amount.
 Return a string representation of the GlobalItem instance.
 
 #### Properties
+
 ##### [`item`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L246)
 
 Return the Item object associated with this global item ID.
-
 
 ### `Fixer`
 
 Represents a fixer item used to repair something, with optional skill requirements.
 
 Properties:
-- item_id (str): The fixer item’s ID.
-- amount (int): Quantity of the fixer required.
-- skill_requirements (dict[str, int]): Required skills and their levels.
-- item (Item): The wrapped `Item` object.
-- skills (list[Skill]): Skill objects required for the fixer.
+    - item_id (str): The fixer item’s ID.
+    - amount (int): Quantity of the fixer required.
+    - skill_requirements (dict[str, int]): Required skills and their levels.
+    - item (Item): The wrapped `Item` object.
+    - skills (list[Skill]): Skill objects required for the fixer.
 
 #### Object Methods
+
 ##### [`__init__(item_id: str, data: dict)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L262)
 
 Initialise a Fixer with its ID, amount, and skill requirements.
@@ -178,20 +180,20 @@ Initialise a Fixer with its ID, amount, and skill requirements.
 
 Return a string representation of the Fixer instance.
 
-##### [`get_skill_level(skill: Skill | str)`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L272)
+##### [`get_skill_level(skill: Skill | str) -> int`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L272)
 
 Return the required level for the given skill.
-
 
 <ins>**Args:**</ins>
   - **skill (Skill | str)**:
       - _The skill object or perk ID to check._
 
 <ins>**Returns:**</ins>
-  - **int:**
-      - The level required for the given skill, or 0 if not required.
+  - **int**:
+      - _The level required for the given skill, or 0 if not required._
 
 #### Properties
+
 ##### [`item`](https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L286)
 
 Return the Item object associated with this fixer.
@@ -201,5 +203,4 @@ Return the Item object associated with this fixer.
 Return a list of Skill objects required by this fixer.
 
 
-
-[Previous Folder](../lists/attachment_list.md) | [Previous File](farming.md) | [Next File](fluid.md) | [Next Folder](../parser/distribution_container_parser.md) | [Back to Index](../../index.md)
+[Previous Folder](../navbox/navbox.md) | [Previous File](fish.md) | [Next File](fluid.md) | [Next Folder](../parser/creation_method_parser.md) | [Back to Index](../../index.md)
