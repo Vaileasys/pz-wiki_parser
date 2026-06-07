@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cache.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../animals/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="config_manager.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../fluids/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="cache.html">cache.py</a>
+<a href="config_manager.html">config_manager.py</a>
+<a href="constants.html">constants.py</a>
+<a href="file_loading.html">file_loading.py</a>
+<a href="language.html">language.py</a>
+<a href="logger.html">logger.py</a>
+<a href="page_manager.html">page_manager.py</a>
+<a href="runner.html">runner.py</a>
+<a href="setup.html">setup.py</a>
+<a href="version.html">version.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>cache.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/core</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">save_cache(data: dict, data_file: str, data_dir = CACHE_DIR, suppress = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L11">source</a>
+<p>Caches data by saving it to a json file.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>data (dict)</dt>
+<dd>Data to be cached, by storing it in a json file.</dd>
+<dt>data_file (str)</dt>
+<dd>Name of the JSON file to be saved as. Including the file extension is optional.</dd>
+<dt>data_dir (_type_, optional)</dt>
+<dd>Custom directory for the JSON file. Defaults to value of &#x27;scripts.core.constants.DATA_PATH&#x27;.</dd>
+<dt>suppress (bool, optional)</dt>
+<dd>Suppress displaying warnings/print statements. Defaults to False.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">load_cache(cache_file, cache_name = &#x27;data&#x27;, get_version = False, backup_old = False, suppress = False) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L38">source</a>
+<p>Loads the cache from a json file with the option to return the version of it, and back it up if it&#x27;s old.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>cache_file (str)</dt>
+<dd>Path to the cache file.</dd>
+<dt>cache_name (str, optional)</dt>
+<dd>String to be used in prints. Should be a name for the type of cache, e.g. &#x27;item&#x27;. Defaults to None.</dd>
+<dt>get_version (bool, optional)</dt>
+<dd>If True, returns the version of the cached data. Defaults to False.</dd>
+<dt>backup_old (bool, optional)</dt>
+<dd>If True, backs up the cache, only if it&#x27;s an old version. Defaults to False.</dd>
+<dt>suppress (bool, optional)</dt>
+<dd>Suppress displaying print statements (errors still displayed). Defaults to False.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Cached data if valid, otherwise an empty dictionary.</dd>
+<dt>str</dt>
+<dd>Version of the cached data, if &#x27;get_version&#x27; is True.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">clear_cache(cache_path = CACHE_DIR, cache_name = None, suppress = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/cache.py#L87">source</a>
+<p>Clears the cache at a specified file path.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>cache_path (str)</dt>
+<dd>File path of the cache to be deleted. Can be a single file, or entire folder. Must be a file or folder in &#x27;scripts.core.constants.DATA_PATH&#x27;.</dd>
+<dt>cache_name (str, optional)</dt>
+<dd>String to be used in print statements. Should be a name for the type of cache, e.g. &#x27;item&#x27;. Defaults to None.</dd>
+<dt>suppress (bool, optional)</dt>
+<dd>Suppress displaying print statements (errors still displayed). Defaults to False.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

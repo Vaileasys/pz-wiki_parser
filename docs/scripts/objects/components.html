@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>components.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="clothing_item.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="craft_recipe.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>components.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<div class="summary"><p>Provides the FluidContainer and Durability classes for managing components <br>related to fluid handling and durability.</p>
+<p>- FluidContainer holds information about an item’s fluid types, capacities, <br>  mixing ratios, and special behaviour (e.g., random fluid selection).<br>- Durability tracks an item’s material and maximum hit points, supporting <br>  durability-based mechanics.</p>
+<p>These classes serve as lightweight wrappers over raw component data, offering <br>convenient property access and helper methods.</p></div>
+<h2 id="classes">Classes</h2>
+<h3 id="class-fluidcontainer">FluidContainer</h3>
+<div class="summary"><p>Represents the FluidContainer component of an item or entity, holding information <br>about contained fluids, capacities, and mixing proportions.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(data: dict)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L22">source</a>
+<p>Initialize a FluidContainer with raw component data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>data (dict)</dt>
+<dd>FluidContainer data dictionary.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">__bool__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L31">source</a>
+<p>Allow FluidContainer to evaluate as False if empty, True if data exists.</p>
+</section>
+<section class="member">
+<code class="signature">has_fluid(*fluids: Fluid | str | list[Fluid | str]) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L35">source</a>
+<p>Check if the item contains any of the given fluids.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>*fluids (Fluid | str | list[Fluid | str])</dt>
+<dd>One or more Fluid objects or fluid ID strings.</dd>
+<dt>Accepts individual arguments or a list.</dt>
+<dd>No description.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>True if any of the fluids are present, False otherwise.</dd>
+</dl>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">is_valid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L70">source</a>
+</section>
+<section class="member">
+<code class="signature">container_name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L74">source</a>
+<p>Return the translated container name.</p>
+</section>
+<section class="member">
+<code class="signature">rain_factor</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L81">source</a>
+<p>Return the rain collection factor (float).</p>
+</section>
+<section class="member">
+<code class="signature">capacity</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L86">source</a>
+<p>Return the container’s fluid capacity (int).</p>
+</section>
+<section class="member">
+<code class="signature">custom_drink_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L91">source</a>
+<p>Return the custom drink sound, if defined (str or None).</p>
+</section>
+<section class="member">
+<code class="signature">fluids</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L96">source</a>
+<p>Return a list of Fluid objects, including mix ratios and optional colors.</p>
+</section>
+<section class="member">
+<code class="signature">fluid_proportions</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L128">source</a>
+<p>Return the raw list of fluid proportions (list of floats).</p>
+</section>
+<section class="member">
+<code class="signature">fluid_map</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L142">source</a>
+<p>Return a dictionary mapping Fluid objects to normalised proportions.<br>If PickRandomFluid is True, all fluids are given equal weighting (1.0).</p>
+</section>
+<section class="member">
+<code class="signature">pick_random_fluid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L165">source</a>
+<p>Return whether the container picks a random fluid (bool).</p>
+</section>
+<section class="member">
+<code class="signature">initial_percent_min</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L170">source</a>
+<p>Return the minimum initial fill percentage (float).</p>
+</section>
+<section class="member">
+<code class="signature">initial_percent_max</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L175">source</a>
+<p>Return the maximum initial fill percentage (float).</p>
+</section>
+<h3 id="class-durability">Durability</h3>
+<div class="summary"><p>Represents the Durability component of an item, including material type <br>and maximum hit points.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(data: dict)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L185">source</a>
+<p>Initialize a Durability object with raw component data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>data (dict)</dt>
+<dd>Durability data dictionary.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">__bool__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L194">source</a>
+<p>Allow Durability to evaluate as False if empty, True if data exists.</p>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">material</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L199">source</a>
+<p>Return the material type (str), defaults to &#x27;Default&#x27;.</p>
+</section>
+<section class="member">
+<code class="signature">max_hit_points</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/components.py#L204">source</a>
+<p>Return the maximum hit points (int), defaults to 0.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-fluidcontainer">FluidContainer</a>
+<a class="sidebar-child" href="#class-durability">Durability</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

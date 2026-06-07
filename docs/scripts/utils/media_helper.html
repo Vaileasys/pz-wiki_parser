@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>media_helper.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../tools/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="lua_helper.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="table_helper.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../vehicles/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="categories.html">categories.py</a>
+<a href="color.html">color.py</a>
+<a href="echo.html">echo.py</a>
+<a href="lua_helper.html">lua_helper.py</a>
+<a href="media_helper.html">media_helper.py</a>
+<a href="table_helper.html">table_helper.py</a>
+<a href="util.html">util.py</a>
+<a href="utility.html">utility.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>media_helper.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/utils</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">parse_code_effects(full_code: str) -&gt; dict[str, str | int | float]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/media_helper.py#L64">source</a>
+</section>
+<section class="member">
+<code class="signature">get_code_name(code: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/media_helper.py#L94">source</a>
+<p>Returns the translated name of a code based on its title ID.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>code (str)</dt>
+<dd>The short effect code, e.g., &quot;BOR&quot;, &quot;CRP&quot;, &quot;RCP&quot;</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Translated name if available, or the raw code if not found.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_icon(code: str, value: int | float = None, size: str = &#x27;32px&#x27;) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/media_helper.py#L115">source</a>
+<p>Returns a wiki image for the code&#x27;s icon, or None if there isn&#x27;t one.<br>If it&#x27;s a recipe (i.e. RCP), this returns None so text can be displayed instead.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

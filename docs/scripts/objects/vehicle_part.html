@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vehicle_part.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="vehicle.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="zone.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>vehicle_part.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<div class="summary"><p>Vehicle part access.</p>
+<p>Defines the base VehiclePart class and its many subclasses (e.g. seats, doors, windows),<br>along with tools for mapping items to parts, resolving install/uninstall data,<br>and structuring vehicle components for each vehicle definition.</p>
+<p>Includes:<br>- VehiclePart and subclasses for part-specific logic<br>- VehicleParts manager for handling all parts on a vehicle<br>- VehiclePartItem for linking items to parts<br>- PartInstallUninstall helper for install/uninstall requirements</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">get_vehicle_part_class(part_name: str) -&gt; type[&#x27;VehiclePart&#x27;]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L19">source</a>
+<p>Returns the appropriate VehiclePart subclass based on part name prefix.<br>Defaults to VehiclePart.</p>
+</section>
+<h2 id="classes">Classes</h2>
+<h3 id="class-vehiclepartitem">VehiclePartItem</h3>
+<div class="summary"><p>Item subclass that links items to vehicle parts.</p>
+<p>Adds access to all parts that use this item, along with install/uninstall data.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">build_item_part_map()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L69">source</a>
+</section>
+<section class="member">
+<code class="signature">has_part(item_id: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L79">source</a>
+</section>
+<section class="member">
+<code class="signature">from_item(item: &#x27;Item&#x27;) -&gt; &#x27;VehiclePartItem&#x27;</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L85">source</a>
+<p>Promote the existing Item object to a VehiclePartItem.</p>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">vehicle_parts</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L98">source</a>
+</section>
+<section class="member">
+<code class="signature">install</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L102">source</a>
+</section>
+<section class="member">
+<code class="signature">uninstall</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L109">source</a>
+</section>
+<h3 id="class-vehiclepart">VehiclePart</h3>
+<div class="summary"><p>Base class for a single vehicle part, holding parsed data and common properties<br>like install/uninstall info, durability, etc.</p>
+<p>Used as the parent class for more specific part types.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(part_type: str, vehicle_id: str, data: dict)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L123">source</a>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L208">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L129">source</a>
+</section>
+<section class="member">
+<code class="signature">common_name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L136">source</a>
+</section>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L142">source</a>
+</section>
+<section class="member">
+<code class="signature">wiki_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L148">source</a>
+</section>
+<section class="member">
+<code class="signature">common_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L154">source</a>
+</section>
+<section class="member">
+<code class="signature">position</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L160">source</a>
+</section>
+<section class="member">
+<code class="signature">container</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L169">source</a>
+</section>
+<section class="member">
+<code class="signature">table</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L173">source</a>
+</section>
+<section class="member">
+<code class="signature">install</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L177">source</a>
+</section>
+<section class="member">
+<code class="signature">uninstall</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L181">source</a>
+</section>
+<section class="member">
+<code class="signature">items</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L185">source</a>
+</section>
+<section class="member">
+<code class="signature">mechanic_area</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L189">source</a>
+</section>
+<section class="member">
+<code class="signature">area</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L193">source</a>
+</section>
+<section class="member">
+<code class="signature">category</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L197">source</a>
+</section>
+<section class="member">
+<code class="signature">durability</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L201">source</a>
+</section>
+<section class="member">
+<code class="signature">mechanic_require_key</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L205">source</a>
+</section>
+<h3 id="class-vehicleseat">VehicleSeat</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L214">source</a>
+</section>
+<section class="member">
+<code class="signature">seat_position</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L218">source</a>
+</section>
+<h3 id="class-vehicledoor">VehicleDoor</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L223">source</a>
+</section>
+<h3 id="class-vehicletrunkdoor">VehicleTrunkDoor</h3>
+<h3 id="class-vehicletire">VehicleTire</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L232">source</a>
+</section>
+<section class="member">
+<code class="signature">wheel</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L236">source</a>
+</section>
+<section class="member">
+<code class="signature">model</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L240">source</a>
+</section>
+<section class="member">
+<code class="signature">content_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L244">source</a>
+</section>
+<h3 id="class-vehiclebrake">VehicleBrake</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L249">source</a>
+</section>
+<h3 id="class-vehiclesuspension">VehicleSuspension</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L254">source</a>
+</section>
+<h3 id="class-vehicleengine">VehicleEngine</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L259">source</a>
+</section>
+<h3 id="class-vehiclebattery">VehicleBattery</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L264">source</a>
+</section>
+<h3 id="class-vehiclemuffler">VehicleMuffler</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L269">source</a>
+</section>
+<h3 id="class-vehiclegastank">VehicleGasTank</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">condition_affects_capacity</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L274">source</a>
+</section>
+<section class="member">
+<code class="signature">content_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L278">source</a>
+</section>
+<h3 id="class-vehicleradio">VehicleRadio</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L283">source</a>
+</section>
+<h3 id="class-vehicleglovebox">VehicleGloveBox</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L288">source</a>
+</section>
+<h3 id="class-vehiclewindow">VehicleWindow</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">is_windshield</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L293">source</a>
+</section>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L297">source</a>
+</section>
+<section class="member">
+<code class="signature">parent</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L309">source</a>
+</section>
+<section class="member">
+<code class="signature">window</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L313">source</a>
+</section>
+<section class="member">
+<code class="signature">openable</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L317">source</a>
+</section>
+<h3 id="class-vehicleheadlight">VehicleHeadlight</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L322">source</a>
+</section>
+<h3 id="class-vehiclelightbar">VehicleLightbar</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L329">source</a>
+</section>
+<h3 id="class-vehicleheater">VehicleHeater</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L334">source</a>
+</section>
+<h3 id="class-vehiclepassengercompartment">VehiclePassengerCompartment</h3>
+<h3 id="class-vehicleenginedoor">VehicleEngineDoor</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L343">source</a>
+</section>
+<h3 id="class-vehiclehoodornament">VehicleHoodOrnament</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L348">source</a>
+</section>
+<h3 id="class-vehicletruckbed">VehicleTruckBed</h3>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L354">source</a>
+</section>
+<section class="member">
+<code class="signature">condition_affects_capacity</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L358">source</a>
+</section>
+<section class="member">
+<code class="signature">capacity</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L362">source</a>
+</section>
+<h3 id="class-partinstalluninstall">PartInstallUninstall</h3>
+<div class="summary"><p>Helper class to handle install/uninstall data for vehicle parts.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(key: str, data: dict)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L368">source</a>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L372">source</a>
+<p>Get a value from the install/uninstall data.</p>
+</section>
+<section class="member">
+<code class="signature">get_item_objects() -&gt; list[Item | Tag]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L403">source</a>
+<p>Convert items list to a list of item/tag objects</p>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">items</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L377">source</a>
+<p>Convert items dict to a sorted list</p>
+</section>
+<section class="member">
+<code class="signature">formatted_items</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L388">source</a>
+</section>
+<section class="member">
+<code class="signature">skills</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L423">source</a>
+</section>
+<section class="member">
+<code class="signature">traits</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L426">source</a>
+</section>
+<section class="member">
+<code class="signature">professions</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L429">source</a>
+</section>
+<section class="member">
+<code class="signature">door</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L432">source</a>
+</section>
+<section class="member">
+<code class="signature">time</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L435">source</a>
+</section>
+<section class="member">
+<code class="signature">recipes</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L438">source</a>
+</section>
+<section class="member">
+<code class="signature">require_empty</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L441">source</a>
+</section>
+<section class="member">
+<code class="signature">require_installed</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L444">source</a>
+</section>
+<section class="member">
+<code class="signature">require_uninstalled</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L447">source</a>
+</section>
+<section class="member">
+<code class="signature">test</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L450">source</a>
+</section>
+<section class="member">
+<code class="signature">complete</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L453">source</a>
+</section>
+<h3 id="class-vehicleparts">VehicleParts</h3>
+<div class="summary"><p>Holds and processes all parts for a single vehicle, including wildcard merging<br>and access to common components like seats, door, etc.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(parts_raw: dict, vehicle: &#x27;Vehicle&#x27;)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L500">source</a>
+</section>
+<section class="member">
+<code class="signature">_build_part(name: str, data: dict)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L517">source</a>
+</section>
+<section class="member">
+<code class="signature">all() -&gt; list[VehiclePart]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L533">source</a>
+</section>
+<section class="member">
+<code class="signature">get(name: str) -&gt; VehiclePart | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L536">source</a>
+</section>
+<section class="member">
+<code class="signature">parts_starting_with(prefix: str) -&gt; list[VehiclePart]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L539">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">seats</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L543">source</a>
+</section>
+<section class="member">
+<code class="signature">doors</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L547">source</a>
+</section>
+<section class="member">
+<code class="signature">trunk_door</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L551">source</a>
+</section>
+<section class="member">
+<code class="signature">engine</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L555">source</a>
+</section>
+<section class="member">
+<code class="signature">battery</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L559">source</a>
+</section>
+<section class="member">
+<code class="signature">muffler</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L563">source</a>
+</section>
+<section class="member">
+<code class="signature">gas_tank</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L567">source</a>
+</section>
+<section class="member">
+<code class="signature">heater</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L571">source</a>
+</section>
+<section class="member">
+<code class="signature">engine_door</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L575">source</a>
+</section>
+<section class="member">
+<code class="signature">lightbar</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L579">source</a>
+</section>
+<section class="member">
+<code class="signature">passenger_compartment</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L583">source</a>
+</section>
+<section class="member">
+<code class="signature">glove_box</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L587">source</a>
+</section>
+<section class="member">
+<code class="signature">radio</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L591">source</a>
+</section>
+<section class="member">
+<code class="signature">truck_bed</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L595">source</a>
+</section>
+<section class="member">
+<code class="signature">headlights</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L599">source</a>
+</section>
+<section class="member">
+<code class="signature">windows</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L603">source</a>
+</section>
+<section class="member">
+<code class="signature">windshields</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L607">source</a>
+</section>
+<section class="member">
+<code class="signature">tires</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L611">source</a>
+</section>
+<section class="member">
+<code class="signature">brakes</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L615">source</a>
+</section>
+<section class="member">
+<code class="signature">suspensions</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L619">source</a>
+</section>
+<section class="member">
+<code class="signature">hood_ornaments</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle_part.py#L623">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-vehiclepartitem">VehiclePartItem</a>
+<a class="sidebar-child" href="#class-vehiclepart">VehiclePart</a>
+<a class="sidebar-child" href="#class-vehicleseat">VehicleSeat</a>
+<a class="sidebar-child" href="#class-vehicledoor">VehicleDoor</a>
+<a class="sidebar-child" href="#class-vehicletrunkdoor">VehicleTrunkDoor</a>
+<a class="sidebar-child" href="#class-vehicletire">VehicleTire</a>
+<a class="sidebar-child" href="#class-vehiclebrake">VehicleBrake</a>
+<a class="sidebar-child" href="#class-vehiclesuspension">VehicleSuspension</a>
+<a class="sidebar-child" href="#class-vehicleengine">VehicleEngine</a>
+<a class="sidebar-child" href="#class-vehiclebattery">VehicleBattery</a>
+<a class="sidebar-child" href="#class-vehiclemuffler">VehicleMuffler</a>
+<a class="sidebar-child" href="#class-vehiclegastank">VehicleGasTank</a>
+<a class="sidebar-child" href="#class-vehicleradio">VehicleRadio</a>
+<a class="sidebar-child" href="#class-vehicleglovebox">VehicleGloveBox</a>
+<a class="sidebar-child" href="#class-vehiclewindow">VehicleWindow</a>
+<a class="sidebar-child" href="#class-vehicleheadlight">VehicleHeadlight</a>
+<a class="sidebar-child" href="#class-vehiclelightbar">VehicleLightbar</a>
+<a class="sidebar-child" href="#class-vehicleheater">VehicleHeater</a>
+<a class="sidebar-child" href="#class-vehiclepassengercompartment">VehiclePassengerCompartment</a>
+<a class="sidebar-child" href="#class-vehicleenginedoor">VehicleEngineDoor</a>
+<a class="sidebar-child" href="#class-vehiclehoodornament">VehicleHoodOrnament</a>
+<a class="sidebar-child" href="#class-vehicletruckbed">VehicleTruckBed</a>
+<a class="sidebar-child" href="#class-partinstalluninstall">PartInstallUninstall</a>
+<a class="sidebar-child" href="#class-vehicleparts">VehicleParts</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

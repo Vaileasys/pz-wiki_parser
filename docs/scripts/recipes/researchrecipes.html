@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>researchrecipes.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="evolved_recipes.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="teached_recipes.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../tiles/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="craft_recipes.html">craft_recipes.py</a>
+<a href="evolved_recipes.html">evolved_recipes.py</a>
+<a href="researchrecipes.html">researchrecipes.py</a>
+<a href="teached_recipes.html">teached_recipes.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>researchrecipes.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/recipes</a></p>
+<div class="summary"><p>Project Zomboid Wiki Research Recipes Generator</p>
+<p>This script processes items in Project Zomboid that can be researched to learn new<br>recipes. It generates wiki markup showing which recipes can be learned by researching<br>each item, using the Crafting/sandbox template for proper formatting.</p>
+<p>The script handles:<br>- Parsing item data for researchable recipes (from item&#x27;s ResearchableRecipes property)<br>- Finding recipes where the item is a product (product-based research)<br>- Combining all researchable recipes into a single unified list<br>- Generating formatted wiki markup with recipe lists<br>- Creating output in both research and crafting directories<br>- Proper template formatting for wiki integration<br>- Expanding meta recipes into their component recipes</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">find_recipes_producing_item(item_id: str) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/researchrecipes.py#L29">source</a>
+<p>Find all recipes that produce the given item as an output.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_id (str)</dt>
+<dd>The item ID to search for</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>List of recipe IDs that produce this item</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main(batch: bool = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/researchrecipes.py#L56">source</a>
+<p>Main execution function for research recipes generation.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>batch (bool)</dt>
+<dd>If True, skip language initialization</dd>
+<dt>This function</dt>
+<dd>No description.</dd>
+<dt>1. Loads parsed item data</dt>
+<dd>No description.</dd>
+<dt>2. Identifies items with researchable recipes (traditional and product-based)</dt>
+<dd>No description.</dd>
+<dt>3. Combines all researchable recipes into a single unified list per item</dt>
+<dd>No description.</dd>
+<dt>4. Generates wiki markup using Crafting/sandbox template</dt>
+<dd>No description.</dd>
+<dt>5. Creates output files organized by individual IDs and by wiki pages</dt>
+<dd>No description.</dd>
+<dt>6. Handles proper formatting for wiki integration</dt>
+<dd>No description.</dd>
+<dt>7. Expands meta recipes into their component recipes</dt>
+<dd>No description.</dd>
+<dt>The output is saved in multiple locations</dt>
+<dd>No description.</dd>
+<dt>- output/recipes/researchrecipes/id/ (individual item files)</dt>
+<dd>No description.</dd>
+<dt>- output/recipes/researchrecipes/page/ (page-combined files)</dt>
+<dd>No description.</dd>
+<dt>- output/recipes/crafting/id/ (individual item files)</dt>
+<dd>No description.</dd>
+<dt>- output/recipes/crafting/page/ (page-combined files)</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

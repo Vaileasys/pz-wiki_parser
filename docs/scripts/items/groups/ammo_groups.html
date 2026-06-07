@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ammo_groups.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../../index.html"><img class="nav-icon" src="../../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../index.html"><img class="nav-icon" src="../../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="weapon_groups.html"><img class="nav-icon" src="../../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../lists/index.html"><img class="nav-icon" src="../../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="ammo_groups.html">ammo_groups.py</a>
+<a href="weapon_groups.html">weapon_groups.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>ammo_groups.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/items/groups</a></p>
+<div class="summary"><p>Ammunition item grouping and relationship discovery.</p>
+<p>Classifies ammo-related items into rounds, boxes, cartons, and magazines,<br>then derives their containment hierarchy from crafting recipes. Also links<br>ammo types to compatible weapons and magazines for generated item data.</p></div>
+<h2 id="classes">Classes</h2>
+<h3 id="class-ammogroups">AmmoGroups</h3>
+<div class="summary"><p>Item grouping rules for ammunition and magazines.</p>
+<p>Defines recognised ammo groups, their display labels, parent categories,<br>and display order. Classification uses recipe-derived containment data<br>for boxes and cartons, and item tags for loose rounds and magazines.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">get_box_types() -&gt; dict[str, dict]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/ammo_groups.py#L100">source</a>
+<p>Get cached ammo container relationship data.</p>
+<p>Builds the mapping on first use, then reuses it for later classification<br>and relationship lookups.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Dictionary mapping ammo container item IDs to containment data.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">classify(item: Item, **kwargs) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/ammo_groups.py#L118">source</a>
+<p>Classify an item as an ammunition group type.</p>
+<p>Boxes and cartons are identified from recipe-derived container data.<br>Loose rounds are identified by the Ammo tag, while magazines are identified<br>by pistol or rifle magazine tags.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item</dt>
+<dd>Item object to classify.</dd>
+<dt>**kwargs</dt>
+<dd>Additional context accepted for API compatibility.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Ammo group type ID, or None if the item is not ammo-related.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<h4>Static Methods</h4>
+<section class="member">
+<code class="signature">build_box_types() -&gt; dict[str, dict]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/ammo_groups.py#L39">source</a>
+<p>Build ammo container relationships from crafting recipes.</p>
+<p>Reads known unpacking recipes to map boxes and cartons to the item they<br>contain, along with the produced quantity. Supports direct recipe outputs<br>and item mapper based recipes.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Dictionary mapping ammo container item IDs to containment data.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">build_ammo_data(item_id: str, ammo_type: str, all_item_data: dict[str, dict]) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/ammo_groups.py#L161">source</a>
+<p>Build relationship data for an ammunition item.</p>
+<p>Traces the ammo hierarchy between rounds, boxes, and cartons, then finds<br>compatible firearms and magazines by matching each item&#x27;s ammo type.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_id</dt>
+<dd>Full item ID to analyse.</dd>
+<dt>ammo_type</dt>
+<dd>Ammo group type returned by classify().</dd>
+<dt>all_item_data</dt>
+<dd>Item data dictionary to read from and update.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>The item&#x27;s data dictionary with related ammo, weapon, and magazine</dt>
+<dd>No description.</dd>
+<dt>fields added where available.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-ammogroups">AmmoGroups</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

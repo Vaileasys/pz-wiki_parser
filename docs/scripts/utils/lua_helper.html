@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>lua_helper.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../tools/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="echo.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="media_helper.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../vehicles/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="categories.html">categories.py</a>
+<a href="color.html">color.py</a>
+<a href="echo.html">echo.py</a>
+<a href="lua_helper.html">lua_helper.py</a>
+<a href="media_helper.html">media_helper.py</a>
+<a href="table_helper.html">table_helper.py</a>
+<a href="util.html">util.py</a>
+<a href="utility.html">utility.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>lua_helper.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/utils</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">load_lua_file(lua_files: str | list[str], lua_runtime: LuaRuntime = None, dependencies: list[str] = None, inject_lua: str = None, prefer: str = None, media_type: str = &#x27;lua&#x27;) -&gt; LuaRuntime</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/lua_helper.py#L9">source</a>
+<p>Loads and executes Lua files in the given Lua runtime.</p>
+<p>:param lua_files: Lua file names or paths (single or list).<br>:param lua_runtime: Existing runtime or None to create one.<br>:param dependencies: Lua dependencies to load first.<br>:param inject_lua: Optional code to run before loading any files.<br>:param prefer: Optional keyword to prioritise among duplicate file paths.<br>:param media_type: The section of the game file map to search.<br>:return: Lua runtime.</p>
+</section>
+<section class="member">
+<code class="signature">lua_to_python(lua_data: object, _depth: int = 0) -&gt; object</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/lua_helper.py#L69">source</a>
+<p>Converts Lua data to its Python equivalent (dict, list, or basic value).</p>
+<p>:param lua_data: The Lua data to convert. Can be a basic type (int, float, bool, str, None), Lua table (converted to Python dict or list), or a Lua function (converted to a string).<br>:return: The corresponding Python data structure (dict, list, basic type, or string).</p>
+</section>
+<section class="member">
+<code class="signature">parse_lua_tables(lua_runtime: LuaRuntime, tables: list[str] = None) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/lua_helper.py#L138">source</a>
+<p>Parses Lua tables from the provided Lua runtime and converts them into Python data structures.</p>
+<p>:param lua_runtime: The initialised Lua runtime environment containing the Lua code to parse.<br>:param tables: List of Lua table names to extract. If None, all global tables (excluding standard Lua libraries) will be extracted.<br>:return: Dictionary containing extracted tables with their Python data representations.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

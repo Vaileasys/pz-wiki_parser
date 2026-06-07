@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>entity_health.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../recipes/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="entity_article.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="entity_infobox.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../tools/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="entity_article.html">entity_article.py</a>
+<a href="entity_health.html">entity_health.py</a>
+<a href="entity_infobox.html">entity_infobox.py</a>
+<a href="named_furniture_filter.html">named_furniture_filter.py</a>
+<a href="tiles_article.html">tiles_article.py</a>
+<a href="tiles_batch.html">tiles_batch.py</a>
+<a href="tiles_codesnip.html">tiles_codesnip.py</a>
+<a href="tiles_container_mapping.html">tiles_container_mapping.py</a>
+<a href="tiles_infobox.html">tiles_infobox.py</a>
+<a href="tiles_scrapping.html">tiles_scrapping.py</a>
+<a href="tiles_stitcher.html">tiles_stitcher.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>entity_health.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/tiles</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">extract_base_name(entity_name: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_health.py#L18">source</a>
+<p>Extract the base name from an entity name by removing level suffix.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>entity_name (str)</dt>
+<dd>Full entity name (e.g., &quot;Wood_BarElementCorner_Lvl1&quot;)</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Base name without level suffix (e.g., &quot;Wood_BarElementCorner&quot;)</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">group_entities_by_base(entity_data: Dict[str, dict]) -&gt; Dict[str, List[tuple]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_health.py#L33">source</a>
+<p>Group entities by their base name, sorting level variants together.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>entity_data (Dict[str, dict])</dt>
+<dd>Dictionary of all entity definitions</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Dict[str, List[tuple]]</dt>
+<dd>Dictionary mapping base names to list of (entity_name, entity_def) tuples</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_translated_name(entity_def: dict) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_health.py#L64">source</a>
+<p>Get the translated display name for an entity.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>entity_def (dict)</dt>
+<dd>Entity definition dictionary.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Translated display name.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">extract_descriptor(display_name: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_health.py#L84">source</a>
+<p>Extract the descriptor (text in parentheses) from a display name.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>display_name (str)</dt>
+<dd>Full display name like &quot;Wooden Wall (Shoddy)&quot;</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The descriptor text like &quot;Shoddy&quot;, or empty string if none found.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">map_descriptor(descriptor: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_health.py#L100">source</a>
+<p>Map a descriptor to its replacement value.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>descriptor (str)</dt>
+<dd>Original descriptor (e.g., &quot;Shoddy&quot;)</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Mapped descriptor (e.g., &quot;Basic&quot;) or original if no mapping exists.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_min_level(entity_def: dict) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_health.py#L113">source</a>
+<p>Extract the minimum skill level required to build an entity.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>entity_def (dict)</dt>
+<dd>Entity definition dictionary.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Minimum skill level as string, or empty string if none.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">build_health_template_single(entity_name: str, entity_def: dict) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_health.py#L131">source</a>
+<p>Build a health template for a single entity (not merged).</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>entity_name (str)</dt>
+<dd>Name identifier of the entity.</dd>
+<dt>entity_def (dict)</dt>
+<dd>Entity definition dictionary.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>MediaWiki health template markup.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">build_health_template_merged(base_name: str, entity_variants: List[tuple]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_health.py#L167">source</a>
+<p>Build a merged health template for all level variants of an entity.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>base_name (str)</dt>
+<dd>Base name without level suffix.</dd>
+<dt>entity_variants (List[tuple])</dt>
+<dd>List of (entity_name, entity_def) tuples.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>MediaWiki health template markup with merged level variants.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">has_health_values(entity_def: dict) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_health.py#L212">source</a>
+<p>Check if an entity has skillBaseHealth value.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>entity_def (dict)</dt>
+<dd>Entity definition dictionary.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>True if entity has skillBaseHealth value.</dd>
+<dt>If health is missing but skillBaseHealth exists, health defaults to 0.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">generate_health_templates(grouped_entities: Dict[str, List[tuple]], lang_code: str) -&gt; Dict[str, str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_health.py#L227">source</a>
+<p>Generate health templates for all entities.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>grouped_entities (Dict[str, List[tuple]])</dt>
+<dd>Dictionary mapping base names to entity variants.</dd>
+<dt>lang_code (str)</dt>
+<dd>Language code for output directory.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Dict[str, str]</dt>
+<dd>Dictionary mapping base names to their health template markup.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main(lang_code: str, entity_data: Dict[str, dict] = None) -&gt; Dict[str, str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_health.py#L284">source</a>
+<p>Main execution function for entity health template generation.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lang_code (str)</dt>
+<dd>Language code to process</dd>
+<dt>entity_data (Dict[str, dict], optional)</dt>
+<dd>Pre-loaded entity data. If None, loads from cache.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Dict[str, str]</dt>
+<dd>Dictionary mapping base names to their health template markup.</dd>
+<dt>This function</dt>
+<dd>No description.</dd>
+<dt>1. Loads the parsed entity data cache (if not provided)</dt>
+<dd>No description.</dd>
+<dt>2. Groups entities by base name (merging level variants)</dt>
+<dd>No description.</dd>
+<dt>3. Generates health templates</dt>
+<dd>No description.</dd>
+<dt>4. Outputs files to output/{lang_code}/tiles/entity_hp/</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

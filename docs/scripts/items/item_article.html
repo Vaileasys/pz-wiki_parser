@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>item_article.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../foraging/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="item_body_part.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="groups/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="item_article.html">item_article.py</a>
+<a href="item_body_part.html">item_body_part.py</a>
+<a href="item_codesnip.html">item_codesnip.py</a>
+<a href="item_consumables.html">item_consumables.py</a>
+<a href="item_container_contents.html">item_container_contents.py</a>
+<a href="item_distribution.html">item_distribution.py</a>
+<a href="item_fixing.html">item_fixing.py</a>
+<a href="item_groups.html">item_groups.py</a>
+<a href="item_infobox.html">item_infobox.py</a>
+<a href="item_lists.html">item_lists.py</a>
+<a href="item_literature_titles.html">item_literature_titles.py</a>
+<a href="item_recmedia_transcript.html">item_recmedia_transcript.py</a>
+<a href="item_tags.html">item_tags.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>item_article.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/items</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">load_translations(language_code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L39">source</a>
+<p>Load translation data from JSON file for the specified language.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>language_code (str)</dt>
+<dd>The language code to load translations for</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Translation data for the specified language</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">load_page_dictionary()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L63">source</a>
+<p>Load the page dictionary from page_manager and store it in memory.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>The flattened page dictionary</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">load_cache()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L84">source</a>
+<p>Load frequently accessed content into memory for fast lookups.</p>
+<p>Caches:<br>- History entries: resources/history/{id or id_type}.txt<br>- Code snippets: output/en/item/codesnips/{id_type or id}.txt<br>- Body parts: output/en/item/body_parts/{id_type or id}.txt<br>- Consumable properties: output/en/item/consumable_properties/{id_type or id}.txt<br>- Container contents: output/en/item/container_contents/{id_type or id}.txt<br>- Fixing: output/en/item/fixing/{id_type or id}.txt<br>- Infoboxes: output/en/item/infoboxes/{id_type or id}.txt<br>- Crafting recipes: output/recipes/crafting/id/*.txt<br>- Evolved recipes: output/recipes/evolved_recipes/template/*.txt<br>- Research recipes: output/recipes/researchrecipes/id/*.txt<br>- Teached recipes: output/recipes/teachedrecipes/id/*.txt<br>- Building recipes: output/recipes/building/id/*.txt<br>- Distribution data: data/cache/distributions/all_items.json<br>- Usage sections:<br>  - Weapon: output/en/item/usage/weapon/{id_type or id}.txt<br>  - Clothing: output/en/item/usage/clothing/{id_type or id}.txt<br>  - Container: output/en/item/usage/container/{id_type or id}.txt<br>  - Fluid container: output/en/item/usage/fluid_container/{id_type or id}.txt<br>  - Food: output/en/item/usage/food/{id_type or id}.txt<br>  - Crafting: output/en/item/usage/crafting/{id_type or id}.txt<br>  - Building: output/en/item/usage/building/{id_type or id}.txt</p>
+</section>
+<section class="member">
+<code class="signature">get_article_for_item(item_name, language_code = &#x27;en&#x27;)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L332">source</a>
+<p>Determine the correct article for an item name.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_name (str)</dt>
+<dd>The item name</dd>
+<dt>language_code (str)</dt>
+<dd>Language code</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The appropriate article (&quot;A&quot;, &quot;An&quot;, or &quot;&quot;)</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_category_link(item)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L373">source</a>
+<p>Resolve the category link ({{ll|Category:...}}) for an item for use in the footer.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item (Item)</dt>
+<dd>Item instance</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Category link markup, e.g. {{ll|Category:Materials}}</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_header(item, translation_data, language_code = &#x27;en&#x27;)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L467">source</a>
+<p>Create the header markup: static LangSwitch + Navbar, then version/autogenerated (and Title/AutoT for non-en).</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item (Item)</dt>
+<dd>Item instance</dd>
+<dt>translation_data (dict)</dt>
+<dd>Translation data</dd>
+<dt>language_code (str)</dt>
+<dd>Language code</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Header markup</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_intro(item_data, translation_data, language_code = &#x27;en&#x27;)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L500">source</a>
+<p>Creates the introduction section for an item article.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_data (dict)</dt>
+<dd>Data about the item including name and other properties</dd>
+<dt>translation_data (dict)</dt>
+<dd>Translation data for the current language</dd>
+<dt>language_code (str)</dt>
+<dd>The language code (default: &quot;en&quot;)</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The formatted introduction text</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_infobox(item)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L607">source</a>
+<p>Get the infobox for an item from the cache.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item (Item)</dt>
+<dd>Item instance</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Infobox markup</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_usage(item_data, translation_data)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L630">source</a>
+<p>Creates the usage section for an item article with a call to action.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_data (dict)</dt>
+<dd>Data about the item</dd>
+<dt>translation_data (dict)</dt>
+<dd>Translation data for the current language</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The formatted usage section</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_obtaining(item_data, translation_data)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L1204">source</a>
+<p>Creates the obtaining section.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_data (dict)</dt>
+<dd>Data about the item</dd>
+<dt>translation_data (dict)</dt>
+<dd>Translation data for the current language</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The formatted obtaining section, or empty string if no data</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_history(item_data, translation_data)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L1271">source</a>
+<p>Creates the history section.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_data (dict)</dt>
+<dd>Data about the item</dd>
+<dt>translation_data (dict)</dt>
+<dd>Translation data for the current language</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The formatted history section</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_code(item_data, translation_data)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L1306">source</a>
+<p>Creates the code section.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_data (dict)</dt>
+<dd>Data about the item</dd>
+<dt>translation_data (dict)</dt>
+<dd>Translation data for the current language</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The formatted code section</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_navigation(translation_data)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L1337">source</a>
+<p>Creates the navigation section.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>translation_data (dict)</dt>
+<dd>Translation data for the current language</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The formatted navigation section</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_articles()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L1352">source</a>
+</section>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_article.py#L1448">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

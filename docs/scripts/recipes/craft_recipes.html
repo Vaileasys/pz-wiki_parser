@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>craft_recipes.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="evolved_recipes.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../tiles/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="craft_recipes.html">craft_recipes.py</a>
+<a href="evolved_recipes.html">evolved_recipes.py</a>
+<a href="researchrecipes.html">researchrecipes.py</a>
+<a href="teached_recipes.html">teached_recipes.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>craft_recipes.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/recipes</a></p>
+<div class="summary"><p>Project Zomboid Wiki Crafting Recipe Processor</p>
+<p>This script processes crafting recipes from Project Zomboid, converting them into<br>wiki-ready format. It handles both standard crafting recipes and building recipes,<br>with support for various recipe components and special cases.</p>
+<p>The script handles:<br>- Fluid processing with RGB color values<br>- Ingredient processing with quantities<br>- Tool requirements and workstations<br>- Product outputs and mappers<br>- Experience gains and skill requirements<br>- Recipe learning methods<br>- Item and skill usage documentation<br>- Lua table generation for templates</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">get_unit_tool_ids() -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L41">source</a>
+<p>Get list of item IDs that should be treated as unit tools.<br>Finds all items with Type &quot;Drainable&quot; from the item data cache.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>List of item IDs that are unit tools (drainable items)</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_use_delta(item_id: str) -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L64">source</a>
+<p>Get the UseDelta value for a unit tool item.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_id (str)</dt>
+<dd>The item ID to look up</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>float</dt>
+<dd>The UseDelta value as a float, or 0.1 as default if not found</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">format_count(count_data)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L82">source</a>
+<p>Format count as &#x27;min-max&#x27; string or int for display.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>count_data</dt>
+<dd>Either an int for fixed counts or a dict with min/max/variable keys</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str | int</dt>
+<dd>Formatted count as &quot;min-max&quot; string for variable counts, or int for fixed counts</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">fluid_rgb(fluid_id)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L97">source</a>
+<p>Get RGB color values for a fluid type.</p>
+<p>Raises:<br>    RuntimeError: If there&#x27;s an error processing the fluid.</p>
+<p>Handles:<br>- Category-based fluid IDs<br>- RGB value normalization</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>fluid_id (str)</dt>
+<dd>Fluid identifier, can be in form &#x27;categories[Water]&#x27;.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Dictionary containing:</dd>
+<dt>- name</dt>
+<dd>Display name of the fluid</dd>
+<dt>- R</dt>
+<dd>Red color value (0-255)</dd>
+<dt>- G</dt>
+<dd>Green color value (0-255)</dd>
+<dt>- B</dt>
+<dd>Blue color value (0-255)</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_ingredients(recipe: dict, build_data: dict) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L136">source</a>
+<p>Process recipe ingredients into wiki markup.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>recipe (dict)</dt>
+<dd>Recipe data containing ingredients.</dd>
+<dt>build_data (dict)</dt>
+<dd>Additional building recipe data.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Wiki markup for ingredients section.</dd>
+<dt>Handles</dt>
+<dd>No description.</dd>
+<dt>- Energy inputs</dt>
+<dd>No description.</dd>
+<dt>- Fluid ingredients with colors</dt>
+<dd>No description.</dd>
+<dt>- Numbered list ingredients</dt>
+<dd>No description.</dd>
+<dt>- Tag-based ingredients</dt>
+<dd>No description.</dd>
+<dt>- Simple item ingredients</dt>
+<dd>No description.</dd>
+<dt>- Proper grouping of &quot;One of&quot; vs &quot;Each of&quot; items</dt>
+<dd>No description.</dd>
+<dt>- Icon integration</dt>
+<dd>No description.</dd>
+<dt>- Unit items with Unit bar template</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_tools(recipe: dict, build_data: dict) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L385">source</a>
+<p>Process tool requirements into wiki markup.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>recipe (dict)</dt>
+<dd>Recipe data containing tool requirements.</dd>
+<dt>build_data (dict)</dt>
+<dd>Additional building recipe data.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Wiki markup for tools section.</dd>
+<dt>Handles</dt>
+<dd>No description.</dd>
+<dt>- Individual tool requirements</dt>
+<dd>No description.</dd>
+<dt>- Tool tag groups</dt>
+<dd>No description.</dd>
+<dt>- Tool condition flags</dt>
+<dd>No description.</dd>
+<dt>- Icon integration</dt>
+<dd>No description.</dd>
+<dt>- Proper grouping of requirements</dt>
+<dd>No description.</dd>
+<dt>- Unit items with Unit bar template</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_workstation(recipe: dict, build_data: dict) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L492">source</a>
+<p>Process workstation requirements into wiki markup.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>recipe (dict)</dt>
+<dd>Recipe data containing workstation info.</dd>
+<dt>build_data (dict)</dt>
+<dd>Additional building recipe data.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Wiki markup for workstation section.</dd>
+<dt>Handles</dt>
+<dd>No description.</dd>
+<dt>- Required crafting stations</dt>
+<dd>No description.</dd>
+<dt>- Special location requirements</dt>
+<dd>No description.</dd>
+<dt>- Building-specific workstations</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_output_mapper(recipe: dict, mapper_key: str) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L570">source</a>
+<p>Process output mapper strings into item lists.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>recipe (dict)</dt>
+<dd>Recipe data containing mappers.</dd>
+<dt>mapper_key (str)</dt>
+<dd>Key for the mapper to process.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>List of mapped item IDs.</dd>
+<dt>Handles</dt>
+<dd>No description.</dd>
+<dt>- Mapper resolution</dt>
+<dd>No description.</dd>
+<dt>- Item ID normalization</dt>
+<dd>No description.</dd>
+<dt>- Multiple mapper types</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_products(recipe: dict, build_data: dict) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L616">source</a>
+<p>Process recipe products into wiki markup.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>recipe (dict)</dt>
+<dd>Recipe data containing products.</dd>
+<dt>build_data (dict)</dt>
+<dd>Additional building recipe data.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Wiki markup for products section.</dd>
+<dt>Handles</dt>
+<dd>No description.</dd>
+<dt>- Standard product outputs</dt>
+<dd>No description.</dd>
+<dt>- Building recipe outputs</dt>
+<dd>No description.</dd>
+<dt>- Fluid outputs with colors</dt>
+<dd>No description.</dd>
+<dt>- Icon integration</dt>
+<dd>No description.</dd>
+<dt>- Amount formatting</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_xp(recipe: dict, build_data: dict) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L802">source</a>
+<p>Process experience gains into wiki markup.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>recipe (dict)</dt>
+<dd>Recipe data containing XP info.</dd>
+<dt>build_data (dict)</dt>
+<dd>Additional building recipe data.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Wiki markup for XP section.</dd>
+<dt>Handles</dt>
+<dd>No description.</dd>
+<dt>- XP amounts per skill</dt>
+<dd>No description.</dd>
+<dt>- Multiple skill XP gains</dt>
+<dd>No description.</dd>
+<dt>- Building-specific XP</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_recipes(data: dict) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L840">source</a>
+<p>Process recipe learning methods into wiki markup.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>data (dict)</dt>
+<dd>Recipe data containing learning methods.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Wiki markup for recipe learning section.</dd>
+<dt>Handles</dt>
+<dd>No description.</dd>
+<dt>- Skillbook requirements</dt>
+<dd>No description.</dd>
+<dt>- Auto-learn conditions</dt>
+<dd>No description.</dd>
+<dt>- Schematic requirements</dt>
+<dd>No description.</dd>
+<dt>- Trait requirements</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_skills(data: dict) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L933">source</a>
+<p>Process skill requirements into wiki markup.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>data (dict)</dt>
+<dd>Recipe data containing skill requirements.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Wiki markup for skills section.</dd>
+<dt>Handles</dt>
+<dd>No description.</dd>
+<dt>- Required skill levels</dt>
+<dd>No description.</dd>
+<dt>- Multiple skill requirements</dt>
+<dd>No description.</dd>
+<dt>- Skill alternatives</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_requirements(recipe: dict, literature_data: dict) -&gt; tuple[str, str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L961">source</a>
+<p>Process recipe requirements into wiki markup.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>recipe (dict)</dt>
+<dd>Recipe data.</dd>
+<dt>parsed_item_metadata (dict)</dt>
+<dd>Item metadata for reference.</dd>
+<dt>literature_data (dict)</dt>
+<dd>Literature data for books/magazines.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>tuple[str, str]</dt>
+<dd>(recipes_markup, skills_markup) for wiki sections.</dd>
+<dt>Handles</dt>
+<dd>No description.</dd>
+<dt>- Skill requirements</dt>
+<dd>No description.</dd>
+<dt>- Literature requirements</dt>
+<dd>No description.</dd>
+<dt>- Trait requirements</dt>
+<dd>No description.</dd>
+<dt>- Auto-learn conditions</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">build_research_items_map(craft_data: dict, build_data: dict) -&gt; dict[str, list[str]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1069">source</a>
+<p>Build a reverse mapping of recipe_id -&gt; list of item IDs that can research that recipe.</p>
+<p>This is the reverse of researchrecipes.py: instead of listing which recipes an item<br>can teach, this lists which items can be used to research/unlock a given recipe.</p>
+<p>Two sources are combined:<br>- Items whose ResearchableRecipes property lists this recipe (after meta expansion).<br>- Items that are outputs of this recipe when the recipe requires skill or auto-learn.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>craft_data (dict)</dt>
+<dd>Raw crafting recipe data keyed by recipe_id.</dd>
+<dt>build_data (dict)</dt>
+<dd>Raw building/entity recipe data keyed by recipe_id.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict[str, list[str]]</dt>
+<dd>recipe_id -&gt; sorted list of item IDs.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_research_items(recipe_id: str, research_items_map: dict[str, list[str]]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1120">source</a>
+<p>Generate a collapsible wiki list of items that can be researched to learn this recipe.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>recipe_id (str)</dt>
+<dd>The recipe identifier.</dd>
+<dt>research_items_map (dict[str, list[str]])</dt>
+<dd>Mapping from recipe_id to item IDs.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Wiki markup for a collapsible list, or empty string if none.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">build_tag_to_items_map() -&gt; dict[str, list[dict[str, str]]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1158">source</a>
+<p>Build mapping of tags to items.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>parsed_item_data (dict)</dt>
+<dd>Parsed item data.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict[str, list[dict[str, str]]]</dt>
+<dd>Mapping of tags to item lists.</dd>
+<dt>Creates a lookup table for items by their tags.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">output_item_article_lists(crafting_recipe_map: dict[str, dict], building_recipe_map: dict[str, dict], tag_to_items_map: dict[str, list[dict[str, str]]]) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1179">source</a>
+<p>Generate wiki article lists for items with id and page subfolders.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>crafting_recipe_map (dict[str, dict])</dt>
+<dd>Crafting recipe data.</dd>
+<dt>building_recipe_map (dict[str, dict])</dt>
+<dd>Building recipe data.</dd>
+<dt>tag_to_items_map (dict[str, list[dict[str, str]]])</dt>
+<dd>Tag to items mapping.</dd>
+<dt>Creates files documenting how items are used in recipes,</dt>
+<dd>No description.</dd>
+<dt>both as ingredients and as products. Organizes outputs into</dt>
+<dd>No description.</dd>
+<dt>id and page subfolders for better wiki organization.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">output_skill_usage(recipe_data_map: dict[str, dict]) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1475">source</a>
+<p>Generate wiki markup for skill usage.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>recipe_data_map (dict[str, dict])</dt>
+<dd>Recipe data.</dd>
+<dt>Creates files documenting which recipes require each skill</dt>
+<dd>No description.</dd>
+<dt>and what level of skill is needed.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">output_category_usage(recipe_data_map: dict[str, dict]) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1549">source</a>
+<p>Generate wiki markup for category usage.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>recipe_data_map (dict[str, dict])</dt>
+<dd>Recipe data.</dd>
+<dt>Creates files documenting which recipes belong to each category</dt>
+<dd>No description.</dd>
+<dt>and outputs them in template format.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">output_workstation_usage(recipe_data_map: dict[str, dict]) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1608">source</a>
+<p>Generate wiki markup for workstation usage.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>recipe_data_map (dict[str, dict])</dt>
+<dd>Recipe data.</dd>
+<dt>Creates files documenting which recipes require each workstation,</dt>
+<dd>No description.</dd>
+<dt>organized by crafting vs building recipes.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">output_tag_usage(crafting_recipe_map: dict[str, dict], building_recipe_map: dict[str, dict]) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1723">source</a>
+<p>Generate wiki markup for tag usage.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>crafting_recipe_map (dict[str, dict])</dt>
+<dd>Crafting recipe data.</dd>
+<dt>building_recipe_map (dict[str, dict])</dt>
+<dd>Building recipe data.</dd>
+<dt>Creates files documenting which recipes use each tag,</dt>
+<dd>No description.</dd>
+<dt>organized by crafting vs building recipes.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">output_lua_tables(recipe_data_map: dict[str, dict]) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1827">source</a>
+<p>Generate Lua tables for recipe data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>recipe_data_map (dict[str, dict])</dt>
+<dd>Recipe data.</dd>
+<dt>Creates Lua table files that can be used by wiki templates</dt>
+<dd>No description.</dd>
+<dt>to display recipe information.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main(batch: bool = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/craft_recipes.py#L1935">source</a>
+<p>Main execution function for recipe processing.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>batch (bool)</dt>
+<dd>If True, skip language initialization</dd>
+<dt>This function</dt>
+<dd>No description.</dd>
+<dt>1. Loads necessary data from parsers</dt>
+<dd>No description.</dd>
+<dt>2. Processes all recipes into wiki format</dt>
+<dd>No description.</dd>
+<dt>3. Generates item usage documentation</dt>
+<dd>No description.</dd>
+<dt>4. Creates skill usage documentation</dt>
+<dd>No description.</dd>
+<dt>5. Outputs Lua tables for templates</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

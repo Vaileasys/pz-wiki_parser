@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>metarecipe_parser.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../objects/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="literature_parser.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="movable_definitions_parser.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../recipes/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="creation_method_parser.html">creation_method_parser.py</a>
+<a href="distribution_container_parser.html">distribution_container_parser.py</a>
+<a href="distribution_parser.html">distribution_parser.py</a>
+<a href="evolvedrecipe_parser.html">evolvedrecipe_parser.py</a>
+<a href="item_parser.html">item_parser.py</a>
+<a href="java_parser.html">java_parser.py</a>
+<a href="literature_parser.html">literature_parser.py</a>
+<a href="metarecipe_parser.html">metarecipe_parser.py</a>
+<a href="movable_definitions_parser.html">movable_definitions_parser.py</a>
+<a href="outfit_parser.html">outfit_parser.py</a>
+<a href="outfit_story_parser.html">outfit_story_parser.py</a>
+<a href="outfit_zone_parser.html">outfit_zone_parser.py</a>
+<a href="radio_parser.html">radio_parser.py</a>
+<a href="recipe_parser.html">recipe_parser.py</a>
+<a href="script_parser.html">script_parser.py</a>
+<a href="stash_parser.html">stash_parser.py</a>
+<a href="tiles_parser.html">tiles_parser.py</a>
+<a href="zone_parser.html">zone_parser.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>metarecipe_parser.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/parser</a></p>
+<div class="summary"><p>Project Zomboid Wiki Meta Recipe Parser</p>
+<p>This script identifies and processes meta recipes from Project Zomboid&#x27;s craft recipe data.<br>Meta recipes allow multiple recipes to be learned by just knowing one recipe name.</p>
+<p>The script:<br>- Loads craft recipe data from cache<br>- Identifies recipes with the &#x27;MetaRecipe&#x27; key<br>- Groups recipes by their meta recipe identifier<br>- Provides a way to expand meta recipe names to all associated recipes<br>- Saves the meta recipe mapping to cache for use by other scripts</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">get_metarecipe_data()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/metarecipe_parser.py#L28">source</a>
+<p>Returns the parsed meta recipe data.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>A dictionary mapping meta recipe names to lists of recipe names.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">build_metarecipe_mapping(craft_data)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/metarecipe_parser.py#L41">source</a>
+<p>Builds a mapping of meta recipes to their associated recipes.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>craft_data (dict)</dt>
+<dd>Dictionary of craft recipes.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Dictionary mapping meta recipe names to lists of recipe names.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">expand_recipe_list(recipe_list)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/metarecipe_parser.py#L67">source</a>
+<p>Expands a list of recipe names, replacing meta recipes with their associated recipes.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>recipe_list (list or str)</dt>
+<dd>A list of recipe names or a single recipe name.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list</dt>
+<dd>An expanded list of recipe names with meta recipes replaced by their components.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/metarecipe_parser.py#L97">source</a>
+<p>Initializes the meta recipe data.</p>
+<p>This function:<br>1. Checks for existing cache<br>2. If needed, parses craft recipe data to extract meta recipes<br>3. Builds a mapping of meta recipes to their associated recipes<br>4. Saves the mapping to cache</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

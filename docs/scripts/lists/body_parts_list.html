@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>body_parts_list.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../items/lists/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="body_locations_list.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="fluid_list.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../misc/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="attachment_list.html">attachment_list.py</a>
+<a href="body_locations_list.html">body_locations_list.py</a>
+<a href="body_parts_list.html">body_parts_list.py</a>
+<a href="fluid_list.html">fluid_list.py</a>
+<a href="furniture_list.html">furniture_list.py</a>
+<a href="furniture_surfaces_list.html">furniture_surfaces_list.py</a>
+<a href="hotbar_slots.html">hotbar_slots.py</a>
+<a href="outfit_list.html">outfit_list.py</a>
+<a href="recmedia_list.html">recmedia_list.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>body_parts_list.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/lists</a></p>
+<div class="summary"><p>Generates a wiki-formatted table of all BloodLocation values for the modding article.</p>
+<p>This script outputs a MediaWiki table showing each BloodLocation name, the associated body parts,<br>and an image reference. The data is sourced directly from the BloodLocation and BodyPart classes,<br>and is intended for use in the PZWiki modding documentation.</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">build_links(location: BloodLocation) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/body_parts_list.py#L41">source</a>
+<p>Builds a single string of internal anchor links for all body parts in a BloodLocation.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>location (BloodLocation)</dt>
+<dd>The location to extract links from.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>A string of wiki-formatted anchor links joined with &lt;br&gt; tags.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_image(blood_location: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/body_parts_list.py#L57">source</a>
+<p>Returns the appropriate image tag for a given BloodLocation.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>blood_location (str)</dt>
+<dd>The name of the BloodLocation.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>A wiki-formatted image link.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">generate_content() -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/body_parts_list.py#L71">source</a>
+<p>Builds the full wiki table content for all BloodLocations.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>A list of strings representing lines of the wiki table.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/body_parts_list.py#L90">source</a>
+<p>Entry point for the script. Generates the table and writes it to the output file.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

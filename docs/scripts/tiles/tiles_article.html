@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tiles_article.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../recipes/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="named_furniture_filter.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="tiles_batch.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../tools/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="entity_article.html">entity_article.py</a>
+<a href="entity_health.html">entity_health.py</a>
+<a href="entity_infobox.html">entity_infobox.py</a>
+<a href="named_furniture_filter.html">named_furniture_filter.py</a>
+<a href="tiles_article.html">tiles_article.py</a>
+<a href="tiles_batch.html">tiles_batch.py</a>
+<a href="tiles_codesnip.html">tiles_codesnip.py</a>
+<a href="tiles_container_mapping.html">tiles_container_mapping.py</a>
+<a href="tiles_infobox.html">tiles_infobox.py</a>
+<a href="tiles_scrapping.html">tiles_scrapping.py</a>
+<a href="tiles_stitcher.html">tiles_stitcher.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>tiles_article.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/tiles</a></p>
+<div class="summary"><p>Project Zomboid Wiki Article Generator</p>
+<p>This script generates complete wiki articles for Project Zomboid tiles. It combines<br>various components including infoboxes, usage information, code snippets, and navigation<br>elements to create comprehensive wiki pages for each tile type.</p>
+<p>The script handles:<br>- Article structure and formatting<br>- Usage descriptions based on tile properties<br>- Dismantling and breakage information<br>- Code snippet integration<br>- Navigation elements</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">process_usage(tile_name, tile_data, scrappings)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L20">source</a>
+<p>Build the &#x27;Usage&#x27; section for a tile article.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>tile_name (str)</dt>
+<dd>Name of the tile group.</dd>
+<dt>tile_data (dict)</dt>
+<dd>Dictionary containing tile properties and variants.</dd>
+<dt>scrappings (dict)</dt>
+<dd>Dictionary containing dismantling and breakage information.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Formatted wiki markup for the Usage section, including property-based</dd>
+<dt>descriptions and dismantling/breakage information.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_codesnip(tile_data, codesnips)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L121">source</a>
+<p>Create a CodeBox section containing all CodeSnip templates for a tile group.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>tile_data (dict)</dt>
+<dd>Dictionary of sprite names and their data.</dd>
+<dt>codesnips (dict)</dt>
+<dd>Dictionary mapping sprite names to their CodeSnip markup.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Formatted wiki markup for the Code section containing all relevant</dd>
+<dt>CodeSnip templates wrapped in a CodeBox.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">assemble_article(header, infobox, intro, usage, codesnip, navigation)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L143">source</a>
+<p>Combine all article sections into a complete wiki article.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>header (str)</dt>
+<dd>Article header with metadata templates.</dd>
+<dt>infobox (str)</dt>
+<dd>Infobox template markup.</dd>
+<dt>intro (str)</dt>
+<dd>Article introduction paragraph.</dd>
+<dt>usage (str)</dt>
+<dd>Usage section markup.</dd>
+<dt>codesnip (str)</dt>
+<dd>Code section markup.</dd>
+<dt>navigation (str)</dt>
+<dd>Navigation template markup.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Complete wiki article text with all sections properly formatted.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">sanitize_filename(name)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L170">source</a>
+<p>Convert a string into a safe filesystem filename.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>name (str)</dt>
+<dd>Original string to convert.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Sanitized string safe for use as a filename, with special characters</dd>
+<dt>replaced by underscores and spaces converted to underscores.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">generate_tile_articles(tiles_data, infoboxes, codesnips, scrappings)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_article.py#L190">source</a>
+<p>Generate and save wiki articles for all tile groups.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>tiles_data (dict)</dt>
+<dd>Dictionary containing all tile group data.</dd>
+<dt>infoboxes (dict)</dt>
+<dd>Dictionary mapping tile names to their infobox markup.</dd>
+<dt>codesnips (dict)</dt>
+<dd>Dictionary mapping sprite names to their CodeSnip markup.</dd>
+<dt>scrappings (dict)</dt>
+<dd>Dictionary containing dismantling and breakage information.</dd>
+<dt>The function generates complete wiki articles by combining various components</dt>
+<dd>No description.</dd>
+<dt>and saves them to individual files in the output directory structure.</dt>
+<dd>No description.</dd>
+<dt>Each article includes metadata, infobox, introduction, usage information,</dt>
+<dd>No description.</dd>
+<dt>code snippets, and navigation elements.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

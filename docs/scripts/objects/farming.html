@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>farming.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="evolved_recipe.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="fish.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>farming.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<h2 id="classes">Classes</h2>
+<h3 id="class-farming">Farming</h3>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_parse_farming_definitions()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L13">source</a>
+</section>
+<section class="member">
+<code class="signature">_load_farming_definitions()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L40">source</a>
+</section>
+<section class="member">
+<code class="signature">from_item(item: Item | str) -&gt; &#x27;Farming | None&#x27;</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L64">source</a>
+</section>
+<section class="member">
+<code class="signature">from_recipe(recipe: str | list[str]) -&gt; &#x27;Farming | None&#x27;</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L79">source</a>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(crop: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L89">source</a>
+</section>
+<section class="member">
+<code class="signature">get_sprite(sprite = None, dim = &#x27;32x32px&#x27;) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L93">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">crop</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L114">source</a>
+</section>
+<section class="member">
+<code class="signature">data</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L118">source</a>
+</section>
+<section class="member">
+<code class="signature">icon</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L122">source</a>
+</section>
+<section class="member">
+<code class="signature">texture</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L126">source</a>
+</section>
+<section class="member">
+<code class="signature">season_recipe</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L130">source</a>
+</section>
+<section class="member">
+<code class="signature">seed_name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L134">source</a>
+</section>
+<section class="member">
+<code class="signature">seed_item</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L141">source</a>
+</section>
+<section class="member">
+<code class="signature">vegetable_item</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L147">source</a>
+</section>
+<section class="member">
+<code class="signature">special_seed</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L151">source</a>
+</section>
+<section class="member">
+<code class="signature">seed_types</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L155">source</a>
+</section>
+<section class="member">
+<code class="signature">sprite</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L161">source</a>
+</section>
+<section class="member">
+<code class="signature">dying_sprite</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L165">source</a>
+</section>
+<section class="member">
+<code class="signature">unhealthy_sprite</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L169">source</a>
+</section>
+<section class="member">
+<code class="signature">dead_sprite</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L173">source</a>
+</section>
+<section class="member">
+<code class="signature">trampled_sprite</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L177">source</a>
+</section>
+<section class="member">
+<code class="signature">time_to_grow</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L183">source</a>
+</section>
+<section class="member">
+<code class="signature">grow_time_days</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L187">source</a>
+</section>
+<section class="member">
+<code class="signature">full_grown_stage</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L191">source</a>
+</section>
+<section class="member">
+<code class="signature">mature_stage</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L195">source</a>
+</section>
+<section class="member">
+<code class="signature">harvest_level</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L199">source</a>
+</section>
+<section class="member">
+<code class="signature">water_needed_raw</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L203">source</a>
+</section>
+<section class="member">
+<code class="signature">water_needed</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L207">source</a>
+</section>
+<section class="member">
+<code class="signature">water_level</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L211">source</a>
+</section>
+<section class="member">
+<code class="signature">rot_time</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L215">source</a>
+</section>
+<section class="member">
+<code class="signature">grow_back</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L219">source</a>
+</section>
+<section class="member">
+<code class="signature">harvest_position</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L223">source</a>
+</section>
+<section class="member">
+<code class="signature">sow_month_num</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L229">source</a>
+</section>
+<section class="member">
+<code class="signature">sow_months</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L233">source</a>
+</section>
+<section class="member">
+<code class="signature">best_month_num</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L237">source</a>
+</section>
+<section class="member">
+<code class="signature">best_months</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L241">source</a>
+</section>
+<section class="member">
+<code class="signature">risk_month_num</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L245">source</a>
+</section>
+<section class="member">
+<code class="signature">risk_months</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L249">source</a>
+</section>
+<section class="member">
+<code class="signature">bad_month_num</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L253">source</a>
+</section>
+<section class="member">
+<code class="signature">bad_months</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L257">source</a>
+</section>
+<section class="member">
+<code class="signature">min_veg</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L263">source</a>
+</section>
+<section class="member">
+<code class="signature">max_veg</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L267">source</a>
+</section>
+<section class="member">
+<code class="signature">min_veg_authorized</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L271">source</a>
+</section>
+<section class="member">
+<code class="signature">max_veg_authorized</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L275">source</a>
+</section>
+<section class="member">
+<code class="signature">is_flower</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L281">source</a>
+</section>
+<section class="member">
+<code class="signature">moth_food</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L285">source</a>
+</section>
+<section class="member">
+<code class="signature">moth_bane</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L289">source</a>
+</section>
+<section class="member">
+<code class="signature">aphids_bane</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L293">source</a>
+</section>
+<section class="member">
+<code class="signature">rabbit_bane</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L297">source</a>
+</section>
+<section class="member">
+<code class="signature">cold_hardy</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L301">source</a>
+</section>
+<section class="member">
+<code class="signature">slugs_proof</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L305">source</a>
+</section>
+<section class="member">
+<code class="signature">scythe_harvest</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/farming.py#L309">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-farming">Farming</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

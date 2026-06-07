@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>manual_tile_stitcher.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../tiles/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="generate_docs.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="outfit_images.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../utils/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="batch_processor.html">batch_processor.py</a>
+<a href="diff.html">diff.py</a>
+<a href="generate_docs.html">generate_docs.py</a>
+<a href="manual_tile_stitcher.html">manual_tile_stitcher.py</a>
+<a href="outfit_images.html">outfit_images.py</a>
+<a href="page_name_checker.html">page_name_checker.py</a>
+<a href="update_icons.html">update_icons.py</a>
+<a href="vehicle_render_data.html">vehicle_render_data.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>manual_tile_stitcher.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/tools</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L442">source</a>
+</section>
+<h2 id="classes">Classes</h2>
+<h3 id="class-spriteitem">SpriteItem</h3>
+<div class="summary"><p>Represents a sprite with its position and image.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(sprite_name, x = 0, y = 0)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L30">source</a>
+</section>
+<section class="member">
+<code class="signature">load_image()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L39">source</a>
+<p>Load the sprite image from disk.</p>
+</section>
+<section class="member">
+<code class="signature">get_photo_image()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L48">source</a>
+<p>Get PhotoImage for tkinter display.</p>
+</section>
+<h3 id="class-manualtilestitcher">ManualTileStitcher</h3>
+<div class="summary"><p>Main application for manual tile stitching.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(root)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L58">source</a>
+</section>
+<section class="member">
+<code class="signature">apply_dark_theme()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L78">source</a>
+<p>Apply dark theme to the application.</p>
+</section>
+<section class="member">
+<code class="signature">setup_ui()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L96">source</a>
+<p>Set up the user interface.</p>
+</section>
+<section class="member">
+<code class="signature">_remove_png_suffix(text)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L186">source</a>
+<p>Remove a trailing .png/.PNG extension from the provided text.</p>
+</section>
+<section class="member">
+<code class="signature">_normalize_expression(expression)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L192">source</a>
+<p>Normalize sprite expression text for consistent parsing.</p>
+</section>
+<section class="member">
+<code class="signature">_expand_expression_tokens(expression)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L198">source</a>
+<p>Expand shorthand expressions into full sprite names.</p>
+</section>
+<section class="member">
+<code class="signature">load_sprites()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L222">source</a>
+<p>Load sprites from the text input.</p>
+</section>
+<section class="member">
+<code class="signature">on_canvas_configure(event)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L273">source</a>
+<p>Handle canvas resize to update dimensions.</p>
+</section>
+<section class="member">
+<code class="signature">update_canvas()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L279">source</a>
+<p>Redraw all sprites on the canvas.</p>
+</section>
+<section class="member">
+<code class="signature">on_canvas_click(event)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L317">source</a>
+<p>Handle canvas click to select sprite and start dragging.</p>
+</section>
+<section class="member">
+<code class="signature">on_canvas_drag(event)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L342">source</a>
+<p>Handle dragging a sprite.</p>
+</section>
+<section class="member">
+<code class="signature">on_canvas_release(event)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L362">source</a>
+<p>Handle mouse release after dragging.</p>
+</section>
+<section class="member">
+<code class="signature">move_sprite(dx, dy)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L371">source</a>
+<p>Move the selected sprite by the given offset.</p>
+</section>
+<section class="member">
+<code class="signature">delete_selected_sprite()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L383">source</a>
+<p>Delete the currently selected sprite.</p>
+</section>
+<section class="member">
+<code class="signature">save_output()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/manual_tile_stitcher.py#L395">source</a>
+<p>Save the composite image to disk.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-spriteitem">SpriteItem</a>
+<a class="sidebar-child" href="#class-manualtilestitcher">ManualTileStitcher</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

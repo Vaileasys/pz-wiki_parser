@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>file_loading.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../animals/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="constants.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="language.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../fluids/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="cache.html">cache.py</a>
+<a href="config_manager.html">config_manager.py</a>
+<a href="constants.html">constants.py</a>
+<a href="file_loading.html">file_loading.py</a>
+<a href="language.html">language.py</a>
+<a href="logger.html">logger.py</a>
+<a href="page_manager.html">page_manager.py</a>
+<a href="runner.html">runner.py</a>
+<a href="setup.html">setup.py</a>
+<a href="version.html">version.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>file_loading.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/core</a></p>
+<div class="summary"><p>File Loading System</p>
+<p>Provides utilities for mapping, locating, reading, and writing game-related files<br>(like scripts, lua, maps, clothing) under the game&#x27;s media directory.</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">get_game_dir()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L21">source</a>
+<p>Return the base directory where the game is installed.</p>
+</section>
+<section class="member">
+<code class="signature">get_media_dir()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L25">source</a>
+<p>Return the path to the media folder within the game directory.</p>
+</section>
+<section class="member">
+<code class="signature">get_lua_dir()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L29">source</a>
+<p>Return the path to the &#x27;media/lua&#x27; directory.</p>
+</section>
+<section class="member">
+<code class="signature">get_scripts_dir()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L33">source</a>
+<p>Return the path to the &#x27;media/scripts&#x27; directory.</p>
+</section>
+<section class="member">
+<code class="signature">get_maps_dir()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L37">source</a>
+<p>Return the path to the &#x27;media/maps&#x27; directory.</p>
+</section>
+<section class="member">
+<code class="signature">get_clothing_dir()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L41">source</a>
+<p>Return the path to the &#x27;media/clothing&#x27; directory.</p>
+</section>
+<section class="member">
+<code class="signature">map_dir(base_dir, extension = None, media_type = &#x27;scripts&#x27;, suppress = False, exclude_ext = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L53">source</a>
+<p>Maps all files with the given extension in a directory.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>base_dir (str)</dt>
+<dd>Directory to scan.</dd>
+<dt>extension (str)</dt>
+<dd>File extension to include.</dd>
+<dt>media_type (str)</dt>
+<dd>Media type this map is for (&quot;scripts&quot;, &quot;lua&quot;).</dd>
+<dt>suppress (bool)</dt>
+<dd>If True, hides duplicate warnings.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict[str, list[str]]</dt>
+<dd>{filename: [relative_paths]}</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">map_game_files(suppress = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L119">source</a>
+</section>
+<section class="member">
+<code class="signature">get_file_paths(mapping: dict, filename: str, *, prefer = None) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L156">source</a>
+<p>Returns all matching file paths from the mapping, optionally filtered by keyword.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>mapping (dict)</dt>
+<dd>Output from map_dir().</dd>
+<dt>filename (str)</dt>
+<dd>Filename without extension.</dd>
+<dt>prefer (str, optional)</dt>
+<dd>Keyword to prioritise in path.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>All matching paths (may be empty).</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_game_file_map() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L179">source</a>
+<p>Returns the cached game file map. Loads from disk once if needed.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>{&#x27;scripts&#x27;: ..., &#x27;lua&#x27;: ...}</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_files_by_type(filenames: str | list[str] = None, media_type: str = &#x27;scripts&#x27;, prefer: str = None, prefix: str = None) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L194">source</a>
+<p>Resolves filenames to absolute paths using the file map for the specified media type.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>filenames (str or list[str], optional)</dt>
+<dd>File names (no extension or path). If None, includes all files.</dd>
+<dt>media_type (str)</dt>
+<dd>Media type (&quot;lua&quot;, &quot;scripts&quot;, &quot;maps&quot;, &quot;clothing&quot;, etc.).</dd>
+<dt>prefer (str, optional)</dt>
+<dd>Keyword to prioritise among duplicates.</dd>
+<dt>prefix (str, optional)</dt>
+<dd>Only include files starting with this prefix.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>Absolute file paths.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_script_files(filenames: str | list[str] = None, media_type: str = &#x27;scripts&#x27;, prefer: str = None, prefix: str = None) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L236">source</a>
+<p>Return absolute paths to script files, filtering by filenames, duplicates, or prefix.</p>
+</section>
+<section class="member">
+<code class="signature">get_lua_files(filenames: str | list[str] = None, media_type: str = &#x27;lua&#x27;, prefer: str = None) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L241">source</a>
+<p>Return absolute paths to Lua files, optionally filtering by name or preference keyword.</p>
+</section>
+<section class="member">
+<code class="signature">get_clothing_files(filenames: str | list[str] = None, media_type: str = &#x27;clothing&#x27;, prefer: str = None) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L246">source</a>
+<p>Return absolute paths to clothing XML files, with optional name or preference filtering.</p>
+</section>
+<section class="member">
+<code class="signature">get_relpath_by_type(name: str, media_type: str, prefer: str = None) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L252">source</a>
+<p>Retrieves the relative path to a file by name, as stored in the file map for the specified media type.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>name (str)</dt>
+<dd>The filename without extension.</dd>
+<dt>media_type (str)</dt>
+<dd>Media type (&quot;lua&quot;, &quot;scripts&quot;, &quot;maps&quot;, &quot;clothing&quot;, etc.).</dd>
+<dt>prefer (str, optional)</dt>
+<dd>Keyword to prioritise among duplicates.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str | None</dt>
+<dd>The relative file path if found, else None.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_script_relpath(name: str, prefer: str = None) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L269">source</a>
+<p>Return the relative path of a script file by name, optionally prioritising a substring.</p>
+</section>
+<section class="member">
+<code class="signature">get_lua_relpath(name: str, prefer: str = None) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L273">source</a>
+<p>Return the relative path of a Lua file by name, optionally prioritising a substring.</p>
+</section>
+<section class="member">
+<code class="signature">get_clothing_relpath(name: str, prefer: str = None) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L277">source</a>
+<p>Return the relative path of a clothing file by name, optionally prioritizing a substring.</p>
+</section>
+<section class="member">
+<code class="signature">get_abs_path_by_type(name: str, media_type: str, prefer: str = None) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L283">source</a>
+<p>Retrieves the absolute path to a file by name for the specified media type.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>name (str)</dt>
+<dd>The filename without extension.</dd>
+<dt>media_type (str)</dt>
+<dd>Media type (&quot;lua&quot;, &quot;scripts&quot;, &quot;maps&quot;, &quot;clothing&quot;, etc.).</dd>
+<dt>prefer (str, optional)</dt>
+<dd>Keyword to prioritise among duplicates.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str | None</dt>
+<dd>The absolute file path if found, otherwise None.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_script_path(name: str, media_type: str = &#x27;scripts&#x27;, prefer: str = None) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L301">source</a>
+<p>Return the absolute path to a script file by name, optionally prioritizing a substring.</p>
+</section>
+<section class="member">
+<code class="signature">get_lua_path(name: str, media_type: str = &#x27;lua&#x27;, prefer: str = None) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L305">source</a>
+<p>Return the absolute path to a Lua file by name, optionally prioritizing a substring.</p>
+</section>
+<section class="member">
+<code class="signature">get_clothing_path(name: str, media_type: str = &#x27;clothing&#x27;, prefer: str = None) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L309">source</a>
+<p>Return the absolute path to a clothing file by name, optionally prioritizing a substring.</p>
+</section>
+<section class="member">
+<code class="signature">build_file_map(base_dir: Path, name: str = &#x27;unknown&#x27;) -&gt; dict[str, Path]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L316">source</a>
+<p>Get a mapping of relative file paths to absolute paths.</p>
+</section>
+<section class="member">
+<code class="signature">hash_file(path: Path) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L326">source</a>
+</section>
+<section class="member">
+<code class="signature">load_json(path: str) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L336">source</a>
+<p>Load JSON data from a file. Returns empty dict on failure.</p>
+</section>
+<section class="member">
+<code class="signature">save_json(path: str, data: dict) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L349">source</a>
+<p>Save dictionary data to a JSON file. Returns True if successful.</p>
+</section>
+<section class="member">
+<code class="signature">read_file(path: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L362">source</a>
+<p>Reads the contents of a file as a string.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>path (str)</dt>
+<dd>Path to the file.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>File contents.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">write_file(content: list[str], rel_path: str = &#x27;output.txt&#x27;, root_path: str = OUTPUT_LANG_DIR, suppress: bool = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L387">source</a>
+<p>Writes content to a file, creating directories as needed.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>content (list[str])</dt>
+<dd>A list of strings to write to the file.</dd>
+<dt>rel_path (str)</dt>
+<dd>Relative path where the file will be saved. If no file extension is given, it&#x27;s treated as a directory.</dd>
+<dt>root_path (str)</dt>
+<dd>Root path to prepend to `rel_path`. {language_code} will be formatted to current language code.</dd>
+<dt>clear_root (bool)</dt>
+<dd>If True, deletes all contents under `root_path` before writing.</dd>
+<dt>suppress (bool)</dt>
+<dd>If True, suppresses info messages.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Path</dt>
+<dd>Directory where the file was saved.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">load_file(rel_path, root_path = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L416">source</a>
+<p>Load a text file and return its lines as a list.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>rel_path (str)</dt>
+<dd>Relative path to the file.</dd>
+<dt>root_path (str, optional)</dt>
+<dd>Root directory to join with rel_path. Defaults to &#x27;OUTPUT_LANG_DIR&#x27;.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>List of lines from the file, or an empty list if not found.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">clear_dir(directory: str = OUTPUT_LANG_DIR, suppress: bool = False) -&gt; Path</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/file_loading.py#L437">source</a>
+<p>Delete the contents of a directory at `root_path/rel_path`.<br>Only deletes contents under `PROJECT_ROOT`.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>directory (str)</dt>
+<dd>Directory to clear (automatically formats `language_code`).</dd>
+<dt>suppress (bool)</dt>
+<dd>If True, suppress warning/info messages.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Path</dt>
+<dd>The absolute path to the directory that was cleared.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

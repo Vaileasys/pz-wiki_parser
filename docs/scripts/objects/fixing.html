@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fixing.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="fish.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="fluid.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>fixing.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<div class="summary"><p>Provides access to parsed &quot;fixing&quot; data from Project Zomboid scripts.</p>
+<p>This module defines the `Fixing` class, which represents a repair recipe.<br>It includes logic for resolving fixing entries based on item IDs, loading fixer data, and exposing relevant<br>attributes like required items, condition modifiers, and skill requirements.</p>
+<p>Classes:<br>    - Fixing: Represents a fixing definition, including required items and fixers.<br>    - GlobalItem: Represents a global item required across all fixer attempts.<br>    - Fixer: Represents a fixer item and its associated skill requirements.</p></div>
+<h2 id="classes">Classes</h2>
+<h3 id="class-fixing">Fixing</h3>
+<div class="summary"><p>Represents a fixing entry for an item, containing data about how it can be repaired.</p>
+<p>This class lazily loads all fixing definitions from parsed script data and provides<br>a caching mechanism to avoid duplicate instances. A Fixing object can be accessed using<br>either a fixing ID, item ID or Item object.</p>
+<p>Properties:<br>    - fixing_id (str): The internal ID of the fixing.<br>    - valid (bool): Whether the fixing entry contains valid data.<br>    - script_type (str): Optional script type associated with the fixing.<br>    - file (str): The script file name where the fixing is defined.<br>    - path (str): The resolved file path for the fixing source.<br>    - module (str): The module prefix of the fixing ID.<br>    - id_type (str): The item identifier portion of the fixing ID.<br>    - requires (list[Item]): List of required items for the fix.<br>    - condition_modifier (float): Modifier applied to the item’s condition after repair.<br>    - global_items (list[GlobalItem]): Shared global items required by the fixing.<br>    - fixers (list[Fixer]): Fixer items, with optional skill requirements.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_load_fixings()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L45">source</a>
+<p>Load and cache all fixing data from script files if not already loaded.</p>
+</section>
+<section class="member">
+<code class="signature">all()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L50">source</a>
+<p>Return a dictionary of all fixings, mapped by their fixing ID.</p>
+</section>
+<section class="member">
+<code class="signature">keys()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L57">source</a>
+<p>Return an iterable of all available fixing IDs.</p>
+</section>
+<section class="member">
+<code class="signature">values()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L64">source</a>
+<p>Return a generator of all Fixing instances.</p>
+</section>
+<section class="member">
+<code class="signature">count() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L71">source</a>
+<p>Return the number of available fixing definitions.</p>
+</section>
+<section class="member">
+<code class="signature">exists(fixing_id: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L78">source</a>
+<p>Check if a fixing with the given ID exists.</p>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(key: str | Item)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L84">source</a>
+<p>Create or return a cached Fixing instance based on a string ID or Item object.<br>Supports matching by fixing ID, item ID, or an Item object.</p>
+</section>
+<section class="member">
+<code class="signature">__init__(_: str = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L136">source</a>
+<p>Initialise the Fixing instance with resolved fixing ID.</p>
+<p>Raises:<br>    RuntimeError: If resolving the fixing ID fails.</p>
+</section>
+<section class="member">
+<code class="signature">__getitem__(key)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L157">source</a>
+<p>Allow dictionary-style access to internal data.</p>
+</section>
+<section class="member">
+<code class="signature">__contains__(key)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L161">source</a>
+<p>Check if a key exists in the fixing data.</p>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L165">source</a>
+<p>Return a readable string representation of the Fixing instance.</p>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L169">source</a>
+<p>Get a value from the fixing data with an optional default.</p>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">valid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L174">source</a>
+<p>Return True if the fixing entry contains valid data.</p>
+</section>
+<section class="member">
+<code class="signature">script_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L179">source</a>
+<p>Return the script type defined for the fixing, if any.</p>
+</section>
+<section class="member">
+<code class="signature">file</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L184">source</a>
+<p>Return the source script file name for the fixing.</p>
+</section>
+<section class="member">
+<code class="signature">path</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L189">source</a>
+<p>Return the resolved file path of the fixing script.</p>
+</section>
+<section class="member">
+<code class="signature">module</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L194">source</a>
+<p>Return the module name (prefix) of the fixing ID.</p>
+</section>
+<section class="member">
+<code class="signature">id_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L199">source</a>
+<p>Return the item identifier part of the fixing ID.</p>
+</section>
+<section class="member">
+<code class="signature">requires</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L204">source</a>
+<p>Return a list of required Item objects for this fixing.</p>
+</section>
+<section class="member">
+<code class="signature">condition_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L209">source</a>
+<p>Return the condition modifier value for the fixing.</p>
+</section>
+<section class="member">
+<code class="signature">global_items</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L214">source</a>
+<p>Return a list of GlobalItem objects required by the fixing.</p>
+</section>
+<section class="member">
+<code class="signature">fixers</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L222">source</a>
+<p>Return a list of Fixer objects that can be used for repair.</p>
+</section>
+<h3 id="class-globalitem">GlobalItem</h3>
+<div class="summary"><p>Represents a global item required across all fixing attempts.</p>
+<p>Properties:<br>    - item_id (str): The item ID of the required global item.<br>    - amount (int): Quantity required for the fixing.<br>    - item (Item): The wrapped `Item` object.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(item_id: str, amount: int)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L236">source</a>
+<p>Initialise a GlobalItem with its ID and required amount.</p>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L241">source</a>
+<p>Return a string representation of the GlobalItem instance.</p>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">item</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L246">source</a>
+<p>Return the Item object associated with this global item ID.</p>
+</section>
+<h3 id="class-fixer">Fixer</h3>
+<div class="summary"><p>Represents a fixer item used to repair something, with optional skill requirements.</p>
+<p>Properties:<br>    - item_id (str): The fixer item’s ID.<br>    - amount (int): Quantity of the fixer required.<br>    - skill_requirements (dict[str, int]): Required skills and their levels.<br>    - item (Item): The wrapped `Item` object.<br>    - skills (list[Skill]): Skill objects required for the fixer.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(item_id: str, data: dict)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L262">source</a>
+<p>Initialise a Fixer with its ID, amount, and skill requirements.</p>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L268">source</a>
+<p>Return a string representation of the Fixer instance.</p>
+</section>
+<section class="member">
+<code class="signature">get_skill_level(skill: Skill | str) -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L272">source</a>
+<p>Return the required level for the given skill.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>skill (Skill | str)</dt>
+<dd>The skill object or perk ID to check.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>int</dt>
+<dd>The level required for the given skill, or 0 if not required.</dd>
+</dl>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">item</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L286">source</a>
+<p>Return the Item object associated with this fixer.</p>
+</section>
+<section class="member">
+<code class="signature">skills</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fixing.py#L291">source</a>
+<p>Return a list of Skill objects required by this fixer.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-fixing">Fixing</a>
+<a class="sidebar-child" href="#class-globalitem">GlobalItem</a>
+<a class="sidebar-child" href="#class-fixer">Fixer</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>item_parser.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../objects/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="evolvedrecipe_parser.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="java_parser.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../recipes/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="creation_method_parser.html">creation_method_parser.py</a>
+<a href="distribution_container_parser.html">distribution_container_parser.py</a>
+<a href="distribution_parser.html">distribution_parser.py</a>
+<a href="evolvedrecipe_parser.html">evolvedrecipe_parser.py</a>
+<a href="item_parser.html">item_parser.py</a>
+<a href="java_parser.html">java_parser.py</a>
+<a href="literature_parser.html">literature_parser.py</a>
+<a href="metarecipe_parser.html">metarecipe_parser.py</a>
+<a href="movable_definitions_parser.html">movable_definitions_parser.py</a>
+<a href="outfit_parser.html">outfit_parser.py</a>
+<a href="outfit_story_parser.html">outfit_story_parser.py</a>
+<a href="outfit_zone_parser.html">outfit_zone_parser.py</a>
+<a href="radio_parser.html">radio_parser.py</a>
+<a href="recipe_parser.html">recipe_parser.py</a>
+<a href="script_parser.html">script_parser.py</a>
+<a href="stash_parser.html">stash_parser.py</a>
+<a href="tiles_parser.html">tiles_parser.py</a>
+<a href="zone_parser.html">zone_parser.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>item_parser.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/parser</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">get_item_data()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/item_parser.py#L31">source</a>
+</section>
+<section class="member">
+<code class="signature">is_blacklisted(item_name, item_data)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/item_parser.py#L38">source</a>
+<p>Check if item is blacklisted</p>
+</section>
+<section class="member">
+<code class="signature">parse_fluid_container(lines, start_index)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/item_parser.py#L55">source</a>
+<p>Parse fluid container</p>
+</section>
+<section class="member">
+<code class="signature">parse_item(lines, start_index, module_name)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/item_parser.py#L134">source</a>
+<p>Parse an item and its properties</p>
+</section>
+<section class="member">
+<code class="signature">parse_module(lines)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/item_parser.py#L225">source</a>
+<p>Parse the module and its items</p>
+</section>
+<section class="member">
+<code class="signature">parse_files(file_paths: list[str]) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/item_parser.py#L267">source</a>
+<p>Parses a list of .txt files and updates the global parsed_data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>file_paths (list[str])</dt>
+<dd>List of absolute file paths to parse.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Parsed item data.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_new_items(old_dict, new_dict)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/item_parser.py#L305">source</a>
+<p>Compares the new dict with the old dict and returns a dict of new items and another for changed properties.</p>
+</section>
+<section class="member">
+<code class="signature">init()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/item_parser.py#L331">source</a>
+<p>Initialise parser</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

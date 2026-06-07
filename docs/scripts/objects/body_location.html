@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>body_location.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="attachment.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="clothing_item.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>body_location.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<h2 id="classes">Classes</h2>
+<h3 id="class-bodylocation">BodyLocation</h3>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_load_data()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L22">source</a>
+</section>
+<section class="member">
+<code class="signature">_parse_locations()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L29">source</a>
+</section>
+<section class="member">
+<code class="signature">_generate_item_body_locations()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L100">source</a>
+<p>Generates and caches ItemBodyLocations for all loaded items.</p>
+</section>
+<section class="member">
+<code class="signature">_parse_items() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L131">source</a>
+</section>
+<section class="member">
+<code class="signature">_transform_data() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L150">source</a>
+</section>
+<section class="member">
+<code class="signature">all() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L195">source</a>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(location_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L204">source</a>
+</section>
+<section class="member">
+<code class="signature">__init__(location_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L215">source</a>
+</section>
+<section class="member">
+<code class="signature">__repr__() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L226">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">wiki_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L232">source</a>
+</section>
+<section class="member">
+<code class="signature">group</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L238">source</a>
+</section>
+<section class="member">
+<code class="signature">alias</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L242">source</a>
+</section>
+<section class="member">
+<code class="signature">multi_item</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L246">source</a>
+</section>
+<section class="member">
+<code class="signature">exclusive</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L250">source</a>
+</section>
+<section class="member">
+<code class="signature">hide_model</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L254">source</a>
+</section>
+<section class="member">
+<code class="signature">alt_model</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L258">source</a>
+</section>
+<section class="member">
+<code class="signature">items</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L262">source</a>
+</section>
+<section class="member">
+<code class="signature">lua_name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L266">source</a>
+</section>
+<h3 id="class-bodypart">BodyPart</h3>
+<div class="summary"><p>Static reference for body part display names.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(body_part_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L298">source</a>
+</section>
+<section class="member">
+<code class="signature">__init__(body_part: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L309">source</a>
+</section>
+<section class="member">
+<code class="signature">__str__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L312">source</a>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L315">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">display_name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L319">source</a>
+</section>
+<section class="member">
+<code class="signature">name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L322">source</a>
+</section>
+<section class="member">
+<code class="signature">name_en</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L327">source</a>
+</section>
+<section class="member">
+<code class="signature">wiki_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L332">source</a>
+</section>
+<h3 id="class-bodypartlist">BodyPartList</h3>
+<div class="summary"><p>Helper class that wraps a list of BodyPart objects with additional properties for convenience.<br>Supports iteration and indexing.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(body_parts: list[BodyPart])</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L342">source</a>
+<h5>Args</h5>
+<dl class="fields">
+<dt>body_parts (list[BodyPart])</dt>
+<dd>A list of BodyPart objects.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">__iter__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L349">source</a>
+<p>Returns an iterator over the body parts.</p>
+</section>
+<section class="member">
+<code class="signature">__getitem__(index)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L353">source</a>
+<p>Returns the body part at the given index.</p>
+</section>
+<section class="member">
+<code class="signature">__len__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L357">source</a>
+<p>Returns the number of body parts.</p>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L361">source</a>
+<p>Returns a debug representation of the body part list.</p>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">body_part_ids</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L366">source</a>
+<p>Returns the internal names of each body part.</p>
+</section>
+<section class="member">
+<code class="signature">names</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L371">source</a>
+<p>Returns the translated names of each body part.</p>
+</section>
+<section class="member">
+<code class="signature">wiki_links</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L376">source</a>
+<p>Returns the internal names of each body part.</p>
+</section>
+<section class="member">
+<code class="signature">display_names</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L381">source</a>
+<p>Returns the display name keys of each body part.</p>
+</section>
+<h3 id="class-bloodlocation">BloodLocation</h3>
+<div class="summary"><p>Maps a named blood location to a set of body parts.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">all() -&gt; list[&#x27;BloodLocation&#x27;]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L449">source</a>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(blood_location: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L427">source</a>
+</section>
+<section class="member">
+<code class="signature">__init__(blood_location: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L438">source</a>
+</section>
+<section class="member">
+<code class="signature">__str__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L442">source</a>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L445">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">body_parts</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L453">source</a>
+<p>Returns a list-like wrapper of BodyPart instances for this blood location.</p>
+</section>
+<h3 id="class-bloodlocationlist">BloodLocationList</h3>
+<div class="summary"><p>Helper class that wraps a list of BloodLocation objects with additional properties for convenience.<br>Supports iteration and indexing.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(locations: list[BloodLocation])</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L463">source</a>
+<h5>Args</h5>
+<dl class="fields">
+<dt>locations (list[BloodLocation])</dt>
+<dd>A list of BloodLocation objects.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">__iter__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L470">source</a>
+<p>Returns an iterator over the blood locations.</p>
+</section>
+<section class="member">
+<code class="signature">__getitem__(index)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L474">source</a>
+<p>Returns the blood location at the given index.</p>
+</section>
+<section class="member">
+<code class="signature">__len__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L478">source</a>
+<p>Returns the number of blood locations.</p>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L482">source</a>
+<p>Returns a debug representation of the blood location list.</p>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">names</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L487">source</a>
+<p>Returns the names of all blood locations.</p>
+</section>
+<section class="member">
+<code class="signature">body_parts</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/body_location.py#L492">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-bodylocation">BodyLocation</a>
+<a class="sidebar-child" href="#class-bodypart">BodyPart</a>
+<a class="sidebar-child" href="#class-bodypartlist">BodyPartList</a>
+<a class="sidebar-child" href="#class-bloodlocation">BloodLocation</a>
+<a class="sidebar-child" href="#class-bloodlocationlist">BloodLocationList</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

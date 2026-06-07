@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>echo.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../tools/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="color.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="lua_helper.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../vehicles/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="categories.html">categories.py</a>
+<a href="color.html">color.py</a>
+<a href="echo.html">echo.py</a>
+<a href="lua_helper.html">lua_helper.py</a>
+<a href="media_helper.html">media_helper.py</a>
+<a href="table_helper.html">table_helper.py</a>
+<a href="util.html">util.py</a>
+<a href="utility.html">utility.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>echo.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/utils</a></p>
+<div class="summary"><p>Console logging utilities with coloured output, warning control, and tqdm support.</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">_message(message: str, prefix: str, style_func, *, emit_warning: bool = False, warnings_level: int = 3)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L12">source</a>
+<p>Print a coloured message with optional warning metadata.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>message (str)</dt>
+<dd>The message text to display.</dd>
+<dt>prefix (str)</dt>
+<dd>Label prefix (e.g., &quot;[Info]&quot;, &quot;[Warning]&quot;).</dd>
+<dt>style_func (callable)</dt>
+<dd>A function that applies styling (e.g., color.info).</dd>
+<dt>emit_warning (bool, optional)</dt>
+<dd>Whether to append stack info for warnings.</dd>
+<dt>warnings_level (int, optional)</dt>
+<dd>Warning level threshold for display.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">ignore_warnings(warnings_level: int = 0, ignore: bool = True)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L51">source</a>
+<p>Enable or disable warning output filtering by level.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>warnings_level (int)</dt>
+<dd>Minimum warning level to show.</dd>
+<dt>ignore (bool)</dt>
+<dd>Whether to suppress warnings below the level.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">write(message: str, style_func = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L63">source</a>
+<p>Print a standard message safely, supporting tqdm progress bars.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>message (str)</dt>
+<dd>The message text to print.</dd>
+<dt>style_func (callable, optional)</dt>
+<dd>A colour/style function (e.g. color.info).</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">info(message: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L78">source</a>
+<p>Print an informational message in cyan.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>message (str)</dt>
+<dd>The message text to display.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">warning(message: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L87">source</a>
+<p>Print a warning message in yellow with warning context.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>message (str)</dt>
+<dd>The warning text to display.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">error(message: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L96">source</a>
+<p>Print an error message in red with error context.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>message (str)</dt>
+<dd>The error text to display.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">success(message: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L105">source</a>
+<p>Print a success message in green.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>message (str)</dt>
+<dd>The success message to display.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">debug(message: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L114">source</a>
+<p>Print a debug message in magenta if debug mode is enabled.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>message (str)</dt>
+<dd>The debug text to display.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">deprecated(message: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/echo.py#L127">source</a>
+<p>Print a deprecation warning in magenta with warning context.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>message (str)</dt>
+<dd>The deprecation message to display.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

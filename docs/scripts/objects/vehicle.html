@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vehicle.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="trap.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="vehicle_part.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>vehicle.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<h2 id="classes">Classes</h2>
+<h3 id="class-vehicle">Vehicle</h3>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">all()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L106">source</a>
+<p>Return all vehicles as a dictionary of {vehicle_id: Vehicle}.</p>
+</section>
+<section class="member">
+<code class="signature">keys()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L113">source</a>
+<p>Return all vehicle IDs.</p>
+</section>
+<section class="member">
+<code class="signature">values()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L120">source</a>
+<p>Return all vehicle instances.</p>
+</section>
+<section class="member">
+<code class="signature">count()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L127">source</a>
+<p>Return the number of loaded vehicles.</p>
+</section>
+<section class="member">
+<code class="signature">get_model_data(model_id)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L134">source</a>
+<p>Return model data for a given model_id.</p>
+</section>
+<section class="member">
+<code class="signature">fix_vehicle_id(vehicle_id: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L141">source</a>
+<p>Attempts to fix a partial vehicle_id by assuming the &#x27;Base&#x27; module first,<br>then falling back to a full search through parsed vehicle data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>vehicle_id (str)</dt>
+<dd>Either a full vehicle_id (&#x27;Module.Vehicle&#x27;) or just a vehicle name.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The best-guess full vehicle_id.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">_load_vehicles()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L171">source</a>
+<p>Load vehicle data only once and store in class-level cache.</p>
+</section>
+<section class="member">
+<code class="signature">_load_models()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L176">source</a>
+<p>Load vehicle models and store them in a class-level cache.</p>
+</section>
+<section class="member">
+<code class="signature">_load_mechanics_overlay()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L186">source</a>
+<p>Load mechanics overlay from LUA table.</p>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(vehicle_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L27">source</a>
+<p>Returns an existing Vehicle instance if one already exists for the given ID.</p>
+<p>Fixes partial IDs like &#x27;Van&#x27; to &#x27;Base.Van&#x27; before checking or creating the instance.</p>
+</section>
+<section class="member">
+<code class="signature">__init__(vehicle_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L47">source</a>
+<p>Sets up the vehicle&#x27;s data if it hasn’t been initialised yet.</p>
+</section>
+<section class="member">
+<code class="signature">__getitem__(key)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L93">source</a>
+<p>Allows &#x27;vehicle[&quot;DisplayName&quot;]&#x27;</p>
+</section>
+<section class="member">
+<code class="signature">__contains__(key)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L97">source</a>
+<p>Allows &#x27;in&#x27; checks. e.g. &#x27;&quot;EvolvedRecipe&quot; in vehicle&#x27;</p>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L101">source</a>
+<p>Overview of the vehicle when called directly: Vehicle(vehicle_id)</p>
+</section>
+<section class="member">
+<code class="signature">setup_vehicle()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L193">source</a>
+<p>Initialise vehicle values.</p>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L204">source</a>
+<p>Safely get a value from vehicle data with an optional default.</p>
+</section>
+<section class="member">
+<code class="signature">get_file() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L210">source</a>
+<p>Return the source file for this vehicle.</p>
+</section>
+<section class="member">
+<code class="signature">get_path() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L214">source</a>
+<p>Return the full path of the source file.</p>
+</section>
+<section class="member">
+<code class="signature">get_name() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L218">source</a>
+<p>Return the translated name of the vehicle.</p>
+</section>
+<section class="member">
+<code class="signature">find_name(lang_code: str = None) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L224">source</a>
+</section>
+<section class="member">
+<code class="signature">find_is_trailer() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L248">source</a>
+<p>Determine whether the vehicle is a trailer</p>
+</section>
+<section class="member">
+<code class="signature">get_parent() -&gt; &#x27;Vehicle&#x27; | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L255">source</a>
+<p>Return the parent as a Vehicle object, or None if this is the root or unknown.</p>
+</section>
+<section class="member">
+<code class="signature">find_parent() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L263">source</a>
+<p>Finds the parent vehicle, based on the 3D model.</p>
+</section>
+<section class="member">
+<code class="signature">get_full_parent() -&gt; &#x27;Vehicle&#x27; | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L303">source</a>
+<p>Return the full parent as a Vehicle object, or self if this is the root or unknown.</p>
+</section>
+<section class="member">
+<code class="signature">find_full_parent() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L311">source</a>
+<p>Finds the vehicle type, the parent make/model.</p>
+</section>
+<section class="member">
+<code class="signature">get_children() -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L342">source</a>
+</section>
+<section class="member">
+<code class="signature">find_children() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L347">source</a>
+</section>
+<section class="member">
+<code class="signature">get_page() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L360">source</a>
+<p>Return the wiki page for this vehicle.</p>
+</section>
+<section class="member">
+<code class="signature">find_page() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L366">source</a>
+</section>
+<section class="member">
+<code class="signature">get_link() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L376">source</a>
+<p>Return the wiki page for this vehicle.</p>
+</section>
+<section class="member">
+<code class="signature">get_variants() -&gt; list</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L382">source</a>
+<p>Returns a list of vehicle_ids that use this vehicle as their parent.</p>
+</section>
+<section class="member">
+<code class="signature">find_variants() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L388">source</a>
+<p>Finds and caches all vehicles whose parent matches this vehicle_id.</p>
+</section>
+<section class="member">
+<code class="signature">get_manufacturer() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L395">source</a>
+<p>Returns the vehicles manufacturer</p>
+</section>
+<section class="member">
+<code class="signature">get_lore_model() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L401">source</a>
+<p>Returns the vehicles lore model</p>
+</section>
+<section class="member">
+<code class="signature">find_manufacturer() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L407">source</a>
+<p>Finds and caches the vehicle manufacturer based on the name.</p>
+</section>
+<section class="member">
+<code class="signature">get_mechanic_type() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L425">source</a>
+<p>Return the mechanic type ID for this vehicle.</p>
+</section>
+<section class="member">
+<code class="signature">get_vehicle_type() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L429">source</a>
+<p>Return the translated mechanic type name.</p>
+</section>
+<section class="member">
+<code class="signature">find_vehicle_type() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L435">source</a>
+</section>
+<section class="member">
+<code class="signature">get_model(*, do_format = True) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L441">source</a>
+<p>Return the rendered 3D model wiki file name as PNG.</p>
+</section>
+<section class="member">
+<code class="signature">get_models(*, do_format = True) -&gt; str | list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L448">source</a>
+<p>Return the rendered 3D models as PNGs.</p>
+</section>
+<section class="member">
+<code class="signature">find_all_models() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L455">source</a>
+<p>Return all the rendered 3D models including that of all children.</p>
+</section>
+<section class="member">
+<code class="signature">format_model(*, is_single: bool = False) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L475">source</a>
+</section>
+<section class="member">
+<code class="signature">get_mesh_id() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L497">source</a>
+<p>Return the internal model ID.</p>
+</section>
+<section class="member">
+<code class="signature">get_mesh_path() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L503">source</a>
+<p>Return the file path to the vehicle mesh.</p>
+</section>
+<section class="member">
+<code class="signature">find_mesh_path() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L509">source</a>
+</section>
+<section class="member">
+<code class="signature">get_texture_path() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L512">source</a>
+<p>Return the texture path for the vehicle skin.</p>
+</section>
+<section class="member">
+<code class="signature">get_car_model_name() -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L518">source</a>
+<p>Return the in-game display name from carModelName, if defined.</p>
+</section>
+<section class="member">
+<code class="signature">get_mass() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L525">source</a>
+<p>Return the vehicle mass, defaulting to 800.0.</p>
+</section>
+<section class="member">
+<code class="signature">get_zombie_type() -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L529">source</a>
+<p>Return a list of zombie types allowed to spawn in the vehicle.</p>
+</section>
+<section class="member">
+<code class="signature">get_special_key_ring() -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L538">source</a>
+<p>Return possible special key ring types defined for the vehicle.</p>
+</section>
+<section class="member">
+<code class="signature">get_special_key_chance() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L547">source</a>
+<p>Return the chance percentage of the vehicle spawning with a special key ring.</p>
+</section>
+<section class="member">
+<code class="signature">get_engine_repair_level() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L551">source</a>
+<p>Return the engine repair level required.</p>
+</section>
+<section class="member">
+<code class="signature">get_player_damage_protection() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L555">source</a>
+<p>Return the player damage protection value.</p>
+</section>
+<section class="member">
+<code class="signature">get_wheels() -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L559">source</a>
+<p>Return the wheels in the vehicle.</p>
+</section>
+<section class="member">
+<code class="signature">get_doors() -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L565">source</a>
+<p>Return the doors in the vehicle.</p>
+</section>
+<section class="member">
+<code class="signature">get_seats() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L576">source</a>
+<p>Return the number of seats in the vehicle.</p>
+</section>
+<section class="member">
+<code class="signature">get_wheel_friction() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L582">source</a>
+<p>Return the vehicle&#x27;s wheel friction value.</p>
+</section>
+<section class="member">
+<code class="signature">get_braking_force() -&gt; int | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L587">source</a>
+<p>Return the vehicle&#x27;s braking force.</p>
+</section>
+<section class="member">
+<code class="signature">get_max_speed() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L592">source</a>
+<p>Return the vehicle&#x27;s max speed.</p>
+</section>
+<section class="member">
+<code class="signature">get_roll_influence() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L596">source</a>
+<p>Return the roll influence value.</p>
+</section>
+<section class="member">
+<code class="signature">get_is_small_vehicle() -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L600">source</a>
+<p>Return whether the vehicle is small.</p>
+</section>
+<section class="member">
+<code class="signature">get_stopping_movement_force() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L604">source</a>
+<p>Return the stopping force applied when idle.</p>
+</section>
+<section class="member">
+<code class="signature">get_animal_trailer_size() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L608">source</a>
+<p>Return the trailer&#x27;s animal capacity.</p>
+</section>
+<section class="member">
+<code class="signature">get_attachments() -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L612">source</a>
+<p>Return the attachment points available.</p>
+</section>
+<section class="member">
+<code class="signature">get_offroad_efficiency() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L616">source</a>
+<p>Return the offroad driving efficiency.</p>
+</section>
+<section class="member">
+<code class="signature">get_has_lightbar() -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L620">source</a>
+<p>Return whether the vehicle has a lightbar.</p>
+</section>
+<section class="member">
+<code class="signature">get_has_siren() -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L626">source</a>
+<p>Return whether the vehicle has a siren.</p>
+</section>
+<section class="member">
+<code class="signature">find_lightbar() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L632">source</a>
+<p>Detect if the vehicle has a lightbar siren.</p>
+</section>
+<section class="member">
+<code class="signature">get_has_reverse_beeper()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L639">source</a>
+<p>Return whether the vehicle has a reverse beeper.</p>
+</section>
+<section class="member">
+<code class="signature">get_front_end_health() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L646">source</a>
+<p>Return the vehicle&#x27;s front-end health.</p>
+</section>
+<section class="member">
+<code class="signature">get_rear_end_health() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L650">source</a>
+<p>Return the vehicle&#x27;s rear-end health.</p>
+</section>
+<section class="member">
+<code class="signature">get_engine_force() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L655">source</a>
+<p>Return the engine force.</p>
+</section>
+<section class="member">
+<code class="signature">get_engine_power() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L659">source</a>
+<p>Returns the engine power in horsepower (hp).</p>
+</section>
+<section class="member">
+<code class="signature">get_engine_quality() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L663">source</a>
+<p>Return the engine quality.</p>
+</section>
+<section class="member">
+<code class="signature">get_engine_loudness() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L667">source</a>
+<p>Return how loud the engine is.</p>
+</section>
+<section class="member">
+<code class="signature">get_engine_rpm_type() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L671">source</a>
+<p>Return the engine RPM type.</p>
+</section>
+<section class="member">
+<code class="signature">get_steering_increment() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L676">source</a>
+<p>Return how fast the steering changes.</p>
+</section>
+<section class="member">
+<code class="signature">get_steering_clamp() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L680">source</a>
+<p>Return the steering limit angle.</p>
+</section>
+<section class="member">
+<code class="signature">get_suspension_stiffness() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L685">source</a>
+<p>Return the suspension stiffness.</p>
+</section>
+<section class="member">
+<code class="signature">get_suspension_compression() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L689">source</a>
+<p>Return the suspension compression rate.</p>
+</section>
+<section class="member">
+<code class="signature">get_suspension_damping() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L694">source</a>
+<p>Return the suspension damping rate.</p>
+</section>
+<section class="member">
+<code class="signature">get_max_suspension_travel_cm() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L699">source</a>
+<p>Return the max suspension travel in cm.</p>
+</section>
+<section class="member">
+<code class="signature">get_suspension_rest_length() -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L703">source</a>
+<p>Return the rest length of the suspension.</p>
+</section>
+<section class="member">
+<code class="signature">get_parts_data() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L708">source</a>
+<p>Return parts data with wildcard templates merged into specific parts.</p>
+</section>
+<section class="member">
+<code class="signature">get_parts() -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L744">source</a>
+<p>Return a list of part names.</p>
+</section>
+<section class="member">
+<code class="signature">get_part(part) -&gt; dict | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L748">source</a>
+<p>Return part data, allowing fuzzy lookup with &#x27;*&#x27;.</p>
+</section>
+<section class="member">
+<code class="signature">get_part_table(part: str) -&gt; dict | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L761">source</a>
+<p>Return the part table if present, or the base data.</p>
+</section>
+<section class="member">
+<code class="signature">get_part_install(part: str) -&gt; dict | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L774">source</a>
+<p>Return install data for a given part.</p>
+</section>
+<section class="member">
+<code class="signature">get_part_uninstall(part: str) -&gt; dict | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L779">source</a>
+<p>Return uninstall data for a given part.</p>
+</section>
+<section class="member">
+<code class="signature">get_recipes() -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L784">source</a>
+<p>Return recipes that need to be known to remove parts.</p>
+</section>
+<section class="member">
+<code class="signature">find_part_recipe() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L790">source</a>
+<p>Find and cache install/uninstall recipes from parts.</p>
+</section>
+<section class="member">
+<code class="signature">find_part_capacity(part_data: dict, part: str = None) -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L812">source</a>
+<p>Determine part capacity from part container or fallback itemType.</p>
+</section>
+<section class="member">
+<code class="signature">get_glove_box_capacity() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L830">source</a>
+</section>
+<section class="member">
+<code class="signature">find_glove_box_capacity() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L835">source</a>
+</section>
+<section class="member">
+<code class="signature">get_trunk_capacity() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L843">source</a>
+</section>
+<section class="member">
+<code class="signature">find_trunk_capacity() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L848">source</a>
+</section>
+<section class="member">
+<code class="signature">get_seat_capacity() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L866">source</a>
+</section>
+<section class="member">
+<code class="signature">find_seat_capacity() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L871">source</a>
+</section>
+<section class="member">
+<code class="signature">get_total_capacity() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L881">source</a>
+</section>
+<section class="member">
+<code class="signature">calculate_total_capacity() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L886">source</a>
+</section>
+<section class="member">
+<code class="signature">get_mechanics_overlay()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L893">source</a>
+<p>Return mechanics overlay.</p>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L913">source</a>
+</section>
+<section class="member">
+<code class="signature">name_en</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L919">source</a>
+</section>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L925">source</a>
+<p>Return the wiki page for this vehicle.</p>
+</section>
+<section class="member">
+<code class="signature">wiki_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L938">source</a>
+<p>Return the wiki link for this vehicle.</p>
+</section>
+<section class="member">
+<code class="signature">parts</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/vehicle.py#L945">source</a>
+<p>Return a list of part names.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-vehicle">Vehicle</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

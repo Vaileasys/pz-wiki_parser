@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>outfit.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="item.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="outfit_story.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>outfit.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<div class="summary"><p>Provides cached access to parsed Project Zomboid outfit data.</p>
+<p>The Outfit class wraps male/female outfit definitions, resolves wiki page names,<br>and exposes common outfit properties such as GUIDs, item lists, sex availability,<br>and navbox grouping.</p></div>
+<h2 id="classes">Classes</h2>
+<h3 id="class-outfit">Outfit</h3>
+<div class="summary"><p>Represents a single outfit definition from the parsed outfit cache.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">load(force: bool = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L52">source</a>
+<p>Load outfit data from cache, regenerating if outdated.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>force</dt>
+<dd>Reload data even if already loaded.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">load_pages(force: bool = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L80">source</a>
+<p>Load flattened page data used for outfit page lookup.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>force</dt>
+<dd>Reload page data even if already loaded.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">all() -&gt; dict[str, &#x27;Outfit&#x27;]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L95">source</a>
+<p>Return all outfits keyed by outfit ID.</p>
+</section>
+<section class="member">
+<code class="signature">values()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L110">source</a>
+<p>Return all outfit instances.</p>
+</section>
+<section class="member">
+<code class="signature">keys()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L115">source</a>
+<p>Return all outfit IDs.</p>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(outfit_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L22">source</a>
+<p>Create or reuse an Outfit instance.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>outfit_id</dt>
+<dd>Outfit ID.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">__init__(outfit_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L39">source</a>
+<p>Initialise the outfit instance.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>outfit_id</dt>
+<dd>Outfit ID.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L229">source</a>
+<p>Return debug representation.</p>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">outfit_id</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L120">source</a>
+<p>Outfit ID.</p>
+</section>
+<section class="member">
+<code class="signature">male_data</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L125">source</a>
+<p>Male outfit data.</p>
+</section>
+<section class="member">
+<code class="signature">female_data</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L130">source</a>
+<p>Female outfit data.</p>
+</section>
+<section class="member">
+<code class="signature">has_male</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L135">source</a>
+<p>Whether the outfit has a male definition.</p>
+</section>
+<section class="member">
+<code class="signature">has_female</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L140">source</a>
+<p>Whether the outfit has a female definition.</p>
+</section>
+<section class="member">
+<code class="signature">sex</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L145">source</a>
+<p>Sex availability: Both, Male, Female, or blank.</p>
+</section>
+<section class="member">
+<code class="signature">navbox_section</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L159">source</a>
+<p>Navbox section name for this outfit.</p>
+</section>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L173">source</a>
+<p>Wiki page name for this outfit, falling back to outfit ID.</p>
+</section>
+<section class="member">
+<code class="signature">guids</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L192">source</a>
+<p>All GUIDs for this outfit.</p>
+</section>
+<section class="member">
+<code class="signature">male_guid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L205">source</a>
+<p>Male outfit GUID.</p>
+</section>
+<section class="member">
+<code class="signature">female_guid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L210">source</a>
+<p>Female outfit GUID.</p>
+</section>
+<section class="member">
+<code class="signature">male_items</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L215">source</a>
+<p>Items used by the male outfit definition.</p>
+</section>
+<section class="member">
+<code class="signature">female_items</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L220">source</a>
+<p>Items used by the female outfit definition.</p>
+</section>
+<section class="member">
+<code class="signature">valid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit.py#L225">source</a>
+<p>Whether the outfit has male or female data.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-outfit">Outfit</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

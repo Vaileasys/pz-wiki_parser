@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>zone.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="vehicle_part.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>zone.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<h2 id="classes">Classes</h2>
+<h3 id="class-zone">Zone</h3>
+<div class="summary"><p>Handle zone data as one class:<br>- Zone._parse() builds { zone_type: { name: [entries...] } }<br>- Zone.load() loads from cache (re-parse if version mismatch)<br>- Zone(zone_type) -&gt; a handle for that type (returns nested dict)<br>- Zone(zone_type, name) -&gt; a handle for that name group (returns list)</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_parse()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L50">source</a>
+<p>Parse objects.lua -&gt; nested dict, then save cache.</p>
+</section>
+<section class="member">
+<code class="signature">load()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L75">source</a>
+<p>Load from cache, re-parse if version mismatch.</p>
+</section>
+<section class="member">
+<code class="signature">types()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L90">source</a>
+<p>List available zone types.</p>
+</section>
+<section class="member">
+<code class="signature">names_for(zone_type, include_empty = True)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L97">source</a>
+<p>List name groups for a given zone type.</p>
+</section>
+<section class="member">
+<code class="signature">exists(zone_type, name = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L108">source</a>
+</section>
+<h4>Static Methods</h4>
+<section class="member">
+<code class="signature">coord(data: dict[str, int], rlink = True)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L152">source</a>
+<p>Return centre coords as wikilink or plain string.</p>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(zone_type, name = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L21">source</a>
+</section>
+<section class="member">
+<code class="signature">__init__(zone_type, name = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L31">source</a>
+</section>
+<section class="member">
+<code class="signature">all()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L116">source</a>
+<p>If self.name is None -&gt; return nested dict {name: [entries...]} for the zone type.<br>If self.name is set  -&gt; return the list of entries for that group.</p>
+</section>
+<section class="member">
+<code class="signature">flat()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L123">source</a>
+<p>Flatten to a single list (only meaningful for type handles).</p>
+</section>
+<section class="member">
+<code class="signature">dump(filename = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L133">source</a>
+<p>Dump to JSON file.</p>
+</section>
+<h3 id="class-ranchzone">RanchZone</h3>
+<div class="summary"><p>Represents a single ranch zone entry.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_parse()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L200">source</a>
+<p>Parses RanchZoneDefinitions.lua to extract ranch zone data and caches it.</p>
+</section>
+<section class="member">
+<code class="signature">load()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L215">source</a>
+<p>Loads RanchZone data from the cache, re-parsing the Lua file if the data is outdated.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Raw RanchZone data.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">all() -&gt; dict[str, &#x27;RanchZone&#x27;]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L238">source</a>
+<p>Returns all known RanchZone instances.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict[str, RanchZone]</dt>
+<dd>Mapping of item ID to RanchZone instance.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">count() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L250">source</a>
+<p>Returns the total number of RanchZone types parsed.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>int</dt>
+<dd>Number of unique RanchZone types.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">exists(id: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L262">source</a>
+<p>Checks if a RanchZone with the given id exists in the parsed data.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>True if found, False otherwise.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">animal_index() -&gt; dict[str, list[str]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L274">source</a>
+<p>Return a mapping of all maleType and femaleType values to the list of corresponding ranch zones.</p>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L174">source</a>
+<p>Ensures only one RanchZone instance exists per RanchZone ID.</p>
+</section>
+<section class="member">
+<code class="signature">__init__(id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L186">source</a>
+<p>Initialises RanchZone instance if not already initialised.</p>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L340">source</a>
+<p>Returns a raw value from the RanchZone data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>key (str)</dt>
+<dd>Key to look up.</dd>
+<dt>default</dt>
+<dd>Value to return if key is missing.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Any</dt>
+<dd>Value from the raw data or default.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L413">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">is_valid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L354">source</a>
+</section>
+<section class="member">
+<code class="signature">data</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L358">source</a>
+</section>
+<section class="member">
+<code class="signature">type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L362">source</a>
+</section>
+<section class="member">
+<code class="signature">possible_def</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L366">source</a>
+</section>
+<section class="member">
+<code class="signature">def_list</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L370">source</a>
+</section>
+<section class="member">
+<code class="signature">global_name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L374">source</a>
+</section>
+<section class="member">
+<code class="signature">chance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L378">source</a>
+</section>
+<section class="member">
+<code class="signature">female_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L382">source</a>
+</section>
+<section class="member">
+<code class="signature">male_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L385">source</a>
+</section>
+<section class="member">
+<code class="signature">min_female_nb</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L389">source</a>
+</section>
+<section class="member">
+<code class="signature">max_female_nb</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L392">source</a>
+</section>
+<section class="member">
+<code class="signature">min_male_nb</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L395">source</a>
+</section>
+<section class="member">
+<code class="signature">max_male_nb</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L398">source</a>
+</section>
+<section class="member">
+<code class="signature">forced_breed</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L402">source</a>
+</section>
+<section class="member">
+<code class="signature">chance_for_baby</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L406">source</a>
+</section>
+<section class="member">
+<code class="signature">male_chance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/zone.py#L410">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-zone">Zone</a>
+<a class="sidebar-child" href="#class-ranchzone">RanchZone</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

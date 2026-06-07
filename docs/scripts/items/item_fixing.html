@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>item_fixing.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../foraging/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="item_distribution.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="item_groups.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="groups/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="item_article.html">item_article.py</a>
+<a href="item_body_part.html">item_body_part.py</a>
+<a href="item_codesnip.html">item_codesnip.py</a>
+<a href="item_consumables.html">item_consumables.py</a>
+<a href="item_container_contents.html">item_container_contents.py</a>
+<a href="item_distribution.html">item_distribution.py</a>
+<a href="item_fixing.html">item_fixing.py</a>
+<a href="item_groups.html">item_groups.py</a>
+<a href="item_infobox.html">item_infobox.py</a>
+<a href="item_lists.html">item_lists.py</a>
+<a href="item_literature_titles.html">item_literature_titles.py</a>
+<a href="item_recmedia_transcript.html">item_recmedia_transcript.py</a>
+<a href="item_tags.html">item_tags.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>item_fixing.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/items</a></p>
+<div class="summary"><p>Processes and generates [Fixing](https://pzwiki.net/wiki/Template:Fixing) templates for items.</p>
+<p>This script extracts fixing data, formats it into wiki templates, and saves individual<br>.txt files for each item-fixing combination under the `items/fixing/` directory.</p>
+<p>The output is in the following MediaWiki format:</p>
+<p>Example:<br>    {{Fixing<br>    |name=JS-2000 Shotgun<br>    |item_id=Base.Shotgun<br>    |fixer1=[[JS-2000 Shotgun]]<br>    |fixer1_value=1<br>    |fixer1_skill=2 [[Aiming]]<br>    |fixer2=[[Sawed-off JS-2000 Shotgun]]<br>    |fixer2_value=1<br>    |fixer2_skill=2 [[Aiming]]<br>    }}</p>
+<p>{{Fixing<br>    |name=Hood (Standard Vehicle)<br>    |item_id=Base.EngineDoor1<br>    |global_item=[[Welding Torch]]<br>    |global_item_value=2<br>    |fixer1=[[Steel Sheet]]<br>    |fixer1_value=1<br>    |fixer1_skill=1 [[Welding]]&lt;br&gt;2 [[Mechanics]]<br>    |fixer2=[[Steel Sheet - Small]]<br>    |fixer2_value=2<br>    |fixer2_skill=1 [[Welding]]&lt;br&gt;2 [[Mechanics]]<br>    |condition_modifier=120%<br>    }}</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">process_fixers(fixers: list[Fixer]) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_fixing.py#L47">source</a>
+<p>Process a list of Fixer objects into a dictionary of wiki template values.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>fixers (list[Fixer])</dt>
+<dd>List of fixer items used for a single fixing entry.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>A dictionary with fixer names, quantities, and skill requirements, formatted for wiki template usage.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">generate_data(item: Item, fixing: Fixing)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_fixing.py#L74">source</a>
+<p>Generate the base data dictionary for a fixing wiki template.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item (Item)</dt>
+<dd>The item this fixing applies to.</dd>
+<dt>fixing (Fixing)</dt>
+<dd>The corresponding fixing object.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>A dictionary of all relevant wiki template keys and values.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">generate_template(data: dict)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_fixing.py#L103">source</a>
+<p>Convert a fixing data dictionary into a list of lines representing a wiki template.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>data (dict)</dt>
+<dd>The fixing data to embed in the template.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>Lines forming the complete {{Fixing}} wiki template.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main(batch = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_fixing.py#L125">source</a>
+<p>Generate and save {{Fixing}} templates for all items with fixings.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>batch (bool)</dt>
+<dd>If True, skip language loading (for batch processing).</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

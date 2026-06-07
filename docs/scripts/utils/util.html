@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>util.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../tools/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="table_helper.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="utility.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../vehicles/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="categories.html">categories.py</a>
+<a href="color.html">color.py</a>
+<a href="echo.html">echo.py</a>
+<a href="lua_helper.html">lua_helper.py</a>
+<a href="media_helper.html">media_helper.py</a>
+<a href="table_helper.html">table_helper.py</a>
+<a href="util.html">util.py</a>
+<a href="utility.html">utility.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>util.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/utils</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">capitalize(value)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L4">source</a>
+<p>Safely perform the capitalize method if a value is not a string. Lists will also be capitalized, provided their values are strings.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>value</dt>
+<dd>The string or list of strings to capitalize.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str | list | None</dt>
+<dd>Capitalized values if a string or list, otherwise None.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">format_positive(value)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L38">source</a>
+<p>Formats a number with &#x27;+&#x27; if positive, trimming trailing zeros. Returns original value as string if invalid.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>value</dt>
+<dd>The value to format.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Formatted string with &#x27;+&#x27; prefix if positive, or original value as a string if invalid.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">link(page: str, name: str = None, anchor: str = None) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L56">source</a>
+<p>Returns a wiki link in the format `[[Page#Anchor|Name]]`, including a language suffix for non-English languages.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>page</dt>
+<dd>The target page</dd>
+<dt>name</dt>
+<dd>The display text of the link (optional). Defaults to `page`.</dd>
+<dt>anchor</dt>
+<dd>The section anchor within the page (optional).</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The formatted wiki link.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">convert_percentage(value: str | int | float, start_zero = True, percentage = False, default = None, decimals: int = 0) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L93">source</a>
+<p>Converts a numeric value to a percentage string.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>value (str, int, float)</dt>
+<dd>The value to be converted to a percentage. Can be a number or a string representation of a number.</dd>
+<dt>start_zero (bool, optional)</dt>
+<dd>If True, treats the value as a fraction (e.g., 0.5 -&gt; 50%).</dd>
+<dt>If False, assumes the value starts from 100% (e.g., 1.5 -&gt; 150%). Defaults to True.</dt>
+<dd>No description.</dd>
+<dt>percentage (bool, optional)</dt>
+<dd>If True, the value is already a percentage and will not be scaled. Defaults to False.</dd>
+<dt>default (str)</dt>
+<dd>The value to return for invalid input or when the percentage rounds to 0.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The formatted percentage as a string with a &#x27;%&#x27; sign.</dd>
+<dt>Returns &#x27;-&#x27; for invalid inputs.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">convert_int(value: int | float) -&gt; int | float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L126">source</a>
+<p>Converts a value to an integer if it has no decimal (isn&#x27;t float-like).</p>
+</section>
+<section class="member">
+<code class="signature">to_bool(value)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L142">source</a>
+<p>Convert a value to boolean by checking common &#x27;true&#x27; strings.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>value</dt>
+<dd>Any value to check.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>True if the value matches a &#x27;true&#x27; string; False otherwise.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">flip_data(data: dict) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L155">source</a>
+<p>Flip a flat dictionary so that values become keys, and keys become values.<br>If multiple keys share the same value, they are grouped in a list.</p>
+<p>Raises:<br>    TypeError: If &#x27;data&#x27; is not a dictionary or a value is unhashable.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>data (dict)</dt>
+<dd>A flat dictionary to flip. All values must be hashable.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>A new dictionary with values as keys and lists of original keys as values.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">deep_merge(base: dict, override: dict) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L180">source</a>
+<p>Recursively merge two dictionaries, preserving existing keys.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>base (dict)</dt>
+<dd>The base dictionary.</dd>
+<dt>override (dict)</dt>
+<dd>The dictionary with overriding values.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>A new dictionary with combined contents.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">deep_getattr(obj: object, attr_path: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L202">source</a>
+<p>Access nested attributes on an object using dot‑notation.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>obj (object)</dt>
+<dd>The object to fetch attributes from.</dd>
+<dt>attr_path (str)</dt>
+<dd>A string of attribute names separated by &#x27;.&#x27;, e.g. &quot;fluid_container.capacity&quot; - the path to the desired value.</dd>
+<dt>default (str | int | float, optional)</dt>
+<dd>A fallback value returned if any attribute in the path doesn&#x27;t exist or its value is `None`.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>The value found at the end of the attribute path, or `default` if any intermediate attribute is missing or `None`.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">calculate_drain_rate(use_delta: float, unit: str = &#x27;hour&#x27;, tick_minutes: int = 1, as_percentage: bool = False) -&gt; str | float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L223">source</a>
+<p>Calculates how much of a drainable item is consumed over time.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>use_delta (float)</dt>
+<dd>Radio UseDelta value from item script (e.g., 0.014 for 1.4% per hour).</dd>
+<dt>as_percentage (bool)</dt>
+<dd>Return as a percentage string (default False).</dd>
+<dt>unit (str)</dt>
+<dd>Time unit to calculate (&#x27;minute&#x27;, &#x27;hour&#x27;, &#x27;day&#x27;).</dd>
+<dt>as_percentage (bool)</dt>
+<dd>Return as a percentage string (default False).</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str | float</dt>
+<dd>Battery drain over the given time unit.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">convert_unit(value: float, unit: str, start_prefix: str = &#x27;&#x27;, force_prefix: str = None) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L250">source</a>
+<p>Convert a value from a given SI prefix (default: base) to the most appropriate SI prefix<br>between milli (m) and Mega (M), or force it to a specific one.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>value (float)</dt>
+<dd>The numeric value to convert.</dd>
+<dt>unit (str)</dt>
+<dd>The unit to append after the converted value.</dd>
+<dt>start_prefix (str, optional)</dt>
+<dd>The starting SI prefix (default &quot;&quot;). One of: &quot;m&quot;, &quot;&quot;, &quot;k&quot;, &quot;M&quot;.</dd>
+<dt>force_prefix (str, optional)</dt>
+<dd>If set, force output to this SI prefix. Skips automatic scaling.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>A human-readable string with the chosen prefix and unit.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">split_camel_case(text: str, sep: str = &#x27; &#x27;, preserve_caps: bool = True) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L289">source</a>
+<p>Add separator between words in a camel case string.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>text (str)</dt>
+<dd>A camelCase or PascalCase string.</dd>
+<dt>sep (str)</dt>
+<dd>String used to join split parts.</dd>
+<dt>preserve_caps (bool)</dt>
+<dd>Keep consecutive capital letters together.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The string with separators added between words.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">tick(text: str = None, link: str = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L311">source</a>
+<p>Return a wiki-formatted tick/check icon, optionally with text and link.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>text (str, optional)</dt>
+<dd>Display text.</dd>
+<dt>link (str, optional)</dt>
+<dd>Link target.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Formatted wiki string for the tick icon.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">cross(text: str = None, link: str = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L327">source</a>
+<p>Return a wiki-formatted cross icon, optionally with text and link.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>text (str, optional)</dt>
+<dd>Display text.</dd>
+<dt>link (str, optional)</dt>
+<dd>Link target.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Formatted wiki string for the cross icon.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">rgb(red: int | float = 0, green: int | float = 0, blue: int | float = 0)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L343">source</a>
+<p>Return an rgb template string with the given colour values.</p>
+<p>Each colour component can be specified as either:<br>  - An int (0–255), representing the raw RGB value.<br>  - A float (0.0–1.0), representing a normalised fraction which will be scaled to 0–255.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>red (int | float)</dt>
+<dd>Red component (default: 0).</dd>
+<dt>green (int | float)</dt>
+<dd>Green component (default: 0).</dd>
+<dt>blue (int | float)</dt>
+<dd>Blue component (default: 0).</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>A string formatted as &#x27;{{rgb|R, G, B}}&#x27; where R, G, and B are integers.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">enumerate_params(parameters: dict, whitelist: list[str] = None, blacklist: list[str] = None, separator: str = &#x27;&lt;br&gt;&#x27;) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L373">source</a>
+<p>Expand list values in a dict into numbered keys for infobox use.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>parameters (dict)</dt>
+<dd>Dictionary of parameter names and values.</dd>
+<dt>whitelist (list[str], optional)</dt>
+<dd>Only keys in this list will be enumerated. If None, all keys are considered.</dd>
+<dt>blacklist (list[str], optional)</dt>
+<dd>Keys in this list will be excluded from enumeration.</dd>
+<dt>separator (str, optional)</dt>
+<dd>String to use for joining non-enumerated list values. Defaults to &quot;&lt;br&gt;&quot;.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>New dictionary with expanded numbered keys.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">check_zero(value: int | float, default = None) -&gt; int | float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/util.py#L413">source</a>
+<p>Return &#x27;default&#x27; if the numeric value is zero, else return the value.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>value (int or float)</dt>
+<dd>Value to check.</dd>
+<dt>default (optional)</dt>
+<dd>Value to return if input is zero.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>int, float, or None</dt>
+<dd>Original value or &#x27;default&#x27; if zero.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

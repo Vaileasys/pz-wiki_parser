@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>navbox_schema.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../misc/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="navbox_outfits.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="navbox_weapons.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../objects/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="navbox.html">navbox.py</a>
+<a href="navbox_outfits.html">navbox_outfits.py</a>
+<a href="navbox_schema.html">navbox_schema.py</a>
+<a href="navbox_weapons.html">navbox_weapons.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>navbox_schema.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/navbox</a></p>
+<h2 id="classes">Classes</h2>
+<h3 id="class-navboxsection">NavboxSection</h3>
+<div class="summary"><p>Represents a single navbox section and its items.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">add_item(item: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_schema.py#L10">source</a>
+<p>Add an item to the section if it is valid and not already present.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item (str)</dt>
+<dd>Page name or formatted navbox item.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">sort_items()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_schema.py#L25">source</a>
+<p>Sort all items in the section alphabetically.</p>
+</section>
+<section class="member">
+<code class="signature">to_dict() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_schema.py#L29">source</a>
+<p>Convert the section into a JSON-ready dictionary.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Section data containing the section name and item list.</dd>
+</dl>
+</section>
+<h3 id="class-navboxschema">NavboxSchema</h3>
+<div class="summary"><p>Represents the full navbox JSON schema.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">add_section(section_name: str) -&gt; NavboxSection</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_schema.py#L48">source</a>
+<p>Create or retrieve a navbox section.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>section_name (str)</dt>
+<dd>Name of the section.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>NavboxSection</dt>
+<dd>Existing or newly created section.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">sort_sections()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_schema.py#L68">source</a>
+<p>Sort all sections alphabetically.</p>
+</section>
+<section class="member">
+<code class="signature">sort_sections_by_order(section_order: list[str])</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_schema.py#L72">source</a>
+<p>Sort sections by a preferred order, then alphabetically.</p>
+</section>
+<section class="member">
+<code class="signature">sort_items()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_schema.py#L86">source</a>
+<p>Sort items in every section.</p>
+</section>
+<section class="member">
+<code class="signature">validate()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_schema.py#L91">source</a>
+<p>Validate the navbox schema before export.</p>
+<p>Raises:<br>    ValueError: If the navbox contains invalid or missing data.</p>
+</section>
+<section class="member">
+<code class="signature">to_dict() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_schema.py#L113">source</a>
+<p>Convert the navbox schema into a JSON-ready dictionary.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Navbox data containing the table name and sections.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-navboxsection">NavboxSection</a>
+<a class="sidebar-child" href="#class-navboxschema">NavboxSchema</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>version.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../animals/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="setup.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="../fluids/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="cache.html">cache.py</a>
+<a href="config_manager.html">config_manager.py</a>
+<a href="constants.html">constants.py</a>
+<a href="file_loading.html">file_loading.py</a>
+<a href="language.html">language.py</a>
+<a href="logger.html">logger.py</a>
+<a href="page_manager.html">page_manager.py</a>
+<a href="runner.html">runner.py</a>
+<a href="setup.html">setup.py</a>
+<a href="version.html">version.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>version.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/core</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/version.py#L121">source</a>
+</section>
+<h2 id="classes">Classes</h2>
+<h3 id="class-version">Version</h3>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">get()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/version.py#L24">source</a>
+<p>Returns the current version. If unset, pulls from config.</p>
+</section>
+<section class="member">
+<code class="signature">set(new_version: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/version.py#L32">source</a>
+</section>
+<section class="member">
+<code class="signature">parsed_version(update: bool = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/version.py#L36">source</a>
+<p>Parses the version from the decompiled game. Requires ZomboidDecompiler.</p>
+</section>
+<section class="member">
+<code class="signature">update()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/version.py#L52">source</a>
+<p>Loads version from config and checks for changes.</p>
+</section>
+<section class="member">
+<code class="signature">change()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/version.py#L109">source</a>
+<p>Prompts the user for a new version number and updates it.</p>
+</section>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/version.py#L117">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-version">Version</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>utility.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../tools/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="util.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="../vehicles/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="categories.html">categories.py</a>
+<a href="color.html">color.py</a>
+<a href="echo.html">echo.py</a>
+<a href="lua_helper.html">lua_helper.py</a>
+<a href="media_helper.html">media_helper.py</a>
+<a href="table_helper.html">table_helper.py</a>
+<a href="util.html">util.py</a>
+<a href="utility.html">utility.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>utility.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/utils</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">get_item_data_from_id(item_id)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L22">source</a>
+</section>
+<section class="member">
+<code class="signature">fix_item_id(item_id)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L31">source</a>
+<p>Checks if an item_id is formatted correctly (i.e., &#x27;module.item_name&#x27;).<br>If not, it&#x27;ll assume it&#x27;s just the &#x27;item_name&#x27; and search the parsed item data for its &#x27;module&#x27;.<br>It will then return the full item_id.</p>
+<p>:param item_id: The Item ID to check, which could be either in the format &#x27;module.item_name&#x27; or just &#x27;item_name&#x27; (without the module).<br>:type item_id: str</p>
+<p>:returns: The correct item_id in the format &#x27;module.item_name&#x27;. Otherwise it&#x27;ll return the input string.<br>:rtype: item_id (str)</p>
+<p>:example:<br>    Given `item_id = &quot;Cooked&quot;` and `item_parser.get_item_data()` contains a key like `&quot;Food.Cooked&quot;`,<br>    this function will return `&quot;Food.Cooked&quot;`.</p>
+</section>
+<section class="member">
+<code class="signature">get_clothing_xml_value(item_data, xml_value)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L59">source</a>
+</section>
+<section class="member">
+<code class="signature">get_model(item_data)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L98">source</a>
+</section>
+<section class="member">
+<code class="signature">get_body_parts(item_data, link = True, default = &#x27;&#x27;)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L160">source</a>
+<p>Gets body parts for an item and returns as a list.</p>
+<p>:returns: Translated body parts.<br>:rtype: body_parts (list)</p>
+</section>
+<section class="member">
+<code class="signature">get_skill_type_mapping(item_data, item_id)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L221">source</a>
+</section>
+<section class="member">
+<code class="signature">get_burn_data()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L264">source</a>
+<p>Returns burn time data from camping_fuel.lua.</p>
+</section>
+<section class="member">
+<code class="signature">get_burn_time(item_id, item_data)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L292">source</a>
+</section>
+<section class="member">
+<code class="signature">save_cache(data: dict, data_file: str, data_dir = DATA_DIR, suppress = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L382">source</a>
+</section>
+<section class="member">
+<code class="signature">load_cache(cache_file, cache_name = &#x27;data&#x27;, get_version = False, backup_old = False, suppress = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L389">source</a>
+</section>
+<section class="member">
+<code class="signature">clear_cache(cache_path = DATA_DIR, cache_name = None, suppress = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L414">source</a>
+</section>
+<section class="member">
+<code class="signature">get_name(item_id, item_data: dict = {}, language = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L422">source</a>
+<p>Gets an item name if it has a special case, otherwise translates the DisplayName.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_id (str)</dt>
+<dd>Item ID for the item to get the name for.</dd>
+<dt>item_data (dict, optional)</dt>
+<dd>The item properties to get the DisplayName from. Default will get the data based on the item ID, adds more overhead.</dd>
+<dt>language (str, optional)</dt>
+<dd>The language code to use when translating. Defaults to selected language code.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The items name as it is displayed in-game.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_item_id_data(suppress = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L516">source</a>
+<p>Loads item_id_dictionary.csv into memory, mapping each page name to a list of item IDs found in its infobox.</p>
+<p>:param suppress (bool, optional): Suppress print statements. Defaults to False.</p>
+<p>:return: Returns all page names and the item IDs in the page&#x27;s infobox.<br>:rtype: item_id_dict_data (dict)</p>
+</section>
+<section class="member">
+<code class="signature">get_page(item_id, name = &#x27;Unknown&#x27;)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L561">source</a>
+</section>
+<section class="member">
+<code class="signature">find_icon(item_id, all_icons = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L573">source</a>
+<p>Retrieves the icon associated with a given item_id. Can return a single icon (string) (default) or multiple icons (list),<br>depending on the &#x27;get_all_icons&#x27; parameter.</p>
+<p>:param item_id (str): The ID of the item for which to retrieve the icon.<br>:param get_all_icons (bool, optional): If True, returns all icon variants as a list. If False (default), returns only the first icon as a string.</p>
+<p>:return: The icon (or list of icons) associated with the item_id. Returns the default icon (&quot;Question_On&quot;) if no specific icon is found.<br>:rtype: icon (list[str])</p>
+</section>
+<section class="member">
+<code class="signature">get_icon(item_id, format = False, all_icons = False, cycling = False, custom_name = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L720">source</a>
+<p>Retrieves the icon(s) associated with a given item_id, with optional formatting and cycling through multiple icons.</p>
+<p>:param item_id: The ID of the item for which to retrieve the icon(s).<br>:type item_id: str<br>:param format: If True, formats the icon(s) with language-specific links, display names, and cycling support.<br>                                Defaults to False.<br>:type format: bool, optional<br>:param all_icons: If True, returns all icon variants for the item_id. If False, only the primary icon is returned.<br>                                   Defaults to False.<br>:type all_icons: bool, optional<br>:param cycling: If True, formats the icons as a cycling image if there are multiple icons.<br>                                 This option will force all_icons to be True. Defaults to False.<br>:type cycling: bool, optional</p>
+<p>:return: The icon(s) associated with the item_id. If format is True, returns a formatted string. If format is False,<br>         returns either a single icon (str).<br>:rtype: icon_result (str)</p>
+</section>
+<section class="member">
+<code class="signature">get_guid(item_data)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L794">source</a>
+</section>
+<section class="member">
+<code class="signature">get_fluid_name(fluid_data, lang = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/utility.py#L804">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

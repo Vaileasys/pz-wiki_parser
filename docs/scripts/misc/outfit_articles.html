@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>outfit_articles.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../lists/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="item_merger.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="room_define.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="item_merger.html">item_merger.py</a>
+<a href="outfit_articles.html">outfit_articles.py</a>
+<a href="room_define.html">room_define.py</a>
+<a href="spawn_points.html">spawn_points.py</a>
+<a href="test.html">test.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>outfit_articles.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/misc</a></p>
+<div class="summary"><p>Generates wiki-formatted outfit article output.</p>
+<p>Builds outfit pages from Outfit data, including infoboxes, overviews, item tables, <br>code sections, and navigation. Story and zone spawn data are pulled from<br>OutfitStory and OutfitZone, while list output is handled separately.</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">_build_clothing_name_mapping()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L38">source</a>
+<p>Build a reverse mapping from clothing item names to game item IDs.<br>This uses cached item data (not reparsing) and caches the mapping itself.</p>
+<p>For example: &quot;Belt&quot; -&gt; &quot;Base.Belt2&quot;, &quot;Bag_HikingBag&quot; -&gt; &quot;Base.Bag_HikingBag&quot;</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Mapping of clothing item name to game item ID</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">format_display_name(story_id)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L72">source</a>
+<p>Format a story ID for display by removing prefix and converting camel case to spaced words</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>story_id (str)</dt>
+<dd>The story ID (e.g., &quot;RBBurntFireman&quot;)</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Formatted display name (e.g., &quot;Burnt Fireman&quot;)</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">format_story_link(story_type, story_id)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L97">source</a>
+<p>Format a story link based on the story type</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>story_type (str)</dt>
+<dd>The type of story (e.g., &quot;random_building&quot;, &quot;random_vehicle&quot;)</dd>
+<dt>story_id (str)</dt>
+<dd>The story ID (e.g., &quot;RBBurntFireman&quot;)</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Formatted wiki link</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_stories(outfit_id: str) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L124">source</a>
+<p>Process story-related spawn locations for the outfit</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>outfit_id (str)</dt>
+<dd>The outfit ID</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Story-related spawn information</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_zones(outfit_id: str) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L160">source</a>
+<p>Process zone-related spawn locations for the outfit</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>outfit_id (str)</dt>
+<dd>The outfit ID</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>Zone-related spawn information</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_header()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L217">source</a>
+<p>Create the header section of the article</p>
+</section>
+<section class="member">
+<code class="signature">create_infobox(outfit: Outfit)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L226">source</a>
+<p>Create the infobox section for a specific outfit</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>outfit (Outfit)</dt>
+<dd>The outfit object</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Complete infobox template</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_intro(outfit: Outfit)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L283">source</a>
+<p>Create the introduction section of the article</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>outfit (Outfit)</dt>
+<dd>The outfit object</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Complete introduction section</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_overview(outfit: Outfit) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L303">source</a>
+<p>Create the overview section of the article</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>outfit (Outfit)</dt>
+<dd>The outfit object</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Contains &#x27;content&#x27; (for article) and &#x27;bot_flagged&#x27; (for individual files)</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_items(outfit: Outfit, clothing_to_item_mapping: dict) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L343">source</a>
+<p>Create the items section of the article</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>outfit (Outfit)</dt>
+<dd>The outfit object</dd>
+<dt>clothing_to_item_mapping (dict)</dt>
+<dd>Mapping of clothing item names to game item IDs</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Contains &#x27;content&#x27; (complete items section) and &#x27;tables_data&#x27; (individual table data)</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_items_table(outfit: Outfit, items_dict: dict, guid: str, sex_label: str, clothing_to_item_mapping: dict) -&gt; dict[str, list[str]] | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L416">source</a>
+<p>Create a wikitable for items with sub-items support</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Contains &#x27;table_only&#x27; (just the bot-flagged table) and</dd>
+<dt>&#x27;full_section&#x27; (header + table for article)</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_code(outfit: Outfit)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L553">source</a>
+<p>Create the code section with outfit data</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>outfit (Outfit)</dt>
+<dd>The outfit object</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Complete code section</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_navigation(sex_type: str) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L612">source</a>
+<p>Create the navigation section of the article</p>
+</section>
+<section class="member">
+<code class="signature">build_article(outfit: Outfit, clothing_to_item_mapping: dict) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L635">source</a>
+<p>Build a complete article for a specific outfit</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>outfit (Outfit)</dt>
+<dd>The outfit object</dd>
+<dt>clothing_to_item_mapping (dict)</dt>
+<dd>Mapping of clothing item names to game item IDs</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Dictionary containing all sections and the complete article</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">write_article_files(article_data: dict)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L700">source</a>
+</section>
+<section class="member">
+<code class="signature">create_articles()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L736">source</a>
+<p>Create outfit articles using nested functions to build each section</p>
+</section>
+<section class="member">
+<code class="signature">run_decompiler()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L776">source</a>
+<p>Ensure the ZomboidDecompiler has been run.<br>If not, run it now.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>True if decompiler output exists or was successfully created, False otherwise</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/misc/outfit_articles.py#L827">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

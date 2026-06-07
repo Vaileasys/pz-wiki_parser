@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>item_infobox.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../foraging/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="item_groups.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="item_lists.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="groups/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="item_article.html">item_article.py</a>
+<a href="item_body_part.html">item_body_part.py</a>
+<a href="item_codesnip.html">item_codesnip.py</a>
+<a href="item_consumables.html">item_consumables.py</a>
+<a href="item_container_contents.html">item_container_contents.py</a>
+<a href="item_distribution.html">item_distribution.py</a>
+<a href="item_fixing.html">item_fixing.py</a>
+<a href="item_groups.html">item_groups.py</a>
+<a href="item_infobox.html">item_infobox.py</a>
+<a href="item_lists.html">item_lists.py</a>
+<a href="item_literature_titles.html">item_literature_titles.py</a>
+<a href="item_recmedia_transcript.html">item_recmedia_transcript.py</a>
+<a href="item_tags.html">item_tags.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>item_infobox.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/items</a></p>
+<div class="summary"><p>Item infobox generator.</p>
+<p>This module processes `Item` objects into structured infobox parameters, formatted for wiki output.<br>It handles individual items, pages with multiple item IDs, and supports both combined and standalone infobox generation.</p>
+<p>Main functions:<br>- Extract item attributes into infobox fields<br>- Merge multiple item definitions into unified infobox data, based on page<br>- Format and output infobox content as text files</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">generate_item_data(item: Item, language_code: str = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L48">source</a>
+<p>Extracts relevant parameters from an Item object into a dictionary.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item (Item)</dt>
+<dd>The item object to process.</dd>
+<dt>language_code (str, optional)</dt>
+<dd>Language code to use for translations.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Dictionary of infobox parameters for the given item.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">post_process_rm(data: dict, page: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L374">source</a>
+<p>Post processing of generated item data to add recorded media properties.</p>
+</section>
+<section class="member">
+<code class="signature">get_translation(translation_key: str, language_code: str = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L391">source</a>
+<p>Get translation for a given key.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>translation_key (str)</dt>
+<dd>The key to translate</dd>
+<dt>language_code (str, optional)</dt>
+<dd>Language code to use. If None, uses current language.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The translated string or the original key if translation not found</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">build_infobox(infobox_data: dict) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L435">source</a>
+<p>Builds an infobox template from the provided parameters.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>infobox_data (dict)</dt>
+<dd>Dictionary of key-value infobox fields.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>A list of lines forming the infobox template.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">join_keys(params: dict) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L455">source</a>
+<p>Converts list values of specific keys into &lt;br&gt;-joined strings.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>params (dict)</dt>
+<dd>Infobox parameters.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Updated dictionary with joined string values for specified keys.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_descriptor(item_id: str) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L473">source</a>
+<p>Returns a short label for the item, based on patterns in its ID.</p>
+<p>Matches are defined in &#x27;item_descriptors.json&#x27; using start, end, or contains rules.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_id (str)</dt>
+<dd>Full item ID.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str | None</dt>
+<dd>Descriptor if matched, otherwise None.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">merge_items(page_data: dict) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L518">source</a>
+<p>Merges parameters from multiple item variants into a single infobox-ready dictionary.</p>
+<p>Identical values shared across all items are included once without a descriptor.</p>
+<p>Keys listed in `DESCRIPTOR_KEYS` will trigger descriptor formatting if their values differ between items.<br>Keys listed in `SKIP_KEYS` are only included from the first (primary) item.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>page_data (dict)</dt>
+<dd>Mapping of item_id to parameter dictionaries.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Merged dictionary of parameters with values enumerated and descriptors applied where needed.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_pages(pages: dict, language_code: str = None) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L605">source</a>
+<p>Generates infoboxes for all items grouped by page name and writes output files.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>pages (dict)</dt>
+<dd>Mapping of page names to their item_id entries.</dd>
+<dt>language_code (str, optional)</dt>
+<dd>Language code to use for translations.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_items(item_id_list: list, language_code: str = None) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L661">source</a>
+<p>Generates infoboxes for a list of specific item IDs and writes output files.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_id_list (list)</dt>
+<dd>List of item IDs to process.</dd>
+<dt>language_code (str, optional)</dt>
+<dd>Language code to use for translations.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">prepare_media_pages(rm_id) -&gt; set</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L692">source</a>
+</section>
+<section class="member">
+<code class="signature">prepare_pages(item_id_list: list) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L741">source</a>
+<p>Prepares and validates the item-to-page mappings for later infobox generation.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_id_list (list)</dt>
+<dd>List of item IDs to process.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Updated pages dictionary containing valid item_id groupings.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">select_item() -&gt; list</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L812">source</a>
+<p>Prompts the user to input one or more item IDs (semicolon-separated) and returns the valid ones.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>A list of valid item IDs.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">select_page() -&gt; dict[str, dict[str, list[str]]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L843">source</a>
+<p>Prompts the user to input one or more page names (semicolon-separated) and returns a<br>dictionary of valid pages and their associated item IDs.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>A dictionary mapping page names to their valid item IDs.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">choose_process(run_directly: bool)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L877">source</a>
+<p>Presents the user with infobox generation options.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>run_directly (bool)</dt>
+<dd>Whether to allow quitting or going back.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The selected menu option.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">init_dependencies()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L914">source</a>
+<p>Initialises required modules so they don&#x27;t interrupt tqdm progress bars.</p>
+</section>
+<section class="member">
+<code class="signature">main(run_directly: bool = False, language: str = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L919">source</a>
+<p>Entry point for infobox generation.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>run_directly (bool)</dt>
+<dd>Whether the script is being run directly.</dd>
+<dt>language (str, optional)</dt>
+<dd>Language code to use. If None, uses current language.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">batch_entry(language_code = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_infobox.py#L955">source</a>
+<p>Entry point for batch processing.</p>
+<p>This function runs both processing modes automatically:<br>1. Process all pages (with merging) - generates merged infoboxes for items that share pages<br>2. Process all individual items (no merging) - generates individual infoboxes for each item</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>language_code (str, optional)</dt>
+<dd>Language code to use. If None, uses current language.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

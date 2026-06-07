@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>item_tags.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../foraging/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="item_recmedia_transcript.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="groups/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="item_article.html">item_article.py</a>
+<a href="item_body_part.html">item_body_part.py</a>
+<a href="item_codesnip.html">item_codesnip.py</a>
+<a href="item_consumables.html">item_consumables.py</a>
+<a href="item_container_contents.html">item_container_contents.py</a>
+<a href="item_distribution.html">item_distribution.py</a>
+<a href="item_fixing.html">item_fixing.py</a>
+<a href="item_groups.html">item_groups.py</a>
+<a href="item_infobox.html">item_infobox.py</a>
+<a href="item_lists.html">item_lists.py</a>
+<a href="item_literature_titles.html">item_literature_titles.py</a>
+<a href="item_recmedia_transcript.html">item_recmedia_transcript.py</a>
+<a href="item_tags.html">item_tags.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>item_tags.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/items</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">_get_language_code()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L17">source</a>
+<p>Lazy-load language code to avoid import-time prompts.</p>
+</section>
+<section class="member">
+<code class="signature">_get_output_tags_dir()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L24">source</a>
+<p>Lazy-load output tags directory to avoid import-time prompts.</p>
+</section>
+<section class="member">
+<code class="signature">write_tag_image()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L36">source</a>
+<p>Write each tag&#x27;s item icons for `cycle-img`.</p>
+</section>
+<section class="member">
+<code class="signature">write_tag_table()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L62">source</a>
+<p>Write a wikitable showing all tags and corresponding items.</p>
+</section>
+<section class="member">
+<code class="signature">write_tag_list()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L90">source</a>
+<p>Write each tag item as an item_list.</p>
+</section>
+<section class="member">
+<code class="signature">get_see_also(all_filenames, reference_filename)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L120">source</a>
+<p>Get 3 similarly named filenames and include in &#x27;see also&#x27;</p>
+</section>
+<section class="member">
+<code class="signature">write_article(tag, item_content, see_also_list, dest_dir)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L142">source</a>
+</section>
+<section class="member">
+<code class="signature">get_item_list(source_dir)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L183">source</a>
+</section>
+<section class="member">
+<code class="signature">generate_article_modding()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L205">source</a>
+</section>
+<section class="member">
+<code class="signature">generate_article_templates()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L230">source</a>
+</section>
+<section class="member">
+<code class="signature">get_tag_data() -&gt; dict[str, list[dict[str, str]]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L255">source</a>
+<p>Retrieve tag data, generating it if not already.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Dictionary with keys as tag names, and values that are lists of items.</dd>
+<dt>Each item is a dictionary with the following data</dt>
+<dd>No description.</dd>
+<dt>- &#x27;item_id&#x27;</dt>
+<dd>item&#x27;s unique ID, including the module (Base).</dd>
+<dt>- &#x27;icon&#x27;</dt>
+<dd>item&#x27;s icon.</dd>
+<dt>- &#x27;name&#x27;</dt>
+<dd>item&#x27;s display name as it appears in-game.</dd>
+<dt>- &#x27;page&#x27;</dt>
+<dd>item&#x27;s page name as it is on the wiki.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">generate_tags_dict()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L272">source</a>
+<p>Generate a tags dictionary, mapping them to their associated items.</p>
+</section>
+<section class="member">
+<code class="signature">run_function(option: dict)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L365">source</a>
+</section>
+<section class="member">
+<code class="signature">display_menu(menu, is_root = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L399">source</a>
+</section>
+<section class="member">
+<code class="signature">nav_menu(menu, is_root = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L412">source</a>
+</section>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L427">source</a>
+</section>
+<h2 id="classes">Classes</h2>
+<h3 id="class-tag">Tag</h3>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">load() -&gt; dict[str, list[dict[str, str]]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L310">source</a>
+</section>
+<section class="member">
+<code class="signature">exists(tag: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L316">source</a>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(tag: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L319">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">items</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L324">source</a>
+</section>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L330">source</a>
+</section>
+<section class="member">
+<code class="signature">wiki_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L334">source</a>
+</section>
+<section class="member">
+<code class="signature">template</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_tags.py#L338">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-tag">Tag</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

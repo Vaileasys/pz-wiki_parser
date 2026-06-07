@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evolved_recipe.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="craft_recipe.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="farming.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>evolved_recipe.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<div class="summary"><p>Evolved Recipe module.</p>
+<p>This module defines the `EvolvedRecipe` class, which parses and represents customisable cooking recipes<br>from the game’s script files. It supports loading all evolved recipes, accessing recipe properties,<br>and linking them to compatible items and their effects.</p></div>
+<h2 id="classes">Classes</h2>
+<h3 id="class-evolvedrecipe">EvolvedRecipe</h3>
+<div class="summary"><p>Represents an evolved recipe parsed from Project Zomboid script files.</p>
+<p>Each recipe is uniquely identified by its ID and provides access to associated script<br>data, result items, ingredients, and localisation metadata. Recipes are loaded once and<br>cached for re-use.</p>
+<p>Args:<br>    recipe_id (str): The recipe identifier. This may be either a full ID (e.g., &quot;Base.Soup&quot;)<br>                     or a short ID (e.g., &quot;Soup&quot;). The module prefix is stripped automatically.</p>
+<p>Example:<br>    soup = EvolvedRecipe(&quot;Soup&quot;)<br>    soup.name -&gt; &#x27;Soup&#x27;<br>    soup.result_item.name -&gt; &#x27;Pot of Soup&#x27;</p>
+<p>Class Methods:<br>    - EvolvedRecipe.all() → dict of all recipes<br>    - EvolvedRecipe.exists(&quot;Soup&quot;) → check if a recipe exists<br>    - EvolvedRecipe.keys() / values() / count() → like dict access</p>
+<p>Notes:<br>    The underlying script data is parsed from `evolvedrecipe` script blocks,<br>    and item links are created based on references from the `Item` class.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_load_evolved_recipes()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L85">source</a>
+<p>Internal method to load all evolved recipes from script data and map associated items.</p>
+</section>
+<section class="member">
+<code class="signature">all()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L134">source</a>
+<p>Return all evolved recipes as a dictionary of `{recipe_id: EvolvedRecipe}`. Similar to `dict.items()` in behaviour.</p>
+</section>
+<section class="member">
+<code class="signature">keys()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L141">source</a>
+<p>Return all evolved recipe IDs. Mirrors `dict.keys()` for available recipe entries.</p>
+</section>
+<section class="member">
+<code class="signature">values()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L148">source</a>
+<p>Yield all `EvolvedRecipe` instances. Mirrors `dict.values()` for available recipe entries.</p>
+</section>
+<section class="member">
+<code class="signature">count()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L155">source</a>
+<p>Return the number of loaded evolved recipes. Equivalent to `len(dict)` on the full recipe mapping.</p>
+</section>
+<section class="member">
+<code class="signature">exists(recipe_id: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L162">source</a>
+<p>Check if a given recipe ID exists in the loaded data. Similar to checking `recipe_id in dict`.</p>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(recipe_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L46">source</a>
+<p>Create or return a cached instance of an EvolvedRecipe by ID.</p>
+</section>
+<section class="member">
+<code class="signature">__init__(recipe_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L58">source</a>
+<p>Initialise an EvolvedRecipe instance using the provided recipe ID.</p>
+</section>
+<section class="member">
+<code class="signature">__getitem__(key)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L73">source</a>
+<p>Allow dict-style access to the internal data. Equivalent to `self.data[key]` or `self.data.get(key)`.</p>
+</section>
+<section class="member">
+<code class="signature">__contains__(key)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L77">source</a>
+<p>Check if a key exists in the internal data. Equivalent to `key in self.data`.</p>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L81">source</a>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L170">source</a>
+<p>Return a value from the internal data dictionary. Equivalent to `self.data.get(key, default)`.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>key (str)</dt>
+<dd>The key to retrieve from the internal recipe data.</dd>
+<dt>default (Any, optional)</dt>
+<dd>The value to return if the key is not found. Defaults to None.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Any</dt>
+<dd>The value associated with the key, or the default if not present.</dd>
+</dl>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">valid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L186">source</a>
+</section>
+<section class="member">
+<code class="signature">script_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L190">source</a>
+</section>
+<section class="member">
+<code class="signature">file</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L194">source</a>
+</section>
+<section class="member">
+<code class="signature">path</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L198">source</a>
+</section>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L202">source</a>
+</section>
+<section class="member">
+<code class="signature">original_name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L214">source</a>
+</section>
+<section class="member">
+<code class="signature">display_name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L218">source</a>
+</section>
+<section class="member">
+<code class="signature">name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L222">source</a>
+</section>
+<section class="member">
+<code class="signature">name_en</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L228">source</a>
+</section>
+<section class="member">
+<code class="signature">wiki_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L234">source</a>
+</section>
+<section class="member">
+<code class="signature">max_items</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L240">source</a>
+</section>
+<section class="member">
+<code class="signature">result_item</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L244">source</a>
+</section>
+<section class="member">
+<code class="signature">base_item</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L249">source</a>
+</section>
+<section class="member">
+<code class="signature">cookable</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L254">source</a>
+</section>
+<section class="member">
+<code class="signature">add_ingredient_if_cooked</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L258">source</a>
+</section>
+<section class="member">
+<code class="signature">can_add_spices_empty</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L262">source</a>
+</section>
+<section class="member">
+<code class="signature">add_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L266">source</a>
+</section>
+<section class="member">
+<code class="signature">hidden</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L270">source</a>
+</section>
+<section class="member">
+<code class="signature">allow_frozen</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L274">source</a>
+</section>
+<section class="member">
+<code class="signature">template</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L278">source</a>
+</section>
+<section class="member">
+<code class="signature">minimum_water</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L282">source</a>
+</section>
+<section class="member">
+<code class="signature">items_list</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/evolved_recipe.py#L286">source</a>
+<p>Return a dictionary of items that can be used in this evolved recipe.</p>
+<p>This includes both directly associated items and items inherited from the template<br>recipe (if this recipe has a template parameter).</p>
+<p>Each key is an item ID (str), and each value is a dictionary containing:<br>    - &quot;item&quot; (Item): The `Item` object reference.<br>    - &quot;hunger&quot; (float | int): The hunger value contributed when added.<br>    - &quot;cooked&quot; (bool): Whether the item is only valid when cooked.<br>    - &quot;spice&quot; (bool): Whether the item is a spice.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict[str, dict[str, Item | float | bool]]</dt>
+<dd>Items compatible with this recipe.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-evolvedrecipe">EvolvedRecipe</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

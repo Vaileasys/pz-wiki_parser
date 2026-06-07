@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>evolved_recipes.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="craft_recipes.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="researchrecipes.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../tiles/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="craft_recipes.html">craft_recipes.py</a>
+<a href="evolved_recipes.html">evolved_recipes.py</a>
+<a href="researchrecipes.html">researchrecipes.py</a>
+<a href="teached_recipes.html">teached_recipes.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>evolved_recipes.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/recipes</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">format_recipe_info(recipe)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/evolved_recipes.py#L14">source</a>
+<p>Format evolved recipe information in wiki article format.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>recipe (EvolvedRecipe)</dt>
+<dd>The evolved recipe object to format</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list</dt>
+<dd>Formatted lines for the wiki article</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">format_recipe_template(item, evolved_recipe)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/evolved_recipes.py#L154">source</a>
+<p>Format evolved recipe template information for an item.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item (Item)</dt>
+<dd>The item object to format</dd>
+<dt>evolved_recipe (dict)</dt>
+<dd>The evolved recipe data for the item</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list</dt>
+<dd>Formatted lines for the wiki template</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main(batch: bool = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/recipes/evolved_recipes.py#L179">source</a>
+<p>Main execution function for evolved recipes article generation.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>batch (bool)</dt>
+<dd>If True, skip language initialization</dd>
+<dt>This function</dt>
+<dd>No description.</dd>
+<dt>1. Loads all evolved recipes</dt>
+<dd>No description.</dd>
+<dt>2. For each recipe with a result item</dt>
+<dd>No description.</dd>
+<dt>- Formats the recipe information in wiki article format</dt>
+<dd>No description.</dd>
+<dt>- Creates a file named after the result item&#x27;s ID</dt>
+<dd>No description.</dd>
+<dt>- Writes the formatted content to the output directory</dt>
+<dd>No description.</dd>
+<dt>3. For each item with evolved recipe properties</dt>
+<dd>No description.</dd>
+<dt>- Formats the recipe template information</dt>
+<dd>No description.</dd>
+<dt>- Creates a file named after the item&#x27;s ID</dt>
+<dd>No description.</dd>
+<dt>- Writes the formatted content to the template directory</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

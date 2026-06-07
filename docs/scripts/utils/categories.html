@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>categories.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../tools/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="color.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../vehicles/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="categories.html">categories.py</a>
+<a href="color.html">color.py</a>
+<a href="echo.html">echo.py</a>
+<a href="lua_helper.html">lua_helper.py</a>
+<a href="media_helper.html">media_helper.py</a>
+<a href="table_helper.html">table_helper.py</a>
+<a href="util.html">util.py</a>
+<a href="utility.html">utility.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>categories.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/utils</a></p>
+<div class="summary"><p>Category checks.</p>
+<p>This module defines a series of category check functions used to classify an object based on their type,<br>tags, or other properties. The `find_categories` and `find_all_categories` functions evaluate an item against<br>a predefined list of checks and return matching category names.</p>
+<p>Typical usage:<br>    categories = find_categories(item)              # First matching category<br>    all_categories = find_all_categories(item)      # All matching categories</p>
+<p>Used by the wiki parser to automatically organise and filter item data.</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">get_cat_link(display_category: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L99">source</a>
+<p>Returns a formatted link string for a given display category.</p>
+<p>Translates the raw DisplayCategory value, splits it by &quot;/&quot;, and converts each<br>part into a wiki link using `display_category_map`. Falls back to plain text<br>if a link can&#x27;t be found.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>display_category (str)</dt>
+<dd>The raw DisplayCategory value from item data.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>A slash-separated string of wiki links or plain text.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">is_ammo(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L141">source</a>
+<p>Return True if the item is considered ammunition.</p>
+</section>
+<section class="member">
+<code class="signature">is_clothing(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L148">source</a>
+<p>Return True if the item is clothing.</p>
+</section>
+<section class="member">
+<code class="signature">is_container(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L153">source</a>
+<p>Return True if the item is a container.</p>
+</section>
+<section class="member">
+<code class="signature">is_fluid_container(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L162">source</a>
+</section>
+<section class="member">
+<code class="signature">is_food(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L166">source</a>
+<p>Return True if the item is food or marked as food.</p>
+</section>
+<section class="member">
+<code class="signature">is_fuel(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L171">source</a>
+<p>Return True if the item can be used as burnable fuel.</p>
+</section>
+<section class="member">
+<code class="signature">is_animal_part(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L176">source</a>
+<p>Return True if the item is an animal part.</p>
+</section>
+<section class="member">
+<code class="signature">is_appearance(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L181">source</a>
+<p>Return True if the item is used to modify player appearance.</p>
+</section>
+<section class="member">
+<code class="signature">is_camping(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L194">source</a>
+<p>Return True if the item is used for camping.</p>
+</section>
+<section class="member">
+<code class="signature">is_communication(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L199">source</a>
+<p>Return True if the item is a communication appliance.</p>
+</section>
+<section class="member">
+<code class="signature">is_cooking(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L204">source</a>
+<p>Return True if the item is a cooking utensil.</p>
+</section>
+<section class="member">
+<code class="signature">is_corpse(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L209">source</a>
+<p>Return True if the item is a corpse.</p>
+</section>
+<section class="member">
+<code class="signature">is_entertainment(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L214">source</a>
+<p>Return True if the item is an electronic.</p>
+</section>
+<section class="member">
+<code class="signature">is_electronics(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L222">source</a>
+<p>Return True if the item is an electronic.</p>
+</section>
+<section class="member">
+<code class="signature">is_fire_source(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L229">source</a>
+<p>Return True if the item can be used to start a fire.</p>
+</section>
+<section class="member">
+<code class="signature">is_literature(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L238">source</a>
+<p>Return True if the item is a book, map, or other literature.</p>
+</section>
+<section class="member">
+<code class="signature">is_fishing(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L245">source</a>
+<p>Return True if the item is used in fishing.</p>
+</section>
+<section class="member">
+<code class="signature">is_gardening(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L257">source</a>
+<p>Return True if the item is used in gardening.</p>
+</section>
+<section class="member">
+<code class="signature">is_household(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L267">source</a>
+<p>Return True if the item is categorised as a household item.</p>
+</section>
+<section class="member">
+<code class="signature">is_instrument(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L275">source</a>
+<p>Return True if the item is an instrument.</p>
+</section>
+<section class="member">
+<code class="signature">is_junk(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L283">source</a>
+<p>Return True if the item is classified as junk.</p>
+</section>
+<section class="member">
+<code class="signature">is_light_source(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L288">source</a>
+<p>Return True if the item is classified as light source.</p>
+</section>
+<section class="member">
+<code class="signature">is_material(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L297">source</a>
+<p>Return True if the item is classified as a material.</p>
+</section>
+<section class="member">
+<code class="signature">is_medical(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L313">source</a>
+<p>Return True if the item is used in or related to first aid.</p>
+</section>
+<section class="member">
+<code class="signature">is_memento(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L322">source</a>
+<p>Return True if the item is classified as a memento.</p>
+</section>
+<section class="member">
+<code class="signature">is_security(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L345">source</a>
+<p>Return True if the item is classified as security.</p>
+</section>
+<section class="member">
+<code class="signature">is_sport(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L350">source</a>
+<p>Return True if the item is classified as sport.</p>
+</section>
+<section class="member">
+<code class="signature">is_tool(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L355">source</a>
+<p>Return True if the item is classified as a tool.</p>
+</section>
+<section class="member">
+<code class="signature">is_trapping(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L428">source</a>
+<p>Return True if the item is classified as a trap.</p>
+</section>
+<section class="member">
+<code class="signature">is_vehicle_maintenance(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L433">source</a>
+<p>Return True if the item is used for vehicle maintenance.</p>
+</section>
+<section class="member">
+<code class="signature">is_weapon(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L441">source</a>
+<p>Return True if the item is a weapon.</p>
+</section>
+<section class="member">
+<code class="signature">is_weapon_part(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L446">source</a>
+<p>Return True if the item is a weapon part.</p>
+</section>
+<section class="member">
+<code class="signature">is_debug(item: Item) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L451">source</a>
+<p>Return True if the item is a weapon.</p>
+</section>
+<section class="member">
+<code class="signature">find_categories(obj: object, *, do_all: bool = False, checks: list[tuple] = ITEM_CHECKS) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L500">source</a>
+<p>Determine categories for an object using a list of check functions. Option to return only one (default) or all.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>obj (object)</dt>
+<dd>The object to evaluate (typically an Item).</dd>
+<dt>do_all (bool, optional)</dt>
+<dd>If True, return all matching categories. If False (default), return only the first match.</dd>
+<dt>checks (list[tuple], optional)</dt>
+<dd>A list of (function, category_name) pairs to check against.</dd>
+<dt>Each function should return a bool when passed `obj`.</dt>
+<dd>No description.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>A list of category names. Returns a single-element list if do_all is False,</dd>
+<dt>or multiple category names if do_all is True. Returns an empty list if no match is found.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">find_all_categories(obj: object, *, checks: list[tuple] = ITEM_CHECKS) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/categories.py#L525">source</a>
+<p>Return all category names that match the given object.<br>This is a shorthand for calling `find_categories` with `do_all=True`.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>obj (object)</dt>
+<dd>The object to evaluate (typically an Item).</dd>
+<dt>checks (list[tuple], optional)</dt>
+<dd>A list of (function, category_name) pairs to check against.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>A list of all category names that match.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>batch_processor.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../tiles/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="diff.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../utils/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="batch_processor.html">batch_processor.py</a>
+<a href="diff.html">diff.py</a>
+<a href="generate_docs.html">generate_docs.py</a>
+<a href="manual_tile_stitcher.html">manual_tile_stitcher.py</a>
+<a href="outfit_images.html">outfit_images.py</a>
+<a href="page_name_checker.html">page_name_checker.py</a>
+<a href="update_icons.html">update_icons.py</a>
+<a href="vehicle_render_data.html">vehicle_render_data.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>batch_processor.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/tools</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">_mark_once(key)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/batch_processor.py#L24">source</a>
+<p>Return True the first time a key is seen in this batch, else False.</p>
+</section>
+<section class="member">
+<code class="signature">reset_mark_once()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/batch_processor.py#L32">source</a>
+<p>Reset the once_run_scripts set for a new batch.</p>
+</section>
+<section class="member">
+<code class="signature">select_languages()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/batch_processor.py#L37">source</a>
+<p>Prompt user for language selection.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list</dt>
+<dd>List of language codes to process.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">setup_language(lang_code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/batch_processor.py#L85">source</a>
+<p>Set up the language system for the specified language code.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lang_code (str)</dt>
+<dd>Language code to set up</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">batch_items(lang_code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/batch_processor.py#L104">source</a>
+<p>Run items batch processing for a single language.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lang_code (str)</dt>
+<dd>Language code to process</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">batch_recipes(lang_code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/batch_processor.py#L215">source</a>
+<p>Run recipes batch processing.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lang_code (str)</dt>
+<dd>Language code to process (only used for setup, recipes run once per batch)</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">batch_tiles(lang_code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/batch_processor.py#L236">source</a>
+<p>Run tiles batch processing.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lang_code (str)</dt>
+<dd>Language code to process</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">batch_fluids(lang_code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/batch_processor.py#L248">source</a>
+<p>Run fluids batch processing.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lang_code (str)</dt>
+<dd>Language code to process</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">batch_lists(lang_code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/batch_processor.py#L264">source</a>
+<p>Run lists batch processing.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lang_code (str)</dt>
+<dd>Language code to process</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">batch_animals(lang_code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/batch_processor.py#L310">source</a>
+<p>Run animals batch processing.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lang_code (str)</dt>
+<dd>Language code to process</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">batch_vehicles(lang_code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/batch_processor.py#L332">source</a>
+<p>Run vehicles batch processing.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lang_code (str)</dt>
+<dd>Language code to process</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">batch_misc(lang_code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/batch_processor.py#L356">source</a>
+<p>Run misc batch processing.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lang_code (str)</dt>
+<dd>Language code to process</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/batch_processor.py#L374">source</a>
+<p>Main function for the items batch processor.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

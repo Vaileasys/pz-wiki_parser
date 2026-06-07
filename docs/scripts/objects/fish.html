@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fish.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="farming.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="fixing.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>fish.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<div class="summary"><p>Parses and represents fish data from Project Zomboid&#x27;s fishing system.</p>
+<p>Extracts fish properties from the game&#x27;s Lua files.<br>Fish instances can be created using item IDs and provide structured access to attributes.</p>
+<p>Cached data is automatically stored and reused between sessions.</p></div>
+<h2 id="classes">Classes</h2>
+<h3 id="class-fish">Fish</h3>
+<div class="summary"><p>Represents a single fish type defined in the game’s fishing system.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_parse()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L79">source</a>
+<p>Parses fish data from the provided Lua file and caches it.</p>
+<p>Extracts entries from the &#x27;Fishing.fishes&#x27; table and indexes them by item type.</p>
+</section>
+<section class="member">
+<code class="signature">load()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L99">source</a>
+<p>Loads fish data from the cache, re-parsing the Lua file if the data is outdated.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Mapping of item ID to fish data.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">fix_item_id(item_id: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L122">source</a>
+<p>Attempts to fix a partial item_id by assuming the &#x27;Base&#x27; module first,<br>then falling back to a full search through parsed fishes data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_id (str)</dt>
+<dd>Either a full item_id (&#x27;Module.Item&#x27;) or just an item name.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The best-guess full item_id.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">all() -&gt; dict[str, &#x27;Fish&#x27;]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L153">source</a>
+<p>Returns all known fish instances.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict[str, Fish]</dt>
+<dd>Mapping of item ID to Fish instance.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">count() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L165">source</a>
+<p>Returns the total number of fish types parsed.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>int</dt>
+<dd>Number of unique fish types.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">exists(item_id: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L177">source</a>
+<p>Checks if a fish with the given item id exists in the parsed data.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>True if found, False otherwise.</dd>
+</dl>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(item_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L51">source</a>
+<p>Ensures only one Fish instance exists per item ID.</p>
+</section>
+<section class="member">
+<code class="signature">__init__(item_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L65">source</a>
+<p>Initialise the Fish instance with its data if not already initialised.</p>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L188">source</a>
+<p>Returns a raw value from the fish data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>key (str)</dt>
+<dd>Key to look up.</dd>
+<dt>default</dt>
+<dd>Value to return if key is missing.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Any</dt>
+<dd>Value from the raw data or default.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L250">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">is_valid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L202">source</a>
+</section>
+<section class="member">
+<code class="signature">data</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L206">source</a>
+</section>
+<section class="member">
+<code class="signature">item_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L210">source</a>
+</section>
+<section class="member">
+<code class="signature">item</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L214">source</a>
+</section>
+<section class="member">
+<code class="signature">max_length</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L219">source</a>
+</section>
+<section class="member">
+<code class="signature">trophy_length</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L223">source</a>
+</section>
+<section class="member">
+<code class="signature">max_weight</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L227">source</a>
+</section>
+<section class="member">
+<code class="signature">trophy_weight</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L231">source</a>
+</section>
+<section class="member">
+<code class="signature">is_predator</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L235">source</a>
+</section>
+<section class="member">
+<code class="signature">lures</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L239">source</a>
+</section>
+<section class="member">
+<code class="signature">size_data</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L243">source</a>
+</section>
+<section class="member">
+<code class="signature">has_sizes</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fish.py#L247">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-fish">Fish</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

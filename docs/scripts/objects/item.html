@@ -1,0 +1,2005 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>item.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="forage.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="outfit.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>item.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<div class="summary"><p>The `Item` class is a centralised way to access and manipulate data from the parsed script data.<br>Some properties will return another object, so properties can be strung together.<br>E.g., `item.blood_location.body_parts.wiki_links` returns a list of body parts as formatted links for an item.</p>
+<p>Instances are cached and reused automatically by item ID.</p></div>
+<h2 id="classes">Classes</h2>
+<h3 id="class-item">Item</h3>
+<div class="summary"><p>Represents a single parsed game item.</p>
+<p>Offers attribute-style access to raw values, translations,<br>default handling, icon/model discovery, and logic for derived values<br>like burn time or skill books. Also wraps component data<br>such as durability or fluid container info.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_load_items()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L409">source</a>
+<p>Loads and normalises item script data into the class-level cache.</p>
+<p>All dictionary keys are lowercased to ensure consistent access.</p>
+</section>
+<section class="member">
+<code class="signature">_generate_item_keys()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L419">source</a>
+<p>Generates and caches ItemKeys for all loaded items.</p>
+</section>
+<section class="member">
+<code class="signature">_parse_foraging_penalties()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L454">source</a>
+<p>Extracts clothing penalties from &#x27;forageSystem.lua&#x27; and cache.</p>
+</section>
+<section class="member">
+<code class="signature">fix_item_id(item_id: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L469">source</a>
+<p>Attempts to fix a partial item_id by assuming the &#x27;Base&#x27; module first,<br>then falling back to a full search through parsed item data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_id (str)</dt>
+<dd>Either a full item_id (&#x27;Module.Item&#x27;) or just an item name.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The best-guess full item_id.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_id_from_key(item_key: str) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L502">source</a>
+<p>Retrieves the full item ID corresponding to a given ItemKey.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_key (str)</dt>
+<dd>The ItemKey to look up.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The corresponding full item ID, or None if not found.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">all()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L523">source</a>
+<p>Return all items as a dictionary of {item_id: Item}.</p>
+</section>
+<section class="member">
+<code class="signature">items()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L530">source</a>
+<p>Return an iterable of (item_id, Item) pairs.</p>
+</section>
+<section class="member">
+<code class="signature">keys()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L535">source</a>
+<p>Return all item IDs as a keys view.</p>
+</section>
+<section class="member">
+<code class="signature">values()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L542">source</a>
+<p>Return all Item instances as a generator.</p>
+</section>
+<section class="member">
+<code class="signature">count()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L549">source</a>
+<p>Return the total number of loaded items.</p>
+</section>
+<section class="member">
+<code class="signature">get_icon_cache()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L556">source</a>
+<p>Return the cached list of item icon filenames.</p>
+</section>
+<section class="member">
+<code class="signature">load_burn_data()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L566">source</a>
+<p>Load and cache burn time data from camping_fuel.lua.</p>
+</section>
+<section class="member">
+<code class="signature">exists(item_id: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L589">source</a>
+</section>
+<h4>Static Methods</h4>
+<section class="member">
+<code class="signature">_lower_keys(data: dict) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L394">source</a>
+<p>Converts the keys of a dictionary to lowercase.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>data (dict)</dt>
+<dd>Dictionary to normalise.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Dictionary with all top-level keys lowercased.</dd>
+</dl>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(item_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L335">source</a>
+<p>Return an existing Item instance if one already exists for the given ID.</p>
+<p>Fixes partial IDs like &#x27;Axe&#x27; to &#x27;Base.Axe&#x27; before checking or creating the instance.</p>
+</section>
+<section class="member">
+<code class="signature">__init__(item_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L353">source</a>
+<p>Initialise the Item instance with its data if not already initialised.</p>
+</section>
+<section class="member">
+<code class="signature">__getitem__(key)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L381">source</a>
+<p>Allow dictionary-style access to item data (e.g., item[&quot;DisplayName&quot;]).</p>
+</section>
+<section class="member">
+<code class="signature">__contains__(key)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L385">source</a>
+<p>Allow &#x27;in&#x27; checks for item data keys (e.g., &quot;EvolvedRecipe&quot; in item).</p>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L389">source</a>
+<p>Return a string representation of the Item showing name, ID, type, and source path.</p>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L598">source</a>
+<p>Retrieve the value for a given key from item data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>key (str)</dt>
+<dd>The key to look up.</dd>
+<dt>default (any, optional)</dt>
+<dd>Fallback if the key is missing.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>any</dt>
+<dd>The value from data or the provided default.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">_find_name(language: str = None) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L613">source</a>
+<p>Determines the display name of the item, handling special cases and translations.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>language (str, optional)</dt>
+<dd>Language code (e.g., &#x27;en&#x27;). If None, uses the active language.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The resolved item name, including special case titles, vehicle part names, or translated display names.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">_find_icon()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L705">source</a>
+<p>Detects and sets the item&#x27;s icon(s), checking CSV overrides, item properties, and icon variants.</p>
+</section>
+<section class="member">
+<code class="signature">_format_icon(format: bool = False, all_icons: bool = False, cycling: bool = False, custom_name: str = None) -&gt; str | list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L809">source</a>
+<p>Formats the item&#x27;s icon(s) for display or wiki markup, with optional cycling or custom names.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>format (bool, optional)</dt>
+<dd>Whether to return wiki-formatted markup.</dd>
+<dt>all_icons (bool, optional)</dt>
+<dd>Whether to include all icon variants.</dd>
+<dt>cycling (bool, optional)</dt>
+<dd>Whether to wrap icons in a cycling image span.</dd>
+<dt>custom_name (str, optional)</dt>
+<dd>Custom display name for the icon.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str or list[str]</dt>
+<dd>Formatted wiki markup or raw icon filename(s).</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">_calculate_burn_time()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L863">source</a>
+<p>Calculate and store the burn time for this item based on weight, category, tags, and fuel data.</p>
+</section>
+<section class="member">
+<code class="signature">calculate_weight(trait: str = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L959">source</a>
+</section>
+<section class="member">
+<code class="signature">get_default(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L975">source</a>
+<p>Retrieve the value for a key using the class default if no explicit default is provided.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>key (str)</dt>
+<dd>The key to look up.</dd>
+<dt>default (any, optional)</dt>
+<dd>Explicit fallback (overrides class default if provided).</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>any</dt>
+<dd>The value from data or the determined default.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_component(key: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L991">source</a>
+<p>Retrieve a sprecific component dict from the item data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>key (str)</dt>
+<dd>The component key to look up.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>The subcomponent data or an empty dict if missing.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_icon(format: bool = True, all_icons: bool = True, cycling: bool = True, custom_name: str = None) -&gt; str | list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1003">source</a>
+<p>Returns the item&#x27;s icon(s), either as raw filenames or formatted wiki markup.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>format (bool, optional)</dt>
+<dd>Whether to return wiki-formatted markup. Defaults to True.</dd>
+<dt>all_icons (bool, optional)</dt>
+<dd>Whether to include all icon variants. Defaults to True.</dd>
+<dt>cycling (bool, optional)</dt>
+<dd>Whether to wrap icons in a cycling image span. Defaults to True.</dd>
+<dt>custom_name (str, optional)</dt>
+<dd>Custom display name for the icon. Defaults to None.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str or list[str]</dt>
+<dd>Formatted wiki markup or raw icon filename(s).</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_skill(raw: bool = False, get_all: bool = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1038">source</a>
+<p>Returns the skill(s) associated with the item.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>raw (bool)</dt>
+<dd>If True, returns the raw skill name(s) as string(s) instead of Skill objects.</dd>
+<dt>get_all (bool)</dt>
+<dd>If True, returns a list of all associated skills. Otherwise returns only the primary one.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Skill | list[Skill] | str | list[str] | None</dt>
+<dd>A single Skill or skill name, a list of Skills or names,</dd>
+<dt>or None if no valid skill is found.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_body_parts(do_link: bool = True, raw_id: bool = False, default = None) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1088">source</a>
+<p>Returns a list of body parts based on the item&#x27;s `BloodLocation`.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>do_link (bool)</dt>
+<dd>If True, returns wiki-linked names. Otherwise returns plain names.</dd>
+<dt>raw_id (bool)</dt>
+<dd>If True, returns internal body part ids.</dd>
+<dt>default (Any)</dt>
+<dd>Value to return if no blood location data is found.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str] | Any</dt>
+<dd>A list of body part names or links, or the provided default value if no data is found.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_recipes() -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1111">source</a>
+</section>
+<section class="member">
+<code class="signature">get_fabric() -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1124">source</a>
+<p>Returns the item id for the item&#x27;s fabric type.</p>
+</section>
+<section class="member">
+<code class="signature">has_tag(*tags: str | list[str]) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1135">source</a>
+<p>Check if the item has any of the given tags.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>*tags (str | list[str])</dt>
+<dd>One or more tags to check. Can be individual strings or a list of strings.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>True if any of the tags are present, False otherwise.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">has_tags(*tags: str | list[str]) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1161">source</a>
+<p>Check if the item has all of the given tags.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>*tags (str | list[str])</dt>
+<dd>Tags to check. Accepts multiple strings or a list of strings.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>True if all tags are present, False otherwise.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">has_category(*categories: str | list[str]) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1186">source</a>
+<p>Check if the item has any of the given categories.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>*categories (str | list[str])</dt>
+<dd>One or more category names to check. Can be individual strings or a list.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>True if any of the categories are present, False otherwise.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">name(value)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1274">source</a>
+</section>
+<section class="member">
+<code class="signature">name_en(value)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1292">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">valid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1214">source</a>
+</section>
+<section class="member">
+<code class="signature">script_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1218">source</a>
+</section>
+<section class="member">
+<code class="signature">file</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1222">source</a>
+</section>
+<section class="member">
+<code class="signature">path</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1226">source</a>
+</section>
+<section class="member">
+<code class="signature">item_id</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1230">source</a>
+</section>
+<section class="member">
+<code class="signature">module</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1234">source</a>
+</section>
+<section class="member">
+<code class="signature">id_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1238">source</a>
+</section>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1242">source</a>
+</section>
+<section class="member">
+<code class="signature">has_page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1254">source</a>
+</section>
+<section class="member">
+<code class="signature">translation_name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1260">source</a>
+</section>
+<section class="member">
+<code class="signature">name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1264">source</a>
+</section>
+<section class="member">
+<code class="signature">name_en</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1280">source</a>
+</section>
+<section class="member">
+<code class="signature">wiki_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1296">source</a>
+</section>
+<section class="member">
+<code class="signature">icon</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1302">source</a>
+</section>
+<section class="member">
+<code class="signature">icons</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1306">source</a>
+</section>
+<section class="member">
+<code class="signature">item_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1313">source</a>
+</section>
+<section class="member">
+<code class="signature">item_key</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1317">source</a>
+</section>
+<section class="member">
+<code class="signature">raw_display_category</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1325">source</a>
+</section>
+<section class="member">
+<code class="signature">display_category</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1329">source</a>
+</section>
+<section class="member">
+<code class="signature">display_category_name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1337">source</a>
+</section>
+<section class="member">
+<code class="signature">display_name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1352">source</a>
+</section>
+<section class="member">
+<code class="signature">always_welcome_gift</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1356">source</a>
+</section>
+<section class="member">
+<code class="signature">tags</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1360">source</a>
+</section>
+<section class="member">
+<code class="signature">guid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1364">source</a>
+</section>
+<section class="member">
+<code class="signature">raw_icon</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1369">source</a>
+</section>
+<section class="member">
+<code class="signature">icons_for_texture</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1373">source</a>
+</section>
+<section class="member">
+<code class="signature">static_model</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1377">source</a>
+</section>
+<section class="member">
+<code class="signature">world_static_model</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1381">source</a>
+</section>
+<section class="member">
+<code class="signature">physics_object</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1385">source</a>
+</section>
+<section class="member">
+<code class="signature">placed_sprite</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1389">source</a>
+</section>
+<section class="member">
+<code class="signature">weapon_sprite</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1393">source</a>
+</section>
+<section class="member">
+<code class="signature">eat_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1397">source</a>
+</section>
+<section class="member">
+<code class="signature">swing_anim</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1401">source</a>
+</section>
+<section class="member">
+<code class="signature">idle_anim</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1405">source</a>
+</section>
+<section class="member">
+<code class="signature">run_anim</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1409">source</a>
+</section>
+<section class="member">
+<code class="signature">static_models_by_index</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1413">source</a>
+</section>
+<section class="member">
+<code class="signature">world_static_models_by_index</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1417">source</a>
+</section>
+<section class="member">
+<code class="signature">primary_anim_mask</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1421">source</a>
+</section>
+<section class="member">
+<code class="signature">secondary_anim_mask</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1425">source</a>
+</section>
+<section class="member">
+<code class="signature">world_object_sprite</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1429">source</a>
+</section>
+<section class="member">
+<code class="signature">read_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1433">source</a>
+</section>
+<section class="member">
+<code class="signature">scale_world_icon</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1437">source</a>
+</section>
+<section class="member">
+<code class="signature">use_world_item</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1441">source</a>
+</section>
+<section class="member">
+<code class="signature">weapon_sprites_by_index</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1445">source</a>
+</section>
+<section class="member">
+<code class="signature">color_blue</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1449">source</a>
+</section>
+<section class="member">
+<code class="signature">color_green</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1453">source</a>
+</section>
+<section class="member">
+<code class="signature">color_red</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1457">source</a>
+</section>
+<section class="member">
+<code class="signature">icon_color_mask</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1461">source</a>
+</section>
+<section class="member">
+<code class="signature">icon_fluid_mask</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1465">source</a>
+</section>
+<section class="member">
+<code class="signature">dig_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1469">source</a>
+</section>
+<section class="member">
+<code class="signature">pour_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1473">source</a>
+</section>
+<section class="member">
+<code class="signature">place_multiple_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1478">source</a>
+</section>
+<section class="member">
+<code class="signature">place_one_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1482">source</a>
+</section>
+<section class="member">
+<code class="signature">cooking_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1486">source</a>
+</section>
+<section class="member">
+<code class="signature">swing_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1490">source</a>
+</section>
+<section class="member">
+<code class="signature">close_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1494">source</a>
+</section>
+<section class="member">
+<code class="signature">open_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1498">source</a>
+</section>
+<section class="member">
+<code class="signature">put_in_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1502">source</a>
+</section>
+<section class="member">
+<code class="signature">break_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1506">source</a>
+</section>
+<section class="member">
+<code class="signature">door_hit_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1510">source</a>
+</section>
+<section class="member">
+<code class="signature">drop_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1514">source</a>
+</section>
+<section class="member">
+<code class="signature">hit_floor_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1518">source</a>
+</section>
+<section class="member">
+<code class="signature">hit_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1522">source</a>
+</section>
+<section class="member">
+<code class="signature">aim_release_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1526">source</a>
+</section>
+<section class="member">
+<code class="signature">bring_to_bear_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1530">source</a>
+</section>
+<section class="member">
+<code class="signature">click_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1534">source</a>
+</section>
+<section class="member">
+<code class="signature">eject_ammo_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1538">source</a>
+</section>
+<section class="member">
+<code class="signature">eject_ammo_start_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1542">source</a>
+</section>
+<section class="member">
+<code class="signature">eject_ammo_stop_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1546">source</a>
+</section>
+<section class="member">
+<code class="signature">equip_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1550">source</a>
+</section>
+<section class="member">
+<code class="signature">custom_eat_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1554">source</a>
+</section>
+<section class="member">
+<code class="signature">impact_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1558">source</a>
+</section>
+<section class="member">
+<code class="signature">insert_ammo_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1562">source</a>
+</section>
+<section class="member">
+<code class="signature">insert_ammo_start_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1566">source</a>
+</section>
+<section class="member">
+<code class="signature">insert_ammo_stop_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1570">source</a>
+</section>
+<section class="member">
+<code class="signature">damaged_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1574">source</a>
+</section>
+<section class="member">
+<code class="signature">unequip_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1578">source</a>
+</section>
+<section class="member">
+<code class="signature">rack_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1582">source</a>
+</section>
+<section class="member">
+<code class="signature">npc_sound_boost</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1586">source</a>
+</section>
+<section class="member">
+<code class="signature">sound_parameter</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1590">source</a>
+</section>
+<section class="member">
+<code class="signature">sound_map</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1594">source</a>
+</section>
+<section class="member">
+<code class="signature">fill_from_dispenser_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1598">source</a>
+</section>
+<section class="member">
+<code class="signature">fill_from_lake_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1602">source</a>
+</section>
+<section class="member">
+<code class="signature">fill_from_tap_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1606">source</a>
+</section>
+<section class="member">
+<code class="signature">fill_from_toilet_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1610">source</a>
+</section>
+<section class="member">
+<code class="signature">weight</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1615">source</a>
+</section>
+<section class="member">
+<code class="signature">capacity</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1619">source</a>
+</section>
+<section class="member">
+<code class="signature">weight_reduction</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1623">source</a>
+</section>
+<section class="member">
+<code class="signature">accept_item_function</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1627">source</a>
+</section>
+<section class="member">
+<code class="signature">weight_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1631">source</a>
+</section>
+<section class="member">
+<code class="signature">weapon_weight</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1635">source</a>
+</section>
+<section class="member">
+<code class="signature">max_item_size</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1639">source</a>
+</section>
+<section class="member">
+<code class="signature">weight_empty</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1643">source</a>
+</section>
+<section class="member">
+<code class="signature">evolved_recipe</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1648">source</a>
+</section>
+<section class="member">
+<code class="signature">evolved_recipe_name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1652">source</a>
+</section>
+<section class="member">
+<code class="signature">researchable_recipes</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1656">source</a>
+</section>
+<section class="member">
+<code class="signature">teached_recipes</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1662">source</a>
+</section>
+<section class="member">
+<code class="signature">sharpness</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1666">source</a>
+</section>
+<section class="member">
+<code class="signature">head_condition</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1670">source</a>
+</section>
+<section class="member">
+<code class="signature">head_condition_lower_chance_multiplier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1674">source</a>
+</section>
+<section class="member">
+<code class="signature">condition_lower_chance_one_in</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1680">source</a>
+</section>
+<section class="member">
+<code class="signature">can_attach</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1684">source</a>
+</section>
+<section class="member">
+<code class="signature">can_detach</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1688">source</a>
+</section>
+<section class="member">
+<code class="signature">condition_max</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1692">source</a>
+</section>
+<section class="member">
+<code class="signature">replace_on_use</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1696">source</a>
+</section>
+<section class="member">
+<code class="signature">replace_on_use_on</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1700">source</a>
+</section>
+<section class="member">
+<code class="signature">consolidate_option</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1704">source</a>
+</section>
+<section class="member">
+<code class="signature">use_delta</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1708">source</a>
+</section>
+<section class="member">
+<code class="signature">use_while_equipped</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1712">source</a>
+</section>
+<section class="member">
+<code class="signature">use_self</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1716">source</a>
+</section>
+<section class="member">
+<code class="signature">replace_on_deplete</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1720">source</a>
+</section>
+<section class="member">
+<code class="signature">remove_on_broken</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1724">source</a>
+</section>
+<section class="member">
+<code class="signature">without_drainable</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1728">source</a>
+</section>
+<section class="member">
+<code class="signature">with_drainable</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1732">source</a>
+</section>
+<section class="member">
+<code class="signature">ticks_per_equip_use</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1736">source</a>
+</section>
+<section class="member">
+<code class="signature">can_be_reused</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1740">source</a>
+</section>
+<section class="member">
+<code class="signature">head_condition_max</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1744">source</a>
+</section>
+<section class="member">
+<code class="signature">disappear_on_use</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1748">source</a>
+</section>
+<section class="member">
+<code class="signature">cant_be_consolided</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1752">source</a>
+</section>
+<section class="member">
+<code class="signature">use_while_unequipped</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1756">source</a>
+</section>
+<section class="member">
+<code class="signature">equipped_no_sprint</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1760">source</a>
+</section>
+<section class="member">
+<code class="signature">protect_from_rain_when_equipped</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1764">source</a>
+</section>
+<section class="member">
+<code class="signature">replace_on_cooked</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1768">source</a>
+</section>
+<section class="member">
+<code class="signature">item_after_cleaning</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1772">source</a>
+</section>
+<section class="member">
+<code class="signature">can_barricade</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1776">source</a>
+</section>
+<section class="member">
+<code class="signature">keep_on_deplete</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1780">source</a>
+</section>
+<section class="member">
+<code class="signature">chance_to_spawn_damaged</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1784">source</a>
+</section>
+<section class="member">
+<code class="signature">metal_value</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1788">source</a>
+</section>
+<section class="member">
+<code class="signature">food_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1793">source</a>
+</section>
+<section class="member">
+<code class="signature">days_fresh</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1797">source</a>
+</section>
+<section class="member">
+<code class="signature">days_totally_rotten</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1801">source</a>
+</section>
+<section class="member">
+<code class="signature">hunger_change</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1805">source</a>
+</section>
+<section class="member">
+<code class="signature">thirst_change</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1809">source</a>
+</section>
+<section class="member">
+<code class="signature">calories</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1813">source</a>
+</section>
+<section class="member">
+<code class="signature">carbohydrates</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1817">source</a>
+</section>
+<section class="member">
+<code class="signature">lipids</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1821">source</a>
+</section>
+<section class="member">
+<code class="signature">proteins</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1825">source</a>
+</section>
+<section class="member">
+<code class="signature">is_cookable</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1829">source</a>
+</section>
+<section class="member">
+<code class="signature">minutes_to_cook</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1833">source</a>
+</section>
+<section class="member">
+<code class="signature">minutes_to_burn</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1837">source</a>
+</section>
+<section class="member">
+<code class="signature">remove_unhappiness_when_cooked</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1841">source</a>
+</section>
+<section class="member">
+<code class="signature">bad_cold</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1845">source</a>
+</section>
+<section class="member">
+<code class="signature">bad_in_microwave</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1849">source</a>
+</section>
+<section class="member">
+<code class="signature">dangerous_uncooked</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1853">source</a>
+</section>
+<section class="member">
+<code class="signature">good_hot</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1857">source</a>
+</section>
+<section class="member">
+<code class="signature">cant_eat</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1861">source</a>
+</section>
+<section class="member">
+<code class="signature">cant_be_frozen</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1865">source</a>
+</section>
+<section class="member">
+<code class="signature">animal_feed_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1869">source</a>
+</section>
+<section class="member">
+<code class="signature">packaged</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1873">source</a>
+</section>
+<section class="member">
+<code class="signature">spice</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1877">source</a>
+</section>
+<section class="member">
+<code class="signature">canned_food</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1881">source</a>
+</section>
+<section class="member">
+<code class="signature">replace_on_rotten</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1885">source</a>
+</section>
+<section class="member">
+<code class="signature">eat_time</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1889">source</a>
+</section>
+<section class="member">
+<code class="signature">remove_negative_effect_on_cooked</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1893">source</a>
+</section>
+<section class="member">
+<code class="signature">unhappy_change</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1898">source</a>
+</section>
+<section class="member">
+<code class="signature">boredom_change</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1902">source</a>
+</section>
+<section class="member">
+<code class="signature">stress_change</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1906">source</a>
+</section>
+<section class="member">
+<code class="signature">reduce_food_sickness</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1910">source</a>
+</section>
+<section class="member">
+<code class="signature">endurance_change</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1914">source</a>
+</section>
+<section class="member">
+<code class="signature">poison_power</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1918">source</a>
+</section>
+<section class="member">
+<code class="signature">medical</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1922">source</a>
+</section>
+<section class="member">
+<code class="signature">alcoholic</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1926">source</a>
+</section>
+<section class="member">
+<code class="signature">bandage_power</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1930">source</a>
+</section>
+<section class="member">
+<code class="signature">can_bandage</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1934">source</a>
+</section>
+<section class="member">
+<code class="signature">alcohol_power</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1938">source</a>
+</section>
+<section class="member">
+<code class="signature">reduce_infection_power</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1942">source</a>
+</section>
+<section class="member">
+<code class="signature">fatigue_change</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1946">source</a>
+</section>
+<section class="member">
+<code class="signature">flu_reduction</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1950">source</a>
+</section>
+<section class="member">
+<code class="signature">herbalist_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1954">source</a>
+</section>
+<section class="member">
+<code class="signature">pain_reduction</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1958">source</a>
+</section>
+<section class="member">
+<code class="signature">explosion_power</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1963">source</a>
+</section>
+<section class="member">
+<code class="signature">explosion_range</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1967">source</a>
+</section>
+<section class="member">
+<code class="signature">explosion_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1971">source</a>
+</section>
+<section class="member">
+<code class="signature">knockdown_mod</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1975">source</a>
+</section>
+<section class="member">
+<code class="signature">max_damage</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1979">source</a>
+</section>
+<section class="member">
+<code class="signature">max_hit_count</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1983">source</a>
+</section>
+<section class="member">
+<code class="signature">max_range</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1987">source</a>
+</section>
+<section class="member">
+<code class="signature">min_damage</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1991">source</a>
+</section>
+<section class="member">
+<code class="signature">minimum_swing_time</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1995">source</a>
+</section>
+<section class="member">
+<code class="signature">swing_amount_before_impact</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L1999">source</a>
+</section>
+<section class="member">
+<code class="signature">swing_time</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2003">source</a>
+</section>
+<section class="member">
+<code class="signature">trigger_explosion_timer</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2007">source</a>
+</section>
+<section class="member">
+<code class="signature">can_be_placed</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2011">source</a>
+</section>
+<section class="member">
+<code class="signature">can_be_remote</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2015">source</a>
+</section>
+<section class="member">
+<code class="signature">explosion_timer</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2019">source</a>
+</section>
+<section class="member">
+<code class="signature">sensor_range</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2023">source</a>
+</section>
+<section class="member">
+<code class="signature">alarm_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2027">source</a>
+</section>
+<section class="member">
+<code class="signature">sound_radius</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2031">source</a>
+</section>
+<section class="member">
+<code class="signature">reload_time_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2035">source</a>
+</section>
+<section class="member">
+<code class="signature">mount_on</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2039">source</a>
+</section>
+<section class="member">
+<code class="signature">part_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2043">source</a>
+</section>
+<section class="member">
+<code class="signature">attachment_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2047">source</a>
+</section>
+<section class="member">
+<code class="signature">base_speed</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2051">source</a>
+</section>
+<section class="member">
+<code class="signature">categories</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2055">source</a>
+</section>
+<section class="member">
+<code class="signature">crit_dmg_multiplier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2059">source</a>
+</section>
+<section class="member">
+<code class="signature">critical_chance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2063">source</a>
+</section>
+<section class="member">
+<code class="signature">door_damage</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2067">source</a>
+</section>
+<section class="member">
+<code class="signature">knock_back_on_no_death</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2071">source</a>
+</section>
+<section class="member">
+<code class="signature">min_angle</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2075">source</a>
+</section>
+<section class="member">
+<code class="signature">min_range</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2079">source</a>
+</section>
+<section class="member">
+<code class="signature">push_back_mod</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2083">source</a>
+</section>
+<section class="member">
+<code class="signature">splat_blood_on_no_death</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2087">source</a>
+</section>
+<section class="member">
+<code class="signature">splat_number</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2091">source</a>
+</section>
+<section class="member">
+<code class="signature">subcategory</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2095">source</a>
+</section>
+<section class="member">
+<code class="signature">tree_damage</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2099">source</a>
+</section>
+<section class="member">
+<code class="signature">weapon_length</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2103">source</a>
+</section>
+<section class="member">
+<code class="signature">projectile_spread_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2107">source</a>
+</section>
+<section class="member">
+<code class="signature">max_range_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2111">source</a>
+</section>
+<section class="member">
+<code class="signature">angle_falloff</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2115">source</a>
+</section>
+<section class="member">
+<code class="signature">have_chamber</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2119">source</a>
+</section>
+<section class="member">
+<code class="signature">insert_all_bullets_reload</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2123">source</a>
+</section>
+<section class="member">
+<code class="signature">projectile_spread</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2127">source</a>
+</section>
+<section class="member">
+<code class="signature">projectile_weight_center</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2131">source</a>
+</section>
+<section class="member">
+<code class="signature">rack_after_shoot</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2135">source</a>
+</section>
+<section class="member">
+<code class="signature">range_falloff</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2139">source</a>
+</section>
+<section class="member">
+<code class="signature">other_hand_use</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2143">source</a>
+</section>
+<section class="member">
+<code class="signature">other_hand_require</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2147">source</a>
+</section>
+<section class="member">
+<code class="signature">fire_power</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2151">source</a>
+</section>
+<section class="member">
+<code class="signature">fire_range</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2155">source</a>
+</section>
+<section class="member">
+<code class="signature">noise_range</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2159">source</a>
+</section>
+<section class="member">
+<code class="signature">aiming_time_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2163">source</a>
+</section>
+<section class="member">
+<code class="signature">hit_chance_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2167">source</a>
+</section>
+<section class="member">
+<code class="signature">noise_duration</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2171">source</a>
+</section>
+<section class="member">
+<code class="signature">recoil_delay_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2175">source</a>
+</section>
+<section class="member">
+<code class="signature">remote_controller</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2179">source</a>
+</section>
+<section class="member">
+<code class="signature">remote_range</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2183">source</a>
+</section>
+<section class="member">
+<code class="signature">manually_remove_spent_rounds</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2187">source</a>
+</section>
+<section class="member">
+<code class="signature">explosion_duration</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2191">source</a>
+</section>
+<section class="member">
+<code class="signature">smoke_range</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2195">source</a>
+</section>
+<section class="member">
+<code class="signature">count_</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2199">source</a>
+</section>
+<section class="member">
+<code class="signature">ammo_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2203">source</a>
+</section>
+<section class="member">
+<code class="signature">can_stack</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2216">source</a>
+</section>
+<section class="member">
+<code class="signature">gun_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2220">source</a>
+</section>
+<section class="member">
+<code class="signature">max_ammo</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2224">source</a>
+</section>
+<section class="member">
+<code class="signature">aiming_perk_crit_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2228">source</a>
+</section>
+<section class="member">
+<code class="signature">aiming_perk_hit_chance_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2232">source</a>
+</section>
+<section class="member">
+<code class="signature">aiming_perk_min_angle_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2236">source</a>
+</section>
+<section class="member">
+<code class="signature">aiming_perk_range_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2240">source</a>
+</section>
+<section class="member">
+<code class="signature">aiming_time</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2244">source</a>
+</section>
+<section class="member">
+<code class="signature">ammo_box</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2248">source</a>
+</section>
+<section class="member">
+<code class="signature">fire_mode</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2252">source</a>
+</section>
+<section class="member">
+<code class="signature">fire_mode_possibilities</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2256">source</a>
+</section>
+<section class="member">
+<code class="signature">cyclic_rate_multiplier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2260">source</a>
+</section>
+<section class="member">
+<code class="signature">hit_chance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2264">source</a>
+</section>
+<section class="member">
+<code class="signature">is_aimed_firearm</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2268">source</a>
+</section>
+<section class="member">
+<code class="signature">jam_gun_chance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2272">source</a>
+</section>
+<section class="member">
+<code class="signature">magazine_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2276">source</a>
+</section>
+<section class="member">
+<code class="signature">min_sight_range</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2280">source</a>
+</section>
+<section class="member">
+<code class="signature">max_sight_range</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2284">source</a>
+</section>
+<section class="member">
+<code class="signature">model_weapon_part</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2288">source</a>
+</section>
+<section class="member">
+<code class="signature">multiple_hit_condition_affected</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2292">source</a>
+</section>
+<section class="member">
+<code class="signature">piercing_bullets</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2296">source</a>
+</section>
+<section class="member">
+<code class="signature">projectile_count</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2300">source</a>
+</section>
+<section class="member">
+<code class="signature">ranged</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2304">source</a>
+</section>
+<section class="member">
+<code class="signature">recoil_delay</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2308">source</a>
+</section>
+<section class="member">
+<code class="signature">reload_time</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2312">source</a>
+</section>
+<section class="member">
+<code class="signature">requires_equipped_both_hands</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2316">source</a>
+</section>
+<section class="member">
+<code class="signature">share_damage</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2320">source</a>
+</section>
+<section class="member">
+<code class="signature">shell_fall_sound</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2324">source</a>
+</section>
+<section class="member">
+<code class="signature">sound_gain</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2328">source</a>
+</section>
+<section class="member">
+<code class="signature">sound_volume</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2332">source</a>
+</section>
+<section class="member">
+<code class="signature">splat_size</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2336">source</a>
+</section>
+<section class="member">
+<code class="signature">stop_power</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2340">source</a>
+</section>
+<section class="member">
+<code class="signature">to_hit_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2344">source</a>
+</section>
+<section class="member">
+<code class="signature">two_hand_weapon</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2348">source</a>
+</section>
+<section class="member">
+<code class="signature">use_endurance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2352">source</a>
+</section>
+<section class="member">
+<code class="signature">weapon_reload_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2356">source</a>
+</section>
+<section class="member">
+<code class="signature">clip_size</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2360">source</a>
+</section>
+<section class="member">
+<code class="signature">damage_category</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2364">source</a>
+</section>
+<section class="member">
+<code class="signature">damage_make_hole</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2368">source</a>
+</section>
+<section class="member">
+<code class="signature">hit_angle_mod</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2372">source</a>
+</section>
+<section class="member">
+<code class="signature">endurance_mod</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2376">source</a>
+</section>
+<section class="member">
+<code class="signature">low_light_bonus</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2380">source</a>
+</section>
+<section class="member">
+<code class="signature">always_knockdown</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2384">source</a>
+</section>
+<section class="member">
+<code class="signature">aiming_mod</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2388">source</a>
+</section>
+<section class="member">
+<code class="signature">is_aimed_hand_weapon</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2392">source</a>
+</section>
+<section class="member">
+<code class="signature">cant_attack_with_lowest_endurance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2396">source</a>
+</section>
+<section class="member">
+<code class="signature">close_kill_move</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2400">source</a>
+</section>
+<section class="member">
+<code class="signature">body_location</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2405">source</a>
+</section>
+<section class="member">
+<code class="signature">clothing_item</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2410">source</a>
+</section>
+<section class="member">
+<code class="signature">can_be_equipped</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2417">source</a>
+</section>
+<section class="member">
+<code class="signature">run_speed_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2422">source</a>
+</section>
+<section class="member">
+<code class="signature">blood_location</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2426">source</a>
+</section>
+<section class="member">
+<code class="signature">can_have_holes</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2434">source</a>
+</section>
+<section class="member">
+<code class="signature">chance_to_fall</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2438">source</a>
+</section>
+<section class="member">
+<code class="signature">insulation</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2442">source</a>
+</section>
+<section class="member">
+<code class="signature">wind_resistance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2446">source</a>
+</section>
+<section class="member">
+<code class="signature">fabric_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2450">source</a>
+</section>
+<section class="member">
+<code class="signature">scratch_defense</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2454">source</a>
+</section>
+<section class="member">
+<code class="signature">discomfort_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2458">source</a>
+</section>
+<section class="member">
+<code class="signature">water_resistance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2462">source</a>
+</section>
+<section class="member">
+<code class="signature">bite_defense</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2466">source</a>
+</section>
+<section class="member">
+<code class="signature">attachment_replacement</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2470">source</a>
+</section>
+<section class="member">
+<code class="signature">clothing_item_extra</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2474">source</a>
+</section>
+<section class="member">
+<code class="signature">clothing_item_extra_option</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2478">source</a>
+</section>
+<section class="member">
+<code class="signature">replace_in_second_hand</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2482">source</a>
+</section>
+<section class="member">
+<code class="signature">replace_in_primary_hand</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2486">source</a>
+</section>
+<section class="member">
+<code class="signature">corpse_sickness_defense</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2490">source</a>
+</section>
+<section class="member">
+<code class="signature">hearing_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2494">source</a>
+</section>
+<section class="member">
+<code class="signature">neck_protection_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2498">source</a>
+</section>
+<section class="member">
+<code class="signature">visual_aid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2502">source</a>
+</section>
+<section class="member">
+<code class="signature">vision_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2506">source</a>
+</section>
+<section class="member">
+<code class="signature">attachments_provided</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2510">source</a>
+</section>
+<section class="member">
+<code class="signature">combat_speed_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2514">source</a>
+</section>
+<section class="member">
+<code class="signature">bullet_defense</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2518">source</a>
+</section>
+<section class="member">
+<code class="signature">stomp_power</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2522">source</a>
+</section>
+<section class="member">
+<code class="signature">tooltip</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2527">source</a>
+</section>
+<section class="member">
+<code class="signature">custom_context_menu</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2531">source</a>
+</section>
+<section class="member">
+<code class="signature">clothing_extra_submenu</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2535">source</a>
+</section>
+<section class="member">
+<code class="signature">on_create</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2542">source</a>
+</section>
+<section class="member">
+<code class="signature">on_break</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2546">source</a>
+</section>
+<section class="member">
+<code class="signature">on_cooked</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2550">source</a>
+</section>
+<section class="member">
+<code class="signature">on_eat</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2554">source</a>
+</section>
+<section class="member">
+<code class="signature">accept_media_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2559">source</a>
+</section>
+<section class="member">
+<code class="signature">media_category</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2563">source</a>
+</section>
+<section class="member">
+<code class="signature">base_volume_range</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2567">source</a>
+</section>
+<section class="member">
+<code class="signature">is_high_tier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2571">source</a>
+</section>
+<section class="member">
+<code class="signature">is_portable</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2575">source</a>
+</section>
+<section class="member">
+<code class="signature">is_television</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2579">source</a>
+</section>
+<section class="member">
+<code class="signature">max_channel</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2583">source</a>
+</section>
+<section class="member">
+<code class="signature">mic_range</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2587">source</a>
+</section>
+<section class="member">
+<code class="signature">min_channel</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2591">source</a>
+</section>
+<section class="member">
+<code class="signature">no_transmit</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2595">source</a>
+</section>
+<section class="member">
+<code class="signature">transmit_range</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2599">source</a>
+</section>
+<section class="member">
+<code class="signature">two_way</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2603">source</a>
+</section>
+<section class="member">
+<code class="signature">uses_battery</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2607">source</a>
+</section>
+<section class="member">
+<code class="signature">require_in_hand_or_inventory</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2611">source</a>
+</section>
+<section class="member">
+<code class="signature">activated_item</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2615">source</a>
+</section>
+<section class="member">
+<code class="signature">light_distance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2619">source</a>
+</section>
+<section class="member">
+<code class="signature">light_strength</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2623">source</a>
+</section>
+<section class="member">
+<code class="signature">torch_cone</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2627">source</a>
+</section>
+<section class="member">
+<code class="signature">torch_dot</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2631">source</a>
+</section>
+<section class="member">
+<code class="signature">vehicle_part_model</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2636">source</a>
+</section>
+<section class="member">
+<code class="signature">brake_force</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2640">source</a>
+</section>
+<section class="member">
+<code class="signature">engine_loudness</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2644">source</a>
+</section>
+<section class="member">
+<code class="signature">condition_lower_standard</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2648">source</a>
+</section>
+<section class="member">
+<code class="signature">condition_lower_offroad</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2652">source</a>
+</section>
+<section class="member">
+<code class="signature">suspension_damping</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2656">source</a>
+</section>
+<section class="member">
+<code class="signature">suspension_compression</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2660">source</a>
+</section>
+<section class="member">
+<code class="signature">wheel_friction</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2664">source</a>
+</section>
+<section class="member">
+<code class="signature">vehicle_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2668">source</a>
+</section>
+<section class="member">
+<code class="signature">max_capacity</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2672">source</a>
+</section>
+<section class="member">
+<code class="signature">mechanics_item</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2676">source</a>
+</section>
+<section class="member">
+<code class="signature">condition_affects_capacity</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2680">source</a>
+</section>
+<section class="member">
+<code class="signature">can_be_write</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2685">source</a>
+</section>
+<section class="member">
+<code class="signature">page_to_write</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2689">source</a>
+</section>
+<section class="member">
+<code class="signature">map</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2693">source</a>
+</section>
+<section class="member">
+<code class="signature">lvl_skill_trained</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2697">source</a>
+</section>
+<section class="member">
+<code class="signature">num_levels_trained</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2701">source</a>
+</section>
+<section class="member">
+<code class="signature">number_of_pages</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2705">source</a>
+</section>
+<section class="member">
+<code class="signature">skill_trained</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2709">source</a>
+</section>
+<section class="member">
+<code class="signature">is_dung</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2719">source</a>
+</section>
+<section class="member">
+<code class="signature">survival_gear</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2723">source</a>
+</section>
+<section class="member">
+<code class="signature">fishing_lure</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2727">source</a>
+</section>
+<section class="member">
+<code class="signature">trap</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2731">source</a>
+</section>
+<section class="member">
+<code class="signature">padlock</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2735">source</a>
+</section>
+<section class="member">
+<code class="signature">digital_padlock</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2739">source</a>
+</section>
+<section class="member">
+<code class="signature">can_store_water</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2743">source</a>
+</section>
+<section class="member">
+<code class="signature">is_water_source</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2747">source</a>
+</section>
+<section class="member">
+<code class="signature">wet</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2751">source</a>
+</section>
+<section class="member">
+<code class="signature">cosmetic</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2755">source</a>
+</section>
+<section class="member">
+<code class="signature">obsolete</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2759">source</a>
+</section>
+<section class="member">
+<code class="signature">fire_fuel_ratio</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2764">source</a>
+</section>
+<section class="member">
+<code class="signature">rain_factor</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2768">source</a>
+</section>
+<section class="member">
+<code class="signature">wet_cooldown</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2772">source</a>
+</section>
+<section class="member">
+<code class="signature">origin_x</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2776">source</a>
+</section>
+<section class="member">
+<code class="signature">origin_y</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2780">source</a>
+</section>
+<section class="member">
+<code class="signature">origin_z</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2784">source</a>
+</section>
+<section class="member">
+<code class="signature">item_when_dry</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2788">source</a>
+</section>
+<section class="member">
+<code class="signature">spawn_with</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2792">source</a>
+</section>
+<section class="member">
+<code class="signature">make_up_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2796">source</a>
+</section>
+<section class="member">
+<code class="signature">shout_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2800">source</a>
+</section>
+<section class="member">
+<code class="signature">shout_multiplier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2804">source</a>
+</section>
+<section class="member">
+<code class="signature">components</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2810">source</a>
+<p>Returns a list of component keys defined for the item.</p>
+</section>
+<section class="member">
+<code class="signature">fluid_container</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2815">source</a>
+<p>Returns the item&#x27;s FluidContainer component.</p>
+</section>
+<section class="member">
+<code class="signature">durability</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2822">source</a>
+<p>Returns the item&#x27;s Durability component.</p>
+</section>
+<section class="member">
+<code class="signature">skill</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2831">source</a>
+<p>Returns the primary skill associated with the item, if any.</p>
+</section>
+<section class="member">
+<code class="signature">weight_full</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2840">source</a>
+<p>Returns the item&#x27;s total weight when full, whether with fluids or items.<br>Rounded to 2 decimal places, returns an int if no remainder.</p>
+</section>
+<section class="member">
+<code class="signature">weapons</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2860">source</a>
+</section>
+<section class="member">
+<code class="signature">burn_time</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2881">source</a>
+<p>Returns the burn time the item provides.</p>
+</section>
+<section class="member">
+<code class="signature">should_burn</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2890">source</a>
+<p>Returns True if the item is expected to burn.<br>Based on game logic from `ISCampingMenu.shouldBurn()`.</p>
+</section>
+<section class="member">
+<code class="signature">is_tinder</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2909">source</a>
+<p>Returns whether the item is valid tinder.<br>Based on game logic from `ISCampingMenu.isValidTinder()`.<br>Returns None if the item shouldn&#x27;t burn.</p>
+</section>
+<section class="member">
+<code class="signature">models</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L2948">source</a>
+<p>Returns a list of model texture filenames for this item.<br>Finds the correct model names based on clothing textures or static model values, and formats them as `&lt;Name&gt;_Model.png`.</p>
+</section>
+<section class="member">
+<code class="signature">skill_multiplier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L3022">source</a>
+<p>XP multiplier based on the skill book and training level.<br>Returns 1 if no skill book is set.</p>
+</section>
+<section class="member">
+<code class="signature">foraging_penalty</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L3033">source</a>
+</section>
+<section class="member">
+<code class="signature">body_parts</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L3051">source</a>
+</section>
+<section class="member">
+<code class="signature">vehicle_type_name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L3055">source</a>
+</section>
+<section class="member">
+<code class="signature">item_categories</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L3068">source</a>
+</section>
+<section class="member">
+<code class="signature">units</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L3076">source</a>
+</section>
+<section class="member">
+<code class="signature">material_item</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L3080">source</a>
+</section>
+<section class="member">
+<code class="signature">material</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L3138">source</a>
+</section>
+<section class="member">
+<code class="signature">foraging</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L3152">source</a>
+</section>
+<section class="member">
+<code class="signature">vehicle_part</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L3159">source</a>
+<p>Return a VehiclePartItem view of this item if it is used<br>in any vehicle part; otherwise None.</p>
+</section>
+<section class="member">
+<code class="signature">vehicle_part_types</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L3184">source</a>
+</section>
+<section class="member">
+<code class="signature">fish</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/item.py#L3195">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-item">Item</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>attachment.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="animal_part.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="body_location.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>attachment.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<div class="summary"><p>Hotbar slot and attachment parsing from ISHotbarAttachDefinition.lua.</p>
+<p>This module parses and structures hotbar attachment slot data,<br>providing access to slot definitions, associated item mappings,<br>and attachment point metadata. It includes:</p>
+<p>- `HotbarSlot`: Represents each hotbar slot with access to animation sets,<br>  attachments, item compatibility, and wiki utilities.<br>- `HotbarSlotItems`: A wrapper for item compatibility within a slot, exposing<br>  items grouped by AttachmentType, AttachmentsProvided, and AttachmentReplacement.<br>- `AttachmentType`: Represents global attachment points used across slots,<br>  mapping back to slot usage and associated items.</p>
+<p>Parsed data is cached for performance and reused across components.</p></div>
+<h2 id="classes">Classes</h2>
+<h3 id="class-hotbarslot">HotbarSlot</h3>
+<div class="summary"><p>Represents a hotbar slot definition parsed from the game files.<br>Provides access to slot metadata and items.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_load_slots()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L33">source</a>
+<p>Load and process all hotbar slot data from ISHotbarAttachDefinition.lua.<br>This includes identifying relevant item associations.</p>
+</section>
+<section class="member">
+<code class="signature">_parse_data() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L71">source</a>
+<p>Parse raw Lua data into a cleaned hotbar slot dictionary.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>A mapping of slot_id to slot metadata.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">_find_all_items()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L94">source</a>
+<p>Populate internal item lists for type, provided, and replacement keys.</p>
+</section>
+<section class="member">
+<code class="signature">_find_slot_items(slot: str, slot_data: dict) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L109">source</a>
+<p>Find all items that match a slot&#x27;s attachment rules.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>slot (str)</dt>
+<dd>The slot ID.</dd>
+<dt>slot_data (dict)</dt>
+<dd>The raw slot data.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>The updated slot data with item associations.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">all() -&gt; dict[str, &#x27;HotbarSlot&#x27;]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L145">source</a>
+<p>Return all hotbar slots.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict[str, HotbarSlot]</dt>
+<dd>A dictionary of slot_id to HotbarSlot instances.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">keys()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L156">source</a>
+<p>Return all available slot IDs.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>KeysView</dt>
+<dd>The slot ID keys.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">values()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L167">source</a>
+<p>Return all HotbarSlot instances.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Generator[HotbarSlot]</dt>
+<dd>A generator of HotbarSlot instances.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">count()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L178">source</a>
+<p>Return the total number of hotbar slots.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>int</dt>
+<dd>The number of slots.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">exists(slot_id: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L189">source</a>
+<p>Check if a slot exists.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>slot_id (str)</dt>
+<dd>The slot ID to check.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>True if the slot exists, otherwise False.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_attachment_data() -&gt; dict[str, dict]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L203">source</a>
+<p>Return the full attachment type structure generated during slot parsing.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Mapping of attachment_id to metadata, slots, and item IDs.</dd>
+</dl>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(slot_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L213">source</a>
+</section>
+<section class="member">
+<code class="signature">__init__(slot_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L219">source</a>
+<p>Initialise a HotbarSlot instance.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>slot_id (str)</dt>
+<dd>The ID of the slot to load.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L235">source</a>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L238">source</a>
+<p>Return a value from the raw slot data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>key (str)</dt>
+<dd>The key to look up.</dd>
+<dt>default</dt>
+<dd>A fallback value.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Any</dt>
+<dd>The corresponding value or default.</dd>
+</dl>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">items</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L252">source</a>
+<p>Access the items associated with this hotbar slot.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>HotbarSlotItems</dt>
+<dd>A dict-like wrapper for item compatibility.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">wiki_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L262">source</a>
+<p>Return a wiki-formatted link to this slot&#x27;s display name.</p>
+</section>
+<section class="member">
+<code class="signature">wiki_link_id</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L267">source</a>
+<p>Return a wiki-formatted link using the slot ID as both label and anchor.</p>
+</section>
+<h3 id="class-hotbarslotitems">HotbarSlotItems</h3>
+<div class="summary"><p>Wrapper around hotbar slot item data, providing both property access<br>and dict-like behaviour.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(data: dict[str, list[str]])</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L276">source</a>
+<p>Initialise the item wrapper.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>data (dict)</dt>
+<dd>A dictionary of attachment type lists.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L300">source</a>
+<p>Get a list of items by raw key.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>key (str)</dt>
+<dd>The internal item key.</dd>
+<dt>default</dt>
+<dd>A fallback if the key is missing.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>A list of item IDs.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">__getitem__(key)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L313">source</a>
+</section>
+<section class="member">
+<code class="signature">__iter__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L316">source</a>
+</section>
+<section class="member">
+<code class="signature">__len__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L319">source</a>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L322">source</a>
+</section>
+<section class="member">
+<code class="signature">__str__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L325">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">attachments</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L286">source</a>
+<p>Items with a matching AttachmentType.</p>
+</section>
+<section class="member">
+<code class="signature">provided</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L291">source</a>
+<p>Items that provide this slot via AttachmentsProvided.</p>
+</section>
+<section class="member">
+<code class="signature">replaced</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L296">source</a>
+<p>Items that replace this slot via AttachmentReplacement.</p>
+</section>
+<h3 id="class-attachmenttype">AttachmentType</h3>
+<div class="summary"><p>Represents an attachment point across all hotbar slots.<br>Groups metadata and related items under a specific attachment ID.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_load()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L364">source</a>
+<p>Load parsed attachment data from HotbarSlot.</p>
+</section>
+<section class="member">
+<code class="signature">all() -&gt; dict[str, &#x27;AttachmentType&#x27;]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L374">source</a>
+<p>Return all attachment types as a dictionary.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict[str, AttachmentType]</dt>
+<dd>Mapping of attachment_id to instance.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">keys()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L385">source</a>
+<p>Return all attachment type IDs.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>KeysView[str]</dt>
+<dd>The attachment IDs.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">values()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L396">source</a>
+<p>Return all AttachmentType instances.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Generator[AttachmentType]</dt>
+<dd>Generator of all instances.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">count() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L407">source</a>
+<p>Return the total number of attachment types.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>int</dt>
+<dd>Count of known attachment types.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">exists(attachment_id: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L418">source</a>
+<p>Check if an attachment ID exists in the parsed data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>attachment_id (str)</dt>
+<dd>The attachment ID to check.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>True if the attachment exists, False otherwise.</dd>
+</dl>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(attachment_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L336">source</a>
+<p>Ensure a shared instance per attachment_id.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>attachment_id (str)</dt>
+<dd>The ID of the attachment point.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>AttachmentType</dt>
+<dd>A shared instance of the attachment type.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">__init__(attachment_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L351">source</a>
+<p>Initialise the AttachmentType instance with parsed data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>attachment_id (str)</dt>
+<dd>The ID of the attachment point.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L431">source</a>
+<p>Return a debug representation of the attachment.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>A string in the format &lt;AttachmentType attachment_id&gt;.</dd>
+</dl>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">valid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L441">source</a>
+<p>Whether this AttachmentType instance corresponds to known data.</p>
+</section>
+<section class="member">
+<code class="signature">name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L446">source</a>
+<p>The display name of this attachment (from HotbarSlot).</p>
+</section>
+<section class="member">
+<code class="signature">slots</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L451">source</a>
+<p>List of hotbar slot IDs that use this attachment type.</p>
+</section>
+<section class="member">
+<code class="signature">items</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L456">source</a>
+<p>List of item IDs that use this attachment via AttachmentType.</p>
+</section>
+<section class="member">
+<code class="signature">wiki_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L461">source</a>
+<p>Return a wiki-formatted link to this attachment type&#x27;s display name.</p>
+</section>
+<section class="member">
+<code class="signature">wiki_link_id</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/attachment.py#L466">source</a>
+<p>Return a wiki-formatted link using the attachment ID as both label and anchor.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-hotbarslot">HotbarSlot</a>
+<a class="sidebar-child" href="#class-hotbarslotitems">HotbarSlotItems</a>
+<a class="sidebar-child" href="#class-attachmenttype">AttachmentType</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

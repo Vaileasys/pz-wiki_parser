@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fluid.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="fixing.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="forage.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>fluid.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<h2 id="classes">Classes</h2>
+<h3 id="class-fluid">Fluid</h3>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_load_fluids()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L70">source</a>
+<p>Load fluid data only once and store in class-level cache.</p>
+</section>
+<section class="member">
+<code class="signature">_load_color_reference()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L75">source</a>
+</section>
+<section class="member">
+<code class="signature">fix_fluid_id(fluid_id: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L80">source</a>
+<p>Fixes a partial fluid_id by assuming &#x27;Base&#x27; first, then fallback to search.</p>
+</section>
+<section class="member">
+<code class="signature">all()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L103">source</a>
+<p>Return all fluids as a dictionary of {fluid_id: Fluid}.</p>
+</section>
+<section class="member">
+<code class="signature">keys()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L110">source</a>
+</section>
+<section class="member">
+<code class="signature">values()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L116">source</a>
+</section>
+<section class="member">
+<code class="signature">count()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L122">source</a>
+</section>
+<section class="member">
+<code class="signature">exists(fluid_id: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L128">source</a>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(fluid_id: str, mix_ratio = None, color = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L15">source</a>
+<p>Returns an existing Fluid instance if one already exists for the given ID.<br>If overrides are provided, returns a new instance</p>
+</section>
+<section class="member">
+<code class="signature">__init__(fluid_id: str, mix_ratio = None, color = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L35">source</a>
+<p>Initialises the fluid’s data if it hasn’t been initialised yet.</p>
+</section>
+<section class="member">
+<code class="signature">__getitem__(key)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L60">source</a>
+</section>
+<section class="member">
+<code class="signature">__contains__(key)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L63">source</a>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L66">source</a>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L137">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">valid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L145">source</a>
+</section>
+<section class="member">
+<code class="signature">script_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L149">source</a>
+</section>
+<section class="member">
+<code class="signature">file</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L153">source</a>
+</section>
+<section class="member">
+<code class="signature">path</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L157">source</a>
+</section>
+<section class="member">
+<code class="signature">module</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L161">source</a>
+</section>
+<section class="member">
+<code class="signature">id_type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L165">source</a>
+</section>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L169">source</a>
+</section>
+<section class="member">
+<code class="signature">display_name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L176">source</a>
+</section>
+<section class="member">
+<code class="signature">name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L180">source</a>
+</section>
+<section class="member">
+<code class="signature">name_en</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L190">source</a>
+</section>
+<section class="member">
+<code class="signature">wiki_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L200">source</a>
+</section>
+<section class="member">
+<code class="signature">mix_ratio</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L206">source</a>
+<p>Return the fluid’s relative mix ratio (defaults to 1.0 if not set).</p>
+</section>
+<section class="member">
+<code class="signature">properties</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L213">source</a>
+<p>Return the &#x27;Properties&#x27; block or an empty dict.</p>
+</section>
+<section class="member">
+<code class="signature">fatigue_change</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L218">source</a>
+</section>
+<section class="member">
+<code class="signature">hunger_change</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L222">source</a>
+</section>
+<section class="member">
+<code class="signature">stress_change</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L226">source</a>
+</section>
+<section class="member">
+<code class="signature">thirst_change</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L230">source</a>
+</section>
+<section class="member">
+<code class="signature">unhappy_change</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L234">source</a>
+</section>
+<section class="member">
+<code class="signature">calories</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L238">source</a>
+</section>
+<section class="member">
+<code class="signature">carbohydrates</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L242">source</a>
+</section>
+<section class="member">
+<code class="signature">lipids</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L246">source</a>
+</section>
+<section class="member">
+<code class="signature">proteins</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L250">source</a>
+</section>
+<section class="member">
+<code class="signature">alcohol</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L254">source</a>
+</section>
+<section class="member">
+<code class="signature">flu_reduction</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L258">source</a>
+</section>
+<section class="member">
+<code class="signature">pain_reduction</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L262">source</a>
+</section>
+<section class="member">
+<code class="signature">endurance_change</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L266">source</a>
+</section>
+<section class="member">
+<code class="signature">food_sickness_reduction</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L270">source</a>
+</section>
+<section class="member">
+<code class="signature">poison</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L276">source</a>
+<p>Return a FluidPoison object wrapping the &#x27;Poison&#x27; block.</p>
+</section>
+<section class="member">
+<code class="signature">color_reference</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L285">source</a>
+</section>
+<section class="member">
+<code class="signature">color</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L289">source</a>
+<p>Return the fluid color as [R, G, B] integers (0–255).</p>
+</section>
+<section class="member">
+<code class="signature">r</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L307">source</a>
+</section>
+<section class="member">
+<code class="signature">g</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L311">source</a>
+</section>
+<section class="member">
+<code class="signature">b</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L315">source</a>
+</section>
+<section class="member">
+<code class="signature">rgb</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L319">source</a>
+<p>Return the fluid color as a wiki RGB template string, e.g., &#x27;{{rgb|140, 198, 0}}&#x27;.</p>
+</section>
+<section class="member">
+<code class="signature">rgb_name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L324">source</a>
+<p>Return the fluid color as a wiki RGB template string with the name as the tooltip.</p>
+</section>
+<section class="member">
+<code class="signature">rgb_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L329">source</a>
+<p>Return the fluid color as a wiki RGB template string and link.</p>
+</section>
+<section class="member">
+<code class="signature">categories</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L336">source</a>
+<p>Return the fluid&#x27;s category list, or empty if none.</p>
+</section>
+<section class="member">
+<code class="signature">blend_whitelist</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L341">source</a>
+<p>Return FluidBlendList for BlendWhiteList (empty if missing).</p>
+</section>
+<section class="member">
+<code class="signature">blend_blacklist</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L349">source</a>
+<p>Return FluidBlendList for BlendBlackList (empty if missing).</p>
+</section>
+<h3 id="class-fluidpoison">FluidPoison</h3>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(poison_data: dict)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L358">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">max_effect</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L362">source</a>
+</section>
+<section class="member">
+<code class="signature">min_amount</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L366">source</a>
+</section>
+<section class="member">
+<code class="signature">dilute_ratio</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L370">source</a>
+</section>
+<h3 id="class-fluidblendlist">FluidBlendList</h3>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(blend_data: dict)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L375">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">whitelist</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L379">source</a>
+</section>
+<section class="member">
+<code class="signature">blacklist</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L383">source</a>
+</section>
+<section class="member">
+<code class="signature">fluids</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L387">source</a>
+</section>
+<section class="member">
+<code class="signature">categories</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/fluid.py#L391">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-fluid">Fluid</a>
+<a class="sidebar-child" href="#class-fluidpoison">FluidPoison</a>
+<a class="sidebar-child" href="#class-fluidblendlist">FluidBlendList</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

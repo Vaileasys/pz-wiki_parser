@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fluid_compatibility.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../core/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="fluid_article.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="fluid_infobox.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../foraging/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="fluid_article.html">fluid_article.py</a>
+<a href="fluid_compatibility.html">fluid_compatibility.py</a>
+<a href="fluid_infobox.html">fluid_infobox.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>fluid_compatibility.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/fluids</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">are_fluids_compatible(fluid1: Fluid, fluid2: Fluid) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_compatibility.py#L11">source</a>
+<p>Check if two fluids are compatible for mixing.</p>
+<p>Rules:<br>1. All fluids are compatible with themselves<br>2. If neither fluid has a whitelist, they are compatible<br>3. If a fluid has a whitelist, it only allows fluids with categories in its whitelist<br>4. Both fluids must allow each other (if they have whitelists)</p>
+</section>
+<section class="member">
+<code class="signature">sort_fluids(fluids)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_compatibility.py#L61">source</a>
+<p>Sort fluids by first category, then alphabetically, with water fluids first</p>
+</section>
+<section class="member">
+<code class="signature">generate_compatibility_table()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_compatibility.py#L110">source</a>
+<p>Generate the compatibility table content</p>
+</section>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/fluids/fluid_compatibility.py#L153">source</a>
+<p>Main function to generate the fluid compatibility table</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tiles_stitcher.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../recipes/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="tiles_scrapping.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="../tools/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="entity_article.html">entity_article.py</a>
+<a href="entity_health.html">entity_health.py</a>
+<a href="entity_infobox.html">entity_infobox.py</a>
+<a href="named_furniture_filter.html">named_furniture_filter.py</a>
+<a href="tiles_article.html">tiles_article.py</a>
+<a href="tiles_batch.html">tiles_batch.py</a>
+<a href="tiles_codesnip.html">tiles_codesnip.py</a>
+<a href="tiles_container_mapping.html">tiles_container_mapping.py</a>
+<a href="tiles_infobox.html">tiles_infobox.py</a>
+<a href="tiles_scrapping.html">tiles_scrapping.py</a>
+<a href="tiles_stitcher.html">tiles_stitcher.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>tiles_stitcher.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/tiles</a></p>
+<div class="summary"><p>Project Zomboid Wiki Tile Stitcher</p>
+<p>This script is responsible for combining multiple sprite tiles into composite images<br>for the Project Zomboid Wiki. It handles multi-tile furniture and objects that span<br>multiple grid cells, combining their individual sprites into a single cohesive image<br>while maintaining proper positioning and orientation.</p>
+<p>The script processes sprites based on their facing direction (North, South, East, West)<br>and grid positions, using threading for improved performance.</p>
+<p>This script supports both:<br>- Furniture tiles (from named_furniture.json with explicit SpriteGridPos)<br>- Entity tiles (from parsed_entity_data.json with spriteOutputs lists)</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">parse_grid_position(position_string: str) -&gt; tuple[int, int]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_stitcher.py#L81">source</a>
+<p>Parse a grid position string into column and row indices.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>position_string (str)</dt>
+<dd>A string in the format &quot;row,column&quot; where both values are integers.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>tuple[int, int]</dt>
+<dd>A tuple containing (column_index, row_index).</dd>
+<dt>Returns (0, 0) if the parsing fails.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">build_output_name(sprite_identifier_list: list[str]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_stitcher.py#L99">source</a>
+<p>Generate an output filename by combining multiple sprite identifiers.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>sprite_identifier_list (list[str])</dt>
+<dd>List of sprite identifiers to combine.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Combined filename where the first identifier is the base and subsequent</dd>
+<dt>ones are appended as suffixes, joined with &#x27;+&#x27;.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">build_entity_output_name(sprite_identifier_list: list[str]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_stitcher.py#L117">source</a>
+<p>Generate an output filename for entity sprites by joining all identifiers with &#x27;+&#x27;.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>sprite_identifier_list (list[str])</dt>
+<dd>List of sprite identifiers to combine.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Combined filename where all identifiers are joined with &#x27;+&#x27;.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">extract_entity_stitching_tasks(entity_data: dict) -&gt; list[tuple[str, list[dict], str]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_stitcher.py#L130">source</a>
+<p>Extract stitching tasks from entity data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>entity_data (dict)</dt>
+<dd>Dictionary of entity definitions from parsed_entity_data.json.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[tuple[str, list[dict], str]]</dt>
+<dd>List of stitching tasks in the format</dd>
+<dt>(facing_direction, sprite_entries_list, output_base_name).</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">composite_sprites(facing_direction: str, sprite_entries_list: list[dict], output_base_name: str, progress_bar, output_images_path: str = None, horizontal_offsets: dict = None, vertical_offsets: dict = None) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_stitcher.py#L180">source</a>
+<p>Create a composite image by combining multiple sprite images for a specific facing direction.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>facing_direction (str)</dt>
+<dd>The direction the sprite is facing (&#x27;N&#x27;, &#x27;S&#x27;, &#x27;E&#x27;, or &#x27;W&#x27;).</dd>
+<dt>sprite_entries_list (list[dict])</dt>
+<dd>List of sprite entries containing sprite IDs and grid positions.</dd>
+<dt>output_base_name (str)</dt>
+<dd>Base name for the output file.</dd>
+<dt>progress_bar</dt>
+<dd>tqdm progress bar instance for tracking progress.</dd>
+<dt>output_images_path (str, optional)</dt>
+<dd>Base path for output images. Defaults to OUTPUT_IMAGES_BASE_PATH.</dd>
+<dt>horizontal_offsets (dict, optional)</dt>
+<dd>Horizontal offset values. Defaults to SPRITE_HORIZONTAL_OFFSETS.</dd>
+<dt>vertical_offsets (dict, optional)</dt>
+<dd>Vertical offset values. Defaults to SPRITE_VERTICAL_OFFSETS.</dd>
+<dt>The function handles</dt>
+<dd>No description.</dd>
+<dt>- Sorting sprites by grid position</dt>
+<dd>No description.</dd>
+<dt>- Computing canvas size based on sprite positions</dt>
+<dd>No description.</dd>
+<dt>- Compositing sprites onto a single image</dt>
+<dd>No description.</dd>
+<dt>- Saving the resulting image to the appropriate directory</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">stitch_furniture_tiles() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_stitcher.py#L289">source</a>
+<p>Process furniture tiles from named_furniture cache and create composite images.</p>
+</section>
+<section class="member">
+<code class="signature">stitch_entity_tiles() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_stitcher.py#L349">source</a>
+<p>Process entity tiles from parsed_entity_data cache and create composite images.</p>
+</section>
+<section class="member">
+<code class="signature">stitch_entity_sprites_for_lang(lang_code: str = None) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_stitcher.py#L390">source</a>
+<p>Convenience function to stitch entity sprites. Can be called from other scripts.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lang_code (str, optional)</dt>
+<dd>Language code (currently unused but kept for API compatibility).</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_stitcher.py#L400">source</a>
+<p>Main execution function for the tile stitcher.</p>
+<p>Processes both furniture and entity caches to identify multi-tile objects and creates<br>composite images for each valid combination. Uses multi-threading to improve<br>performance when processing multiple sprites.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

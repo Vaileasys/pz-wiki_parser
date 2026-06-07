@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>config_manager.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../animals/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="cache.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="constants.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../fluids/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="cache.html">cache.py</a>
+<a href="config_manager.html">config_manager.py</a>
+<a href="constants.html">constants.py</a>
+<a href="file_loading.html">file_loading.py</a>
+<a href="language.html">language.py</a>
+<a href="logger.html">logger.py</a>
+<a href="page_manager.html">page_manager.py</a>
+<a href="runner.html">runner.py</a>
+<a href="setup.html">setup.py</a>
+<a href="version.html">version.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>config_manager.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/core</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">_ensure_loaded()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L23">source</a>
+<p>Ensure the config is loaded into memory.<br>If the config file does not exist, it is reset to defaults.<br>Updates cached `_config` and `_data`.</p>
+</section>
+<section class="member">
+<code class="signature">_update_missing_entries()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L39">source</a>
+<p>Check for missing sections or keys in the loaded config.<br>If any are missing, add them from `CONFIG_DEFAULTS` and rewrite the file.</p>
+</section>
+<section class="member">
+<code class="signature">_bool_to_config(value)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L58">source</a>
+</section>
+<section class="member">
+<code class="signature">reset()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L64">source</a>
+<p>Reset the config file to the default values in `CONFIG_DEFAULTS`.<br>Overwrites the existing config file.</p>
+</section>
+<section class="member">
+<code class="signature">refresh()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L78">source</a>
+<p>Clear the current in-memory config and reload it from file.<br>Updates cached `_config` and `_data`.</p>
+</section>
+<section class="member">
+<code class="signature">get(key, section = &#x27;Settings&#x27;)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L88">source</a>
+<p>Get a config value from the in-memory cache.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>key (str)</dt>
+<dd>Config key to retrieve.</dd>
+<dt>section (str)</dt>
+<dd>Section to look in (default &#x27;Settings&#x27;).</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str or None</dt>
+<dd>Config value as string, or None if not found.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_debug_mode()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L103">source</a>
+<p>Get the `debug_mode` setting as a boolean.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>Debug mode status.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_first_time_run()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L113">source</a>
+<p>Get the `first_time_run` setting as a boolean.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>First time run status.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_default_language() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L123">source</a>
+<p>Get the `default_language` setting.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Default language code.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_version() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L133">source</a>
+<p>Get the `version` setting.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Configured version string.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_game_directory() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L143">source</a>
+<p>Get the `game_directory` setting.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Path to the game directory.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_zomboid_decompiler() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L153">source</a>
+<p>Get the `zomboid_decompiler` setting.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Path to the zomboid decompiler.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_pywikibot() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L163">source</a>
+<p>Get the `pywikibot` setting.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Path to the pywikibot.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_max_workers()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L173">source</a>
+<p>Get the `max_workers` setting.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Number of max workers.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">set(key, value, section = &#x27;Settings&#x27;)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L183">source</a>
+<p>Update a config value and write it to the config file.<br>Also updates the in-memory cache.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>key (str)</dt>
+<dd>Config key to update.</dd>
+<dt>value (str)</dt>
+<dd>Value to set.</dd>
+<dt>section (str)</dt>
+<dd>Section to update (default &#x27;Settings&#x27;).</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">set_debug_mode(value)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L204">source</a>
+<p>Set the `debug_mode` setting.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>value (bool or str)</dt>
+<dd>New debug mode value.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">set_first_time_run(value)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L214">source</a>
+<p>Set the `first_time_run` setting.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>value (bool or str)</dt>
+<dd>New first time run value.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">set_default_language(value)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L224">source</a>
+<p>Set the `default_language` setting.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>value (str)</dt>
+<dd>New default language code.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">set_version(value)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L234">source</a>
+<p>Set the `version` setting.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>value (str)</dt>
+<dd>New version string.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">set_game_directory(value)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L244">source</a>
+<p>Set the `game_directory` setting.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>value (str)</dt>
+<dd>New game directory path.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">set_zomboid_decompiler(value)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L254">source</a>
+<p>Set the `zomboid_decompiler` setting.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>value (str)</dt>
+<dd>New zomboid decompiler path.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">set_pywikibot(value)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L264">source</a>
+<p>Set the `pywikibot` setting.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>value (str)</dt>
+<dd>New pywikibot path.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">set_max_workers(value)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L274">source</a>
+<p>Set the `max_workers` setting.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>value (str)</dt>
+<dd>New number of max workers.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/config_manager.py#L284">source</a>
+<p>Main entry point to reset the config and update dependent modules.<br>Used to fully reset the config system.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>entity_article.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../recipes/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="entity_health.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../tools/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="entity_article.html">entity_article.py</a>
+<a href="entity_health.html">entity_health.py</a>
+<a href="entity_infobox.html">entity_infobox.py</a>
+<a href="named_furniture_filter.html">named_furniture_filter.py</a>
+<a href="tiles_article.html">tiles_article.py</a>
+<a href="tiles_batch.html">tiles_batch.py</a>
+<a href="tiles_codesnip.html">tiles_codesnip.py</a>
+<a href="tiles_container_mapping.html">tiles_container_mapping.py</a>
+<a href="tiles_infobox.html">tiles_infobox.py</a>
+<a href="tiles_scrapping.html">tiles_scrapping.py</a>
+<a href="tiles_stitcher.html">tiles_stitcher.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>entity_article.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/tiles</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">extract_base_name(entity_name: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_article.py#L14">source</a>
+<p>Extract the base name from an entity name by removing level suffix.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>entity_name (str)</dt>
+<dd>Full entity name (e.g., &quot;Wood_BarElementCorner_Lvl1&quot; or &quot;WoodenWallLvl1&quot;)</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Base name without level suffix (e.g., &quot;Wood_BarElementCorner&quot; or &quot;WoodenWall&quot;)</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">group_entities_by_base(entity_data: Dict[str, dict]) -&gt; Dict[str, List[tuple]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_article.py#L29">source</a>
+<p>Group entities by their base name, sorting level variants together.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>entity_data (Dict[str, dict])</dt>
+<dd>Dictionary of all entity definitions</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Dict[str, List[tuple]]</dt>
+<dd>Dictionary mapping base names to list of (entity_name, entity_def) tuples</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_header(base_name: str, entity_variants: List[tuple], game_version: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_article.py#L60">source</a>
+<p>Create the header markup for an entity article.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>base_name (str)</dt>
+<dd>Base name of the entity (without level suffix).</dd>
+<dt>entity_variants (List[tuple])</dt>
+<dd>List of (entity_name, entity_def) tuples for all level variants.</dd>
+<dt>game_version (str)</dt>
+<dd>Current game version.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Header markup with metadata templates.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_infobox(base_name: str, entity_variants: List[tuple], infoboxes: Dict[str, str]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_article.py#L83">source</a>
+<p>Get the infobox for an entity from the generated infoboxes.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>base_name (str)</dt>
+<dd>Base name of the entity (without level suffix).</dd>
+<dt>entity_variants (List[tuple])</dt>
+<dd>List of (entity_name, entity_def) tuples for all level variants.</dd>
+<dt>infoboxes (Dict[str, str])</dt>
+<dd>Dictionary mapping base names to merged infobox markup.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Infobox markup.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_intro(base_name: str, entity_variants: List[tuple]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_article.py#L101">source</a>
+<p>Create the introduction paragraph for an entity article.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>base_name (str)</dt>
+<dd>Base name of the entity (without level suffix).</dd>
+<dt>entity_variants (List[tuple])</dt>
+<dd>List of (entity_name, entity_def) tuples for all level variants.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Introduction paragraph.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_usage(base_name: str, entity_variants: List[tuple]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_article.py#L139">source</a>
+<p>Create the usage section for an entity article.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>base_name (str)</dt>
+<dd>Base name of the entity (without level suffix).</dd>
+<dt>entity_variants (List[tuple])</dt>
+<dd>List of (entity_name, entity_def) tuples for all level variants.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Usage section markup.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_crafting(base_name: str, entity_variants: List[tuple]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_article.py#L153">source</a>
+<p>Create the crafting section for an entity article.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>base_name (str)</dt>
+<dd>Base name of the entity (without level suffix).</dd>
+<dt>entity_variants (List[tuple])</dt>
+<dd>List of (entity_name, entity_def) tuples for all level variants.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Crafting section markup.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">create_navigation() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_article.py#L178">source</a>
+<p>Create the navigation section for an entity article.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Navigation section markup.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">collect_entity_sprites(grouped_entities: Dict[str, List[tuple]]) -&gt; Set[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_article.py#L189">source</a>
+<p>Collect all unique sprite names from all entities, including composite names.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>grouped_entities (Dict[str, List[tuple]])</dt>
+<dd>Dictionary mapping base names to entity variants.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Set[str]</dt>
+<dd>Set of unique sprite names used by entities (both individual and composite).</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">copy_entity_sprites(sprites: Set[str], lang_code: str, source_dir: str = &#x27;resources/tile_images&#x27;) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_article.py#L217">source</a>
+<p>Copy sprite images from source directory to output directory.<br>Also copies stitched composite sprites from the entity_images_stitched directories.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>sprites (Set[str])</dt>
+<dd>Set of sprite names to copy (including composite names).</dd>
+<dt>lang_code (str)</dt>
+<dd>Language code for output directory.</dd>
+<dt>source_dir (str)</dt>
+<dd>Source directory containing individual sprite images.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">assemble_article(header: str, infobox: str, intro: str, usage: str, crafting: str, navigation: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_article.py#L274">source</a>
+<p>Combine all article sections into a complete wiki article.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>header (str)</dt>
+<dd>Article header with metadata templates.</dd>
+<dt>infobox (str)</dt>
+<dd>Infobox template markup.</dd>
+<dt>intro (str)</dt>
+<dd>Article introduction paragraph.</dd>
+<dt>usage (str)</dt>
+<dd>Usage section markup.</dd>
+<dt>crafting (str)</dt>
+<dd>Crafting section markup.</dd>
+<dt>navigation (str)</dt>
+<dd>Navigation template markup.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Complete wiki article text with all sections properly formatted.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">generate_entity_articles(grouped_entities: Dict[str, List[tuple]], infoboxes: Dict[str, str], lang_code: str, game_version: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_article.py#L322">source</a>
+<p>Generate and save wiki articles for all entities.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>grouped_entities (Dict[str, List[tuple]])</dt>
+<dd>Dictionary mapping base names to list of (entity_name, entity_def) tuples.</dd>
+<dt>infoboxes (Dict[str, str])</dt>
+<dd>Dictionary mapping base names to their merged infobox markup.</dd>
+<dt>lang_code (str)</dt>
+<dd>Language code for output directory.</dd>
+<dt>game_version (str)</dt>
+<dd>Current game version.</dd>
+<dt>The function generates complete wiki articles by combining various components</dt>
+<dd>No description.</dd>
+<dt>and saves them to individual files in the output directory structure.</dt>
+<dd>No description.</dd>
+<dt>Each article includes metadata, infobox, introduction, usage information,</dt>
+<dd>No description.</dd>
+<dt>crafting recipes, code snippets, and navigation elements.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main(lang_code: str, entity_data: Dict[str, dict] = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/entity_article.py#L381">source</a>
+<p>Main execution function for entity article generation.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lang_code (str)</dt>
+<dd>Language code to process</dd>
+<dt>entity_data (Dict[str, dict], optional)</dt>
+<dd>Pre-loaded entity data. If None, loads from cache.</dd>
+<dt>This function</dt>
+<dd>No description.</dd>
+<dt>1. Loads the parsed entity data cache (if not provided)</dt>
+<dd>No description.</dd>
+<dt>2. Groups entities by base name (merging level variants)</dt>
+<dd>No description.</dd>
+<dt>3. Generates merged entity infoboxes</dt>
+<dd>No description.</dd>
+<dt>4. Generates complete entity articles</dt>
+<dd>No description.</dd>
+<dt>5. Outputs files to output/{lang_code}/tiles/entity_articles/</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

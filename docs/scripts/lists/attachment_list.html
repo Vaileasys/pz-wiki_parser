@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>attachment_list.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../items/lists/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="body_locations_list.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../misc/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="attachment_list.html">attachment_list.py</a>
+<a href="body_locations_list.html">body_locations_list.py</a>
+<a href="body_parts_list.html">body_parts_list.py</a>
+<a href="fluid_list.html">fluid_list.py</a>
+<a href="furniture_list.html">furniture_list.py</a>
+<a href="furniture_surfaces_list.html">furniture_surfaces_list.py</a>
+<a href="hotbar_slots.html">hotbar_slots.py</a>
+<a href="outfit_list.html">outfit_list.py</a>
+<a href="recmedia_list.html">recmedia_list.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>attachment_list.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/lists</a></p>
+<div class="summary"><p>Generates wikitable output for the modding pages `AttachmentType` and `AttachmentsProvided`<br>on the PZwiki.</p>
+<p>This script extracts data from hotbar slot definitions and attachment types,<br>formats it into MediaWiki tables, and writes them to output files.</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">build_hotbar_table()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/attachment_list.py#L15">source</a>
+<p>Write table for `AttachmentsProvided` using hotbar slot data.<br>Skips slots with replacements.</p>
+</section>
+<section class="member">
+<code class="signature">build_attachment_table()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/attachment_list.py#L66">source</a>
+<p>Write table for `AttachmentType` with `AttachedLocation`, hotbar slots, and item icons.</p>
+</section>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/lists/attachment_list.py#L108">source</a>
+<p>Run both hotbar and attachment table builders.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

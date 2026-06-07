@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>animal_infobox.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="animal_genes.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="animal_list_pzwiki.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../core/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal_article.html">animal_article.py</a>
+<a href="animal_food.html">animal_food.py</a>
+<a href="animal_genes.html">animal_genes.py</a>
+<a href="animal_infobox.html">animal_infobox.py</a>
+<a href="animal_list_pzwiki.html">animal_list_pzwiki.py</a>
+<a href="animal_products.html">animal_products.py</a>
+<a href="animal_stages.html">animal_stages.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>animal_infobox.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/animals</a></p>
+<div class="summary"><p>Item infobox generator.</p>
+<p>This module processes `Item` objects into structured infobox parameters, formatted for wiki output.<br>It handles individual items, pages with multiple item IDs, and supports both combined and standalone infobox generation.</p>
+<p>Main functions:<br>- Extract item attributes into infobox fields<br>- Merge multiple item definitions into unified infobox data, based on page<br>- Format and output infobox content as text files</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">generate_animal_data(breed: AnimalBreed)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/animals/animal_infobox.py#L33">source</a>
+<p>Extracts relevant parameters from an Item object into a dictionary.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item (Item)</dt>
+<dd>The item object to process.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Dictionary of infobox parameters for the given item.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">_translations_cache(key, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/animals/animal_infobox.py#L95">source</a>
+</section>
+<section class="member">
+<code class="signature">build_infobox(infobox_data: dict) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/animals/animal_infobox.py#L106">source</a>
+<p>Builds an infobox template from the provided parameters.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>infobox_data (dict)</dt>
+<dd>Dictionary of key-value infobox fields.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>A list of lines forming the infobox template.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_pages(pages: dict) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/animals/animal_infobox.py#L126">source</a>
+<p>Generates infoboxes for all items grouped by page name and writes output files.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>pages (dict)</dt>
+<dd>Mapping of page names to their item_id entries.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_animals(full_breed_id_list: list, page_names: bool = False) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/animals/animal_infobox.py#L172">source</a>
+<p>Generates infoboxes for a list of specific item IDs and writes output files.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_id_list (list)</dt>
+<dd>List of item IDs to process.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">prepare_pages(full_breed_id_list: list) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/animals/animal_infobox.py#L194">source</a>
+<p>Prepares and validates the item-to-page mappings for later infobox generation.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_id_list (list)</dt>
+<dd>List of item IDs to process.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Updated pages dictionary containing valid item_id groupings.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">select_animal() -&gt; list</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/animals/animal_infobox.py#L250">source</a>
+<p>Prompts the user to input one or more animal keys (semicolon-separated) and returns the valid ones.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>A list of valid animal keys.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">select_page() -&gt; dict[str, dict[str, list[str]]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/animals/animal_infobox.py#L279">source</a>
+<p>Prompts the user to input one or more page names (semicolon-separated) and returns a<br>dictionary of valid pages and their associated item IDs.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>A dictionary mapping page names to their valid item IDs.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">choose_process(run_directly: bool)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/animals/animal_infobox.py#L309">source</a>
+<p>Presents the user with infobox generation options.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>run_directly (bool)</dt>
+<dd>Whether to allow quitting or going back.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>The selected menu option.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">init_dependencies()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/animals/animal_infobox.py#L345">source</a>
+<p>Initialises required modules so they don&#x27;t interrupt tqdm progress bars.</p>
+</section>
+<section class="member">
+<code class="signature">main(pre_choice: int = None, run_directly: bool = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/animals/animal_infobox.py#L352">source</a>
+<p>Entry point for infobox generation.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>run_directly (bool)</dt>
+<dd>Whether the script is being run directly.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

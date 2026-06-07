@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>item_groups.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../foraging/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="item_fixing.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="item_infobox.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="groups/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="item_article.html">item_article.py</a>
+<a href="item_body_part.html">item_body_part.py</a>
+<a href="item_codesnip.html">item_codesnip.py</a>
+<a href="item_consumables.html">item_consumables.py</a>
+<a href="item_container_contents.html">item_container_contents.py</a>
+<a href="item_distribution.html">item_distribution.py</a>
+<a href="item_fixing.html">item_fixing.py</a>
+<a href="item_groups.html">item_groups.py</a>
+<a href="item_infobox.html">item_infobox.py</a>
+<a href="item_lists.html">item_lists.py</a>
+<a href="item_literature_titles.html">item_literature_titles.py</a>
+<a href="item_recmedia_transcript.html">item_recmedia_transcript.py</a>
+<a href="item_tags.html">item_tags.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>item_groups.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/items</a></p>
+<div class="summary"><p>Shared item grouping framework.</p>
+<p>Defines a small metadata model and base class for assigning items to named<br>groups, such as weapon types, ammo types, food categories, or clothing sections.<br>Group subclasses provide the actual classification logic while this module<br>handles display names, category lookups, ordering, and validation.</p></div>
+<h2 id="classes">Classes</h2>
+<h3 id="class-groupinfo">GroupInfo</h3>
+<div class="summary"><p>Metadata for a single item group.</p>
+<p>Attributes:<br>    type_id: Internal group identifier used for lookups.<br>    display_name: Display label used in generated output. Defaults to type_id.<br>    category: Optional parent category for grouping related types.<br>    display_order: Sort order used when generating ordered sections.<br>    metadata: Extra group-specific values for specialised use cases.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__post_init__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_groups.py#L32">source</a>
+<p>Fill missing display values after initialisation.</p>
+<p>Sets display_name to type_id when no explicit display name was provided.</p>
+</section>
+<h3 id="class-itemgroups">ItemGroups</h3>
+<div class="summary"><p>Base class for item grouping systems.</p>
+<p>Subclasses define available groups with GROUPS and implement classify()<br>to assign items to one of those group IDs. Shared helper methods provide<br>consistent access to labels, categories, ordering, and validation.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">classify(item, **kwargs) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_groups.py#L59">source</a>
+<p>Classify an item into a group type.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item</dt>
+<dd>Item object to classify.</dd>
+<dt>**kwargs</dt>
+<dd>Optional context required by subclass logic.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>The matching group type ID, or None if the item does not belong to any group.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">find_type(item, **kwargs) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_groups.py#L73">source</a>
+<p>Classify an item using the subclass rules.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item</dt>
+<dd>Item object to classify.</dd>
+<dt>**kwargs</dt>
+<dd>Optional context passed through to classify().</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>The matching group type ID, or None if no group applies.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_group_info(type_id: str) -&gt; GroupInfo</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_groups.py#L87">source</a>
+<p>Get metadata for a group type.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>type_id</dt>
+<dd>Group type ID to look up.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>The matching GroupInfo object, or None if the type ID is not defined.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_display_name(type_id: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_groups.py#L100">source</a>
+<p>Get the display label for a group type.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>type_id</dt>
+<dd>Group type ID to look up.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>The group&#x27;s display name, or type_id if the group is not defined.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_type_to_display_map() -&gt; dict[str, str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_groups.py#L114">source</a>
+<p>Get all group type IDs mapped to their display labels.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Dictionary mapping each type ID to its display name.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_section_order(include_unordered: bool = False) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_groups.py#L124">source</a>
+<p>Get group display labels sorted by display order.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>include_unordered</dt>
+<dd>Whether to include groups using the default</dd>
+<dt>unordered display value.</dt>
+<dd>No description.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Ordered list of group display names.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_types_by_category(category: str) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_groups.py#L146">source</a>
+<p>Get all group type IDs in a category.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>category</dt>
+<dd>Category name to look up.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>List of type IDs in the category. Returns an empty list if the</dt>
+<dd>No description.</dd>
+<dt>category is not found.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_all_type_ids() -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_groups.py#L168">source</a>
+<p>Get every group type ID defined by the class.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>List of all type IDs in GROUPS.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_all_categories() -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_groups.py#L178">source</a>
+<p>Get every category used by the grouping class.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Sorted list of category names.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">validate_type_id(type_id: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_groups.py#L193">source</a>
+<p>Check whether a group type ID is defined.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>type_id</dt>
+<dd>Group type ID to check.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>True if the type ID exists in GROUPS, otherwise False.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_groups_by_order() -&gt; list[tuple[str, GroupInfo]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_groups.py#L206">source</a>
+<p>Get all groups sorted by display order.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>List of (type_id, GroupInfo) tuples sorted by display_order.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-groupinfo">GroupInfo</a>
+<a class="sidebar-child" href="#class-itemgroups">ItemGroups</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

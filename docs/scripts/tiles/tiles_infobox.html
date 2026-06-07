@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tiles_infobox.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../recipes/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="tiles_container_mapping.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="tiles_scrapping.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../tools/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="entity_article.html">entity_article.py</a>
+<a href="entity_health.html">entity_health.py</a>
+<a href="entity_infobox.html">entity_infobox.py</a>
+<a href="named_furniture_filter.html">named_furniture_filter.py</a>
+<a href="tiles_article.html">tiles_article.py</a>
+<a href="tiles_batch.html">tiles_batch.py</a>
+<a href="tiles_codesnip.html">tiles_codesnip.py</a>
+<a href="tiles_container_mapping.html">tiles_container_mapping.py</a>
+<a href="tiles_infobox.html">tiles_infobox.py</a>
+<a href="tiles_scrapping.html">tiles_scrapping.py</a>
+<a href="tiles_stitcher.html">tiles_stitcher.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>tiles_infobox.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/tiles</a></p>
+<div class="summary"><p>Project Zomboid Wiki Infobox Generator</p>
+<p>This script generates MediaWiki infobox templates for Project Zomboid tiles. It processes<br>tile definitions and properties to create structured information boxes that appear at<br>the top of wiki articles, containing key information about each tile type.</p>
+<p>The script handles:<br>- Display names and translations<br>- Tile properties and statistics<br>- Tool requirements and skill levels<br>- Container capacities and special features<br>- Multi-tile object composition<br>- Image and sprite references</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">_parse_grid(pos: str) -&gt; Tuple[int, int]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L59">source</a>
+<p>Parse a grid position string into column and row coordinates.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>pos (str)</dt>
+<dd>Position string in format &quot;row,column&quot;</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>tuple[int, int]</dt>
+<dd>A tuple of (column, row) coordinates.</dd>
+<dt>Returns (0, 0) if parsing fails.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">_build_output_name(sprite_ids: List[str]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L77">source</a>
+<p>Generate a composite name from multiple sprite IDs.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>sprite_ids (List[str])</dt>
+<dd>List of sprite identifiers.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Combined name where the first ID is the base and subsequent</dd>
+<dt>ones are appended as suffixes, joined with &#x27;+&#x27;.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">_get_composite_names(tile_list: List[dict]) -&gt; List[Tuple[str, str]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L93">source</a>
+<p>Generate composite names for multi-tile objects based on facing direction.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>tile_list (List[dict])</dt>
+<dd>List of tile entries with sprite and facing information.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>List[Tuple[str, str]]</dt>
+<dd>List of tuples containing (facing_direction, composite_name).</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">extract_tile_stats(tiles: Dict[str, dict], definitions: Dict[str, dict], lang_code: str) -&gt; Tuple[float, int, str, str, str, str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L115">source</a>
+<p>Extract key statistics and requirements for a tile group.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>tiles (Dict[str, dict])</dt>
+<dd>Dictionary of tile definitions.</dd>
+<dt>definitions (Dict[str, dict])</dt>
+<dd>Dictionary of game definitions.</dd>
+<dt>lang_code (str)</dt>
+<dd>Language code for translations.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Tuple[float, int, str, str, str, str]</dt>
+<dd>Tuple containing:</dd>
+<dt>- encumbrance</dt>
+<dd>Weight/encumbrance value</dd>
+<dt>- max_size</dt>
+<dd>Maximum size of the tile group</dd>
+<dt>- pickup_skill</dt>
+<dd>Required skill for pickup</dd>
+<dt>- pickup_tool</dt>
+<dd>Required tool for pickup</dd>
+<dt>- dis_skill</dt>
+<dd>Required skill for disassembly</dd>
+<dt>- dis_tool</dt>
+<dd>Required tool for disassembly</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">generate_infoboxes(named_tiles_data: Dict[str, Dict], definitions: Dict[str, Dict], lang_code: str, game_version: str) -&gt; Dict[str, str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L168">source</a>
+<p>Generate infobox templates for all tile groups.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>named_tiles_data (Dict[str, Dict])</dt>
+<dd>Dictionary of tile groups and their definitions.</dd>
+<dt>definitions (Dict[str, Dict])</dt>
+<dd>Dictionary of game definitions.</dd>
+<dt>lang_code (str)</dt>
+<dd>Language code for translations.</dd>
+<dt>game_version (str)</dt>
+<dd>Current game version.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Dict[str, str]</dt>
+<dd>Dictionary mapping tile group names to their infobox markup.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">build_infobox(display_name: str, tiles: Dict[str, dict], definitions: Dict[str, dict], lang_code: str, game_version: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L233">source</a>
+<p>Build a complete infobox template for a tile group.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>display_name (str)</dt>
+<dd>Display name of the tile group.</dd>
+<dt>tiles (Dict[str, dict])</dt>
+<dd>Dictionary of tile definitions.</dd>
+<dt>definitions (Dict[str, dict])</dt>
+<dd>Dictionary of game definitions.</dd>
+<dt>lang_code (str)</dt>
+<dd>Language code for translations.</dd>
+<dt>game_version (str)</dt>
+<dd>Current game version.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Complete MediaWiki infobox template markup.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">prepare_tile_list(tiles: Dict[str, dict]) -&gt; Tuple[List[dict], Dict[str, int]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L279">source</a>
+<p>Process tile definitions into a structured list and count facings.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>tiles (Dict[str, dict])</dt>
+<dd>Dictionary of tile definitions.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Tuple[List[dict], Dict[str, int]]</dt>
+<dd>Tuple containing:</dd>
+<dt>- List of processed tile entries with extracted properties</dt>
+<dd>No description.</dd>
+<dt>- Dictionary counting tiles for each facing direction</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">build_icon_params(tile_list: List[dict], max_size: int) -&gt; List[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L336">source</a>
+<p>Generate icon parameters for the infobox template.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>tile_list (List[dict])</dt>
+<dd>List of processed tile entries.</dd>
+<dt>max_size (int)</dt>
+<dd>Maximum size of the tile group.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>List[str]</dt>
+<dd>List of icon parameter lines for the infobox template.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">build_sprite_tile_params(tile_list: List[dict]) -&gt; Tuple[List[str], List[str]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L371">source</a>
+</section>
+<section class="member">
+<code class="signature">build_misc_params(tile_list: List[dict], definitions: Dict[str, dict], lang_code: str) -&gt; List[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_infobox.py#L392">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

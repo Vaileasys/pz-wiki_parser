@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>named_furniture_filter.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../recipes/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="entity_infobox.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="tiles_article.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../tools/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="entity_article.html">entity_article.py</a>
+<a href="entity_health.html">entity_health.py</a>
+<a href="entity_infobox.html">entity_infobox.py</a>
+<a href="named_furniture_filter.html">named_furniture_filter.py</a>
+<a href="tiles_article.html">tiles_article.py</a>
+<a href="tiles_batch.html">tiles_batch.py</a>
+<a href="tiles_codesnip.html">tiles_codesnip.py</a>
+<a href="tiles_container_mapping.html">tiles_container_mapping.py</a>
+<a href="tiles_infobox.html">tiles_infobox.py</a>
+<a href="tiles_scrapping.html">tiles_scrapping.py</a>
+<a href="tiles_stitcher.html">tiles_stitcher.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>named_furniture_filter.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/tiles</a></p>
+<div class="summary"><p>Project Zomboid Wiki Named Furniture Filter</p>
+<p>This script processes and organizes tile data for named furniture in Project Zomboid.<br>It handles both manually defined furniture groups and automatically detected furniture<br>based on game properties. The script is responsible for grouping related furniture<br>sprites and organizing them into logical sets for wiki documentation.</p>
+<p>The script handles:<br>- Manual furniture group definitions<br>- Automatic furniture detection and grouping<br>- Multi-sprite furniture composition<br>- Variant handling for similar furniture types<br>- Directional (facing) furniture organization</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">process_tiles(tiles_data: dict) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/named_furniture_filter.py#L155">source</a>
+<p>Process and organize tile data into furniture groups.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>tiles_data (dict)</dt>
+<dd>Raw tile data from the game files.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Processed and organized furniture groups.</dd>
+<dt>The processing follows these steps</dt>
+<dd>No description.</dd>
+<dt>1. Process manually defined groups from MANUAL_GROUPS</dt>
+<dd>No description.</dd>
+<dt>2. Group remaining tiles by their GroupName and CustomName properties</dt>
+<dd>No description.</dd>
+<dt>3. Within each group</dt>
+<dd>No description.</dd>
+<dt>- Split by sprite prefix if multiple exist</dt>
+<dd>No description.</dd>
+<dt>- Handle facing directions for multi-sprite objects</dt>
+<dd>No description.</dd>
+<dt>- Group by signature for variant handling</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/named_furniture_filter.py#L288">source</a>
+<p>Main execution function for the named furniture filter.</p>
+<p>This function:<br>1. Loads the tile data cache<br>2. Processes tiles into furniture groups<br>3. Saves the processed data back to cache<br>4. Provides progress feedback through echo messages</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

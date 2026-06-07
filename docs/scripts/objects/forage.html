@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>forage.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="fluid.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="item.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>forage.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<h2 id="classes">Classes</h2>
+<h3 id="class-foragingitem">ForagingItem</h3>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">load() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L33">source</a>
+<p>Loads the foraging data from cache, otherwise parses it with the distribution parser.</p>
+</section>
+<section class="member">
+<code class="signature">all() -&gt; dict[str, &#x27;ForagingItem&#x27;]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L48">source</a>
+<p>Return all foraging instances as a dictionary of {foraging_id: Item}.</p>
+</section>
+<section class="member">
+<code class="signature">items() -&gt; dict[str, &#x27;ForagingItem&#x27;]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L53">source</a>
+<p>Return an iterable of (id, instance) pairs.</p>
+</section>
+<section class="member">
+<code class="signature">exists(foraging_id: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L58">source</a>
+<p>Returns True if the foraging ID exists in the foraging data.</p>
+</section>
+<section class="member">
+<code class="signature">count() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L63">source</a>
+<p>Returns the number of foraging entries loaded.</p>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(item_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L23">source</a>
+</section>
+<section class="member">
+<code class="signature">__init__(item_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L28">source</a>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L67">source</a>
+<p>Returns the raw value from this item&#x27;s foraging data.</p>
+</section>
+<section class="member">
+<code class="signature">_translate_month(month: int)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L71">source</a>
+</section>
+<section class="member">
+<code class="signature">has_category(*category_ids: str | list[str]) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L75">source</a>
+<p>Check if the foraging item is in any of the given categories.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>*category_ids (str | list[str])</dt>
+<dd>One or more category IDs. Can be individual strings or lists of strings.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>True if the item is in at least one of the categories.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">_get_month_links(months)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L160">source</a>
+</section>
+<section class="member">
+<code class="signature">__repr__() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L267">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">id</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L99">source</a>
+</section>
+<section class="member">
+<code class="signature">valid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L103">source</a>
+</section>
+<section class="member">
+<code class="signature">type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L107">source</a>
+</section>
+<section class="member">
+<code class="signature">item</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L111">source</a>
+</section>
+<section class="member">
+<code class="signature">skill</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L115">source</a>
+</section>
+<section class="member">
+<code class="signature">xp</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L119">source</a>
+</section>
+<section class="member">
+<code class="signature">perks</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L123">source</a>
+</section>
+<section class="member">
+<code class="signature">zones</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L127">source</a>
+</section>
+<section class="member">
+<code class="signature">categories</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L142">source</a>
+</section>
+<section class="member">
+<code class="signature">min_count</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L149">source</a>
+</section>
+<section class="member">
+<code class="signature">max_count</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L153">source</a>
+</section>
+<section class="member">
+<code class="signature">spawn_funcs</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L157">source</a>
+</section>
+<section class="member">
+<code class="signature">months_raw</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L180">source</a>
+</section>
+<section class="member">
+<code class="signature">months</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L188">source</a>
+</section>
+<section class="member">
+<code class="signature">bonus_months_raw</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L192">source</a>
+</section>
+<section class="member">
+<code class="signature">bonus_months</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L200">source</a>
+</section>
+<section class="member">
+<code class="signature">malus_months_raw</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L204">source</a>
+</section>
+<section class="member">
+<code class="signature">malus_months</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L212">source</a>
+</section>
+<section class="member">
+<code class="signature">day_chance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L216">source</a>
+</section>
+<section class="member">
+<code class="signature">night_chance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L220">source</a>
+</section>
+<section class="member">
+<code class="signature">snow_chance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L224">source</a>
+</section>
+<section class="member">
+<code class="signature">rain_chance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L228">source</a>
+</section>
+<section class="member">
+<code class="signature">item_size_modifier</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L232">source</a>
+</section>
+<section class="member">
+<code class="signature">is_item_override_size</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L236">source</a>
+</section>
+<section class="member">
+<code class="signature">force_outside</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L240">source</a>
+</section>
+<section class="member">
+<code class="signature">can_be_above_floor</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L244">source</a>
+</section>
+<section class="member">
+<code class="signature">poison_chance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L248">source</a>
+</section>
+<section class="member">
+<code class="signature">poison_power_min</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L252">source</a>
+</section>
+<section class="member">
+<code class="signature">poison_power_max</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L256">source</a>
+</section>
+<section class="member">
+<code class="signature">poison_detection_level</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L260">source</a>
+</section>
+<section class="member">
+<code class="signature">alt_world_texture</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L264">source</a>
+</section>
+<h3 id="class-foragecategory">ForageCategory</h3>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">load() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L285">source</a>
+</section>
+<section class="member">
+<code class="signature">all() -&gt; dict[str, &#x27;ForageCategory&#x27;]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L291">source</a>
+<p>Return all foraging categories as a dictionary of {category_id: ForageCategory}.</p>
+</section>
+<section class="member">
+<code class="signature">count() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L296">source</a>
+<p>Returns the number of foraging categories loaded.</p>
+</section>
+<section class="member">
+<code class="signature">exists(category: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L301">source</a>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(category: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L275">source</a>
+</section>
+<section class="member">
+<code class="signature">__init__(category: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L280">source</a>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L304">source</a>
+<p>Returns the raw value from this category&#x27;s data.</p>
+</section>
+<section class="member">
+<code class="signature">__repr__() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L423">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">id</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L309">source</a>
+</section>
+<section class="member">
+<code class="signature">valid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L313">source</a>
+</section>
+<section class="member">
+<code class="signature">type_category</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L317">source</a>
+</section>
+<section class="member">
+<code class="signature">name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L321">source</a>
+</section>
+<section class="member">
+<code class="signature">name_en</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L325">source</a>
+</section>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L331">source</a>
+</section>
+<section class="member">
+<code class="signature">wiki_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L337">source</a>
+</section>
+<section class="member">
+<code class="signature">icon_raw</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L343">source</a>
+</section>
+<section class="member">
+<code class="signature">icon</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L347">source</a>
+</section>
+<section class="member">
+<code class="signature">is_hidden</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L351">source</a>
+</section>
+<section class="member">
+<code class="signature">identify_perk</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L355">source</a>
+</section>
+<section class="member">
+<code class="signature">identify_level</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L359">source</a>
+</section>
+<section class="member">
+<code class="signature">zones</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L363">source</a>
+</section>
+<section class="member">
+<code class="signature">traits</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L367">source</a>
+</section>
+<section class="member">
+<code class="signature">occupations</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L371">source</a>
+</section>
+<section class="member">
+<code class="signature">sprite_affinity</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L375">source</a>
+</section>
+<section class="member">
+<code class="signature">focus_chance_min</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L379">source</a>
+</section>
+<section class="member">
+<code class="signature">focus_chance_max</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L383">source</a>
+</section>
+<section class="member">
+<code class="signature">valid_floors</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L387">source</a>
+</section>
+<section class="member">
+<code class="signature">chance_to_create_icon</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L391">source</a>
+</section>
+<section class="member">
+<code class="signature">chance_to_move_icon</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L395">source</a>
+</section>
+<section class="member">
+<code class="signature">has_rained_chance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L399">source</a>
+</section>
+<section class="member">
+<code class="signature">rain_chance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L403">source</a>
+</section>
+<section class="member">
+<code class="signature">snow_chance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L407">source</a>
+</section>
+<section class="member">
+<code class="signature">night_chance</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L411">source</a>
+</section>
+<section class="member">
+<code class="signature">items</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L415">source</a>
+<p>Returns all ForagingItem instances assigned to this category.</p>
+</section>
+<h3 id="class-foragezone">ForageZone</h3>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">load() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L441">source</a>
+</section>
+<section class="member">
+<code class="signature">all() -&gt; dict[str, &#x27;ForageZone&#x27;]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L447">source</a>
+<p>Return all foraging zones as a dictionary of {zone_id: ForageZone}.</p>
+</section>
+<section class="member">
+<code class="signature">exists(zone: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L452">source</a>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(zone: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L431">source</a>
+</section>
+<section class="member">
+<code class="signature">__init__(zone: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L436">source</a>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L455">source</a>
+<p>Returns the raw value from this zone&#x27;s data.</p>
+</section>
+<section class="member">
+<code class="signature">__repr__() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L498">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">id</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L460">source</a>
+</section>
+<section class="member">
+<code class="signature">data</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L464">source</a>
+</section>
+<section class="member">
+<code class="signature">valid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L468">source</a>
+</section>
+<section class="member">
+<code class="signature">contains_biomes</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L472">source</a>
+</section>
+<section class="member">
+<code class="signature">name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L479">source</a>
+</section>
+<section class="member">
+<code class="signature">density_min</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L483">source</a>
+</section>
+<section class="member">
+<code class="signature">density_max</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L487">source</a>
+</section>
+<section class="member">
+<code class="signature">refill_percent</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L491">source</a>
+</section>
+<section class="member">
+<code class="signature">abundance_setting</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L495">source</a>
+</section>
+<h3 id="class-forageskill">ForageSkill</h3>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">load() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L517">source</a>
+</section>
+<section class="member">
+<code class="signature">all() -&gt; dict[str, &#x27;ForageSkill&#x27;]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L523">source</a>
+<p>Return all foraging skills as a dictionary of {skill_id: ForageSkill}.</p>
+</section>
+<section class="member">
+<code class="signature">exists(zone: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L528">source</a>
+</section>
+<section class="member">
+<code class="signature">_build_category_map()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L532">source</a>
+</section>
+<section class="member">
+<code class="signature">get_traits(category_id: str) -&gt; list[Trait]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L546">source</a>
+</section>
+<section class="member">
+<code class="signature">get_occupations(category_id: str) -&gt; list[Occupation]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L554">source</a>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(zone: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L507">source</a>
+</section>
+<section class="member">
+<code class="signature">__init__(zone: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L512">source</a>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L561">source</a>
+<p>Returns the raw value from this skill&#x27;s data.</p>
+</section>
+<section class="member">
+<code class="signature">__repr__() -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L618">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">id</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L566">source</a>
+</section>
+<section class="member">
+<code class="signature">data</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L570">source</a>
+</section>
+<section class="member">
+<code class="signature">valid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L574">source</a>
+</section>
+<section class="member">
+<code class="signature">type</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L578">source</a>
+</section>
+<section class="member">
+<code class="signature">object</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L582">source</a>
+<p>Returns the Trait or Occupation object associated with this skill.</p>
+</section>
+<section class="member">
+<code class="signature">name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L591">source</a>
+</section>
+<section class="member">
+<code class="signature">weather_effect</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L597">source</a>
+</section>
+<section class="member">
+<code class="signature">darkness_effect</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L601">source</a>
+</section>
+<section class="member">
+<code class="signature">specialisations</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L605">source</a>
+</section>
+<section class="member">
+<code class="signature">vision_bonus</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L615">source</a>
+</section>
+<h3 id="class-foragesystem">ForageSystem</h3>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_parse_forage_system() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L626">source</a>
+</section>
+<section class="member">
+<code class="signature">_parse_forage_categories()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L641">source</a>
+</section>
+<section class="member">
+<code class="signature">_parse_zones() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L665">source</a>
+</section>
+<section class="member">
+<code class="signature">_parse_skills() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L679">source</a>
+</section>
+<section class="member">
+<code class="signature">_parse()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L707">source</a>
+</section>
+<section class="member">
+<code class="signature">load() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L733">source</a>
+</section>
+<section class="member">
+<code class="signature">get(value, default) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L749">source</a>
+<p>Returns a value from the foraging data, or a default if not found.</p>
+</section>
+<section class="member">
+<code class="signature">get_categories() -&gt; dict[str, dict]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L754">source</a>
+<p>Returns all foraging category definitions.</p>
+</section>
+<section class="member">
+<code class="signature">get_zones() -&gt; dict[str, dict]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L759">source</a>
+<p>Returns all forage zone definitions (e.g., Forest, DeepForest).</p>
+</section>
+<section class="member">
+<code class="signature">get_skills() -&gt; dict[str, dict]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L764">source</a>
+<p>Returns all forage skill definitions (e.g., PlantScavenging, Trapping).</p>
+</section>
+<section class="member">
+<code class="signature">get_sprite_affinities() -&gt; dict[str, list[str]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L769">source</a>
+<p>Returns sprite affinity groupings (e.g., genericPlants → list of tile names).</p>
+</section>
+<section class="member">
+<code class="signature">get_seed_table() -&gt; dict[str, dict]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L774">source</a>
+<p>Returns seed drop info (item → { type, amount, chance }).</p>
+</section>
+<section class="member">
+<code class="signature">get_world_sprites() -&gt; dict[str, list[list[str]]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L779">source</a>
+<p>Returns grouped world sprite names for placement (e.g., bushes, wildPlants).</p>
+</section>
+<section class="member">
+<code class="signature">get_abundance_settings() -&gt; dict[str, list[int]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L784">source</a>
+<p>Returns abundance modifiers for game difficulty presets.</p>
+</section>
+<section class="member">
+<code class="signature">get_clothing_penalties() -&gt; dict[str, float | int]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L789">source</a>
+<p>Returns vision penalties caused by clothing on specific body locations.</p>
+</section>
+<section class="member">
+<code class="signature">get_zone_density_multi() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L794">source</a>
+</section>
+<section class="member">
+<code class="signature">get_aim_multiplier() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L798">source</a>
+</section>
+<section class="member">
+<code class="signature">get_max_icons_per_zone() -&gt; int | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L802">source</a>
+</section>
+<section class="member">
+<code class="signature">get_min_vision_radius() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L806">source</a>
+</section>
+<section class="member">
+<code class="signature">get_max_vision_radius() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L810">source</a>
+</section>
+<section class="member">
+<code class="signature">get_vision_radius_cap() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L814">source</a>
+</section>
+<section class="member">
+<code class="signature">get_dark_vision_radius() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L818">source</a>
+</section>
+<section class="member">
+<code class="signature">get_fatigue_penalty() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L822">source</a>
+</section>
+<section class="member">
+<code class="signature">get_exhaustion_penalty_max() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L826">source</a>
+</section>
+<section class="member">
+<code class="signature">get_panic_penalty_max() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L830">source</a>
+</section>
+<section class="member">
+<code class="signature">get_light_penalty_max() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L834">source</a>
+</section>
+<section class="member">
+<code class="signature">get_clothing_penalty_max() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L838">source</a>
+</section>
+<section class="member">
+<code class="signature">get_effect_reduction_max() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L842">source</a>
+</section>
+<section class="member">
+<code class="signature">get_hunger_bonus_max() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L846">source</a>
+</section>
+<section class="member">
+<code class="signature">get_body_penalty_max() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L850">source</a>
+</section>
+<section class="member">
+<code class="signature">get_endurance_penalty() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L854">source</a>
+</section>
+<section class="member">
+<code class="signature">get_sneak_multiplier() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L858">source</a>
+</section>
+<section class="member">
+<code class="signature">get_level_xp_modifier() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L862">source</a>
+</section>
+<section class="member">
+<code class="signature">get_global_xp_modifier() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L866">source</a>
+</section>
+<section class="member">
+<code class="signature">get_level_bonus() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L870">source</a>
+</section>
+<section class="member">
+<code class="signature">get_month_malus() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L874">source</a>
+</section>
+<section class="member">
+<code class="signature">get_month_bonus() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L878">source</a>
+</section>
+<section class="member">
+<code class="signature">get_light_penalty_cutoff() -&gt; float | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/forage.py#L882">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-foragingitem">ForagingItem</a>
+<a class="sidebar-child" href="#class-foragecategory">ForageCategory</a>
+<a class="sidebar-child" href="#class-foragezone">ForageZone</a>
+<a class="sidebar-child" href="#class-forageskill">ForageSkill</a>
+<a class="sidebar-child" href="#class-foragesystem">ForageSystem</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

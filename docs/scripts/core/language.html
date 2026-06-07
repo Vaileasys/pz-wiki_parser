@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>language.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../animals/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="file_loading.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="logger.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../fluids/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="cache.html">cache.py</a>
+<a href="config_manager.html">config_manager.py</a>
+<a href="constants.html">constants.py</a>
+<a href="file_loading.html">file_loading.py</a>
+<a href="language.html">language.py</a>
+<a href="logger.html">logger.py</a>
+<a href="page_manager.html">page_manager.py</a>
+<a href="runner.html">runner.py</a>
+<a href="setup.html">setup.py</a>
+<a href="version.html">version.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>language.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/core</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L273">source</a>
+</section>
+<h2 id="classes">Classes</h2>
+<h3 id="class-language">Language</h3>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">get()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L49">source</a>
+</section>
+<section class="member">
+<code class="signature">set(code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L55">source</a>
+</section>
+<section class="member">
+<code class="signature">reset()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L60">source</a>
+</section>
+<section class="member">
+<code class="signature">get_default()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L66">source</a>
+</section>
+<section class="member">
+<code class="signature">get_subpage()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L72">source</a>
+</section>
+<section class="member">
+<code class="signature">set_subpage(code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L78">source</a>
+</section>
+<section class="member">
+<code class="signature">set_default(code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L83">source</a>
+</section>
+<section class="member">
+<code class="signature">update_default()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L87">source</a>
+</section>
+<section class="member">
+<code class="signature">init()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L92">source</a>
+</section>
+<section class="member">
+<code class="signature">_prompt()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L100">source</a>
+</section>
+<h4>Static Methods</h4>
+<section class="member">
+<code class="signature">get_encoding(code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L109">source</a>
+</section>
+<section class="member">
+<code class="signature">get_language_name(code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L113">source</a>
+</section>
+<section class="member">
+<code class="signature">get_game_code(wiki_code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L117">source</a>
+</section>
+<h3 id="class-translate">Translate</h3>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">get(property_value, property_key = None, lang_code = None, default = None) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L164">source</a>
+<p>Get a translation for a given value, using optional prefix logic.</p>
+</section>
+<section class="member">
+<code class="signature">get_wiki(value: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L201">source</a>
+<p>Translate all wiki-style placeholders (&lt;&lt; &gt;&gt;) inside a string.</p>
+</section>
+<section class="member">
+<code class="signature">load()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L210">source</a>
+<p>Force-load all translation data, bypassing lazy init.</p>
+</section>
+<section class="member">
+<code class="signature">_ensure_loaded()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L220">source</a>
+</section>
+<section class="member">
+<code class="signature">_cache()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L225">source</a>
+</section>
+<section class="member">
+<code class="signature">_parse(wiki_code, game_code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/core/language.py#L244">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-language">Language</a>
+<a class="sidebar-child" href="#class-translate">Translate</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>skill.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="recorded_media.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="trap.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>skill.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<div class="summary"><p>This module contains classes for handling skills and skill books in Project Zomboid.</p>
+<p>Skill data is loaded from `skills.json`, based on values from the game&#x27;s Java class `PerkFactory.init()`.<br>Skill book data is parsed from `XPSystem_SkillBook.lua`.</p></div>
+<h2 id="classes">Classes</h2>
+<h3 id="class-skill">Skill</h3>
+<div class="summary"><p>Represents a game skill (perk), including XP thresholds and translation data.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_load_skills()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L69">source</a>
+<p>Load skill data from skills.json.</p>
+</section>
+<section class="member">
+<code class="signature">all()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L74">source</a>
+<p>Return all skills as a dictionary of Skill instances.</p>
+</section>
+<section class="member">
+<code class="signature">keys()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L81">source</a>
+<p>Return all skill keys.</p>
+</section>
+<section class="member">
+<code class="signature">values()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L88">source</a>
+<p>Yield Skill instances for all skills.</p>
+</section>
+<section class="member">
+<code class="signature">count()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L95">source</a>
+<p>Return the number of defined skills.</p>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(perk_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L24">source</a>
+</section>
+<section class="member">
+<code class="signature">__init__(perk_id: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L35">source</a>
+</section>
+<section class="member">
+<code class="signature">__getitem__(key)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L52">source</a>
+<p>Allow dict-like access to raw skill data.</p>
+</section>
+<section class="member">
+<code class="signature">__contains__(key)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L56">source</a>
+<p>Check if a key exists in the raw skill data.</p>
+</section>
+<section class="member">
+<code class="signature">__bool__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L60">source</a>
+<p>Return True if the skill has valid data.</p>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L64">source</a>
+<p>Return a string representation of the skill.</p>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L101">source</a>
+<p>Return a value from the raw data with an optional default.</p>
+</section>
+<section class="member">
+<code class="signature">get_xp(level: int) -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L105">source</a>
+<p>Return the XP required to reach the given level.</p>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L112">source</a>
+<p>Localised name of the skill.</p>
+</section>
+<section class="member">
+<code class="signature">name_en</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L123">source</a>
+<p>English name of the skill.</p>
+</section>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L133">source</a>
+<p>Page name for the skill.</p>
+</section>
+<section class="member">
+<code class="signature">wiki_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L140">source</a>
+<p>Wiki link for the skill.</p>
+</section>
+<h3 id="class-skillbook">SkillBook</h3>
+<div class="summary"><p>Represents a skill book with XP multipliers for specific levels.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_load_books()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L186">source</a>
+<p>Parse SkillBook data from XPSystem_SkillBook.lua.</p>
+</section>
+<section class="member">
+<code class="signature">all()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L197">source</a>
+<p>Return all skill books as a dictionary of SkillBook instances.</p>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(name: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L155">source</a>
+</section>
+<section class="member">
+<code class="signature">_init(skill_book: str, data: dict)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L168">source</a>
+</section>
+<section class="member">
+<code class="signature">__bool__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L177">source</a>
+<p>Return True if the book has a valid associated skill.</p>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L181">source</a>
+<p>Return a string representation of the skill book.</p>
+</section>
+<section class="member">
+<code class="signature">get_multiplier(level: int) -&gt; float</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L203">source</a>
+<p>Return the XP multiplier for a given skill level.</p>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L220">source</a>
+<p>Localised name of the associated skill.</p>
+</section>
+<section class="member">
+<code class="signature">name_en</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L225">source</a>
+<p>English name of the associated skill.</p>
+</section>
+<section class="member">
+<code class="signature">wiki_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/skill.py#L230">source</a>
+<p>Wiki link for the associated skill.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-skill">Skill</a>
+<a class="sidebar-child" href="#class-skillbook">SkillBook</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

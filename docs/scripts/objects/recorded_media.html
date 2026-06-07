@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>recorded_media.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="profession.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="skill.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>recorded_media.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<h2 id="classes">Classes</h2>
+<h3 id="class-recmedia">RecMedia</h3>
+<div class="summary"><p>Represents a single recorded media entry.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_parse()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L44">source</a>
+<p>Parses RecMedia data from the provided Lua file and caches it.</p>
+</section>
+<section class="member">
+<code class="signature">load()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L57">source</a>
+<p>Loads RecMedia data from the cache, re-parsing the Lua file if the data is outdated.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Raw RecMedia data.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">all() -&gt; dict[str, &#x27;RecMedia&#x27;]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L80">source</a>
+<p>Returns all known RecMedia instances.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict[str, RecMedia]</dt>
+<dd>Mapping of item ID to RecMedia instance.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">count() -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L92">source</a>
+<p>Returns the total number of RecMedia types parsed.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>int</dt>
+<dd>Number of unique RecMedia types.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">exists(rec_media_id: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L104">source</a>
+<p>Checks if a RecMedia with the given id exists in the parsed data.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>True if found, False otherwise.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_media_items() -&gt; &#x27;list[Item]&#x27;</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L116">source</a>
+</section>
+<section class="member">
+<code class="signature">get_item_dict() -&gt; dict[str, list[&#x27;RecMedia&#x27;]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L126">source</a>
+</section>
+<section class="member">
+<code class="signature">get_page_dict() -&gt; dict[str, str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L147">source</a>
+</section>
+<section class="member">
+<code class="signature">get_id_from_page(page: str) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L162">source</a>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__new__(guid: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L19">source</a>
+<p>Ensures only one RecMedia instance exists per recorded media ID.</p>
+</section>
+<section class="member">
+<code class="signature">__init__(guid: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L31">source</a>
+<p>Initialise the RecMedia instance with its data if not already initialised.</p>
+</section>
+<section class="member">
+<code class="signature">get(key: str, default = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L167">source</a>
+<p>Returns a raw value from the RecMedia data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>key (str)</dt>
+<dd>Key to look up.</dd>
+<dt>default</dt>
+<dd>Value to return if key is missing.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Any</dt>
+<dd>Value from the raw data or default.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_speaker_lines() -&gt; list[tuple[str, &#x27;RecMediaLine&#x27;]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L180">source</a>
+<p>Returns a list of (speaker, RecMediaLine) tuples based on color-coded speaker identity.</p>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L283">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">is_valid</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L200">source</a>
+</section>
+<section class="member">
+<code class="signature">data</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L204">source</a>
+</section>
+<section class="member">
+<code class="signature">item</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L208">source</a>
+</section>
+<section class="member">
+<code class="signature">name</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L213">source</a>
+</section>
+<section class="member">
+<code class="signature">name_en</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L217">source</a>
+</section>
+<section class="member">
+<code class="signature">page</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L221">source</a>
+</section>
+<section class="member">
+<code class="signature">wiki_link</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L236">source</a>
+</section>
+<section class="member">
+<code class="signature">title_id</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L240">source</a>
+</section>
+<section class="member">
+<code class="signature">title</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L244">source</a>
+</section>
+<section class="member">
+<code class="signature">subtitle_id</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L248">source</a>
+</section>
+<section class="member">
+<code class="signature">subtitle</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L252">source</a>
+</section>
+<section class="member">
+<code class="signature">author_id</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L256">source</a>
+</section>
+<section class="member">
+<code class="signature">author</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L260">source</a>
+</section>
+<section class="member">
+<code class="signature">extra_id</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L264">source</a>
+</section>
+<section class="member">
+<code class="signature">extra</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L268">source</a>
+</section>
+<section class="member">
+<code class="signature">category</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L272">source</a>
+</section>
+<section class="member">
+<code class="signature">spawning</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L276">source</a>
+</section>
+<section class="member">
+<code class="signature">lines</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L280">source</a>
+</section>
+<h3 id="class-recmedialine">RecMediaLine</h3>
+<div class="summary"><p>Represents a single line of recorded media content.</p></div>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init__(data: dict)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L290">source</a>
+</section>
+<section class="member">
+<code class="signature">__repr__()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L314">source</a>
+</section>
+<h4>Properties</h4>
+<section class="member">
+<code class="signature">text_id</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L294">source</a>
+</section>
+<section class="member">
+<code class="signature">text</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L298">source</a>
+</section>
+<section class="member">
+<code class="signature">color</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L303">source</a>
+</section>
+<section class="member">
+<code class="signature">codes</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/recorded_media.py#L311">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-recmedia">RecMedia</a>
+<a class="sidebar-child" href="#class-recmedialine">RecMediaLine</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>table_helper.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../tools/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="media_helper.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="util.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../vehicles/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="categories.html">categories.py</a>
+<a href="color.html">color.py</a>
+<a href="echo.html">echo.py</a>
+<a href="lua_helper.html">lua_helper.py</a>
+<a href="media_helper.html">media_helper.py</a>
+<a href="table_helper.html">table_helper.py</a>
+<a href="util.html">util.py</a>
+<a href="utility.html">utility.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>table_helper.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/utils</a></p>
+<div class="summary"><p>Generates wiki-formatted tables for Project Zomboid.</p>
+<p>This module loads item data, builds structured tables with translations and formatting,<br>and writes them as individual or combined output files for use on the PZwiki.</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">get_table_data(path: str, extra_keys: str | list = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/table_helper.py#L23">source</a>
+<p>Loads table data and optionally extracts extra keys from the JSON file.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>path (str)</dt>
+<dd>Path to the JSON file.</dd>
+<dt>extra_keys (str | list, optional)</dt>
+<dd>Single key or list of keys to extract additional data.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>tuple</dt>
+<dd>(map, headings[, extra_data]) depending on whether extra_keys is provided.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_column_headings(table_type: str, table_map: dict, columns: dict, drop_keys: set[str] = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/table_helper.py#L57">source</a>
+<p>Builds the list of column headings for a given table type.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>table_type (str)</dt>
+<dd>Table type to look up.</dd>
+<dt>table_map (dict)</dt>
+<dd>Mapping of table types to their column keys.</dd>
+<dt>columns (dict)</dt>
+<dd>Translated heading strings by key.</dd>
+<dt>drop_keys (set[str])</dt>
+<dd>optional set of keys to exclude.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>Formatted wiki heading strings.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">generate_column_headings(column_def: dict, headings: dict) -&gt; list</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/table_helper.py#L92">source</a>
+<p>Generates multi-row wiki headings from a nested column definition.</p>
+<p>Supports attributes like &#x27;style&#x27; and &#x27;class&#x27; on child headings,<br>as well as colspan/rowspan for structured table layouts.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>column_def (dict)</dt>
+<dd>Column layout with optional attributes and nesting.</dd>
+<dt>headings (dict)</dt>
+<dd>Mapping of keys to translated headings.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>Formatted wiki markup for table headers.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">generate_table(table_type: str, data: dict, column_headings: list, table_header: str = DEF_TABLE_HEADER, table_footer: str = DEF_TABLE_FOOTER, caption_top: str = None, caption_bottom: str = None, caption: str = None, table_before: str = None, table_after: str = None, do_bot_flag: bool = True, bot_flag_type: str = &#x27;table&#x27;, do_horizontal_scroll: bool = True) -&gt; list</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/table_helper.py#L146">source</a>
+<p>Generates a full wiki-formatted table for the given data and headings.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>table_type (str)</dt>
+<dd>Used in comments and IDs.</dd>
+<dt>data (dict)</dt>
+<dd>List of dicts representing table rows.</dd>
+<dt>column_headings (list)</dt>
+<dd>Header rows for the table.</dd>
+<dt>table_header (str)</dt>
+<dd>Starting wiki markup for the table.</dd>
+<dt>table_footer (str)</dt>
+<dd>Closing wiki markup.</dd>
+<dt>caption_top (str)</dt>
+<dd>Optional caption shown above the table.</dd>
+<dt>caption_bottom (str)</dt>
+<dd>Optional caption shown below the table.</dd>
+<dt>caption (str)</dt>
+<dd>Optional centered caption (overrides top/bottom).</dd>
+<dt>table_before (str)</dt>
+<dd>Content before the table.</dd>
+<dt>table_after (str)</dt>
+<dd>Content after the table.</dd>
+<dt>do_bot_flag (bool)</dt>
+<dd>Whether to include bot flag markers.</dd>
+<dt>bot_flag_type (str)</dt>
+<dd>Type used in bot flag comment.</dd>
+<dt>do_horizontal_scroll (bool)</dt>
+<dd>Wraps table in a scrollable container.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>The full table as a list of wiki lines.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_notes(data_list)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/table_helper.py#L238">source</a>
+<p>Extracts notes from the first entry in a data list, if present.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>data_list (list)</dt>
+<dd>List of data dictionaries.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>tuple</dt>
+<dd>(caption str, remaining data list)</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">remove_empty_columns(all_food_data: dict[str, list[dict]]) -&gt; dict[str, set]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/table_helper.py#L260">source</a>
+<p>Remove columns from each table where all values are &#x27;-&#x27;.<br>Returns a dict mapping table_type -&gt; removed column keys.</p>
+</section>
+<section class="member">
+<code class="signature">create_tables(item_type: str, all_data: dict, columns: dict, table_map: dict = {}, table_header = DEF_TABLE_HEADER, table_footer = DEF_TABLE_FOOTER, caption = None, caption_top = None, caption_bottom = None, combine_tables: bool = True, root_path: str = os.path.join(ITEM_DIR, &#x27;lists&#x27;), do_bot_flag: bool = True, bot_flag_type: str = &#x27;table&#x27;, suppress: bool = False, drop_empty_columns: bool = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/utils/table_helper.py#L285">source</a>
+<p>Creates and writes individual and/or combined item tables for each table type.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item_type (str)</dt>
+<dd>The main category name for grouping the output.</dd>
+<dt>all_data (dict[str, list])</dt>
+<dd>A dictionary mapping table types to lists of item data.</dd>
+<dt>columns (dict[str, str])</dt>
+<dd>A mapping of column keys to translated heading strings.</dd>
+<dt>table_map (dict[str, list[str]])</dt>
+<dd>A mapping of table types to their expected column keys. Defaults to empty dictionary.</dd>
+<dt>table_header (str)</dt>
+<dd>Custom table header to use. Defaults to DEF_TABLE_HEADER.</dd>
+<dt>table_footer (str)</dt>
+<dd>Custom table footer to use. Defaults to DEF_TABLE_FOOTER.</dd>
+<dt>caption (str | None)</dt>
+<dd>A shared table caption (centered, overrides caption_top and caption_bottom).</dd>
+<dt>caption_top (str | None)</dt>
+<dd>Caption to appear above the table.</dd>
+<dt>caption_bottom (str | None)</dt>
+<dd>Caption to appear below the table if no top or center caption is set.</dd>
+<dt>combine_tables (bool)</dt>
+<dd>If True, combines all tables into one file. Defaults to True.</dd>
+<dt>root_path (str)</dt>
+<dd>Root path where files will be written. `{language_code}` will be formatted to the current language code.</dd>
+<dt>do_bot_flag (bool)</dt>
+<dd>Whether to add the bot flag comment to the output. Defaults to True.</dd>
+<dt>bot_flag_type (str)</dt>
+<dd>The identifier used in bot flag comments. Defaults to &quot;table&quot;.</dd>
+<dt>suppress (bool)</dt>
+<dd>If True, suppresses terminal output except for final success message.</dd>
+<dt>drop_empty_columns (bool)</dt>
+<dd>If True, removes columns that are empty in all rows for each table type. Defaults to False.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>None</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

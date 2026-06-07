@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>script_parser.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../objects/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="recipe_parser.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="stash_parser.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../recipes/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="creation_method_parser.html">creation_method_parser.py</a>
+<a href="distribution_container_parser.html">distribution_container_parser.py</a>
+<a href="distribution_parser.html">distribution_parser.py</a>
+<a href="evolvedrecipe_parser.html">evolvedrecipe_parser.py</a>
+<a href="item_parser.html">item_parser.py</a>
+<a href="java_parser.html">java_parser.py</a>
+<a href="literature_parser.html">literature_parser.py</a>
+<a href="metarecipe_parser.html">metarecipe_parser.py</a>
+<a href="movable_definitions_parser.html">movable_definitions_parser.py</a>
+<a href="outfit_parser.html">outfit_parser.py</a>
+<a href="outfit_story_parser.html">outfit_story_parser.py</a>
+<a href="outfit_zone_parser.html">outfit_zone_parser.py</a>
+<a href="radio_parser.html">radio_parser.py</a>
+<a href="recipe_parser.html">recipe_parser.py</a>
+<a href="script_parser.html">script_parser.py</a>
+<a href="stash_parser.html">stash_parser.py</a>
+<a href="tiles_parser.html">tiles_parser.py</a>
+<a href="zone_parser.html">zone_parser.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>script_parser.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/parser</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">inject_templates(script_dict: dict, script_type: str, template_dict: dict) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L205">source</a>
+<p>Injects and merges template! and template entries into each script definition.</p>
+</section>
+<section class="member">
+<code class="signature">post_process(script_dict: dict, script_type: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L354">source</a>
+<p>Applies post-processing logic based on script type.</p>
+</section>
+<section class="member">
+<code class="signature">split_list(value: str, character: str) -&gt; list</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L365">source</a>
+<p>Splits by a specific character and normalises as a list</p>
+</section>
+<section class="member">
+<code class="signature">split_dict(value: list[str], character: str) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L370">source</a>
+<p>Splits at a specific character and normalises as a dict.</p>
+</section>
+<section class="member">
+<code class="signature">split_pipe_list(value: str) -&gt; list</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L391">source</a>
+<p>Splits at pipes `|` and normalises as a list.</p>
+</section>
+<section class="member">
+<code class="signature">split_slash_list(value: str) -&gt; list</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L396">source</a>
+<p>Splits at slashes `/` and normalises as a list.</p>
+</section>
+<section class="member">
+<code class="signature">split_space_list(value: str) -&gt; list</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L401">source</a>
+<p>Splits at spaces ` ` and normalises as a list.</p>
+</section>
+<section class="member">
+<code class="signature">split_semicolon_list(value: str) -&gt; list</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L406">source</a>
+<p>Splits at semicolons `;` and normalises as a list.</p>
+</section>
+<section class="member">
+<code class="signature">split_colon_list(value: str) -&gt; list</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L411">source</a>
+<p>Splits at colons `:` and normalises as a list.</p>
+</section>
+<section class="member">
+<code class="signature">split_colon_dict(value: list[str]) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L416">source</a>
+<p>Splits at colons `:` and normalises as a dict.</p>
+</section>
+<section class="member">
+<code class="signature">split_equal_dict(value: list[str]) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L421">source</a>
+<p>Splits at equals `=` and normalises as a dict.</p>
+</section>
+<section class="member">
+<code class="signature">split_space_dict(value: list[str]) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L426">source</a>
+<p>Splits at spaces ` ` and normalises as a dict.</p>
+</section>
+<section class="member">
+<code class="signature">parse_evolved_recipe(value: str, block_id: str = &#x27;Unknown&#x27;) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L434">source</a>
+<p>Special case for processing values of &#x27;EvolvedRecipe&#x27;.</p>
+</section>
+<section class="member">
+<code class="signature">parse_fluid(value: str, block_id: str = &#x27;Unknown&#x27;) -&gt; list[list]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L460">source</a>
+<p>Special case for processing values of &#x27;fluid&#x27;.</p>
+</section>
+<section class="member">
+<code class="signature">parse_fixer(value: str, block_id: str = &#x27;Unknown&#x27;) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L476">source</a>
+<p>Special case for processing values of &#x27;fixer&#x27;.</p>
+</section>
+<section class="member">
+<code class="signature">parse_item_mapper(lines: list[str], block_id: str = &#x27;Unknown&#x27;) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L506">source</a>
+<p>Special case for processing values of &#x27;itemMapper&#x27;.</p>
+</section>
+<section class="member">
+<code class="signature">compare_script_versions(script_type: str = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L537">source</a>
+<p>Compares current script data against the cached version(s).<br>If script_type is empty, runs for all cached types.</p>
+</section>
+<section class="member">
+<code class="signature">process_value(key: str, value: str, block_id: str = &#x27;Unknown&#x27;, script_type: str = &#x27;&#x27;) -&gt; str | list | dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L600">source</a>
+<p>Processes a raw value string into its appropriate type based on key and script type rules.<br>Applies special handling for known keys and uses config-based rules to convert values into lists or dictionaries based on separators.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>key (str)</dt>
+<dd>The key associated with the value (e.g., &quot;Tags&quot;, &quot;EvolvedRecipe&quot;).</dd>
+<dt>value (str)</dt>
+<dd>The raw string value to be processed.</dd>
+<dt>block_id (str, optional)</dt>
+<dd>Identifier for the current script block, used in warnings. Defaults to &quot;Unknown&quot;.</dd>
+<dt>script_type (str, optional)</dt>
+<dd>Type of script being parsed (e.g., &quot;item&quot;, &quot;fixing&quot;). Determines which rules apply.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str | list | dict</dt>
+<dd>The processed value, cast into a normalised format (e.g., list, dict, or scalar).</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">normalise(value: str) -&gt; str | int | float | bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L691">source</a>
+<p>Convert a string to its type: int, float, bool, or str.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>value (str)</dt>
+<dd>The input string to normalise.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str | int | float | bool</dt>
+<dd>The value converted to its appropriate type.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">remove_comments(lines: list[str]) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L732">source</a>
+<p>Strip // single‑line comments and nested /* … */ block comments.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lines</dt>
+<dd>list[str]</dd>
+<dt>Raw lines read from a text file.</dt>
+<dd>No description.</dd>
+<dt>Returns</dt>
+<dd>No description.</dd>
+<dt>list[str]</dt>
+<dd>No description.</dd>
+<dt>Lines with comments removed; blank lines are dropped.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">parse_key_value_line(line: str, data: dict, block_id: str = &#x27;Unknown&#x27;, script_type: str = &#x27;&#x27;) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L778">source</a>
+<p>Parses a single key-value line and inserts or merges it into the provided data dictionary.<br>Supports both &#x27;=&#x27; and &#x27;:&#x27; as separators, applies script-type-specific processing rules, and handles merging of values, lists, and nested dictionaries.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>line (str)</dt>
+<dd>The script line containing a key-value pair.</dd>
+<dt>data (dict)</dt>
+<dd>The dictionary to update with the parsed key and value.</dd>
+<dt>block_id (str, optional)</dt>
+<dd>Identifier for the current script block, used for warnings. Defaults to &quot;Unknown&quot;.</dd>
+<dt>script_type (str, optional)</dt>
+<dd>Type of script being parsed (e.g., &quot;item&quot;, &quot;vehicle&quot;). Used to apply config rules.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>None</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">parse_block(lines: list[str], block_id: str = &#x27;Unknown&#x27;, script_type: str = &#x27;&#x27;) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L846">source</a>
+<p>Parse a block of script lines into a nested dictionary.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lines (list[str])</dt>
+<dd>Block of script lines.</dd>
+<dt>block_id (str, optional)</dt>
+<dd>Identifier for this block. Defaults to &quot;Unknown&quot;.</dd>
+<dt>script_type (str, optional)</dt>
+<dd>Script type to apply correct parsing rules. Defaults to &quot;&quot;.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Parsed block as a structured dictionary.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">is_blacklisted(filepath: str, script_type: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L921">source</a>
+<p>Check if a file should be blacklisted based on file and folder blacklists.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>filepath (str)</dt>
+<dd>Path to the file to check</dd>
+<dt>script_type (str)</dt>
+<dd>Type of script being parsed</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>True if file should be blacklisted, False otherwise</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">parse_entity_block(lines: list[str], entity_name: str, script_type: str = &#x27;entity&#x27;) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L949">source</a>
+<p>Parse an entity block to extract component data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lines (list[str])</dt>
+<dd>Lines within the entity block</dd>
+<dt>entity_name (str)</dt>
+<dd>Name of the entity</dd>
+<dt>script_type (str)</dt>
+<dd>Script type (should be &quot;entity&quot;)</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Parsed entity data with flattened component fields</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">check_cache_version(script_type: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L1035">source</a>
+</section>
+<section class="member">
+<code class="signature">extract_script_data(script_type: str, do_post_processing: bool = True, cache_result: bool = True, use_cache = True) -&gt; dict[str, dict]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L1044">source</a>
+<p>Parses all script files of a given script type, extracting blocks into dictionaries keyed by FullType (i.e. [Module].[Type])</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>script_type (str)</dt>
+<dd>Type of script to extract (e.g., &quot;item&quot;, &quot;vehicle&quot;).</dd>
+<dt>prefix (str)</dt>
+<dd>Required prefix of the block type (e.g., &quot;vehicle_&quot;).</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict[str, dict]</dt>
+<dd>A dictionary of parsed script blocks keyed by full ID (FullType).</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main(run_directly = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/script_parser.py#L1311">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

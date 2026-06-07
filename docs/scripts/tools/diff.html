@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>diff.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../tiles/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="batch_processor.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="generate_docs.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../utils/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="batch_processor.html">batch_processor.py</a>
+<a href="diff.html">diff.py</a>
+<a href="generate_docs.html">generate_docs.py</a>
+<a href="manual_tile_stitcher.html">manual_tile_stitcher.py</a>
+<a href="outfit_images.html">outfit_images.py</a>
+<a href="page_name_checker.html">page_name_checker.py</a>
+<a href="update_icons.html">update_icons.py</a>
+<a href="vehicle_render_data.html">vehicle_render_data.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>diff.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/tools</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">generate_line_diff(old_path: Path, new_path: Path) -&gt; list[dict] | bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/diff.py#L13">source</a>
+<p>Return grouped diff blocks with full &#x27;old&#x27; and &#x27;new&#x27; line lists.</p>
+</section>
+<section class="member">
+<code class="signature">compare_dirs(old: dict[str, str], new: dict[str, str], max_workers: int | None = None, use_snapshots: bool = False) -&gt; dict[str, list[str] | dict[str, dict[int, dict[str, str]] | bool]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/diff.py#L40">source</a>
+<p>Compare two directories and return a dict with added, removed, and changed files.<br>Includes line-by-line diffs for .lua and .txt files.</p>
+</section>
+<section class="member">
+<code class="signature">save_diff_to_json(diff_data: dict[str, list[str] | dict[str, object]], old: dict[str, str], new: dict[str, str])</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/diff.py#L113">source</a>
+<p>Save raw diff to JSON file.</p>
+</section>
+<section class="member">
+<code class="signature">save_diff_to_txt(diff_data: dict[str, list[str] | dict[str, object]], old: dict[str, str], new: dict[str, str])</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/diff.py#L130">source</a>
+<p>Save diff as a readable TXT summary.</p>
+</section>
+<section class="member">
+<code class="signature">get_snapshot_file(version: str, name: str = &#x27;media&#x27;) -&gt; Path</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/diff.py#L180">source</a>
+</section>
+<section class="member">
+<code class="signature">scan_game_snapshot(directories: list[Path] = MEDIA_DIRS) -&gt; dict[str, str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/diff.py#L183">source</a>
+</section>
+<section class="member">
+<code class="signature">load_snapshot(version: str, name: str = &#x27;media&#x27;) -&gt; dict[str, str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/diff.py#L193">source</a>
+</section>
+<section class="member">
+<code class="signature">save_snapshot(snapshot: dict[str, str], version: str, name: str = &#x27;media&#x27;)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/diff.py#L199">source</a>
+</section>
+<section class="member">
+<code class="signature">snapshot_diff(old_version: str, new_version: str, directories: list[Path], name: str = &#x27;media&#x27;) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/diff.py#L205">source</a>
+<p>Loads snapshots and runs a `compare_dirs()` style diff.</p>
+</section>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/diff.py#L229">source</a>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>outfit_zone.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../navbox/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="outfit_story.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="profession.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../parser/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="animal.html">animal.py</a>
+<a href="animal_gene.html">animal_gene.py</a>
+<a href="animal_part.html">animal_part.py</a>
+<a href="attachment.html">attachment.py</a>
+<a href="body_location.html">body_location.py</a>
+<a href="clothing_item.html">clothing_item.py</a>
+<a href="components.html">components.py</a>
+<a href="craft_recipe.html">craft_recipe.py</a>
+<a href="evolved_recipe.html">evolved_recipe.py</a>
+<a href="farming.html">farming.py</a>
+<a href="fish.html">fish.py</a>
+<a href="fixing.html">fixing.py</a>
+<a href="fluid.html">fluid.py</a>
+<a href="forage.html">forage.py</a>
+<a href="item.html">item.py</a>
+<a href="outfit.html">outfit.py</a>
+<a href="outfit_story.html">outfit_story.py</a>
+<a href="outfit_zone.html">outfit_zone.py</a>
+<a href="profession.html">profession.py</a>
+<a href="recorded_media.html">recorded_media.py</a>
+<a href="skill.html">skill.py</a>
+<a href="trap.html">trap.py</a>
+<a href="vehicle.html">vehicle.py</a>
+<a href="vehicle_part.html">vehicle_part.py</a>
+<a href="zone.html">zone.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>outfit_zone.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/objects</a></p>
+<div class="summary"><p>Provides access to outfit zombie zone spawn data.</p>
+<p>OutfitZone loads parsed ZombiesZoneDefinition data and provides helpers for<br>finding which zombie zones reference a given outfit ID.</p></div>
+<h2 id="classes">Classes</h2>
+<h3 id="class-outfitzone">OutfitZone</h3>
+<div class="summary"><p>Provides cached lookup for outfit zombie zone spawn data.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">load(force: bool = False) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit_zone.py#L16">source</a>
+<p>Load outfit zone data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>force</dt>
+<dd>Reload data even if already loaded.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">all() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit_zone.py#L33">source</a>
+<p>Return all outfit zone data.</p>
+</section>
+<section class="member">
+<code class="signature">get(outfit_id: str) -&gt; list[dict]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit_zone.py#L38">source</a>
+<p>Return zones that reference an outfit ID.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>outfit_id</dt>
+<dd>Outfit ID to search for.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">has(outfit_id: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit_zone.py#L74">source</a>
+<p>Check whether an outfit appears in any zone.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>outfit_id</dt>
+<dd>Outfit ID to check.</dd>
+</dl>
+</section>
+<h4>Static Methods</h4>
+<section class="member">
+<code class="signature">_dedupe_zones(zones: list[dict]) -&gt; list[dict]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/objects/outfit_zone.py#L84">source</a>
+<p>Remove duplicate zone names.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>zones</dt>
+<dd>Zone match dictionaries.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-outfitzone">OutfitZone</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

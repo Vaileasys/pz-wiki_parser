@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>item_consumables.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../foraging/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="item_codesnip.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="item_container_contents.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="groups/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="item_article.html">item_article.py</a>
+<a href="item_body_part.html">item_body_part.py</a>
+<a href="item_codesnip.html">item_codesnip.py</a>
+<a href="item_consumables.html">item_consumables.py</a>
+<a href="item_container_contents.html">item_container_contents.py</a>
+<a href="item_distribution.html">item_distribution.py</a>
+<a href="item_fixing.html">item_fixing.py</a>
+<a href="item_groups.html">item_groups.py</a>
+<a href="item_infobox.html">item_infobox.py</a>
+<a href="item_lists.html">item_lists.py</a>
+<a href="item_literature_titles.html">item_literature_titles.py</a>
+<a href="item_recmedia_transcript.html">item_recmedia_transcript.py</a>
+<a href="item_tags.html">item_tags.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>item_consumables.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/items</a></p>
+<div class="summary"><p>Consumables template generator.</p>
+<p>This module processes food items, generating a `{{Consumables}}` templates<br>for each valid food item and writes to individual text files for use on the PZwiki.</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">get_variant(item: Item, variant: str = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_consumables.py#L17">source</a>
+<p>Returns the icon for a specific variant of the item, if it exists.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item (Item)</dt>
+<dd>Item object to get icons for.</dd>
+<dt>variant (str, optional)</dt>
+<dd>Variant type such as &#x27;cooked&#x27;, &#x27;rotten&#x27;, or &#x27;burnt&#x27;.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Icon filename for the variant, or the base icon if not found.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">generate_data(item: Item)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_consumables.py#L47">source</a>
+<p>Extracts and formats consumable data for a given item.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item (Item)</dt>
+<dd>The item to generate data from.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict | None</dt>
+<dd>Dictionary of parameters for the template, or None if not applicable.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">build_template(data)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_consumables.py#L101">source</a>
+<p>Builds a `{{Consumables}}` template from the item data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>data (dict)</dt>
+<dd>Parameter data for the template.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>Lines of the wiki template content.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">process_items(items_list)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_consumables.py#L119">source</a>
+<p>Processes a list of item IDs and writes their template files.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>items_list (list[str])</dt>
+<dd>List of item IDs to process.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">select_item()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_consumables.py#L142">source</a>
+<p>Prompts user to input a valid item ID.</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>list[str]</dt>
+<dd>A list containing a single validated item ID.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main(run_directly = False)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_consumables.py#L156">source</a>
+<p>Main entry point for the generator. Prompts user for input mode and processes items.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>run_directly (bool, optional)</dt>
+<dd>If True, enables quit option instead of back. Defaults to False.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

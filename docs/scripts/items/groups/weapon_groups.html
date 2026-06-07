@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>weapon_groups.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../../index.html"><img class="nav-icon" src="../../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../index.html"><img class="nav-icon" src="../../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="ammo_groups.html"><img class="nav-icon" src="../../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="../lists/index.html"><img class="nav-icon" src="../../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="ammo_groups.html">ammo_groups.py</a>
+<a href="weapon_groups.html">weapon_groups.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>weapon_groups.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/items/groups</a></p>
+<div class="summary"><p>Weapon item grouping and classification.</p>
+<p>Classifies weapons by melee skill, firearm type, explosives, and weapon parts,<br>then exposes their display names, categories, and ordering for generated<br>navboxes, lists, and item data.</p></div>
+<h2 id="classes">Classes</h2>
+<h3 id="class-weapongroups">WeaponGroups</h3>
+<div class="summary"><p>Item grouping rules for weapons and weapon-related items.</p>
+<p>Defines the recognised weapon groups, their display labels, parent<br>categories, and display order. Classification is based on weapon skill<br>categories, firearm properties, display category, or item type.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">classify(item: Item, **kwargs) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/weapon_groups.py#L58">source</a>
+<p>Classify an item as a weapon group type.</p>
+<p>Weapons with skill categories are grouped by their primary skill, with<br>&quot;Improvised&quot; ignored when another skill is present. Firearms are grouped<br>as handguns, rifles, or shotguns based on equipment and projectile data.<br>Explosives and weapon parts are handled by display category or item type.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>item</dt>
+<dd>Item object to classify.</dd>
+<dt>**kwargs</dt>
+<dd>Additional context accepted for API compatibility.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>Weapon group type ID, or None if the item is not weapon-related.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-weapongroups">WeaponGroups</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

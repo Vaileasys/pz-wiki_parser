@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>item_distribution.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../foraging/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="item_container_contents.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="item_fixing.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="groups/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="item_article.html">item_article.py</a>
+<a href="item_body_part.html">item_body_part.py</a>
+<a href="item_codesnip.html">item_codesnip.py</a>
+<a href="item_consumables.html">item_consumables.py</a>
+<a href="item_container_contents.html">item_container_contents.py</a>
+<a href="item_distribution.html">item_distribution.py</a>
+<a href="item_fixing.html">item_fixing.py</a>
+<a href="item_groups.html">item_groups.py</a>
+<a href="item_infobox.html">item_infobox.py</a>
+<a href="item_lists.html">item_lists.py</a>
+<a href="item_literature_titles.html">item_literature_titles.py</a>
+<a href="item_recmedia_transcript.html">item_recmedia_transcript.py</a>
+<a href="item_tags.html">item_tags.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>item_distribution.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/items</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">load_item_dictionary(item_name)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_distribution.py#L21">source</a>
+<p>Load and search for a modified item name based on a dictionary in itemname_en.txt.</p>
+</section>
+<section class="member">
+<code class="signature">process_json(file_paths)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_distribution.py#L61">source</a>
+<p>Process JSON files and gather a list of unique items and their counts.</p>
+</section>
+<section class="member">
+<code class="signature">build_item_json(item_list, procedural_data, distribution_data, vehicle_data, foraging_data, clothing_data, stories_data, fishing_data, butchering_data, attached_weapons_data, container_contents_data, outfits_data = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_distribution.py#L256">source</a>
+</section>
+<section class="member">
+<code class="signature">merge_case_insensitive_duplicates(items_dict)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_distribution.py#L1152">source</a>
+<p>Merge items that have the same ID but different capitalization.</p>
+<p>This prevents issues where items like &quot;Bag_Schoolbag&quot; and &quot;Bag_SchoolBag&quot;<br>are treated as separate items, causing later overwrites and split index entries.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>items_dict (dict)</dt>
+<dd>Dictionary of item_id -&gt; item_data</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Deduplicated dictionary with merged data</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">build_tables(category_items, index)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_distribution.py#L1400">source</a>
+<p>Build Lua tables from pre-categorized item data, organizing items by category.<br>Split files that would exceed 2500 lines into multiple numbered files.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>category_items (dict)</dt>
+<dd>Dictionary of items organized by category</dd>
+<dt>index (dict)</dt>
+<dd>Dictionary of item IDs organized by category</dd>
+<dt>Output files to data_files directory with category-based filenames.</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">calculate_missing_items(itemname_path, itemlist_path, missing_items_path)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_distribution.py#L1911">source</a>
+<p>Calculate items that exist in itemname_en.txt but not in the processed item list.</p>
+</section>
+<section class="member">
+<code class="signature">combine_items_by_page(all_items)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_distribution.py#L1933">source</a>
+<p>Combines distribution data for items that share the same wiki page.</p>
+<p>This function:<br>1. Uses page_manager to get the official page-to-item mappings<br>2. For each page, combines all secondary item data into the primary item&#x27;s data<br>3. Removes duplicate entries in container, vehicle, and other lists<br>4. Returns a new dictionary with combined items</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>all_items (dict)</dt>
+<dd>Dictionary of all items with their distribution data</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>dict</dt>
+<dd>Updated dictionary with combined items</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">extract_raw_outfit_id(outfit_name)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_distribution.py#L2260">source</a>
+<p>Extract the raw outfit ID by removing gender suffixes.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>outfit_name (str)</dt>
+<dd>Outfit name like &quot;Armor Test Kelly Gang (male)&quot;</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>str</dt>
+<dd>Raw outfit ID like &quot;ArmorTestKellyGang&quot;</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_outfit_link(outfit_id, outfits_data = None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_distribution.py#L2279">source</a>
+<p>Convert an outfit ID to a wiki link using the page dictionary.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>outfit_id</dt>
+<dd>The outfit identifier (e.g., &quot;ArmyInstructor&quot;)</dd>
+<dt>outfits_data</dt>
+<dd>Optional dictionary containing outfit data (no longer used for linking)</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>A wiki link to the outfit page if found in page dictionary, otherwise the raw ID</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/item_distribution.py#L2308">source</a>
+<p>Main function to process and generate distribution data files.</p>
+<p>This function:<br>1. Checks if decompiler has run successfully<br>2. Parses distribution data from various sources<br>3. Processes items and builds JSON data<br>4. Combines items that share the same wiki page<br>5. Categorizes items by type<br>6. Generates Lua data files by category<br>7. Creates an index file</p>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>bool</dt>
+<dd>True if processing completed successfully, False otherwise</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>generate_docs.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../tiles/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="diff.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="manual_tile_stitcher.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../utils/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="batch_processor.html">batch_processor.py</a>
+<a href="diff.html">diff.py</a>
+<a href="generate_docs.html">generate_docs.py</a>
+<a href="manual_tile_stitcher.html">manual_tile_stitcher.py</a>
+<a href="outfit_images.html">outfit_images.py</a>
+<a href="page_name_checker.html">page_name_checker.py</a>
+<a href="update_icons.html">update_icons.py</a>
+<a href="vehicle_render_data.html">vehicle_render_data.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>generate_docs.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/tools</a></p>
+<div class="summary"><p>Generate HTML API documentation from the scripts package.</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">posix_rel(path: Path, root: Path) -&gt; PurePosixPath</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L78">source</a>
+<p>Return a POSIX-style path relative to a root directory.</p>
+</section>
+<section class="member">
+<code class="signature">doc_path_for_source(source_rel: PurePosixPath) -&gt; PurePosixPath</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L83">source</a>
+<p>Return the HTML documentation path for a source file.</p>
+</section>
+<section class="member">
+<code class="signature">doc_path_for_package(source_rel: PurePosixPath) -&gt; PurePosixPath</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L88">source</a>
+<p>Return the HTML index path for a package folder.</p>
+</section>
+<section class="member">
+<code class="signature">discover_sources(scripts_dir: Path = SCRIPTS_DIR) -&gt; list[Path]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L93">source</a>
+<p>Find Python files that should have generated documentation.</p>
+</section>
+<section class="member">
+<code class="signature">discover_packages(scripts_dir: Path = SCRIPTS_DIR) -&gt; list[Path]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L102">source</a>
+<p>Find package marker files that can describe generated folders.</p>
+</section>
+<section class="member">
+<code class="signature">unparse(node: ast.AST | None) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L107">source</a>
+<p>Convert an AST node back into source-like text.</p>
+</section>
+<section class="member">
+<code class="signature">annotation(node: ast.AST | None) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L114">source</a>
+<p>Return an annotation as readable text, if one exists.</p>
+</section>
+<section class="member">
+<code class="signature">default_map(args: list[ast.arg], defaults: list[ast.expr]) -&gt; dict[str, ast.expr]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L120">source</a>
+<p>Map positional argument names to their default value nodes.</p>
+</section>
+<section class="member">
+<code class="signature">format_arg(arg: ast.arg, default: ast.expr | None = None) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L130">source</a>
+<p>Format one function argument for a generated signature.</p>
+</section>
+<section class="member">
+<code class="signature">function_signature(node: ast.FunctionDef | ast.AsyncFunctionDef, *, drop_first_arg: bool = False) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L141">source</a>
+<p>Build a readable function or method signature.</p>
+</section>
+<section class="member">
+<code class="signature">decorator_names(node: ast.FunctionDef | ast.AsyncFunctionDef) -&gt; set[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L175">source</a>
+<p>Return the simple decorator names used by a function.</p>
+</section>
+<section class="member">
+<code class="signature">decorator_names_from_call(node: ast.Call) -&gt; set[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L188">source</a>
+<p>Return a decorator name when the decorator is called.</p>
+</section>
+<section class="member">
+<code class="signature">clean_docstring(node: ast.AST) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L198">source</a>
+<p>Return a cleaned docstring or an empty string.</p>
+</section>
+<section class="member">
+<code class="signature">parse_field_line(line: str) -&gt; DocField | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L203">source</a>
+<p>Parse one Args or Returns field from a docstring.</p>
+</section>
+<section class="member">
+<code class="signature">parse_doc_fields(docstring: str) -&gt; tuple[str, list[DocField], list[DocField]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L224">source</a>
+<p>Split a docstring into summary, arguments, and returns.</p>
+</section>
+<section class="member">
+<code class="signature">split_package_docstring(docstring: str) -&gt; tuple[str, str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L283">source</a>
+<p>Split a package docstring into short summary and detailed description.</p>
+</section>
+<section class="member">
+<code class="signature">member_doc(node: ast.FunctionDef | ast.AsyncFunctionDef, kind: str, *, drop_first_arg: bool = False) -&gt; MemberDoc</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L291">source</a>
+<p>Create documentation data for a function-like member.</p>
+</section>
+<section class="member">
+<code class="signature">parse_module(source_path: Path, repo_root: Path = REPO_ROOT) -&gt; ModuleDoc</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L311">source</a>
+<p>Parse one Python file into module documentation data.</p>
+</section>
+<section class="member">
+<code class="signature">parse_package(source_path: Path, repo_root: Path = REPO_ROOT) -&gt; PackageDoc</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L335">source</a>
+<p>Parse a package __init__.py into folder documentation data.</p>
+</section>
+<section class="member">
+<code class="signature">parse_class(node: ast.ClassDef) -&gt; ClassDoc</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L352">source</a>
+<p>Parse a class and group its documented members.</p>
+</section>
+<section class="member">
+<code class="signature">source_url(module: ModuleDoc, line: int) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L398">source</a>
+<p>Build the GitHub source link for a line in a module.</p>
+</section>
+<section class="member">
+<code class="signature">relative_link(from_doc: PurePosixPath, to_doc: PurePosixPath) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L403">source</a>
+<p>Build a relative link between generated docs.</p>
+</section>
+<section class="member">
+<code class="signature">html_index_back_link(doc_rel: PurePosixPath) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L413">source</a>
+<p>Return the relative link from an HTML page to the HTML index.</p>
+</section>
+<section class="member">
+<code class="signature">html_escape(value: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L418">source</a>
+<p>Escape text for HTML output.</p>
+</section>
+<section class="member">
+<code class="signature">render_html_text(text: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L423">source</a>
+<p>Render simple multiline text as HTML paragraphs.</p>
+</section>
+<section class="member">
+<code class="signature">slug(value: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L434">source</a>
+<p>Return a simple stable id for generated headings.</p>
+</section>
+<section class="member">
+<code class="signature">render_html_fields(title: str, fields: list[DocField]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L445">source</a>
+<p>Render Args or Returns fields as an HTML definition list.</p>
+</section>
+<section class="member">
+<code class="signature">render_html_member(module: ModuleDoc, member: MemberDoc) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L459">source</a>
+<p>Render one member block for an HTML module page.</p>
+</section>
+<section class="member">
+<code class="signature">render_folder_link(module: ModuleDoc, packages: dict[PurePosixPath, PackageDoc]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L475">source</a>
+<p>Render a link from a file page back to its folder index.</p>
+</section>
+<section class="member">
+<code class="signature">render_parent_back_link(package: PackageDoc, parent_package: PackageDoc) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L489">source</a>
+<p>Render a compact back link above a folder title.</p>
+</section>
+<section class="member">
+<code class="signature">html_nav_line(module: ModuleDoc, modules: list[ModuleDoc]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L506">source</a>
+<p>Render navigation links for an HTML module page.</p>
+</section>
+<section class="member">
+<code class="signature">render_nav_links(current_path: PurePosixPath, links: list[tuple[str, PurePosixPath]]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L546">source</a>
+<p>Render nav links with icons for a generated page.</p>
+</section>
+<section class="member">
+<code class="signature">render_link_list(current_path: PurePosixPath, title: str, links: list[tuple[str, PurePosixPath]]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L567">source</a>
+<p>Render a sidebar card with links relative to the current page.</p>
+</section>
+<section class="member">
+<code class="signature">render_anchor_list(title: str, links: list[tuple[str, str, int]]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L582">source</a>
+<p>Render a sidebar card with in-page anchor links.</p>
+</section>
+<section class="member">
+<code class="signature">render_page_layout(nav: str, left: str, content: str, right: str = &#x27;&#x27;) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L595">source</a>
+<p>Render the shared sticky-header and three-column page layout.</p>
+</section>
+<section class="member">
+<code class="signature">folder_nav_line(package: PackageDoc, packages: dict[PurePosixPath, PackageDoc]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L609">source</a>
+<p>Render navigation links for a folder index page.</p>
+</section>
+<section class="member">
+<code class="signature">render_module_left_sidebar(module: ModuleDoc, modules: list[ModuleDoc], packages: dict[PurePosixPath, PackageDoc]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L621">source</a>
+<p>Render file-page folder navigation.</p>
+</section>
+<section class="member">
+<code class="signature">render_module_right_sidebar(module: ModuleDoc) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L637">source</a>
+<p>Render file-page in-page navigation.</p>
+</section>
+<section class="member">
+<code class="signature">render_folder_left_sidebar(package: PackageDoc, packages: dict[PurePosixPath, PackageDoc]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L649">source</a>
+<p>Render folder-page parent and child navigation.</p>
+</section>
+<section class="member">
+<code class="signature">render_folder_right_sidebar(has_folders: bool, has_files: bool) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L669">source</a>
+<p>Render folder-page in-page navigation.</p>
+</section>
+<section class="member">
+<code class="signature">html_page(title: str, body: str, current_path: PurePosixPath) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L679">source</a>
+<p>Wrap HTML page content with the shared document shell.</p>
+</section>
+<section class="member">
+<code class="signature">render_html_module(module: ModuleDoc, modules: list[ModuleDoc], packages: dict[PurePosixPath, PackageDoc]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L703">source</a>
+<p>Render one complete HTML module page.</p>
+</section>
+<section class="member">
+<code class="signature">render_folder_index(package: PackageDoc, modules: list[ModuleDoc], packages: dict[PurePosixPath, PackageDoc]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L756">source</a>
+<p>Render one folder-level index page.</p>
+</section>
+<section class="member">
+<code class="signature">render_html_index(modules: list[ModuleDoc], packages: dict[PurePosixPath, PackageDoc]) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L811">source</a>
+<p>Render the generated HTML index page.</p>
+</section>
+<section class="member">
+<code class="signature">build_modules(scripts_dir: Path = SCRIPTS_DIR, repo_root: Path = REPO_ROOT) -&gt; list[ModuleDoc]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L884">source</a>
+<p>Parse and sort every source module that should be documented.</p>
+</section>
+<section class="member">
+<code class="signature">build_packages(scripts_dir: Path = SCRIPTS_DIR, repo_root: Path = REPO_ROOT) -&gt; dict[PurePosixPath, PackageDoc]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L892">source</a>
+<p>Parse and index package folder summaries.</p>
+</section>
+<section class="member">
+<code class="signature">expected_html_docs(modules: list[ModuleDoc], packages: dict[PurePosixPath, PackageDoc]) -&gt; dict[PurePosixPath, str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L900">source</a>
+<p>Build the complete set of generated HTML files.</p>
+</section>
+<section class="member">
+<code class="signature">is_generated_doc_path(path: PurePosixPath, suffix: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L915">source</a>
+<p>Return whether a path belongs to generated docs for this format.</p>
+</section>
+<section class="member">
+<code class="signature">existing_markdown(docs_dir: Path = DOCS_DIR) -&gt; set[PurePosixPath]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L922">source</a>
+<p>Return existing generated Markdown files.</p>
+</section>
+<section class="member">
+<code class="signature">existing_html(docs_dir: Path = DOCS_DIR) -&gt; set[PurePosixPath]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L934">source</a>
+<p>Return existing generated HTML files.</p>
+</section>
+<section class="member">
+<code class="signature">clean_markdown(docs_dir: Path = DOCS_DIR) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L946">source</a>
+<p>Remove generated Markdown files.</p>
+</section>
+<section class="member">
+<code class="signature">clean_html(docs_dir: Path = DOCS_DIR) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L956">source</a>
+<p>Remove generated HTML files.</p>
+</section>
+<section class="member">
+<code class="signature">prune_empty_dirs(docs_dir: Path = DOCS_DIR) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L966">source</a>
+<p>Remove empty directories left behind by generated docs.</p>
+</section>
+<section class="member">
+<code class="signature">write_file_set(docs: dict[PurePosixPath, str], docs_dir: Path = DOCS_DIR) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L982">source</a>
+<p>Write a set of generated files below docs.</p>
+</section>
+<section class="member">
+<code class="signature">write_docs(html_docs: dict[PurePosixPath, str], docs_dir: Path = DOCS_DIR) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L991">source</a>
+<p>Write generated HTML docs to disk.</p>
+</section>
+<section class="member">
+<code class="signature">check_file_set(docs: dict[PurePosixPath, str], existing_paths: set[PurePosixPath], docs_dir: Path) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L999">source</a>
+<p>Check whether one generated file set matches disk.</p>
+</section>
+<section class="member">
+<code class="signature">check_docs(html_docs: dict[PurePosixPath, str], docs_dir: Path = DOCS_DIR) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L1038">source</a>
+<p>Check whether existing docs match generated HTML output.</p>
+</section>
+<section class="member">
+<code class="signature">parse_args(argv: list[str]) -&gt; argparse.Namespace</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L1044">source</a>
+<p>Parse command line arguments.</p>
+</section>
+<section class="member">
+<code class="signature">main(argv: list[str] | None = None) -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/generate_docs.py#L1055">source</a>
+<p>Run the documentation generator.</p>
+</section>
+<h2 id="classes">Classes</h2>
+<h3 id="class-docfield">DocField</h3>
+<h3 id="class-memberdoc">MemberDoc</h3>
+<h3 id="class-classdoc">ClassDoc</h3>
+<h3 id="class-moduledoc">ModuleDoc</h3>
+<h3 id="class-packagedoc">PackageDoc</h3>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-docfield">DocField</a>
+<a class="sidebar-child" href="#class-memberdoc">MemberDoc</a>
+<a class="sidebar-child" href="#class-classdoc">ClassDoc</a>
+<a class="sidebar-child" href="#class-moduledoc">ModuleDoc</a>
+<a class="sidebar-child" href="#class-packagedoc">PackageDoc</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tiles_batch.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../recipes/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="tiles_article.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="tiles_codesnip.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../tools/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="entity_article.html">entity_article.py</a>
+<a href="entity_health.html">entity_health.py</a>
+<a href="entity_infobox.html">entity_infobox.py</a>
+<a href="named_furniture_filter.html">named_furniture_filter.py</a>
+<a href="tiles_article.html">tiles_article.py</a>
+<a href="tiles_batch.html">tiles_batch.py</a>
+<a href="tiles_codesnip.html">tiles_codesnip.py</a>
+<a href="tiles_container_mapping.html">tiles_container_mapping.py</a>
+<a href="tiles_infobox.html">tiles_infobox.py</a>
+<a href="tiles_scrapping.html">tiles_scrapping.py</a>
+<a href="tiles_stitcher.html">tiles_stitcher.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>tiles_batch.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/tiles</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">parse_entities()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_batch.py#L31">source</a>
+<p>Wrapper function to parse entity data.</p>
+</section>
+<section class="member">
+<code class="signature">generate_cache(cache_path: str, cache_label: str, parser_func, game_version: str)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_batch.py#L36">source</a>
+<p>Generate or load a cache file for tile data.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>cache_path (str)</dt>
+<dd>Path to the cache file.</dd>
+<dt>cache_label (str)</dt>
+<dd>Human-readable label for the cache type.</dd>
+<dt>parser_func (callable)</dt>
+<dd>Function to parse data if cache needs regeneration.</dd>
+<dt>game_version (str)</dt>
+<dd>Current game version for cache validation.</dd>
+</dl>
+<h5>Returns</h5>
+<dl class="fields">
+<dt>tuple</dt>
+<dd>(cache_data, cache_version) where:</dd>
+<dt>- cache_data</dt>
+<dd>The loaded data or None if loading failed</dd>
+<dt>- cache_version</dt>
+<dd>Version string of the cache or None if loading failed</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">main(lang_code)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tiles/tiles_batch.py#L64">source</a>
+<p>Main execution function for the tile processing pipeline.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>lang_code (str)</dt>
+<dd>Language code to process</dd>
+<dt>This function</dt>
+<dd>No description.</dd>
+<dt>1. Ensures all necessary caches are present and up-to-date</dt>
+<dd>No description.</dd>
+<dt>2. Loads or generates required data from game files</dt>
+<dd>No description.</dd>
+<dt>3. Generates various wiki components</dt>
+<dd>No description.</dd>
+<dt>- Infoboxes for tile properties</dt>
+<dd>No description.</dd>
+<dt>- CodeSnips showing tile definitions</dt>
+<dd>No description.</dd>
+<dt>- Scrapping tables for dismantling info</dt>
+<dd>No description.</dd>
+<dt>- Complete wiki articles</dt>
+<dd>No description.</dd>
+<dt>- Furniture and crafting surface lists</dt>
+<dd>No description.</dd>
+<dt>4. Provides progress feedback through echo messages</dt>
+<dd>No description.</dd>
+</dl>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

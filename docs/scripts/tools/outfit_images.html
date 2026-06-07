@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>outfit_images.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../tiles/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="manual_tile_stitcher.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="page_name_checker.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../utils/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="batch_processor.html">batch_processor.py</a>
+<a href="diff.html">diff.py</a>
+<a href="generate_docs.html">generate_docs.py</a>
+<a href="manual_tile_stitcher.html">manual_tile_stitcher.py</a>
+<a href="outfit_images.html">outfit_images.py</a>
+<a href="page_name_checker.html">page_name_checker.py</a>
+<a href="update_icons.html">update_icons.py</a>
+<a href="vehicle_render_data.html">vehicle_render_data.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>outfit_images.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/tools</a></p>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">is_green_pixel(pixel_rgb)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/outfit_images.py#L27">source</a>
+<p>Check if a pixel is green using conservative tolerance-based detection.<br>Returns True if the pixel should be considered greenscreen.</p>
+</section>
+<section class="member">
+<code class="signature">process_outfit_image(input_path: Path, output_path: Path)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/outfit_images.py#L52">source</a>
+<p>Process a single outfit image:<br>1. Crop to specified coordinates<br>2. Remove green background pixels using tolerance-based detection<br>3. Save with maximum lossless compression</p>
+</section>
+<section class="member">
+<code class="signature">main()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/outfit_images.py#L104">source</a>
+<p>Main function to process all outfit images</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>
