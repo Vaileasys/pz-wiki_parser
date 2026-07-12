@@ -40,12 +40,12 @@
 <h2 id="functions">Functions</h2>
 <section class="member">
 <code class="signature">parse_game_version() -&gt; list[int, int, int]</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/java_parser.py#L11">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/java_parser.py#L21">source</a>
 <p>Parse game version from Core.java.</p>
 </section>
 <section class="member">
 <code class="signature">parse_static_registry(java_path: Path, java_type: str, *, grouped: bool = False) -&gt; dict</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/java_parser.py#L36">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/java_parser.py#L46">source</a>
 <p>Parse static final declarations of a given Java type.</p>
 <p>Extracts constant names and their string values from a Java file.</p>
 <h5>Args</h5>
@@ -64,20 +64,33 @@
 </dl>
 </section>
 <section class="member">
+<code class="signature">parse_color_reference(java_path: Path) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/java_parser.py#L87">source</a>
+<p>Parse the named colors declared in Colors.java.</p>
+</section>
+<section class="member">
 <code class="signature">process_registry(java_type: str, java_path: Path, output_path: Path, res_path: Path, *, grouped: bool = False, is_update: bool = False, label: str | None = None, do_flip: bool = False) -&gt; dict</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/java_parser.py#L76">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/java_parser.py#L103">source</a>
 </section>
 <section class="member">
-<code class="signature">update_item_keys(is_update: bool = False) -&gt; dict</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/java_parser.py#L118">source</a>
+<code class="signature">update_item_keys(is_update: bool = True) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/java_parser.py#L145">source</a>
 </section>
 <section class="member">
-<code class="signature">update_item_body_locations(is_update: bool = False) -&gt; dict</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/java_parser.py#L130">source</a>
+<code class="signature">update_item_body_locations(is_update: bool = True) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/java_parser.py#L157">source</a>
+</section>
+<section class="member">
+<code class="signature">update_color_reference(is_update: bool = True) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/java_parser.py#L168">source</a>
+</section>
+<section class="member">
+<code class="signature">update_resources()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/java_parser.py#L206">source</a>
 </section>
 <section class="member">
 <code class="signature">main(is_update: bool = False)</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/java_parser.py#L140">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/parser/java_parser.py#L212">source</a>
 </section>
 </article></div>
 <div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
