@@ -6,6 +6,7 @@ Pack parsing is handled by ``scripts.parser.pack_parser``.
 
 from __future__ import annotations
 
+from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 import io
@@ -42,6 +43,7 @@ class SpriteExtractionSummary:
     skipped_existing: int = 0
     skipped_invalid: int = 0
     skipped_bounds: int = 0
+    skipped_missing: int = 0
 
 
 def _safe_stem(name: str, fallback: str) -> str:
@@ -231,6 +233,153 @@ def extract_pack_sprites(
     pack = parse_pack_file(pack_path)
     extract_sprites(pack, folder_level=folder_level)
     write_pack_metadata(pack)
+
+
+def extract_indexed_sprites(
+    sprite_records: list[dict],
+    output_dir: str | Path,
+    *,
+    output_names: dict[str, str] | None = None,
+    overwrite: bool = True,
+) -> SpriteExtractionSummary:
+    """Extract selected sprites using the sprite index.
+
+    Args:
+        sprite_records: Sprite records from ``sprite_index["sprites"]``.
+        output_dir: Flat output directory for the selected images.
+        output_names: Optional mapping of sprite ID to destination filename.
+        overwrite: Replace existing files when True.
+    """
+    records = list(sprite_records)
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_names = output_names or {}
+
+    summary = SpriteExtractionSummary()
+    if not records:
+        return summary
+
+    texturepacks_dir = Path(get_game_directory()) / "media" / "texturepacks"
+    records_by_pack: dict[str, list[dict]] = defaultdict(list)
+
+    for record in records:
+        pack_file = record.get("pack_file")
+        if not pack_file:
+            summary.skipped_missing += 1
+            continue
+        records_by_pack[pack_file].append(record)
+
+    progress = tqdm(
+        total=len(records),
+        desc="Extracting indexed sprites",
+        unit="sprite",
+        bar_format=PBAR_FORMAT,
+    )
+
+    try:
+        for pack_file, pack_records in records_by_pack.items():
+            pack_path = texturepacks_dir / pack_file
+            if not pack_path.is_file():
+                summary.skipped_missing += len(pack_records)
+                progress.update(len(pack_records))
+                continue
+
+            pack = parse_pack_file(pack_path)
+            sheets = {sheet.index: sheet for sheet in pack.sheets}
+            records_by_sheet: dict[int, list[dict]] = defaultdict(list)
+
+            for record in pack_records:
+                records_by_sheet[record.get("sheet_index", -1)].append(record)
+
+            for sheet_index, sheet_records in records_by_sheet.items():
+                sheet = sheets.get(sheet_index)
+                if sheet is None:
+                    summary.skipped_missing += len(sheet_records)
+                    progress.update(len(sheet_records))
+                    continue
+
+                image = _sheet_image(pack, sheet)
+                try:
+                    for record in sheet_records:
+                        entry_index = record.get("entry_index", -1)
+                        sprite = None
+
+                        if 0 <= entry_index < len(sheet.sprites):
+                            candidate = sheet.sprites[entry_index]
+                            if candidate.name.casefold() == str(record.get("name", "")).casefold():
+                                sprite = candidate
+
+                        if sprite is None:
+                            wanted_name = str(record.get("name", "")).casefold()
+                            sprite = next(
+                                (
+                                    candidate
+                                    for candidate in sheet.sprites
+                                    if candidate.name.casefold() == wanted_name
+                                ),
+                                None,
+                            )
+
+                        if sprite is None:
+                            summary.skipped_missing += 1
+                            progress.update(1)
+                            continue
+
+                        if not sprite.valid:
+                            summary.skipped_invalid += 1
+                            progress.update(1)
+                            continue
+
+                        x2 = sprite.x_pos + sprite.width
+                        y2 = sprite.y_pos + sprite.height
+
+                        if not (
+                            0 <= sprite.x_pos < image.width
+                            and 0 <= sprite.y_pos < image.height
+                            and sprite.x_pos < x2 <= image.width
+                            and sprite.y_pos < y2 <= image.height
+                            and sprite.total_width > 0
+                            and sprite.total_height > 0
+                            and sprite.x_offset + sprite.width <= sprite.total_width
+                            and sprite.y_offset + sprite.height <= sprite.total_height
+                        ):
+                            summary.skipped_bounds += 1
+                            progress.update(1)
+                            continue
+
+                        output_name = output_names.get(
+                            record.get("id", ""),
+                            record.get("file_name") or f"{sprite.name}.png",
+                        )
+                        output_name = Path(output_name).name
+                        suffix = Path(output_name).suffix or ".png"
+                        stem = _safe_stem(Path(output_name).stem, "sprite")
+                        output_path = output_dir / f"{stem}{suffix}"
+
+                        if output_path.exists() and not overwrite:
+                            summary.skipped_existing += 1
+                            progress.update(1)
+                            continue
+
+                        crop = image.crop((sprite.x_pos, sprite.y_pos, x2, y2))
+                        output_image = Image.new(
+                            "RGBA",
+                            (sprite.total_width, sprite.total_height),
+                            (0, 0, 0, 0),
+                        )
+                        output_image.paste(crop, (sprite.x_offset, sprite.y_offset))
+                        output_image.save(output_path, format="PNG")
+                        output_image.close()
+                        crop.close()
+
+                        summary.extracted += 1
+                        progress.update(1)
+                finally:
+                    image.close()
+    finally:
+        progress.close()
+
+    return summary
 
 
 def extract_all_sprites(folder_level: int = 2) -> None:

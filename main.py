@@ -251,7 +251,7 @@ menu_structure = {
             "1": {
                 "module": "tools.update_icons",
                 "name": "Update icons",
-                "description": "Updates 'texture_names.json' (used for various scripts) adding new icons into a folder. Ensure .pack icons are added manually to 'resources/icons/'.",
+                "description": "Updates 'texture_names.json' and extracts newly discovered Item/Build icons.",
             },
             "2": {
                 "module": "tools.vehicle_render_data",
