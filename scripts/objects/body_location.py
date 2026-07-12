@@ -114,7 +114,7 @@ class BodyLocation:
                     break
                 elif user_input == "y":
                     echo.info("Regenerating item body location cache...")
-                    java_parser.update_item_body_locations(is_update=True)
+                    java_parser.update_item_body_locations()
                     data = load_cache(ITEM_BODY_LOCATIONS_PATH, "Item body location", suppress=True)
                     break
                 else:

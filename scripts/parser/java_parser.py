@@ -7,6 +7,16 @@ from scripts.utils import echo
 
 CLASS_RE = re.compile(r'public\s+static\s+class\s+(\w+)')
 
+JAVA_FLOAT_PATTERN = r'[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?[fFdD]?'
+COLOR_RE = re.compile(
+    rf'public\s+static\s+final\s+Color\s+\w+\s*=\s*'
+    rf'addColor\(\s*"([^"]+)"\s*,\s*new\s+Color\(\s*'
+    rf'({JAVA_FLOAT_PATTERN})\s*,\s*'
+    rf'({JAVA_FLOAT_PATTERN})\s*,\s*'
+    rf'({JAVA_FLOAT_PATTERN})\s*'
+    rf'\)\s*\)\s*;'
+)
+
 
 def parse_game_version()  -> list[int, int, int]:
     """Parse game version from Core.java."""
@@ -73,6 +83,23 @@ def parse_static_registry(java_path: Path, java_type: str, *, grouped: bool = Fa
         
     return data
 
+
+def parse_color_reference(java_path: Path) -> dict:
+    """Parse the named colors declared in Colors.java."""
+    text = java_path.read_text(encoding="utf-8")
+    colors = {}
+
+    for match in COLOR_RE.finditer(text):
+        name, red, green, blue = match.groups()
+        colors[name] = [
+            float(red.rstrip("fFdD")),
+            float(green.rstrip("fFdD")),
+            float(blue.rstrip("fFdD")),
+        ]
+
+    return {"colors": colors}
+
+
 def process_registry(
     java_type: str,
     java_path: Path,
@@ -115,7 +142,7 @@ def process_registry(
     
     return data
 
-def update_item_keys(is_update: bool = False) -> dict:
+def update_item_keys(is_update: bool = True) -> dict:
     java_path = Path(DECOMPILED_DIR, "source/zombie/scripting/objects", "ItemKey.java")
     return process_registry(
         java_type = "ItemKey",
@@ -127,7 +154,7 @@ def update_item_keys(is_update: bool = False) -> dict:
     )
     
 
-def update_item_body_locations(is_update: bool = False) -> dict:
+def update_item_body_locations(is_update: bool = True) -> dict:
     java_path = Path(DECOMPILED_DIR, "source/zombie/scripting/objects", "ItemBodyLocation.java")
     return process_registry(
         java_type = "ItemBodyLocation",
@@ -137,9 +164,55 @@ def update_item_body_locations(is_update: bool = False) -> dict:
         is_update = is_update
     )
 
+
+def update_color_reference(is_update: bool = True) -> dict:
+    java_path = Path(DECOMPILED_DIR, "source/zombie/core", "Colors.java")
+    output_path = Path(OUTPUT_DIR) / "color_reference.json"
+    res_path = Path(ITEM_KEY_PATH).parent / "color_reference.json"
+    label = "Color reference"
+
+    if not java_path.exists():
+        echo.error(f"Java file '{java_path}' does not exist. Ensure you have setup and run the ZomboidDecompiler.")
+        return {}
+
+    echo.info(f"Parsing standard colour declarations from '{java_path}'...")
+
+    data = parse_color_reference(java_path)
+    if not data["colors"]:
+        echo.error(f"Could not find standard colour declarations in '{java_path}'.")
+        return {}
+
+    cache.save_cache(data, output_path.name, data_dir=output_path.parent, suppress=True)
+    echo.success(f"{label} parsed and saved to '{output_path}'.")
+
+    while True:
+        user_input = None
+        if not is_update:
+            user_input = input(f"Do you want to update the '{label}' resource file? (Y/N)\n> ").strip().lower()
+
+        if user_input == "y" or is_update:
+            echo.info(f"Updating {label} resource file at '{res_path}'...")
+            cache.save_cache(data, res_path.name, data_dir=res_path.parent, suppress=True)
+            echo.success(f"{label} resource file updated.")
+            break
+
+        if user_input == "n":
+            break
+
+        echo.error("Invalid input. Please enter 'Y' or 'N'.")
+
+    return data
+
+def update_resources():
+    update_item_keys()
+    update_item_body_locations()
+    update_color_reference()
+
+
 def main(is_update: bool = False):
-    update_item_keys(is_update=is_update)
-    update_item_body_locations(is_update=is_update)
+    if is_update:
+        update_resources()
+
 
 if __name__ == "__main__":
     main()

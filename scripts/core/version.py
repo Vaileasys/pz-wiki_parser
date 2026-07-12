@@ -1,10 +1,9 @@
 from pathlib import Path
 import re
 
-from scripts.core import config_manager as config, logger
-from scripts.core import file_loading
-from scripts.utils import color, echo
-from scripts.core.constants import DECOMPILED_DIR
+from scripts.core import config_manager as config, logger, file_loading
+from scripts.parser.java_parser import update_resources
+from scripts.utils import color
 
 SCRIPTS_DIR = Path(file_loading.get_scripts_dir())
 LUA_DIR = Path(file_loading.get_lua_dir())
@@ -55,6 +54,7 @@ class Version:
         cls.set(config.get_version())
         current = diff.scan_game_snapshot([SCRIPTS_DIR])
         previous = diff.load_snapshot(cls._version, name="scripts")
+        decompiled = False
 
         if current != previous:
             print(color.warning("Detected a potential version change."))
@@ -79,8 +79,12 @@ class Version:
                 
             if choice == "1":
                 from scripts.core.runner import run_zomboid_decompiler
-                run_zomboid_decompiler()
-                new_version = cls.parsed_version(update=True)
+                failed = run_zomboid_decompiler()
+                if not failed:
+                    new_version = cls.parsed_version(update=True)
+                    decompiled = True
+                else:
+                    new_version = None
             elif choice == "2":
                 new_version = input("Enter a new version number:\n> ").strip()
             else:
@@ -102,6 +106,10 @@ class Version:
             else:
                 print("Version update skipped.")
                 diff.save_snapshot(current, cls._version, "scripts")
+            
+            if new_version and decompiled:
+                update_resources()
+                
         else:
             diff.save_snapshot(current, cls._version, "scripts")
 

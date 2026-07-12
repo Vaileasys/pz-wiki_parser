@@ -433,7 +433,7 @@ class Item:
                     break
                 elif user_input == "y":
                     echo.info("Regenerating item key cache...")
-                    java_parser.update_item_keys(is_update=True)
+                    java_parser.update_item_keys()
                     data = load_cache(ITEM_KEY_PATH, "Item key", suppress=True)
                     break
                 else:

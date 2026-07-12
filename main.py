@@ -290,9 +290,9 @@ menu_structure = {
             },
             "9": {
                 "module": "scripts.parser.java_parser",
-                "function": "update_item_keys",
-                "name": "Generate item keys",
-                "description": "Parses itemKey declarations from the game's Java files.",
+                "function": "update_resources",
+                "name": "Update resources",
+                "description": "Updates item keys, item body locations, and color references from the game's Java files.",
             },
             "10": {
                 "module": "scripts.tools.page_name_checker",
