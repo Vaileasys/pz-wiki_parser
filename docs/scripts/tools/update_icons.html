@@ -27,27 +27,88 @@
 <div class="doc-main"><article class="content">
 <h1>update_icons.py</h1>
 <p class="folder-link">Folder: <a href="index.html">scripts/tools</a></p>
+<div class="summary"><p>Update the icon name resource and extract newly discovered icons.</p>
+<p>Pack icons are located through the sprite index and extracted directly from the<br>Project Zomboid `texturepacks` directory.</p></div>
 <h2 id="functions">Functions</h2>
 <section class="member">
-<code class="signature">load_existing_textures()</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L18">source</a>
+<code class="signature">load_existing_textures() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L36">source</a>
+<p>Load the existing texture name resource.</p>
 </section>
 <section class="member">
-<code class="signature">get_texture_names(textures_dir: Path, folder_key: str = None, prefix_blacklist: list = [], prefix_whitelist: list = [])</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L24">source</a>
-<p>Extracts all texture names from the directory, categorised by prefix.<br>Returns a dictionary of all textures, grouped by prefix or folder key.</p>
+<code class="signature">_ensure_png(name: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L43">source</a>
+<p>Return a filename ending in ``.png``.</p>
 </section>
 <section class="member">
-<code class="signature">copy_new_textures(texture_dir: Path)</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L71">source</a>
+<code class="signature">_stored_name(category: str, source_name: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L48">source</a>
+<p>Return the filename format stored in ``texture_names.json``.</p>
 </section>
 <section class="member">
-<code class="signature">save_new_texture_data()</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L92">source</a>
+<code class="signature">_category_for_filename(file_name: str) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L58">source</a>
+<p>Return the supported icon category for a loose texture filename.</p>
 </section>
 <section class="member">
-<code class="signature">main()</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L103">source</a>
+<code class="signature">_source_score(source: dict) -&gt; tuple[int, int]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L70">source</a>
+<p>Return a sortable preference score for an icon source.</p>
+</section>
+<section class="member">
+<code class="signature">_add_source(sources: dict[str, dict[str, dict]], category: str, stored_name: str, source: dict) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L80">source</a>
+<p>Add or replace the preferred source for one stored filename.</p>
+</section>
+<section class="member">
+<code class="signature">_collect_pack_sources(index: dict, sources: dict[str, dict[str, dict]]) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L95">source</a>
+<p>Add preferred Item and Build sprites from the pack index.</p>
+</section>
+<section class="member">
+<code class="signature">_collect_loose_sources(sources: dict[str, dict[str, dict]]) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L132">source</a>
+<p>Add loose Item and Build textures from ``media/textures``.</p>
+</section>
+<section class="member">
+<code class="signature">collect_icon_sources(index: dict) -&gt; dict[str, dict[str, dict]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L156">source</a>
+<p>Return the preferred current source for every Item and Build icon.</p>
+</section>
+<section class="member">
+<code class="signature">find_new_icons(textures_data: dict, sources: dict[str, dict[str, dict]]) -&gt; dict[str, list[dict]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L164">source</a>
+<p>Find source records not yet present in ``texture_names.json``.</p>
+</section>
+<section class="member">
+<code class="signature">_add_extracted_names(textures_data: dict, new_textures: dict[str, list[str]]) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L191">source</a>
+<p>Add successfully written filenames to the texture-name resource.</p>
+</section>
+<section class="member">
+<code class="signature">_prepare_new_texture_dir() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L208">source</a>
+<p>Clear output from the previous update run.</p>
+</section>
+<section class="member">
+<code class="signature">extract_new_icons(new_sources: dict[str, list[dict]]) -&gt; dict[str, list[str]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L215">source</a>
+<p>Copy or extract all newly discovered icons.</p>
+</section>
+<section class="member">
+<code class="signature">_reset_loaded_item_icon_cache() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L278">source</a>
+<p>Reset Item&#x27;s icon list when it is already loaded in this process.</p>
+</section>
+<section class="member">
+<code class="signature">update_icons() -&gt; dict[str, list[str]]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L287">source</a>
+<p>Update texture names and extract only newly discovered icons.</p>
+</section>
+<section class="member">
+<code class="signature">main() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/tools/update_icons.py#L311">source</a>
+<p>Run the icon update workflow.</p>
 </section>
 </article></div>
 <div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
