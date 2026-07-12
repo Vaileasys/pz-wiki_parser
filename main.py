@@ -279,22 +279,27 @@ menu_structure = {
                 "description": "Process outfit images: crop, remove greenscreen background, and output to images folder.",
             },
             "7": {
+                "module": "scripts.sprites.sprite_extractor",
+                "name": "Sprite extractor",
+                "description": "Extract sprites from .pack files.",
+            },
+            "8": {
                 "module": "scripts.tiles.tiles_stitcher",
                 "name": "Tile stitcher",
                 "description": "Stitch tile sprites.",
             },
-            "8": {
+            "9": {
                 "module": "scripts.tools.manual_tile_stitcher",
                 "name": "Manual tile stitcher",
                 "description": "Manually stitch tile sprites.",
             },
-            "9": {
+            "10": {
                 "module": "scripts.parser.java_parser",
                 "function": "update_resources",
                 "name": "Update resources",
                 "description": "Updates item keys, item body locations, and color references from the game's Java files.",
             },
-            "10": {
+            "11": {
                 "module": "scripts.tools.page_name_checker",
                 "name": "Page name checker",
                 "description": "Compare item page names with item names and report differences.",
