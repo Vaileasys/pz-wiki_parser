@@ -289,7 +289,8 @@ menu_structure = {
                 "description": "Manually stitch tile sprites.",
             },
             "9": {
-                "module": "scripts.parser.item_key_parser",
+                "module": "scripts.parser.java_parser",
+                "function": "update_item_keys",
                 "name": "Generate item keys",
                 "description": "Parses itemKey declarations from the game's Java files.",
             },
@@ -401,19 +402,19 @@ def display_menu(menu, is_root=False, title=None):
         print("Q: Quit")
 
 
-def handle_module(module_name, user_input=None):
+def handle_module(module_name, function="main", user_input=None):
     try:
         module = importlib.import_module(module_name)
         if config.get_debug_mode():
             cache.clear_cache()
         if user_input is not None:
-            module.main(user_input)
+            getattr(module, function)(user_input)
         else:
-            module.main()
+            getattr(module, function)()
     except ImportError as error:
         echo.error(f"Error importing module {module_name}: {error}")
     except AttributeError as error:
-        echo.error(f"Module {module_name} does not have a main() function: {error}")
+        echo.error(f"Module {module_name} does not have a {function}() function: {error}")
     except Exception as error:
         echo.error(f"An error occurred while running {module_name}: {error}")
 
@@ -469,7 +470,7 @@ def navigate_menu(menu, is_root=False, title=None):
                 print_header(title)
                 handle_module("scripts.core.setup")
             elif "module" in selected:
-                handle_module(selected["module"])
+                handle_module(selected.get("module"), selected.get("function", "main"))
             elif subs:
                 navigate_menu(subs, title=name)
         else:
