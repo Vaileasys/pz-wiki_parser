@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sprite_indexer.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../recipes/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="sprite_extractor.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="../tiles/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="sprite_extractor.html">sprite_extractor.py</a>
+<a href="sprite_indexer.html">sprite_indexer.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>sprite_indexer.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/sprites</a></p>
+<div class="summary"><p>Build a versioned index of sprites stored in Project Zomboid .pack files.</p>
+<p>The generated index is used to locate sprites by name, category, pack, and spritesheet without extracting every image.</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">_new_index() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_indexer.py#L186">source</a>
+<p>Return an empty sprite index structure.</p>
+</section>
+<section class="member">
+<code class="signature">_get_pack_priority(pack_name: str, domain: str, scale: str | None) -&gt; int</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_indexer.py#L226">source</a>
+<p>Return the lookup priority for a pack.</p>
+</section>
+<section class="member">
+<code class="signature">_classify_sprite(pack_name: str, sprite_name: str) -&gt; tuple[str, str | None, str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_indexer.py#L240">source</a>
+<p>Return the domain, scale, and category for one sprite.</p>
+</section>
+<section class="member">
+<code class="signature">_add_to_indexes(index: dict, sprite: SpriteIndex) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_indexer.py#L262">source</a>
+<p>Store a sprite record and update its lookup indexes.</p>
+</section>
+<section class="member">
+<code class="signature">_load_index_cache() -&gt; dict | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_indexer.py#L280">source</a>
+<p>Load the sprite cache when its version and schema are current.</p>
+</section>
+<section class="member">
+<code class="signature">_save_index_cache(index: dict) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_indexer.py#L302">source</a>
+<p>Save the sprite index through the shared cache service.</p>
+</section>
+<section class="member">
+<code class="signature">get_preferred_sprite(index: dict, name: str, *, domain: str | None = None, scale: str | None = None, category: str | None = None, include_legacy: bool = True) -&gt; dict | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_indexer.py#L307">source</a>
+<p>Return the preferred sprite record for a name.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>index</dt>
+<dd>Loaded sprite index.</dd>
+<dt>name</dt>
+<dd>Sprite name, with or without a ``.png`` extension.</dd>
+<dt>domain</dt>
+<dd>Optional domain filter, such as ``&quot;ui&quot;`` or ``&quot;tiles&quot;``.</dd>
+<dt>scale</dt>
+<dd>Optional explicit tile scale, such as ``&quot;1x&quot;`` or ``&quot;2x&quot;``.</dd>
+<dt>category</dt>
+<dd>Optional category filter, such as ``&quot;items&quot;`` or ``&quot;trees&quot;``.</dd>
+<dt>include_legacy</dt>
+<dd>Include legacy entries in normal priority sorting.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">get_sprite_names(index: dict, sprite_ids: list[str], *, include_legacy: bool = True) -&gt; set[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_indexer.py#L382">source</a>
+<p>Return normalised names for a list of indexed sprite IDs.</p>
+</section>
+<section class="member">
+<code class="signature">analyse_pack(pack: Pack, index: dict) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_indexer.py#L408">source</a>
+<p>Add one parsed pack to an existing sprite index.</p>
+</section>
+<section class="member">
+<code class="signature">get_sprite_index(force: bool = False) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_indexer.py#L507">source</a>
+<p>Build or load the versioned Project Zomboid sprite index.</p>
+</section>
+<section class="member">
+<code class="signature">analyse_sprites(force: bool = False) -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_indexer.py#L543">source</a>
+<p>Compatibility wrapper for :func:`get_sprite_index`.</p>
+</section>
+<section class="member">
+<code class="signature">main() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_indexer.py#L548">source</a>
+<p>Rebuild the sprite index cache.</p>
+</section>
+<h2 id="classes">Classes</h2>
+<h3 id="class-spriteindex">SpriteIndex</h3>
+<div class="summary"><p>Location and classification of one sprite inside a texture pack.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">from_entry(sprite_id: str, sprite: SpriteEntry, *, pack_name: str, pack_file: str, sheet_name: str, sheet_index: int, entry_index: int, domain: str, category: str, scale: str | None, priority: int, source_status: str) -&gt; &#x27;SpriteIndex&#x27;</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_indexer.py#L134">source</a>
+<p>Create an index from parsed sprite metadata.</p>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">to_dict() -&gt; dict</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_indexer.py#L181">source</a>
+<p>Return a JSON-serialisable sprite record.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-spriteindex">SpriteIndex</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

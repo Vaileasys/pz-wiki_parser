@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sprite_extractor.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../recipes/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="sprite_indexer.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../tiles/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="sprite_extractor.html">sprite_extractor.py</a>
+<a href="sprite_indexer.html">sprite_indexer.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>sprite_extractor.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/sprites</a></p>
+<div class="summary"><p>Extract sprites and cache metadata from Project Zomboid .pack files.</p>
+<p>Pack parsing is handled by ``scripts.parser.pack_parser``.</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">_safe_stem(name: str, fallback: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_extractor.py#L49">source</a>
+<p>Return a Windows-safe filename or directory name.</p>
+</section>
+<section class="member">
+<code class="signature">_sheet_image(pack: Pack, sheet: PackSheet) -&gt; Image.Image</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_extractor.py#L62">source</a>
+<p>Load one embedded pack sheet as an RGBA image.</p>
+</section>
+<section class="member">
+<code class="signature">_sprite_output_path(sprites_dir: Path, pack: Pack, sheet: PackSheet, sprite: SpriteEntry, fallback: str, folder_level: int) -&gt; Path</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_extractor.py#L68">source</a>
+<p>Return the output path for one sprite.</p>
+<p>Folder levels:<br>    0: output/sprites/&lt;sprite&gt;.png<br>    1: output/sprites/&lt;pack&gt;/&lt;sprite&gt;.png<br>    2: output/sprites/&lt;pack&gt;/&lt;sheet&gt;/&lt;sprite&gt;.png</p>
+</section>
+<section class="member">
+<code class="signature">_relative_output_path(path: Path) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_extractor.py#L96">source</a>
+<p>Return a portable output path for metadata.</p>
+</section>
+<section class="member">
+<code class="signature">_write_json(path: Path, data: dict) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_extractor.py#L104">source</a>
+<p>Write JSON atomically.</p>
+</section>
+<section class="member">
+<code class="signature">extract_sprites(pack: Pack, folder_level: int = 2, overwrite: bool = True) -&gt; SpriteExtractionSummary</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_extractor.py#L116">source</a>
+<p>Extract every valid sprite from one parsed pack.</p>
+</section>
+<section class="member">
+<code class="signature">write_pack_metadata(pack: Pack) -&gt; Path</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_extractor.py#L209">source</a>
+<p>Write metadata for one parsed pack.</p>
+</section>
+<section class="member">
+<code class="signature">extract_pack_sprites(pack_path: str | Path, folder_level: int = 2) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_extractor.py#L223">source</a>
+<p>Parse one pack, extract its sprites, and write its metadata.</p>
+</section>
+<section class="member">
+<code class="signature">extract_indexed_sprites(sprite_records: list[dict], output_dir: str | Path, *, output_names: dict[str, str] | None = None, overwrite: bool = True) -&gt; SpriteExtractionSummary</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_extractor.py#L238">source</a>
+<p>Extract selected sprites using the sprite index.</p>
+<h5>Args</h5>
+<dl class="fields">
+<dt>sprite_records</dt>
+<dd>Sprite records from ``sprite_index[&quot;sprites&quot;]``.</dd>
+<dt>output_dir</dt>
+<dd>Flat output directory for the selected images.</dd>
+<dt>output_names</dt>
+<dd>Optional mapping of sprite ID to destination filename.</dd>
+<dt>overwrite</dt>
+<dd>Replace existing files when True.</dd>
+</dl>
+</section>
+<section class="member">
+<code class="signature">extract_all_sprites(folder_level: int = 2) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_extractor.py#L385">source</a>
+<p>Extract sprites from every Project Zomboid texture pack.</p>
+<p>Folder levels:<br>    0: completely flat<br>    1: pack folder<br>    2: pack folder and spritesheet folder</p>
+</section>
+<section class="member">
+<code class="signature">main() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/sprites/sprite_extractor.py#L422">source</a>
+<p>Extract all sprites using pack and spritesheet folders.</p>
+</section>
+<h2 id="classes">Classes</h2>
+<h3 id="class-spriteextractionsummary">SpriteExtractionSummary</h3>
+<div class="summary"><p>Counters for one completed sprite extraction.</p></div>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-spriteextractionsummary">SpriteExtractionSummary</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>
