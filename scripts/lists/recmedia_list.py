@@ -61,7 +61,7 @@ def generate_data(guid: str, rm_data: dict):
             skills.append(f"{link(code_title)}: {format_positive(value)}")
         if code_type == "recipe":
 #            recipes.append(f"{code_title.replace('%1', value)}")
-            recipes.append(value)
+            recipes.append(Translate.get(value))
         elif code_type == "moodle":
             moodle_list.append(f"{code_title}: {format_positive(value)}")
             moodles[code_id] = format_positive(value)
