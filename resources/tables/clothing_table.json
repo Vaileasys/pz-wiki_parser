@@ -229,7 +229,7 @@
     },
     "body_locations": {
         "Armor": {
-            "body_location": ["Calf_Left", "Calf_Left_Texture", "Calf_Right", "Calf_Right_Texture", "ShoulderpadLeft", "ShoulderpadRight", "Thigh_Right", "Thigh_Left", "Cuirass", "Gorget", "TorsoExtraVestBullet", "ForeArm_Right", "ForeArm_Left", "Elbow_Right", "Elbow_Left", "ShoulderpadLeft", "ShoulderpadRight", "SportShoulderpad", "SportShoulderpadOnTop", "LeftArm", "RightArm", "Knee_Right", "Knee_Left", "Codpiece"],
+            "body_location": ["Calf_Left", "Calf_Left_Texture", "Calf_Right", "Calf_Right_Texture", "ShoulderpadLeft", "ShoulderpadRight", "Thigh_Right", "Thigh_Left", "Cuirass", "Gorget", "TorsoExtraVestBullet", "ForeArm_Right", "ForeArm_Left", "Elbow_Right", "Elbow_Left", "ShoulderpadLeft", "ShoulderpadRight", "SportShoulderpad", "SportShoulderpadOnTop", "LeftArm", "RightArm", "Knee_Right", "Knee_Left", "Codpiece", "Gaiter_Left", "Gaiter_Right"],
             "table": "armor"
         },
         "Long underwear": {
@@ -273,7 +273,7 @@
             "table": "torso"
         },
         "Pants": {
-            "body_location": ["Pants", "ShortPants"],
+            "body_location": ["Pants", "ShortPants", "Pants_Skinny"],
             "table": "legs"
         },
         "Skirts and shorts": {
@@ -341,7 +341,7 @@
             "table": "normal"
         },
         "Belts": {
-            "body_location": ["Belt", "BeltExtra", "AmmoStrap", "SCBA", "SCBAnotank", "AnkleHolster", "Webbing", "ShoulderHolster", "FannyPackFront", "FannyPackBack"],
+            "body_location": ["Belt", "BeltExtra", "AmmoStrap", "SCBA", "SCBAnotank", "AnkleHolster", "Webbing", "ShoulderHolster", "FannyPackFront", "FannyPackBack", "Satchel"],
             "table": "belt"
         },
         "Back": {
@@ -349,7 +349,7 @@
             "table": "back"
         },
         "Neck": {
-            "body_location": ["Neck", "Scarf"],
+            "body_location": ["Neck", "Neck_Texture", "Scarf"],
             "table": "head"
         },
         "Necklace": {
