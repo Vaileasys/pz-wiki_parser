@@ -1251,9 +1251,9 @@ class Item:
         return self._page
 
     @property
-    def has_page(self):
+    def has_page(self) -> bool:
         if self._has_page is None:
-            self.name
+            self.page
         return self._has_page
 
     @property
