@@ -55,7 +55,7 @@ class WeaponGroups(ItemGroups):
     }
     
     @classmethod
-    def classify(cls, item: Item, **kwargs) -> str | None:
+    def classify(cls, item: "Item", **kwargs) -> str | None:
         """
         Classify an item as a weapon group type.
 
