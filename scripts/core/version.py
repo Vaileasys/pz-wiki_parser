@@ -2,7 +2,6 @@ from pathlib import Path
 import re
 
 from scripts.core import config_manager as config, logger, file_loading
-from scripts.parser.java_parser import update_resources
 from scripts.utils import color
 
 SCRIPTS_DIR = Path(file_loading.get_scripts_dir())
@@ -108,6 +107,8 @@ class Version:
                 diff.save_snapshot(current, cls._version, "scripts")
             
             if new_version and decompiled:
+                from scripts.parser.java_parser import update_resources
+
                 update_resources()
                 
         else:
