@@ -53,22 +53,28 @@
 <p class="folder-link">Folder: <a href="index.html">scripts/items/lists</a></p>
 <h2 id="functions">Functions</h2>
 <section class="member">
-<code class="signature">get_body_location(body_location: str)</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/lists/item_list_clothing.py#L15">source</a>
-<p>Gets the section and table for a BodyLocation</p>
+<code class="signature">_find_group(item: Item, location_id: str | None)</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/lists/item_list_clothing.py#L20">source</a>
+<p>Return the first clothing/accessory group that owns the item.</p>
+</section>
+<section class="member">
+<code class="signature">_get_ordered_groups()</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/lists/item_list_clothing.py#L29">source</a>
+<p>Combine both classifiers using clothing_table.json display order.</p>
 </section>
 <section class="member">
 <code class="signature">generate_data(item: Item)</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/lists/item_list_clothing.py#L29">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/lists/item_list_clothing.py#L39">source</a>
 <p>Gets the item&#x27;s properties based on the BodyLocation as defined for its table</p>
 </section>
 <section class="member">
 <code class="signature">find_items()</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/lists/item_list_clothing.py#L202">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/lists/item_list_clothing.py#L224">source</a>
+<p>Collect clothing items grouped by their configured clothing section.</p>
 </section>
 <section class="member">
 <code class="signature">main()</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/lists/item_list_clothing.py#L273">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/lists/item_list_clothing.py#L282">source</a>
 </section>
 </article></div>
 <div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">

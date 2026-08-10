@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>clothing_groups.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../../index.html"><img class="nav-icon" src="../../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../index.html"><img class="nav-icon" src="../../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="ammo_groups.html"><img class="nav-icon" src="../../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="weapon_groups.html"><img class="nav-icon" src="../../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../lists/index.html"><img class="nav-icon" src="../../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="ammo_groups.html">ammo_groups.py</a>
+<a href="clothing_groups.html">clothing_groups.py</a>
+<a href="weapon_groups.html">weapon_groups.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>clothing_groups.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/items/groups</a></p>
+<div class="summary"><p>Body-location groups shared by clothing lists and wearable navboxes.</p>
+<p>The public grouping classes are intentionally separate:</p>
+<p>* :class:`ClothingGroups` owns garments, armour, footwear, tails, and Other.<br>* :class:`AccessoryGroups` owns the accessory sections used by the wiki.</p>
+<p>Both classes read the same ``clothing_table.json`` resource so the combined<br>clothing item list and the two navboxes use one body-location mapping.</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">is_wearable_item(item: &#x27;Item&#x27;) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/clothing_groups.py#L57">source</a>
+<p>Return whether an item belongs in clothing/accessory outputs.</p>
+</section>
+<section class="member">
+<code class="signature">get_wearable_location_id(item: &#x27;Item&#x27;) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/clothing_groups.py#L70">source</a>
+<p>Return the effective BodyLocation or CanBeEquipped location ID.</p>
+</section>
+<h2 id="classes">Classes</h2>
+<h3 id="class-bodylocationgroups">_BodyLocationGroups</h3>
+<div class="summary"><p>Private resource-backed implementation shared by the two classifiers.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_includes_group(display_name: str) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/clothing_groups.py#L105">source</a>
+<p>Return whether the concrete classifier owns a resource section.</p>
+</section>
+<section class="member">
+<code class="signature">_ensure_groups_loaded() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/clothing_groups.py#L115">source</a>
+<p>Load this classifier&#x27;s groups from the clothing-table resource.</p>
+</section>
+<section class="member">
+<code class="signature">reset() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/clothing_groups.py#L172">source</a>
+<p>Clear resource-derived state so it reloads on next access.</p>
+</section>
+<section class="member">
+<code class="signature">classify_location(location_id: str | None) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/clothing_groups.py#L180">source</a>
+<p>Classify a body location owned by this grouping class.</p>
+<p>Locations owned by the other classifier return ``None``. A genuinely<br>unknown location falls back to ``DEFAULT_GROUP_ID`` when configured.</p>
+</section>
+<section class="member">
+<code class="signature">classify(item: &#x27;Item&#x27;, **kwargs) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/clothing_groups.py#L202">source</a>
+<p>Classify an item using BodyLocation or CanBeEquipped.</p>
+</section>
+<section class="member">
+<code class="signature">is_known_body_location(location_id: str | None) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/clothing_groups.py#L208">source</a>
+<p>Return whether clothing_table.json maps a body location anywhere.</p>
+</section>
+<section class="member">
+<code class="signature">get_table_type(type_id: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/clothing_groups.py#L217">source</a>
+<p>Return the clothing-table layout configured for a group.</p>
+</section>
+<section class="member">
+<code class="signature">get_section_order(include_unordered: bool = False) -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/clothing_groups.py#L225">source</a>
+<p>Return explicit wiki order or the clothing resource order.</p>
+</section>
+<h4>Static Methods</h4>
+<section class="member">
+<code class="signature">_normalise_type_id(display_name: str) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/clothing_groups.py#L99">source</a>
+<p>Convert a section heading into a stable snake-case group ID.</p>
+</section>
+<h4>Object Methods</h4>
+<section class="member">
+<code class="signature">__init_subclass__(**kwargs) -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/clothing_groups.py#L90">source</a>
+<p>Give each public classifier independent lazy-loaded state.</p>
+</section>
+<h3 id="class-clothinggroups">ClothingGroups</h3>
+<div class="summary"><p>Classify garments, armour, footwear, tails, and unknown locations.</p></div>
+<h3 id="class-accessorygroups">AccessoryGroups</h3>
+<div class="summary"><p>Classify the accessory sections used by the wiki.</p></div>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-bodylocationgroups">_BodyLocationGroups</a>
+<a class="sidebar-child" href="#class-clothinggroups">ClothingGroups</a>
+<a class="sidebar-child" href="#class-accessorygroups">AccessoryGroups</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>

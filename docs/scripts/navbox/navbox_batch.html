@@ -8,14 +8,16 @@
 </head>
 <body>
 <main class="page">
-<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../misc/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="navbox.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="navbox_outfits.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../objects/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../index.html"><img class="nav-icon" src="../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../misc/index.html"><img class="nav-icon" src="../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="navbox_accessories.html"><img class="nav-icon" src="../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="navbox_clothing.html"><img class="nav-icon" src="../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../objects/index.html"><img class="nav-icon" src="../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
 <div class="doc-layout">
 <div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
 <h2>Folder</h2>
 <nav class="sidebar-nav">
 <a href="index.html">Folder Index</a>
 <a href="navbox.html">navbox.py</a>
+<a href="navbox_accessories.html">navbox_accessories.py</a>
 <a href="navbox_batch.html">navbox_batch.py</a>
+<a href="navbox_clothing.html">navbox_clothing.py</a>
 <a href="navbox_outfits.html">navbox_outfits.py</a>
 <a href="navbox_page_index.html">navbox_page_index.py</a>
 <a href="navbox_schema.html">navbox_schema.py</a>
@@ -30,32 +32,32 @@
 <h2 id="functions">Functions</h2>
 <section class="member">
 <code class="signature">get_output_dir() -&gt; Path</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_batch.py#L34">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_batch.py#L46">source</a>
 <p>Return the navbox output directory for the active language.</p>
 </section>
 <section class="member">
 <code class="signature">display_menu(start: int = 0, page_size: int = 10, run_directly: bool = False) -&gt; None</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_batch.py#L39">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_batch.py#L51">source</a>
 <p>Display a paginated menu of registered navbox generators.</p>
 </section>
 <section class="member">
 <code class="signature">_load_module(module_path: str) -&gt; ModuleType</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_batch.py#L66">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_batch.py#L78">source</a>
 <p>Import a registered navbox module and validate its entry point.</p>
 </section>
 <section class="member">
 <code class="signature">run_module(module_data: dict[str, str]) -&gt; Path</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_batch.py#L78">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_batch.py#L90">source</a>
 <p>Run one registered navbox module and return its generated file path.</p>
 </section>
 <section class="member">
 <code class="signature">run_all_modules() -&gt; tuple[list[Path], Path]</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_batch.py#L102">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_batch.py#L114">source</a>
 <p>Run all registered navboxes, then generate the page-to-navbox index.</p>
 </section>
 <section class="member">
 <code class="signature">main(run_directly: bool = False) -&gt; None</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_batch.py#L139">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_batch.py#L153">source</a>
 <p>Handle menu input for individual or complete navbox generation.</p>
 </section>
 </article></div>
