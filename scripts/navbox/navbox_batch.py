@@ -28,6 +28,18 @@ MODULES: dict[str, dict[str, str]] = {
         "description": "navbox for weapons, ammunition and weapon-part pages.",
         "output_filename": "weapons.json",
     },
+    "3": {
+        "module": "scripts.navbox.navbox_clothing",
+        "name": "Clothing",
+        "description": "navbox for garment and protective clothing pages.",
+        "output_filename": "clothing.json",
+    },
+    "4": {
+        "module": "scripts.navbox.navbox_accessories",
+        "name": "Accessories",
+        "description": "navbox for worn accessories, jewellery, belts and bags.",
+        "output_filename": "accessories.json",
+    },
 }
 
 
@@ -116,19 +128,21 @@ def run_all_modules() -> tuple[list[Path], Path]:
     echo.write("\n[Running] Page navbox index", color.warning)
     index_path = generate_page_navbox_index(navbox_paths=generated_paths)
 
+    print("")
+
     if failures:
         failed_names = ", ".join(name for name, _exc in failures)
-        raise RuntimeError(
+        echo.warning(
             f"Navbox batch completed with {len(failures)} failure(s): "
             f"{failed_names}. The page index contains only the "
             f"{len(generated_paths)} successful navbox output(s)."
         )
+    else:
+        echo.success(
+            f"Finished generating navboxes and the page index. "
+            f"Files saved to '{get_output_dir()}'"
+        )
 
-    print("")
-    echo.success(
-        f"Finished generating navboxes and the page index. "
-        f"Files saved to '{get_output_dir()}'"
-    )
     return generated_paths, index_path
 
 
