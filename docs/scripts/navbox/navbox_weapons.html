@@ -15,7 +15,9 @@
 <nav class="sidebar-nav">
 <a href="index.html">Folder Index</a>
 <a href="navbox.html">navbox.py</a>
+<a href="navbox_batch.html">navbox_batch.py</a>
 <a href="navbox_outfits.html">navbox_outfits.py</a>
+<a href="navbox_page_index.html">navbox_page_index.py</a>
 <a href="navbox_schema.html">navbox_schema.py</a>
 <a href="navbox_weapons.html">navbox_weapons.py</a>
 </nav>
@@ -23,26 +25,26 @@
 <div class="doc-main"><article class="content">
 <h1>navbox_weapons.py</h1>
 <p class="folder-link">Folder: <a href="index.html">scripts/navbox</a></p>
+<div class="summary"><p>Generate the weapon navbox.</p></div>
 <h2 id="functions">Functions</h2>
 <section class="member">
-<code class="signature">reset_weapon_list_state()</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_weapons.py#L15">source</a>
-</section>
-<section class="member">
-<code class="signature">prepare_weapon_item_data()</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_weapons.py#L22">source</a>
+<code class="signature">get_item_section(item: Item) -&gt; str | None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_weapons.py#L26">source</a>
+<p>Return the display section for a weapon-related item.</p>
 </section>
 <section class="member">
 <code class="signature">build_weapon_navbox(section_order: list[str] | None = None) -&gt; Navbox</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_weapons.py#L31">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_weapons.py#L36">source</a>
+<p>Build a navbox containing weapons, ammunition, and weapon parts.</p>
 </section>
 <section class="member">
 <code class="signature">generate_weapon_navbox(output_dir: str | Path | None = None, section_order: list[str] | None = None) -&gt; Path</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_weapons.py#L71">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_weapons.py#L64">source</a>
+<p>Generate and save the weapon navbox JSON file.</p>
 </section>
 <section class="member">
 <code class="signature">main()</code>
-<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_weapons.py#L82">source</a>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/navbox/navbox_weapons.py#L76">source</a>
 </section>
 </article></div>
 <div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
