@@ -1,43 +1,65 @@
-import os
 from tqdm import tqdm
 from scripts.objects.item import Item
 from scripts.objects.attachment import HotbarSlot
-from scripts.core.constants import PBAR_FORMAT, TABLES_DIR
-from scripts.utils import table_helper
+from scripts.items.groups.clothing_groups import (
+    AccessoryGroups,
+    ClothingGroups,
+    TABLE_PATH,
+    get_wearable_location_id,
+    is_wearable_item,
+)
+from scripts.core.constants import PBAR_FORMAT
+from scripts.utils import echo, table_helper
 from scripts.utils.util import convert_int, convert_percentage, tick, cross
 
-TABLE_PATH = os.path.join(TABLES_DIR, "clothing_table.json")
-
 table_types = {}
-body_location_map = {}
+
+GROUP_CLASSES = (AccessoryGroups, ClothingGroups)
 
 
-def get_body_location(body_location: str):
-    """Gets the section and table for a BodyLocation"""
-    for key, value in body_location_map.items():
-        # Case-insensitive comparison
-        if any(body_location.lower() == loc.lower() for loc in value["body_location"]):
-            # return body location heading and table header
-            return key, value["table"]
+def _find_group(item: Item, location_id: str | None):
+    """Return the first clothing/accessory group that owns the item."""
+    for group_class in GROUP_CLASSES:
+        group_id = group_class.find_type(item, location_id=location_id)
+        if group_id is not None:
+            return group_class, group_id
+    return None
 
-    # Default to 'Other'
-    heading = "Other"
-    table = body_location_map[heading]["table"]
-    return heading, table
+
+def _get_ordered_groups():
+    """Combine both classifiers using clothing_table.json display order."""
+    groups = [
+        (group_class, type_id, group)
+        for group_class in GROUP_CLASSES
+        for type_id, group in group_class.get_groups_by_order()
+    ]
+    return sorted(groups, key=lambda entry: entry[2].display_order)
 
 
 def generate_data(item: Item):
     """Gets the item's properties based on the BodyLocation as defined for its table"""
     notes = None
 
-    body_location = item.body_location or item.can_be_equipped
-    if not body_location:
+    location_id = get_wearable_location_id(item)
+    group_match = _find_group(item, location_id)
+    if group_match is None:
         return None, None
 
-    if not hasattr(body_location, "location_id"):
-        return None, None
+    group_class, group_id = group_match
 
-    heading, table_key = get_body_location(body_location.location_id)
+    if (
+        group_class is ClothingGroups
+        and group_id == ClothingGroups.DEFAULT_GROUP_ID
+        and location_id
+        and not ClothingGroups.is_known_body_location(location_id)
+    ):
+        echo.warning(
+            f"Clothing body location '{location_id}' is not mapped for "
+            f"'{item.item_id}'; adding item to 'Other'."
+        )
+
+    heading = group_class.get_display_name(group_id)
+    table_key = group_class.get_table_type(group_id)
     columns = table_types.get(table_key, table_types["generic"])
 
     item_dict = {}
@@ -200,15 +222,7 @@ def generate_data(item: Item):
 
 
 def find_items():
-    blacklist = (
-        "MakeUp_",
-        "ZedDmg_",
-        "Wound_",
-        "Bandage_",
-        "F_Hair_",
-        "M_Hair_",
-        "M_Beard_",
-    )
+    """Collect clothing items grouped by their configured clothing section."""
     clothing_items = {}
 
     with tqdm(
@@ -221,50 +235,45 @@ def find_items():
         for item_id in Item.all():
             item = Item(item_id)
             pbar.set_postfix_str(f"Processing: {item.item_type} ({item_id[:30]})")
-            if item.has_category("clothing"):
-                # filter out blacklisted items and 'Reverse' variants
-                if not item.id_type.startswith(blacklist) and not item.id_type.endswith(
-                    "_Reverse"
+
+            if not is_wearable_item(item):
+                pbar.update(1)
+                continue
+
+            try:
+                table_type, new_item = generate_data(item)
+            except Exception as exc:
+                echo.error(
+                    f"[ERROR] Failed to process clothing item '{item_id}': {exc}"
+                )
+                import traceback
+
+                traceback.print_exc()
+                pbar.update(1)
+                continue
+
+            # Skip clothing records with no BodyLocation or CanBeEquipped value.
+            if table_type is None or new_item is None:
+                pbar.update(1)
+                continue
+
+            note = new_item.pop("notes", None)
+
+            if table_type not in clothing_items:
+                clothing_items[table_type] = (
+                    [{"notes": [note]}] if note else [{"notes": []}]
+                )
+            elif note:
+                if (
+                    clothing_items[table_type]
+                    and "notes" in clothing_items[table_type][0]
                 ):
-                    if item.obsolete:
-                        continue
-                    try:
-                        table_type, new_item = generate_data(item)
-                    except Exception as e:
-                        from scripts.utils import echo
+                    if note not in clothing_items[table_type][0]["notes"]:
+                        clothing_items[table_type][0]["notes"].append(note)
+                else:
+                    clothing_items[table_type].insert(0, {"notes": [note]})
 
-                        echo.error(
-                            f"[ERROR] Failed to process clothing item '{item_id}': {e}"
-                        )
-                        import traceback
-
-                        traceback.print_exc()
-                        pbar.update(1)
-                        continue
-
-                    # Skip items with no body location
-                    if table_type is None or new_item is None:
-                        continue
-
-                    note = new_item.pop("notes", None)
-
-                    # add heading to dict if it hasn't been added yet.
-                    if table_type not in clothing_items:
-                        clothing_items[table_type] = (
-                            [{"notes": [note]}] if note else [{"notes": []}]
-                        )
-                    else:
-                        if note:
-                            if (
-                                clothing_items[table_type]
-                                and "notes" in clothing_items[table_type][0]
-                            ):
-                                if note not in clothing_items[table_type][0]["notes"]:
-                                    clothing_items[table_type][0]["notes"].append(note)
-                            else:
-                                clothing_items[table_type].insert(0, {"notes": [note]})
-
-                    clothing_items[table_type].append(new_item)
+            clothing_items[table_type].append(new_item)
             pbar.update(1)
 
     return clothing_items
@@ -272,15 +281,16 @@ def find_items():
 
 def main():
     global table_types
-    global body_location_map
-    table_types, column_headings, body_location_map = table_helper.get_table_data(
-        TABLE_PATH, "body_locations"
-    )
+    table_types, column_headings = table_helper.get_table_data(TABLE_PATH)
 
     clothing_items = find_items()
 
     table_map = {
-        key: table_types[value["table"]] for key, value in body_location_map.items()
+        group.display_name: table_types.get(
+            group.metadata.get("table", "generic"),
+            table_types["generic"],
+        )
+        for _group_class, _type_id, group in _get_ordered_groups()
     }
     table_helper.create_tables(
         "clothing_item_list",

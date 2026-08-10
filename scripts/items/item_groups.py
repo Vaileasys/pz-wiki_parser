@@ -53,6 +53,15 @@ class ItemGroups(ABC):
     
     # Optional: Define explicit category groupings
     CATEGORY_GROUPS: dict[str, list[str]] = {}
+
+    @classmethod
+    def _ensure_groups_loaded(cls) -> None:
+        """Ensure dynamically defined groups are available.
+
+        Static grouping classes do not need to override this hook. Classes
+        backed by a resource file can populate ``GROUPS`` lazily.
+        """
+        return None
     
     @classmethod
     @abstractmethod
@@ -81,6 +90,7 @@ class ItemGroups(ABC):
         Returns:
             The matching group type ID, or None if no group applies.
         """
+        cls._ensure_groups_loaded()
         return cls.classify(item, **kwargs)
     
     @classmethod
@@ -94,6 +104,7 @@ class ItemGroups(ABC):
         Returns:
             The matching GroupInfo object, or None if the type ID is not defined.
         """
+        cls._ensure_groups_loaded()
         return cls.GROUPS.get(type_id)
     
     @classmethod
@@ -107,6 +118,7 @@ class ItemGroups(ABC):
         Returns:
             The group's display name, or type_id if the group is not defined.
         """
+        cls._ensure_groups_loaded()
         group = cls.GROUPS.get(type_id)
         return group.display_name if group else type_id
     
@@ -118,6 +130,7 @@ class ItemGroups(ABC):
         Returns:
             Dictionary mapping each type ID to its display name.
         """
+        cls._ensure_groups_loaded()
         return {type_id: group.display_name for type_id, group in cls.GROUPS.items()}
     
     @classmethod
@@ -132,6 +145,7 @@ class ItemGroups(ABC):
         Returns:
             Ordered list of group display names.
         """
+        cls._ensure_groups_loaded()
         if include_unordered:
             sorted_groups = sorted(cls.GROUPS.values(), key=lambda x: x.display_order)
         else:
@@ -154,6 +168,7 @@ class ItemGroups(ABC):
             List of type IDs in the category. Returns an empty list if the
             category is not found.
         """
+        cls._ensure_groups_loaded()
         # First check explicit CATEGORY_GROUPS mapping
         if cls.CATEGORY_GROUPS and category in cls.CATEGORY_GROUPS:
             return cls.CATEGORY_GROUPS[category]
@@ -172,6 +187,7 @@ class ItemGroups(ABC):
         Returns:
             List of all type IDs in GROUPS.
         """
+        cls._ensure_groups_loaded()
         return list(cls.GROUPS.keys())
     
     @classmethod
@@ -182,6 +198,7 @@ class ItemGroups(ABC):
         Returns:
             Sorted list of category names.
         """
+        cls._ensure_groups_loaded()
         if cls.CATEGORY_GROUPS:
             return sorted(cls.CATEGORY_GROUPS.keys())
         
@@ -200,6 +217,7 @@ class ItemGroups(ABC):
         Returns:
             True if the type ID exists in GROUPS, otherwise False.
         """
+        cls._ensure_groups_loaded()
         return type_id in cls.GROUPS
     
     @classmethod
@@ -210,6 +228,7 @@ class ItemGroups(ABC):
         Returns:
             List of (type_id, GroupInfo) tuples sorted by display_order.
         """
+        cls._ensure_groups_loaded()
         sorted_items = sorted(
             cls.GROUPS.items(),
             key=lambda x: x[1].display_order
