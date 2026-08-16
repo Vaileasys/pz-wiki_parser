@@ -35,7 +35,7 @@ def build_table(data: dict):
 
     for k, v in data.items():
         content.extend((
-            f'|- id="{v.get("location")}"',
+            f'|- id="{v.get("location").lower()}"',
             f'| {v.get("location")}',
             f'| {v.get("lua_constant")}',
             f'| {v.get("exclusive")}',
@@ -65,13 +65,13 @@ def generate_data():
         exclusive = []
         excl_locs = loc.exclusive
         for excl_loc in excl_locs:
-            exclusive.append(link(f"#{excl_loc.name}", excl_loc.name))
+            exclusive.append(link(f"#{excl_loc.name.lower()}", excl_loc.name))
         exclusive = " &bull; ".join(exclusive) if exclusive else "-"
         
         hidden = []
         hidden_locs = loc.hide_model
         for hidden_loc in hidden_locs:
-            hidden.append(link(f"#{hidden_loc.name}", hidden_loc.name))
+            hidden.append(link(f"#{hidden_loc.name.lower()}", hidden_loc.name))
         hidden = " &bull; ".join(hidden) if hidden else "-"
 
         items = []
