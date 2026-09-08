@@ -226,6 +226,7 @@ def generate_data(item_id: str, table_type: str):
             "-" if not item.get("HeadCondition") else head_condition
         )
     if "head_condition_lower_chance_multiplier" in columns:
+        # HCLCM is initialized as 1 and some weapons rely on this instead of setting it in the scripts
         head_condition_lower_chance_multiplier_value = 1.0 if not item.head_condition_lower_chance_multiplier else item.head_condition_lower_chance_multiplier
         head_condition_lower_chance_multiplier = f"{convert_int(head_condition_lower_chance_multiplier_value)}&times;"
         item_dict["head_condition_lower_chance_multiplier"] = (

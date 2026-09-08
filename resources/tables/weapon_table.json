@@ -147,7 +147,7 @@
         "condition_lower_chance": "! [[File:UI_Condition_Chance.png|32px|<<condition_lower_chance>>]]",
         "condition_average": "! [[File:UI_Condition_Average.png|32px|link=|<<average_condition>>]]",
         "head_condition": "! HC",
-        "head_condition_lower_chance_multiplier": "! HCLCM",
+        "head_condition_lower_chance_multiplier": "! data-sort-type=text | HCLCM",
         "repairable": "! [[File:UI_Condition.png|32px|link=|<<repairable>>]]",
         "magazine": "! Magazine",
         "weapon": "! Weapons",
