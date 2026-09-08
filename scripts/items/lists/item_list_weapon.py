@@ -165,7 +165,7 @@ def generate_data(item_id: str, table_type: str):
         convert_int(item.base_speed) if "attack_speed" in columns else None
     )
     if "endurance_mod" in columns:
-        endurance_mod = f"{util.convert_int(item.endurance_mod)}×"
+        endurance_mod = f"{util.convert_int(item.endurance_mod)}&times;"
         item_dict["endurance_mod"] = (
             "-" if not item.get("EnduranceMod") else endurance_mod
         )
@@ -185,7 +185,7 @@ def generate_data(item_id: str, table_type: str):
         )
     if "crit_multiplier" in columns:
         item_dict["crit_multiplier"] = (
-            f"{convert_int(item.crit_dmg_multiplier)}×"
+            f"{convert_int(item.crit_dmg_multiplier)}&times;"
             if item.crit_dmg_multiplier
             else "-"
         )
@@ -228,7 +228,9 @@ def generate_data(item_id: str, table_type: str):
     if "head_condition_lower_chance_multiplier" in columns:
         # HCLCM is initialized as 1 and some weapons rely on this instead of setting it in the scripts
         head_condition_lower_chance_multiplier_value = 1.0 if not item.head_condition_lower_chance_multiplier else item.head_condition_lower_chance_multiplier
-        head_condition_lower_chance_multiplier = f"{convert_int(head_condition_lower_chance_multiplier_value)}&times;"
+        converted_hclcmv = convert_int(head_condition_lower_chance_multiplier_value)
+        # Table sorting doesn't work properly with decimal values and the added x character
+        head_condition_lower_chance_multiplier = f"data-sort-value={converted_hclcmv}| {converted_hclcmv}&times;"
         item_dict["head_condition_lower_chance_multiplier"] = (
             "-" if not item.get("HeadCondition") else head_condition_lower_chance_multiplier
         )
