@@ -21,6 +21,8 @@
             "condition_max": {"rowspan": 2},
             "condition_lower_chance": {"rowspan": 2},
             "condition_average": {"rowspan": 2},
+            "head_condition": {"rowspan": 2},
+            "head_condition_lower_chance_multiplier": {"rowspan": 2},
             "item_id": {"rowspan": 2}
         },
         "firearm": {
@@ -141,6 +143,8 @@
         "knockback": "! [[File:UI_Knockback.png|32px|link=|<<knockback>>]]",
         "condition_max": "! [[File:UI_Condition_Max.png|32px|link=|<<max_condition>>]]",
         "condition_lower_chance": "! [[File:UI_Condition_Chance.png|32px|<<condition_lower_chance>>]]",
+        "head_condition": "HC",
+        "head_condition_lower_chance_multiplier": "HCLCM",
         "condition_average": "! [[File:UI_Condition_Average.png|32px|link=|<<average_condition>>]]",
         "repairable": "! [[File:UI_Condition.png|32px|link=|<<repairable>>]]",
         "magazine": "! Magazine",

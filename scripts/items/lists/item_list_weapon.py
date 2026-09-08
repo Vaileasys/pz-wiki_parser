@@ -220,6 +220,17 @@ def generate_data(item_id: str, table_type: str):
             if "condition_max" in columns and "condition_lower_chance" in columns
             else None
         )
+    if "head_condition" in columns:
+        head_condition = str(convert_int(item.head_condition))
+        item_dict["head_condition"] = (
+            "-" if not item.get("HeadCondition") else head_condition
+        )
+    if "head_condition_lower_chance_multiplier" in columns:
+        head_condition_lower_chance_multiplier_value = 1.0 if not item.head_condition_lower_chance_multiplier else item.head_condition_lower_chance_multiplier
+        head_condition_lower_chance_multiplier = f"{convert_int(head_condition_lower_chance_multiplier_value)}&times;"
+        item_dict["head_condition_lower_chance_multiplier"] = (
+            "-" if not item.get("HeadCondition") else head_condition_lower_chance_multiplier
+        )
     item_dict["repairable"] = (
         Translate.get_wiki(check_fixing(item_id)) if "repairable" in columns else None
     )
