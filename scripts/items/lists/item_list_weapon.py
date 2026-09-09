@@ -26,7 +26,6 @@ def check_fixing(item):
         return f"[[File:UI Tick.png|link=Condition{Language.get_subpage()}#<<repairing>>|<<repairable>>]]"
     return f"[[File:UI Cross.png|link=Condition{Language.get_subpage()}#<<repairing>>|<<not_repairable>>]]"
 
-
 def get_function(item: Item):
     strings = {
         "reload_time": {
@@ -240,6 +239,18 @@ def generate_data(item_id: str, table_type: str):
     item_dict["repairable"] = (
         Translate.get_wiki(check_fixing(item)) if "repairable" in columns else None
     )
+    if "sharpenable" in columns:
+        sharpenable = item.has_tag("sharpenable")
+        if sharpenable:
+                item_dict["sharpenable"] = "[[File:UI Tick.png|<<sharpenable>>]]"
+        else:
+            item_dict["sharpenable"] = "[[File:UI Cross.png|<<not_sharpenable>>]]"
+    if "maintenance_xp" in columns:
+        maintenance_xp = not item.has_tag("nomaintenancexp")
+        if maintenance_xp:
+            item_dict["maintenance_xp"] = "[[File:UI Tick.png|<<maintenance_xp>>]]"
+        else:
+            item_dict["maintenance_xp"] = "[[File:UI Cross.png|<<no_maintenance_xp>>]]"
     if "magazine" in columns:
         item_dict["magazine"] = (
             Item(item_data.get("Magazine")).icon if item_data.get("Magazine") else "-"
