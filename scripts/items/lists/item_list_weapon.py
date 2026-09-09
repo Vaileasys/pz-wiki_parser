@@ -16,10 +16,13 @@ table_type_map = {}
 all_item_data = {}  # Cache for each item's `TableType`
 
 
-def check_fixing(item_id):
+def check_fixing(item):
     """Check if a given item can be fixed"""
-    fixing = Fixing(item_id)
-    if fixing.valid:
+    fixing = Fixing(item.item_id)
+    valid = fixing.valid
+    if item.has_tag("repairwithglue", "repairwithtape", "repairwithepoxy"):
+        valid = True
+    if valid:
         return f"[[File:UI Tick.png|link=Condition{Language.get_subpage()}#<<repairing>>|<<repairable>>]]"
     return f"[[File:UI Cross.png|link=Condition{Language.get_subpage()}#<<repairing>>|<<not_repairable>>]]"
 
@@ -235,7 +238,7 @@ def generate_data(item_id: str, table_type: str):
             "-" if not item.get("HeadCondition") else head_condition_lower_chance_multiplier
         )
     item_dict["repairable"] = (
-        Translate.get_wiki(check_fixing(item_id)) if "repairable" in columns else None
+        Translate.get_wiki(check_fixing(item)) if "repairable" in columns else None
     )
     if "magazine" in columns:
         item_dict["magazine"] = (
