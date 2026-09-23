@@ -79,9 +79,9 @@ class WeaponGroups(ItemGroups):
             skill = item.categories
             if skill:
                 # Melee weapons - classified by skill category
-                # Remove "Improvised" if there are other categories
-                if "Improvised" in skill and len(skill) > 1:
-                    skill = [cat for cat in skill if cat != "Improvised"]
+                # Remove "improvised" if there are other categories
+                if "improvised" in skill and len(skill) > 1:
+                    skill = [cat for cat in skill if cat != "improvised"]
                     if len(skill) > 1:
                         echo.warning(f"More than 1 skill ({','.join(skill)})")
                 table_type = skill[0]
