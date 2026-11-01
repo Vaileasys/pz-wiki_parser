@@ -4,7 +4,7 @@ from scripts.core.cache import save_cache
 from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
-from scripts.objects.craft_recipe import CraftRecipe
+from scripts.items.groups.tool_groups import ToolGroups
 from scripts.utils import table_helper, echo, util
 
 TABLE_PATH = os.path.join(TABLES_DIR, "tool_table.json")
@@ -164,31 +164,13 @@ def find_types(item: Item):
 
 
 def find_crafting_categories(item: Item):
-    categories = set()
-    for recipe_id, recipe in CraftRecipe.all().items():
-        if item.item_id in recipe.input_items:
-            categories.add(recipe.category)
-
-    if item.has_category("fishing"):
-        categories.add("Fishing")
-    if item.has_category("cooking"):
-        categories.add("Cooking")
-    if item.has_category("gardening"):
-        categories.add("Farming")
-    if item.has_category("medical"):
-        categories.add("Medical")
-
-    categories = list(categories)
-
-    if not categories:
-        categories = ["other"]
-
-    return sorted(categories)
+    return [
+        "other" if category == "Other" else category
+        for category in ToolGroups.get_categories(item)
+    ]
 
 
 def find_table_type(item: Item):
-    if not find_crafting_categories(item):
-        return "other"
     return "tool"
 
 

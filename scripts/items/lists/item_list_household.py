@@ -3,6 +3,7 @@ from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
+from scripts.items.groups.household_groups import HouseholdGroups
 from scripts.utils import table_helper, echo, util
 
 TABLE_PATH = os.path.join(TABLES_DIR, "household_table.json")
@@ -77,17 +78,7 @@ def generate_data(item: Item):
 
 
 def find_table_type(item: Item):
-    if item.has_tag("Write", "Eraser"):
-        return "writing"
-    if (
-        item.has_tag("CleanStains")
-        or Item(item.item_when_dry).has_tag("CleanStains")
-        or Item(item.replace_on_deplete).has_tag("CleanStains")
-        or item.id_type == "Soap2"
-        or item.fluid_container.has_fluid("Bleach", "CleaningLiquid")
-    ):
-        return "cleaning"
-    return "other"
+    return HouseholdGroups.find_type(item)
 
 
 def process_items() -> dict:

@@ -3,6 +3,7 @@ from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
+from scripts.items.groups.memento_groups import MementoGroups
 from scripts.utils import table_helper, echo, util
 
 TABLE_PATH = os.path.join(TABLES_DIR, "memento_table.json")
@@ -66,19 +67,7 @@ def generate_data(item: Item):
 
 
 def find_table_type(item: Item):
-    if item.item_type in ("clothing", "alarmclockclothing"):
-        return "clothing"
-    if item.item_type == "literature":
-        return "literature"
-    if item.item_type == "container":
-        return "container"
-    if item.fluid_container:
-        return "fluid_container"
-    if "Specimen" in item.id_type:
-        return "specimen"
-    if item.has_tag("Dice"):
-        return "dice"
-    return "other"
+    return MementoGroups.find_type(item)
 
 
 def process_items() -> dict:

@@ -3,6 +3,7 @@ from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
+from scripts.items.groups.junk_groups import JunkGroups
 from scripts.utils import table_helper, echo, util
 
 TABLE_PATH = os.path.join(TABLES_DIR, "junk_table.json")
@@ -67,19 +68,7 @@ def find_original_item(item: Item):
 
 
 def find_table_type(item: Item):
-    if item.is_dung:
-        return "dung"
-    if (
-        item.custom_context_menu == "Smoke"
-        or item.has_tag("Smokable", "Tobacco", "ChewingTobacco", "RollingPaper")
-        or item.id_type in ("CigarettePack", "CanPipe", "CigaretteCarton")
-    ):
-        return "smoking"
-    if item.item_type == "literature":
-        return "literature"
-    if "broken" in item.id_type.lower():
-        return "broken"
-    return "other"
+    return JunkGroups.find_type(item)
 
 
 def process_items() -> dict:

@@ -4,6 +4,7 @@ from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
 from scripts.objects.craft_recipe import CraftRecipe
+from scripts.items.groups.electronics_groups import ElectronicsGroups
 from scripts.utils import table_helper, echo, util
 
 TABLE_PATH = os.path.join(TABLES_DIR, "electronic_table.json")
@@ -60,38 +61,7 @@ def generate_data(item: Item):
 
 
 def find_table_type(item: Item):
-    if item.has_tag("Generator"):
-        return "generator"
-    if "Battery" in item.id_type:
-        return "battery"
-    if "LightBulb" in item.id_type:
-        return "light_bulb"
-    if (
-        item.has_tag("MiscElectronic")
-        or item.item_type == "radio"
-        or item.has_tag("TVRemote")
-        or item.item_id in CraftRecipe("DismantleMiscElectronics").input_items
-        or item.item_id in CraftRecipe("DismantleElectronics").input_items
-        or item.item_id in CraftRecipe("DismantlePowerBar").input_items
-    ):
-        return "appliance"
-    if (
-        item.item_id in CraftRecipe("DismantleMiscElectronics").output_items
-        or item.item_id in CraftRecipe("DismantleElectronics").output_items
-        or item.item_id in CraftRecipe("DismantlePowerBar").output_items
-        or item.item_id
-        in ("Base.RadioReceiver", "Base.RadioTransmitter", "Base.ScannerModule")
-    ):
-        return "component"
-    if (
-        item.item_id in CraftRecipe("MakeRemoteTrigger").output_items
-        or item.item_id in CraftRecipe("MakeRemoteControllerV1").output_items
-        or item.item_id in CraftRecipe("MakeRemoteControllerV2").output_items
-        or item.item_id in CraftRecipe("MakeRemoteControllerV3").output_items
-        or item.item_id in CraftRecipe("MakeTimer").output_items
-    ):
-        return "upgrade"
-    return "other"
+    return ElectronicsGroups.find_type(item)
 
 
 def process_items() -> dict:

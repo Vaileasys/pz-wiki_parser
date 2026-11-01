@@ -6,6 +6,7 @@ from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.utils import table_helper
 from scripts.objects.item import Item
 from scripts.objects.skill import Skill
+from scripts.items.groups.literature_groups import LiteratureGroups
 
 TABLE_PATH = os.path.join(TABLES_DIR, "literature_table.json")
 
@@ -16,57 +17,8 @@ table_type_map = None
 
 # Get the list type, for mapping the section/table
 def get_list_type(item: Item, special_data):
-    TYPE_MAPPING = {
-        "ComicBook": "Miscellaneous",  # Included so it doesn't get added to 'Hardcover books'
-        "PhotoBook": "Miscellaneous",  # Included so it doesn't get added to 'Hardcover books'
-        "PictureBook": "Miscellaneous",  # Included so it doesn't get added to 'Hardcover books'
-        "HollowBook": "Hollow books",
-        "HollowFancyBook": "Hollow books",
-        "BookFancy": "Leatherbound books",
-        "Book": "Hardcover books",
-        "Magazine": "Magazines",
-        "HottieZ": "Magazines",
-        "HunkZ": "Magazines",
-        "Newspaper": "Newspapers",
-        "Paperback": "Paperback books",
-    }
-
-    # Annotated maps
-    if "map_id" in special_data:
-        return "Annotated maps"
-
-    display_category = item.raw_display_category or item.item_type
-
-    # Map/Cartography
-    if item.item_type == "map":
-        return "Maps"
-
-    # Writable
-    if item.can_be_write:
-        return "Writable"
-
-    # Skill Books & Recipes
-    if display_category == "SkillBook":
-        schematics = ["Schematic", "Recipe", "SewingPattern"]
-        if item.teached_recipes:
-            return "Recipe magazines"
-        elif any(keyword in (item.on_create or "") for keyword in schematics) or any(
-            keyword in item.item_id for keyword in schematics
-        ):
-            return "Schematics"
-        else:
-            return "Skill books"
-    # Seed packets
-    elif display_category == "Gardening":
-        return "Seed packets"
-
-    # Leisure. Map to the correct heading.
-    for key, value in TYPE_MAPPING.items():
-        if key in item.item_id:
-            return value
-
-    # Default
-    return "Miscellaneous"
+    group_id = LiteratureGroups.find_type(item, special_data=special_data)
+    return LiteratureGroups.get_display_name(group_id)
 
 
 # Get list of recipes an item teaches.

@@ -6,16 +6,10 @@ from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.core.cache import save_cache
 from scripts.utils import table_helper, echo
 from scripts.objects.item import Item
-from scripts.objects.forage import ForagingItem
-from scripts.objects.craft_recipe import CraftRecipe
-from scripts.objects.evolved_recipe import EvolvedRecipe
+from scripts.items.groups.food_groups import (FoodGroups, include_in_food_groups, is_food_item)
 
 TABLE_PATH = os.path.join(TABLES_DIR, "food_table.json")
 
-evolvedrecipe_results = []
-evolvedrecipe_base = []
-recipe_products = []
-forage_categories = {}
 table_map = {}
 
 
@@ -123,103 +117,8 @@ def generate_data(item: Item, table_type: str):
 
 
 def find_table_type(item: Item):
-    display_name = item.name_en
-    table_type = None
-    if item.id_type in evolvedrecipe_results or item.item_id in evolvedrecipe_results:
-        table_type = "evolved_recipes"
-    elif item.id_type in evolvedrecipe_base or item.item_id in evolvedrecipe_base:
-        table_type = "evolved_recipes_base"
-    elif "Canned" in display_name or "Can of Food" in display_name:
-        table_type = "canned"
-    elif "Jar of" in display_name and item.id_type.startswith("Canned"):
-        table_type = "pickled"
-    else:
-        food_type = item.food_type.lower() if item.food_type else ""
-        foraging_item = ForagingItem(item.id_type)
-        if food_type == "egg" or item.id_type in ("EggCarton"):
-            table_type = "egg"
-        elif food_type == "candy" or item.id_type in (
-            "CandyPackage",
-            "Lollipop",
-            "MintCandy",
-            "Gum",
-            "Chocolate",
-        ):
-            table_type = "candy"
-        elif food_type == "herb" or foraging_item.has_category("WildHerbs"):
-            table_type = "herb"
-        elif (
-            food_type
-            in ("vegetable", "vegetables", "mushroom", "greens", "hotpepper", "bean")
-            or foraging_item.has_category("Vegetables", "Mushrooms")
-            or item.id_type in ("Squash", "PumpkinSliced", "PumpkinSmashed")
-        ):
-            table_type = "vegetable"
-        elif food_type in ("fruits", "citrus", "berry") or foraging_item.has_category(
-            "Berries", "Fruits"
-        ):
-            table_type = "fruit"
-        elif food_type in (
-            "meat",
-            "poultry",
-            "bacon",
-            "beef",
-            "sausage",
-            "venison",
-        ) or item.id_type in ("HotdogPack"):
-            table_type = "meat"
-        elif (
-            food_type in ("seafood", "fish", "roe")
-            or item.has_tag("FishMeat")
-            or "Fish" in display_name
-            or item.id_type in ("Mussels")
-        ):
-            table_type = "seafood"
-        elif food_type == "insect" or foraging_item.has_category("Insects", "FishBait"):
-            table_type = "insect"
-        elif food_type == "game" or "Dead" in display_name:
-            table_type = "game"
-        elif item.item_id in recipe_products:
-            table_type = "prepared"
-        elif (
-            food_type in ("bread", "pasta", "rice")
-            or item.id_type in ("BunsHamburger", "BunsHotdog")
-            or ""
-        ):
-            table_type = "grains"
-        elif item.spice:
-            table_type = "spice"
-        elif (
-            foraging_item.has_category("WildPlants")
-            or "Sheaf" in item.id_type
-            or "Rippled" in item.id_type
-            or "Tuft" in item.id_type
-            or "Hemp" in item.id_type
-            or "Hops" in item.id_type
-            or "Dried" in item.id_type
-        ):
-            table_type = "plant"
-        elif food_type in (
-            "cheese",
-            "chocolate",
-            "cocoa",
-            "coffee",
-            "oil",
-            "nut",
-            "seed",
-            "stock",
-            "sugar",
-            "tea",
-            "thickener",
-            "catfood",
-            "dogfood",
-            "noexplicit",
-        ):
-            table_type = "miscellaneous"
-        elif food_type:
-            table_type = item.food_type
-
-    return table_type if table_type else "miscellaneous"
+    """Return the shared food group ID used as the list table type."""
+    return FoodGroups.find_type(item)
 
 
 def find_items():
@@ -227,7 +126,7 @@ def find_items():
     nutrition_items: dict[str, Item] = {}
 
     for item_id, item in Item.items():
-        if item.item_type == "food" or item.display_category == "Food":
+        if is_food_item(item):
             food_items[item_id] = item
 
             if item.get("Calories"):
@@ -238,51 +137,10 @@ def find_items():
 
 def main():
     global language_code
-    global evolvedrecipe_results
-    global evolvedrecipe_base
-    global recipe_products
     global table_map
     language_code = Language.get()
     table_map, column_headings = table_helper.get_table_data(TABLE_PATH)
-
-    # cooking_recipe_data = {}
-    for recipe_id, recipe in CraftRecipe.all().items():
-        blacklisted_recipes = [
-            "SlicePumpkin",
-            "SliceWatermelon",
-            "SmashPumpkin",
-            "SmashWatermelon",
-            "OpenPackOfBuns",
-            "OpenCandyPackage",
-            "OpenMacAndCheese",
-            "PutEggsInCarton",
-            "OpenEggCarton",
-        ]
-        # Skip blacklisted recipes
-        if recipe_id in blacklisted_recipes:
-            continue
-
-        if recipe.category == "Cooking":
-            # cooking_recipe_data[recipe_id] = recipe.data
-            # Get output items directly from the CraftRecipe object
-            recipe_products.extend(recipe.output_items)
-
-    # save_cache(cooking_recipe_data, "cooking_recipe_data.json")
-    save_cache({"recipes": recipe_products}, "recipe_products_data.json")
-
-    # Store all evolvedrecipe products in a list for determining section
-    for er in EvolvedRecipe.values():
-        result = er.result_item
-        if result and result.valid:
-            evolvedrecipe_results.append(result.item_id)
-        else:
-            echo.warning(f"EvolvedRecipe with invalid result item: {er.recipe_id}")
-
-        base = er.base_item
-        if base and base.valid:
-            evolvedrecipe_base.append(base.item_id)
-        else:
-            echo.warning(f"EvolvedRecipe with invalid base item: {er.recipe_id}")
+    save_cache({"recipes": FoodGroups.get_recipe_product_ids()}, "recipe_products_data.json")
 
     with tqdm(
         total=0,
@@ -303,25 +161,7 @@ def main():
         for item_id, item in food_items.items():
             pbar.set_postfix_str(f"Generating: Food ({item_id[:40]})")
 
-            # Blacklisted types of items
-            if item.has_tag("Smokable", "Feather"):
-                continue
-            # Animal parts
-            if (
-                any(x in item.name_en for x in ("Head", "Animal"))
-                and "Sunflower" not in item.name_en
-            ):
-                continue
-            # Droppings
-            if any(x in item.name_en for x in ("Dung", "Droppings")):
-                continue
-            if item.foraging:
-                if (
-                    item.foraging.has_category("MedicinalPlants", "Medical")
-                    and not item.hunger_change
-                ):
-                    continue
-            if item.eat_type == "pipe":
+            if not include_in_food_groups(item):
                 continue
 
             table_type = find_table_type(item)

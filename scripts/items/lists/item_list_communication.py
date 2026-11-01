@@ -3,6 +3,7 @@ from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
+from scripts.items.groups.communication_groups import CommunicationGroups
 from scripts.utils import table_helper, echo, util
 
 TABLE_PATH = os.path.join(TABLES_DIR, "communication_table.json")
@@ -41,11 +42,7 @@ def generate_data(item: Item):
 
 
 def find_table_type(item: Item):
-    if item.is_television:
-        return "television"
-    if item.two_way:
-        return "two_way"
-    return "radio"
+    return CommunicationGroups.find_type(item)
     
 
 def process_items() -> dict:

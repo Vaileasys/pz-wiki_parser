@@ -3,6 +3,7 @@ from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
+from scripts.items.groups.camping_groups import CampingGroups, is_camping_item
 from scripts.utils import table_helper, echo, util
 
 TABLE_PATH = os.path.join(TABLES_DIR, "camping_table.json")
@@ -39,14 +40,8 @@ def generate_data(item: Item):
     return table_type, item_dict
 
 def find_table_type(item: Item):
-    name = item.item_id.lower()
-    if "tent" in name:
-        return "tent"
-    elif "sleepingbag" in name:
-        return "sleeping_bag"
-    elif item.has_tag("StartFire") or item.id_type == "PercedWood":
-        return "fire_starter"
-    return "other"
+    """Return the table key from the shared camping classifier."""
+    return CampingGroups.find_type(item)
     
 
 def process_items() -> dict:
@@ -57,7 +52,7 @@ def process_items() -> dict:
     with tqdm(total=Item.count(), desc="Processing items", bar_format=PBAR_FORMAT, unit=" items", leave=False) as pbar:
         for item_id, item in Item.items():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
-            if item.has_category("camping"):
+            if is_camping_item(item):
                 table_type, item_dict = generate_data(item)
 
                 # Add table_type to dict if it hasn't been added yet.

@@ -4,6 +4,7 @@ from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
 from scripts.objects.animal import Animal, AnimalBreed
+from scripts.items.groups.corpse_groups import CorpseGroups
 from scripts.utils import table_helper, echo, util
 
 TABLE_PATH = os.path.join(TABLES_DIR, "corpse_table.json")
@@ -54,9 +55,7 @@ def generate_data(item: Item, animal: Animal = None, breed: AnimalBreed = None, 
 
 
 def find_table_type(item: Item, stage: str = None):
-    if item.item_id == "Base.CorpseAnimal":
-        return f"animal_{stage}"
-    return "corpse"
+    return CorpseGroups.find_type(item, stage=stage)
 
 
 def process_items() -> dict:

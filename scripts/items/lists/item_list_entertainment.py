@@ -3,6 +3,7 @@ from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
+from scripts.items.groups.entertainment_groups import EntertainmentGroups
 from scripts.utils import table_helper, echo, util
 
 TABLE_PATH = os.path.join(TABLES_DIR, "entertainment_table.json")
@@ -48,7 +49,7 @@ def generate_data(item: Item):
 
 
 def find_table_type(item: Item):
-    return "entertainment"
+    return EntertainmentGroups.find_type(item)
 
 
 def process_items() -> dict:

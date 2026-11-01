@@ -3,13 +3,12 @@ from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
-from scripts.objects.evolved_recipe import EvolvedRecipe
+from scripts.items.groups.cooking_groups import CookingGroups
 from scripts.utils import table_helper, echo, util
 
 TABLE_PATH = os.path.join(TABLES_DIR, "cooking_table.json")
 
 table_map = {}
-evolved_recipes = {}
 
 
 def generate_data(item: Item):
@@ -55,7 +54,7 @@ def generate_data(item: Item):
         else:
             item_dict["capacity"] = "-"
     if "evolved_recipe" in columns:
-        recipes = evolved_recipes.get(item.item_id, ["-"])
+        recipes = CookingGroups.get_evolved_recipe_links(item.item_id) or ["-"]
         item_dict["evolved_recipe"] = "<br>".join(recipes)
 
     item_dict["item_id"] = item.item_id if "item_id" in columns else None
@@ -73,29 +72,7 @@ def generate_data(item: Item):
 
 
 def find_table_type(item: Item):
-    global evolved_recipes
-    # Check tags case-insensitively
-    item_tags_lower = [tag.lower() for tag in (item.tags or [])]
-    
-    if "mixingutensil" in item_tags_lower:
-        return "mixing_utensil"
-    if any(tag in item_tags_lower for tag in ["dullknife", "sharpknife", "meatcleaver", "pizzacutter"]):
-        return "knife"
-    if "bottleopener" in item_tags_lower or "canopener" in item_tags_lower:
-        return "can_bottle_opener"
-
-    is_evolved_recipe = False
-    for recipe_id, evolved_recipe in EvolvedRecipe.all().items():
-        if evolved_recipe.base_item.item_id == item.item_id:
-            is_evolved_recipe = True
-            if item.item_id not in evolved_recipes:
-                evolved_recipes[item.item_id] = []  # set
-            evolved_recipes[item.item_id].append(evolved_recipe.wiki_link)
-
-    if is_evolved_recipe:
-        return "evolved_recipe"
-
-    return "other"
+    return CookingGroups.find_type(item)
 
 
 def process_items() -> dict:

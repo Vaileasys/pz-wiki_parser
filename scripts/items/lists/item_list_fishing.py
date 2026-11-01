@@ -3,6 +3,7 @@ from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
+from scripts.items.groups.fishing_groups import FishingGroups
 from scripts.utils import table_helper, echo, util
 
 TABLE_PATH = os.path.join(TABLES_DIR, "fishing_table.json")
@@ -96,20 +97,7 @@ def find_type(item: Item):
 
 
 def find_table_type(item: Item):
-    if (
-        item.has_tag("FishingHook", "FishingLine")
-        or item.fishing_lure
-        or item.id_type in ("Bobber", "FishingHookBox")
-    ):
-        return "tackle"
-    if item.has_tag("FishingSpear", "FishingRod", "FishingNet") or item.id_type in (
-        "FishingRodBreak",
-        "BrokenFishingNet",
-    ):
-        return "gear"
-    if item.fish:
-        return "fish"
-    return "other"
+    return FishingGroups.find_type(item)
 
 
 def process_items() -> dict:

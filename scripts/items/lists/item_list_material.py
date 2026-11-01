@@ -3,6 +3,7 @@ from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
+from scripts.items.groups.material_groups import MaterialGroups
 from scripts.objects.craft_recipe import CraftRecipe
 from scripts.utils import table_helper, echo, util
 
@@ -176,129 +177,7 @@ def find_product(item: Item):
 
 
 def find_table_type(item: Item):
-    if item.has_tag("ToolHead", "SawBlade") or (
-        ("Head" in item.id_type or "Blade" in item.id_type)
-        and not "Broken" in item.id_type
-    ):
-        return "tool_head"
-    if (
-        item.has_tag(
-            "LeatherCrudeLarge",
-            "LeatherCrudeWetLarge",
-            "LeatherCrudeTannedLarge",
-            "LeatherCrudeMedium",
-            "LeatherCrudeWetMedium",
-            "LeatherCrudeTannedMedium",
-            "LeatherCrudeSmall",
-            "LeatherCrudeWetSmall",
-            "LeatherCrudeTannedSmall",
-            "LeatherFurLarge",
-            "LeatherFurWetLarge",
-            "LeatherFurTannedLarge",
-            "LeatherFurMedium",
-            "LeatherFurWetMedium",
-            "LeatherFurTannedMedium",
-            "LeatherFurSmall",
-            "LeatherFurWetSmall",
-            "LeatherFurTannedSmall",
-            "LeatherFullLarge",
-            "LeatherFullMedium",
-            "LeatherFullSmall",
-        )
-        or "Leather" in item.id_type
-        or item.fabric_type == "Leather"
-        or "Hide" in item.id_type
-    ):
-        return "leather"
-    if "Denim" in item.id_type:
-        return "denim"
-    if item.get("DisplayCategory") == "Paint":
-        return "paint"
-    if item.has_tag("Wallpaper"):
-        return "wallpaper"
-    if (
-        "Iron" in item.id_type
-        or "Hematite" in item.id_type
-        or item.has_tag(
-            "SmeltableIronLarge",
-            "SmeltableIronMedium",
-            "SmeltableIronMediumPlus",
-            "SmeltableIronSmall",
-        )
-    ):
-        return "iron"
-    if "Steel" in item.id_type or item.has_tag(
-        "SmeltableSteelLarge",
-        "SmeltableSteelMedium",
-        "SmeltableSteelMediumPlus",
-        "SmeltableSteelSmall",
-    ):
-        return "steel"
-    if "Copper" in item.id_type or "Malachite" in item.id_type:
-        return "copper"
-    if (
-        "Clay" in item.id_type or "Ceramic" in item.id_type or "Unfired" in item.id_type
-    ) and not "CrucibleWith" in item.id_type:
-        return "clay"
-    if "Brass" in item.id_type:
-        return "brass"
-    if "Silver" in item.id_type:
-        return "silver"
-    if "Gold" in item.id_type:
-        return "gold"
-    if "Aluminum" in item.id_type or item.has_tag("Aluminum", "ScrapAluminum"):
-        return "aluminum"
-    if "Glass" in item.id_type:
-        return "glass"
-    if (
-        "Stone" in item.id_type
-        or "Limestone" in item.id_type
-        or "Quicklime" in item.id_type
-        or item.has_tag("Stone", "Limestone")
-    ):
-        return "stone"
-    if "Sheet" in item.id_type or "Cotton" in item.id_type:
-        return "cotton"
-    if (
-        item.has_tag("Thread", "HeavyThread", "Twine")
-        or "Flax" in item.id_type
-        or "Hemp" in item.id_type
-        or "Burlap" in item.id_type
-        or "Dogbane" in item.id_type
-        or "String" in item.id_type
-        or "Rope" in item.id_type
-        or "Yarn" in item.id_type
-        or "WoolRaw" in item.id_type
-        or "CheeseCloth" in item.id_type
-    ):
-        return "fibre"
-    if (
-        item.has_tag("Glue", "Tape", "FiberglassTape", "Epoxy")
-        or "Zipties" in item.id_type
-    ):
-        return "repair"
-    if item.has_tag("AnimalBone", "LargeAnimalBone") or "Bone" in item.id_type:
-        return "bone"
-    if (
-        "Wood" in item.id_type
-        or "Twigs" in item.id_type
-        or "Firewood" in item.id_type
-        or "LogStack" in item.id_type
-        or "Branch" in item.id_type
-        or "Plank" in item.id_type
-        or item.has_tag(
-            "WoodHandle",
-            "Log",
-            "LongStick",
-            "MakeWoodCharcoalLarge",
-            "MakeWoodCharcoalSmall",
-            "MakeWoodCharcoalMedium",
-        )
-    ):
-        return "wood"
-    if item.has_tag("Charcoal"):
-        return "charcoal"
-    return "other"
+    return MaterialGroups.find_type(item)
 
 
 def process_items() -> dict:

@@ -3,6 +3,7 @@ from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
+from scripts.items.groups.medical_groups import MedicalGroups
 from scripts.objects.fluid import Fluid
 from scripts.utils import table_helper, echo, util
 
@@ -102,37 +103,7 @@ def find_effect(item: Item):
 
 
 def find_table_type(item: Item):
-    if item.can_bandage:
-        return "bandage"
-    if item.alcohol_power:
-        return "disinfectant"
-    if item.fluid_container:
-        if item.fluid_container.has_fluid("Alcohol"):
-            return "disinfectant"
-    if (
-        item.food_type == "Herb"
-        or item.has_tag("Comfrey")
-        or item.has_tag("HerbalTea")
-        or item.has_tag("Plantain")
-        or item.has_tag("WildGarlic")
-    ):
-        return "herb"
-    if any(x in item.id_type for x in ("Cataplasm", "Poultice")):
-        return "poultice"
-    if item.has_tag("Pills") or item.item_type == "food":
-        return "pharmaceutical"
-    if item.item_type == "container" or "Box" in item.id_type:
-        return "package"
-    if (
-        item.has_tag("RemoveBullet")
-        or item.has_tag("RemoveGlass")
-        or item.has_tag("Scissors")
-        or item.has_tag("Sharpenable")
-        or item.has_tag("MortarPestle")
-        or "Needle" in item.id_type
-    ):
-        return "tools"
-    return "other"
+    return MedicalGroups.find_type(item)
 
 
 def process_items() -> dict:

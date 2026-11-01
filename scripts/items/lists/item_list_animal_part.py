@@ -4,12 +4,12 @@ from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
 from scripts.objects.animal_part import AnimalPart, AnimalMeat
+from scripts.items.groups.animal_part_groups import AnimalPartGroups
 from scripts.utils import table_helper, echo, util
 
 TABLE_PATH = os.path.join(TABLES_DIR, "animal_part_table.json")
 
 table_map = {}
-animal_parts_list = []  # List of item ids parsed in AnimalPart class
 
 
 def process_item(item: Item, cut: str = None):
@@ -68,33 +68,8 @@ def process_item(item: Item, cut: str = None):
 
 
 def find_table_type(item: Item):
-    if item.has_tag("AnimalSkull"):
-        return "animal_skull"
-    elif item.has_tag("AnimalHead"):
-        return "animal_head"
-    elif item.has_tag("Feather"):
-        return "feather"
-    elif item.has_tag("AnimalBrain"):
-        return "brain"
-    elif item.has_tag("AnimalBone") or item.has_tag("LargeAnimalBone"):
-        return "bone"
-    elif (
-        AnimalMeat.exists(item.item_id)
-        or item.food_type in ("Poultry", "Game")
-        or item.has_tag("Vermin")
-    ):
-        return "meat"
-    elif item.item_id in animal_parts_list:
-        for _, parts in AnimalPart.all().items():
-            if item.item_id in parts.bone_items:
-                return "bone"
-            elif item == parts.leather:
-                return "leather"
-            elif item == parts.head:
-                return "animal_head"
-            elif item == parts.skull:
-                return "animal_skull"
-    return "other"
+    """Return the table key from the shared animal-part classifier."""
+    return AnimalPartGroups.find_type(item)
 
 
 def generate_item(item: Item, items: dict, cut: str = None):
@@ -114,32 +89,10 @@ def generate_item(item: Item, items: dict, cut: str = None):
 
 
 def find_items() -> dict:
-    global animal_parts_list
     items = {}
     item_count = 0
 
-    # Collect items
-    with tqdm(
-        total=Item.count(),
-        desc="Processing items",
-        bar_format=PBAR_FORMAT,
-        unit=" items",
-        leave=False,
-    ) as pbar:
-        pbar.set_postfix_str(f"Collecting animal parts")
-        animal_parts = set()
-        for _, animal_part in AnimalPart.all().items():
-            animal_parts.update(animal_part.all_parts)
-
-        animal_parts_list = animal_parts.copy()  # cache so we can search it later
-
-        for item_id, item in Item.items():
-            pbar.set_postfix_str(f"Processing: {item_id[:30]}")
-
-            if item.has_category("animal_part"):
-                animal_parts.add(item_id)
-
-            pbar.update(1)
+    animal_parts = AnimalPartGroups.get_item_ids()
 
     # Process items
     with tqdm(
@@ -159,6 +112,7 @@ def find_items() -> dict:
                 generate_item(item, items)
 
             item_count += 1
+            pbar.update(1)
 
     echo.info(f"Finished processing {item_count} items for {len(items)} tables.")
 

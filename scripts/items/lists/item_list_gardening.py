@@ -3,6 +3,7 @@ from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.objects.item import Item
+from scripts.items.groups.gardening_groups import GardeningGroups
 from scripts.objects.farming import Farming
 from scripts.utils import table_helper, echo, util
 
@@ -185,17 +186,7 @@ def get_teached_recipes(item: Item):
 
 
 def find_table_type(item: Item):
-    if item.has_tag("isSeed"):
-        return "seed"
-    if item.teached_recipes:
-        return "seed_packet"
-    # if item.has_tag("FarmingLoot", "Compost", "Fertilizer"):
-    #    return "farming_loot"
-    if item.item_type in ("moveable", "food"):
-        return "plant"
-    if item.has_tag("TakeDirt", "TakeDung", "DigPlow", "Scythe", "CutPlant"):
-        return "tool"
-    return "other"
+    return GardeningGroups.find_type(item)
 
 
 def process_items() -> dict:

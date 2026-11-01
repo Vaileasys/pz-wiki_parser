@@ -6,6 +6,10 @@ from scripts.core.version import Version
 from scripts.core.language import Language
 from scripts.objects.item import Item
 from scripts.objects.attachment import HotbarSlot
+from scripts.items.groups.container_groups import (
+    ContainerGroups,
+    is_container_item,
+)
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.utils import table_helper, echo
 from scripts.utils.util import convert_int, convert_percentage, link, check_zero
@@ -209,20 +213,9 @@ def get_cached_types() -> dict:
 
 # Get the list type, for mapping the section/table
 def find_table_type(item: Item):
-    if item.can_be_equipped:
-        if hasattr(item.can_be_equipped, "location_id"):
-            if item.can_be_equipped.location_id.lower() == "back":
-                return "Back"
-            return "Torso"
-
-    if item.accept_item_function:
-        heading = item.accept_item_function.replace("AcceptItemFunction.", "")
-        # Try to get a name for the heading
-        if Item.exists(heading):
-            heading = Item(heading).name
-        return heading.capitalize()
-
-    return "Containers"
+    """Return the display heading from the shared container classifier."""
+    group_id = ContainerGroups.find_type(item)
+    return ContainerGroups.get_display_name(group_id)
 
 
 # Process items, returning the heading and row data.
@@ -324,7 +317,7 @@ def find_items():
     ) as pbar:
         for item_id, item in Item.all().items():
             pbar.set_postfix_str(f"Processing: {item_id[:30]}")
-            if item.has_category("container"):
+            if is_container_item(item):
                 try:
                     table_type, item_data = process_item(item)
                 except Exception as e:

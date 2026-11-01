@@ -2,6 +2,7 @@ import os
 from tqdm import tqdm
 from scripts.core.language import Language
 from scripts.objects.item import Item
+from scripts.items.groups.fuel_groups import FuelGroups
 from scripts.core.constants import TABLES_DIR, PBAR_FORMAT
 from scripts.utils.table_helper import get_table_data, create_tables
 from scripts.utils.util import tick, cross
@@ -13,11 +14,8 @@ table_map = {}
 
 
 def find_table_type(item: Item):
-    if item.item_type == "map":
-        return "Literature"
-    elif item.item_type in ("food", "drainable", "normal", "moveable"):
-        return "Miscellaneous"
-    return item.item_type
+    group_id = FuelGroups.find_type(item)
+    return FuelGroups.get_table_type(group_id)
 
 
 def process_item(item: Item):
