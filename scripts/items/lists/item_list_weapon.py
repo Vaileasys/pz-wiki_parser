@@ -16,13 +16,15 @@ table_type_map = {}
 all_item_data = {}  # Cache for each item's `TableType`
 
 
-def check_fixing(item_id):
+def check_fixing(item):
     """Check if a given item can be fixed"""
-    fixing = Fixing(item_id)
-    if fixing.valid:
+    fixing = Fixing(item.item_id)
+    valid = fixing.valid
+    if item.has_tag("repairwithglue", "repairwithtape", "repairwithepoxy"):
+        valid = True
+    if valid:
         return f"[[File:UI Tick.png|link=Condition{Language.get_subpage()}#<<repairing>>|<<repairable>>]]"
     return f"[[File:UI Cross.png|link=Condition{Language.get_subpage()}#<<repairing>>|<<not_repairable>>]]"
-
 
 def get_function(item: Item):
     strings = {
@@ -165,7 +167,7 @@ def generate_data(item_id: str, table_type: str):
         convert_int(item.base_speed) if "attack_speed" in columns else None
     )
     if "endurance_mod" in columns:
-        endurance_mod = f"{util.convert_int(item.endurance_mod)}×"
+        endurance_mod = f"{util.convert_int(item.endurance_mod)}&times;"
         item_dict["endurance_mod"] = (
             "-" if not item.get("EnduranceMod") else endurance_mod
         )
@@ -185,7 +187,7 @@ def generate_data(item_id: str, table_type: str):
         )
     if "crit_multiplier" in columns:
         item_dict["crit_multiplier"] = (
-            f"{convert_int(item.crit_dmg_multiplier)}×"
+            f"{convert_int(item.crit_dmg_multiplier)}&times;"
             if item.crit_dmg_multiplier
             else "-"
         )
@@ -220,9 +222,35 @@ def generate_data(item_id: str, table_type: str):
             if "condition_max" in columns and "condition_lower_chance" in columns
             else None
         )
+    if "head_condition" in columns:
+        head_condition = str(convert_int(item.head_condition))
+        item_dict["head_condition"] = (
+            "-" if not item.get("HeadCondition") else head_condition
+        )
+    if "head_condition_lower_chance_multiplier" in columns:
+        # HCLCM is initialized as 1 and some weapons rely on this instead of setting it in the scripts
+        head_condition_lower_chance_multiplier_value = 1.0 if not item.head_condition_lower_chance_multiplier else item.head_condition_lower_chance_multiplier
+        converted_hclcmv = convert_int(head_condition_lower_chance_multiplier_value)
+        # Table sorting doesn't work properly with decimal values and the added x character
+        head_condition_lower_chance_multiplier = f"data-sort-value={converted_hclcmv}| {converted_hclcmv}&times;"
+        item_dict["head_condition_lower_chance_multiplier"] = (
+            "-" if not item.get("HeadCondition") else head_condition_lower_chance_multiplier
+        )
     item_dict["repairable"] = (
-        Translate.get_wiki(check_fixing(item_id)) if "repairable" in columns else None
+        Translate.get_wiki(check_fixing(item)) if "repairable" in columns else None
     )
+    if "sharpenable" in columns:
+        sharpenable = item.has_tag("sharpenable")
+        if sharpenable:
+                item_dict["sharpenable"] = "[[File:UI Tick.png|<<sharpenable>>]]"
+        else:
+            item_dict["sharpenable"] = "[[File:UI Cross.png|<<not_sharpenable>>]]"
+    if "maintenance_xp" in columns:
+        maintenance_xp = not item.has_tag("nomaintenancexp")
+        if maintenance_xp:
+            item_dict["maintenance_xp"] = "[[File:UI Tick.png|<<maintenance_xp>>]]"
+        else:
+            item_dict["maintenance_xp"] = "[[File:UI Cross.png|<<no_maintenance_xp>>]]"
     if "magazine" in columns:
         item_dict["magazine"] = (
             Item(item_data.get("Magazine")).icon if item_data.get("Magazine") else "-"
