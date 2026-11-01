@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>food_groups.py - PZwiki Parser Docs</title>
+<link rel="stylesheet" href="../../../assets/docs.css">
+</head>
+<body>
+<main class="page">
+<header class="navbar"><nav class="nav"><a class="nav-link" href="../../../index.html"><img class="nav-icon" src="../../../assets/icon_home.png" alt="" aria-hidden="true"><span>Home</span></a><a class="nav-link" href="../index.html"><img class="nav-icon" src="../../../assets/icon_skip_backward.png" alt="" aria-hidden="true"><span>Previous Folder</span></a><a class="nav-link" href="fishing_groups.html"><img class="nav-icon" src="../../../assets/icon_previous.png" alt="" aria-hidden="true"><span>Previous File</span></a><a class="nav-link" href="fuel_groups.html"><img class="nav-icon" src="../../../assets/icon_next.png" alt="" aria-hidden="true"><span>Next File</span></a><a class="nav-link" href="../lists/index.html"><img class="nav-icon" src="../../../assets/icon_skip_forward.png" alt="" aria-hidden="true"><span>Next Folder</span></a></nav></header>
+<div class="doc-layout">
+<div class="doc-sidebar doc-sidebar-left"><aside class="sidebar-card">
+<h2>Folder</h2>
+<nav class="sidebar-nav">
+<a href="index.html">Folder Index</a>
+<a href="ammo_groups.html">ammo_groups.py</a>
+<a href="animal_part_groups.html">animal_part_groups.py</a>
+<a href="camping_groups.html">camping_groups.py</a>
+<a href="clothing_groups.html">clothing_groups.py</a>
+<a href="communication_groups.html">communication_groups.py</a>
+<a href="container_groups.html">container_groups.py</a>
+<a href="cooking_groups.html">cooking_groups.py</a>
+<a href="corpse_groups.html">corpse_groups.py</a>
+<a href="electronics_groups.html">electronics_groups.py</a>
+<a href="entertainment_groups.html">entertainment_groups.py</a>
+<a href="fishing_groups.html">fishing_groups.py</a>
+<a href="food_groups.html">food_groups.py</a>
+<a href="fuel_groups.html">fuel_groups.py</a>
+<a href="furniture_groups.html">furniture_groups.py</a>
+<a href="gardening_groups.html">gardening_groups.py</a>
+<a href="household_groups.html">household_groups.py</a>
+<a href="junk_groups.html">junk_groups.py</a>
+<a href="light_source_groups.html">light_source_groups.py</a>
+<a href="literature_groups.html">literature_groups.py</a>
+<a href="material_groups.html">material_groups.py</a>
+<a href="medical_groups.html">medical_groups.py</a>
+<a href="memento_groups.html">memento_groups.py</a>
+<a href="tool_groups.html">tool_groups.py</a>
+<a href="weapon_groups.html">weapon_groups.py</a>
+</nav>
+</aside></div>
+<div class="doc-main"><article class="content">
+<h1>food_groups.py</h1>
+<p class="folder-link">Folder: <a href="index.html">scripts/items/groups</a></p>
+<div class="summary"><p>Food item grouping shared by the food list and food navbox.</p>
+<p>The group IDs intentionally match the table keys historically produced by<br>``item_list_food.py``.  Keeping the classification here gives list and navbox<br>generation one source of truth while leaving their output formatting separate.</p></div>
+<h2 id="functions">Functions</h2>
+<section class="member">
+<code class="signature">is_food_item(item: &#x27;Item&#x27;) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/food_groups.py#L52">source</a>
+<p>Return whether an item is defined or displayed as food.</p>
+</section>
+<section class="member">
+<code class="signature">include_in_food_groups(item: &#x27;Item&#x27;) -&gt; bool</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/food_groups.py#L57">source</a>
+<p>Return whether a food item belongs in the grouped list and navbox.</p>
+<p>These exclusions are the same ones previously applied inline by the food<br>item-list generator.  Nutrition output remains broader and is therefore<br>still based on :func:`is_food_item` alone.</p>
+</section>
+<h2 id="classes">Classes</h2>
+<h3 id="class-foodgroups">FoodGroups</h3>
+<div class="summary"><p>Classify food using recipe, FoodType, and foraging information.</p></div>
+<h4>Class Methods</h4>
+<section class="member">
+<code class="signature">_ensure_context_loaded() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/food_groups.py#L147">source</a>
+<p>Build recipe-derived lookup sets once for the current process.</p>
+</section>
+<section class="member">
+<code class="signature">reset_context() -&gt; None</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/food_groups.py#L188">source</a>
+<p>Clear recipe-derived state so it is rebuilt on the next lookup.</p>
+</section>
+<section class="member">
+<code class="signature">get_recipe_product_ids() -&gt; list[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/food_groups.py#L196">source</a>
+<p>Return sorted cooking-recipe product IDs used for classification.</p>
+</section>
+<section class="member">
+<code class="signature">classify(item: &#x27;Item&#x27;, **kwargs) -&gt; str</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/food_groups.py#L202">source</a>
+<p>Return the food group ID for an item.</p>
+<p>The priority deliberately preserves the former ``find_table_type``<br>behaviour used by the food item list.</p>
+</section>
+<h4>Static Methods</h4>
+<section class="member">
+<code class="signature">_item_ids(item: &#x27;Item&#x27;) -&gt; set[str]</code>
+<a class="source" href="https://github.com/Vaileasys/pz-wiki_parser/blob/main/scripts/items/groups/food_groups.py#L142">source</a>
+<p>Return the full and short IDs used by parsed recipe data.</p>
+</section>
+</article></div>
+<div class="doc-sidebar doc-sidebar-right"><aside class="sidebar-card">
+<h2>On This Page</h2>
+<nav class="sidebar-nav">
+<a class="sidebar-parent" href="#functions">Functions</a>
+<a class="sidebar-parent" href="#classes">Classes</a>
+<a class="sidebar-child" href="#class-foodgroups">FoodGroups</a>
+</nav>
+</aside></div>
+</div>
+</main>
+</body>
+</html>
